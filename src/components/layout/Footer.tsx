@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Mail, Phone, MapPin, ExternalLink, Globe } from 'lucide-react';
 
 export function Footer() {
@@ -11,8 +12,8 @@ export function Footer() {
           {/* Column 1: Identity */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary-navy font-bold text-lg">
-                RI
+              <div className="flex-shrink-0 bg-white rounded p-1">
+                <Image src="/logo.png" alt="Logo Kementerian" width={160} height={40} className="h-10 w-auto object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-lg leading-tight">UKPBJ</span>

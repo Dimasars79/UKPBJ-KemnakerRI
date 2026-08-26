@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, User, Globe, Eye, Menu, ChevronDown } from 'lucide-react';
 
 export function Header() {
@@ -30,9 +31,8 @@ export function Header() {
         <div className="flex justify-between items-center h-20">
           {/* Logo Area */}
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold text-lg">
-              {/* Placeholder for Garuda/Kemlu Logo */}
-              RI
+            <div className="flex-shrink-0">
+              <Image src="/logo.png" alt="Logo Kementerian" width={200} height={48} className="h-12 w-auto object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-primary-navy text-lg leading-tight tracking-tight">UKPBJ</span>
