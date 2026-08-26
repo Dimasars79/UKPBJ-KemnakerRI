@@ -13,6 +13,7 @@ import { SearchBar } from '@/components/ui/SearchBar';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Building2, Briefcase, Users, Globe, Book, Award, Scale, HelpCircle, AlertCircle, Phone, MessageSquare, ArrowRight, ShieldCheck, FileCheck, CheckCircle2, Eye, MapPin, Mail } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -22,17 +23,17 @@ export default function Home() {
       <main className="flex-grow">
         {/* 6. Hero Section */}
         <section className="relative bg-primary-navy text-white overflow-hidden py-20 lg:py-32">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <defs>
-                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5"/>
-                </pattern>
-              </defs>
-              <rect width="100" height="100" fill="url(#grid)" />
-            </svg>
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <Image 
+              src="/hero-bg.png" 
+              alt="Gedung Kementerian Luar Negeri" 
+              fill
+              className="object-cover opacity-40 mix-blend-overlay"
+              priority
+            />
           </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-navy/90 to-transparent" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-3xl">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
