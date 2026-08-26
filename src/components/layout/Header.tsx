@@ -32,7 +32,7 @@ export function Header() {
           {/* Logo Area */}
           <div className="flex items-center space-x-3">
             <div className="flex-shrink-0">
-              <Image src="/logo.png" alt="Logo Kementerian" width={200} height={48} className="h-12 w-auto object-contain" />
+              <Image src="/logo.svg" alt="Logo Kementerian" width={200} height={48} className="h-12 w-auto object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-primary-navy text-lg leading-tight tracking-tight">UKPBJ</span>
