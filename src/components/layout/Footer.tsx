@@ -8,12 +8,12 @@ export function Footer() {
     <footer className="bg-primary-navy text-white pt-16 pb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
-          
+
           {/* Column 1: Identity */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
               <div className="flex-shrink-0 bg-white rounded p-1">
-                <Image src="/logo.svg" alt="Logo Kementerian" width={160} height={40} className="h-10 w-auto object-contain" />
+                <Image src="/logo.png" alt="Logo Kementerian" width={160} height={40} className="h-10 w-auto object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-lg leading-tight">UKPBJ</span>
