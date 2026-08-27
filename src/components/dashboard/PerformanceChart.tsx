@@ -12,7 +12,7 @@ const data = [
 
 export function PerformanceChart() {
   return (
-    <div className="h-[400px] w-full bg-white rounded-xl shadow-lg border border-slate-100 p-6">
+    <div className="h-[300px] md:h-[400px] w-full bg-white rounded-xl shadow-lg border border-slate-100 p-6">
       <h3 className="text-xl font-bold text-primary-navy mb-6 text-center">Data Penyelesaian Paket Pengadaan 2024</h3>
       <ResponsiveContainer width="100%" height="85%">
         <BarChart
