@@ -12,7 +12,7 @@ interface NewsCardProps {
   featured?: boolean;
 }
 
-export function NewsCard({ title, summary, date, category, imageUrl, href, featured = false }: NewsCardProps) {
+export function NewsCard({ title, summary, date, category, href, featured = false }: NewsCardProps) {
   return (
     <Link href={href} className={`group flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 ${featured ? 'md:flex-row md:col-span-2 lg:col-span-2' : ''}`}>
       <div className={`relative ${featured ? 'md:w-1/2' : 'h-48'} overflow-hidden bg-slate-200 flex-shrink-0`}>

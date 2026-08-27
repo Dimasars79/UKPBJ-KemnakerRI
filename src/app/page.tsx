@@ -80,7 +80,7 @@ export default function Home() {
                   <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary-navy">Profil UKPBJ</h2>
                   <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
                   <p className="text-xl text-slate-600 mb-12 leading-relaxed">
-                    "Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Luar Negeri merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas."
+                    &quot;Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Luar Negeri merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas.&quot;
                   </p>
                 </FadeIn>
                 
