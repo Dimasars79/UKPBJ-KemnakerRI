@@ -8,6 +8,7 @@ import { Briefcase, Users, Globe, HelpCircle, AlertCircle, MessageSquare, ArrowR
 import Link from 'next/link';
 import Image from 'next/image';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
+import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 
@@ -121,33 +122,37 @@ export default function Home() {
               </FadeIn>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <FadeIn direction="up" delay={0.2} className="lg:col-span-2">
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <StaggerItem>
+                <div className="bg-primary-navy text-white rounded-xl p-6 shadow-md h-full">
+                  <h4 className="text-lg font-bold mb-2">Total Penghematan</h4>
+                  <p className="text-3xl font-extrabold text-accent-gold">Rp 12.4 Miliar</p>
+                  <p className="text-sm text-slate-300 mt-2">Tahun Anggaran 2024</p>
+                </div>
+              </StaggerItem>
+              <StaggerItem>
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 h-full">
+                  <h4 className="text-lg font-bold text-primary-navy mb-2">Paket Selesai</h4>
+                  <p className="text-3xl font-extrabold text-primary-blue">440 Paket</p>
+                  <p className="text-sm text-slate-500 mt-2">Dari total 498 target paket</p>
+                </div>
+              </StaggerItem>
+              <StaggerItem>
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 h-full">
+                  <h4 className="text-lg font-bold text-primary-navy mb-2">Efisiensi Waktu</h4>
+                  <p className="text-3xl font-extrabold text-primary-blue">14 Hari</p>
+                  <p className="text-sm text-slate-500 mt-2">Rata-rata proses pemilihan</p>
+                </div>
+              </StaggerItem>
+            </StaggerContainer>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <FadeIn direction="up" delay={0.2}>
                 <PerformanceChart />
               </FadeIn>
-              <StaggerContainer className="space-y-4">
-                <StaggerItem>
-                  <div className="bg-primary-navy text-white rounded-xl p-6 shadow-md">
-                    <h4 className="text-lg font-bold mb-2">Total Penghematan</h4>
-                    <p className="text-3xl font-extrabold text-accent-gold">Rp 12.4 Miliar</p>
-                    <p className="text-sm text-slate-300 mt-2">Tahun Anggaran 2024</p>
-                  </div>
-                </StaggerItem>
-                <StaggerItem>
-                  <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                    <h4 className="text-lg font-bold text-primary-navy mb-2">Paket Selesai</h4>
-                    <p className="text-3xl font-extrabold text-primary-blue">440 Paket</p>
-                    <p className="text-sm text-slate-500 mt-2">Dari total 498 target paket</p>
-                  </div>
-                </StaggerItem>
-                <StaggerItem>
-                  <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                    <h4 className="text-lg font-bold text-primary-navy mb-2">Efisiensi Waktu</h4>
-                    <p className="text-3xl font-extrabold text-primary-blue">14 Hari</p>
-                    <p className="text-sm text-slate-500 mt-2">Rata-rata proses pemilihan</p>
-                  </div>
-                </StaggerItem>
-              </StaggerContainer>
+              <FadeIn direction="up" delay={0.4}>
+                <EfficiencyChart />
+              </FadeIn>
             </div>
           </div>
         </section>
