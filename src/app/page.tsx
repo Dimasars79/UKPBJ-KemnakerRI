@@ -36,7 +36,7 @@ export default function Home() {
                 Unit Kerja Pengadaan Barang/Jasa Kementerian Luar Negeri
               </p>
               <p className="text-lg text-slate-300 mb-10 max-w-2xl leading-relaxed">
-                Mendukung pengadaan barang dan jasa yang efektif, efisien, transparan, dan akuntabel.
+                Berkomitmen menghadirkan ekosistem pengadaan yang berintegritas, efisien, dan inovatif guna mewujudkan tata kelola pemerintahan yang unggul dan tepercaya.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="#profil" className="bg-primary-blue hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-md transition-colors text-center shadow-md border border-blue-500">
