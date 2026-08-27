@@ -35,6 +35,15 @@ const config: Config = {
           "2xl": "1280px",
         },
       },
+      animation: {
+        marquee: "marquee 25s linear infinite",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(100vw)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
+      },
     },
   },
   plugins: [],

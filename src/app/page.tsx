@@ -48,6 +48,13 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Marquee Text */}
+          <div className="absolute bottom-0 left-0 w-full overflow-hidden bg-primary-navy/40 py-3 border-t border-white/10 z-20 backdrop-blur-sm">
+            <p className="animate-marquee whitespace-nowrap text-xs md:text-sm font-bold tracking-[0.25em] text-accent-gold">
+              TRANSPARENT PROCUREMENT &bull; PROFESSIONAL SERVICE &bull; ACCOUNTABLE GOVERNANCE &bull; GLOBAL CONNECTION &nbsp;&nbsp;&nbsp;&nbsp; TRANSPARENT PROCUREMENT &bull; PROFESSIONAL SERVICE &bull; ACCOUNTABLE GOVERNANCE &bull; GLOBAL CONNECTION &nbsp;&nbsp;&nbsp;&nbsp; TRANSPARENT PROCUREMENT &bull; PROFESSIONAL SERVICE &bull; ACCOUNTABLE GOVERNANCE &bull; GLOBAL CONNECTION
+            </p>
+          </div>
         </section>
 
         {/* 2. Profil UKPBJ (Prioritized) */}
