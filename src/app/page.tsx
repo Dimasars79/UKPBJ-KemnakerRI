@@ -20,7 +20,7 @@ export default function Home() {
           <div className="absolute inset-0">
             <Image 
               src="/hero-bg.png" 
-              alt="Gedung" 
+              alt="Gedung Kementerian Luar Negeri" 
               fill
               className="object-cover opacity-40 mix-blend-overlay"
               priority
@@ -33,7 +33,7 @@ export default function Home() {
                 Pengadaan yang Transparan, <br className="hidden md:block"/> Profesional, dan Akuntabel
               </h1>
               <p className="text-xl md:text-2xl font-medium text-secondary-soft mb-6">
-                Unit Kerja Pengadaan Barang/Jasa
+                Unit Kerja Pengadaan Barang/Jasa Kementerian Luar Negeri
               </p>
               <p className="text-lg text-slate-300 mb-10 max-w-2xl leading-relaxed">
                 Mendukung pengadaan barang dan jasa yang efektif, efisien, transparan, dan akuntabel.
@@ -56,7 +56,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-6 text-primary-navy">Profil UKPBJ</h2>
             <div className="w-16 h-1 bg-accent-gold mx-auto mb-8 rounded-full" />
             <p className="text-xl text-slate-600 mb-12 leading-relaxed">
-              "Unit Kerja Pengadaan Barang/Jasa (UKPBJ) merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas."
+              "Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Luar Negeri merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas."
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               <div className="flex flex-col items-center">
@@ -141,7 +141,7 @@ export default function Home() {
               <NewsCard 
                 featured={false}
                 title="Sosialisasi Peraturan Pengadaan Terbaru"
-                summary="UKPBJ mengadakan sosialisasi terkait regulasi terbaru mengenai pengadaan barang dan jasa pemerintah."
+                summary="UKPBJ Kementerian Luar Negeri mengadakan sosialisasi terkait regulasi terbaru mengenai pengadaan barang dan jasa pemerintah."
                 date="24 Agustus 2026"
                 category="Berita"
                 imageUrl="/placeholder"
@@ -149,7 +149,7 @@ export default function Home() {
               />
               <NewsCard 
                 title="Peningkatan Kapasitas PPK"
-                summary="Kegiatan bimbingan teknis yang diselenggarakan khusus untuk Pejabat Pembuat Komitmen."
+                summary="Kegiatan bimbingan teknis yang diselenggarakan khusus untuk Pejabat Pembuat Komitmen Kementerian Luar Negeri."
                 date="20 Agustus 2026"
                 category="Kegiatan"
                 imageUrl="/placeholder"
