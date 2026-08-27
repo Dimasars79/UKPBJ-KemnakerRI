@@ -43,13 +43,13 @@ export function Header() {
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center space-x-1">
             {[
-              { label: 'Beranda', href: 'https://ukpbj.kemlu.go.id/' },
+              { label: 'Beranda', href: '/' },
               { label: 'Informasi', href: '#' },
-              { label: 'Layanan', href: 'https://ukpbj.kemlu.go.id/layanan' },
-              { label: 'Agenda', href: 'https://ukpbj.kemlu.go.id/agenda' },
+              { label: 'Layanan', href: '#' },
+              { label: 'Agenda', href: '#' },
               { label: 'Galeri', href: '#' },
-              { label: 'Monitoring', href: 'https://ukpbj.kemlu.go.id/monitoring' },
-              { label: 'Tentang UKPBJ', href: 'https://ukpbj.kemlu.go.id/profil/tentang-ukpbj' }
+              { label: 'Monitoring', href: '#' },
+              { label: 'Tentang UKPBJ', href: '#' }
             ].map((item) => (
               <Link
                 key={item.label}
