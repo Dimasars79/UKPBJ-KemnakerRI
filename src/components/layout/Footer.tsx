@@ -43,11 +43,11 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4 text-white">Layanan</h3>
             <ul className="space-y-3 text-sm text-slate-300">
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">LPSE</Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Pengaduan</Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Permintaan Informasi</Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Bimbingan Teknis</Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Clearing House</Link></li>
+              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">LPSE</Link></li>
+              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Pengaduan</Link></li>
+              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Permintaan Informasi</Link></li>
+              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Bimbingan Teknis</Link></li>
+              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Clearing House</Link></li>
             </ul>
           </div>
 
@@ -55,11 +55,8 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4 text-white">Informasi</h3>
             <ul className="space-y-3 text-sm text-slate-300">
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Peraturan</Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Panduan & SOP</Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Berita Terkini</Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Agenda Kegiatan</Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors">Galeri</Link></li>
+              <li><Link href="/#profil" className="hover:text-secondary-soft transition-colors">Profil UKPBJ</Link></li>
+              <li><Link href="/#berita" className="hover:text-secondary-soft transition-colors">Berita Terkini</Link></li>
             </ul>
           </div>
 

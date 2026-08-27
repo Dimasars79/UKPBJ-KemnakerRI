@@ -132,7 +132,7 @@ export default function Home() {
         </section>
 
         {/* 4. News and Information */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-white" id="berita">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
             <div className="flex justify-between items-end mb-8">
               <SectionHeading title="Berita & Informasi Terkini" />

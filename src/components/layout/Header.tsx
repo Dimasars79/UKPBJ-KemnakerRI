@@ -42,16 +42,21 @@ export function Header() {
 
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center space-x-1">
-            {['Beranda', 'Informasi', 'Layanan', 'Monitoring', 'Agenda', 'Galeri', 'Tentang UKPBJ'].map((item) => (
+            {[
+              { label: 'Beranda', href: '/' },
+              { label: 'Profil UKPBJ', href: '/#profil' },
+              { label: 'Layanan', href: '/#layanan' },
+              { label: 'Berita', href: '/#berita' }
+            ].map((item) => (
               <Link
-                key={item}
-                href="#"
-                className={`px-3 py-2 rounded-md text-sm font-semibold transition-colors ${item === 'Beranda'
+                key={item.label}
+                href={item.href}
+                className={`px-3 py-2 rounded-md text-sm font-semibold transition-colors ${item.label === 'Beranda'
                     ? 'text-primary-blue'
                     : 'text-slate-700 hover:text-primary-blue hover:bg-secondary-offwhite'
                   }`}
               >
-                {item}
+                {item.label}
               </Link>
             ))}
           </nav>
