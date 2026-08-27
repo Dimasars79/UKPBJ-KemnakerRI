@@ -68,45 +68,53 @@ export default function Home() {
         </section>
 
         {/* 2. Profil UKPBJ (Prioritized) */}
-        <section className="py-20 bg-white text-center" id="profil">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-            <FadeIn>
-              <h2 className="text-3xl font-bold mb-6 text-primary-navy">Profil UKPBJ</h2>
-              <div className="w-16 h-1 bg-accent-gold mx-auto mb-8 rounded-full" />
-              <p className="text-xl text-slate-600 mb-12 leading-relaxed">
-                "Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Luar Negeri merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas."
-              </p>
-            </FadeIn>
-            
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-              <StaggerItem>
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
-                    <Briefcase className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-primary-navy">Profesional</h3>
-                  <p className="text-slate-500 text-sm">SDM yang kompeten dan berintegritas tinggi.</p>
-                </div>
-              </StaggerItem>
-              <StaggerItem>
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
-                    <Eye className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-primary-navy">Transparan</h3>
-                  <p className="text-slate-500 text-sm">Proses yang terbuka dan dapat diawasi publik.</p>
-                </div>
-              </StaggerItem>
-              <StaggerItem>
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
-                    <FileCheck className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-primary-navy">Akuntabel</h3>
-                  <p className="text-slate-500 text-sm">Dapat dipertanggungjawabkan sesuai peraturan.</p>
-                </div>
-              </StaggerItem>
-            </StaggerContainer>
+        <section className="py-20 bg-white" id="profil">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+            <div className="flex flex-col lg:flex-row items-center gap-12">
+              <FadeIn direction="right" className="lg:w-1/3 flex justify-center">
+                <Image src="/logo-ukpbj-square.png" alt="Logo UKPBJ" width={400} height={400} className="w-64 md:w-80 h-auto object-contain drop-shadow-2xl" />
+              </FadeIn>
+              
+              <div className="lg:w-2/3">
+                <FadeIn direction="left">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary-navy">Profil UKPBJ</h2>
+                  <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
+                  <p className="text-xl text-slate-600 mb-12 leading-relaxed">
+                    "Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Luar Negeri merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas."
+                  </p>
+                </FadeIn>
+                
+                <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-4">
+                  <StaggerItem>
+                    <div className="flex flex-col">
+                      <div className="w-14 h-14 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
+                        <Briefcase className="w-7 h-7" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-primary-navy">Profesional</h3>
+                      <p className="text-slate-500 text-sm">SDM yang kompeten dan berintegritas tinggi.</p>
+                    </div>
+                  </StaggerItem>
+                  <StaggerItem>
+                    <div className="flex flex-col">
+                      <div className="w-14 h-14 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
+                        <Eye className="w-7 h-7" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-primary-navy">Transparan</h3>
+                      <p className="text-slate-500 text-sm">Proses yang terbuka dan dapat diawasi publik.</p>
+                    </div>
+                  </StaggerItem>
+                  <StaggerItem>
+                    <div className="flex flex-col">
+                      <div className="w-14 h-14 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
+                        <FileCheck className="w-7 h-7" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-primary-navy">Akuntabel</h3>
+                      <p className="text-slate-500 text-sm">Dapat dipertanggungjawabkan sesuai peraturan.</p>
+                    </div>
+                  </StaggerItem>
+                </StaggerContainer>
+              </div>
+            </div>
           </div>
         </section>
 
