@@ -72,7 +72,7 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
             <div className="flex flex-col lg:flex-row items-center gap-12">
               <FadeIn direction="right" className="lg:w-1/3 flex justify-center">
-                <Image src="/logo-ukpbj-square.png" alt="Logo UKPBJ" width={400} height={400} className="w-64 md:w-80 h-auto object-contain drop-shadow-2xl" />
+                <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={400} height={400} className="w-64 md:w-80 h-auto object-contain drop-shadow-2xl" />
               </FadeIn>
               
               <div className="lg:w-2/3">
