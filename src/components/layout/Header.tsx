@@ -45,13 +45,10 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo Area */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center">
             <Link href="/" className="flex-shrink-0">
-              <Image src="/logo.png" alt="Logo Kementerian" width={200} height={48} className="h-10 md:h-12 w-auto object-contain" />
+              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={200} height={60} className="h-12 md:h-16 w-auto object-contain" />
             </Link>
-            <div className="flex flex-col ml-2 border-l border-slate-300 pl-4">
-              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={120} height={48} className="h-10 md:h-12 w-auto object-contain" />
-            </div>
           </div>
 
           {/* Desktop Nav Links */}
