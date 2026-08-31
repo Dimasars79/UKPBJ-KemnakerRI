@@ -36,7 +36,7 @@ export default function TentangPage() {
             <FadeIn direction="right" className="bg-white p-10 rounded-2xl shadow-lg border-t-4 border-t-primary-blue">
               <h2 className="text-2xl font-bold text-primary-navy mb-4">Visi</h2>
               <p className="text-slate-600 text-lg leading-relaxed">
-                "Menjadi Unit Kerja Pengadaan Barang/Jasa Pemerintah yang Profesional, Modern, dan Berintegritas Tinggi untuk Mewujudkan Pengadaan yang Kredibel dan Akuntabel."
+                &quot;Menjadi Unit Kerja Pengadaan Barang/Jasa Pemerintah yang Profesional, Modern, dan Berintegritas Tinggi untuk Mewujudkan Pengadaan yang Kredibel dan Akuntabel.&quot;
               </p>
             </FadeIn>
             <FadeIn direction="left" className="bg-white p-10 rounded-2xl shadow-lg border-t-4 border-t-accent-gold">

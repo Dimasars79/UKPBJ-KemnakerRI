@@ -17,9 +17,9 @@ export default function InformasiPage() {
   ];
 
   const dummyNews = [
-    { title: 'Peningkatan Kapasitas SDM Pengadaan', summary: 'Bimbingan teknis terbaru untuk seluruh anggota Pokja UKPBJ.', date: '12 Okt 2026', category: 'Berita', href: '#' },
-    { title: 'Pembaruan Sistem SPSE v4.5', summary: 'Jadwal maintenance dan panduan penggunaan sistem SPSE terbaru.', date: '08 Okt 2026', category: 'Pengumuman', href: '#' },
-    { title: 'Sosialisasi E-Katalog Sektoral', summary: 'Kemnaker mengadakan sosialisasi terkait produk dalam negeri.', date: '01 Okt 2026', category: 'Berita', href: '#' },
+    { title: 'Peningkatan Kapasitas SDM Pengadaan', summary: 'Bimbingan teknis terbaru untuk seluruh anggota Pokja UKPBJ.', date: '12 Okt 2026', category: 'Berita', href: '#', imageUrl: '/poster_kegiatan_1787841596732.jpg' },
+    { title: 'Pembaruan Sistem SPSE v4.5', summary: 'Jadwal maintenance dan panduan penggunaan sistem SPSE terbaru.', date: '08 Okt 2026', category: 'Pengumuman', href: '#', imageUrl: '/poster_kegiatan_1787841596732.jpg' },
+    { title: 'Sosialisasi E-Katalog Sektoral', summary: 'Kemnaker mengadakan sosialisasi terkait produk dalam negeri.', date: '01 Okt 2026', category: 'Berita', href: '#', imageUrl: '/poster_kegiatan_1787841596732.jpg' },
   ];
 
   return (

@@ -12,25 +12,25 @@ export default function LayananPage() {
     {
       title: "LPSE",
       description: "Layanan Pengadaan Secara Elektronik untuk penyelenggaraan pengadaan barang/jasa.",
-      icon: <Monitor className="w-8 h-8 text-white" />,
+      icon: Monitor,
       href: "https://lpse.kemlu.go.id"
     },
     {
       title: "SIKaP",
       description: "Sistem Informasi Kinerja Penyedia untuk mengelola data kinerja penyedia barang/jasa.",
-      icon: <FileText className="w-8 h-8 text-white" />,
+      icon: FileText,
       href: "#"
     },
     {
       title: "Layanan Pengaduan",
       description: "Sampaikan laporan atau pengaduan terkait proses pengadaan barang/jasa.",
-      icon: <HelpCircle className="w-8 h-8 text-white" />,
+      icon: HelpCircle,
       href: "#"
     },
     {
       title: "Clearing House",
       description: "Konsultasi dan penyelesaian masalah terkait proses pengadaan barang/jasa.",
-      icon: <ShieldCheck className="w-8 h-8 text-white" />,
+      icon: ShieldCheck,
       href: "#"
     }
   ];

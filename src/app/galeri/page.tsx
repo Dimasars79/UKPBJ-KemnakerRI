@@ -4,7 +4,6 @@ import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import Image from 'next/image';
 
 export default function GaleriPage() {
   const dummyImages = [
