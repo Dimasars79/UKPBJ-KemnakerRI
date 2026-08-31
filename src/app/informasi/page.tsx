@@ -10,10 +10,10 @@ import { Search } from 'lucide-react';
 
 export default function InformasiPage() {
   const dummyDocs = [
-    { title: 'Peraturan Presiden No. 16 Tahun 2018', category: 'Regulasi', date: '16 Jan 2018', size: '2.4 MB', type: 'PDF' },
-    { title: 'Peraturan Presiden No. 12 Tahun 2021', category: 'Regulasi', date: '2 Feb 2021', size: '1.8 MB', type: 'PDF' },
-    { title: 'SOP Pengadaan Barang/Jasa Secara Elektronik', category: 'SOP', date: '10 Mar 2023', size: '3.1 MB', type: 'PDF' },
-    { title: 'Surat Edaran Kepala LKPP No. 3 Tahun 2023', category: 'Edaran', date: '15 Apr 2023', size: '1.2 MB', type: 'PDF' },
+    { title: 'Peraturan Presiden No. 16 Tahun 2018', category: 'Regulasi', href: '#' },
+    { title: 'Peraturan Presiden No. 12 Tahun 2021', category: 'Regulasi', href: '#' },
+    { title: 'SOP Pengadaan Barang/Jasa Secara Elektronik', category: 'SOP', href: '#' },
+    { title: 'Surat Edaran Kepala LKPP No. 3 Tahun 2023', category: 'Edaran', href: '#' },
   ];
 
   const dummyNews = [
