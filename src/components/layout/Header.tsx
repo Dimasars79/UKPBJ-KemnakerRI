@@ -49,9 +49,8 @@ export function Header() {
             <Link href="/" className="flex-shrink-0">
               <Image src="/logo.png" alt="Logo Kementerian" width={200} height={48} className="h-10 md:h-12 w-auto object-contain" />
             </Link>
-            <div className="flex flex-col">
-              <span className="font-bold text-primary-navy text-base md:text-lg leading-tight tracking-tight">UKPBJ</span>
-              <span className="text-xs md:text-sm text-slate-500 font-medium leading-tight">Kementerian Luar Negeri</span>
+            <div className="flex flex-col ml-2 border-l border-slate-300 pl-4">
+              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={120} height={48} className="h-10 md:h-12 w-auto object-contain" />
             </div>
           </div>
 
