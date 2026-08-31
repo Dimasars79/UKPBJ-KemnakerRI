@@ -48,8 +48,8 @@ export function Header() {
           <div className="flex items-center space-x-3">
             <Link href="/" className="flex-shrink-0 flex items-center space-x-4">
               <Image src="/logo-kemnaker.png" alt="Logo Kementerian Ketenagakerjaan" width={64} height={64} className="h-12 md:h-16 w-auto object-contain drop-shadow-sm" />
-              <div className="h-10 md:h-12 border-l border-slate-300"></div>
-              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={160} height={64} className="h-12 md:h-16 w-auto object-contain drop-shadow-sm" />
+              <div className="h-10 md:h-14 border-l border-slate-300"></div>
+              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={220} height={80} className="h-16 md:h-20 w-auto object-contain drop-shadow-sm" />
             </Link>
           </div>
 
