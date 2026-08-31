@@ -11,12 +11,12 @@ export function Header() {
 
   const navLinks = [
     { label: 'Beranda', href: '/' },
-    { label: 'Informasi', href: '#' },
-    { label: 'Layanan', href: '#' },
-    { label: 'Agenda', href: '#' },
-    { label: 'Galeri', href: '#' },
-    { label: 'Monitoring', href: '#' },
-    { label: 'Tentang UKPBJ', href: '#' }
+    { label: 'Informasi', href: '/informasi' },
+    { label: 'Layanan', href: '/layanan' },
+    { label: 'Agenda', href: '/agenda' },
+    { label: 'Galeri', href: '/galeri' },
+    { label: 'Monitoring', href: '/monitoring' },
+    { label: 'Tentang UKPBJ', href: '/tentang' }
   ];
 
   return (
