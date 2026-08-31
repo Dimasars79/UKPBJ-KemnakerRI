@@ -2,27 +2,59 @@ import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { SectionHeading } from '@/components/ui/SectionHeading';
+import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
+import Image from 'next/image';
 
 export default function GaleriPage() {
+  const dummyImages = [
+    { id: 1, title: 'Rapat Koordinasi Nasional', desc: 'Rapat koordinasi seluruh anggota UKPBJ kementerian.', size: 'large' },
+    { id: 2, title: 'Penghargaan Kinerja', desc: 'Penghargaan UKPBJ Terbaik 2025.', size: 'small' },
+    { id: 3, title: 'Sosialisasi E-Katalog', desc: 'Sosialisasi e-katalog lokal bersama vendor.', size: 'small' },
+    { id: 4, title: 'Bimtek PBJ', desc: 'Bimbingan teknis peraturan pengadaan terbaru.', size: 'small' },
+    { id: 5, title: 'Kunjungan Kerja', desc: 'Kunjungan kerja ke UKPBJ Provinsi.', size: 'small' },
+    { id: 6, title: 'Pelantikan Pejabat', desc: 'Pelantikan pejabat pembuat komitmen baru.', size: 'large' },
+  ];
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-secondary-offwhite pt-24 pb-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <FadeIn direction="up">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary-navy mb-6">Galeri Kegiatan</h1>
-            <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
-            <div className="bg-white p-12 rounded-xl shadow-lg border border-slate-100 min-h-[500px] flex flex-col items-center justify-center text-center">
-              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-10 h-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-slate-700 mb-4">Galeri Dokumentasi</h2>
-              <p className="text-slate-500 max-w-lg">Dokumentasi foto dan video dari setiap kegiatan, sosialisasi, dan program pengadaan UKPBJ akan segera diunggah.</p>
-            </div>
-          </FadeIn>
-        </div>
+      <main className="min-h-screen bg-slate-50 pb-20">
+        <section className="bg-primary-navy py-16 relative overflow-hidden">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <FadeIn direction="up">
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 text-center">Galeri Dokumentasi</h1>
+              <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
+                Rekam jejak visual dari setiap kegiatan, program kerja, dan pencapaian UKPBJ.
+              </p>
+            </FadeIn>
+          </div>
+        </section>
+
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+          <SectionHeading title="Foto Kegiatan" subtitle="Dokumentasi terbaru" />
+          
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+            {dummyImages.map((img) => (
+              <StaggerItem 
+                key={img.id} 
+                className={`relative group overflow-hidden rounded-xl shadow-sm ${img.size === 'large' ? 'md:col-span-2 md:row-span-2' : ''}`}
+              >
+                <div className={`w-full bg-slate-200 ${img.size === 'large' ? 'h-[400px]' : 'h-[192px]'} flex items-center justify-center`}>
+                  {/* Placeholder Background with subtle pattern */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/80 to-primary-navy/80 mix-blend-multiply" />
+                  <span className="text-slate-400 font-bold z-0 opacity-30 text-2xl">FOTO {img.id}</span>
+                </div>
+                
+                {/* Overlay on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-navy via-primary-navy/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                  <h3 className="text-white font-bold text-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300">{img.title}</h3>
+                  <p className="text-slate-300 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{img.desc}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </section>
       </main>
       <Footer />
     </>

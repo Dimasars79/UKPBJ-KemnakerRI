@@ -2,27 +2,66 @@ import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { SectionHeading } from '@/components/ui/SectionHeading';
+import { AgendaCard } from '@/components/cards/AgendaCard';
+import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 
 export default function AgendaPage() {
+  const dummyAgendas = [
+    { title: 'Pembukaan Tender Konstruksi Gedung A', date: '20 Okt 2026', time: '09:00 - 12:00 WIB', location: 'Gedung Utama Kemlu', type: 'Tender' },
+    { title: 'Sosialisasi E-Katalog Sektoral Baru', date: '25 Okt 2026', time: '13:00 - 15:00 WIB', location: 'Zoom Meeting', type: 'Sosialisasi' },
+    { title: 'Ujian Sertifikasi PBJ Tingkat Dasar', date: '02 Nov 2026', time: '08:00 - 16:00 WIB', location: 'Pusdiklat Kemlu', type: 'Sertifikasi' },
+    { title: 'Rapat Evaluasi Kinerja Vendor Q3', date: '10 Nov 2026', time: '10:00 - 14:00 WIB', location: 'Ruang Rapat UKPBJ', type: 'Rapat' },
+    { title: 'Bimbingan Teknis Penggunaan SIKaP', date: '15 Nov 2026', time: '09:00 - 12:00 WIB', location: 'Zoom Meeting', type: 'Bimtek' },
+  ];
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-secondary-offwhite pt-24 pb-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <FadeIn direction="up">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary-navy mb-6">Agenda Kegiatan</h1>
-            <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
-            <div className="bg-white p-12 rounded-xl shadow-lg border border-slate-100 min-h-[500px] flex flex-col items-center justify-center text-center">
-              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-10 h-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-slate-700 mb-4">Jadwal Agenda</h2>
-              <p className="text-slate-500 max-w-lg">Kalender kegiatan UKPBJ, pelatihan, sertifikasi, dan acara terkait pengadaan barang/jasa akan ditampilkan di sini.</p>
+      <main className="min-h-screen bg-slate-50 pb-20">
+        <section className="bg-primary-navy py-16 relative overflow-hidden">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <FadeIn direction="up">
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 text-center">Agenda & Kegiatan</h1>
+              <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
+                Jadwal lengkap kegiatan, tender, sosialisasi, dan pelatihan di lingkungan UKPBJ Kementerian.
+              </p>
+            </FadeIn>
+          </div>
+        </section>
+
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-8">
+            <SectionHeading title="Kegiatan Mendatang" subtitle="Agenda resmi yang akan diselenggarakan dalam waktu dekat" />
+            
+            <div className="mt-4 md:mt-0 flex gap-2">
+              <select className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-md shadow-sm outline-none focus:border-primary-blue">
+                <option>Semua Kategori</option>
+                <option>Tender</option>
+                <option>Sosialisasi</option>
+                <option>Sertifikasi</option>
+              </select>
+              <select className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-md shadow-sm outline-none focus:border-primary-blue">
+                <option>Bulan Ini</option>
+                <option>Bulan Depan</option>
+              </select>
             </div>
-          </FadeIn>
-        </div>
+          </div>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {dummyAgendas.map((agenda, idx) => (
+              <StaggerItem key={idx}>
+                <AgendaCard {...agenda} />
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+          
+          <div className="mt-12 text-center">
+            <button className="bg-white border border-slate-200 hover:border-primary-blue text-primary-navy font-bold py-3 px-8 rounded-md transition-colors shadow-sm">
+              Muat Lebih Banyak
+            </button>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

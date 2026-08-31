@@ -2,27 +2,85 @@ import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { SectionHeading } from '@/components/ui/SectionHeading';
+import { DocumentCard } from '@/components/cards/DocumentCard';
+import { NewsCard } from '@/components/cards/NewsCard';
+import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
+import { Search } from 'lucide-react';
 
 export default function InformasiPage() {
+  const dummyDocs = [
+    { title: 'Peraturan Presiden No. 16 Tahun 2018', category: 'Regulasi', date: '16 Jan 2018', size: '2.4 MB', type: 'PDF' },
+    { title: 'Peraturan Presiden No. 12 Tahun 2021', category: 'Regulasi', date: '2 Feb 2021', size: '1.8 MB', type: 'PDF' },
+    { title: 'SOP Pengadaan Barang/Jasa Secara Elektronik', category: 'SOP', date: '10 Mar 2023', size: '3.1 MB', type: 'PDF' },
+    { title: 'Surat Edaran Kepala LKPP No. 3 Tahun 2023', category: 'Edaran', date: '15 Apr 2023', size: '1.2 MB', type: 'PDF' },
+  ];
+
+  const dummyNews = [
+    { title: 'Peningkatan Kapasitas SDM Pengadaan', summary: 'Bimbingan teknis terbaru untuk seluruh anggota Pokja UKPBJ.', date: '12 Okt 2026', category: 'Berita', href: '#' },
+    { title: 'Pembaruan Sistem SPSE v4.5', summary: 'Jadwal maintenance dan panduan penggunaan sistem SPSE terbaru.', date: '08 Okt 2026', category: 'Pengumuman', href: '#' },
+    { title: 'Sosialisasi E-Katalog Sektoral', summary: 'Kemnaker mengadakan sosialisasi terkait produk dalam negeri.', date: '01 Okt 2026', category: 'Berita', href: '#' },
+  ];
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-secondary-offwhite pt-24 pb-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <FadeIn direction="up">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary-navy mb-6">Informasi Publik</h1>
-            <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
-            <div className="bg-white p-12 rounded-xl shadow-lg border border-slate-100 min-h-[500px] flex flex-col items-center justify-center text-center">
-              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-10 h-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+      <main className="min-h-screen bg-slate-50 pb-20">
+        {/* Hero Section */}
+        <section className="bg-primary-navy py-16 md:py-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <FadeIn direction="up">
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 text-center">Pusat Informasi & Regulasi</h1>
+              <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg mb-10">
+                Temukan berbagai dokumen penting, regulasi terbaru, panduan, serta pengumuman resmi terkait pengadaan barang/jasa.
+              </p>
+              
+              {/* Search Bar Mockup */}
+              <div className="max-w-2xl mx-auto flex items-center bg-white rounded-full p-2 shadow-lg">
+                <Search className="w-6 h-6 text-slate-400 ml-4" />
+                <input 
+                  type="text" 
+                  placeholder="Cari dokumen, peraturan, atau pengumuman..." 
+                  className="w-full bg-transparent border-none focus:ring-0 px-4 py-2 text-slate-700 outline-none"
+                />
+                <button className="bg-accent-gold hover:bg-yellow-600 text-primary-navy font-bold py-2 px-6 rounded-full transition-colors">
+                  Cari
+                </button>
               </div>
-              <h2 className="text-2xl font-bold text-slate-700 mb-4">Halaman Informasi</h2>
-              <p className="text-slate-500 max-w-lg">Kami sedang menyiapkan berbagai informasi publik dan dokumen pengadaan yang relevan. Halaman ini akan segera tersedia secara penuh.</p>
+            </FadeIn>
+          </div>
+        </section>
+
+        {/* Content Section */}
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8 md:p-12 mb-16">
+            <SectionHeading title="Dokumen & Regulasi" subtitle="Unduh peraturan dan standar operasional prosedur terbaru" />
+            
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+              {dummyDocs.map((doc, idx) => (
+                <StaggerItem key={idx}>
+                  <DocumentCard {...doc} />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+            
+            <div className="mt-8 text-center">
+              <button className="text-primary-blue font-semibold hover:underline">Lihat Semua Dokumen &rarr;</button>
             </div>
-          </FadeIn>
-        </div>
+          </div>
+          
+          <div className="mt-20">
+            <SectionHeading title="Berita & Pengumuman" subtitle="Informasi terkini seputar kegiatan UKPBJ" />
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+              {dummyNews.map((news, idx) => (
+                <StaggerItem key={idx}>
+                  <NewsCard {...news} />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

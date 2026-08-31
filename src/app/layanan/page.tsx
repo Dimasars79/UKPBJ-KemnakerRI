@@ -2,27 +2,89 @@ import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { SectionHeading } from '@/components/ui/SectionHeading';
+import { ServiceCard } from '@/components/cards/ServiceCard';
+import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
+import { Monitor, FileText, HelpCircle, ShieldCheck } from 'lucide-react';
 
 export default function LayananPage() {
+  const services = [
+    {
+      title: "LPSE",
+      description: "Layanan Pengadaan Secara Elektronik untuk penyelenggaraan pengadaan barang/jasa.",
+      icon: <Monitor className="w-8 h-8 text-white" />,
+      href: "https://lpse.kemlu.go.id"
+    },
+    {
+      title: "SIKaP",
+      description: "Sistem Informasi Kinerja Penyedia untuk mengelola data kinerja penyedia barang/jasa.",
+      icon: <FileText className="w-8 h-8 text-white" />,
+      href: "#"
+    },
+    {
+      title: "Layanan Pengaduan",
+      description: "Sampaikan laporan atau pengaduan terkait proses pengadaan barang/jasa.",
+      icon: <HelpCircle className="w-8 h-8 text-white" />,
+      href: "#"
+    },
+    {
+      title: "Clearing House",
+      description: "Konsultasi dan penyelesaian masalah terkait proses pengadaan barang/jasa.",
+      icon: <ShieldCheck className="w-8 h-8 text-white" />,
+      href: "#"
+    }
+  ];
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-secondary-offwhite pt-24 pb-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <FadeIn direction="up">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary-navy mb-6">Layanan Pengadaan</h1>
-            <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
-            <div className="bg-white p-12 rounded-xl shadow-lg border border-slate-100 min-h-[500px] flex flex-col items-center justify-center text-center">
-              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-10 h-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-slate-700 mb-4">Pusat Layanan</h2>
-              <p className="text-slate-500 max-w-lg">Portal layanan eletronik seperti LPSE, SIKaP, dan sistem Clearing House sedang dalam tahap integrasi.</p>
+      <main className="min-h-screen bg-slate-50 pb-20">
+        <section className="bg-primary-navy py-20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-blue-900/30" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <FadeIn direction="up">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">Layanan Pengadaan Terintegrasi</h1>
+              <div className="w-20 h-1 bg-accent-gold mx-auto mb-8 rounded-full" />
+              <p className="text-slate-300 max-w-3xl mx-auto text-lg leading-relaxed">
+                Kami menyediakan berbagai layanan elektronik terintegrasi untuk memastikan transparansi, efisiensi, dan kemudahan akses bagi seluruh pemangku kepentingan.
+              </p>
+            </FadeIn>
+          </div>
+        </section>
+
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {services.map((service, idx) => (
+              <StaggerItem key={idx}>
+                <ServiceCard {...service} />
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </section>
+
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-24">
+          <SectionHeading title="Alur Pelayanan" subtitle="Langkah-langkah umum dalam proses layanan pengadaan" />
+          
+          <div className="mt-12 bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100 relative">
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-100 -translate-y-1/2 z-0"></div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+              {[
+                { step: 1, title: 'Registrasi', desc: 'Penyedia mendaftar melalui sistem SPSE' },
+                { step: 2, title: 'Verifikasi', desc: 'Pengecekan kelengkapan dokumen administrasi' },
+                { step: 3, title: 'Akses Sistem', desc: 'Penyedia mendapatkan akses penuh ke sistem' },
+                { step: 4, title: 'Proses Tender', desc: 'Mengikuti proses lelang/pengadaan' }
+              ].map((item) => (
+                <div key={item.step} className="flex flex-col items-center text-center bg-white p-4">
+                  <div className="w-16 h-16 rounded-full bg-primary-navy text-accent-gold flex items-center justify-center text-2xl font-bold mb-4 shadow-lg border-4 border-white">
+                    {item.step}
+                  </div>
+                  <h3 className="font-bold text-lg text-primary-navy mb-2">{item.title}</h3>
+                  <p className="text-sm text-slate-500">{item.desc}</p>
+                </div>
+              ))}
             </div>
-          </FadeIn>
-        </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </>
