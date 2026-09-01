@@ -34,7 +34,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-secondary-soft flex-shrink-0" />
-                <span>ukpbj@kemlu.go.id</span>
+                <span>ukpbj@kemnaker.go.id</span>
               </div>
             </div>
           </div>

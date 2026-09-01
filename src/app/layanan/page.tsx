@@ -13,7 +13,7 @@ export default function LayananPage() {
       title: "LPSE",
       description: "Layanan Pengadaan Secara Elektronik untuk penyelenggaraan pengadaan barang/jasa.",
       icon: Monitor,
-      href: "https://lpse.kemlu.go.id"
+      href: "https://lpse.kemnaker.go.id"
     },
     {
       title: "SIKaP",
