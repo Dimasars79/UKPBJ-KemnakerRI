@@ -5,9 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Search, User, Globe, Eye, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const navLinks = [
     { label: 'Beranda', href: '/' },
@@ -62,7 +64,7 @@ export function Header() {
                 className="relative px-4 py-2 text-sm font-bold group"
               >
                 <span className={`relative z-10 transition-colors duration-300 ${
-                  item.label === 'Beranda'
+                  pathname === item.href
                     ? 'text-accent-gold'
                     : 'text-slate-600 group-hover:text-primary-navy'
                 }`}>
@@ -71,7 +73,7 @@ export function Header() {
                 
                 {/* Underline Animation */}
                 <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-accent-gold via-yellow-400 to-accent-gold transition-all duration-300 rounded-full ${
-                  item.label === 'Beranda'
+                  pathname === item.href
                     ? 'w-3/4 opacity-100 shadow-[0_0_8px_rgba(212,175,55,0.8)]'
                     : 'w-0 opacity-0 group-hover:w-3/4 group-hover:opacity-100 group-hover:shadow-[0_0_8px_rgba(212,175,55,0.8)]'
                 }`} />
