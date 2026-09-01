@@ -26,11 +26,11 @@ export function Footer() {
             <div className="space-y-3 text-sm text-slate-300">
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-secondary-soft flex-shrink-0 mt-0.5" />
-                <span>Jl. Taman Pejambon No. 6, Jakarta Pusat, 10110, Indonesia</span>
+                <span>Gedung B Lantai 3, Jl. Jenderal Gatot Subroto Kav. 51, Jakarta.</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-secondary-soft flex-shrink-0" />
-                <span>(021) 344 1508</span>
+                <span>021-52921236</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-secondary-soft flex-shrink-0" />
