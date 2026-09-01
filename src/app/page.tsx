@@ -36,13 +36,13 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-32">
             <div className="max-w-4xl">
               <FadeIn direction="left" delay={0.1}>
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
                   UKPBJ
                 </h1>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 text-white">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 text-white leading-tight">
                   KEMENTERIAN KETENAGAKERJAAN
                 </h2>
-                <h3 className="text-xl md:text-2xl font-bold text-[#f2b33a] mb-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#f2b33a] mb-8">
                   Unit Kerja Pengadaan Barang/Jasa
                 </h3>
               </FadeIn>
