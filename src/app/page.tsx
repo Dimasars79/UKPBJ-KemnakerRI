@@ -241,7 +241,8 @@ export default function Home() {
         </section>
 
         {/* 3. Main Services (Tempat untuk services nantinya) */}
-        <section className="py-16 bg-secondary-offwhite" id="layanan">
+        <section className="py-20 bg-gradient-to-tr from-blue-50/40 via-slate-50 to-white relative overflow-hidden" id="layanan">
+          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-primary-blue/5 rounded-full blur-[120px] -translate-x-1/3 -translate-y-1/3 pointer-events-none" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <FadeIn>
               <div className="flex justify-between items-end mb-10">
@@ -301,8 +302,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 4. News and Information */}
-        <section className="py-16 bg-white" id="berita">
+        {/* 4. Berita / Pengumuman Terkini */}
+        <section className="py-20 bg-gradient-to-bl from-white via-blue-50/30 to-slate-50 border-t border-slate-100 relative overflow-hidden" id="berita">
+          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent-gold/5 rounded-full blur-[100px] translate-x-1/4 translate-y-1/4 pointer-events-none" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
             <FadeIn>
               <div className="flex justify-between items-end mb-8">
