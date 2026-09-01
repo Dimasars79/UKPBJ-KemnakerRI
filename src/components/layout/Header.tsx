@@ -24,8 +24,8 @@ export function Header() {
       {/* Top Government Bar */}
       <div className="bg-primary-navy text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide">
         <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <span>KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
+          <div className="flex items-center space-x-2 overflow-hidden">
+            <span className="truncate tracking-wider md:tracking-widest">KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <button className="hover:text-secondary-soft transition-colors flex items-center space-x-1">
