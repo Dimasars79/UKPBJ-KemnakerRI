@@ -28,7 +28,7 @@ export default function TentangPage() {
           <div className="absolute inset-0 bg-blue-900/20" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
             <FadeIn direction="up">
-              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={600} height={200} className="w-auto h-32 md:h-48 lg:h-56 object-contain mb-12 mx-auto drop-shadow-[0_20px_50px_rgba(255,255,255,0.1)]" />
+              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={400} height={145} className="w-auto h-28 md:h-36 lg:h-40 object-contain mb-10 mx-auto drop-shadow-2xl" />
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 text-center">Tentang Organisasi Kami</h1>
               <p className="text-slate-300 text-center max-w-3xl mx-auto text-lg leading-relaxed">
                 Unit Kerja Pengadaan Barang/Jasa (UKPBJ) merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen pada standar layanan internasional.
