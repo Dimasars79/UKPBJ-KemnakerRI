@@ -2,8 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="bg-primary-navy text-white pt-16 pb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,7 +23,7 @@ export function Footer() {
               </div>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              Unit Kerja Pengadaan Barang/Jasa Kementerian Ketenagakerjaan merupakan pusat keunggulan pengadaan barang/jasa pemerintah di lingkungan Kementerian Ketenagakerjaan Republik Indonesia.
+              {t('footer.desc')}
             </p>
             <div className="space-y-3 text-sm text-slate-300">
               <div className="flex items-start space-x-3">
@@ -41,7 +43,7 @@ export function Footer() {
 
           {/* Column 2: Layanan */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-white">Layanan</h3>
+            <h3 className="font-semibold text-lg mb-4 text-white">{t('footer.services')}</h3>
             <ul className="space-y-3 text-sm text-slate-300">
               <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">LPSE</Link></li>
               <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Pengaduan</Link></li>
@@ -53,7 +55,7 @@ export function Footer() {
 
           {/* Column 3: Informasi */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-white">Informasi</h3>
+            <h3 className="font-semibold text-lg mb-4 text-white">{t('footer.socials')}</h3>
             <ul className="space-y-3 text-sm text-slate-300">
               <li><Link href="/#profil" className="hover:text-secondary-soft transition-colors">Profil UKPBJ</Link></li>
               <li><Link href="/#berita" className="hover:text-secondary-soft transition-colors">Berita Terkini</Link></li>
@@ -62,7 +64,7 @@ export function Footer() {
 
           {/* Column 4: Tautan */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-white">Tautan Terkait</h3>
+            <h3 className="font-semibold text-lg mb-4 text-white">{t('footer.links')}</h3>
             <ul className="space-y-3 text-sm text-slate-300">
               <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>Kementerian Ketenagakerjaan</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
               <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>LKPP</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
@@ -75,8 +77,10 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400">
-          <p>&copy; {new Date().getFullYear()} UKPBJ Kementerian Ketenagakerjaan Republik Indonesia. Hak Cipta Dilindungi.</p>
+        <div className="pt-8 border-t border-slate-700/50 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400">
+          <p className="mb-4 md:mb-0 text-center md:text-left">
+            {t('footer.rights')}
+          </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <Link href="#" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
             <Link href="#" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>

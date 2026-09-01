@@ -4,6 +4,8 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
+import { LanguageProvider } from "@/contexts/LanguageContext";
+
 export const metadata: Metadata = {
   title: "UKPBJ Kementerian Ketenagakerjaan Republik Indonesia",
   description: "Portal Pengadaan Barang/Jasa Kementerian Ketenagakerjaan Republik Indonesia",
@@ -17,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className={`${inter.variable} font-sans flex flex-col min-h-screen`}>
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

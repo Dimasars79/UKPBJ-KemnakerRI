@@ -1,6 +1,9 @@
+"use client"
+
 import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { NewsCard } from '@/components/cards/NewsCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -13,6 +16,8 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 
 export default function Home() {
+  const { t } = useLanguage();
+
   return (
     <>
       <Header />
@@ -40,18 +45,16 @@ export default function Home() {
                   UKPBJ
                 </h1>
                 <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 text-white leading-tight">
-                  KEMENTERIAN KETENAGAKERJAAN
+                  {t('home.hero_title')}
                 </h2>
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#f2b33a] mb-8">
-                  Unit Kerja Pengadaan Barang/Jasa
+                  {t('home.hero_subtitle')}
                 </h3>
               </FadeIn>
               
               <FadeIn direction="left" delay={0.3}>
                 <p className="text-base md:text-lg text-slate-200 mb-12 max-w-3xl leading-relaxed">
-                  Mewujudkan pengadaan yang transparan, profesional, akuntabel, 
-                  dan berintegritas untuk mendukung pembangunan ketenagakerjaan 
-                  yang inklusif dan berkelanjutan.
+                  {t('home.hero_desc')}
                 </p>
               </FadeIn>
 
@@ -150,10 +153,10 @@ export default function Home() {
               
               <div className="lg:w-2/3">
                 <FadeIn direction="left">
-                  <h2 className="text-2xl md:text-4xl font-bold mb-6 text-primary-navy">Profil UKPBJ</h2>
+                  <h2 className="text-2xl md:text-4xl font-bold mb-6 text-primary-navy">{t('home.about_title')}</h2>
                   <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
                   <p className="text-xl text-slate-600 mb-12 leading-relaxed">
-                    &quot;Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Ketenagakerjaan merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas dan berintegritas.&quot;
+                    {t('home.about_desc')}
                   </p>
                 </FadeIn>
                 

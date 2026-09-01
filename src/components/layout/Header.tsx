@@ -6,19 +6,25 @@ import Image from 'next/image';
 import { Search, User, Globe, Eye, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { language, setLanguage, t } = useLanguage();
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'id' ? 'en' : 'id');
+  };
 
   const navLinks = [
-    { label: 'Beranda', href: '/' },
-    { label: 'Informasi', href: '/informasi' },
-    { label: 'Layanan', href: '/layanan' },
-    { label: 'Agenda', href: '/agenda' },
-    { label: 'Galeri', href: '/galeri' },
-    { label: 'Monitoring', href: '/monitoring' },
-    { label: 'Tentang UKPBJ', href: '/tentang' }
+    { label: t('nav.home'), href: '/' },
+    { label: t('nav.info'), href: '/informasi' },
+    { label: t('nav.services'), href: '/layanan' },
+    { label: t('nav.agenda'), href: '/agenda' },
+    { label: t('nav.gallery'), href: '/galeri' },
+    { label: t('nav.monitoring'), href: '/monitoring' },
+    { label: t('nav.about'), href: '/tentang' }
   ];
 
   return (
@@ -30,14 +36,14 @@ export function Header() {
             <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full">KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
           </div>
           <div className="hidden md:flex items-center space-x-4">
-            <button className="hover:text-secondary-soft transition-colors flex items-center space-x-1">
+            <button onClick={toggleLanguage} className="hover:text-secondary-soft transition-colors flex items-center space-x-1 cursor-pointer">
               <Globe className="w-3 h-3" />
-              <span>Bahasa Indonesia</span>
+              <span>{t('nav.language')}</span>
               <ChevronDown className="w-3 h-3" />
             </button>
             <button className="hover:text-secondary-soft transition-colors flex items-center space-x-1">
               <Eye className="w-3 h-3" />
-              <span>Aksesibilitas</span>
+              <span>{t('nav.accessibility')}</span>
             </button>
           </div>
         </div>
@@ -98,7 +104,7 @@ export function Header() {
             >
               <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
               <User className="w-4 h-4 relative z-10" />
-              <span className="relative z-10">Masuk Portal</span>
+              <span className="relative z-10">{t('nav.login')}</span>
             </Link>
 
             {/* Mobile Navbar Toggler */}
