@@ -10,11 +10,13 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
 
-  const toggleLanguage = () => {
-    setLanguage(language === 'id' ? 'en' : 'id');
+  const toggleLanguage = (lang: 'id' | 'en') => {
+    setLanguage(lang);
+    setIsLangMenuOpen(false);
   };
 
   const navLinks = [
@@ -36,11 +38,54 @@ export function Header() {
             <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full">KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
           </div>
           <div className="hidden md:flex items-center space-x-4">
-            <button onClick={toggleLanguage} className="hover:text-secondary-soft transition-colors flex items-center space-x-1 cursor-pointer">
-              <Globe className="w-3 h-3" />
-              <span>{t('nav.language')}</span>
-              <ChevronDown className="w-3 h-3" />
-            </button>
+            {/* Language Dropdown */}
+            <div className="relative">
+              <button 
+                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} 
+                onBlur={() => setTimeout(() => setIsLangMenuOpen(false), 200)}
+                className="hover:text-accent-gold transition-colors flex items-center space-x-1.5 cursor-pointer bg-white/10 px-3 py-1 rounded-full border border-white/20 hover:border-accent-gold hover:shadow-[0_0_10px_rgba(212,175,55,0.4)] relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-accent-gold/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                <Globe className="w-3.5 h-3.5 relative z-10" />
+                <span className="relative z-10 font-bold tracking-wider">{language.toUpperCase()}</span>
+                <ChevronDown className={`w-3.5 h-3.5 relative z-10 transition-transform duration-300 ${isLangMenuOpen ? 'rotate-180 text-accent-gold' : ''}`} />
+              </button>
+
+              <AnimatePresence>
+                {isLangMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2, type: 'spring', stiffness: 300, damping: 25 }}
+                    className="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-100 z-50 text-slate-800"
+                  >
+                    <div className="p-1">
+                      <button 
+                        onClick={() => toggleLanguage('id')}
+                        className={`w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between transition-colors ${language === 'id' ? 'bg-blue-50 text-primary-blue font-bold' : 'hover:bg-slate-50'}`}
+                      >
+                        <span className="flex items-center space-x-2">
+                          <span className="text-base">🇮🇩</span>
+                          <span>Indonesia</span>
+                        </span>
+                        {language === 'id' && <div className="w-1.5 h-1.5 rounded-full bg-primary-blue" />}
+                      </button>
+                      <button 
+                        onClick={() => toggleLanguage('en')}
+                        className={`w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between transition-colors ${language === 'en' ? 'bg-blue-50 text-primary-blue font-bold' : 'hover:bg-slate-50'}`}
+                      >
+                        <span className="flex items-center space-x-2">
+                          <span className="text-base">🇬🇧</span>
+                          <span>English</span>
+                        </span>
+                        {language === 'en' && <div className="w-1.5 h-1.5 rounded-full bg-primary-blue" />}
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <button className="hover:text-secondary-soft transition-colors flex items-center space-x-1">
               <Eye className="w-3 h-3" />
               <span>{t('nav.accessibility')}</span>
