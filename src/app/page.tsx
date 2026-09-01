@@ -300,7 +300,7 @@ export default function Home() {
                 <NewsCard 
                   featured={false}
                   title="Sosialisasi Peraturan Pengadaan Terbaru"
-                  summary="UKPBJ Kementerian Luar Negeri mengadakan sosialisasi terkait regulasi terbaru mengenai pengadaan barang dan jasa pemerintah."
+                  summary="UKPBJ Kementerian Ketenagakerjaan mengadakan sosialisasi terkait regulasi terbaru mengenai pengadaan barang dan jasa pemerintah."
                   date="24 Agustus 2026"
                   category="Berita"
                   imageUrl="/placeholder"
@@ -310,7 +310,7 @@ export default function Home() {
               <StaggerItem>
                 <NewsCard 
                   title="Peningkatan Kapasitas PPK"
-                  summary="Kegiatan bimbingan teknis yang diselenggarakan khusus untuk Pejabat Pembuat Komitmen Kementerian Luar Negeri."
+                  summary="Kegiatan bimbingan teknis yang diselenggarakan khusus untuk Pejabat Pembuat Komitmen Kementerian Ketenagakerjaan."
                   date="20 Agustus 2026"
                   category="Kegiatan"
                   imageUrl="/placeholder"

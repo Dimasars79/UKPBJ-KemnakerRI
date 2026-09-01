@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "UKPBJ Kementerian Luar Negeri Republik Indonesia",
-  description: "Portal Pengadaan Barang/Jasa Kementerian Luar Negeri Republik Indonesia",
+  title: "UKPBJ Kementerian Ketenagakerjaan Republik Indonesia",
+  description: "Portal Pengadaan Barang/Jasa Kementerian Ketenagakerjaan Republik Indonesia",
 };
 
 export default function RootLayout({

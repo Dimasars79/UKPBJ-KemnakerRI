@@ -17,11 +17,11 @@ export function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-lg leading-tight">UKPBJ</span>
-                <span className="text-secondary-soft text-sm font-medium">Kementerian Luar Negeri</span>
+                <span className="text-secondary-soft text-sm font-medium">Kementerian Ketenagakerjaan</span>
               </div>
             </div>
-            <p className="text-slate-300 text-sm leading-relaxed mb-6 max-w-sm">
-              Unit Kerja Pengadaan Barang/Jasa Kementerian Luar Negeri merupakan pusat keunggulan pengadaan barang/jasa pemerintah di lingkungan Kementerian Luar Negeri dan Perwakilan Republik Indonesia di luar negeri.
+            <p className="text-slate-400 text-sm leading-relaxed mb-6">
+              Unit Kerja Pengadaan Barang/Jasa Kementerian Ketenagakerjaan merupakan pusat keunggulan pengadaan barang/jasa pemerintah di lingkungan Kementerian Ketenagakerjaan Republik Indonesia.
             </p>
             <div className="space-y-3 text-sm text-slate-300">
               <div className="flex items-start space-x-3">
@@ -64,7 +64,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4 text-white">Tautan Terkait</h3>
             <ul className="space-y-3 text-sm text-slate-300">
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>Kementerian Luar Negeri</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
+              <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>Kementerian Ketenagakerjaan</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
               <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>LKPP</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
               <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>INAPROC</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
               <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>SPSE Nasional</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
@@ -76,7 +76,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400">
-          <p>&copy; {new Date().getFullYear()} UKPBJ Kementerian Luar Negeri Republik Indonesia. Hak Cipta Dilindungi.</p>
+          <p>&copy; {new Date().getFullYear()} UKPBJ Kementerian Ketenagakerjaan Republik Indonesia. Hak Cipta Dilindungi.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <Link href="#" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
             <Link href="#" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>

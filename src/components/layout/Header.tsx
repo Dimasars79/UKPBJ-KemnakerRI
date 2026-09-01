@@ -25,7 +25,7 @@ export function Header() {
       <div className="bg-primary-navy text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <span>KEMENTERIAN LUAR NEGERI REPUBLIK INDONESIA</span>
+            <span>KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <button className="hover:text-secondary-soft transition-colors flex items-center space-x-1">
