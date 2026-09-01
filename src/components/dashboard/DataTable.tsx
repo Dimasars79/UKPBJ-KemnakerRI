@@ -15,18 +15,18 @@ const mockData = [
 export function DataTable() {
   return (
     <div className="w-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mt-8">
-      <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+      <div className="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-center bg-slate-50/50">
         <div>
           <h3 className="text-xl font-bold text-primary-navy">Analisis Data Pengadaan</h3>
           <p className="text-sm text-slate-500 mt-1">Daftar lengkap paket pengadaan berdasarkan kategori dan status</p>
         </div>
-        <button className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors shadow-sm">
+        <button className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors shadow-sm whitespace-nowrap w-full sm:w-auto">
           Ekspor Data
         </button>
       </div>
       
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm text-slate-600">
+        <table className="w-full text-left text-sm text-slate-600 whitespace-nowrap">
           <thead className="bg-slate-50 text-slate-500 uppercase text-xs font-semibold border-b border-slate-100">
             <tr>
               <th className="px-6 py-4">Nama Paket</th>
