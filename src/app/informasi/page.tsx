@@ -1,5 +1,9 @@
+"use client"
+
 import React from 'react';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -9,6 +13,8 @@ import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { Search } from 'lucide-react';
 
 export default function InformasiPage() {
+  const { t } = useLanguage();
+
   const dummyDocs = [
     { title: 'Peraturan Presiden No. 16 Tahun 2018', category: 'Regulasi', href: '#' },
     { title: 'Peraturan Presiden No. 12 Tahun 2021', category: 'Regulasi', href: '#' },
@@ -35,9 +41,9 @@ export default function InformasiPage() {
           <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/debut-light.png')] opacity-20 mix-blend-overlay" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">Pusat Informasi & Regulasi</h1>
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_informasi.title')}</h1>
               <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg mb-10">
-                Temukan berbagai dokumen penting, regulasi terbaru, panduan, serta pengumuman resmi terkait pengadaan barang/jasa.
+                {t('page_informasi.desc')}
               </p>
               
               {/* Search Bar Mockup */}

@@ -1,11 +1,16 @@
+"use client"
+
 import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 
 export default function GaleriPage() {
+  const { t } = useLanguage();
+
   const dummyImages = [
     { id: 1, title: 'Rapat Koordinasi Nasional', desc: 'Rapat koordinasi seluruh anggota UKPBJ kementerian.', size: 'large' },
     { id: 2, title: 'Penghargaan Kinerja', desc: 'Penghargaan UKPBJ Terbaik 2025.', size: 'small' },
@@ -28,9 +33,9 @@ export default function GaleriPage() {
           <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/worn-dots.png')] opacity-20 mix-blend-overlay" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">Galeri Dokumentasi</h1>
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_galeri.title')}</h1>
               <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
-                Rekam jejak visual dari setiap kegiatan, program kerja, dan pencapaian UKPBJ.
+                {t('page_galeri.desc')}
               </p>
             </FadeIn>
           </div>

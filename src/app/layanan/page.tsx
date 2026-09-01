@@ -1,5 +1,9 @@
+"use client"
+
 import React from 'react';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -8,6 +12,8 @@ import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { Monitor, FileText, HelpCircle, ShieldCheck } from 'lucide-react';
 
 export default function LayananPage() {
+  const { t } = useLanguage();
+
   const services = [
     {
       title: "LPSE",
@@ -48,10 +54,10 @@ export default function LayananPage() {
           <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-20 mix-blend-overlay" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6">Layanan Pengadaan Terintegrasi</h1>
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6">{t('page_layanan.title')}</h1>
               <div className="w-20 h-1 bg-accent-gold mx-auto mb-8 rounded-full" />
               <p className="text-slate-300 max-w-3xl mx-auto text-lg leading-relaxed">
-                Kami menyediakan berbagai layanan elektronik terintegrasi untuk memastikan transparansi, efisiensi, dan kemudahan akses bagi seluruh pemangku kepentingan.
+                {t('page_layanan.desc')}
               </p>
             </FadeIn>
           </div>

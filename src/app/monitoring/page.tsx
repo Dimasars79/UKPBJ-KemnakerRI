@@ -1,5 +1,9 @@
+"use client"
+
 import React from 'react';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -8,7 +12,9 @@ import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { TrendingUp, Clock, PackageCheck } from 'lucide-react';
 
 export default function MonitoringPage() {
-  const stats = [
+  const { t } = useLanguage();
+
+  const performanceStats = [
     { title: 'Total Paket Selesai', value: '428', icon: <PackageCheck className="w-8 h-8 text-white" />, trend: '+12% dari bulan lalu' },
     { title: 'Efisiensi Waktu', value: '18%', icon: <Clock className="w-8 h-8 text-white" />, trend: 'Lebih cepat 4 hari/paket' },
     { title: 'Penghematan Pagu', value: 'Rp 14.5 M', icon: <TrendingUp className="w-8 h-8 text-white" />, trend: '12.5% efisiensi anggaran' },
@@ -27,9 +33,9 @@ export default function MonitoringPage() {
           <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">Dashboard Monitoring & Evaluasi</h1>
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_monitoring.title')}</h1>
               <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
-                Pantau kinerja pengadaan secara langsung. Transparansi data untuk memastikan akuntabilitas proses pengadaan.
+                {t('page_monitoring.desc')}
               </p>
             </FadeIn>
           </div>

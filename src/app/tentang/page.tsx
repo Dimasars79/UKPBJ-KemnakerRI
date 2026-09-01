@@ -1,5 +1,9 @@
+"use client"
+
 import React from 'react';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -8,6 +12,7 @@ import Image from 'next/image';
 import { OrganizationChart } from '@/components/ui/OrganizationChart';
 
 export default function TentangPage() {
+  const { t } = useLanguage();
   const values = [
     { title: 'Integritas', desc: 'Bertindak jujur, transparan, dan menghindari konflik kepentingan dalam seluruh proses pengadaan.', icon: <ShieldCheck className="w-6 h-6" /> },
     { title: 'Profesionalisme', desc: 'Menjalankan tugas dengan kompetensi tinggi dan sesuai dengan peraturan perundang-undangan.', icon: <Target className="w-6 h-6" /> },
@@ -29,9 +34,9 @@ export default function TentangPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
             <FadeIn direction="up">
               <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={400} height={145} className="w-auto h-28 md:h-36 lg:h-40 object-contain mb-10 mx-auto drop-shadow-2xl" />
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">Tentang Organisasi Kami</h1>
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_tentang.title')}</h1>
               <p className="text-slate-300 text-center max-w-3xl mx-auto text-lg leading-relaxed">
-                Unit Kerja Pengadaan Barang/Jasa (UKPBJ) merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen pada standar layanan internasional.
+                {t('page_tentang.desc')}
               </p>
             </FadeIn>
           </div>

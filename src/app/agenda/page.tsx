@@ -1,5 +1,9 @@
+"use client"
+
 import React from 'react';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -7,6 +11,8 @@ import { AgendaCard } from '@/components/cards/AgendaCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 
 export default function AgendaPage() {
+  const { t } = useLanguage();
+
   const dummyAgendas = [
     { title: 'Pembukaan Tender Konstruksi Gedung A', date: '20', month: 'Okt', time: '09:00 - 12:00 WIB', location: 'Gedung Utama Kemnaker', category: 'Tender' },
     { title: 'Sosialisasi E-Katalog Sektoral Baru', date: '25', month: 'Okt', time: '13:00 - 15:00 WIB', location: 'Zoom Meeting', category: 'Sosialisasi' },
@@ -28,9 +34,9 @@ export default function AgendaPage() {
           <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/cartographer.png')] opacity-20 mix-blend-overlay" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">Agenda & Kegiatan</h1>
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_agenda.title')}</h1>
               <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
-                Jadwal lengkap kegiatan, tender, sosialisasi, dan pelatihan di lingkungan UKPBJ Kementerian.
+                {t('page_agenda.desc')}
               </p>
             </FadeIn>
           </div>

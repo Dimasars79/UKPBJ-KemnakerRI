@@ -201,9 +201,9 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-center mb-10">
               <FadeIn direction="left" className="mb-6 md:mb-0">
-                <SectionHeading title="Dashboard Kinerja" />
+                <SectionHeading title={t('home.dashboard_title')} />
                 <p className="text-slate-600 max-w-2xl mt-2">
-                  Transparansi capaian kinerja pengadaan barang dan jasa di lingkungan Kementerian Ketenagakerjaan.
+                  {t('home.dashboard_desc')}
                 </p>
               </FadeIn>
             </div>
@@ -211,23 +211,23 @@ export default function Home() {
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <StaggerItem>
                 <div className="bg-primary-navy text-white rounded-xl p-6 shadow-md h-full">
-                  <h4 className="text-lg font-bold mb-2">Total Penghematan</h4>
+                  <h4 className="text-lg font-bold mb-2">{t('home.stats_saving')}</h4>
                   <p className="text-2xl md:text-3xl font-extrabold text-accent-gold">Rp 12.4 Miliar</p>
-                  <p className="text-sm text-slate-300 mt-2">Tahun Anggaran 2024</p>
+                  <p className="text-sm text-slate-300 mt-2">{t('home.stats_year')}</p>
                 </div>
               </StaggerItem>
               <StaggerItem>
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 h-full">
-                  <h4 className="text-lg font-bold text-primary-navy mb-2">Paket Selesai</h4>
+                  <h4 className="text-lg font-bold text-primary-navy mb-2">{t('home.stats_done')}</h4>
                   <p className="text-2xl md:text-3xl font-extrabold text-primary-blue">440 Paket</p>
-                  <p className="text-sm text-slate-500 mt-2">Dari total 498 target paket</p>
+                  <p className="text-sm text-slate-500 mt-2">{t('home.stats_target')}</p>
                 </div>
               </StaggerItem>
               <StaggerItem>
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 h-full">
-                  <h4 className="text-lg font-bold text-primary-navy mb-2">Efisiensi Waktu</h4>
+                  <h4 className="text-lg font-bold text-primary-navy mb-2">{t('home.stats_time')}</h4>
                   <p className="text-2xl md:text-3xl font-extrabold text-primary-blue">14 Hari</p>
-                  <p className="text-sm text-slate-500 mt-2">Rata-rata proses pemilihan</p>
+                  <p className="text-sm text-slate-500 mt-2">{t('home.stats_avg')}</p>
                 </div>
               </StaggerItem>
             </StaggerContainer>
@@ -249,7 +249,7 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <FadeIn>
               <div className="flex justify-between items-end mb-10">
-                <SectionHeading title="Layanan UKPBJ" />
+                <SectionHeading title={t('home.services_title')} />
               </div>
             </FadeIn>
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -311,7 +311,7 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
             <FadeIn>
               <div className="flex justify-between items-end mb-8">
-                <SectionHeading title="Berita & Informasi Terkini" />
+                <SectionHeading title={t('home.news_title')} />
               </div>
             </FadeIn>
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -349,7 +349,7 @@ export default function Home() {
             </StaggerContainer>
             <FadeIn direction="up" delay={0.4} className="mt-8 text-center">
               <Link href="#" className="inline-flex items-center text-primary-blue font-bold hover:text-primary-navy transition-colors">
-                Lihat Semua Berita <ArrowRight className="w-5 h-5 ml-2" />
+                {t('home.news_more')} <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </FadeIn>
           </div>
@@ -363,13 +363,13 @@ export default function Home() {
               <FadeIn direction="right">
                 <div className="inline-flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-full text-accent-gold font-medium text-sm mb-6">
                   <Calendar className="w-4 h-4" />
-                  <span>Agenda Mendatang</span>
+                  <span>{t('home.agenda_title')}</span>
                 </div>
                 <h2 className="text-2xl md:text-4xl font-bold mb-6 leading-tight">
-                  Bimbingan Teknis Pengadaan Barang & Jasa Pemerintah
+                  {t('home.agenda_subtitle')}
                 </h2>
                 <p className="text-lg text-slate-300 mb-8 leading-relaxed">
-                  Tingkatkan kompetensi dan pemahaman Anda seputar regulasi terbaru pengadaan barang dan jasa pemerintah melalui bimbingan teknis komprehensif bersama pakar dan praktisi dari LKPP.
+                  {t('home.agenda_desc')}
                 </p>
                 <StaggerContainer className="space-y-4 mb-8">
                   <StaggerItem>
@@ -396,7 +396,7 @@ export default function Home() {
                   </StaggerItem>
                 </StaggerContainer>
                 <Link href="#" className="inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-8 rounded-md transition-colors shadow-lg">
-                  Daftar Sekarang <ArrowRight className="w-5 h-5 ml-2" />
+                  {t('home.agenda_btn')} <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </FadeIn>
               <FadeIn direction="left" delay={0.2} className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group">
@@ -408,7 +408,7 @@ export default function Home() {
                   className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-navy/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <p className="text-white font-medium">Klik gambar untuk mengunduh resolusi tinggi.</p>
+                  <p className="text-white font-medium">{t('home.agenda_hint')}</p>
                 </div>
               </FadeIn>
             </div>

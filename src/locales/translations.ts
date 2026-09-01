@@ -53,10 +53,40 @@ export const translations: Translations = {
         'Layanan Pengadaan Digital',
         'Pembinaan Berkelanjutan'
       ],
-      news_title: 'Berita & Pengumuman',
+      dashboard_title: 'Dashboard Kinerja',
+      dashboard_desc: 'Transparansi capaian kinerja pengadaan barang dan jasa di lingkungan Kementerian Ketenagakerjaan.',
+      services_title: 'Layanan UKPBJ',
+      news_title: 'Berita & Informasi Terkini',
+      news_more: 'Lihat Semua Berita',
       agenda_title: 'Agenda Mendatang',
-      agenda_desc: 'Mari bergabung dalam kegiatan peningkatan kapasitas sumber daya manusia pengadaan barang/jasa.',
-      agenda_btn: 'Daftar Sekarang'
+      agenda_subtitle: 'Bimbingan Teknis Pengadaan Barang & Jasa Pemerintah',
+      agenda_desc: 'Tingkatkan kompetensi dan pemahaman Anda seputar regulasi terbaru pengadaan barang dan jasa pemerintah melalui bimbingan teknis komprehensif bersama pakar dan praktisi dari LKPP.',
+      agenda_btn: 'Daftar Sekarang',
+      agenda_hint: 'Klik gambar untuk mengunduh resolusi tinggi.'
+    },
+    page_tentang: {
+      title: 'Tentang Organisasi Kami',
+      desc: 'Unit Kerja Pengadaan Barang/Jasa (UKPBJ) merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen pada standar layanan internasional.'
+    },
+    page_monitoring: {
+      title: 'Dashboard Monitoring & Evaluasi',
+      desc: 'Pantau kinerja pengadaan secara langsung. Transparansi data untuk memastikan akuntabilitas proses pengadaan.'
+    },
+    page_layanan: {
+      title: 'Layanan Pengadaan Terintegrasi',
+      desc: 'Kami menyediakan berbagai layanan elektronik terintegrasi untuk memastikan transparansi, efisiensi, dan kemudahan akses bagi seluruh pemangku kepentingan.'
+    },
+    page_informasi: {
+      title: 'Pusat Informasi & Regulasi',
+      desc: 'Temukan berbagai dokumen penting, regulasi terbaru, panduan, serta pengumuman resmi terkait pengadaan barang/jasa.'
+    },
+    page_galeri: {
+      title: 'Galeri Dokumentasi',
+      desc: 'Rekam jejak visual dari setiap kegiatan, program kerja, dan pencapaian UKPBJ.'
+    },
+    page_agenda: {
+      title: 'Agenda & Kegiatan',
+      desc: 'Jadwal lengkap kegiatan, tender, sosialisasi, dan pelatihan di lingkungan UKPBJ Kementerian.'
     }
   },
   en: {
@@ -107,10 +137,40 @@ export const translations: Translations = {
         'Digital Procurement Services',
         'Continuous Development'
       ],
-      news_title: 'News & Announcements',
+      dashboard_title: 'Performance Dashboard',
+      dashboard_desc: 'Transparency in the performance of goods and services procurement within the Ministry of Manpower.',
+      services_title: 'UKPBJ Services',
+      news_title: 'Latest News & Information',
+      news_more: 'View All News',
       agenda_title: 'Upcoming Agenda',
-      agenda_desc: 'Join us in capacity building activities for goods/services procurement human resources.',
-      agenda_btn: 'Register Now'
+      agenda_subtitle: 'Technical Guidance on Government Goods & Services Procurement',
+      agenda_desc: 'Improve your competence and understanding of the latest government procurement regulations through comprehensive technical guidance with experts and practitioners from LKPP.',
+      agenda_btn: 'Register Now',
+      agenda_hint: 'Click the image to download in high resolution.'
+    },
+    page_tentang: {
+      title: 'About Our Organization',
+      desc: 'The Goods/Services Procurement Unit (UKPBJ) is a government procurement center of excellence committed to international service standards.'
+    },
+    page_monitoring: {
+      title: 'Monitoring & Evaluation Dashboard',
+      desc: 'Monitor procurement performance directly. Data transparency to ensure accountability in the procurement process.'
+    },
+    page_layanan: {
+      title: 'Integrated Procurement Services',
+      desc: 'We provide various integrated electronic services to ensure transparency, efficiency, and ease of access for all stakeholders.'
+    },
+    page_informasi: {
+      title: 'Information & Regulation Center',
+      desc: 'Find various important documents, latest regulations, guidelines, and official announcements related to goods/services procurement.'
+    },
+    page_galeri: {
+      title: 'Documentation Gallery',
+      desc: 'Visual track record of every activity, work program, and achievement of UKPBJ.'
+    },
+    page_agenda: {
+      title: 'Agenda & Activities',
+      desc: 'Complete schedule of activities, tenders, dissemination, and training within the Ministry\'s UKPBJ.'
     }
   }
 };
