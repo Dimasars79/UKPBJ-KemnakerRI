@@ -6,6 +6,7 @@ import { translations } from '../locales/translations';
 type LanguageContextType = {
   language: 'id' | 'en';
   setLanguage: (lang: 'id' | 'en') => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   t: (key: string) => any;
 };
 
@@ -32,6 +33,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // Helper function to get translation by dot notation path (e.g. 'nav.home')
   const t = (path: string) => {
     const keys = path.split('.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let current: any = translations[language];
     
     for (const key of keys) {

@@ -1,6 +1,8 @@
+type TranslationValue = string | string[] | { [key: string]: TranslationValue };
+
 type Translations = {
   [key: string]: {
-    [key: string]: any;
+    [key: string]: TranslationValue;
   }
 };
 
