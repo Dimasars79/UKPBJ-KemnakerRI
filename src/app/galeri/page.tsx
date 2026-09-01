@@ -16,7 +16,7 @@ export default function GaleriPage() {
     { id: 1, title: 'Kunjungan Kerja', desc: 'Kunjungan dan koordinasi pimpinan dengan jajaran pengurus.', size: 'large', src: '/gallery/gallery-1.jpg' },
     { id: 2, title: 'Rapat Koordinasi Nasional', desc: 'Rapat koordinasi pimpinan mengenai evaluasi kinerja tahunan.', size: 'large', src: '/gallery/gallery-2.jpg' },
     { id: 3, title: 'Sosialisasi Pegawai', desc: 'Acara sosialisasi dan interaksi langsung dengan seluruh peserta.', size: 'large', src: '/gallery/gallery-3.jpg' },
-    { id: 4, title: 'Bimbingan Teknis PBJ', desc: 'Saran: Tambahkan foto pelatihan kompetensi pengadaan barang dan jasa untuk PPK dan Pokja.', size: 'small', src: null },
+    { id: 4, title: 'Bimbingan Teknis PBJ', desc: 'Pelatihan kompetensi pengadaan barang dan jasa untuk PPK dan Pokja.', size: 'small', src: '/gallery/gallery-4.jpg' },
     { id: 5, title: 'Penandatanganan Kontrak', desc: 'Saran: Tambahkan foto penandatanganan pakta integritas atau kontrak kerja sama strategis.', size: 'small', src: null },
     { id: 6, title: 'Penghargaan UKPBJ', desc: 'Saran: Tambahkan foto pencapaian, sertifikasi, atau penghargaan tingkat nasional.', size: 'small', src: null },
   ];
