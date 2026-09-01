@@ -35,7 +35,7 @@ export default function InformasiPage() {
           <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/debut-light.png')] opacity-20 mix-blend-overlay" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <FadeIn direction="up">
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 text-center">Pusat Informasi & Regulasi</h1>
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">Pusat Informasi & Regulasi</h1>
               <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg mb-10">
                 Temukan berbagai dokumen penting, regulasi terbaru, panduan, serta pengumuman resmi terkait pengadaan barang/jasa.
               </p>

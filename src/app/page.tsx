@@ -36,10 +36,10 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-32">
             <div className="max-w-4xl">
               <FadeIn direction="left" delay={0.1}>
-                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
                   UKPBJ
                 </h1>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 text-white leading-tight">
+                <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 text-white leading-tight">
                   KEMENTERIAN KETENAGAKERJAAN
                 </h2>
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#f2b33a] mb-8">
@@ -150,7 +150,7 @@ export default function Home() {
               
               <div className="lg:w-2/3">
                 <FadeIn direction="left">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary-navy">Profil UKPBJ</h2>
+                  <h2 className="text-2xl md:text-4xl font-bold mb-6 text-primary-navy">Profil UKPBJ</h2>
                   <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
                   <p className="text-xl text-slate-600 mb-12 leading-relaxed">
                     &quot;Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Ketenagakerjaan merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas dan berintegritas.&quot;
@@ -209,21 +209,21 @@ export default function Home() {
               <StaggerItem>
                 <div className="bg-primary-navy text-white rounded-xl p-6 shadow-md h-full">
                   <h4 className="text-lg font-bold mb-2">Total Penghematan</h4>
-                  <p className="text-3xl font-extrabold text-accent-gold">Rp 12.4 Miliar</p>
+                  <p className="text-2xl md:text-3xl font-extrabold text-accent-gold">Rp 12.4 Miliar</p>
                   <p className="text-sm text-slate-300 mt-2">Tahun Anggaran 2024</p>
                 </div>
               </StaggerItem>
               <StaggerItem>
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 h-full">
                   <h4 className="text-lg font-bold text-primary-navy mb-2">Paket Selesai</h4>
-                  <p className="text-3xl font-extrabold text-primary-blue">440 Paket</p>
+                  <p className="text-2xl md:text-3xl font-extrabold text-primary-blue">440 Paket</p>
                   <p className="text-sm text-slate-500 mt-2">Dari total 498 target paket</p>
                 </div>
               </StaggerItem>
               <StaggerItem>
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 h-full">
                   <h4 className="text-lg font-bold text-primary-navy mb-2">Efisiensi Waktu</h4>
-                  <p className="text-3xl font-extrabold text-primary-blue">14 Hari</p>
+                  <p className="text-2xl md:text-3xl font-extrabold text-primary-blue">14 Hari</p>
                   <p className="text-sm text-slate-500 mt-2">Rata-rata proses pemilihan</p>
                 </div>
               </StaggerItem>
@@ -362,7 +362,7 @@ export default function Home() {
                   <Calendar className="w-4 h-4" />
                   <span>Agenda Mendatang</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+                <h2 className="text-2xl md:text-4xl font-bold mb-6 leading-tight">
                   Bimbingan Teknis Pengadaan Barang & Jasa Pemerintah
                 </h2>
                 <p className="text-lg text-slate-300 mb-8 leading-relaxed">

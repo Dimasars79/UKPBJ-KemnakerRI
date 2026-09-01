@@ -27,7 +27,7 @@ export default function MonitoringPage() {
           <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <FadeIn direction="up">
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 text-center">Dashboard Monitoring & Evaluasi</h1>
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">Dashboard Monitoring & Evaluasi</h1>
               <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
                 Pantau kinerja pengadaan secara langsung. Transparansi data untuk memastikan akuntabilitas proses pengadaan.
               </p>
@@ -45,7 +45,7 @@ export default function MonitoringPage() {
                 </div>
                 <div>
                   <p className="text-slate-500 text-sm font-medium mb-1">{stat.title}</p>
-                  <h3 className="text-3xl font-bold text-primary-navy mb-1">{stat.value}</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold text-primary-navy mb-1">{stat.value}</h3>
                   <p className="text-green-600 text-xs font-bold">{stat.trend}</p>
                 </div>
               </FadeIn>
