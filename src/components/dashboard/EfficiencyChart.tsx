@@ -16,30 +16,32 @@ const data = [
 
 export function EfficiencyChart() {
   return (
-    <div className="h-[300px] md:h-[400px] w-full bg-white rounded-xl shadow-lg border border-slate-100 p-6">
-      <h3 className="text-xl font-bold text-primary-navy mb-6 text-center">Progres Waktu vs Efisiensi Tender</h3>
-      <ResponsiveContainer width="100%" height="85%">
-        <LineChart
-          data={data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-          <XAxis dataKey="name" tick={{fill: '#64748b'}} tickLine={false} axisLine={false} />
-          <YAxis tick={{fill: '#64748b'}} tickLine={false} axisLine={false} unit="%" />
-          <Tooltip 
-            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-          />
-          <Legend wrapperStyle={{ paddingTop: '20px' }} />
-          <Line type="monotone" dataKey="Waktu" name="Target Waktu (%)" stroke="#94a3b8" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-          <Line type="monotone" dataKey="Pagu" name="Progres Pagu (%)" stroke="#d4af37" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-          <Line type="monotone" dataKey="Paket" name="Progres Paket (%)" stroke="#1e3a8a" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="h-[350px] md:h-[400px] w-full bg-white rounded-xl shadow-lg border border-slate-100 p-4 md:p-6 flex flex-col">
+      <h3 className="text-lg md:text-xl font-bold text-primary-navy mb-4 md:mb-6 text-center">Progres Waktu vs Efisiensi Tender</h3>
+      <div className="flex-1 w-full min-h-0">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={data}
+            margin={{
+              top: 10,
+              right: 10,
+              left: -20,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+            <XAxis dataKey="name" tick={{fill: '#64748b', fontSize: 12}} tickLine={false} axisLine={false} />
+            <YAxis tick={{fill: '#64748b', fontSize: 12}} tickLine={false} axisLine={false} unit="%" />
+            <Tooltip 
+              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
+            />
+            <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} />
+            <Line type="monotone" dataKey="Waktu" name="Target Waktu (%)" stroke="#94a3b8" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="Pagu" name="Progres Pagu (%)" stroke="#d4af37" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="Paket" name="Progres Paket (%)" stroke="#1e3a8a" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
