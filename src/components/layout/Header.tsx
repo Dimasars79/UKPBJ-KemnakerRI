@@ -59,12 +59,25 @@ export function Header() {
               <Link
                 key={item.label}
                 href={item.href}
-                className={`px-3 py-2 rounded-md text-sm font-semibold transition-colors ${item.label === 'Beranda'
-                    ? 'text-primary-blue'
-                    : 'text-slate-700 hover:text-primary-blue hover:bg-secondary-offwhite'
-                  }`}
+                className="relative px-4 py-2 text-sm font-bold group"
               >
-                {item.label}
+                <span className={`relative z-10 transition-colors duration-300 ${
+                  item.label === 'Beranda'
+                    ? 'text-accent-gold'
+                    : 'text-slate-600 group-hover:text-primary-navy'
+                }`}>
+                  {item.label}
+                </span>
+                
+                {/* Underline Animation */}
+                <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-accent-gold via-yellow-400 to-accent-gold transition-all duration-300 rounded-full ${
+                  item.label === 'Beranda'
+                    ? 'w-3/4 opacity-100 shadow-[0_0_8px_rgba(212,175,55,0.8)]'
+                    : 'w-0 opacity-0 group-hover:w-3/4 group-hover:opacity-100 group-hover:shadow-[0_0_8px_rgba(212,175,55,0.8)]'
+                }`} />
+                
+                {/* Subtle Hover Background */}
+                <span className="absolute inset-0 bg-accent-gold/5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
               </Link>
             ))}
           </nav>
