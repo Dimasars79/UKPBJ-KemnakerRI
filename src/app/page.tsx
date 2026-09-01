@@ -26,7 +26,7 @@ export default function Home() {
               src="/hero-bg.png" 
               alt="Gedung Kementerian Ketenagakerjaan" 
               fill
-              className="object-cover object-center"
+              className="object-cover object-center animate-slow-zoom"
               priority
             />
           </div>
@@ -60,43 +60,43 @@ export default function Home() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 lg:gap-8 pt-8 border-t border-white/20 relative">
                   
                   {/* Item 1 */}
-                  <div className="flex flex-col border-r border-white/20 pr-4">
-                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-sm">
-                      <ShieldCheck className="w-6 h-6 text-[#f2b33a]" />
+                  <div className="flex flex-col border-r border-white/20 pr-4 group hover:bg-white/5 p-3 -m-3 rounded-xl transition-all duration-300">
+                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-md group-hover:bg-primary-blue/30 group-hover:border-accent-gold/50 animate-float-subtle group-hover:animate-glow-pulse transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+                      <ShieldCheck className="w-6 h-6 text-[#f2b33a] group-hover:scale-110 transition-transform duration-300" />
                     </div>
-                    <h4 className="font-bold text-sm md:text-base mb-1">TRANSPARAN</h4>
-                    <p className="text-xs text-slate-300">Informasi terbuka dan dapat diakses oleh semua.</p>
+                    <h4 className="font-bold text-sm md:text-base mb-1 group-hover:text-accent-gold transition-colors duration-300">TRANSPARAN</h4>
+                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors duration-300">Informasi terbuka dan dapat diakses oleh semua.</p>
                   </div>
                   
                   {/* Item 2 */}
-                  <div className="flex flex-col border-r-0 md:border-r border-white/20 pr-0 md:pr-4">
-                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-sm">
-                      <Users className="w-6 h-6 text-[#f2b33a]" />
+                  <div className="flex flex-col border-r-0 md:border-r border-white/20 pr-0 md:pr-4 group hover:bg-white/5 p-3 -m-3 rounded-xl transition-all duration-300">
+                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-md group-hover:bg-primary-blue/30 group-hover:border-accent-gold/50 animate-float-subtle group-hover:animate-glow-pulse transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]" style={{ animationDelay: '0.5s' }}>
+                      <Users className="w-6 h-6 text-[#f2b33a] group-hover:scale-110 transition-transform duration-300" />
                     </div>
-                    <h4 className="font-bold text-sm md:text-base mb-1">PROFESIONAL</h4>
-                    <p className="text-xs text-slate-300">Dikelola oleh SDM yang kompeten dan berdedikasi.</p>
+                    <h4 className="font-bold text-sm md:text-base mb-1 group-hover:text-accent-gold transition-colors duration-300">PROFESIONAL</h4>
+                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors duration-300">Dikelola oleh SDM yang kompeten dan berdedikasi.</p>
                   </div>
                   
                   {/* Item 3 */}
-                  <div className="flex flex-col border-r border-white/20 pr-4">
-                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-sm">
-                      <svg className="w-6 h-6 text-[#f2b33a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="flex flex-col border-r border-white/20 pr-4 group hover:bg-white/5 p-3 -m-3 rounded-xl transition-all duration-300">
+                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-md group-hover:bg-primary-blue/30 group-hover:border-accent-gold/50 animate-float-subtle group-hover:animate-glow-pulse transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]" style={{ animationDelay: '1s' }}>
+                      <svg className="w-6 h-6 text-[#f2b33a] group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                       </svg>
                     </div>
-                    <h4 className="font-bold text-sm md:text-base mb-1">AKUNTABEL</h4>
-                    <p className="text-xs text-slate-300">Setiap proses dapat dipertanggungjawabkan.</p>
+                    <h4 className="font-bold text-sm md:text-base mb-1 group-hover:text-accent-gold transition-colors duration-300">AKUNTABEL</h4>
+                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors duration-300">Setiap proses dapat dipertanggungjawabkan.</p>
                   </div>
                   
                   {/* Item 4 */}
-                  <div className="flex flex-col">
-                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-sm">
-                      <svg className="w-6 h-6 text-[#f2b33a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="flex flex-col group hover:bg-white/5 p-3 -m-3 rounded-xl transition-all duration-300">
+                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-md group-hover:bg-primary-blue/30 group-hover:border-accent-gold/50 animate-float-subtle group-hover:animate-glow-pulse transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]" style={{ animationDelay: '1.5s' }}>
+                      <svg className="w-6 h-6 text-[#f2b33a] group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
                     </div>
-                    <h4 className="font-bold text-sm md:text-base mb-1">BERINTEGRITAS</h4>
-                    <p className="text-xs text-slate-300">Menjunjung tinggi nilai etika, moralitas, dan keadilan.</p>
+                    <h4 className="font-bold text-sm md:text-base mb-1 group-hover:text-accent-gold transition-colors duration-300">BERINTEGRITAS</h4>
+                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors duration-300">Menjunjung tinggi nilai etika, moralitas, dan keadilan.</p>
                   </div>
                   
                 </div>
@@ -136,11 +136,16 @@ export default function Home() {
         </section>
 
         {/* 2. Profil UKPBJ (Prioritized) */}
-        <section className="py-20 bg-white" id="profil">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-            <div className="flex flex-col lg:flex-row items-center gap-12">
+        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-blue-50/50" id="profil">
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-blue/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+          
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
+            <div className="flex flex-col lg:flex-row items-center gap-16">
               <FadeIn direction="right" className="lg:w-1/3 flex justify-center">
-                <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={400} height={145} className="w-64 md:w-80 h-auto object-contain drop-shadow-2xl" />
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-accent-gold/20 rounded-full blur-3xl group-hover:bg-accent-gold/40 transition-colors duration-700 pointer-events-none animate-pulse" />
+                  <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={400} height={145} className="w-64 md:w-80 h-auto object-contain drop-shadow-[0_20px_50px_rgba(10,35,66,0.15)] group-hover:scale-105 transition-transform duration-700 relative z-10" />
+                </div>
               </FadeIn>
               
               <div className="lg:w-2/3">
@@ -187,8 +192,10 @@ export default function Home() {
         </section>
 
         {/* 2.5 Performance Dashboard */}
-        <section className="py-16 bg-slate-50 border-y border-slate-100" id="kinerja">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-white border-y border-slate-100" id="kinerja">
+          <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-accent-gold/5 rounded-full blur-[120px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+          
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-center mb-10">
               <FadeIn direction="left" className="mb-6 md:mb-0">
                 <SectionHeading title="Dashboard Kinerja" />

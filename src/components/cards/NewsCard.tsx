@@ -14,7 +14,7 @@ interface NewsCardProps {
 
 export function NewsCard({ title, summary, date, category, href, featured = false }: NewsCardProps) {
   return (
-    <Link href={href} className={`group flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 ${featured ? 'md:flex-row md:col-span-2 lg:col-span-2' : ''}`}>
+    <Link href={href} className={`group flex flex-col bg-white/90 backdrop-blur-md rounded-xl border border-white/60 overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(30,58,138,0.15)] hover:-translate-y-1 transition-all duration-500 ${featured ? 'md:flex-row md:col-span-2 lg:col-span-2' : ''}`}>
       <div className={`relative ${featured ? 'md:w-1/2' : 'h-48'} overflow-hidden bg-slate-200 flex-shrink-0`}>
         {/* Placeholder for image */}
         <div className="w-full h-full bg-slate-200 group-hover:scale-105 transition-transform duration-500 flex items-center justify-center text-slate-400">
