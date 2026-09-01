@@ -1,18 +1,16 @@
 "use client"
 
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 const data = [
-  { name: 'Barang', count: 180 },
-  { name: 'Konstruksi', count: 85 },
-  { name: 'Jasa Konsultasi', count: 65 },
-  { name: 'Jasa Lainnya', count: 98 },
+  { name: 'TW I', Target: 100, Realisasi: 95 },
+  { name: 'TW II', Target: 150, Realisasi: 140 },
+  { name: 'TW III', Target: 200, Realisasi: 185 },
+  { name: 'TW IV', Target: 250, Realisasi: 245 },
 ];
 
-const colors = ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'];
-
-export function EfficiencyChart() {
+export function CategoryChart() {
   return (
     <div className="h-[280px] w-full flex flex-col">
       <div className="flex-1 w-full min-h-0">
@@ -28,11 +26,9 @@ export function EfficiencyChart() {
               contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
               cursor={{fill: '#f8fafc'}}
             />
-            <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={50}>
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-              ))}
-            </Bar>
+            <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} iconType="circle" />
+            <Bar dataKey="Target" fill="#93c5fd" radius={[4, 4, 0, 0]} maxBarSize={30} />
+            <Bar dataKey="Realisasi" fill="#1e40af" radius={[4, 4, 0, 0]} maxBarSize={30} />
           </BarChart>
         </ResponsiveContainer>
       </div>

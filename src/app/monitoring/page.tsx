@@ -8,6 +8,8 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
+import { CategoryChart } from '@/components/dashboard/CategoryChart';
+import { DataTable } from '@/components/dashboard/DataTable';
 import { TrendingUp, Clock, PackageCheck } from 'lucide-react';
 
 export default function MonitoringPage() {
@@ -57,21 +59,30 @@ export default function MonitoringPage() {
             ))}
           </div>
 
-          <SectionHeading title="Grafik Kinerja Tahunan" subtitle="Statistik paket dan pagu pengadaan berjalan" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-            <FadeIn direction="right">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h3 className="text-lg font-bold text-slate-700 mb-6 border-b pb-4">Statistik Total Pengadaan</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+            <FadeIn direction="up" delay={0.1}>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
+                <h3 className="text-lg font-bold text-slate-700 mb-6 border-b pb-4">Tren Penyelesaian Paket</h3>
                 <PerformanceChart />
               </div>
             </FadeIn>
-            <FadeIn direction="left">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h3 className="text-lg font-bold text-slate-700 mb-6 border-b pb-4">Efisiensi Waktu & Pagu</h3>
+            <FadeIn direction="up" delay={0.2}>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
+                <h3 className="text-lg font-bold text-slate-700 mb-6 border-b pb-4">Paket per Kategori</h3>
                 <EfficiencyChart />
               </div>
             </FadeIn>
+            <FadeIn direction="up" delay={0.3}>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
+                <h3 className="text-lg font-bold text-slate-700 mb-6 border-b pb-4">Target vs Realisasi</h3>
+                <CategoryChart />
+              </div>
+            </FadeIn>
           </div>
+
+          <FadeIn direction="up" delay={0.4}>
+            <DataTable />
+          </FadeIn>
         </section>
       </main>
       <Footer />
