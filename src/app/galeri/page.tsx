@@ -4,6 +4,7 @@ import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
+import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
@@ -12,12 +13,12 @@ export default function GaleriPage() {
   const { t } = useLanguage();
 
   const dummyImages = [
-    { id: 1, title: 'Rapat Koordinasi Nasional', desc: 'Rapat koordinasi seluruh anggota UKPBJ kementerian.', size: 'large' },
-    { id: 2, title: 'Penghargaan Kinerja', desc: 'Penghargaan UKPBJ Terbaik 2025.', size: 'small' },
-    { id: 3, title: 'Sosialisasi E-Katalog', desc: 'Sosialisasi e-katalog lokal bersama vendor.', size: 'small' },
-    { id: 4, title: 'Bimtek PBJ', desc: 'Bimbingan teknis peraturan pengadaan terbaru.', size: 'small' },
-    { id: 5, title: 'Kunjungan Kerja', desc: 'Kunjungan kerja ke UKPBJ Provinsi.', size: 'small' },
-    { id: 6, title: 'Pelantikan Pejabat', desc: 'Pelantikan pejabat pembuat komitmen baru.', size: 'large' },
+    { id: 1, title: 'Kunjungan Kerja', desc: 'Kunjungan dan koordinasi pimpinan dengan jajaran pengurus.', size: 'large', src: '/gallery/gallery-1.jpg' },
+    { id: 2, title: 'Rapat Koordinasi Nasional', desc: 'Rapat koordinasi pimpinan mengenai evaluasi kinerja tahunan.', size: 'large', src: '/gallery/gallery-2.jpg' },
+    { id: 3, title: 'Sosialisasi Pegawai', desc: 'Acara sosialisasi dan interaksi langsung dengan seluruh peserta.', size: 'large', src: '/gallery/gallery-3.jpg' },
+    { id: 4, title: 'Bimbingan Teknis PBJ', desc: 'Saran: Tambahkan foto pelatihan kompetensi pengadaan barang dan jasa untuk PPK dan Pokja.', size: 'small', src: null },
+    { id: 5, title: 'Penandatanganan Kontrak', desc: 'Saran: Tambahkan foto penandatanganan pakta integritas atau kontrak kerja sama strategis.', size: 'small', src: null },
+    { id: 6, title: 'Penghargaan UKPBJ', desc: 'Saran: Tambahkan foto pencapaian, sertifikasi, atau penghargaan tingkat nasional.', size: 'small', src: null },
   ];
 
   return (
@@ -50,10 +51,25 @@ export default function GaleriPage() {
                 key={img.id} 
                 className={`relative group overflow-hidden rounded-xl shadow-sm ${img.size === 'large' ? 'md:col-span-2 md:row-span-2' : ''}`}
               >
-                <div className={`w-full bg-slate-200 ${img.size === 'large' ? 'h-[400px]' : 'h-[192px]'} flex items-center justify-center`}>
-                  {/* Placeholder Background with subtle pattern */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/80 to-primary-navy/80 mix-blend-multiply" />
-                  <span className="text-slate-400 font-bold z-0 opacity-30 text-2xl">FOTO {img.id}</span>
+                <div className={`w-full bg-slate-200 ${img.size === 'large' ? 'h-[400px]' : 'h-[192px]'} flex items-center justify-center relative`}>
+                  {img.src ? (
+                    <Image 
+                      src={img.src} 
+                      alt={img.title} 
+                      fill
+                      className="object-cover transform group-hover:scale-105 transition-transform duration-700" 
+                    />
+                  ) : (
+                    <>
+                      {/* Placeholder Background */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/80 to-primary-navy/80 mix-blend-multiply" />
+                      <span className="text-slate-400 font-bold z-0 opacity-30 text-2xl text-center px-4">
+                        (Belum Ada Foto)
+                      </span>
+                    </>
+                  )}
+                  {/* Subtle Dark Overlay */}
+                  <div className="absolute inset-0 bg-primary-navy/20 pointer-events-none" />
                 </div>
                 
                 {/* Overlay on Hover */}
