@@ -19,51 +19,112 @@ export default function Home() {
       
       <main className="flex-grow overflow-hidden">
         {/* 1. Hero Section */}
-        <section className="relative bg-primary-navy text-white overflow-hidden py-20 lg:py-32">
-          {/* Background image */}
-          <div className="absolute inset-0">
+        <section className="relative text-white overflow-hidden min-h-[90vh] flex items-center">
+          {/* Background image & overlays */}
+          <div className="absolute inset-0 z-0">
             <Image 
               src="/hero-bg.png" 
-              alt="Gedung Kementerian Luar Negeri" 
+              alt="Gedung Kementerian Ketenagakerjaan" 
               fill
-              className="object-cover opacity-40 mix-blend-overlay"
+              className="object-cover object-center"
               priority
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-navy/90 to-transparent" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-3xl">
+          {/* Gradient Overlay for better readability on left side */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a2342] via-[#0a2342]/80 to-transparent z-0" />
+          
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-32">
+            <div className="max-w-4xl">
               <FadeIn direction="left" delay={0.1}>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                  Pengadaan yang Transparan, <br className="hidden md:block"/> Profesional, dan Akuntabel
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
+                  UKPBJ
                 </h1>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 text-white">
+                  KEMENTERIAN KETENAGAKERJAAN
+                </h2>
+                <h3 className="text-xl md:text-2xl font-bold text-[#f2b33a] mb-8">
+                  Unit Kerja Pengadaan Barang/Jasa
+                </h3>
               </FadeIn>
+              
               <FadeIn direction="left" delay={0.3}>
-                <p className="text-xl md:text-2xl font-medium text-secondary-soft mb-6">
-                  Unit Kerja Pengadaan Barang/Jasa Kementerian Luar Negeri
-                </p>
-                <p className="text-lg text-slate-300 mb-10 max-w-2xl leading-relaxed">
-                  Berkomitmen menghadirkan ekosistem pengadaan yang berintegritas, efisien, dan inovatif guna mewujudkan tata kelola pemerintahan yang unggul dan tepercaya.
+                <p className="text-base md:text-lg text-slate-200 mb-12 max-w-3xl leading-relaxed">
+                  Mewujudkan pengadaan yang transparan, profesional, akuntabel, 
+                  dan berintegritas untuk mendukung pembangunan ketenagakerjaan 
+                  yang inklusif dan berkelanjutan.
                 </p>
               </FadeIn>
+
+              {/* Four Pillars */}
               <FadeIn direction="up" delay={0.5}>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="#profil" className="bg-primary-blue hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-md transition-colors text-center shadow-md border border-blue-500">
-                    Profil UKPBJ
-                  </Link>
-                  <Link href="#layanan" className="bg-transparent hover:bg-white/10 text-white font-bold py-3 px-8 rounded-md transition-colors text-center border border-white/30">
-                    Layanan Kami
-                  </Link>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 lg:gap-8 pt-8 border-t border-white/20 relative">
+                  
+                  {/* Item 1 */}
+                  <div className="flex flex-col border-r border-white/20 pr-4">
+                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-sm">
+                      <ShieldCheck className="w-6 h-6 text-[#f2b33a]" />
+                    </div>
+                    <h4 className="font-bold text-sm md:text-base mb-1">TRANSPARAN</h4>
+                    <p className="text-xs text-slate-300">Informasi terbuka dan dapat diakses oleh semua.</p>
+                  </div>
+                  
+                  {/* Item 2 */}
+                  <div className="flex flex-col border-r-0 md:border-r border-white/20 pr-0 md:pr-4">
+                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-sm">
+                      <Users className="w-6 h-6 text-[#f2b33a]" />
+                    </div>
+                    <h4 className="font-bold text-sm md:text-base mb-1">PROFESIONAL</h4>
+                    <p className="text-xs text-slate-300">Dikelola oleh SDM yang kompeten dan berdedikasi.</p>
+                  </div>
+                  
+                  {/* Item 3 */}
+                  <div className="flex flex-col border-r border-white/20 pr-4">
+                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-sm">
+                      <svg className="w-6 h-6 text-[#f2b33a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                    <h4 className="font-bold text-sm md:text-base mb-1">AKUNTABEL</h4>
+                    <p className="text-xs text-slate-300">Setiap proses dapat dipertanggungjawabkan.</p>
+                  </div>
+                  
+                  {/* Item 4 */}
+                  <div className="flex flex-col">
+                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-sm">
+                      <svg className="w-6 h-6 text-[#f2b33a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <h4 className="font-bold text-sm md:text-base mb-1">BERINTEGRITAS</h4>
+                    <p className="text-xs text-slate-300">Menjunjung tinggi nilai etika, moralitas, dan keadilan.</p>
+                  </div>
+                  
                 </div>
               </FadeIn>
             </div>
           </div>
 
-          {/* Marquee Text */}
-          <div className="absolute bottom-0 left-0 w-full overflow-hidden bg-primary-navy/40 py-3 border-t border-white/10 z-20 backdrop-blur-sm">
-            <p className="animate-marquee whitespace-nowrap text-xs md:text-sm font-bold tracking-[0.25em] text-accent-gold">
-              TRANSPARENT PROCUREMENT &bull; PROFESSIONAL SERVICE &bull; ACCOUNTABLE GOVERNANCE &bull; GLOBAL CONNECTION &nbsp;&nbsp;&nbsp;&nbsp; TRANSPARENT PROCUREMENT &bull; PROFESSIONAL SERVICE &bull; ACCOUNTABLE GOVERNANCE &bull; GLOBAL CONNECTION &nbsp;&nbsp;&nbsp;&nbsp; TRANSPARENT PROCUREMENT &bull; PROFESSIONAL SERVICE &bull; ACCOUNTABLE GOVERNANCE &bull; GLOBAL CONNECTION
-            </p>
+          {/* Bottom Right Graphic & Slogan (Absolute) */}
+          <div className="absolute bottom-0 right-0 w-full md:w-[600px] h-[200px] z-10 pointer-events-none hidden md:block">
+            {/* A simplistic CSS interpretation of the blue/gold wave */}
+            <div className="absolute bottom-0 right-0 w-full h-full">
+              <svg viewBox="0 0 600 200" preserveAspectRatio="none" className="w-full h-full">
+                <path d="M0,200 C150,200 250,50 400,80 C500,100 550,0 600,0 L600,200 Z" fill="#071b36" opacity="0.9" />
+                <path d="M50,200 C200,200 300,80 450,110 C530,125 570,50 600,30 L600,200 Z" fill="#f2b33a" opacity="0.8" />
+                <path d="M100,200 C250,200 350,110 500,140 C550,150 580,100 600,80 L600,200 Z" fill="#0a2342" />
+              </svg>
+              
+              <div className="absolute bottom-10 right-10 text-right">
+                <div className="flex justify-end gap-3 mb-3 text-white/70">
+                  <FileCheck className="w-5 h-5" />
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
+                </div>
+                <p className="text-[#f2b33a] font-bold text-sm">Melayani dengan Hati,</p>
+                <p className="text-white font-bold text-base">Mengabdi untuk Negeri</p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -80,7 +141,7 @@ export default function Home() {
                   <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary-navy">Profil UKPBJ</h2>
                   <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
                   <p className="text-xl text-slate-600 mb-12 leading-relaxed">
-                    &quot;Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Luar Negeri merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas.&quot;
+                    &quot;Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Ketenagakerjaan merupakan pusat keunggulan pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas dan berintegritas.&quot;
                   </p>
                 </FadeIn>
                 
@@ -125,7 +186,7 @@ export default function Home() {
               <FadeIn direction="left" className="mb-6 md:mb-0">
                 <SectionHeading title="Dashboard Kinerja" />
                 <p className="text-slate-600 max-w-2xl mt-2">
-                  Transparansi capaian kinerja pengadaan barang dan jasa di lingkungan Kementerian Luar Negeri.
+                  Transparansi capaian kinerja pengadaan barang dan jasa di lingkungan Kementerian Ketenagakerjaan.
                 </p>
               </FadeIn>
             </div>
