@@ -25,7 +25,7 @@ export default function AgendaPage() {
             <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[150%] bg-blue-400/10 rounded-full blur-[120px] mix-blend-screen" />
             <div className="absolute top-[20%] -right-[10%] w-[50%] h-[100%] bg-[#f2b33a]/5 rounded-full blur-[100px] mix-blend-screen" />
           </div>
-          <div className="absolute inset-0 bg-blue-900/20" />
+          <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/cartographer.png')] opacity-20 mix-blend-overlay" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <FadeIn direction="up">
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 text-center">Agenda & Kegiatan</h1>
