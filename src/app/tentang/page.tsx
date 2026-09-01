@@ -5,6 +5,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ShieldCheck, Target, Users, BookOpen } from 'lucide-react';
 import Image from 'next/image';
+import { OrganizationChart } from '@/components/ui/OrganizationChart';
 
 export default function TentangPage() {
   const values = [
@@ -65,8 +66,8 @@ export default function TentangPage() {
           
           <div className="bg-white p-10 rounded-2xl shadow-sm border border-slate-100 mb-10">
              <SectionHeading title="Struktur Organisasi" subtitle="Bagan struktur kepengurusan UKPBJ" />
-             <div className="mt-8 flex justify-center items-center h-64 bg-slate-50 border border-dashed border-slate-300 rounded-xl">
-               <span className="text-slate-400 font-medium">Bagan Struktur Organisasi Segera Hadir</span>
+             <div className="mt-8">
+               <OrganizationChart />
              </div>
           </div>
         </section>
