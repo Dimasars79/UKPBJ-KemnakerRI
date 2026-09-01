@@ -43,7 +43,7 @@ export default function MonitoringPage() {
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
           {/* Stat Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {stats.map((stat, idx) => (
+            {performanceStats.map((stat, idx) => (
               <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex items-center">
                 <div className="bg-gradient-to-br from-primary-blue to-blue-600 rounded-xl p-4 mr-6 shadow-md">
                   {stat.icon}
