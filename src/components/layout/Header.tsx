@@ -26,8 +26,8 @@ export function Header() {
       {/* Top Government Bar */}
       <div className="bg-primary-navy text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide">
         <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-2 overflow-hidden">
-            <span className="truncate tracking-wider md:tracking-widest">KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
+          <div className="flex items-center space-x-2">
+            <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full">KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <button className="hover:text-secondary-soft transition-colors flex items-center space-x-1">
@@ -49,9 +49,9 @@ export function Header() {
           {/* Logo Area */}
           <div className="flex items-center space-x-2 sm:space-x-3 max-w-[70%]">
             <Link href="/" className="flex-shrink-0 flex items-center space-x-2 sm:space-x-4">
-              <Image src="/logo-kemnaker.png" alt="Logo Kementerian Ketenagakerjaan" width={64} height={64} className="h-8 sm:h-12 md:h-16 w-auto object-contain drop-shadow-sm" />
-              <div className="h-6 sm:h-10 md:h-14 border-l border-slate-300"></div>
-              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={220} height={80} className="h-10 sm:h-16 md:h-20 w-auto object-contain drop-shadow-sm" />
+              <Image src="/logo-kemnaker.png" alt="Logo Kementerian Ketenagakerjaan" width={64} height={64} className="h-10 sm:h-12 md:h-16 w-auto object-contain drop-shadow-sm" />
+              <div className="h-8 sm:h-10 md:h-14 border-l border-slate-300"></div>
+              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={220} height={80} className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-sm" />
             </Link>
           </div>
 
