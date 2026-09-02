@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, User, Globe, Eye, Menu, X, ChevronDown } from 'lucide-react';
+import { Search, User, Globe, Eye, Menu, X, ChevronDown, Bell, AlertTriangle, FileText, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -11,6 +11,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
 
@@ -137,6 +138,81 @@ export function Header() {
 
           {/* Unified Actions & Toggler (Visible on All Devices) */}
           <div className="flex items-center space-x-3 md:space-x-5">
+            {/* Notification Bell */}
+            <div className="relative">
+              <button 
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                className="group flex items-center justify-center w-10 h-10 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-600 hover:text-accent-gold rounded-full transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] relative"
+              >
+                <Bell className="w-5 h-5 transform group-hover:scale-110 transition-transform" />
+                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full animate-pulse" />
+              </button>
+
+              <AnimatePresence>
+                {isNotificationOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-3 w-80 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_20px_40px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50"
+                  >
+                    <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
+                      <h3 className="font-bold text-primary-navy">Notifikasi Terbaru</h3>
+                      <button className="text-[10px] text-primary-blue hover:text-accent-gold font-semibold transition-colors">
+                        Tandai dibaca
+                      </button>
+                    </div>
+                    
+                    <div className="max-h-80 overflow-y-auto">
+                      <div className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3">
+                        <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-1">
+                          <AlertTriangle className="w-4 h-4 text-red-600" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-slate-800 mb-1">Peringatan Sistem</p>
+                          <p className="text-[11px] text-slate-500 leading-tight">Server SPSE akan mengalami pemeliharaan rutin malam ini jam 23:00 WIB.</p>
+                          <p className="text-[9px] text-slate-400 mt-2">15 menit yang lalu</p>
+                        </div>
+                      </div>
+                      
+                      <div className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
+                          <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-slate-800 mb-1">Pengumuman Tender</p>
+                          <p className="text-[11px] text-slate-500 leading-tight">Tender Baru: Pengadaan Fasilitas Pelatihan Kemenaker telah dibuka.</p>
+                          <p className="text-[9px] text-slate-400 mt-2">2 jam yang lalu</p>
+                        </div>
+                      </div>
+
+                      <div className="p-4 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                          <FileText className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-slate-800 mb-1">Regulasi Baru</p>
+                          <p className="text-[11px] text-slate-500 leading-tight">Dokumen Standar Kontrak versi 2026 telah diterbitkan.</p>
+                          <p className="text-[9px] text-slate-400 mt-2">1 hari yang lalu</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-3 bg-slate-50 border-t border-slate-100">
+                      <Link 
+                        href="/informasi" 
+                        onClick={() => setIsNotificationOpen(false)}
+                        className="block w-full py-2 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy to-primary-blue rounded-lg hover:shadow-md hover:-translate-y-0.5 transition-all"
+                      >
+                        Lihat Semua Pembaruan &rarr;
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {/* Elegant Search (Hidden on very small screens to save space, but visible on md+) */}
             <button className="hidden md:flex group items-center justify-center w-10 h-10 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-600 hover:text-accent-gold rounded-full transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]">
               <Search className="w-5 h-5 transform group-hover:scale-110 transition-transform" />
@@ -195,10 +271,16 @@ export function Header() {
               
               {/* Mobile-only actions inside the menu */}
               <div className="md:hidden mt-6 pt-6 border-t border-slate-100 flex flex-col space-y-3">
-                <button className="flex items-center justify-center space-x-2 bg-slate-50 border border-slate-200 text-slate-600 px-4 py-3 rounded-xl font-medium w-full">
-                  <Search className="w-5 h-5" />
-                  <span>Pencarian</span>
-                </button>
+                <div className="flex gap-3">
+                  <button className="flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-600 p-3 rounded-xl hover:bg-slate-100 transition-colors">
+                    <Search className="w-5 h-5" />
+                  </button>
+                  <Link href="/informasi" className="flex items-center justify-center flex-grow space-x-2 bg-slate-50 border border-slate-200 text-slate-600 px-4 py-3 rounded-xl font-medium relative">
+                    <Bell className="w-5 h-5" />
+                    <span>Notifikasi Baru</span>
+                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  </Link>
+                </div>
                 <Link
                   href="/login"
                   className="flex items-center justify-center space-x-2 bg-gradient-to-r from-primary-navy to-primary-blue text-white w-full px-4 py-3 rounded-xl font-bold shadow-md"
