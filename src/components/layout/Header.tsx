@@ -321,13 +321,10 @@ export function Header() {
             {/* Elegant Search (Hidden on very small screens to save space, but visible on md+) */}
             <button 
               onClick={() => setIsSearchOpen(true)}
-              className="hidden md:flex group items-center justify-center space-x-2 h-10 px-4 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-500 hover:text-accent-gold rounded-full transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+              className="hidden md:flex group items-center justify-center w-10 h-10 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-600 hover:text-accent-gold rounded-full transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+              title="Cari (Ctrl+K)"
             >
-              <Search className="w-4 h-4 transform group-hover:scale-110 transition-transform" />
-              <div className="flex items-center space-x-1 text-xs font-medium text-slate-400 group-hover:text-accent-gold/80 transition-colors">
-                <span>Cari</span>
-                <kbd className="hidden lg:inline-block px-1.5 py-0.5 rounded-md bg-white border border-slate-200 shadow-sm font-mono text-[10px]">Ctrl K</kbd>
-              </div>
+              <Search className="w-5 h-5 transform group-hover:scale-110 transition-transform" />
             </button>
             
             {/* Elegant Login (Hidden on mobile) */}
