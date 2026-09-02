@@ -7,13 +7,16 @@ import { Search, User, Globe, Eye, Menu, X, ChevronDown, Bell, AlertTriangle, Fi
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAccessibility } from '@/contexts/AccessibilityContext';
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isA11yMenuOpen, setIsA11yMenuOpen] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
+  const a11y = useAccessibility();
 
   const toggleLanguage = (lang: 'id' | 'en') => {
     setLanguage(lang);
@@ -87,10 +90,99 @@ export function Header() {
                 )}
               </AnimatePresence>
             </div>
-            <button className="hover:text-secondary-soft transition-colors flex items-center space-x-1">
-              <Eye className="w-3 h-3" />
-              <span>{t('nav.accessibility')}</span>
-            </button>
+            {/* Accessibility Dropdown */}
+            <div className="relative">
+              <button 
+                onClick={() => setIsA11yMenuOpen(!isA11yMenuOpen)}
+                className="hover:text-secondary-soft transition-colors flex items-center space-x-1 cursor-pointer"
+              >
+                <Eye className="w-3 h-3" />
+                <span>{t('nav.accessibility')}</span>
+              </button>
+
+              <AnimatePresence>
+                {isA11yMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-100 z-50 text-slate-800"
+                  >
+                    <div className="p-4 border-b border-slate-100 bg-slate-50">
+                      <h3 className="font-bold text-primary-navy">Mode Aksesibilitas</h3>
+                      <p className="text-xs text-slate-500">Sesuaikan tampilan untuk kenyamanan Anda.</p>
+                    </div>
+                    
+                    <div className="p-2 space-y-1">
+                      {/* Toggle Large Text */}
+                      <div 
+                        onClick={() => a11y.toggleSetting('isLargeText')}
+                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <span className="text-sm font-medium">Perbesar Teks</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isLargeText ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isLargeText ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </div>
+                      </div>
+
+                      {/* Toggle High Contrast */}
+                      <div 
+                        onClick={() => a11y.toggleSetting('isHighContrast')}
+                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <span className="text-sm font-medium">Kontras Tinggi</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isHighContrast ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isHighContrast ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </div>
+                      </div>
+
+                      {/* Toggle Grayscale */}
+                      <div 
+                        onClick={() => a11y.toggleSetting('isGrayscale')}
+                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <span className="text-sm font-medium">Mode Monokrom</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isGrayscale ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isGrayscale ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </div>
+                      </div>
+
+                      {/* Toggle Highlight Links */}
+                      <div 
+                        onClick={() => a11y.toggleSetting('isHighlightLinks')}
+                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <span className="text-sm font-medium">Sorot Tautan</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isHighlightLinks ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isHighlightLinks ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </div>
+                      </div>
+
+                      {/* Toggle Reduce Motion */}
+                      <div 
+                        onClick={() => a11y.toggleSetting('isReduceMotion')}
+                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <span className="text-sm font-medium">Hentikan Animasi</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isReduceMotion ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isReduceMotion ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-3 border-t border-slate-100">
+                      <button 
+                        onClick={() => { a11y.resetSettings(); setIsA11yMenuOpen(false); }}
+                        className="w-full py-2 text-xs font-bold text-slate-500 hover:text-red-500 transition-colors"
+                      >
+                        Kembalikan ke Pengaturan Awal
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

@@ -53,3 +53,34 @@
 .animate-glow-pulse {
   animation: glow-pulse 4s ease-in-out infinite;
 }
+
+/* Accessibility Modes */
+.a11y-large-text {
+  font-size: 115% !important;
+}
+
+.a11y-high-contrast {
+  filter: contrast(150%) saturate(200%) brightness(85%) !important;
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.a11y-grayscale {
+  filter: grayscale(100%) !important;
+}
+
+.a11y-highlight-links a, 
+.a11y-highlight-links button {
+  text-decoration: underline !important;
+  text-decoration-thickness: 3px !important;
+  text-decoration-color: #f2b33a !important;
+}
+
+.a11y-reduce-motion *,
+.a11y-reduce-motion *::before,
+.a11y-reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
