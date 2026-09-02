@@ -17,7 +17,7 @@ export default function MonitoringPage() {
   const performanceStats = [
     { title: 'Total Paket Selesai', value: '428', icon: <PackageCheck className="w-8 h-8 text-white" />, trend: '+12% dari bulan lalu' },
     { title: 'Efisiensi Waktu', value: '18%', icon: <Clock className="w-8 h-8 text-white" />, trend: 'Lebih cepat 4 hari/paket' },
-    { title: 'Penghematan Pagu', value: 'Rp 14.5 M', icon: <TrendingUp className="w-8 h-8 text-white" />, trend: '12.5% efisiensi anggaran' },
+    { title: 'Penghematan Pagu', value: 'Rp 14.500.000.000', icon: <TrendingUp className="w-8 h-8 text-white" />, trend: '12.5% efisiensi anggaran' },
   ];
 
   return (

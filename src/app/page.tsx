@@ -211,8 +211,8 @@ export default function Home() {
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <StaggerItem>
                 <div className="bg-primary-navy text-white rounded-xl p-6 shadow-md h-full">
-                  <h4 className="text-lg font-bold mb-2">{t('home.stats_saving')}</h4>
-                  <p className="text-2xl md:text-3xl font-extrabold text-accent-gold">Rp 12.4 Miliar</p>
+                  <p className="text-sm font-medium text-slate-400 mb-1">{t('home.stats_saving')}</p>
+                  <p className="text-2xl md:text-3xl font-extrabold text-accent-gold">Rp 12.400.000.000</p>
                   <p className="text-sm text-slate-300 mt-2">{t('home.stats_year')}</p>
                 </div>
               </StaggerItem>
