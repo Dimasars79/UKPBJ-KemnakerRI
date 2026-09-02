@@ -22,9 +22,9 @@ export default function InformasiPage() {
   ];
 
   const dummyNews = [
-    { title: 'Peningkatan Kapasitas SDM Pengadaan', summary: 'Bimbingan teknis terbaru untuk seluruh anggota Pokja UKPBJ.', date: '12 Okt 2026', category: 'Berita', href: '#', imageUrl: '/poster_kegiatan_1787841596732.jpg' },
-    { title: 'Pembaruan Sistem SPSE v4.5', summary: 'Jadwal maintenance dan panduan penggunaan sistem SPSE terbaru.', date: '08 Okt 2026', category: 'Pengumuman', href: '#', imageUrl: '/poster_kegiatan_1787841596732.jpg' },
-    { title: 'Sosialisasi E-Katalog Sektoral', summary: 'Kemnaker mengadakan sosialisasi terkait produk dalam negeri.', date: '01 Okt 2026', category: 'Berita', href: '#', imageUrl: '/poster_kegiatan_1787841596732.jpg' },
+    { title: 'Sosialisasi Regulasi Terbaru PBJ', summary: 'Kemnaker mengadakan sosialisasi peraturan pengadaan barang/jasa terbaru.', date: '12 Okt 2026', category: 'Berita', href: '#', imageUrl: '/news/news-1.png' },
+    { title: 'Workshop Peningkatan Kapasitas PPK', summary: 'Bimbingan teknis penggunaan sistem SPSE secara intensif.', date: '08 Okt 2026', category: 'Pelatihan', href: '#', imageUrl: '/news/news-2.png' },
+    { title: 'Pengumuman Tender Fasilitas Baru', summary: 'Tender untuk pembangunan fasilitas baru telah diumumkan.', date: '01 Okt 2026', category: 'Pengumuman', href: '#', imageUrl: '/news/news-3.png' },
   ];
 
   return (
