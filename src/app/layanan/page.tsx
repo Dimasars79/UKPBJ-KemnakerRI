@@ -16,7 +16,8 @@ export default function LayananPage() {
   const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 1)); // September 2026
   const [selectedDate, setSelectedDate] = useState<number | null>(15);
 
-  const activities: Record<number, any[]> = {
+  type Activity = { id: number; title: string; time: string; location: string };
+  const activities: Record<number, Activity[]> = {
     10: [{ id: 1, title: 'Pembukaan Tender Alat Tulis Kantor', time: '09:00 WIB', location: 'Portal LPSE' }],
     15: [
       { id: 2, title: 'Bimbingan Teknis SIKaP', time: '10:00 - 12:00 WIB', location: 'Gedung A Kemenaker' },
