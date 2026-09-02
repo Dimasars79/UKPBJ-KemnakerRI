@@ -72,13 +72,8 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
     setSettings(defaultState);
   };
 
-  // We return null on first render to prevent hydration mismatch with client-only local storage state
-  if (!mounted) {
-    return <>{children}</>;
-  }
-
   return (
-    <AccessibilityContext.Provider value={{ ...settings, toggleSetting, resetSettings }}>
+    <AccessibilityContext.Provider value={{ ...(mounted ? settings : defaultState), toggleSetting, resetSettings }}>
       {children}
     </AccessibilityContext.Provider>
   );
