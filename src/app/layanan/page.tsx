@@ -75,24 +75,26 @@ export default function LayananPage() {
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-24">
           <SectionHeading title="Alur Pelayanan" subtitle="Langkah-langkah umum dalam proses layanan pengadaan" />
           
-          <div className="mt-12 bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100 relative">
-            <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-100 -translate-y-1/2 z-0"></div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+          <div className="mt-12 bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100 relative group">
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-100 group-hover:bg-blue-100 transition-colors duration-700 -translate-y-1/2 z-0"></div>
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
               {[
                 { step: 1, title: 'Registrasi', desc: 'Penyedia mendaftar melalui sistem SPSE' },
                 { step: 2, title: 'Verifikasi', desc: 'Pengecekan kelengkapan dokumen administrasi' },
                 { step: 3, title: 'Akses Sistem', desc: 'Penyedia mendapatkan akses penuh ke sistem' },
                 { step: 4, title: 'Proses Tender', desc: 'Mengikuti proses lelang/pengadaan' }
               ].map((item) => (
-                <div key={item.step} className="flex flex-col items-center text-center bg-white p-4">
-                  <div className="w-16 h-16 rounded-full bg-primary-navy text-accent-gold flex items-center justify-center text-2xl font-bold mb-4 shadow-lg border-4 border-white">
-                    {item.step}
+                <StaggerItem key={item.step}>
+                  <div className="flex flex-col items-center text-center bg-white p-4 hover:-translate-y-2 transition-transform duration-300 cursor-pointer rounded-xl hover:shadow-[0_10px_30px_rgba(30,58,138,0.08)] group/item">
+                    <div className="w-16 h-16 rounded-full bg-primary-navy text-accent-gold flex items-center justify-center text-2xl font-bold mb-4 shadow-lg border-4 border-white group-hover/item:bg-accent-gold group-hover/item:text-primary-navy group-hover/item:shadow-[0_0_20px_rgba(212,175,55,0.5)] group-hover/item:scale-110 group-hover/item:border-yellow-100 transition-all duration-300">
+                      {item.step}
+                    </div>
+                    <h3 className="font-bold text-lg text-primary-navy mb-2 group-hover/item:text-primary-blue transition-colors">{item.title}</h3>
+                    <p className="text-sm text-slate-500">{item.desc}</p>
                   </div>
-                  <h3 className="font-bold text-lg text-primary-navy mb-2">{item.title}</h3>
-                  <p className="text-sm text-slate-500">{item.desc}</p>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
           </div>
         </section>
       </main>
