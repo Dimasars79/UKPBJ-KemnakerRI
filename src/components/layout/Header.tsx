@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Search, User, Globe, Eye, Menu, X, ChevronDown, Bell, AlertTriangle, FileText, CheckCircle2 } from 'lucide-react';
