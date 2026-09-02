@@ -11,15 +11,19 @@ interface OrgNodeProps {
 
 const OrgNode = ({ title, subtitle, icon, isMain = false }: OrgNodeProps) => {
   return (
-    <div className={`relative flex flex-col items-center justify-center p-6 rounded-2xl shadow-lg border-t-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white
-      ${isMain ? 'border-t-accent-gold z-10 w-72' : 'border-t-primary-blue w-64'}
+    <div className={`relative flex flex-col items-center justify-center p-6 rounded-2xl transition-all duration-500 hover:-translate-y-2 
+      bg-white/70 backdrop-blur-md border border-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] 
+      ${isMain 
+        ? 'border-t-4 border-t-accent-gold z-10 w-80 hover:shadow-[0_20px_40px_rgba(212,175,55,0.15)] hover:border-white' 
+        : 'border-t-4 border-t-primary-blue w-64 hover:shadow-[0_20px_40px_rgba(30,58,138,0.1)] hover:border-white'
+      }
     `}>
-      <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 
-        ${isMain ? 'bg-amber-50 text-accent-gold' : 'bg-blue-50 text-primary-blue'}
+      <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 shadow-inner
+        ${isMain ? 'bg-gradient-to-br from-amber-50 to-yellow-100 text-accent-gold' : 'bg-gradient-to-br from-blue-50 to-blue-100 text-primary-blue'}
       `}>
         {icon}
       </div>
-      <h3 className="font-bold text-lg text-primary-navy text-center mb-1">{title}</h3>
+      <h3 className={`font-bold text-lg text-center mb-1 ${isMain ? 'text-accent-gold' : 'text-primary-navy'}`}>{title}</h3>
       <p className="text-sm text-slate-500 text-center font-medium">{subtitle}</p>
     </div>
   );
@@ -27,9 +31,10 @@ const OrgNode = ({ title, subtitle, icon, isMain = false }: OrgNodeProps) => {
 
 export const OrganizationChart = () => {
   return (
-    <div className="py-10 flex flex-col items-center relative overflow-hidden bg-slate-50/50 rounded-3xl border border-slate-100">
+    <div className="py-12 flex flex-col items-center relative overflow-hidden bg-slate-50/30 rounded-3xl border border-slate-100/50">
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-50/40 rounded-full blur-3xl -z-10 pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-blue-100/40 to-transparent rounded-full blur-3xl -z-10 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-yellow-100/20 rounded-full blur-3xl -z-10 pointer-events-none" />
       
       {/* Level 1: Kepala UKPBJ */}
       <FadeIn direction="up" delay={0.1}>
@@ -41,8 +46,7 @@ export const OrganizationChart = () => {
             isMain={true}
           />
           {/* Vertical line down */}
-          <div className="w-px h-12 bg-gradient-to-b from-accent-gold to-primary-blue my-2" />
-          <ChevronDown className="text-primary-blue w-5 h-5 -mt-4 mb-2 z-10" />
+          <div className="w-[2px] h-14 bg-gradient-to-b from-accent-gold via-slate-300 to-primary-blue my-2 rounded-full" />
         </div>
       </FadeIn>
 
@@ -55,22 +59,22 @@ export const OrganizationChart = () => {
             icon={<FileSignature className="w-7 h-7" />} 
           />
           {/* Vertical line down from Sekretariat */}
-          <div className="w-px h-12 bg-primary-blue/50 my-2" />
+          <div className="w-[2px] h-12 bg-slate-300 my-2 rounded-full" />
         </div>
       </FadeIn>
 
       {/* Connection for Level 3 */}
       <FadeIn direction="up" delay={0.3} className="w-full flex justify-center">
-        <div className="relative flex justify-center w-full max-w-4xl px-4">
-          {/* Horizontal connecting line */}
-          <div className="absolute top-0 left-[15%] right-[15%] md:left-[16%] md:right-[16%] lg:left-[18%] lg:right-[18%] h-px bg-primary-blue/50" />
+        <div className="relative flex justify-center w-full max-w-5xl px-4 mt-2">
+          {/* Horizontal connecting line (Responsive adjustments for perfect alignment) */}
+          <div className="hidden md:block absolute top-0 left-[16.66%] right-[16.66%] h-[2px] bg-slate-300 rounded-full" />
           
-          <div className="flex flex-col md:flex-row justify-between w-full gap-8 md:gap-4 lg:gap-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between w-full gap-8 md:gap-4 lg:gap-8 pt-6">
             {/* Pokja */}
             <div className="relative flex flex-col items-center w-full md:w-1/3">
               {/* Vertical line up from Pokja */}
-              <div className="absolute -top-8 w-px h-8 bg-primary-blue/50" />
-              <ChevronDown className="text-primary-blue/50 w-5 h-5 absolute -top-3 z-10" />
+              <div className="hidden md:block absolute -top-6 w-[2px] h-6 bg-slate-300 rounded-full" />
+              <ChevronDown className="text-slate-400 w-5 h-5 mb-2 mt-0 md:mt-0 md:absolute md:-top-3 md:z-10" />
               <OrgNode 
                 title="Pokja Pemilihan" 
                 subtitle="Pelaksana Pemilihan Penyedia" 
@@ -81,8 +85,8 @@ export const OrganizationChart = () => {
             {/* Pejabat Pengadaan */}
             <div className="relative flex flex-col items-center w-full md:w-1/3">
                {/* Vertical line up */}
-               <div className="absolute -top-8 w-px h-8 bg-primary-blue/50" />
-               <ChevronDown className="text-primary-blue/50 w-5 h-5 absolute -top-3 z-10" />
+               <div className="hidden md:block absolute -top-6 w-[2px] h-6 bg-slate-300 rounded-full" />
+               <ChevronDown className="text-slate-400 w-5 h-5 mb-2 mt-0 md:mt-0 md:absolute md:-top-3 md:z-10" />
               <OrgNode 
                 title="Pejabat Pengadaan" 
                 subtitle="Pengadaan Langsung & E-Purchasing" 
@@ -93,8 +97,8 @@ export const OrganizationChart = () => {
             {/* Tim Pendukung */}
             <div className="relative flex flex-col items-center w-full md:w-1/3">
                {/* Vertical line up */}
-               <div className="absolute -top-8 w-px h-8 bg-primary-blue/50" />
-               <ChevronDown className="text-primary-blue/50 w-5 h-5 absolute -top-3 z-10" />
+               <div className="hidden md:block absolute -top-6 w-[2px] h-6 bg-slate-300 rounded-full" />
+               <ChevronDown className="text-slate-400 w-5 h-5 mb-2 mt-0 md:mt-0 md:absolute md:-top-3 md:z-10" />
               <OrgNode 
                 title="Tim Pendukung / Teknis" 
                 subtitle="Dukungan Operasional & IT" 
