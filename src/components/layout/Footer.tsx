@@ -14,7 +14,7 @@ export function Footer() {
           {/* Column 1: Identity */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="flex-shrink-0 bg-white rounded p-1">
+              <div className="flex-shrink-0">
                 <Image src="/logo.png" alt="Logo Kementerian" width={160} height={40} className="h-10 w-auto object-contain" />
               </div>
               <div className="flex flex-col">
