@@ -17,8 +17,8 @@ export default function GaleriPage() {
     { id: 2, title: 'Rapat Koordinasi Nasional', desc: 'Rapat koordinasi pimpinan mengenai evaluasi kinerja tahunan.', size: 'large', src: '/gallery/gallery-2.jpg' },
     { id: 3, title: 'Sosialisasi Pegawai', desc: 'Acara sosialisasi dan interaksi langsung dengan seluruh peserta.', size: 'large', src: '/gallery/gallery-3.jpg' },
     { id: 4, title: 'Bimbingan Teknis PBJ', desc: 'Pelatihan kompetensi pengadaan barang dan jasa untuk PPK dan Pokja.', size: 'small', src: '/gallery/gallery-4.jpg' },
-    { id: 5, title: 'Penandatanganan Kontrak', desc: 'Saran: Tambahkan foto penandatanganan pakta integritas atau kontrak kerja sama strategis.', size: 'small', src: null },
-    { id: 6, title: 'Penghargaan UKPBJ', desc: 'Saran: Tambahkan foto pencapaian, sertifikasi, atau penghargaan tingkat nasional.', size: 'small', src: null },
+    { id: 5, title: 'Penandatanganan Kontrak', desc: 'Penandatanganan pakta integritas dan kontrak kerja sama strategis.', size: 'small', src: '/gallery/gallery-5.jpg' },
+    { id: 6, title: 'Penghargaan UKPBJ', desc: 'Penyerahan penghargaan UKPBJ Unggul tingkat kementerian.', size: 'small', src: '/gallery/gallery-6.jpg' },
   ];
 
   return (
