@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Calendar, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface NewsCardProps {
   title: string;
@@ -12,15 +13,23 @@ interface NewsCardProps {
   featured?: boolean;
 }
 
-export function NewsCard({ title, summary, date, category, href, featured = false }: NewsCardProps) {
+export function NewsCard({ title, summary, date, category, imageUrl, href, featured = false }: NewsCardProps) {
   return (
     <Link href={href} className={`group flex flex-col bg-white/90 backdrop-blur-md rounded-xl border border-white/60 overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(30,58,138,0.15)] hover:-translate-y-1 transition-all duration-500 ${featured ? 'md:flex-row md:col-span-2 lg:col-span-2' : ''}`}>
       <div className={`relative ${featured ? 'md:w-1/2' : 'h-48'} overflow-hidden bg-slate-200 flex-shrink-0`}>
-        {/* Placeholder for image */}
-        <div className="w-full h-full bg-slate-200 group-hover:scale-105 transition-transform duration-500 flex items-center justify-center text-slate-400">
-           Gambar: {category}
-        </div>
-        <div className="absolute top-4 left-4 bg-primary-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+        {imageUrl && imageUrl !== '/placeholder' ? (
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <div className="w-full h-full bg-slate-200 group-hover:scale-105 transition-transform duration-500 flex items-center justify-center text-slate-400">
+             Gambar: {category}
+          </div>
+        )}
+        <div className="absolute top-4 left-4 bg-primary-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide z-10">
           {category}
         </div>
       </div>
