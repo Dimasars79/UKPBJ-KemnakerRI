@@ -322,7 +322,7 @@ export default function Home() {
                   summary="UKPBJ Kementerian Ketenagakerjaan mengadakan sosialisasi terkait regulasi terbaru mengenai pengadaan barang dan jasa pemerintah."
                   date="24 Agustus 2026"
                   category="Berita"
-                  imageUrl="/placeholder"
+                  imageUrl="/news/news-1.png"
                   href="#"
                 />
               </StaggerItem>
@@ -332,7 +332,7 @@ export default function Home() {
                   summary="Kegiatan bimbingan teknis yang diselenggarakan khusus untuk Pejabat Pembuat Komitmen Kementerian Ketenagakerjaan."
                   date="20 Agustus 2026"
                   category="Kegiatan"
-                  imageUrl="/placeholder"
+                  imageUrl="/news/news-2.png"
                   href="#"
                 />
               </StaggerItem>
@@ -342,7 +342,7 @@ export default function Home() {
                   summary="Diumumkan kepada seluruh penyedia barang dan jasa terdaftar mengenai pembukaan tender."
                   date="18 Agustus 2026"
                   category="Pengadaan"
-                  imageUrl="/placeholder"
+                  imageUrl="/news/news-3.png"
                   href="#"
                 />
               </StaggerItem>
