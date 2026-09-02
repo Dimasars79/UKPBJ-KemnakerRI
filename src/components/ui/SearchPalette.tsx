@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, FileText, Calendar, Building, ChevronRight } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 
 interface SearchPaletteProps {
@@ -10,7 +9,6 @@ interface SearchPaletteProps {
 }
 
 export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
-  const { t } = useLanguage();
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
