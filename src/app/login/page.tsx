@@ -27,11 +27,15 @@ export default function LoginPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex items-center space-x-6 mb-12 bg-white/5 backdrop-blur-md w-fit p-4 rounded-2xl border border-white/10"
+            className="flex items-center space-x-6 mb-12 bg-white/5 backdrop-blur-xl w-fit p-5 md:p-6 rounded-3xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] relative overflow-hidden group"
           >
-            <Image src="/logo-kemnaker.png" alt="Logo Kemnaker" width={80} height={80} className="object-contain h-12 md:h-16 w-auto" />
-            <div className="h-12 border-l border-white/30" />
-            <Image src="/logo.png" alt="Logo UKPBJ" width={180} height={80} className="object-contain h-12 md:h-16 w-auto brightness-0 invert" />
+            {/* Inner subtle glow for the glassmorphism box */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+            
+            <Image src="/logo-kemnaker.png" alt="Logo Kemnaker" width={80} height={80} className="object-contain h-14 md:h-20 w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
+            <div className="h-16 md:h-20 border-l-2 border-white/20 rounded-full" />
+            {/* mix-blend-screen removes the black background of the logo, leaving only the white text! */}
+            <Image src="/logo.png" alt="Logo UKPBJ" width={220} height={80} className="object-contain h-14 md:h-20 w-auto mix-blend-screen drop-shadow-lg" />
           </motion.div>
 
           <motion.h1 
