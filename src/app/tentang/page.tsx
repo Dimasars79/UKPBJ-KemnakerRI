@@ -3,15 +3,12 @@
 import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ShieldCheck, Target, Users, BookOpen } from 'lucide-react';
-import Image from 'next/image';
 import { OrganizationChart } from '@/components/ui/OrganizationChart';
 
 export default function TentangPage() {
-  const { t } = useLanguage();
   const values = [
     { title: 'Integritas', desc: 'Bertindak jujur, transparan, dan menghindari konflik kepentingan dalam seluruh proses pengadaan.', icon: <ShieldCheck className="w-6 h-6" /> },
     { title: 'Profesionalisme', desc: 'Menjalankan tugas dengan kompetensi tinggi dan sesuai dengan peraturan perundang-undangan.', icon: <Target className="w-6 h-6" /> },
