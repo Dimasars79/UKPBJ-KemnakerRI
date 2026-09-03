@@ -16,9 +16,22 @@ export function Header() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isA11yMenuOpen, setIsA11yMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isInfoDropdownOpen, setIsInfoDropdownOpen] = useState(false);
+  const [isMobileInfoOpen, setIsMobileInfoOpen] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
+
+  const infoSubmenu = [
+    { label: 'Peraturan', href: '/informasi?kategori=peraturan', icon: '📜', desc: 'Regulasi & dasar hukum PBJ' },
+    { label: 'Panduan', href: '/informasi?kategori=panduan', icon: '📘', desc: 'Petunjuk teknis pengadaan' },
+    { label: 'Standar Operasional Prosedur', href: '/informasi?kategori=sop', icon: '📋', desc: 'SOP tata kelola kerja resmi' },
+    { label: 'Sertifikat PBJ', href: '/informasi?kategori=sertifikat-pbj', icon: '🎓', desc: 'Verifikasi kompetensi pengadaan' },
+    { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi?kategori=tkdn', icon: '🇮🇩', desc: 'Tingkat Komponen Dalam Negeri' },
+    { label: 'Panduan Perizinan/Usaha', href: '/informasi?kategori=perizinan', icon: '📑', desc: 'Legalitas & izin usaha penyedia' },
+    { label: 'Tender/Seleksi Pemilu', href: '/informasi?kategori=pemilu', icon: '🗳️', desc: 'Paket tender & seleksi khusus' },
+    { label: 'Clearing House', href: '/informasi?kategori=clearing-house', icon: '⚖️', desc: 'Konsultasi & penyelesaian PBJ' },
+  ];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -38,7 +51,7 @@ export function Header() {
 
   const navLinks = [
     { label: t('nav.home'), href: '/' },
-    { label: t('nav.info'), href: '/informasi' },
+    { label: t('nav.info'), href: '/informasi', hasDropdown: true },
     { label: t('nav.services'), href: '/layanan' },
     { label: t('nav.agenda'), href: '/agenda' },
     { label: t('nav.gallery'), href: '/galeri' },
@@ -227,33 +240,113 @@ export function Header() {
 
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center space-x-1">
-            {navLinks.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="relative px-3.5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 group"
-              >
-                <span className={`relative z-10 transition-colors duration-200 ${
-                  pathname === item.href
-                    ? 'text-primary-navy font-bold'
-                    : 'text-slate-600 group-hover:text-primary-navy'
-                }`}>
-                  {item.label}
-                </span>
-                
-                {/* Floating active pill highlight */}
-                {pathname === item.href && (
-                  <motion.span 
-                    layoutId="activeNavPill"
-                    className="absolute inset-0 bg-slate-100 border border-slate-200/80 rounded-full -z-0 shadow-xs"
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
-                )}
-                
-                {/* Subtle Hover Background */}
-                <span className="absolute inset-0 bg-slate-100/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none -z-0" />
-              </Link>
-            ))}
+            {navLinks.map((item) => {
+              if (item.hasDropdown) {
+                return (
+                  <div 
+                    key={item.label}
+                    className="relative"
+                    onMouseEnter={() => setIsInfoDropdownOpen(true)}
+                    onMouseLeave={() => setIsInfoDropdownOpen(false)}
+                  >
+                    <Link
+                      href={item.href}
+                      className="relative px-3.5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 group flex items-center gap-1.5"
+                    >
+                      <span className={`relative z-10 transition-colors duration-200 ${
+                        pathname.startsWith('/informasi')
+                          ? 'text-primary-navy font-bold'
+                          : 'text-slate-600 group-hover:text-primary-navy'
+                      }`}>
+                        {item.label}
+                      </span>
+                      <ChevronDown className={`w-3.5 h-3.5 relative z-10 text-slate-500 transition-transform duration-200 ${isInfoDropdownOpen ? 'rotate-180 text-primary-navy' : ''}`} />
+                      
+                      {/* Floating active pill highlight */}
+                      {pathname.startsWith('/informasi') && (
+                        <motion.span 
+                          layoutId="activeNavPill"
+                          className="absolute inset-0 bg-slate-100 border border-slate-200/80 rounded-full -z-0 shadow-xs"
+                          transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                        />
+                      )}
+                      
+                      {/* Subtle Hover Background */}
+                      <span className="absolute inset-0 bg-slate-100/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none -z-0" />
+                    </Link>
+
+                    {/* Dropdown Menu */}
+                    <AnimatePresence>
+                      {isInfoDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10, scale: 0.97 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.97 }}
+                          transition={{ duration: 0.2, ease: "easeOut" }}
+                          className="absolute left-1/2 -translate-x-1/2 mt-2 w-[540px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-200/80 p-3.5 z-50 overflow-hidden"
+                        >
+                          <div className="px-3 py-2 border-b border-slate-100 mb-2 flex items-center justify-between">
+                            <span className="text-xs font-bold text-primary-navy uppercase tracking-wider">Kanal Informasi & Dokumen</span>
+                            <span className="text-[10px] font-bold text-primary-blue bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">8 Kategori</span>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-1.5">
+                            {infoSubmenu.map((sub, idx) => (
+                              <Link
+                                key={idx}
+                                href={sub.href}
+                                onClick={() => setIsInfoDropdownOpen(false)}
+                                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all duration-200 group/sub"
+                              >
+                                <div className="w-8 h-8 rounded-lg bg-blue-50/80 border border-blue-100/50 flex items-center justify-center text-sm flex-shrink-0 group-hover/sub:bg-primary-blue group-hover/sub:text-white transition-all">
+                                  {sub.icon}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs font-bold text-slate-800 group-hover/sub:text-primary-blue transition-colors truncate">
+                                    {sub.label}
+                                  </p>
+                                  <p className="text-[10px] text-slate-500 line-clamp-1">
+                                    {sub.desc}
+                                  </p>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="relative px-3.5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 group"
+                >
+                  <span className={`relative z-10 transition-colors duration-200 ${
+                    pathname === item.href
+                      ? 'text-primary-navy font-bold'
+                      : 'text-slate-600 group-hover:text-primary-navy'
+                  }`}>
+                    {item.label}
+                  </span>
+                  
+                  {/* Floating active pill highlight */}
+                  {pathname === item.href && (
+                    <motion.span 
+                      layoutId="activeNavPill"
+                      className="absolute inset-0 bg-slate-100 border border-slate-200/80 rounded-full -z-0 shadow-xs"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                  
+                  {/* Subtle Hover Background */}
+                  <span className="absolute inset-0 bg-slate-100/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none -z-0" />
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Unified Actions & Toggler (Visible on All Devices) */}
@@ -424,27 +517,78 @@ export function Header() {
 
                 {/* Menu Item List */}
                 <div className="py-2 px-4 divide-y divide-slate-100">
-                  {navLinks.map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`py-3.5 px-2 flex items-center justify-between transition-colors group ${
-                        pathname === item.href
-                          ? 'text-primary-navy font-bold'
-                          : 'text-slate-700 font-semibold hover:text-primary-blue'
-                      }`}
-                    >
-                      <span className="text-base">{item.label}</span>
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
-                        pathname === item.href
-                          ? 'bg-primary-navy text-white shadow-xs'
-                          : 'bg-primary-navy/10 text-primary-navy group-hover:bg-primary-navy group-hover:text-white'
-                      }`}>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </Link>
-                  ))}
+                  {navLinks.map((item) => {
+                    if (item.hasDropdown) {
+                      return (
+                        <div key={item.label} className="py-1">
+                          <button
+                            onClick={() => setIsMobileInfoOpen(!isMobileInfoOpen)}
+                            className={`w-full py-3 px-2 flex items-center justify-between transition-colors group ${
+                              pathname.startsWith('/informasi')
+                                ? 'text-primary-navy font-bold'
+                                : 'text-slate-700 font-semibold hover:text-primary-blue'
+                            }`}
+                          >
+                            <span className="text-base">{item.label}</span>
+                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                              isMobileInfoOpen
+                                ? 'bg-primary-navy text-white rotate-90'
+                                : 'bg-primary-navy/10 text-primary-navy'
+                            }`}>
+                              <ChevronRight className="w-4 h-4" />
+                            </div>
+                          </button>
+
+                          {/* Mobile Submenu Accordion */}
+                          <AnimatePresence>
+                            {isMobileInfoOpen && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="pl-3 pr-1 py-1 space-y-1 overflow-hidden"
+                              >
+                                {infoSubmenu.map((sub, idx) => (
+                                  <Link
+                                    key={idx}
+                                    href={sub.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="flex items-center gap-2.5 p-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-primary-navy hover:bg-slate-50 transition-colors"
+                                  >
+                                    <span>{sub.icon}</span>
+                                    <span>{sub.label}</span>
+                                  </Link>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`py-3.5 px-2 flex items-center justify-between transition-colors group ${
+                          pathname === item.href
+                            ? 'text-primary-navy font-bold'
+                            : 'text-slate-700 font-semibold hover:text-primary-blue'
+                        }`}
+                      >
+                        <span className="text-base">{item.label}</span>
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                          pathname === item.href
+                            ? 'bg-primary-navy text-white shadow-xs'
+                            : 'bg-primary-navy/10 text-primary-navy group-hover:bg-primary-navy group-hover:text-white'
+                        }`}>
+                          <ChevronRight className="w-4 h-4" />
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
 
