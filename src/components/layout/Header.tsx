@@ -204,11 +204,23 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo Area */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <Link href="/" className="flex-shrink-0 flex items-center space-x-2 sm:space-x-4">
-              <Image src="/logo-kemnaker.png" alt="Logo Kementerian Ketenagakerjaan" width={80} height={80} className="h-12 sm:h-14 md:h-16 w-auto object-contain drop-shadow-sm" />
-              <div className="h-10 sm:h-12 md:h-14 border-l border-slate-300"></div>
-              <Image src="/logo-ukpbj-kemnaker-new.png" alt="Logo UKPBJ" width={400} height={160} className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-sm" />
+          <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+            <Link href="/" className="flex items-center space-x-2 sm:space-x-3 group">
+              <Image 
+                src="/logo-kemnaker.png" 
+                alt="Logo Kementerian Ketenagakerjaan" 
+                width={48} 
+                height={48} 
+                className="h-10 md:h-12 w-auto object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105" 
+              />
+              <div className="h-7 md:h-8 border-l border-slate-300"></div>
+              <Image 
+                src="/logo-ukpbj-kemnaker-new.png" 
+                alt="Logo UKPBJ" 
+                width={160} 
+                height={50} 
+                className="h-9 md:h-11 w-auto object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105" 
+              />
             </Link>
           </div>
 
