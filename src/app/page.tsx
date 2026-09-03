@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { NewsCard } from '@/components/cards/NewsCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { Briefcase, Users, Globe, HelpCircle, AlertCircle, MessageSquare, ArrowRight, ShieldCheck, FileCheck, Eye, Calendar, Quote } from 'lucide-react';
+import { Briefcase, Users, Globe, HelpCircle, AlertCircle, MessageSquare, ArrowRight, ShieldCheck, FileCheck, Eye, Calendar, Quote, ShoppingCart, BookOpen, Scale } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
@@ -173,28 +173,28 @@ export default function Home() {
                   <StaggerItem>
                     <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
                       <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
-                        <Briefcase className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                        <ShoppingCart className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Profesional</h3>
-                      <p className="text-slate-500 text-sm leading-relaxed">SDM yang kompeten dan berintegritas tinggi.</p>
+                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Eksekusi Pengadaan</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">Menyelenggarakan proses tender dan pemilihan penyedia yang tangkas dan adil.</p>
                     </div>
                   </StaggerItem>
                   <StaggerItem>
                     <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
                       <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
-                        <Eye className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                        <BookOpen className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Transparan</h3>
-                      <p className="text-slate-500 text-sm leading-relaxed">Proses yang terbuka dan dapat diawasi publik.</p>
+                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Pembinaan SDM</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">Meningkatkan kapasitas dan keahlian Pejabat Pembuat Komitmen (PPK) secara berkelanjutan.</p>
                     </div>
                   </StaggerItem>
                   <StaggerItem>
                     <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
                       <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
-                        <FileCheck className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                        <Scale className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Akuntabel</h3>
-                      <p className="text-slate-500 text-sm leading-relaxed">Dapat dipertanggungjawabkan sesuai peraturan.</p>
+                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Advokasi & Konsultasi</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">Memberikan pendampingan hukum dan solusi penyelesaian sengketa pengadaan.</p>
                     </div>
                   </StaggerItem>
                 </StaggerContainer>
