@@ -66,21 +66,58 @@ export default function TentangPage() {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+          {/* VISI & MISI SECTION */}
+          <div id="visi-misi" className="scroll-mt-32 grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
             <FadeIn direction="right" className="bg-white p-10 rounded-2xl shadow-lg border-t-4 border-t-primary-blue">
-              <h2 className="text-2xl font-bold text-primary-navy mb-4">Visi</h2>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-primary-blue font-bold">
+                  🎯
+                </div>
+                <h2 className="text-2xl font-bold text-primary-navy">Visi</h2>
+              </div>
               <p className="text-slate-600 text-lg leading-relaxed">
                 &quot;Menjadi Unit Kerja Pengadaan Barang/Jasa Pemerintah yang Profesional, Modern, dan Berintegritas Tinggi untuk Mewujudkan Pengadaan yang Kredibel dan Akuntabel.&quot;
               </p>
             </FadeIn>
             <FadeIn direction="left" className="bg-white p-10 rounded-2xl shadow-lg border-t-4 border-t-accent-gold">
-              <h2 className="text-2xl font-bold text-primary-navy mb-4">Misi</h2>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-accent-gold font-bold">
+                  🚀
+                </div>
+                <h2 className="text-2xl font-bold text-primary-navy">Misi</h2>
+              </div>
               <ul className="text-slate-600 space-y-3 list-disc pl-5">
-                <li>Meningkatkan kualitas sumber daya manusia pengadaan.</li>
+                <li>Meningkatkan kualitas sumber daya manusia pengadaan yang berintegritas.</li>
                 <li>Mewujudkan sistem pengadaan yang transparan dan terintegrasi berbasis teknologi informasi.</li>
-                <li>Memberikan pelayanan prima kepada seluruh pemangku kepentingan.</li>
+                <li>Memberikan pelayanan prima kepada seluruh pemangku kepentingan dan penyedia.</li>
                 <li>Menerapkan prinsip tata kelola pemerintahan yang baik (Good Corporate Governance).</li>
               </ul>
+            </FadeIn>
+          </div>
+
+          {/* MAKLUMAT PELAYANAN SECTION */}
+          <div id="maklumat" className="scroll-mt-32 mb-20">
+            <FadeIn direction="up">
+              <div className="bg-gradient-to-br from-[#0B1D3A] via-[#102A54] to-[#0A1830] rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden border border-white/10">
+                <div className="absolute top-0 right-0 w-80 h-80 bg-accent-gold/10 rounded-full blur-[100px] pointer-events-none" />
+                <div className="max-w-3xl mx-auto text-center relative z-10">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4">
+                    <span>📜</span>
+                    <span>Maklumat Resmi Pelayanan</span>
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-4">
+                    Maklumat Pelayanan UKPBJ Kemnaker RI
+                  </h3>
+                  <div className="w-24 h-1 bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto mb-6" />
+                  <blockquote className="text-slate-200 text-base sm:text-lg italic leading-relaxed mb-6 font-medium">
+                    &quot;Dengan ini, kami pimpinan dan seluruh jajaran Unit Kerja Pengadaan Barang/Jasa Kementerian Ketenagakerjaan RI menyatakan sanggup menyelenggarakan pelayanan pengadaan sesuai standar pelayanan yang telah ditetapkan, dan apabila tidak menepati janji ini, kami siap menerima sanksi sesuai peraturan perundang-undangan yang berlaku.&quot;
+                  </blockquote>
+                  <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-white/15 text-xs font-semibold text-amber-300">
+                    <ShieldCheck className="w-4 h-4 text-accent-gold" />
+                    <span>Komitmen Pelayanan Bebas Pungli & Transparan</span>
+                  </div>
+                </div>
+              </div>
             </FadeIn>
           </div>
 
@@ -97,11 +134,42 @@ export default function TentangPage() {
             ))}
           </div>
           
-          <div className="bg-white p-10 rounded-2xl shadow-sm border border-slate-100 mb-10">
+          <div className="bg-white p-10 rounded-2xl shadow-sm border border-slate-100 mb-20">
              <SectionHeading title="Struktur Organisasi" subtitle="Bagan struktur kepengurusan UKPBJ" />
              <div className="mt-8">
                <OrganizationChart />
              </div>
+          </div>
+
+          {/* FAQ SECTION */}
+          <div id="faq" className="scroll-mt-32 mb-10">
+            <SectionHeading title="Pertanyaan Umum (FAQ)" subtitle="Informasi seputar pertanyaan yang sering diajukan terkait UKPBJ" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+              <FadeIn direction="up" delay={0.1} className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80">
+                <h4 className="text-base font-bold text-primary-navy mb-2">Bagaimana cara mendaftar sebagai penyedia di SPSE Kemnaker?</h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  Penyedia dapat mendaftar secara online melalui portal SPSE Kemnaker, kemudian membawa dokumen asli verifikasi ke kantor LPSE/UKPBJ Kemnaker untuk aktivasi akun.
+                </p>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.2} className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80">
+                <h4 className="text-base font-bold text-primary-navy mb-2">Di mana melihat jadwal pengumuman tender aktif?</h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  Seluruh jadwal tender aktif dapat dipantau langsung melalui menu Agenda dan portal SPSE resmi Kemnaker RI secara transparan dan real-time.
+                </p>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.3} className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80">
+                <h4 className="text-base font-bold text-primary-navy mb-2">Apakah ada biaya dalam proses pengadaan barang dan jasa?</h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  Seluruh layanan pengadaan barang dan jasa serta verifikasi di UKPBJ Kemnaker adalah 100% GRATIS dan bebas dari segala bentuk pungutan liar.
+                </p>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.4} className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80">
+                <h4 className="text-base font-bold text-primary-navy mb-2">Bagaimana mengajukan konsultasi pengadaan barang dan jasa?</h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  Anda dapat menggunakan menu Layanan &gt; Klinik Pengadaan atau menghubungi Helpdesk UKPBJ melalui tombol kontak WhatsApp yang tersedia.
+                </p>
+              </FadeIn>
+            </div>
           </div>
         </section>
       </main>

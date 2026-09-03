@@ -18,6 +18,8 @@ export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isInfoDropdownOpen, setIsInfoDropdownOpen] = useState(false);
   const [isMobileInfoOpen, setIsMobileInfoOpen] = useState(false);
+  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+  const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
@@ -31,6 +33,14 @@ export function Header() {
     { label: 'Panduan Perizinan/Usaha', href: '/informasi?kategori=perizinan', icon: '📑', desc: 'Legalitas & izin usaha penyedia' },
     { label: 'Tender/Seleksi Pemilu', href: '/informasi?kategori=pemilu', icon: '🗳️', desc: 'Paket tender & seleksi khusus' },
     { label: 'Clearing House', href: '/informasi?kategori=clearing-house', icon: '⚖️', desc: 'Konsultasi & penyelesaian PBJ' },
+  ];
+
+  const aboutSubmenu = [
+    { label: 'Visi & Misi', href: '/tentang#visi-misi', icon: '🎯', desc: 'Arah dan komitmen strategis' },
+    { label: 'Maklumat UKPBJ', href: '/tentang#maklumat', icon: '📜', desc: 'Janji standar mutu pelayanan' },
+    { label: 'Survey + Monitoring', href: '/monitoring', icon: '📊', desc: 'Indeks kepuasan & evaluasi' },
+    { label: 'Standar Pelayanan Publik', href: '/informasi/sop', icon: '🏛️', desc: 'Standar mutu operasional' },
+    { label: 'FAQ', href: '/tentang#faq', icon: '❓', desc: 'Pertanyaan umum & informasi' },
   ];
 
   useEffect(() => {
@@ -51,12 +61,12 @@ export function Header() {
 
   const navLinks = [
     { label: t('nav.home'), href: '/' },
-    { label: t('nav.info'), href: '/informasi', hasDropdown: true },
+    { label: t('nav.info'), href: '/informasi', hasDropdown: true, dropdownType: 'info' },
     { label: t('nav.services'), href: '/layanan' },
     { label: t('nav.agenda'), href: '/agenda' },
     { label: t('nav.gallery'), href: '/galeri' },
     { label: t('nav.monitoring'), href: '/monitoring' },
-    { label: t('nav.about'), href: '/tentang' }
+    { label: t('nav.about'), href: '/tentang', hasDropdown: true, dropdownType: 'about' }
   ];
 
   return (
@@ -242,28 +252,34 @@ export function Header() {
           <nav className="hidden lg:flex items-center space-x-1">
             {navLinks.map((item) => {
               if (item.hasDropdown) {
+                const isInfo = item.dropdownType === 'info';
+                const isDropdownOpen = isInfo ? isInfoDropdownOpen : isAboutDropdownOpen;
+                const setDropdownOpen = isInfo ? setIsInfoDropdownOpen : setIsAboutDropdownOpen;
+                const isCurrentActive = isInfo ? pathname.startsWith('/informasi') : pathname.startsWith('/tentang');
+                const submenuList = isInfo ? infoSubmenu : aboutSubmenu;
+
                 return (
                   <div 
                     key={item.label}
                     className="relative"
-                    onMouseEnter={() => setIsInfoDropdownOpen(true)}
-                    onMouseLeave={() => setIsInfoDropdownOpen(false)}
+                    onMouseEnter={() => setDropdownOpen(true)}
+                    onMouseLeave={() => setDropdownOpen(false)}
                   >
                     <Link
                       href={item.href}
                       className="relative px-3.5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 group flex items-center gap-1.5"
                     >
                       <span className={`relative z-10 transition-colors duration-200 ${
-                        pathname.startsWith('/informasi')
+                        isCurrentActive
                           ? 'text-primary-navy font-bold'
                           : 'text-slate-600 group-hover:text-primary-navy'
                       }`}>
                         {item.label}
                       </span>
-                      <ChevronDown className={`w-3.5 h-3.5 relative z-10 text-slate-500 transition-transform duration-200 ${isInfoDropdownOpen ? 'rotate-180 text-primary-navy' : ''}`} />
+                      <ChevronDown className={`w-3.5 h-3.5 relative z-10 text-slate-500 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-primary-navy' : ''}`} />
                       
                       {/* Floating active pill highlight */}
-                      {pathname.startsWith('/informasi') && (
+                      {isCurrentActive && (
                         <motion.span 
                           layoutId="activeNavPill"
                           className="absolute inset-0 bg-slate-100 border border-slate-200/80 rounded-full -z-0 shadow-xs"
@@ -277,25 +293,29 @@ export function Header() {
 
                     {/* Dropdown Menu */}
                     <AnimatePresence>
-                      {isInfoDropdownOpen && (
+                      {isDropdownOpen && (
                         <motion.div
                           initial={{ opacity: 0, y: 10, scale: 0.97 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.97 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="absolute left-1/2 -translate-x-1/2 mt-2 w-[540px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-200/80 p-3.5 z-50 overflow-hidden"
+                          className={`absolute ${isInfo ? 'left-1/2 -translate-x-1/2 w-[540px]' : 'right-0 w-[300px]'} mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-200/80 p-3.5 z-50 overflow-hidden`}
                         >
                           <div className="px-3 py-2 border-b border-slate-100 mb-2 flex items-center justify-between">
-                            <span className="text-xs font-bold text-primary-navy uppercase tracking-wider">Kanal Informasi & Dokumen</span>
-                            <span className="text-[10px] font-bold text-primary-blue bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">8 Kategori</span>
+                            <span className="text-xs font-bold text-primary-navy uppercase tracking-wider">
+                              {isInfo ? 'Kanal Informasi & Dokumen' : 'Profil & Tata Kelola'}
+                            </span>
+                            <span className="text-[10px] font-bold text-primary-blue bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
+                              {submenuList.length} Pilihan
+                            </span>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-1.5">
-                            {infoSubmenu.map((sub, idx) => (
+                          <div className={isInfo ? "grid grid-cols-2 gap-1.5" : "flex flex-col gap-1"}>
+                            {submenuList.map((sub, idx) => (
                               <Link
                                 key={idx}
                                 href={sub.href}
-                                onClick={() => setIsInfoDropdownOpen(false)}
+                                onClick={() => setDropdownOpen(false)}
                                 className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all duration-200 group/sub"
                               >
                                 <div className="w-8 h-8 rounded-lg bg-blue-50/80 border border-blue-100/50 flex items-center justify-center text-sm flex-shrink-0 group-hover/sub:bg-primary-blue group-hover/sub:text-white transition-all">
@@ -519,19 +539,25 @@ export function Header() {
                 <div className="py-2 px-4 divide-y divide-slate-100">
                   {navLinks.map((item) => {
                     if (item.hasDropdown) {
+                      const isInfo = item.dropdownType === 'info';
+                      const isAccordionOpen = isInfo ? isMobileInfoOpen : isMobileAboutOpen;
+                      const setIsAccordionOpen = isInfo ? setIsMobileInfoOpen : setIsMobileAboutOpen;
+                      const isCurrentActive = isInfo ? pathname.startsWith('/informasi') : pathname.startsWith('/tentang');
+                      const submenuList = isInfo ? infoSubmenu : aboutSubmenu;
+
                       return (
                         <div key={item.label} className="py-1">
                           <button
-                            onClick={() => setIsMobileInfoOpen(!isMobileInfoOpen)}
+                            onClick={() => setIsAccordionOpen(!isAccordionOpen)}
                             className={`w-full py-3 px-2 flex items-center justify-between transition-colors group ${
-                              pathname.startsWith('/informasi')
+                              isCurrentActive
                                 ? 'text-primary-navy font-bold'
                                 : 'text-slate-700 font-semibold hover:text-primary-blue'
                             }`}
                           >
                             <span className="text-base">{item.label}</span>
                             <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
-                              isMobileInfoOpen
+                              isAccordionOpen
                                 ? 'bg-primary-navy text-white rotate-90'
                                 : 'bg-primary-navy/10 text-primary-navy'
                             }`}>
@@ -541,7 +567,7 @@ export function Header() {
 
                           {/* Mobile Submenu Accordion */}
                           <AnimatePresence>
-                            {isMobileInfoOpen && (
+                            {isAccordionOpen && (
                               <motion.div
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
@@ -549,7 +575,7 @@ export function Header() {
                                 transition={{ duration: 0.2 }}
                                 className="pl-3 pr-1 py-1 space-y-1 overflow-hidden"
                               >
-                                {infoSubmenu.map((sub, idx) => (
+                                {submenuList.map((sub, idx) => (
                                   <Link
                                     key={idx}
                                     href={sub.href}
