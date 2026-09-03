@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { NewsCard } from '@/components/cards/NewsCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { Briefcase, Users, Globe, HelpCircle, AlertCircle, MessageSquare, ArrowRight, ShieldCheck, FileCheck, Eye, Calendar } from 'lucide-react';
+import { Briefcase, Users, Globe, HelpCircle, AlertCircle, MessageSquare, ArrowRight, ShieldCheck, FileCheck, Eye, Calendar, Quote } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
@@ -160,37 +160,41 @@ export default function Home() {
                 <FadeIn direction="left">
                   <h2 className="text-2xl md:text-4xl font-bold mb-6 text-primary-navy">{t('home.about_title')}</h2>
                   <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
-                  <p className="text-xl text-slate-600 mb-12 leading-relaxed">
-                    {t('home.about_desc')}
-                  </p>
+                  
+                  <div className="relative p-6 md:p-8 rounded-3xl bg-white/60 backdrop-blur-md border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-12 group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                    <Quote className="absolute top-6 left-6 w-16 h-16 text-accent-gold/10 transform -scale-x-100 group-hover:scale-110 group-hover:-scale-x-110 transition-transform duration-500" />
+                    <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-medium relative z-10 pl-4 md:pl-8 border-l-4 border-accent-gold/50">
+                      "Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Ketenagakerjaan merupakan <span className="text-primary-blue font-bold">pusat keunggulan</span> pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas dan berintegritas."
+                    </p>
+                  </div>
                 </FadeIn>
                 
-                <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-4">
+                <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
                   <StaggerItem>
-                    <div className="flex flex-col">
-                      <div className="w-14 h-14 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
-                        <Briefcase className="w-7 h-7" />
+                    <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
+                      <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
+                        <Briefcase className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-2 text-primary-navy">Profesional</h3>
-                      <p className="text-slate-500 text-sm">SDM yang kompeten dan berintegritas tinggi.</p>
+                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Profesional</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">SDM yang kompeten dan berintegritas tinggi.</p>
                     </div>
                   </StaggerItem>
                   <StaggerItem>
-                    <div className="flex flex-col">
-                      <div className="w-14 h-14 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
-                        <Eye className="w-7 h-7" />
+                    <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
+                      <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
+                        <Eye className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-2 text-primary-navy">Transparan</h3>
-                      <p className="text-slate-500 text-sm">Proses yang terbuka dan dapat diawasi publik.</p>
+                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Transparan</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">Proses yang terbuka dan dapat diawasi publik.</p>
                     </div>
                   </StaggerItem>
                   <StaggerItem>
-                    <div className="flex flex-col">
-                      <div className="w-14 h-14 rounded-full bg-secondary-offwhite flex items-center justify-center mb-4 text-primary-blue shadow-sm">
-                        <FileCheck className="w-7 h-7" />
+                    <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
+                      <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
+                        <FileCheck className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-2 text-primary-navy">Akuntabel</h3>
-                      <p className="text-slate-500 text-sm">Dapat dipertanggungjawabkan sesuai peraturan.</p>
+                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Akuntabel</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">Dapat dipertanggungjawabkan sesuai peraturan.</p>
                     </div>
                   </StaggerItem>
                 </StaggerContainer>
