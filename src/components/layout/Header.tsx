@@ -204,11 +204,11 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo Area */}
-          <div className="flex items-center space-x-2 sm:space-x-3 max-w-[65%]">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <Link href="/" className="flex-shrink-0 flex items-center space-x-2 sm:space-x-4">
-              <Image src="/logo-kemnaker.png" alt="Logo Kementerian Ketenagakerjaan" width={64} height={64} className="h-10 sm:h-12 md:h-14 w-auto object-contain drop-shadow-sm" />
-              <div className="h-8 sm:h-10 md:h-12 border-l border-slate-300"></div>
-              <Image src="/logo-ukpbj-kemnaker-new.png" alt="Logo UKPBJ" width={300} height={120} className="h-10 sm:h-14 md:h-16 w-auto object-contain drop-shadow-sm" />
+              <Image src="/logo-kemnaker.png" alt="Logo Kementerian Ketenagakerjaan" width={80} height={80} className="h-12 sm:h-14 md:h-16 w-auto object-contain drop-shadow-sm" />
+              <div className="h-10 sm:h-12 md:h-14 border-l border-slate-300"></div>
+              <Image src="/logo-ukpbj-kemnaker-new.png" alt="Logo UKPBJ" width={400} height={160} className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-sm" />
             </Link>
           </div>
 
