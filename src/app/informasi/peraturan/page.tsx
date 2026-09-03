@@ -23,23 +23,104 @@ type Regulation = {
   desc: string;
 };
 
+const categories = [
+  { id: 'all', label: 'Semua Regulasi', icon: <BookOpen className="w-4 h-4" />, count: 18 },
+  { id: 'uu', label: 'Undang-Undang', icon: <FileText className="w-4 h-4" />, count: 3 },
+  { id: 'pp', label: 'Peraturan Pemerintah', icon: <FileText className="w-4 h-4" />, count: 2 },
+  { id: 'perpres', label: 'Peraturan Presiden', icon: <FileText className="w-4 h-4" />, count: 4 },
+  { id: 'inpres', label: 'Keputusan / Instruksi Presiden', icon: <FileText className="w-4 h-4" />, count: 2 },
+  { id: 'permen', label: 'Peraturan Menteri / Lembaga', icon: <FileText className="w-4 h-4" />, count: 4 },
+  { id: 'kepmen', label: 'Keputusan Menteri / Lembaga', icon: <FileText className="w-4 h-4" />, count: 2 },
+  { id: 'se', label: 'Surat Edaran', icon: <FileText className="w-4 h-4" />, count: 3 },
+  { id: 'lain', label: 'Lain-Lain & Pedoman', icon: <FileText className="w-4 h-4" />, count: 2 },
+];
+
+const regulations: Regulation[] = [
+  {
+    id: '1',
+    category: 'uu',
+    nomor: 'UU No. 03 Tahun 2014',
+    title: 'Undang-Undang Nomor 03 Tahun 2014 tentang Perindustrian',
+    date: 'Jumat, 24 November 2023',
+    status: 'Berlaku',
+    fileSize: '1.4 MB',
+    desc: 'Mengatur mengenai penyelenggaraan perindustrian, standardisasi industri, dan pemanfaatan produk dalam negeri.'
+  },
+  {
+    id: '2',
+    category: 'uu',
+    nomor: 'UU No. 17 Tahun 2003',
+    title: 'Undang-Undang Nomor 17 Tahun 2003 tentang Keuangan Negara',
+    date: 'Rabu, 01 November 2023',
+    status: 'Berlaku',
+    fileSize: '980 KB',
+    desc: 'Asas-asas umum pengelolaan keuangan negara dalam rangka mendukung terwujudnya tata kelola pemerintahan yang baik.'
+  },
+  {
+    id: '3',
+    category: 'uu',
+    nomor: 'UU No. 01 Tahun 2004',
+    title: 'Undang-Undang Nomor 01 Tahun 2004 tentang Perbendaharaan Negara',
+    date: 'Rabu, 01 November 2023',
+    status: 'Berlaku',
+    fileSize: '1.2 MB',
+    desc: 'Ketentuan mengenai pengelolaan dan pertanggungjawaban keuangan negara termasuk pelaksanaan pengadaan barang dan jasa.'
+  },
+  {
+    id: '4',
+    category: 'perpres',
+    nomor: 'Perpres No. 12 Tahun 2021',
+    title: 'Peraturan Presiden Nomor 12 Tahun 2021 tentang Perubahan atas Perpres No. 16 Tahun 2018 tentang Pengadaan Barang/Jasa Pemerintah',
+    date: 'Senin, 15 Januari 2024',
+    status: 'Berlaku',
+    fileSize: '2.8 MB',
+    desc: 'Landasan hukum utama pelaksanaan pengadaan barang dan jasa pemerintah Republik Indonesia.'
+  },
+  {
+    id: '5',
+    category: 'perpres',
+    nomor: 'Perpres No. 16 Tahun 2018',
+    title: 'Peraturan Presiden Nomor 16 Tahun 2018 tentang Pengadaan Barang/Jasa Pemerintah',
+    date: 'Kamis, 10 Mei 2023',
+    status: 'Diubah',
+    fileSize: '3.1 MB',
+    desc: 'Pedoman pokok penyelenggaraan pengadaan barang dan jasa instansi pemerintah kementerian/lembaga.'
+  },
+  {
+    id: '6',
+    category: 'pp',
+    nomor: 'PP No. 29 Tahun 2018',
+    title: 'Peraturan Pemerintah Nomor 29 Tahun 2018 tentang Pemberdayaan Industri',
+    date: 'Selasa, 12 Desember 2023',
+    status: 'Berlaku',
+    fileSize: '1.7 MB',
+    desc: 'Ketentuan tentang peningkatan penggunaan produk dalam negeri (P3DN) dan kewajiban TKDN dalam belanja pemerintah.'
+  },
+  {
+    id: '7',
+    category: 'permen',
+    nomor: 'Permenaker No. 05 Tahun 2023',
+    title: 'Peraturan Menteri Ketenagakerjaan tentang Pedoman Pengadaan Barang dan Jasa di Lingkungan Kemnaker',
+    date: 'Senin, 04 Maret 2024',
+    status: 'Berlaku',
+    fileSize: '1.5 MB',
+    desc: 'Petunjuk teknis dan tata kelola internal pelaksanaan PBJ khusus di unit kerja Kementerian Ketenagakerjaan.'
+  },
+  {
+    id: '8',
+    category: 'se',
+    nomor: 'SE Menaker No. 02/2024',
+    title: 'Surat Edaran Menteri Ketenagakerjaan tentang Percepatan Pelaksanaan Pengadaan Dini Tahun Anggaran 2026',
+    date: 'Jumat, 16 Februari 2024',
+    status: 'Berlaku',
+    fileSize: '650 KB',
+    desc: 'Instruksi percepatan tender dini untuk memastikan penyerapan anggaran yang efektif dan tepat sasaran.'
+  }
+];
+
 export default function PeraturanPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  const categories = [
-    { id: 'all', label: 'Semua Regulasi', icon: <BookOpen className="w-4 h-4" />, count: 18 },
-    { id: 'uu', label: 'Undang-Undang', icon: <FileText className="w-4 h-4" />, count: 3 },
-    { id: 'pp', label: 'Peraturan Pemerintah', icon: <FileText className="w-4 h-4" />, count: 2 },
-    { id: 'perpres', label: 'Peraturan Presiden', icon: <FileText className="w-4 h-4" />, count: 4 },
-    { id: 'inpres', label: 'Keputusan / Instruksi Presiden', icon: <FileText className="w-4 h-4" />, count: 2 },
-    { id: 'permen', label: 'Peraturan Menteri / Lembaga', icon: <FileText className="w-4 h-4" />, count: 4 },
-    { id: 'kepmen', label: 'Keputusan Menteri / Lembaga', icon: <FileText className="w-4 h-4" />, count: 2 },
-    { id: 'se', label: 'Surat Edaran', icon: <FileText className="w-4 h-4" />, count: 3 },
-    { id: 'lain', label: 'Lain-Lain & Pedoman', icon: <FileText className="w-4 h-4" />, count: 2 },
-  ];
-
-  const regulations: Regulation[] = [
     {
       id: '1',
       category: 'uu',
