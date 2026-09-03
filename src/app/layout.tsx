@@ -7,6 +7,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 
+import { FloatingContact } from "@/components/ui/FloatingContact";
+
 export const metadata: Metadata = {
   title: "UKPBJ Kementerian Ketenagakerjaan Republik Indonesia",
   description: "Portal Pengadaan Barang/Jasa Kementerian Ketenagakerjaan Republik Indonesia",
@@ -23,6 +25,7 @@ export default function RootLayout({
         <AccessibilityProvider>
           <LanguageProvider>
             {children}
+            <FloatingContact />
           </LanguageProvider>
         </AccessibilityProvider>
       </body>
