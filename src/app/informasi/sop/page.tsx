@@ -7,10 +7,10 @@ import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Search, FileText, Download, Eye, Calendar, 
-  ChevronRight, Filter, BookOpen, GitBranch, 
-  CheckCircle2, ArrowRight, ShieldCheck, Clock, 
-  Workflow, Layers, Sparkles, X, FileCheck, Check
+  Search, FileText, Download, Calendar, 
+  ChevronRight, Filter, GitBranch, 
+  CheckCircle2, ArrowRight, ShieldCheck, 
+  Workflow, Layers, X, FileCheck, Check
 } from 'lucide-react';
 
 type SOPItem = {
