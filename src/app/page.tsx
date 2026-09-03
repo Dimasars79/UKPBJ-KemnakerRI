@@ -228,7 +228,7 @@ export default function Home() {
               {/* Year Dropdown */}
               <FadeIn direction="right">
                 <div className="relative group">
-                  <select className="appearance-none bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold text-lg rounded-xl px-6 py-3 pr-12 focus:outline-none focus:border-accent-gold/50 focus:ring-2 focus:ring-accent-gold/20 hover:bg-white/20 transition-all cursor-pointer shadow-lg">
+                  <select className="appearance-none bg-white/5 backdrop-blur-md border border-white/10 text-white font-medium text-base rounded-full px-6 py-2.5 pr-12 focus:outline-none focus:border-accent-gold/40 focus:ring-2 focus:ring-accent-gold/20 hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer shadow-sm">
                     <option value="2026" className="text-primary-navy">Tahun 2026</option>
                     <option value="2025" className="text-primary-navy">Tahun 2025</option>
                     <option value="2024" className="text-primary-navy">Tahun 2024</option>
