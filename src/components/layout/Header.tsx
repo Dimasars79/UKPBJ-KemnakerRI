@@ -208,7 +208,7 @@ export function Header() {
             <Link href="/" className="flex-shrink-0 flex items-center space-x-2 sm:space-x-4">
               <Image src="/logo-kemnaker.png" alt="Logo Kementerian Ketenagakerjaan" width={64} height={64} className="h-10 sm:h-12 md:h-16 w-auto object-contain drop-shadow-sm" />
               <div className="h-8 sm:h-10 md:h-14 border-l border-slate-300"></div>
-              <Image src="/logo-ukpbj-kemnaker-new.png" alt="Logo UKPBJ" width={220} height={80} className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-sm" />
+              <Image src="/logo-ukpbj-kemnaker-new.png" alt="Logo UKPBJ" width={300} height={120} className="h-16 sm:h-20 md:h-28 w-auto object-contain drop-shadow-sm scale-110 origin-left" />
             </Link>
           </div>
 
