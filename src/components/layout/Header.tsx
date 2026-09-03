@@ -23,7 +23,7 @@ export function Header() {
   const a11y = useAccessibility();
 
   const infoSubmenu = [
-    { label: 'Peraturan', href: '/informasi?kategori=peraturan', icon: '📜', desc: 'Regulasi & dasar hukum PBJ' },
+    { label: 'Peraturan', href: '/informasi/peraturan', icon: '📜', desc: 'Regulasi & dasar hukum PBJ' },
     { label: 'Panduan', href: '/informasi?kategori=panduan', icon: '📘', desc: 'Petunjuk teknis pengadaan' },
     { label: 'Standar Operasional Prosedur', href: '/informasi?kategori=sop', icon: '📋', desc: 'SOP tata kelola kerja resmi' },
     { label: 'Sertifikat PBJ', href: '/informasi?kategori=sertifikat-pbj', icon: '🎓', desc: 'Verifikasi kompetensi pengadaan' },
