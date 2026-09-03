@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { NewsCard } from '@/components/cards/NewsCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { Users, Globe, HelpCircle, AlertCircle, MessageSquare, ArrowRight, ShieldCheck, FileCheck, Calendar, Quote, ShoppingCart, BookOpen, Scale } from 'lucide-react';
+import { Users, Globe, HelpCircle, AlertCircle, MessageSquare, ArrowRight, ShieldCheck, FileCheck, Calendar, Quote, ShoppingCart, BookOpen, Scale, Clock, TrendingDown, Award, ThumbsUp, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
@@ -212,8 +212,8 @@ export default function Home() {
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary-blue/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-              <FadeIn direction="left" className="mb-6 md:mb-0">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+              <FadeIn direction="left" className="mb-2 md:mb-0">
                 <div className="inline-block relative">
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 relative z-10">
                     {t('home.dashboard_title')}
@@ -221,34 +221,69 @@ export default function Home() {
                   <div className="absolute -bottom-2 left-0 w-1/3 h-1 bg-accent-gold rounded-full" />
                 </div>
                 <p className="text-slate-300 max-w-2xl mt-6">
-                  {t('home.dashboard_desc')}
+                  Indikator Kinerja Pengadaan Barang/Jasa UKPBJ Kementerian Ketenagakerjaan
                 </p>
+              </FadeIn>
+              
+              {/* Year Dropdown */}
+              <FadeIn direction="right">
+                <div className="relative group">
+                  <select className="appearance-none bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold text-lg rounded-xl px-6 py-3 pr-12 focus:outline-none focus:border-accent-gold/50 focus:ring-2 focus:ring-accent-gold/20 hover:bg-white/20 transition-all cursor-pointer shadow-lg">
+                    <option value="2026" className="text-primary-navy">Tahun 2026</option>
+                    <option value="2025" className="text-primary-navy">Tahun 2025</option>
+                    <option value="2024" className="text-primary-navy">Tahun 2024</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white pointer-events-none group-hover:text-accent-gold transition-colors" />
+                </div>
               </FadeIn>
             </div>
             
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-accent-gold/50 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)] transition-all duration-300">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <p className="text-sm font-medium text-slate-300 mb-1 relative z-10">{t('home.stats_saving')}</p>
-                  <p className="text-2xl md:text-3xl font-extrabold text-accent-gold relative z-10 drop-shadow-sm">Rp 12.400.000.000</p>
-                  <p className="text-sm text-slate-400 mt-2 relative z-10">{t('home.stats_year')}</p>
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:bg-accent-gold/20 transition-colors">
+                    <Clock className="w-6 h-6 text-accent-gold" />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-200 mb-1 relative z-10">Waktu</h4>
+                  <p className="text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-accent-gold transition-colors">95%</p>
+                  <p className="text-xs text-slate-400 mt-2 relative z-10">Ketepatan waktu proses</p>
                 </div>
               </StaggerItem>
+              
               <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-green-400/50 hover:shadow-[0_8px_30px_rgba(74,222,128,0.15)] transition-all duration-300">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <h4 className="text-lg font-bold text-slate-100 mb-2 relative z-10">{t('home.stats_done')}</h4>
-                  <p className="text-2xl md:text-3xl font-extrabold text-white relative z-10 drop-shadow-sm">440 Paket</p>
-                  <p className="text-sm text-slate-400 mt-2 relative z-10">{t('home.stats_target')}</p>
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:bg-green-400/20 transition-colors">
+                    <TrendingDown className="w-6 h-6 text-green-400" />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-200 mb-1 relative z-10">Efisiensi</h4>
+                  <p className="text-2xl lg:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-green-400 transition-colors">Rp 12.4M</p>
+                  <p className="text-xs text-slate-400 mt-2 relative z-10">Penghematan anggaran</p>
                 </div>
               </StaggerItem>
+
               <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-purple-400/50 hover:shadow-[0_8px_30px_rgba(192,132,252,0.15)] transition-all duration-300">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <h4 className="text-lg font-bold text-slate-100 mb-2 relative z-10">{t('home.stats_time')}</h4>
-                  <p className="text-2xl md:text-3xl font-extrabold text-white relative z-10 drop-shadow-sm">14 Hari</p>
-                  <p className="text-sm text-slate-400 mt-2 relative z-10">{t('home.stats_avg')}</p>
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:bg-purple-400/20 transition-colors">
+                    <Award className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-200 mb-1 relative z-10">Kualitas</h4>
+                  <p className="text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-purple-400 transition-colors">A+</p>
+                  <p className="text-xs text-slate-400 mt-2 relative z-10">Indeks tata kelola</p>
+                </div>
+              </StaggerItem>
+
+              <StaggerItem>
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-pink-400/50 hover:shadow-[0_8px_30px_rgba(244,114,182,0.15)] transition-all duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:bg-pink-400/20 transition-colors">
+                    <ThumbsUp className="w-6 h-6 text-pink-400" />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-200 mb-1 relative z-10">Tingkat Layanan</h4>
+                  <p className="text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-pink-400 transition-colors">98%</p>
+                  <p className="text-xs text-slate-400 mt-2 relative z-10">Kepuasan pengguna</p>
                 </div>
               </StaggerItem>
             </StaggerContainer>
