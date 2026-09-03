@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, User, Globe, Eye, Menu, X, ChevronDown, Bell, AlertTriangle, FileText, CheckCircle2 } from 'lucide-react';
+import { Search, User, Globe, Eye, Menu, X, ChevronDown, ChevronRight, Bell, AlertTriangle, FileText, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -367,67 +367,121 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile Navigation Floating Dropdown */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
+      {/* Mobile Navigation Side Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-[999] lg:hidden">
+            {/* Dark Backdrop Overlay */}
             <motion.div 
-              initial={{ opacity: 0, y: -10, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="lg:hidden mt-2 max-w-7xl mx-auto rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="absolute inset-0 bg-slate-950/60 backdrop-blur-xs"
+            />
+
+            {/* Close Button on Top Right of Overlay */}
+            <motion.button 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 bg-primary-navy hover:bg-primary-blue text-white p-3 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95 z-[1001]"
+              aria-label="Tutup Menu"
             >
-              <div className="p-4 sm:p-6">
-                <div className="grid grid-cols-1 gap-1">
+              <X className="w-6 h-6" />
+            </motion.button>
+
+            {/* Side Drawer Panel */}
+            <motion.div 
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 28, stiffness: 220 }}
+              className="relative w-[82%] max-w-[340px] h-full bg-white shadow-2xl z-[1000] flex flex-col justify-between overflow-y-auto"
+            >
+              <div>
+                {/* Drawer Header with Logos */}
+                <div className="p-5 border-b border-slate-100 flex items-center space-x-3 bg-white">
+                  <Image 
+                    src="/logo-kemnaker.png" 
+                    alt="Logo Kementerian Ketenagakerjaan" 
+                    width={40} 
+                    height={40} 
+                    className="h-9 w-auto object-contain drop-shadow-xs" 
+                  />
+                  <div className="h-7 border-l border-slate-200"></div>
+                  <Image 
+                    src="/logo-ukpbj-kemnaker-new.png" 
+                    alt="Logo UKPBJ" 
+                    width={130} 
+                    height={40} 
+                    className="h-8 w-auto object-contain drop-shadow-xs" 
+                  />
+                </div>
+
+                {/* Menu Item List */}
+                <div className="py-2 px-4 divide-y divide-slate-100">
                   {navLinks.map((item) => (
                     <Link
                       key={item.label}
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-between ${
+                      className={`py-3.5 px-2 flex items-center justify-between transition-colors group ${
                         pathname === item.href
-                          ? 'bg-blue-50/80 text-primary-blue font-bold'
-                          : 'text-slate-700 hover:bg-slate-50 hover:text-primary-navy'
+                          ? 'text-primary-navy font-bold'
+                          : 'text-slate-700 font-semibold hover:text-primary-blue'
                       }`}
                     >
-                      <span>{item.label}</span>
-                      <span className="text-accent-gold">&rarr;</span>
+                      <span className="text-base">{item.label}</span>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                        pathname === item.href
+                          ? 'bg-primary-navy text-white shadow-xs'
+                          : 'bg-primary-navy/10 text-primary-navy group-hover:bg-primary-navy group-hover:text-white'
+                      }`}>
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
                     </Link>
                   ))}
                 </div>
-                
-                {/* Mobile-only actions inside the menu */}
-                <div className="md:hidden mt-4 pt-4 border-t border-slate-100 flex flex-col space-y-2.5">
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => { setIsMobileMenuOpen(false); setIsSearchOpen(true); }}
-                      className="flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-600 p-2.5 rounded-xl hover:bg-slate-100 transition-colors flex-1 gap-2 text-xs font-semibold"
-                    >
-                      <Search className="w-4 h-4" />
-                      <span>Cari</span>
-                    </button>
-                    <Link 
-                      href="/informasi" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center justify-center space-x-2 bg-slate-50 border border-slate-200 text-slate-600 px-3 py-2.5 rounded-xl text-xs font-semibold relative flex-1"
-                    >
-                      <Bell className="w-4 h-4" />
-                      <span>Notifikasi</span>
-                    </Link>
-                  </div>
-                  <Link
-                    href="/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-center space-x-2 bg-gradient-to-r from-primary-navy to-primary-blue text-white w-full px-4 py-2.5 rounded-xl text-sm font-bold shadow-md"
+              </div>
+
+              {/* Drawer Bottom Actions & CTA */}
+              <div className="p-5 border-t border-slate-100 bg-slate-50 space-y-3">
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => { setIsMobileMenuOpen(false); setIsSearchOpen(true); }}
+                    className="flex-1 flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:bg-slate-50 transition-colors"
                   >
-                    <User className="w-4 h-4" />
-                    <span>Masuk Portal</span>
+                    <Search className="w-4 h-4 text-primary-navy" />
+                    <span>Pencarian</span>
+                  </button>
+                  <Link 
+                    href="/informasi"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex-1 flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:bg-slate-50 transition-colors relative"
+                  >
+                    <Bell className="w-4 h-4 text-primary-navy" />
+                    <span>Notifikasi</span>
+                    <span className="w-2 h-2 rounded-full bg-red-500 absolute top-2 right-2 animate-pulse" />
                   </Link>
                 </div>
+
+                <Link
+                  href="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary-navy to-primary-blue text-white py-3 rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Masuk Portal</span>
+                </Link>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
+          </div>
+        )}
+      </AnimatePresence>
       </div>
       
       {/* Search Command Palette Overlay */}
