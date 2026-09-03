@@ -25,20 +25,41 @@ export default function GaleriPage() {
     <>
       <Header />
       <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20">
-        <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a2342] via-[#0d2e57] to-[#113a6e]">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[150%] bg-blue-400/10 rounded-full blur-[120px] mix-blend-screen" />
-            <div className="absolute top-[20%] -right-[10%] w-[50%] h-[100%] bg-[#f2b33a]/5 rounded-full blur-[100px] mix-blend-screen" />
-          </div>
-          <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/worn-dots.png')] opacity-20 mix-blend-overlay" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_galeri.title')}</h1>
-              <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
-                {t('page_galeri.desc')}
-              </p>
-            </FadeIn>
+        {/* HERO SECTION - Official Media Archives & Documentation Theme */}
+        <section className="relative py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-[#080E1A] via-[#101C33] to-[#0A1120]">
+          {/* Spotlight & Fine Dot Matrix Pattern */}
+          <div className="absolute inset-0 bg-[radial-gradient(#38bdf812_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-gradient-to-b from-blue-500/10 to-transparent blur-3xl pointer-events-none" />
+          <div className="absolute -top-10 left-1/3 w-80 h-80 bg-cyan-500/10 rounded-full blur-[110px] pointer-events-none" />
+          
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div className="max-w-4xl mx-auto">
+              <FadeIn direction="up">
+                {/* Government Media Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
+                  <span>📸</span>
+                  <span>Dokumentasi & Arsip Resmi Kemnaker</span>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
+                  Galeri Foto & Dokumentasi <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-slate-100 to-amber-200">
+                    Kegiatan Kerja Pengadaan
+                  </span>
+                </h1>
+
+                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6">
+                  {t('page_galeri.desc')}
+                </p>
+
+                {/* Media Tags */}
+                <div className="flex flex-wrap justify-center gap-3 text-xs font-semibold text-slate-300">
+                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">📷 Kunjungan Kerja</span>
+                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">🏛️ Rapat Koordinasi Nasional</span>
+                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">🎓 Bimbingan Teknis PBJ</span>
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </section>
 

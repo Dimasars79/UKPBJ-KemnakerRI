@@ -44,21 +44,41 @@ export default function LayananPage() {
     <>
       <Header />
       <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20">
-        <section className="relative py-20 overflow-hidden bg-gradient-to-br from-[#0a2342] via-[#0d2e57] to-[#113a6e]">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[150%] bg-blue-400/10 rounded-full blur-[120px] mix-blend-screen" />
-            <div className="absolute top-[20%] -right-[10%] w-[50%] h-[100%] bg-[#f2b33a]/5 rounded-full blur-[100px] mix-blend-screen" />
-          </div>
-          <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-20 mix-blend-overlay" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6">{t('page_layanan.title')}</h1>
-              <div className="w-20 h-1 bg-accent-gold mx-auto mb-8 rounded-full" />
-              <p className="text-slate-300 max-w-3xl mx-auto text-lg leading-relaxed">
-                {t('page_layanan.desc')}
-              </p>
-            </FadeIn>
+        {/* HERO SECTION - Modern Government Tech Service Desk */}
+        <section className="relative py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-[#061A35] via-[#0A2540] to-[#041226]">
+          {/* Tech Grid & Spotlight Background */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e3a8a15_1px,transparent_1px),linear-gradient(to_bottom,#1e3a8a15_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+          <div className="absolute -top-24 right-0 w-96 h-96 bg-primary-blue/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-accent-gold/10 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-4xl mx-auto text-center">
+              <FadeIn direction="up">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
+                  <span>⚡</span>
+                  <span>Layanan Pengadaan Terpadu Kemnaker</span>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
+                  Pusat Solusi & Akses Layanan <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-amber-200">
+                    Pengadaan Barang/Jasa
+                  </span>
+                </h1>
+
+                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6">
+                  {t('page_layanan.desc')}
+                </p>
+
+                {/* Service Indicator Chips */}
+                <div className="flex flex-wrap justify-center gap-3 text-xs font-semibold text-slate-300">
+                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">✓ Sistem SPSE Terintegrasi</span>
+                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">✓ Akses SIKaP 24/7</span>
+                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">✓ Konsultasi & Clearing House</span>
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </section>
 

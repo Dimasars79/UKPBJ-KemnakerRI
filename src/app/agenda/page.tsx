@@ -46,20 +46,40 @@ export default function AgendaPage() {
     <>
       <Header />
       <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20">
-        <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a2342] via-[#0d2e57] to-[#113a6e]">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[150%] bg-blue-400/10 rounded-full blur-[120px] mix-blend-screen" />
-            <div className="absolute top-[20%] -right-[10%] w-[50%] h-[100%] bg-[#f2b33a]/5 rounded-full blur-[100px] mix-blend-screen" />
-          </div>
-          <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/cartographer.png')] opacity-20 mix-blend-overlay" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_agenda.title')}</h1>
-              <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
-                {t('page_agenda.desc')}
-              </p>
-            </FadeIn>
+        {/* HERO SECTION - Official Schedule & Chronology Theme */}
+        <section className="relative py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-[#0B1528] via-[#111F3C] to-[#1A1728]">
+          {/* Chronology Radial Light & Warm Amber Glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.12),transparent_50%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.1),transparent_50%)] pointer-events-none" />
+          <div className="absolute -bottom-10 right-1/4 w-72 h-72 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div className="max-w-4xl mx-auto">
+              <FadeIn direction="up">
+                {/* Government Agenda Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
+                  <span>📅</span>
+                  <span>Jadwal Resmi & Timeline Pengadaan</span>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
+                  Kalender Kegiatan & Agenda <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-white">
+                    Unit Kerja PBJ Kemnaker
+                  </span>
+                </h1>
+
+                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6">
+                  {t('page_agenda.desc')}
+                </p>
+
+                {/* Quick Info Chips */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 font-medium">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                  <span>Waktu Indonesia Barat (WIB) • Diperbarui Secara Berkala</span>
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </section>
 

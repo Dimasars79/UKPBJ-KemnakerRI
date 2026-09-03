@@ -24,20 +24,40 @@ export default function MonitoringPage() {
     <>
       <Header />
       <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20">
-        <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a2342] via-[#0d2e57] to-[#113a6e]">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[150%] bg-blue-400/10 rounded-full blur-[120px] mix-blend-screen" />
-            <div className="absolute top-[20%] -right-[10%] w-[50%] h-[100%] bg-[#f2b33a]/5 rounded-full blur-[100px] mix-blend-screen" />
-          </div>
-          <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <FadeIn direction="up">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_monitoring.title')}</h1>
-              <p className="text-slate-300 text-center max-w-2xl mx-auto text-lg">
-                {t('page_monitoring.desc')}
-              </p>
-            </FadeIn>
+        {/* HERO SECTION - Official Governance & Audit Analytics Theme */}
+        <section className="relative py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-[#02182B] via-[#082038] to-[#041322]">
+          {/* Cyber Blueprint Lines & Emerald Glow */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#06b6d410_1px,transparent_1px),linear-gradient(to_bottom,#06b6d410_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute -bottom-10 left-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div className="max-w-4xl mx-auto">
+              <FadeIn direction="up">
+                {/* Government ITKP Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
+                  <span>📊</span>
+                  <span>Indeks Tata Kelola Pengadaan (ITKP) Resmi</span>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
+                  Dashboard Monitoring & <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 via-cyan-100 to-white">
+                    Evaluasi Kinerja Pengadaan
+                  </span>
+                </h1>
+
+                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6">
+                  {t('page_monitoring.desc')}
+                </p>
+
+                {/* Audit Status Live Chip */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 font-medium">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Data Real-time SPSE • Terbuka & Terverifikasi Publik</span>
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </section>
 

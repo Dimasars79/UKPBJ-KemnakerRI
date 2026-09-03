@@ -23,21 +23,48 @@ export default function TentangPage() {
     <>
       <Header />
       <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20">
-        <section className="relative py-20 overflow-hidden bg-gradient-to-br from-[#0a2342] via-[#0d2e57] to-[#113a6e]">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[150%] bg-blue-400/10 rounded-full blur-[120px] mix-blend-screen" />
-            <div className="absolute top-[20%] -right-[10%] w-[50%] h-[100%] bg-[#f2b33a]/5 rounded-full blur-[100px] mix-blend-screen" />
-          </div>
-          <div className="absolute inset-0 bg-blue-900/20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 mix-blend-overlay" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
-            <FadeIn direction="up">
-              <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={400} height={145} className="w-auto h-28 md:h-36 lg:h-40 object-contain mb-10 mx-auto drop-shadow-2xl" />
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-6 text-center">{t('page_tentang.title')}</h1>
-              <p className="text-slate-300 text-center max-w-3xl mx-auto text-lg leading-relaxed">
-                {t('page_tentang.desc')}
-              </p>
-            </FadeIn>
+        {/* HERO SECTION - Institutional Grandeur */}
+        <section className="relative py-20 lg:py-24 overflow-hidden bg-primary-navy">
+          {/* Architectural Background with Deep Navy Vignette Overlay */}
+          <div 
+            className="absolute inset-0 bg-[url('/gedung-kemnaker.jpg')] bg-cover bg-center bg-no-repeat opacity-25 mix-blend-luminosity scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-navy via-primary-navy/90 to-primary-navy/70 pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(212,175,55,0.15),transparent_60%)] pointer-events-none" />
+          
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-4xl">
+              <FadeIn direction="up">
+                {/* Government Pill Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
+                  <span>🏛️</span>
+                  <span>Profil & Tata Kelola Instansi</span>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] mb-6">
+                  Unit Kerja Pengadaan <br className="hidden sm:inline" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-amber-200">
+                    Barang & Jasa Kemnaker RI
+                  </span>
+                </h1>
+
+                <p className="text-slate-300 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mb-8">
+                  Pusat keunggulan pengadaan pemerintah yang berpegang teguh pada prinsip transparansi, profesionalisme, dan akuntabilitas berstandar nasional.
+                </p>
+
+                {/* Integrity Badges */}
+                <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/10">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-white/5 px-3.5 py-2 rounded-xl border border-white/10">
+                    <ShieldCheck className="w-4 h-4 text-accent-gold" />
+                    <span>Zona Integritas Bebas Korupsi</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-white/5 px-3.5 py-2 rounded-xl border border-white/10">
+                    <Target className="w-4 h-4 text-blue-400" />
+                    <span>Standar Pelayanan Prima UKPBJ</span>
+                  </div>
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </section>
 
