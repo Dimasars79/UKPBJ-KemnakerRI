@@ -40,16 +40,19 @@ export default function InformasiPage() {
           <div className="w-full lg:w-5/12 flex flex-col gap-6">
             
             {/* HERO SECTION */}
-            <div className="relative bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 h-64 flex flex-col justify-center p-8">
-              {/* Background Image building mockup (using abstract shapes to simulate it if no image provided) */}
-              <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-slate-200 to-transparent opacity-50 pointer-events-none" />
-              <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-primary-blue/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 h-64 flex flex-col justify-center p-8 group">
+              {/* Background Image */}
+              <div 
+                className="absolute inset-0 bg-[url('/gedung-kemnaker.jpg')] bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
+              />
+              {/* Gradient Overlay for Text Readability */}
+              <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent pointer-events-none" />
               
               <div className="relative z-10 max-w-xs">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-primary-navy leading-tight mb-4">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-primary-navy leading-tight mb-4 drop-shadow-sm">
                   UKPBJ<br/>UPDATE CENTER
                 </h1>
-                <p className="text-slate-600 text-sm leading-relaxed">
+                <p className="text-slate-700 text-sm leading-relaxed font-medium">
                   Pusat informasi terbaru Unit Kerja Pengadaan Barang/Jasa Kementerian Ketenagakerjaan RI
                 </p>
               </div>
