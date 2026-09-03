@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, FileText, Download, Eye, Calendar, 
   ChevronRight, Filter, BookOpen, GraduationCap, 
-  CheckCircle2, ArrowRight, Video, FileCheck, Users, HelpCircle
+  ArrowRight, Video, FileCheck, Users, HelpCircle
 } from 'lucide-react';
 
 type GuideItem = {
