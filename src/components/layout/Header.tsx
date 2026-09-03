@@ -26,7 +26,7 @@ export function Header() {
     { label: 'Peraturan', href: '/informasi/peraturan', icon: '📜', desc: 'Regulasi & dasar hukum PBJ' },
     { label: 'Panduan', href: '/informasi/panduan', icon: '📘', desc: 'Petunjuk teknis pengadaan' },
     { label: 'Standar Operasional Prosedur', href: '/informasi/sop', icon: '📋', desc: 'SOP tata kelola kerja resmi' },
-    { label: 'Sertifikat PBJ', href: '/informasi?kategori=sertifikat-pbj', icon: '🎓', desc: 'Verifikasi kompetensi pengadaan' },
+    { label: 'Sertifikat PBJ', href: '/informasi/sertifikat-pbj', icon: '🎓', desc: 'Verifikasi kompetensi pengadaan' },
     { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi?kategori=tkdn', icon: '🇮🇩', desc: 'Tingkat Komponen Dalam Negeri' },
     { label: 'Panduan Perizinan/Usaha', href: '/informasi?kategori=perizinan', icon: '📑', desc: 'Legalitas & izin usaha penyedia' },
     { label: 'Tender/Seleksi Pemilu', href: '/informasi?kategori=pemilu', icon: '🗳️', desc: 'Paket tender & seleksi khusus' },
