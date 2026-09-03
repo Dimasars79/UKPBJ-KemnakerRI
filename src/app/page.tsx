@@ -164,7 +164,7 @@ export default function Home() {
                   <div className="relative p-6 md:p-8 rounded-3xl bg-white/60 backdrop-blur-md border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-12 group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
                     <Quote className="absolute top-6 left-6 w-16 h-16 text-accent-gold/10 transform -scale-x-100 group-hover:scale-110 group-hover:-scale-x-110 transition-transform duration-500" />
                     <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-medium relative z-10 pl-4 md:pl-8 border-l-4 border-accent-gold/50">
-                      "Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Ketenagakerjaan merupakan <span className="text-primary-blue font-bold">pusat keunggulan</span> pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas dan berintegritas."
+                      &quot;Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Ketenagakerjaan merupakan <span className="text-primary-blue font-bold">pusat keunggulan</span> pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas dan berintegritas.&quot;
                     </p>
                   </div>
                 </FadeIn>
