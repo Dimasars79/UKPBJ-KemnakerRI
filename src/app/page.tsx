@@ -139,8 +139,13 @@ export default function Home() {
         </section>
 
         {/* 2. Profil UKPBJ (Prioritized) */}
-        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-blue-50/50" id="profil">
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-blue/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white" id="profil">
+          {/* Subtle Polkadot Pattern */}
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-60 pointer-events-none" />
+          
+          {/* Giant Blur Orbs */}
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-blue/10 rounded-full blur-[150px] -translate-y-1/3 translate-x-1/3 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent-gold/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-16">
@@ -194,15 +199,24 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 2.5 Performance Dashboard */}
-        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-white border-y border-slate-100" id="kinerja">
-          <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-accent-gold/5 rounded-full blur-[120px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+        {/* 2.5 Performance Dashboard (ZEBRA STRIPING: DARK MODE) */}
+        <section className="py-24 relative overflow-hidden bg-[#0a2342] border-y border-white/10" id="kinerja">
+          {/* Subtle overlay grid for dark mode */}
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] pointer-events-none" />
+          
+          <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-accent-gold/10 rounded-full blur-[150px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary-blue/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-center mb-10">
               <FadeIn direction="left" className="mb-6 md:mb-0">
-                <SectionHeading title={t('home.dashboard_title')} />
-                <p className="text-slate-600 max-w-2xl mt-2">
+                <div className="inline-block relative">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 relative z-10">
+                    {t('home.dashboard_title')}
+                  </h2>
+                  <div className="absolute -bottom-2 left-0 w-1/3 h-1 bg-accent-gold rounded-full" />
+                </div>
+                <p className="text-slate-300 max-w-2xl mt-6">
                   {t('home.dashboard_desc')}
                 </p>
               </FadeIn>
@@ -210,24 +224,27 @@ export default function Home() {
             
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <StaggerItem>
-                <div className="bg-primary-navy text-white rounded-xl p-6 shadow-md h-full">
-                  <p className="text-sm font-medium text-slate-400 mb-1">{t('home.stats_saving')}</p>
-                  <p className="text-2xl md:text-3xl font-extrabold text-accent-gold">Rp 12.400.000.000</p>
-                  <p className="text-sm text-slate-300 mt-2">{t('home.stats_year')}</p>
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <p className="text-sm font-medium text-slate-300 mb-1 relative z-10">{t('home.stats_saving')}</p>
+                  <p className="text-2xl md:text-3xl font-extrabold text-accent-gold relative z-10 drop-shadow-sm">Rp 12.400.000.000</p>
+                  <p className="text-sm text-slate-400 mt-2 relative z-10">{t('home.stats_year')}</p>
                 </div>
               </StaggerItem>
               <StaggerItem>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 h-full">
-                  <h4 className="text-lg font-bold text-primary-navy mb-2">{t('home.stats_done')}</h4>
-                  <p className="text-2xl md:text-3xl font-extrabold text-primary-blue">440 Paket</p>
-                  <p className="text-sm text-slate-500 mt-2">{t('home.stats_target')}</p>
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <h4 className="text-lg font-bold text-slate-100 mb-2 relative z-10">{t('home.stats_done')}</h4>
+                  <p className="text-2xl md:text-3xl font-extrabold text-white relative z-10 drop-shadow-sm">440 Paket</p>
+                  <p className="text-sm text-slate-400 mt-2 relative z-10">{t('home.stats_target')}</p>
                 </div>
               </StaggerItem>
               <StaggerItem>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 h-full">
-                  <h4 className="text-lg font-bold text-primary-navy mb-2">{t('home.stats_time')}</h4>
-                  <p className="text-2xl md:text-3xl font-extrabold text-primary-blue">14 Hari</p>
-                  <p className="text-sm text-slate-500 mt-2">{t('home.stats_avg')}</p>
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <h4 className="text-lg font-bold text-slate-100 mb-2 relative z-10">{t('home.stats_time')}</h4>
+                  <p className="text-2xl md:text-3xl font-extrabold text-white relative z-10 drop-shadow-sm">14 Hari</p>
+                  <p className="text-sm text-slate-400 mt-2 relative z-10">{t('home.stats_avg')}</p>
                 </div>
               </StaggerItem>
             </StaggerContainer>
@@ -244,8 +261,12 @@ export default function Home() {
         </section>
 
         {/* 3. Main Services (Tempat untuk services nantinya) */}
-        <section className="py-20 bg-gradient-to-tr from-blue-50/40 via-slate-50 to-white relative overflow-hidden" id="layanan">
-          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-primary-blue/5 rounded-full blur-[120px] -translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+        <section className="py-20 bg-gradient-to-tr from-blue-50/40 via-slate-50 to-white relative overflow-hidden border-y border-slate-100" id="layanan">
+          {/* Subtle cubes pattern */}
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
+          
+          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-primary-blue/10 rounded-full blur-[120px] -translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent-gold/10 rounded-full blur-[100px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <FadeIn>
               <div className="flex justify-between items-end mb-10">
