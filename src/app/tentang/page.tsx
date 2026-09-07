@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ShieldCheck, Target, Users, BookOpen, Building2, ScrollText, Award, Compass } from 'lucide-react';
+import { ShieldCheck, Target, Users, BookOpen, Building2, ScrollText, Compass } from 'lucide-react';
 import { OrganizationChart } from '@/components/ui/OrganizationChart';
 
 export default function TentangPage() {
