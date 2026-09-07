@@ -3,7 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, User, Globe, Eye, Menu, X, ChevronDown, ChevronRight, Bell, AlertTriangle, FileText, CheckCircle2 } from 'lucide-react';
+import { 
+  Search, User, Globe, Eye, Menu, X, ChevronDown, ChevronRight, 
+  Bell, AlertTriangle, FileText, CheckCircle2,
+  Home, Briefcase, Calendar, Image as ImageIcon, BarChart3, 
+  Building2, Scale, BookOpen, FileCheck, Award, ShieldCheck, 
+  FileSpreadsheet, Vote, Gavel, Target, ScrollText, HelpCircle, 
+  Layers
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -25,22 +32,22 @@ export function Header() {
   const a11y = useAccessibility();
 
   const infoSubmenu = [
-    { label: 'Peraturan', href: '/informasi/peraturan', icon: '📜', desc: 'Regulasi & dasar hukum PBJ' },
-    { label: 'Panduan', href: '/informasi/panduan', icon: '📘', desc: 'Petunjuk teknis pengadaan' },
-    { label: 'Standar Operasional Prosedur', href: '/informasi/sop', icon: '📋', desc: 'SOP tata kelola kerja resmi' },
-    { label: 'Sertifikat PBJ', href: '/informasi/sertifikat-pbj', icon: '🎓', desc: 'Verifikasi kompetensi pengadaan' },
-    { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi?kategori=tkdn', icon: '🇮🇩', desc: 'Tingkat Komponen Dalam Negeri' },
-    { label: 'Panduan Perizinan/Usaha', href: '/informasi?kategori=perizinan', icon: '📑', desc: 'Legalitas & izin usaha penyedia' },
-    { label: 'Tender/Seleksi Pemilu', href: '/informasi?kategori=pemilu', icon: '🗳️', desc: 'Paket tender & seleksi khusus' },
-    { label: 'Clearing House', href: '/informasi?kategori=clearing-house', icon: '⚖️', desc: 'Konsultasi & penyelesaian PBJ' },
+    { label: 'Peraturan', href: '/informasi/peraturan', icon: <Scale className="w-4 h-4 text-blue-600" />, desc: 'Regulasi & dasar hukum PBJ' },
+    { label: 'Panduan', href: '/informasi/panduan', icon: <BookOpen className="w-4 h-4 text-indigo-600" />, desc: 'Petunjuk teknis pengadaan' },
+    { label: 'Standar Operasional Prosedur', href: '/informasi/sop', icon: <FileCheck className="w-4 h-4 text-sky-600" />, desc: 'SOP tata kelola kerja resmi' },
+    { label: 'Sertifikat PBJ', href: '/informasi/sertifikat-pbj', icon: <Award className="w-4 h-4 text-amber-600" />, desc: 'Verifikasi kompetensi pengadaan' },
+    { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi?kategori=tkdn', icon: <ShieldCheck className="w-4 h-4 text-emerald-600" />, desc: 'Tingkat Komponen Dalam Negeri' },
+    { label: 'Panduan Perizinan/Usaha', href: '/informasi?kategori=perizinan', icon: <FileSpreadsheet className="w-4 h-4 text-cyan-600" />, desc: 'Legalitas & izin usaha penyedia' },
+    { label: 'Tender/Seleksi Pemilu', href: '/informasi?kategori=pemilu', icon: <Vote className="w-4 h-4 text-rose-600" />, desc: 'Paket tender & seleksi khusus' },
+    { label: 'Clearing House', href: '/informasi?kategori=clearing-house', icon: <Gavel className="w-4 h-4 text-purple-600" />, desc: 'Konsultasi & penyelesaian PBJ' },
   ];
 
   const aboutSubmenu = [
-    { label: 'Visi & Misi', href: '/tentang#visi-misi', icon: '🎯', desc: 'Arah dan komitmen strategis' },
-    { label: 'Maklumat UKPBJ', href: '/tentang#maklumat', icon: '📜', desc: 'Janji standar mutu pelayanan' },
-    { label: 'Survey + Monitoring', href: '/monitoring', icon: '📊', desc: 'Indeks kepuasan & evaluasi' },
-    { label: 'Standar Pelayanan Publik', href: '/informasi/sop', icon: '🏛️', desc: 'Standar mutu operasional' },
-    { label: 'FAQ', href: '/tentang#faq', icon: '❓', desc: 'Pertanyaan umum & informasi' },
+    { label: 'Visi & Misi', href: '/tentang#visi-misi', icon: <Target className="w-4 h-4 text-blue-600" />, desc: 'Arah dan komitmen strategis' },
+    { label: 'Maklumat UKPBJ', href: '/tentang#maklumat', icon: <ScrollText className="w-4 h-4 text-amber-600" />, desc: 'Janji standar mutu pelayanan' },
+    { label: 'Survey + Monitoring', href: '/monitoring', icon: <BarChart3 className="w-4 h-4 text-indigo-600" />, desc: 'Indeks kepuasan & evaluasi' },
+    { label: 'Standar Pelayanan Publik', href: '/informasi/sop', icon: <Building2 className="w-4 h-4 text-emerald-600" />, desc: 'Standar mutu operasional' },
+    { label: 'FAQ', href: '/tentang#faq', icon: <HelpCircle className="w-4 h-4 text-purple-600" />, desc: 'Pertanyaan umum & informasi' },
   ];
 
   useEffect(() => {
@@ -60,13 +67,13 @@ export function Header() {
   };
 
   const navLinks = [
-    { label: t('nav.home'), href: '/' },
-    { label: t('nav.info'), href: '/informasi', hasDropdown: true, dropdownType: 'info' },
-    { label: t('nav.services'), href: '/layanan' },
-    { label: t('nav.agenda'), href: '/agenda' },
-    { label: t('nav.gallery'), href: '/galeri' },
-    { label: t('nav.monitoring'), href: '/monitoring' },
-    { label: t('nav.about'), href: '/tentang', hasDropdown: true, dropdownType: 'about' }
+    { label: t('nav.home'), href: '/', icon: <Home className="w-4 h-4" /> },
+    { label: t('nav.info'), href: '/informasi', hasDropdown: true, dropdownType: 'info', icon: <FileText className="w-4 h-4" /> },
+    { label: t('nav.services'), href: '/layanan', icon: <Briefcase className="w-4 h-4" /> },
+    { label: t('nav.agenda'), href: '/agenda', icon: <Calendar className="w-4 h-4" /> },
+    { label: t('nav.gallery'), href: '/galeri', icon: <ImageIcon className="w-4 h-4" /> },
+    { label: t('nav.monitoring'), href: '/monitoring', icon: <BarChart3 className="w-4 h-4" /> },
+    { label: t('nav.about'), href: '/tentang', hasDropdown: true, dropdownType: 'about', icon: <Building2 className="w-4 h-4" /> }
   ];
 
   return (
@@ -555,7 +562,16 @@ export function Header() {
                                 : 'text-slate-700 font-semibold hover:text-primary-blue'
                             }`}
                           >
-                            <span className="text-base">{item.label}</span>
+                            <div className="flex items-center gap-3">
+                              <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
+                                isCurrentActive
+                                  ? 'bg-primary-navy text-accent-gold shadow-xs'
+                                  : 'bg-slate-100 text-slate-600 group-hover:bg-primary-navy/10 group-hover:text-primary-navy'
+                              }`}>
+                                {item.icon}
+                              </div>
+                              <span className="text-sm font-semibold">{item.label}</span>
+                            </div>
                             <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
                               isAccordionOpen
                                 ? 'bg-primary-navy text-white rotate-90'
@@ -580,10 +596,15 @@ export function Header() {
                                     key={idx}
                                     href={sub.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="flex items-center gap-2.5 p-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-primary-navy hover:bg-slate-50 transition-colors"
+                                    className="flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-primary-navy hover:bg-slate-50 transition-colors group/sub"
                                   >
-                                    <span>{sub.icon}</span>
-                                    <span>{sub.label}</span>
+                                    <div className="w-7 h-7 rounded-lg bg-blue-50/80 text-primary-navy flex items-center justify-center flex-shrink-0 group-hover/sub:bg-primary-navy group-hover/sub:text-white transition-colors">
+                                      {sub.icon}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <p className="font-semibold truncate">{sub.label}</p>
+                                      <p className="text-[10px] text-slate-400 truncate">{sub.desc}</p>
+                                    </div>
                                   </Link>
                                 ))}
                               </motion.div>
@@ -598,13 +619,22 @@ export function Header() {
                         key={item.label}
                         href={item.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`py-3.5 px-2 flex items-center justify-between transition-colors group ${
+                        className={`py-3 px-2 flex items-center justify-between transition-colors group ${
                           pathname === item.href
                             ? 'text-primary-navy font-bold'
                             : 'text-slate-700 font-semibold hover:text-primary-blue'
                         }`}
                       >
-                        <span className="text-base">{item.label}</span>
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
+                            pathname === item.href
+                              ? 'bg-primary-navy text-accent-gold shadow-xs'
+                              : 'bg-slate-100 text-slate-600 group-hover:bg-primary-navy/10 group-hover:text-primary-navy'
+                          }`}>
+                            {item.icon}
+                          </div>
+                          <span className="text-sm font-semibold">{item.label}</span>
+                        </div>
                         <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
                           pathname === item.href
                             ? 'bg-primary-navy text-white shadow-xs'
