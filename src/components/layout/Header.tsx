@@ -35,7 +35,7 @@ export function Header() {
     { label: 'Panduan', href: '/informasi/panduan', icon: <BookOpen className="w-4 h-4" />, desc: 'Petunjuk teknis pengadaan' },
     { label: 'Standar Operasional Prosedur', href: '/informasi/sop', icon: <FileCheck className="w-4 h-4" />, desc: 'SOP tata kelola kerja resmi' },
     { label: 'Sertifikat PBJ', href: '/informasi/sertifikat-pbj', icon: <Award className="w-4 h-4" />, desc: 'Verifikasi kompetensi pengadaan' },
-    { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi?kategori=tkdn', icon: <ShieldCheck className="w-4 h-4" />, desc: 'Tingkat Komponen Dalam Negeri' },
+    { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi/tkdn', icon: <ShieldCheck className="w-4 h-4" />, desc: 'Tingkat Komponen Dalam Negeri' },
     { label: 'Panduan Perizinan/Usaha', href: '/informasi?kategori=perizinan', icon: <FileSpreadsheet className="w-4 h-4" />, desc: 'Legalitas & izin usaha penyedia' },
     { label: 'Tender/Seleksi Pemilu', href: '/informasi?kategori=pemilu', icon: <Vote className="w-4 h-4" />, desc: 'Paket tender & seleksi khusus' },
     { label: 'Clearing House', href: '/informasi?kategori=clearing-house', icon: <Gavel className="w-4 h-4" />, desc: 'Konsultasi & penyelesaian PBJ' },
