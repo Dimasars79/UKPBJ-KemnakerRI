@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { NewsCard } from '@/components/cards/NewsCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { Users, Globe, HelpCircle, AlertCircle, MessageSquare, ArrowRight, ShieldCheck, FileCheck, Calendar, Quote, ShoppingCart, BookOpen, Scale, Clock, TrendingDown, Award, ThumbsUp, ChevronDown } from 'lucide-react';
+import { Users, Globe, ArrowRight, ShieldCheck, ChevronDown, Quote, ShoppingCart, BookOpen, Scale, Clock, TrendingDown, Award, ThumbsUp, Calendar, HelpCircle, AlertCircle, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
@@ -107,28 +107,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Bottom Right Graphic & Slogan (Absolute) */}
-          <div className="absolute bottom-0 right-0 w-full md:w-[600px] h-[200px] z-10 pointer-events-none hidden md:block">
-            {/* A simplistic CSS interpretation of the blue/gold wave */}
-            <div className="absolute bottom-0 right-0 w-full h-full">
-              <svg viewBox="0 0 600 200" preserveAspectRatio="none" className="w-full h-full">
-                <path d="M0,200 C150,200 250,50 400,80 C500,100 550,0 600,0 L600,200 Z" fill="#071b36" opacity="0.9" />
-                <path d="M50,200 C200,200 300,80 450,110 C530,125 570,50 600,30 L600,200 Z" fill="#f2b33a" opacity="0.8" />
-                <path d="M100,200 C250,200 350,110 500,140 C550,150 580,100 600,80 L600,200 Z" fill="#0a2342" />
-              </svg>
-              
-              <div className="absolute bottom-10 right-10 text-right">
-                <div className="flex justify-end gap-3 mb-3 text-white/70">
-                  <FileCheck className="w-5 h-5" />
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
-                </div>
-                <p className="text-[#f2b33a] font-bold text-sm">Melayani dengan Hati,</p>
-                <p className="text-white font-bold text-base">Mengabdi untuk Negeri</p>
-              </div>
-            </div>
-          </div>
+
 
           {/* Marquee Text */}
           <div className="absolute bottom-0 left-0 w-full overflow-hidden bg-[#0a2342]/80 py-3 border-t border-white/10 z-20 backdrop-blur-sm">
