@@ -8,8 +8,7 @@ import {
   Bell, AlertTriangle, FileText, CheckCircle2,
   Home, Briefcase, Calendar, Image as ImageIcon, BarChart3, 
   Building2, Scale, BookOpen, FileCheck, Award, ShieldCheck, 
-  FileSpreadsheet, Vote, Gavel, Target, ScrollText, HelpCircle, 
-  Layers
+  FileSpreadsheet, Vote, Gavel, Target, ScrollText, HelpCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
