@@ -176,7 +176,7 @@ export default function SOPPage() {
             <div className="max-w-3xl mx-auto text-center">
               <FadeIn direction="up">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
-                  <span>📋</span>
+                  <FileCheck className="w-3.5 h-3.5 text-cyan-300" />
                   <span>Standar Operasional Prosedur (SOP) Resmi</span>
                 </div>
 

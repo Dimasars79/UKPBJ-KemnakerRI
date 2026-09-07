@@ -9,7 +9,7 @@ import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { DataTable } from '@/components/dashboard/DataTable';
-import { TrendingUp, Clock, PackageCheck } from 'lucide-react';
+import { TrendingUp, Clock, PackageCheck, BarChart3 } from 'lucide-react';
 
 export default function MonitoringPage() {
   const { t } = useLanguage();
@@ -36,7 +36,7 @@ export default function MonitoringPage() {
               <FadeIn direction="up">
                 {/* Government ITKP Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
-                  <span>📊</span>
+                  <BarChart3 className="w-3.5 h-3.5 text-emerald-300" />
                   <span>Indeks Tata Kelola Pengadaan (ITKP) Resmi</span>
                 </div>
 

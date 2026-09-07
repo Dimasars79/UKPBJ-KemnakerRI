@@ -58,7 +58,7 @@ export default function AgendaPage() {
               <FadeIn direction="up">
                 {/* Government Agenda Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
-                  <span>📅</span>
+                  <CalendarIcon className="w-3.5 h-3.5 text-amber-300" />
                   <span>Jadwal Resmi & Timeline Pengadaan</span>
                 </div>
 

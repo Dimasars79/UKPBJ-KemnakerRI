@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ShieldCheck, Target, Users, BookOpen } from 'lucide-react';
+import { ShieldCheck, Target, Users, BookOpen, Building2, ScrollText, Award, Compass } from 'lucide-react';
 import { OrganizationChart } from '@/components/ui/OrganizationChart';
 
 export default function TentangPage() {
@@ -34,7 +34,7 @@ export default function TentangPage() {
               <FadeIn direction="up">
                 {/* Government Pill Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
-                  <span>🏛️</span>
+                  <Building2 className="w-3.5 h-3.5 text-amber-300" />
                   <span>Profil & Tata Kelola Instansi</span>
                 </div>
 
@@ -71,7 +71,7 @@ export default function TentangPage() {
             <FadeIn direction="right" className="bg-white p-10 rounded-2xl shadow-lg border-t-4 border-t-primary-blue">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-primary-blue font-bold">
-                  🎯
+                  <Target className="w-5 h-5 text-primary-blue" />
                 </div>
                 <h2 className="text-2xl font-bold text-primary-navy">Visi</h2>
               </div>
@@ -82,7 +82,7 @@ export default function TentangPage() {
             <FadeIn direction="left" className="bg-white p-10 rounded-2xl shadow-lg border-t-4 border-t-accent-gold">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-accent-gold font-bold">
-                  🚀
+                  <Compass className="w-5 h-5 text-accent-gold" />
                 </div>
                 <h2 className="text-2xl font-bold text-primary-navy">Misi</h2>
               </div>
@@ -102,7 +102,7 @@ export default function TentangPage() {
                 <div className="absolute top-0 right-0 w-80 h-80 bg-accent-gold/10 rounded-full blur-[100px] pointer-events-none" />
                 <div className="max-w-3xl mx-auto text-center relative z-10">
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4">
-                    <span>📜</span>
+                    <ScrollText className="w-3.5 h-3.5 text-amber-300" />
                     <span>Maklumat Resmi Pelayanan</span>
                   </div>
                   <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-4">

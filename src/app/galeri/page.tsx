@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
+import { Camera, Building2, GraduationCap } from 'lucide-react';
 
 export default function GaleriPage() {
   const { t } = useLanguage();
@@ -18,15 +19,15 @@ export default function GaleriPage() {
     { id: 3, title: 'Sosialisasi Pegawai', desc: 'Acara sosialisasi dan interaksi langsung dengan seluruh peserta.', size: 'large', src: '/gallery/gallery-3.jpg' },
     { id: 4, title: 'Bimbingan Teknis PBJ', desc: 'Pelatihan kompetensi pengadaan barang dan jasa untuk PPK dan Pokja.', size: 'small', src: '/gallery/gallery-4.jpg' },
     { id: 5, title: 'Penandatanganan Kontrak', desc: 'Penandatanganan pakta integritas dan kontrak kerja sama strategis.', size: 'small', src: '/gallery/gallery-5.jpg' },
-    { id: 6, title: 'Penghargaan UKPBJ', desc: 'Penyerahan penghargaan UKPBJ Unggul tingkat kementerian.', size: 'small', src: '/gallery/gallery-6.jpg' },
+    { id: 6, title: 'Rapat Evaluasi Berkala', desc: 'Sesi monitoring dan evaluasi target penyerapan anggaran.', size: 'small', src: '/gallery/gallery-6.jpg' },
   ];
 
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20">
-        {/* HERO SECTION - Official Media Archives & Documentation Theme */}
-        <section className="relative py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-[#080E1A] via-[#101C33] to-[#0A1120]">
+      <main className="min-h-screen bg-slate-50 pb-20">
+        {/* HERO BANNER SECTION - Studio Spotlight & Media Archive */}
+        <section className="relative py-20 lg:py-24 overflow-hidden bg-gradient-to-b from-[#061B30] via-[#092644] to-[#06192D]">
           {/* Spotlight & Fine Dot Matrix Pattern */}
           <div className="absolute inset-0 bg-[radial-gradient(#38bdf812_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-gradient-to-b from-blue-500/10 to-transparent blur-3xl pointer-events-none" />
@@ -37,7 +38,7 @@ export default function GaleriPage() {
               <FadeIn direction="up">
                 {/* Government Media Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
-                  <span>📸</span>
+                  <Camera className="w-3.5 h-3.5 text-cyan-300" />
                   <span>Dokumentasi & Arsip Resmi Kemnaker</span>
                 </div>
 
@@ -54,9 +55,18 @@ export default function GaleriPage() {
 
                 {/* Media Tags */}
                 <div className="flex flex-wrap justify-center gap-3 text-xs font-semibold text-slate-300">
-                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">📷 Kunjungan Kerja</span>
-                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">🏛️ Rapat Koordinasi Nasional</span>
-                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">🎓 Bimbingan Teknis PBJ</span>
+                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
+                    <Camera className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Kunjungan Kerja</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
+                    <Building2 className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Rapat Koordinasi Nasional</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
+                    <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Bimbingan Teknis PBJ</span>
+                  </span>
                 </div>
               </FadeIn>
             </div>

@@ -7,8 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ServiceCard } from '@/components/cards/ServiceCard';
-import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { Monitor, FileText, HelpCircle, ShieldCheck } from 'lucide-react';
+import { Monitor, FileText, HelpCircle, ShieldCheck, Zap, CheckCircle2 } from 'lucide-react';
 
 export default function LayananPage() {
   const { t } = useLanguage();
@@ -56,7 +55,7 @@ export default function LayananPage() {
               <FadeIn direction="up">
                 {/* Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
-                  <span>⚡</span>
+                  <Zap className="w-3.5 h-3.5 text-blue-400" />
                   <span>Layanan Pengadaan Terpadu Kemnaker</span>
                 </div>
 
@@ -73,9 +72,18 @@ export default function LayananPage() {
 
                 {/* Service Indicator Chips */}
                 <div className="flex flex-wrap justify-center gap-3 text-xs font-semibold text-slate-300">
-                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">✓ Sistem SPSE Terintegrasi</span>
-                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">✓ Akses SIKaP 24/7</span>
-                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">✓ Konsultasi & Clearing House</span>
+                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Sistem SPSE Terintegrasi</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Akses SIKaP 24/7</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Konsultasi & Clearing House</span>
+                  </span>
                 </div>
               </FadeIn>
             </div>

@@ -244,8 +244,9 @@ export default function SertifikatPBJPage() {
                             <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                               {cert.nomor}
                             </span>
-                            <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full">
-                              ✓ {cert.status}
+                            <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3" />
+                              <span>{cert.status}</span>
                             </span>
                           </div>
                           <h4 className="text-base font-bold text-primary-navy mb-1">

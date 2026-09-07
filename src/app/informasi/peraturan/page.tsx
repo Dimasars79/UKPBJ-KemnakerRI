@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, FileText, Download, Eye, Calendar, 
   ChevronRight, Filter, BookOpen, ShieldCheck, 
-  CheckCircle2, ArrowRight, ExternalLink
+  CheckCircle2, ArrowRight, ExternalLink, Scale
 } from 'lucide-react';
 
 type Regulation = {
@@ -158,7 +158,7 @@ export default function PeraturanPage() {
             <div className="max-w-3xl mx-auto text-center">
               <FadeIn direction="up">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
-                  <span>⚖️</span>
+                  <Scale className="w-3.5 h-3.5 text-amber-300" />
                   <span>JDIH & Regulasi Resmi Pengadaan</span>
                 </div>
 
