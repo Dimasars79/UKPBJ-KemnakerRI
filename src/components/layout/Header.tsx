@@ -31,22 +31,22 @@ export function Header() {
   const a11y = useAccessibility();
 
   const infoSubmenu = [
-    { label: 'Peraturan', href: '/informasi/peraturan', icon: <Scale className="w-4 h-4 text-blue-600" />, desc: 'Regulasi & dasar hukum PBJ' },
-    { label: 'Panduan', href: '/informasi/panduan', icon: <BookOpen className="w-4 h-4 text-indigo-600" />, desc: 'Petunjuk teknis pengadaan' },
-    { label: 'Standar Operasional Prosedur', href: '/informasi/sop', icon: <FileCheck className="w-4 h-4 text-sky-600" />, desc: 'SOP tata kelola kerja resmi' },
-    { label: 'Sertifikat PBJ', href: '/informasi/sertifikat-pbj', icon: <Award className="w-4 h-4 text-amber-600" />, desc: 'Verifikasi kompetensi pengadaan' },
-    { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi?kategori=tkdn', icon: <ShieldCheck className="w-4 h-4 text-emerald-600" />, desc: 'Tingkat Komponen Dalam Negeri' },
-    { label: 'Panduan Perizinan/Usaha', href: '/informasi?kategori=perizinan', icon: <FileSpreadsheet className="w-4 h-4 text-cyan-600" />, desc: 'Legalitas & izin usaha penyedia' },
-    { label: 'Tender/Seleksi Pemilu', href: '/informasi?kategori=pemilu', icon: <Vote className="w-4 h-4 text-rose-600" />, desc: 'Paket tender & seleksi khusus' },
-    { label: 'Clearing House', href: '/informasi?kategori=clearing-house', icon: <Gavel className="w-4 h-4 text-purple-600" />, desc: 'Konsultasi & penyelesaian PBJ' },
+    { label: 'Peraturan', href: '/informasi/peraturan', icon: <Scale className="w-4 h-4" />, desc: 'Regulasi & dasar hukum PBJ' },
+    { label: 'Panduan', href: '/informasi/panduan', icon: <BookOpen className="w-4 h-4" />, desc: 'Petunjuk teknis pengadaan' },
+    { label: 'Standar Operasional Prosedur', href: '/informasi/sop', icon: <FileCheck className="w-4 h-4" />, desc: 'SOP tata kelola kerja resmi' },
+    { label: 'Sertifikat PBJ', href: '/informasi/sertifikat-pbj', icon: <Award className="w-4 h-4" />, desc: 'Verifikasi kompetensi pengadaan' },
+    { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi?kategori=tkdn', icon: <ShieldCheck className="w-4 h-4" />, desc: 'Tingkat Komponen Dalam Negeri' },
+    { label: 'Panduan Perizinan/Usaha', href: '/informasi?kategori=perizinan', icon: <FileSpreadsheet className="w-4 h-4" />, desc: 'Legalitas & izin usaha penyedia' },
+    { label: 'Tender/Seleksi Pemilu', href: '/informasi?kategori=pemilu', icon: <Vote className="w-4 h-4" />, desc: 'Paket tender & seleksi khusus' },
+    { label: 'Clearing House', href: '/informasi?kategori=clearing-house', icon: <Gavel className="w-4 h-4" />, desc: 'Konsultasi & penyelesaian PBJ' },
   ];
 
   const aboutSubmenu = [
-    { label: 'Visi & Misi', href: '/tentang#visi-misi', icon: <Target className="w-4 h-4 text-blue-600" />, desc: 'Arah dan komitmen strategis' },
-    { label: 'Maklumat UKPBJ', href: '/tentang#maklumat', icon: <ScrollText className="w-4 h-4 text-amber-600" />, desc: 'Janji standar mutu pelayanan' },
-    { label: 'Survey + Monitoring', href: '/monitoring', icon: <BarChart3 className="w-4 h-4 text-indigo-600" />, desc: 'Indeks kepuasan & evaluasi' },
-    { label: 'Standar Pelayanan Publik', href: '/informasi/sop', icon: <Building2 className="w-4 h-4 text-emerald-600" />, desc: 'Standar mutu operasional' },
-    { label: 'FAQ', href: '/tentang#faq', icon: <HelpCircle className="w-4 h-4 text-purple-600" />, desc: 'Pertanyaan umum & informasi' },
+    { label: 'Visi & Misi', href: '/tentang#visi-misi', icon: <Target className="w-4 h-4" />, desc: 'Arah dan komitmen strategis' },
+    { label: 'Maklumat UKPBJ', href: '/tentang#maklumat', icon: <ScrollText className="w-4 h-4" />, desc: 'Janji standar mutu pelayanan' },
+    { label: 'Survey + Monitoring', href: '/monitoring', icon: <BarChart3 className="w-4 h-4" />, desc: 'Indeks kepuasan & evaluasi' },
+    { label: 'Standar Pelayanan Publik', href: '/informasi/sop', icon: <Building2 className="w-4 h-4" />, desc: 'Standar mutu operasional' },
+    { label: 'FAQ', href: '/tentang#faq', icon: <HelpCircle className="w-4 h-4" />, desc: 'Pertanyaan umum & informasi' },
   ];
 
   useEffect(() => {
@@ -324,7 +324,7 @@ export function Header() {
                                 onClick={() => setDropdownOpen(false)}
                                 className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all duration-200 group/sub"
                               >
-                                <div className="w-8 h-8 rounded-lg bg-blue-50/80 border border-blue-100/50 flex items-center justify-center text-sm flex-shrink-0 group-hover/sub:bg-primary-blue group-hover/sub:text-white transition-all">
+                                <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 border border-slate-200/60 flex items-center justify-center text-sm flex-shrink-0 group-hover/sub:bg-primary-navy group-hover/sub:text-white group-hover/sub:border-primary-navy transition-all shadow-2xs">
                                   {sub.icon}
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -597,7 +597,7 @@ export function Header() {
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-primary-navy hover:bg-slate-50 transition-colors group/sub"
                                   >
-                                    <div className="w-7 h-7 rounded-lg bg-blue-50/80 text-primary-navy flex items-center justify-center flex-shrink-0 group-hover/sub:bg-primary-navy group-hover/sub:text-white transition-colors">
+                                    <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0 group-hover/sub:bg-primary-navy group-hover/sub:text-white transition-colors shadow-2xs">
                                       {sub.icon}
                                     </div>
                                     <div className="flex-1 min-w-0">
