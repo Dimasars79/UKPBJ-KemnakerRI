@@ -7,6 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ServiceCard } from '@/components/cards/ServiceCard';
+import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { Monitor, FileText, HelpCircle, ShieldCheck, Zap, CheckCircle2 } from 'lucide-react';
 
 export default function LayananPage() {
