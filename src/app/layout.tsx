@@ -6,6 +6,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
+import { DataProvider } from "@/contexts/DataContext";
 
 import { FloatingContact } from "@/components/ui/FloatingContact";
 
@@ -24,8 +25,10 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans flex flex-col min-h-screen`}>
         <AccessibilityProvider>
           <LanguageProvider>
-            {children}
-            <FloatingContact />
+            <DataProvider>
+              {children}
+              <FloatingContact />
+            </DataProvider>
           </LanguageProvider>
         </AccessibilityProvider>
       </body>

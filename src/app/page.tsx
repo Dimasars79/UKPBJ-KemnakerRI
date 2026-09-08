@@ -15,9 +15,13 @@ import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { PengadaanSection } from '@/components/home/PengadaanSection';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
+import { useData } from '@/contexts/DataContext';
 
 export default function Home() {
   const { t } = useLanguage();
+  const { newsList, agendaList } = useData();
+  const publishedNews = newsList.filter(n => n.status === 'Published');
+  const latestAgenda = agendaList[0] || null;
 
   return (
     <>
@@ -358,40 +362,22 @@ export default function Home() {
               </div>
             </FadeIn>
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <StaggerItem>
-                <NewsCard 
-                  featured={false}
-                  title="Sosialisasi Peraturan Pengadaan Terbaru"
-                  summary="UKPBJ Kementerian Ketenagakerjaan mengadakan sosialisasi terkait regulasi terbaru mengenai pengadaan barang dan jasa pemerintah."
-                  date="24 Agustus 2026"
-                  category="Berita"
-                  imageUrl="/news/news-1.png"
-                  href="#"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <NewsCard 
-                  title="Peningkatan Kapasitas PPK"
-                  summary="Kegiatan bimbingan teknis yang diselenggarakan khusus untuk Pejabat Pembuat Komitmen Kementerian Ketenagakerjaan."
-                  date="20 Agustus 2026"
-                  category="Kegiatan"
-                  imageUrl="/news/news-2.png"
-                  href="#"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <NewsCard 
-                  title="Pengumuman Tender Pembangunan Fasilitas"
-                  summary="Diumumkan kepada seluruh penyedia barang dan jasa terdaftar mengenai pembukaan tender."
-                  date="18 Agustus 2026"
-                  category="Pengadaan"
-                  imageUrl="/news/news-3.png"
-                  href="#"
-                />
-              </StaggerItem>
+              {publishedNews.slice(0, 3).map((item, idx) => (
+                <StaggerItem key={item.id}>
+                  <NewsCard 
+                    featured={idx === 0}
+                    title={item.title}
+                    summary={item.excerpt}
+                    date={item.date}
+                    category={item.category}
+                    imageUrl={item.imageUrl || `/news/news-${(idx % 3) + 1}.png`}
+                    href="/informasi"
+                  />
+                </StaggerItem>
+              ))}
             </StaggerContainer>
             <FadeIn direction="up" delay={0.4} className="mt-8 text-center">
-              <Link href="#" className="inline-flex items-center text-primary-blue font-bold hover:text-primary-navy transition-colors">
+              <Link href="/informasi" className="inline-flex items-center text-primary-blue font-bold hover:text-primary-navy transition-colors">
                 {t('home.news_more')} <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </FadeIn>
@@ -409,7 +395,7 @@ export default function Home() {
                   <span>{t('home.agenda_title')}</span>
                 </div>
                 <h2 className="text-2xl md:text-4xl font-bold mb-6 leading-tight">
-                  {t('home.agenda_subtitle')}
+                  {latestAgenda ? latestAgenda.title : t('home.agenda_subtitle')}
                 </h2>
                 <p className="text-lg text-slate-300 mb-8 leading-relaxed">
                   {t('home.agenda_desc')}
@@ -421,8 +407,8 @@ export default function Home() {
                         <Calendar className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-lg">Sabtu, 26 Oktober 2026</h4>
-                        <p className="text-slate-400">08:30 - 16:30 WIB</p>
+                        <h4 className="font-bold text-lg">{latestAgenda ? latestAgenda.date : 'Sabtu, 26 Oktober 2026'}</h4>
+                        <p className="text-slate-400">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</p>
                       </div>
                     </div>
                   </StaggerItem>
@@ -432,13 +418,13 @@ export default function Home() {
                         <Globe className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-lg">Auditorium Utama</h4>
-                        <p className="text-slate-400">Gedung Pusat LKPP, Jakarta Pusat</p>
+                        <h4 className="font-bold text-lg">{latestAgenda ? latestAgenda.location : 'Auditorium Utama'}</h4>
+                        <p className="text-slate-400">{latestAgenda ? latestAgenda.organizer : 'Gedung Pusat LKPP, Jakarta Pusat'}</p>
                       </div>
                     </div>
                   </StaggerItem>
                 </StaggerContainer>
-                <Link href="#" className="inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-8 rounded-md transition-colors shadow-lg">
+                <Link href="/agenda" className="inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-8 rounded-md transition-colors shadow-lg">
                   {t('home.agenda_btn')} <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </FadeIn>

@@ -10,22 +10,32 @@ import { AgendaCard } from '@/components/cards/AgendaCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useData } from '@/contexts/DataContext';
 
 export default function AgendaPage() {
   const { t } = useLanguage();
+  const { agendaList } = useData();
   const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 1)); // September 2026
   const [selectedDate, setSelectedDate] = useState<number | null>(15);
 
-  type Activity = { id: number; title: string; time: string; location: string };
-  const activities: Record<number, Activity[]> = {
-    10: [{ id: 1, title: 'Pembukaan Tender Alat Tulis Kantor', time: '09:00 WIB', location: 'Portal LPSE' }],
-    15: [
-      { id: 2, title: 'Bimbingan Teknis SIKaP', time: '10:00 - 12:00 WIB', location: 'Gedung A Kemenaker' },
-      { id: 3, title: 'Konsultasi Pengadaan', time: '13:00 - 15:00 WIB', location: 'Ruang Rapat UKPBJ' }
-    ],
-    20: [{ id: 4, title: 'Batas Akhir Sanggahan Tender', time: '15:00 WIB', location: 'Sistem SPSE' }],
-    25: [{ id: 5, title: 'Sosialisasi Regulasi Baru', time: '08:30 WIB', location: 'Zoom Meeting' }],
-  };
+  type Activity = { id: number | string; title: string; time: string; location: string };
+  
+  // Build activities dynamically from agendaList
+  const activities: Record<number, Activity[]> = {};
+  agendaList.forEach((ag, idx) => {
+    // Extract day number from date string e.g. "15 Sep 2026"
+    const dayMatch = ag.date.match(/\d+/);
+    const dayNum = dayMatch ? parseInt(dayMatch[0], 10) : 15;
+    if (!activities[dayNum]) {
+      activities[dayNum] = [];
+    }
+    activities[dayNum].push({
+      id: ag.id || idx,
+      title: ag.title,
+      time: ag.time,
+      location: ag.location
+    });
+  });
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
@@ -34,13 +44,17 @@ export default function AgendaPage() {
   const prevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
 
-  const dummyAgendas = [
-    { title: 'Pembukaan Tender Konstruksi Gedung A', date: '20', month: 'Okt', time: '09:00 - 12:00 WIB', location: 'Gedung Utama Kemnaker', category: 'Tender' },
-    { title: 'Sosialisasi E-Katalog Sektoral Baru', date: '25', month: 'Okt', time: '13:00 - 15:00 WIB', location: 'Zoom Meeting', category: 'Sosialisasi' },
-    { title: 'Ujian Sertifikasi PBJ Tingkat Dasar', date: '02', month: 'Nov', time: '08:00 - 16:00 WIB', location: 'Pusdiklat Kemnaker', category: 'Sertifikasi' },
-    { title: 'Rapat Evaluasi Kinerja Vendor Q3', date: '10', month: 'Nov', time: '10:00 - 14:00 WIB', location: 'Ruang Rapat UKPBJ', category: 'Rapat' },
-    { title: 'Bimbingan Teknis Penggunaan SIKaP', date: '15', month: 'Nov', time: '09:00 - 12:00 WIB', location: 'Zoom Meeting', category: 'Bimtek' },
-  ];
+  const dummyAgendas = agendaList.map((ag) => {
+    const parts = ag.date.split(' ');
+    return {
+      title: ag.title,
+      date: parts[0] || '15',
+      month: parts[1] || 'Sep',
+      time: ag.time,
+      location: ag.location,
+      category: ag.category
+    };
+  });
 
   return (
     <>

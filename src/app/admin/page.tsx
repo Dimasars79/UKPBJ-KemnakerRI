@@ -24,7 +24,6 @@ import {
   Cpu, 
   Globe, 
   FileCheck, 
-  Sparkles, 
   ExternalLink, 
   Plus,
   Newspaper,
@@ -39,43 +38,7 @@ import {
   Moon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface PackageItem {
-  id: number;
-  name: string;
-  hps: string;
-  status: string;
-  date: string;
-  deadline: string;
-  unit: string;
-  desc: string;
-}
-
-interface NewsItem {
-  id: string;
-  title: string;
-  category: 'Berita PBJ' | 'Pengumuman Lelang' | 'Regulasi' | 'Siaran Pers';
-  author: string;
-  date: string;
-  views: number;
-  status: 'Published' | 'Draft' | 'Archived';
-  excerpt: string;
-  content: string;
-  syncFrontend: boolean;
-}
-
-interface AgendaItem {
-  id: string;
-  title: string;
-  category: 'Tender' | 'Sosialisasi' | 'Sertifikasi' | 'Bimtek' | 'Rapat';
-  date: string;
-  time: string;
-  location: string;
-  organizer: string;
-  capacity: string;
-  status: 'Terjadwal' | 'Berlangsung' | 'Selesai' | 'Dibatalkan';
-  syncFrontend: boolean;
-}
+import { useData, NewsItem, AgendaItem, ProcurementPackage } from '@/contexts/DataContext';
 
 export default function AdminPortalPage() {
   const router = useRouter();
@@ -83,129 +46,47 @@ export default function AdminPortalPage() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'arsitektur' | 'penyedia' | 'manage-berita' | 'manage-agenda' | 'regulasi' | 'laporan' | 'pengaturan'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   
+  // DataContext Hook
+  const {
+    newsList,
+    addNews,
+    updateNews,
+    deleteNews,
+    toggleNewsStatus,
+    agendaList,
+    addAgenda,
+    updateAgenda,
+    deleteAgenda,
+    packagesList,
+    addPackage,
+    deletePackage,
+    siteSettings,
+    updateSiteSettings,
+    resetToDefaults
+  } = useData();
+
   // Package Modal State
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<PackageItem | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<ProcurementPackage | null>(null);
+
+  // Add Package Modal State
+  const [showPackageModal, setShowPackageModal] = useState(false);
+  const [packageFormData, setPackageFormData] = useState<Partial<ProcurementPackage>>({
+    code: 'TND-2026-009',
+    title: '',
+    unit: 'Biro Perencanaan Kemnaker RI',
+    hps: 'Rp 500.000.000',
+    category: 'Tender',
+    status: 'Pendaftaran Dibuka',
+    deadline: '25 Sep 2026',
+    method: 'Tender - Pascakualifikasi Satu File - Harga Terendah Sistem Gugur',
+    docCount: 3,
+    desc: ''
+  });
 
   // Vendor Form Wizard State
   const [wizardStep, setWizardStep] = useState(1);
   const [vendorSuccess, setVendorSuccess] = useState(false);
-
-  // NEWS MANAGEMENT STATE
-  const [newsList, setNewsList] = useState<NewsItem[]>([
-    {
-      id: 'NWS-001',
-      title: 'Sosialisasi Peraturan LKPP Nomor 12 Tahun 2024 tentang Tata Cara Pengadaan',
-      category: 'Regulasi',
-      author: 'Biro Hukum & Humas Kemnaker',
-      date: '10 Agu 2026',
-      views: 1420,
-      status: 'Published',
-      excerpt: 'Pedoman pelaksanaan pengadaan barang dan jasa pemerintah terbaru yang berlaku di seluruh unit kerja kementerian.',
-      content: 'Dalam rangka meningkatkan akuntabilitas dan efisiensi belanja negara, UKPBJ Kemnaker menyelenggarakan sosialisasi regulasi LKPP terbaru dengan standar digital SPSE terintegrasi.',
-      syncFrontend: true
-    },
-    {
-      id: 'NWS-002',
-      title: 'Pengumuman Penetapan Pemenang Tender Jasa Konsultan IT & Portal',
-      category: 'Pengumuman Lelang',
-      author: 'Pokja Pemilihan I UKPBJ',
-      date: '08 Agu 2026',
-      views: 2850,
-      status: 'Published',
-      excerpt: 'Hasil evaluasi kualifikasi administrasi, teknis, dan harga untuk paket pengembangan arsitektur portal kementerian.',
-      content: 'Berdasarkan berita acara hasil pemilihan, Pokja Pemilihan menetapkan penyedia terpilih setelah melalui masa sanggah tanpa keberatan.',
-      syncFrontend: true
-    },
-    {
-      id: 'NWS-003',
-      title: 'Workshop Peningkatan Penggunaan Produk Dalam Negeri (P3DN) & Sertifikasi TKDN',
-      category: 'Berita PBJ',
-      author: 'Pusat Pasar Kerja & PBJ',
-      date: '05 Agu 2026',
-      views: 940,
-      status: 'Published',
-      excerpt: 'Mendorong komitmen belanja kementerian untuk mencapai target minimal 40% produk ber-TKDN tinggi.',
-      content: 'Kegiatan ini diikuti oleh seluruh PPK dan Pejabat Pengadaan di lingkungan Kementerian Ketenagakerjaan seluruh Indonesia.',
-      syncFrontend: true
-    },
-    {
-      id: 'NWS-004',
-      title: 'Draf Rencana Pengadaan Peralatan Pelatihan Balai Vokasi Tahun 2027',
-      category: 'Siaran Pers',
-      author: 'Ditjen Binalavotas',
-      date: '02 Agu 2026',
-      views: 310,
-      status: 'Draft',
-      excerpt: 'Rancangan awal spesifikasi teknis dan analisis kebutuhan alat kerja laboratorium vokasi.',
-      content: 'Draft internal persiapan Rencana Umum Pengadaan (SiRUP) tahun anggaran mendatang.',
-      syncFrontend: false
-    }
-  ]);
-
-  // AGENDA MANAGEMENT STATE
-  const [agendaList, setAgendaList] = useState<AgendaItem[]>([
-    {
-      id: 'AGD-001',
-      title: 'Bimbingan Teknis Penerapan SIKaP V.3 bagi Penyedia Barang & Jasa',
-      category: 'Bimtek',
-      date: '15 Sep 2026',
-      time: '10:00 - 12:00 WIB',
-      location: 'Auditorium Gedung A Kemnaker & Zoom',
-      organizer: 'Biro Perencanaan & PBJ',
-      capacity: '200 Peserta',
-      status: 'Terjadwal',
-      syncFrontend: true
-    },
-    {
-      id: 'AGD-002',
-      title: 'Pemberian Penjelasan (Aanwijzing) Tender Pengadaan IT Server',
-      category: 'Tender',
-      date: '18 Sep 2026',
-      time: '09:00 - 11:30 WIB',
-      location: 'Ruang Rapat UKPBJ Lt. 4',
-      organizer: 'Pokja Pemilihan II',
-      capacity: 'Khusus Rekanan Terdaftar',
-      status: 'Terjadwal',
-      syncFrontend: true
-    },
-    {
-      id: 'AGD-003',
-      title: 'Ujian Sertifikasi PBJ Tingkat Dasar Batch IV',
-      category: 'Sertifikasi',
-      date: '22 Sep 2026',
-      time: '08:00 - 16:00 WIB',
-      location: 'Pusdiklat Kemnaker RI',
-      organizer: 'Pusat Pengembangan SDM PBJ',
-      capacity: '50 Peserta',
-      status: 'Terjadwal',
-      syncFrontend: true
-    },
-    {
-      id: 'AGD-004',
-      title: 'Rapat Koordinasi Evaluasi Realisasi Anggaran PBJ Kuartal III',
-      category: 'Rapat',
-      date: '28 Sep 2026',
-      time: '13:30 - 16:30 WIB',
-      location: 'Ruang Rapat Utama Menteri',
-      organizer: 'Sekretariat Jenderal Kemnaker',
-      capacity: 'Internal PPK & KPA',
-      status: 'Terjadwal',
-      syncFrontend: true
-    },
-    {
-      id: 'AGD-005',
-      title: 'Sosialisasi Tata Cara Pengajuan Clearing House PBJ',
-      category: 'Sosialisasi',
-      date: '02 Okt 2026',
-      time: '09:00 - 12:00 WIB',
-      location: 'Hybrid (Ruang Komisi & Live Stream)',
-      organizer: 'Inspektorat Jenderal & UKPBJ',
-      capacity: '300 Peserta',
-      status: 'Terjadwal',
-      syncFrontend: true
-    }
-  ]);
 
   // Modals for CRUD News & Agenda
   const [showNewsModal, setShowNewsModal] = useState(false);
@@ -228,7 +109,7 @@ export default function AdminPortalPage() {
     time: '09:00 - 12:00 WIB',
     location: 'Gedung Kemnaker RI',
     organizer: 'UKPBJ Kemnaker RI',
-    capacity: 'Terbuka',
+    capacity: '100 Peserta',
     status: 'Terjadwal'
   });
 
@@ -244,67 +125,44 @@ export default function AdminPortalPage() {
   const handleSaveNews = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingNews) {
-      setNewsList(prev => prev.map(item => item.id === editingNews.id ? {
-        ...item,
-        ...newsFormData,
-        syncFrontend: newsFormData.status === 'Published'
-      } as NewsItem : item));
-      showNotification('✓ Berita berhasil diperbarui dan disinkronisasi ke Frontend (/informasi)!');
+      updateNews(editingNews.id, newsFormData);
+      showNotification('✓ Berita berhasil diperbarui dan tersinkronisasi ke Frontend (/informasi & /)!');
     } else {
-      const newEntry: NewsItem = {
-        id: `NWS-00${newsList.length + 1}`,
+      addNews({
         title: newsFormData.title || 'Judul Berita Baru',
         category: (newsFormData.category as NewsItem['category']) || 'Berita PBJ',
         author: newsFormData.author || 'Admin UKPBJ Kemnaker',
-        date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
-        views: 1,
         status: (newsFormData.status as NewsItem['status']) || 'Published',
         excerpt: newsFormData.excerpt || '',
         content: newsFormData.content || '',
-        syncFrontend: newsFormData.status === 'Published'
-      };
-      setNewsList([newEntry, ...newsList]);
-      showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Frontend!');
+        imageUrl: '/news/news-1.png'
+      });
+      showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Frontend (/informasi)!');
     }
     setShowNewsModal(false);
     setEditingNews(null);
   };
 
   const handleDeleteNews = (id: string) => {
-    if (confirm('Apakah Anda yakin ingin menghapus berita ini?')) {
-      setNewsList(prev => prev.filter(item => item.id !== id));
+    if (confirm('Apakah Anda yakin ingin menghapus berita ini? Data akan langsung terhapus dari backend dan frontend.')) {
+      deleteNews(id);
       showNotification('Berita telah dihapus dari backend & frontend.');
     }
   };
 
   const handleToggleNewsStatus = (id: string) => {
-    setNewsList(prev => prev.map(item => {
-      if (item.id === id) {
-        const nextStatus = item.status === 'Published' ? 'Draft' : 'Published';
-        return {
-          ...item,
-          status: nextStatus,
-          syncFrontend: nextStatus === 'Published'
-        };
-      }
-      return item;
-    }));
-    showNotification('Status publikasi berita berhasil diubah!');
+    toggleNewsStatus(id);
+    showNotification('Status publikasi berita berhasil diubah dan disinkronkan!');
   };
 
   // AGENDA HANDLERS
   const handleSaveAgenda = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingAgenda) {
-      setAgendaList(prev => prev.map(item => item.id === editingAgenda.id ? {
-        ...item,
-        ...agendaFormData,
-        syncFrontend: true
-      } as AgendaItem : item));
-      showNotification('✓ Agenda berhasil diperbarui dan disinkronisasi ke Frontend (/agenda)!');
+      updateAgenda(editingAgenda.id, agendaFormData);
+      showNotification('✓ Agenda berhasil diperbarui dan tersinkronisasi ke Frontend (/agenda)!');
     } else {
-      const newEntry: AgendaItem = {
-        id: `AGD-00${agendaList.length + 1}`,
+      addAgenda({
         title: agendaFormData.title || 'Agenda Baru',
         category: (agendaFormData.category as AgendaItem['category']) || 'Bimtek',
         date: agendaFormData.date || '15 Sep 2026',
@@ -312,10 +170,8 @@ export default function AdminPortalPage() {
         location: agendaFormData.location || 'Gedung Kemnaker RI',
         organizer: agendaFormData.organizer || 'UKPBJ Kemnaker RI',
         capacity: agendaFormData.capacity || '100 Peserta',
-        status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal',
-        syncFrontend: true
-      };
-      setAgendaList([newEntry, ...agendaList]);
+        status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal'
+      });
       showNotification('✓ Agenda baru berhasil ditambahkan ke kalender publik (/agenda)!');
     }
     setShowAgendaModal(false);
@@ -323,54 +179,37 @@ export default function AdminPortalPage() {
   };
 
   const handleDeleteAgenda = (id: string) => {
-    if (confirm('Apakah Anda yakin ingin menghapus agenda ini?')) {
-      setAgendaList(prev => prev.filter(item => item.id !== id));
-      showNotification('Agenda telah dihapus dari sistem.');
+    if (confirm('Apakah Anda yakin ingin menghapus agenda ini? Data akan langsung terhapus dari kalender publik.')) {
+      deleteAgenda(id);
+      showNotification('Agenda telah dihapus dari sistem backend dan frontend.');
     }
   };
 
-  const packagesList: PackageItem[] = [
-    {
-      id: 1,
-      name: 'Pengadaan Jasa Konsultan IT & Portal Terpadu',
-      hps: 'Rp 500.000.000',
-      status: 'Tender',
-      date: '12 Agu 2026',
-      deadline: '20 Agu 2026',
-      unit: 'Biro Perencanaan Kemnaker RI',
-      desc: 'Pengadaan jasa konsultan IT untuk mendukung implementasi sistem informasi terintegrasi di lingkungan Kementerian Ketenagakerjaan.'
-    },
-    {
-      id: 2,
-      name: 'Pengadaan Peralatan Workshop Balai Vokasi',
-      hps: 'Rp 350.000.000',
-      status: 'Tender',
-      date: '10 Agu 2026',
-      deadline: '18 Agu 2026',
-      unit: 'Ditjen Binalavotas',
-      desc: 'Pengadaan sarana dan prasarana penunjang pelatihan vokasi dan produktivitas tenaga kerja.'
-    },
-    {
-      id: 3,
-      name: 'Pengadaan Jasa Kebersihan & Keamanan Gedung',
-      hps: 'Rp 200.000.000',
-      status: 'Seleksi',
-      date: '8 Agu 2026',
-      deadline: '15 Agu 2026',
-      unit: 'Biro Umum Kemnaker RI',
-      desc: 'Penyediaan tenaga alih daya kebersihan dan pengamanan lingkungan kantor kementerian.'
-    },
-    {
-      id: 4,
-      name: 'Pengadaan Lisensi Software & Monitoring Server',
-      hps: 'Rp 750.000.000',
-      status: 'Tender',
-      date: '5 Agu 2026',
-      deadline: '14 Agu 2026',
-      unit: 'Pusdatin Kemnaker RI',
-      desc: 'Lisensi tahunan piranti lunak firewall, monitoring jaringan, dan keamanan data SPSE.'
+  // PACKAGE HANDLERS
+  const handleSavePackage = (e: React.FormEvent) => {
+    e.preventDefault();
+    addPackage({
+      code: packageFormData.code || `TND-2026-00${packagesList.length + 1}`,
+      title: packageFormData.title || 'Paket Pengadaan Baru',
+      unit: packageFormData.unit || 'Biro Perencanaan Kemnaker RI',
+      hps: packageFormData.hps || 'Rp 500.000.000',
+      category: (packageFormData.category as ProcurementPackage['category']) || 'Tender',
+      status: (packageFormData.status as ProcurementPackage['status']) || 'Pendaftaran Dibuka',
+      deadline: packageFormData.deadline || '25 Sep 2026',
+      method: packageFormData.method || 'Tender - Pascakualifikasi Satu File',
+      docCount: 3,
+      desc: packageFormData.desc || ''
+    });
+    showNotification('✓ Paket Pengadaan berhasil ditambahkan dan langsung tampil di Homepage Publik (/ & /#pengadaan)!');
+    setShowPackageModal(false);
+  };
+
+  const handleDeletePackage = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus paket pengadaan ini dari sistem?')) {
+      deletePackage(id);
+      showNotification('Paket pengadaan telah dihapus.');
     }
-  ];
+  };
 
   const handleLogout = () => {
     router.push('/login');
@@ -1353,26 +1192,43 @@ export default function AdminPortalPage() {
         )}
 
         {/* ========================================================= */}
-        {/* TAB 5: PAKET PENGADAAN & DETAIL */}
+        {/* TAB 5: PAKET PENGADAAN & DETAIL (LIVE BACKEND CRUD) */}
         {/* ========================================================= */}
         {activeTab === 'paket' && (
           <div className="p-6 md:p-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-xs font-bold uppercase mb-2">
+                  <Package className="w-3.5 h-3.5" />
+                  <span>Backend Procurement Database</span>
+                </div>
+                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manajemen Paket Pengadaan
                 </h2>
-                <p className="text-xs text-slate-400">Daftar seluruh paket tender dan seleksi di lingkungan Kemnaker RI.</p>
+                <p className="text-xs text-slate-400 mt-1">
+                  Kelola paket tender & seleksi aktif. Perubahan langsung tersinkronisasi ke homepage publik (<Link href="/#pengadaan" className="text-blue-500 hover:underline">/#pengadaan</Link>).
+                </p>
               </div>
               <button 
                 onClick={() => {
-                  setSelectedPackage(packagesList[0]);
-                  setShowDetailModal(true);
+                  setPackageFormData({
+                    code: `TND-2026-00${packagesList.length + 1}`,
+                    title: '',
+                    unit: 'Biro Perencanaan Kemnaker RI',
+                    hps: 'Rp 500.000.000',
+                    category: 'Tender',
+                    status: 'Pendaftaran Dibuka',
+                    deadline: '28 Sep 2026',
+                    method: 'Tender - Pascakualifikasi Satu File',
+                    docCount: 3,
+                    desc: ''
+                  });
+                  setShowPackageModal(true);
                 }}
-                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
-                <span>Tambah Paket Baru</span>
+                <span>Tambah Paket Pengadaan</span>
               </button>
             </div>
 
@@ -1382,33 +1238,56 @@ export default function AdminPortalPage() {
                   isDark ? 'bg-slate-900 border-slate-800 hover:border-blue-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-blue-500/40'
                 }`}>
                   <div className="flex justify-between items-start">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                        {pkg.category}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-mono font-bold">
+                        {pkg.code}
+                      </span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                       {pkg.status}
                     </span>
-                    <span className="text-[11px] text-slate-400">Batas: {pkg.deadline}</span>
                   </div>
 
-                  <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.name}</h3>
-                  <p className="text-xs text-slate-400 line-clamp-2">{pkg.desc}</p>
+                  <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.title}</h3>
+                  <p className="text-xs text-slate-400 line-clamp-2">{pkg.desc || 'Pengadaan barang/jasa untuk mendukung kegiatan operasional kementerian.'}</p>
+
+                  <div className="text-[11px] text-slate-400">
+                    <span>Satuan Kerja: </span>
+                    <strong className={isDark ? 'text-slate-200' : 'text-slate-700'}>{pkg.unit}</strong>
+                  </div>
 
                   <div className={`pt-3 border-t flex justify-between items-center ${
                     isDark ? 'border-slate-800' : 'border-slate-100'
                   }`}>
                     <div>
                       <span className="text-[10px] text-slate-400 block">Nilai HPS:</span>
-                      <strong className="text-xs text-accent-gold font-mono">{pkg.hps}</strong>
+                      <strong className="text-xs text-accent-gold font-mono font-bold">{pkg.hps}</strong>
                     </div>
-                    <button
-                      onClick={() => {
-                        setSelectedPackage(pkg);
-                        setShowDetailModal(true);
-                      }}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                        isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-700 hover:text-white'
-                      }`}
-                    >
-                      Buka Detail
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          setSelectedPackage(pkg);
+                          setShowDetailModal(true);
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-700 hover:text-white'
+                        }`}
+                      >
+                        Detail
+                      </button>
+                      <button
+                        onClick={() => handleDeletePackage(pkg.id)}
+                        title="Hapus Paket"
+                        className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
+                          isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                        }`}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -1617,26 +1496,161 @@ export default function AdminPortalPage() {
         )}
 
         {/* ========================================================= */}
-        {/* TAB 8: LAPORAN & PENGATURAN */}
+        {/* TAB 8: LAPORAN & KINERJA */}
         {/* ========================================================= */}
-        {(activeTab === 'laporan' || activeTab === 'pengaturan') && (
-          <div className="p-6 md:p-8 space-y-4">
-            <h2 className={`text-xl font-bold capitalize ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              {activeTab}
-            </h2>
-            <div className={`p-6 rounded-2xl border text-center space-y-3 ${
+        {activeTab === 'laporan' && (
+          <div className="p-6 md:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Laporan & Evaluasi Kinerja Pengadaan
+                </h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Rekapitulasi efisiensi anggaran, realisasi belanja e-Katalog, dan kepatuhan regulasi PBJ.
+                </p>
+              </div>
+              <button 
+                onClick={() => showNotification('Laporan Bulanan UKPBJ berhasil diexport ke format XLSX!')}
+                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+                <span>Export Rekap Excel</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
+                <p className="text-xs text-slate-400 font-medium">Realisasi Efisiensi Tender</p>
+                <p className={`text-2xl font-black mt-1 text-emerald-500`}>18.4%</p>
+                <p className="text-[10px] text-slate-400 mt-1">Penghematan dari total pagu HPS</p>
+              </div>
+              <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
+                <p className="text-xs text-slate-400 font-medium">Tingkat Belanja Produk DN (P3DN)</p>
+                <p className={`text-2xl font-black mt-1 text-blue-500`}>84.6%</p>
+                <p className="text-[10px] text-slate-400 mt-1">Target nasional minimal 40%</p>
+              </div>
+              <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
+                <p className="text-xs text-slate-400 font-medium">Paket Selesai Tepat Waktu</p>
+                <p className={`text-2xl font-black mt-1 text-accent-gold`}>98.2%</p>
+                <p className="text-[10px] text-slate-400 mt-1">Kuartal berjalan T.A 2026</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 9: PENGATURAN BACKEND & KONTROL DATABASE */}
+        {/* ========================================================= */}
+        {activeTab === 'pengaturan' && (
+          <div className="p-6 md:p-8 space-y-6 max-w-4xl">
+            <div>
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-xs font-bold uppercase mb-2">
+                <Settings className="w-3.5 h-3.5" />
+                <span>Global Site & Database Settings</span>
+              </div>
+              <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Pengaturan Sistem & Database
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">
+                Atur konfigurasi portal publik, banner siaran, status server, dan kelola database sinkronisasi.
+              </p>
+            </div>
+
+            {/* Section 1: Running Banner Announcement */}
+            <div className={`p-6 rounded-2xl border space-y-4 ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
-              <Sparkles className="w-8 h-8 text-accent-gold mx-auto" />
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    Banner Pengumuman Darurat / Siaran Penting (Public Header)
+                  </h3>
+                  <p className="text-[11px] text-slate-400">Teks ini akan muncul di bagian teratas website publik.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    updateSiteSettings({ announcementActive: !siteSettings.announcementActive });
+                    showNotification(`Banner pengumuman publik telah ${!siteSettings.announcementActive ? 'diaktifkan' : 'dinonaktifkan'}.`);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                    siteSettings.announcementActive
+                      ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/40'
+                      : 'bg-slate-500/20 text-slate-400 border border-slate-500/30'
+                  }`}
+                >
+                  {siteSettings.announcementActive ? '✓ Status: Aktif' : '✕ Status: Nonaktif'}
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={siteSettings.announcementBanner}
+                  onChange={(e) => updateSiteSettings({ announcementBanner: e.target.value })}
+                  placeholder="Tulis pesan pengumuman publik..."
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-xs border outline-none ${
+                    isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-600'
+                  }`}
+                />
+                <p className="text-[10px] text-emerald-500 font-semibold flex items-center gap-1">
+                  <Check className="w-3 h-3" />
+                  <span>Tersimpan otomatis ke database client & tersinkronisasi</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Section 2: Server Status */}
+            <div className={`p-6 rounded-2xl border space-y-4 ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
               <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Modul Terintegrasi Database Cloud & API
+                Status Operasional Layanan SPSE / Server Backend
               </h3>
-              <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                Konfigurasi sistem terhubung ke Neon PostgreSQL, API LKPP (SiKAP & SiRUP), dan Next.js Node API Route Handlers.
+              <div className="grid grid-cols-3 gap-3">
+                {(['Normal', 'Maintenance', 'High Traffic'] as const).map((status) => (
+                  <button
+                    key={status}
+                    type="button"
+                    onClick={() => {
+                      updateSiteSettings({ serverStatus: status });
+                      showNotification(`Status backend diatur ke: ${status}`);
+                    }}
+                    className={`p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                      siteSettings.serverStatus === status
+                        ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/30'
+                        : isDark ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white' : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Section 3: Factory Reset Database */}
+            <div className={`p-6 rounded-2xl border border-red-500/20 space-y-3 ${
+              isDark ? 'bg-red-950/10' : 'bg-red-50/50'
+            }`}>
+              <h3 className="text-sm font-bold text-red-500 flex items-center gap-2">
+                <Database className="w-4 h-4" />
+                <span>Reset Database ke Pengaturan Awal (Factory Reset)</span>
+              </h3>
+              <p className="text-xs text-slate-400">
+                Mengembalikan seluruh data Berita, Agenda, dan Paket Pengadaan ke data bawaan resmi Kementerian Ketenagakerjaan.
               </p>
-              <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/30">
-                Semua Layanan Backend Berjalan Normal
-              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirm('Apakah Anda yakin ingin me-reset seluruh database ke data awal? Semua perubahan berita, agenda, dan paket baru akan dikembalikan ke default.')) {
+                    resetToDefaults();
+                    showNotification('✓ Database berhasil di-reset ke kondisi awal!');
+                  }
+                }}
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-md shadow-red-600/30 transition-all cursor-pointer"
+              >
+                Reset Database Sekarang
+              </button>
             </div>
           </div>
         )}
@@ -2000,7 +2014,181 @@ export default function AdminPortalPage() {
       </AnimatePresence>
 
       {/* ========================================================= */}
-      {/* MODAL 4: DETAIL PAKET PENGADAAN */}
+      {/* MODAL 4: TAMBAH PAKET PENGADAAN BARU */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showPackageModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className={`border rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+              }`}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    Tambah Paket Pengadaan Baru
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">Paket baru akan langsung tersimpan di database dan muncul pada homepage publik (/#pengadaan).</p>
+                </div>
+                <button
+                  onClick={() => setShowPackageModal(false)}
+                  className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSavePackage} className="space-y-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Kode Paket / RUP *</label>
+                    <input
+                      type="text"
+                      required
+                      value={packageFormData.code || ''}
+                      onChange={(e) => setPackageFormData({ ...packageFormData, code: e.target.value })}
+                      placeholder="e.g. TND-2026-009"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Kategori Pengadaan *</label>
+                    <select
+                      value={packageFormData.category || 'Tender'}
+                      onChange={(e) => setPackageFormData({ ...packageFormData, category: e.target.value as ProcurementPackage['category'] })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
+                      }`}
+                    >
+                      <option value="Tender">Tender</option>
+                      <option value="Seleksi">Seleksi</option>
+                      <option value="Pengadaan Langsung">Pengadaan Langsung</option>
+                      <option value="E-Purchasing">E-Purchasing</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="font-bold block mb-1">Nama / Judul Paket Pengadaan *</label>
+                  <input
+                    type="text"
+                    required
+                    value={packageFormData.title || ''}
+                    onChange={(e) => setPackageFormData({ ...packageFormData, title: e.target.value })}
+                    placeholder="e.g. Pengadaan Perangkat Server dan Keamanan Jaringan Data Center"
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Satuan Kerja / Unit *</label>
+                    <input
+                      type="text"
+                      required
+                      value={packageFormData.unit || ''}
+                      onChange={(e) => setPackageFormData({ ...packageFormData, unit: e.target.value })}
+                      placeholder="e.g. Pusdatin Kemnaker RI"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Nilai Pagu HPS *</label>
+                    <input
+                      type="text"
+                      required
+                      value={packageFormData.hps || ''}
+                      onChange={(e) => setPackageFormData({ ...packageFormData, hps: e.target.value })}
+                      placeholder="e.g. Rp 850.000.000"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none font-mono ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-accent-gold focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-amber-600 focus:border-blue-600'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Status Paket</label>
+                    <select
+                      value={packageFormData.status || 'Pendaftaran Dibuka'}
+                      onChange={(e) => setPackageFormData({ ...packageFormData, status: e.target.value as ProcurementPackage['status'] })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
+                      }`}
+                    >
+                      <option value="Pendaftaran Dibuka">Pendaftaran Dibuka</option>
+                      <option value="Tahap Evaluasi">Tahap Evaluasi</option>
+                      <option value="Pemberian Penjelasan">Pemberian Penjelasan</option>
+                      <option value="Selesai">Selesai</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Batas Akhir Pendaftaran *</label>
+                    <input
+                      type="text"
+                      required
+                      value={packageFormData.deadline || ''}
+                      onChange={(e) => setPackageFormData({ ...packageFormData, deadline: e.target.value })}
+                      placeholder="e.g. 28 Sep 2026, 15:00 WIB"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="font-bold block mb-1">Deskripsi / Ruang Lingkup Pekerjaan</label>
+                  <textarea
+                    rows={3}
+                    value={packageFormData.desc || ''}
+                    onChange={(e) => setPackageFormData({ ...packageFormData, desc: e.target.value })}
+                    placeholder="Uraian singkat spesifikasi dan lingkup pengadaan..."
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowPackageModal(false)}
+                    className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                    }`}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-600/30 cursor-pointer"
+                  >
+                    Simpan & Publikasikan
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* MODAL 5: DETAIL PAKET PENGADAAN */}
       {/* ========================================================= */}
       <AnimatePresence>
         {showDetailModal && selectedPackage && (
@@ -2015,11 +2203,16 @@ export default function AdminPortalPage() {
             >
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <span className="px-2.5 py-0.5 rounded-md bg-blue-500/20 text-blue-500 border border-blue-500/30 text-xs font-bold">
-                    {selectedPackage.status}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-md bg-blue-500/20 text-blue-500 border border-blue-500/30 text-xs font-bold">
+                      {selectedPackage.status}
+                    </span>
+                    <span className="text-xs font-mono font-bold text-slate-400">
+                      {selectedPackage.code}
+                    </span>
+                  </div>
                   <h3 className={`text-lg sm:text-xl font-bold mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    {selectedPackage.name}
+                    {selectedPackage.title}
                   </h3>
                 </div>
                 <button
@@ -2038,8 +2231,8 @@ export default function AdminPortalPage() {
                   <strong className="text-accent-gold text-sm font-mono">{selectedPackage.hps}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">Tanggal Pengumuman:</span>
-                  <span className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>{selectedPackage.date}</span>
+                  <span className="text-slate-400 block">Satuan Kerja:</span>
+                  <span className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>{selectedPackage.unit}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">Batas Pendaftaran:</span>
@@ -2050,7 +2243,7 @@ export default function AdminPortalPage() {
               <div className="space-y-4 mb-6">
                 <div>
                   <h4 className="text-xs font-bold text-slate-400 uppercase">Deskripsi Pekerjaan</h4>
-                  <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{selectedPackage.desc}</p>
+                  <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{selectedPackage.desc || 'Pengadaan barang/jasa resmi unit kerja Kemnaker RI.'}</p>
                 </div>
 
                 <div>

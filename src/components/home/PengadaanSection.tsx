@@ -20,96 +20,10 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FadeIn } from '@/components/animations/FadeIn';
-
-interface ProcurementPackage {
-  id: string;
-  code: string;
-  title: string;
-  unit: string;
-  hps: string;
-  category: 'Tender' | 'Seleksi' | 'Pengadaan Langsung' | 'E-Purchasing';
-  status: 'Pendaftaran Dibuka' | 'Tahap Evaluasi' | 'Selesai' | 'Pemberian Penjelasan';
-  deadline: string;
-  method: string;
-  docCount: number;
-}
-
-const PROCUREMENT_DATA: ProcurementPackage[] = [
-  {
-    id: 'PKG-2026-001',
-    code: 'TND-984210',
-    title: 'Pengadaan Jasa Konsultan Pengembangan Arsitektur IT & Portal UKPBJ',
-    unit: 'Biro Perencanaan dan Manajemen Kinerja - Kemnaker RI',
-    hps: 'Rp 500.000.000',
-    category: 'Tender',
-    status: 'Pendaftaran Dibuka',
-    deadline: '20 Agu 2026',
-    method: 'Tender - Pascakualifikasi Satu File',
-    docCount: 3
-  },
-  {
-    id: 'PKG-2026-002',
-    code: 'TND-984211',
-    title: 'Pengadaan Peralatan Workshop Pelatihan Vokasi & Produktivitas',
-    unit: 'Ditjen Pembinaan Pelatihan Vokasi dan Produktivitas (Binalavotas)',
-    hps: 'Rp 2.150.000.000',
-    category: 'Tender',
-    status: 'Tahap Evaluasi',
-    deadline: '16 Agu 2026',
-    method: 'Tender - Pascakualifikasi Dua File',
-    docCount: 4
-  },
-  {
-    id: 'PKG-2026-003',
-    code: 'SLK-882014',
-    title: 'Jasa Konsultansi Pengawasan Renovasi Gedung Pusat Pasar Kerja',
-    unit: 'Pusat Pasar Kerja (PaskerID) Kemnaker RI',
-    hps: 'Rp 350.000.000',
-    category: 'Seleksi',
-    status: 'Pemberian Penjelasan',
-    deadline: '22 Agu 2026',
-    method: 'Seleksi Kualifikasi Kualitas & Biaya',
-    docCount: 2
-  },
-  {
-    id: 'PKG-2026-004',
-    code: 'PL-441092',
-    title: 'Pengadaan Lisensi Software Keamanan & Monitoring Server SPSE',
-    unit: 'Pusat Data dan Informasi (Pusdatin) Kemnaker RI',
-    hps: 'Rp 180.000.000',
-    category: 'Pengadaan Langsung',
-    status: 'Selesai',
-    deadline: '05 Agu 2026',
-    method: 'Pengadaan Langsung',
-    docCount: 2
-  },
-  {
-    id: 'PKG-2026-005',
-    code: 'TND-984215',
-    title: 'Pengadaan Jasa Kebersihan, Keamanan, dan Pengelolaan Fasilitas Kantor',
-    unit: 'Biro Umum dan Pengadaan Barang/Jasa Kemnaker RI',
-    hps: 'Rp 850.000.000',
-    category: 'Tender',
-    status: 'Pendaftaran Dibuka',
-    deadline: '25 Agu 2026',
-    method: 'Tender Cepat',
-    docCount: 3
-  },
-  {
-    id: 'PKG-2026-006',
-    code: 'EP-552011',
-    title: 'Pengadaan Perangkat Laptop & Komputer Kerja untuk Pengawas Ketenagakerjaan',
-    unit: 'Ditjen Pembinaan Pengawasan Ketenagakerjaan dan K3 (Binwasnaker & K3)',
-    hps: 'Rp 1.420.000.000',
-    category: 'E-Purchasing',
-    status: 'Selesai',
-    deadline: '01 Agu 2026',
-    method: 'E-Katalog Nasional LKPP',
-    docCount: 1
-  }
-];
+import { useData, ProcurementPackage } from '@/contexts/DataContext';
 
 export function PengadaanSection() {
+  const { packagesList } = useData();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [selectedStatus, setSelectedStatus] = useState<string>('Semua');
@@ -119,7 +33,7 @@ export function PengadaanSection() {
   const statuses = ['Semua', 'Pendaftaran Dibuka', 'Tahap Evaluasi', 'Selesai'];
 
   const filteredPackages = useMemo(() => {
-    return PROCUREMENT_DATA.filter((pkg) => {
+    return packagesList.filter((pkg) => {
       const matchSearch = 
         pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         pkg.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -130,7 +44,7 @@ export function PengadaanSection() {
 
       return matchSearch && matchCat && matchStatus;
     });
-  }, [searchQuery, selectedCategory, selectedStatus]);
+  }, [packagesList, searchQuery, selectedCategory, selectedStatus]);
 
   const getStatusBadge = (status: ProcurementPackage['status']) => {
     switch (status) {

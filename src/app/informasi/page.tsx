@@ -11,16 +11,19 @@ import {
   BarChart2, Bookmark, QrCode, Share2, Printer, 
   CheckCircle2, Clock, ShieldCheck, ArrowRight
 } from 'lucide-react';
+import { useData } from '@/contexts/DataContext';
 
 export default function InformasiPage() {
+  const { newsList, agendaList } = useData();
+  const publishedNews = newsList.filter(n => n.status === 'Published');
   
-  const recentUpdates = [
-    { date: '2 SEP\n2026', type: 'REGULASI', title: 'Peraturan Menteri Ketenagakerjaan tentang Pedoman PBJ', icon: <FileText className="w-5 h-5 text-blue-300"/>, color: 'bg-blue-500/20' },
-    { date: '1 SEP\n2026', type: 'AGENDA', title: 'Bimbingan Teknis Pengadaan Barang/Jasa Batch 4', icon: <Calendar className="w-5 h-5 text-emerald-300"/>, color: 'bg-emerald-500/20' },
-    { date: '31 AGU\n2026', type: 'PENGUMUMAN', title: 'Pengumuman Tender Baru Bulan September 2026', icon: <Megaphone className="w-5 h-5 text-amber-300"/>, color: 'bg-amber-500/20' },
-    { date: '30 AGU\n2026', type: 'DOKUMEN', title: 'Dokumen Kontrak Standar Diperbarui', icon: <FileText className="w-5 h-5 text-sky-300"/>, color: 'bg-sky-500/20' },
-    { date: '29 AGU\n2026', type: 'BERITA', title: 'Kemnaker Perkuat Kompetensi SDM Pengadaan', icon: <Newspaper className="w-5 h-5 text-blue-300"/>, color: 'bg-blue-500/20' },
-  ];
+  const recentUpdates = publishedNews.map((news) => ({
+    date: news.date,
+    type: news.category.toUpperCase(),
+    title: news.title,
+    icon: <Newspaper className="w-5 h-5 text-blue-300"/>,
+    color: 'bg-blue-500/20'
+  }));
 
   const serviceStatuses = [
     { name: 'SPSE Kemnaker', status: 'NORMAL', icon: <Laptop className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
@@ -79,7 +82,9 @@ export default function InformasiPage() {
                       <BellRing className="w-5 h-5 text-accent-gold" />
                     </div>
                     <h2 className="text-lg sm:text-xl font-bold tracking-tight">APA YANG BARU?</h2>
-                    <span className="bg-accent-gold text-slate-950 text-xs font-black px-2.5 py-0.5 rounded-full ml-2">12</span>
+                    <span className="bg-accent-gold text-slate-950 text-xs font-black px-2.5 py-0.5 rounded-full ml-2">
+                      {recentUpdates.length}
+                    </span>
                   </div>
                   <Link href="/informasi/peraturan" className="text-xs sm:text-sm text-slate-300 hover:text-accent-gold flex items-center transition-colors font-semibold">
                     Lihat Semua <ChevronRight className="w-4 h-4 ml-1" />
@@ -199,7 +204,7 @@ export default function InformasiPage() {
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
                     <Calendar className="w-5 h-5" />
                   </div>
-                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">24</h3>
+                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">{agendaList.length}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Agenda</p>
                   <p className="text-[11px] text-slate-500 mb-3">Agenda Mendatang</p>
                   <div className="mt-auto flex items-center text-xs font-bold text-primary-navy group-hover:text-primary-blue">
@@ -227,7 +232,7 @@ export default function InformasiPage() {
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
                     <Newspaper className="w-5 h-5" />
                   </div>
-                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">87</h3>
+                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">{publishedNews.length}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Berita</p>
                   <p className="text-[11px] text-slate-500 mb-3">Berita Publikasi</p>
                   <div className="mt-auto flex items-center text-xs font-bold text-primary-navy group-hover:text-primary-blue">
