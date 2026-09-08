@@ -35,11 +35,15 @@ export default function InformasiPage() {
   ];
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-gradient-to-br from-[#061B30] via-[#0B2A4A] to-[#071F36]">
-      {/* Background Decorative Patterns & Glows */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0284c712_1px,transparent_1px),linear-gradient(to_bottom,#0284c712_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-      <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-primary-blue/20 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-20 right-10 w-[450px] h-[450px] bg-accent-gold/10 rounded-full blur-[140px] pointer-events-none" />
+    <div className="relative min-h-screen flex flex-col bg-[#F8FAFC]">
+      {/* Background Subtle Gradient & Grid Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-100/90 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      
+      {/* Soft Ambient Glows for Depth */}
+      <div className="absolute top-12 left-1/4 w-[550px] h-[550px] bg-blue-400/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-1/3 right-8 w-[480px] h-[480px] bg-amber-400/8 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-12 left-12 w-[420px] h-[420px] bg-sky-400/8 rounded-full blur-[140px] pointer-events-none" />
 
       <Header />
       
@@ -51,7 +55,7 @@ export default function InformasiPage() {
             
             {/* HERO SECTION */}
             <FadeIn direction="up">
-              <div className="relative bg-white rounded-3xl overflow-hidden shadow-xl border border-white/30 h-64 flex flex-col justify-center p-8 group backdrop-blur-md">
+              <div className="relative bg-white rounded-3xl overflow-hidden shadow-xl shadow-slate-200/70 border border-slate-200/80 h-64 flex flex-col justify-center p-8 group backdrop-blur-md">
                 {/* Background Image */}
                 <div 
                   className="absolute inset-0 bg-[url('/gedung-kemnaker.jpg')] bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
@@ -125,7 +129,7 @@ export default function InformasiPage() {
 
             {/* BOTTOM INFO WIDGET */}
             <FadeIn direction="up" delay={0.2}>
-              <div className="bg-white/95 rounded-3xl p-6 border border-white/40 shadow-lg backdrop-blur-md flex items-center space-x-4">
+              <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex items-center space-x-4">
                 <div className="w-11 h-11 bg-slate-100 rounded-2xl flex items-center justify-center flex-shrink-0 text-primary-navy">
                   <Clock className="w-5 h-5" />
                 </div>
@@ -144,7 +148,7 @@ export default function InformasiPage() {
             
             {/* STATUS LAYANAN */}
             <FadeIn direction="up">
-              <div className="bg-white/95 rounded-3xl p-6 sm:p-8 border border-white/40 shadow-xl backdrop-blur-md">
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xl shadow-slate-200/70 backdrop-blur-md">
                 <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center space-x-2">
                     <h2 className="text-lg sm:text-xl font-bold text-primary-navy tracking-tight">STATUS LAYANAN</h2>
@@ -157,7 +161,7 @@ export default function InformasiPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8 mb-6">
                   {serviceStatuses.map((service, idx) => (
-                    <div key={idx} className="flex items-center space-x-3.5 p-3 rounded-2xl bg-slate-50/80 border border-slate-200/60 hover:bg-white transition-colors">
+                    <div key={idx} className="flex items-center space-x-3.5 p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 hover:bg-white hover:border-blue-200 transition-colors">
                       <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${service.color} shadow-2xs`}>
                         {service.icon}
                       </div>
@@ -186,7 +190,7 @@ export default function InformasiPage() {
             <FadeIn direction="up" delay={0.1}>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {/* Regulasi */}
-                <Link href="/informasi/peraturan" className="bg-white/95 rounded-3xl p-5 border border-white/40 shadow-lg backdrop-blur-md flex flex-col h-full hover:-translate-y-1 transition-all cursor-pointer group">
+                <Link href="/informasi/peraturan" className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
                     <FileText className="w-5 h-5" />
                   </div>
@@ -200,7 +204,7 @@ export default function InformasiPage() {
                 </Link>
 
                 {/* Agenda */}
-                <Link href="/agenda" className="bg-white/95 rounded-3xl p-5 border border-white/40 shadow-lg backdrop-blur-md flex flex-col h-full hover:-translate-y-1 transition-all cursor-pointer group">
+                <Link href="/agenda" className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
                     <Calendar className="w-5 h-5" />
                   </div>
@@ -214,7 +218,7 @@ export default function InformasiPage() {
                 </Link>
 
                 {/* Pengumuman */}
-                <Link href="/informasi/pemilu" className="bg-white/95 rounded-3xl p-5 border border-white/40 shadow-lg backdrop-blur-md flex flex-col h-full hover:-translate-y-1 transition-all cursor-pointer group">
+                <Link href="/informasi/pemilu" className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
                     <Megaphone className="w-5 h-5" />
                   </div>
@@ -228,7 +232,7 @@ export default function InformasiPage() {
                 </Link>
 
                 {/* Berita */}
-                <Link href="/informasi" className="bg-white/95 rounded-3xl p-5 border border-white/40 shadow-lg backdrop-blur-md flex flex-col h-full hover:-translate-y-1 transition-all cursor-pointer group">
+                <Link href="/informasi" className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
                     <Newspaper className="w-5 h-5" />
                   </div>
@@ -247,7 +251,7 @@ export default function InformasiPage() {
             <FadeIn direction="up" delay={0.2}>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-auto">
                 
-                <div className="bg-white/95 rounded-3xl p-5 border border-white/40 shadow-lg backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 transition-all cursor-pointer group">
+                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-3 transition-colors shadow-2xs">
                     <Bookmark className="w-5 h-5" />
                   </div>
@@ -258,7 +262,7 @@ export default function InformasiPage() {
                   </button>
                 </div>
 
-                <div className="bg-white/95 rounded-3xl p-5 border border-white/40 shadow-lg backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 transition-all cursor-pointer group">
+                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-3 transition-colors shadow-2xs">
                     <QrCode className="w-5 h-5" />
                   </div>
@@ -269,7 +273,7 @@ export default function InformasiPage() {
                   </button>
                 </div>
 
-                <div className="bg-white/95 rounded-3xl p-5 border border-white/40 shadow-lg backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 transition-all cursor-pointer group">
+                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-3 transition-colors shadow-2xs">
                     <Share2 className="w-5 h-5" />
                   </div>
@@ -280,7 +284,7 @@ export default function InformasiPage() {
                   </button>
                 </div>
 
-                <div className="bg-white/95 rounded-3xl p-5 border border-white/40 shadow-lg backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 transition-all cursor-pointer group">
+                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-3 transition-colors shadow-2xs">
                     <Printer className="w-5 h-5" />
                   </div>
