@@ -57,56 +57,56 @@ export default function TKDNPage() {
     {
       title: 'Sertifikat Terdaftar',
       desc: 'Data Sertifikat TKDN dan Bobot Manfaat Perusahaan (BMP) yang telah diterbitkan secara resmi.',
-      icon: <FileText className="w-5 h-5 text-primary-navy" />,
+      icon: <FileText className="w-5 h-5" />,
       href: 'https://tkdn.kemenperin.go.id/sertifikat.php',
       tag: 'Database Resmi'
     },
     {
       title: 'Rekapitulasi Produk',
       desc: 'Rekapitulasi capaian Sertifikat TKDN berdasarkan kelompok barang, sektor industri, dan sebaran wilayah.',
-      icon: <BarChart3 className="w-5 h-5 text-primary-navy" />,
+      icon: <BarChart3 className="w-5 h-5" />,
       href: 'https://tkdn.kemenperin.go.id/rekap.php',
       tag: 'Statistik P3DN'
     },
     {
       title: 'TKDN Industri Kecil (IK)',
       desc: 'Fasilitas sertifikasi TKDN gratis khusus pelaku usaha mikro dan industri kecil dalam pengadaan pemerintah.',
-      icon: <ShieldCheck className="w-5 h-5 text-primary-navy" />,
+      icon: <ShieldCheck className="w-5 h-5" />,
       href: 'https://siinas.kemenperin.go.id',
       tag: 'Fasilitasi Gratis'
     },
     {
       title: 'FAQ & Tanya Jawab',
       desc: 'Informasi komprehensif mengenai kebijakan P3DN, ketentuan minimal 40% TKDN, dan mekanisme sertifikasi.',
-      icon: <HelpCircle className="w-5 h-5 text-primary-navy" />,
+      icon: <HelpCircle className="w-5 h-5" />,
       href: '#faq',
       tag: 'Pusat Bantuan'
     },
     {
       title: 'Regulasi P3DN',
       desc: 'Kumpulan Undang-Undang, Perpres No. 12/2021, dan Permenperin tentang kewajiban penggunaan produk lokal.',
-      icon: <BookOpen className="w-5 h-5 text-primary-navy" />,
+      icon: <BookOpen className="w-5 h-5" />,
       href: '/informasi/peraturan',
       tag: 'Dasar Hukum'
     },
     {
       title: 'Video Panduan',
       desc: 'Tutorial visual langkah-demi-langkah tata cara pendaftaran akun SIINas dan pengajuan berkas verifikasi.',
-      icon: <Video className="w-5 h-5 text-primary-navy" />,
+      icon: <Video className="w-5 h-5" />,
       href: 'https://www.youtube.com/@kemenperin_ri',
       tag: 'Video Tutorial'
     },
     {
       title: 'Katalog Referensi Produk',
       desc: 'Daftar produk barang dan jasa dalam negeri yang siap dibeli melalui E-Katalog Nasional & Sektoral.',
-      icon: <Layers className="w-5 h-5 text-primary-navy" />,
+      icon: <Layers className="w-5 h-5" />,
       href: 'https://e-katalog.lkpp.go.id',
       tag: 'E-Katalog LKPP'
     },
     {
       title: 'Portal SIINas Kemenperin',
       desc: 'Akses langsung ke portal registrasi dan login Sistem Informasi Industri Nasional Kementerian Perindustrian.',
-      icon: <Building2 className="w-5 h-5 text-primary-navy" />,
+      icon: <Building2 className="w-5 h-5" />,
       href: 'https://siinas.kemenperin.go.id',
       tag: 'Portal Layanan'
     }
