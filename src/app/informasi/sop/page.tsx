@@ -12,6 +12,7 @@ import {
   CheckCircle2, ArrowRight, ShieldCheck, 
   Workflow, Layers, X, FileCheck, Check
 } from 'lucide-react';
+import { useData } from '@/contexts/DataContext';
 
 type SOPItem = {
   id: string;
@@ -26,122 +27,90 @@ type SOPItem = {
   steps: string[];
 };
 
-const sopCategories = [
-  { id: 'all', label: 'Semua SOP', icon: <Layers className="w-4 h-4" />, count: 18 },
-  { id: 'tata-kelola', label: 'SOP Tata Kelola & Registrasi', icon: <FileCheck className="w-4 h-4" />, count: 3 },
-  { id: 'perencanaan', label: 'SOP Perencanaan & HPS', icon: <Workflow className="w-4 h-4" />, count: 3 },
-  { id: 'pemilihan', label: 'SOP Pemilihan & E-Tendering', icon: <GitBranch className="w-4 h-4" />, count: 4 },
-  { id: 'kontrak', label: 'SOP Pelaksanaan Kontrak & BAST', icon: <FileText className="w-4 h-4" />, count: 3 },
-  { id: 'kinerja', label: 'SOP Pengelolaan Kinerja & SIKaP', icon: <CheckCircle2 className="w-4 h-4" />, count: 2 },
-  { id: 'risiko', label: 'SOP Manajemen Risiko & Pengawasan', icon: <ShieldCheck className="w-4 h-4" />, count: 3 },
-];
-
-const sopItems: SOPItem[] = [
+const DEFAULT_STATIC_SOPS: SOPItem[] = [
   {
-    id: '1',
+    id: 'SOP-STAT-1',
     code: 'SOP-PBJ-01/2026',
     category: 'tata-kelola',
     categoryLabel: 'Tata Kelola',
     title: 'SOP Registrasi, Verifikasi, dan Validasi Akun SPSE',
-    date: 'Senin, 04 Desember 2023',
+    date: '04 Desember 2023',
     revision: 'Rev. 02 (2026)',
     fileSize: '1.8 MB',
     desc: 'Standar baku verifikasi identitas badan usaha dan legalitas dokumen penyedia sebelum diaktifkan pada portal SPSE Kemnaker.',
     steps: ['Pendaftaran Online Penyedia', 'Pemeriksaan Dokumen Fisik/Legalitas', 'Verifikasi Petugas Verifikator', 'Aktivasi Akun Terintegrasi']
   },
   {
-    id: '2',
+    id: 'SOP-STAT-2',
     code: 'SOP-PBJ-02/2026',
     category: 'tata-kelola',
     categoryLabel: 'Sistem Informasi',
     title: 'SOP Pengadaan Barang dan Jasa Berbasis Sistem Informasi',
-    date: 'Senin, 04 Desember 2023',
+    date: '04 Desember 2023',
     revision: 'Rev. 01 (2025)',
     fileSize: '2.1 MB',
     desc: 'Pedoman alur tata kelola operasional seluruh transaksi pengadaan digital melalui aplikasi SPSE, E-Katalog, dan Bela Pengadaan.',
     steps: ['Pembuatan Paket Elektronik', 'Pemberitahuan Undangan Tender', 'Penyampaian Penawaran Terenkripsi', 'Pengumuman Pemenang Digital']
   },
   {
-    id: '3',
+    id: 'SOP-STAT-3',
     code: 'SOP-PBJ-03/2026',
     category: 'risiko',
     categoryLabel: 'Manajemen Risiko',
     title: 'SOP Pengendalian dan Mitigasi Risiko Pengadaan Barang/Jasa',
-    date: 'Senin, 04 Desember 2023',
+    date: '04 Desember 2023',
     revision: 'Rev. 03 (2026)',
     fileSize: '2.4 MB',
     desc: 'Mekanisme identifikasi dini, analisis potensi hambatan pelaksanaan, serta langkah pencegahan risiko hukum dan keterlambatan proyek.',
     steps: ['Identifikasi Risiko Pra-Tender', 'Penyusunan Matriks Mitigasi', 'Monitoring Berkala Pelaksanaan', 'Evaluasi Pasca Serah Terima']
-  },
-  {
-    id: '4',
-    code: 'SOP-PBJ-04/2026',
-    category: 'perencanaan',
-    categoryLabel: 'Perencanaan',
-    title: 'SOP Analisa Ketersediaan Penyedia dan Survei Pasar',
-    date: 'Senin, 04 Desember 2023',
-    revision: 'Rev. 02 (2025)',
-    fileSize: '1.5 MB',
-    desc: 'Tata cara pelaksanaan riset pasar, ketersediaan produk dalam negeri (TKDN), dan perbandingan harga wajar sebelum tender dimulai.',
-    steps: ['Penentuan Kebutuhan Barang/Jasa', 'Survei Pasar & Cek TKDN', 'Dokumentasi Bukti Harga Wajar', 'Penyusunan Rekomendasi PPK']
-  },
-  {
-    id: '5',
-    code: 'SOP-PBJ-05/2026',
-    category: 'kinerja',
-    categoryLabel: 'Pengelolaan Kinerja',
-    title: 'SOP Penilaian dan Pengelolaan Kinerja Penyedia (SIKaP)',
-    date: 'Senin, 04 Desember 2023',
-    revision: 'Rev. 02 (2026)',
-    fileSize: '1.9 MB',
-    desc: 'Prosedur pemberian rating kinerja vendor setelah menyelesaikan kontrak kerja sama berdasarkan kualitas, waktu, biaya, dan layanan.',
-    steps: ['Pekerjaan Selesai 100%', 'Input Nilai Indikator oleh PPK', 'Sinkronisasi ke SIKaP LKPP', 'Penetapan Profil Kinerja Vendor']
-  },
-  {
-    id: '6',
-    code: 'SOP-PBJ-06/2026',
-    category: 'kontrak',
-    categoryLabel: 'Pelaksanaan Kontrak',
-    title: 'SOP Pengelolaan dan Pengendalian Kontrak Pengadaan',
-    date: 'Senin, 04 Desember 2023',
-    revision: 'Rev. 01 (2025)',
-    fileSize: '2.7 MB',
-    desc: 'Pengawasan tahapan SPK, penerbitan jaminan pelaksanaan, addendum perubahan kontrak, hingga serah terima hasil pekerjaan.',
-    steps: ['Penandatanganan Kontrak / SPK', 'Pemeriksaan Lapangan Berkala', 'Rapat Evaluasi Kemajuan (SCM)', 'Berita Acara Serah Terima (BAST)']
-  },
-  {
-    id: '7',
-    code: 'SOP-PBJ-07/2026',
-    category: 'pemilihan',
-    categoryLabel: 'Pemilihan Penyedia',
-    title: 'SOP Penanganan Sanggah dan Sanggah Banding Pemilihan',
-    date: 'Kamis, 11 Januari 2024',
-    revision: 'Rev. 01 (2026)',
-    fileSize: '1.6 MB',
-    desc: 'Tata cara penerimaan, klarifikasi fakta, dan penerbitan jawaban resmi atas sanggahan peserta pemilihan sesuai regulasi.',
-    steps: ['Penerimaan Sanggah Melalui SPSE', 'Rapat Klarifikasi Pokja Pemilihan', 'Penyusunan Jawaban Resmi', 'Penyampaian Jawaban Tertulis']
-  },
-  {
-    id: '8',
-    code: 'SOP-PBJ-08/2026',
-    category: 'kontrak',
-    categoryLabel: 'Pelaksanaan Kontrak',
-    title: 'SOP Serah Terima Hasil Pekerjaan dan Pembayaran Termin',
-    date: 'Selasa, 20 Februari 2024',
-    revision: 'Rev. 02 (2026)',
-    fileSize: '2.2 MB',
-    desc: 'Prosedur pemeriksaan fisik hasil pekerjaan oleh PjPHP/PPK, penandatanganan BAST, hingga proses pengajuan SPP/SPM.',
-    steps: ['Permohonan Serah Terima Vendor', 'Uji Fungsi & Pemeriksaan Fisik', 'Penerbitan BAST & BAP', 'Proses Pembayaran ke KPPN']
   }
 ];
 
 export default function SOPPage() {
+  const { sopList } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeFlowchartSOP, setActiveFlowchartSOP] = useState<SOPItem | null>(null);
 
+  // Merge dynamic SOPs from backend context
+  const dynamicSops: SOPItem[] = useMemo(() => {
+    if (!sopList || sopList.length === 0) return DEFAULT_STATIC_SOPS;
+
+    const dynamicMapped: SOPItem[] = sopList
+      .filter(item => item.status === 'Berlaku')
+      .map(item => ({
+        id: item.id,
+        code: item.kode,
+        category: 'tata-kelola',
+        categoryLabel: item.unit,
+        title: item.judul,
+        date: 'Tahun 2026',
+        revision: item.revisi,
+        fileSize: '2.1 MB',
+        desc: `Standar operasional prosedur resmi ${item.unit} dengan ${item.tahapanCount} langkah terstandarisasi.`,
+        steps: [
+          'Pemeriksaan dan Verifikasi Permohonan',
+          'Validasi Persyaratan Teknis & Regulasi',
+          'Penelaahan Kelayakan Tim Kerja',
+          'Persetujuan & Penerbitan Dokumen Resmi'
+        ]
+      }));
+
+    return [...dynamicMapped, ...DEFAULT_STATIC_SOPS];
+  }, [sopList]);
+
+  const sopCategories = useMemo(() => [
+    { id: 'all', label: 'Semua SOP', icon: <Layers className="w-4 h-4" />, count: dynamicSops.length },
+    { id: 'tata-kelola', label: 'SOP Tata Kelola & Registrasi', icon: <FileCheck className="w-4 h-4" />, count: dynamicSops.filter(s => s.category === 'tata-kelola').length },
+    { id: 'perencanaan', label: 'SOP Perencanaan & HPS', icon: <Workflow className="w-4 h-4" />, count: dynamicSops.filter(s => s.category === 'perencanaan').length },
+    { id: 'pemilihan', label: 'SOP Pemilihan & E-Tendering', icon: <GitBranch className="w-4 h-4" />, count: dynamicSops.filter(s => s.category === 'pemilihan').length },
+    { id: 'kontrak', label: 'SOP Pelaksanaan Kontrak & BAST', icon: <FileText className="w-4 h-4" />, count: dynamicSops.filter(s => s.category === 'kontrak').length },
+    { id: 'kinerja', label: 'SOP Pengelolaan Kinerja & SIKaP', icon: <CheckCircle2 className="w-4 h-4" />, count: dynamicSops.filter(s => s.category === 'kinerja').length },
+    { id: 'risiko', label: 'SOP Manajemen Risiko & Pengawasan', icon: <ShieldCheck className="w-4 h-4" />, count: dynamicSops.filter(s => s.category === 'risiko').length },
+  ], [dynamicSops]);
+
   const filteredSOPs = useMemo(() => {
-    return sopItems.filter(item => {
+    return dynamicSops.filter(item => {
       const matchCat = selectedCategory === 'all' || item.category === selectedCategory;
       const matchSearch = searchQuery.trim() === '' || 
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -149,7 +118,7 @@ export default function SOPPage() {
         item.desc.toLowerCase().includes(searchQuery.toLowerCase());
       return matchCat && matchSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [dynamicSops, selectedCategory, searchQuery]);
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">

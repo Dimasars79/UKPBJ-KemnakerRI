@@ -43,6 +43,30 @@ export interface ProcurementPackage {
   desc?: string;
 }
 
+export interface RegulasiItem {
+  id: string;
+  nomor: string;
+  tentang: string;
+  tahun: string;
+  kategori: 'Peraturan Menteri' | 'Peraturan LKPP' | 'Keputusan Menteri' | 'Surat Edaran' | 'Undang-Undang' | 'Peraturan Pemerintah';
+  fileSize: string;
+  downloadUrl?: string;
+  status: 'Aktif' | 'Draft' | 'Dicabut';
+  syncFrontend: boolean;
+}
+
+export interface SopItem {
+  id: string;
+  kode: string;
+  judul: string;
+  unit: string;
+  revisi: string;
+  tahapanCount: number;
+  downloadUrl?: string;
+  status: 'Berlaku' | 'Dalam Revisi' | 'Draft';
+  syncFrontend: boolean;
+}
+
 export interface SiteSettings {
   announcementBanner: string;
   announcementActive: boolean;
@@ -69,6 +93,19 @@ interface DataContextType {
   addPackage: (pkg: Omit<ProcurementPackage, 'id'>) => void;
   updatePackage: (id: string, updated: Partial<ProcurementPackage>) => void;
   deletePackage: (id: string) => void;
+
+  // Regulasi
+  regulasiList: RegulasiItem[];
+  addRegulasi: (reg: Omit<RegulasiItem, 'id' | 'syncFrontend'>) => void;
+  updateRegulasi: (id: string, updated: Partial<RegulasiItem>) => void;
+  deleteRegulasi: (id: string) => void;
+  toggleRegulasiStatus: (id: string) => void;
+
+  // SOP
+  sopList: SopItem[];
+  addSop: (sop: Omit<SopItem, 'id' | 'syncFrontend'>) => void;
+  updateSop: (id: string, updated: Partial<SopItem>) => void;
+  deleteSop: (id: string) => void;
 
   // Site Settings
   siteSettings: SiteSettings;
@@ -265,6 +302,111 @@ const DEFAULT_PACKAGES: ProcurementPackage[] = [
   }
 ];
 
+const DEFAULT_REGULASI: RegulasiItem[] = [
+  {
+    id: 'REG-001',
+    nomor: 'Permenaker No. 12 Tahun 2024',
+    tentang: 'Tata Cara Pelaksanaan Pengadaan Barang dan Jasa di Lingkungan Kementerian Ketenagakerjaan',
+    tahun: '2024',
+    kategori: 'Peraturan Menteri',
+    fileSize: '2.4 MB',
+    downloadUrl: '#',
+    status: 'Aktif',
+    syncFrontend: true
+  },
+  {
+    id: 'REG-002',
+    nomor: 'Peraturan LKPP No. 12 Tahun 2021',
+    tentang: 'Pedoman Pelaksanaan Pengadaan Barang/Jasa Pemerintah Melalui Penyedia',
+    tahun: '2021',
+    kategori: 'Peraturan LKPP',
+    fileSize: '4.8 MB',
+    downloadUrl: '#',
+    status: 'Aktif',
+    syncFrontend: true
+  },
+  {
+    id: 'REG-003',
+    nomor: 'Kepmenaker No. 84 Tahun 2025',
+    tentang: 'Penetapan Standar Satuan Harga dan Honorarium Pengelola Keuangan dan Pengadaan Barang/Jasa',
+    tahun: '2025',
+    kategori: 'Keputusan Menteri',
+    fileSize: '1.9 MB',
+    downloadUrl: '#',
+    status: 'Aktif',
+    syncFrontend: true
+  },
+  {
+    id: 'REG-004',
+    nomor: 'Surat Edaran Sesjen No. 04/SE/2026',
+    tentang: 'Pencegahan Gratifikasi dan Benturan Kepentingan dalam Pemilihan Penyedia Barang/Jasa',
+    tahun: '2026',
+    kategori: 'Surat Edaran',
+    fileSize: '850 KB',
+    downloadUrl: '#',
+    status: 'Aktif',
+    syncFrontend: true
+  }
+];
+
+const DEFAULT_SOP: SopItem[] = [
+  {
+    id: 'SOP-001',
+    kode: 'SOP/PBJ/01/2026',
+    judul: 'Standar Operasional Prosedur Perencanaan Pengadaan & Penyusunan RUP',
+    unit: 'Biro Perencanaan & UKPBJ Kemnaker',
+    revisi: 'Rev. 03 (2026)',
+    tahapanCount: 6,
+    downloadUrl: '#',
+    status: 'Berlaku',
+    syncFrontend: true
+  },
+  {
+    id: 'SOP-002',
+    kode: 'SOP/PBJ/02/2026',
+    judul: 'SOP Pemilihan Penyedia Melalui E-Purchasing (Katalog Elektronik & Toko Daring)',
+    unit: 'Pokja Pemilihan UKPBJ',
+    revisi: 'Rev. 02 (2026)',
+    tahapanCount: 5,
+    downloadUrl: '#',
+    status: 'Berlaku',
+    syncFrontend: true
+  },
+  {
+    id: 'SOP-003',
+    kode: 'SOP/PBJ/03/2026',
+    judul: 'SOP Pelaksanaan Tender / Seleksi Cepat Pascakualifikasi SPSE 4.5',
+    unit: 'Pokja Pemilihan I & II',
+    revisi: 'Rev. 04 (2026)',
+    tahapanCount: 8,
+    downloadUrl: '#',
+    status: 'Berlaku',
+    syncFrontend: true
+  },
+  {
+    id: 'SOP-004',
+    kode: 'SOP/PBJ/04/2026',
+    judul: 'SOP Konsultasi & Penanganan Permasalahan Pengadaan (Clearing House)',
+    unit: 'Inspektorat Jenderal & UKPBJ',
+    revisi: 'Rev. 01 (2025)',
+    tahapanCount: 4,
+    downloadUrl: '#',
+    status: 'Berlaku',
+    syncFrontend: true
+  },
+  {
+    id: 'SOP-005',
+    kode: 'SOP/PBJ/05/2026',
+    judul: 'SOP Serah Terima Hasil Pekerjaan (BAST) dan Evaluasi Kinerja Vendor',
+    unit: 'Pejabat Pembuat Komitmen (PPK)',
+    revisi: 'Rev. 02 (2026)',
+    tahapanCount: 5,
+    downloadUrl: '#',
+    status: 'Berlaku',
+    syncFrontend: true
+  }
+];
+
 const DEFAULT_SETTINGS: SiteSettings = {
   announcementBanner: 'Sosialisasi Peraturan LKPP Nomor 12 Tahun 2024 tentang Pedoman Pengadaan Barang/Jasa Pemerintah',
   announcementActive: true,
@@ -280,6 +422,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [newsList, setNewsList] = useState<NewsItem[]>(DEFAULT_NEWS);
   const [agendaList, setAgendaList] = useState<AgendaItem[]>(DEFAULT_AGENDAS);
   const [packagesList, setPackagesList] = useState<ProcurementPackage[]>(DEFAULT_PACKAGES);
+  const [regulasiList, setRegulasiList] = useState<RegulasiItem[]>(DEFAULT_REGULASI);
+  const [sopList, setSopList] = useState<SopItem[]>(DEFAULT_SOP);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -292,6 +436,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         if (parsed.newsList) setNewsList(parsed.newsList);
         if (parsed.agendaList) setAgendaList(parsed.agendaList);
         if (parsed.packagesList) setPackagesList(parsed.packagesList);
+        if (parsed.regulasiList) setRegulasiList(parsed.regulasiList);
+        if (parsed.sopList) setSopList(parsed.sopList);
         if (parsed.siteSettings) setSiteSettings(parsed.siteSettings);
       }
     } catch (e) {
@@ -306,6 +452,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     newNews = newsList,
     newAgenda = agendaList,
     newPkgs = packagesList,
+    newRegulasi = regulasiList,
+    newSop = sopList,
     newSettings = siteSettings
   ) => {
     try {
@@ -313,6 +461,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         newsList: newNews,
         agendaList: newAgenda,
         packagesList: newPkgs,
+        regulasiList: newRegulasi,
+        sopList: newSop,
         siteSettings: newSettings,
         updatedAt: new Date().toISOString()
       };
@@ -422,11 +572,89 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     persist(newsList, agendaList, updated);
   };
 
+  // REGULASI ACTIONS
+  const addRegulasi = (reg: Omit<RegulasiItem, 'id' | 'syncFrontend'>) => {
+    const newEntry: RegulasiItem = {
+      ...reg,
+      id: `REG-${Date.now().toString().slice(-4)}`,
+      syncFrontend: reg.status === 'Aktif'
+    };
+    const updated = [newEntry, ...regulasiList];
+    setRegulasiList(updated);
+    persist(newsList, agendaList, packagesList, updated);
+  };
+
+  const updateRegulasi = (id: string, updated: Partial<RegulasiItem>) => {
+    const updatedList = regulasiList.map((item) => {
+      if (item.id === id) {
+        const next = { ...item, ...updated };
+        next.syncFrontend = next.status === 'Aktif';
+        return next;
+      }
+      return item;
+    });
+    setRegulasiList(updatedList);
+    persist(newsList, agendaList, packagesList, updatedList);
+  };
+
+  const deleteRegulasi = (id: string) => {
+    const updated = regulasiList.filter((item) => item.id !== id);
+    setRegulasiList(updated);
+    persist(newsList, agendaList, packagesList, updated);
+  };
+
+  const toggleRegulasiStatus = (id: string) => {
+    const updatedList = regulasiList.map((item) => {
+      if (item.id === id) {
+        const nextStatus: RegulasiItem['status'] = item.status === 'Aktif' ? 'Draft' : 'Aktif';
+        return {
+          ...item,
+          status: nextStatus,
+          syncFrontend: nextStatus === 'Aktif'
+        };
+      }
+      return item;
+    });
+    setRegulasiList(updatedList);
+    persist(newsList, agendaList, packagesList, updatedList);
+  };
+
+  // SOP ACTIONS
+  const addSop = (sop: Omit<SopItem, 'id' | 'syncFrontend'>) => {
+    const newEntry: SopItem = {
+      ...sop,
+      id: `SOP-${Date.now().toString().slice(-4)}`,
+      syncFrontend: sop.status === 'Berlaku'
+    };
+    const updated = [newEntry, ...sopList];
+    setSopList(updated);
+    persist(newsList, agendaList, packagesList, regulasiList, updated);
+  };
+
+  const updateSop = (id: string, updated: Partial<SopItem>) => {
+    const updatedList = sopList.map((item) => {
+      if (item.id === id) {
+        const next = { ...item, ...updated };
+        next.syncFrontend = next.status === 'Berlaku';
+        return next;
+      }
+      return item;
+    });
+    setSopList(updatedList);
+    persist(newsList, agendaList, packagesList, regulasiList, updatedList);
+  };
+
+  const deleteSop = (id: string) => {
+    const updated = sopList.filter((item) => item.id !== id);
+    setSopList(updated);
+    persist(newsList, agendaList, packagesList, regulasiList, updated);
+  };
+
   // SITE SETTINGS ACTIONS
   const updateSiteSettings = (settings: Partial<SiteSettings>) => {
     const updated = { ...siteSettings, ...settings };
     setSiteSettings(updated);
-    persist(newsList, agendaList, packagesList, updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
   };
 
   // RESET TO DEFAULT
@@ -434,8 +662,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setNewsList(DEFAULT_NEWS);
     setAgendaList(DEFAULT_AGENDAS);
     setPackagesList(DEFAULT_PACKAGES);
+    setRegulasiList(DEFAULT_REGULASI);
+    setSopList(DEFAULT_SOP);
     setSiteSettings(DEFAULT_SETTINGS);
-    persist(DEFAULT_NEWS, DEFAULT_AGENDAS, DEFAULT_PACKAGES, DEFAULT_SETTINGS);
+    persist(DEFAULT_NEWS, DEFAULT_AGENDAS, DEFAULT_PACKAGES, DEFAULT_REGULASI, DEFAULT_SOP, DEFAULT_SETTINGS);
   };
 
   return (
@@ -454,6 +684,15 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         addPackage,
         updatePackage,
         deletePackage,
+        regulasiList,
+        addRegulasi,
+        updateRegulasi,
+        deleteRegulasi,
+        toggleRegulasiStatus,
+        sopList,
+        addSop,
+        updateSop,
+        deleteSop,
         siteSettings,
         updateSiteSettings,
         resetToDefaults,

@@ -11,6 +11,7 @@ import {
   ChevronRight, Filter, BookOpen, ShieldCheck, 
   CheckCircle2, ArrowRight, ExternalLink, Scale
 } from 'lucide-react';
+import { useData } from '@/contexts/DataContext';
 
 type Regulation = {
   id: string;
@@ -23,107 +24,100 @@ type Regulation = {
   desc: string;
 };
 
-const categories = [
-  { id: 'all', label: 'Semua Regulasi', icon: <BookOpen className="w-4 h-4" />, count: 18 },
-  { id: 'uu', label: 'Undang-Undang', icon: <FileText className="w-4 h-4" />, count: 3 },
-  { id: 'pp', label: 'Peraturan Pemerintah', icon: <FileText className="w-4 h-4" />, count: 2 },
-  { id: 'perpres', label: 'Peraturan Presiden', icon: <FileText className="w-4 h-4" />, count: 4 },
-  { id: 'inpres', label: 'Keputusan / Instruksi Presiden', icon: <FileText className="w-4 h-4" />, count: 2 },
-  { id: 'permen', label: 'Peraturan Menteri / Lembaga', icon: <FileText className="w-4 h-4" />, count: 4 },
-  { id: 'kepmen', label: 'Keputusan Menteri / Lembaga', icon: <FileText className="w-4 h-4" />, count: 2 },
-  { id: 'se', label: 'Surat Edaran', icon: <FileText className="w-4 h-4" />, count: 3 },
-  { id: 'lain', label: 'Lain-Lain & Pedoman', icon: <FileText className="w-4 h-4" />, count: 2 },
-];
+const mapCategoryToId = (kategori: string): string => {
+  switch (kategori) {
+    case 'Undang-Undang': return 'uu';
+    case 'Peraturan Pemerintah': return 'pp';
+    case 'Peraturan Presiden': return 'perpres';
+    case 'Peraturan Menteri':
+    case 'Peraturan LKPP': return 'permen';
+    case 'Keputusan Menteri': return 'kepmen';
+    case 'Surat Edaran': return 'se';
+    default: return 'lain';
+  }
+};
 
-const regulations: Regulation[] = [
+const DEFAULT_STATIC_REGULATIONS: Regulation[] = [
   {
-    id: '1',
+    id: 'REG-STAT-1',
     category: 'uu',
     nomor: 'UU No. 03 Tahun 2014',
     title: 'Undang-Undang Nomor 03 Tahun 2014 tentang Perindustrian',
-    date: 'Jumat, 24 November 2023',
+    date: '24 November 2023',
     status: 'Berlaku',
     fileSize: '1.4 MB',
     desc: 'Mengatur mengenai penyelenggaraan perindustrian, standardisasi industri, dan pemanfaatan produk dalam negeri.'
   },
   {
-    id: '2',
+    id: 'REG-STAT-2',
     category: 'uu',
     nomor: 'UU No. 17 Tahun 2003',
     title: 'Undang-Undang Nomor 17 Tahun 2003 tentang Keuangan Negara',
-    date: 'Rabu, 01 November 2023',
+    date: '01 November 2023',
     status: 'Berlaku',
     fileSize: '980 KB',
     desc: 'Asas-asas umum pengelolaan keuangan negara dalam rangka mendukung terwujudnya tata kelola pemerintahan yang baik.'
   },
   {
-    id: '3',
-    category: 'uu',
-    nomor: 'UU No. 01 Tahun 2004',
-    title: 'Undang-Undang Nomor 01 Tahun 2004 tentang Perbendaharaan Negara',
-    date: 'Rabu, 01 November 2023',
-    status: 'Berlaku',
-    fileSize: '1.2 MB',
-    desc: 'Ketentuan mengenai pengelolaan dan pertanggungjawaban keuangan negara termasuk pelaksanaan pengadaan barang dan jasa.'
-  },
-  {
-    id: '4',
+    id: 'REG-STAT-3',
     category: 'perpres',
     nomor: 'Perpres No. 12 Tahun 2021',
     title: 'Peraturan Presiden Nomor 12 Tahun 2021 tentang Perubahan atas Perpres No. 16 Tahun 2018 tentang Pengadaan Barang/Jasa Pemerintah',
-    date: 'Senin, 15 Januari 2024',
+    date: '15 Januari 2024',
     status: 'Berlaku',
     fileSize: '2.8 MB',
     desc: 'Landasan hukum utama pelaksanaan pengadaan barang dan jasa pemerintah Republik Indonesia.'
   },
   {
-    id: '5',
-    category: 'perpres',
-    nomor: 'Perpres No. 16 Tahun 2018',
-    title: 'Peraturan Presiden Nomor 16 Tahun 2018 tentang Pengadaan Barang/Jasa Pemerintah',
-    date: 'Kamis, 10 Mei 2023',
-    status: 'Diubah',
-    fileSize: '3.1 MB',
-    desc: 'Pedoman pokok penyelenggaraan pengadaan barang dan jasa instansi pemerintah kementerian/lembaga.'
-  },
-  {
-    id: '6',
+    id: 'REG-STAT-4',
     category: 'pp',
     nomor: 'PP No. 29 Tahun 2018',
     title: 'Peraturan Pemerintah Nomor 29 Tahun 2018 tentang Pemberdayaan Industri',
-    date: 'Selasa, 12 Desember 2023',
+    date: '12 Desember 2023',
     status: 'Berlaku',
     fileSize: '1.7 MB',
     desc: 'Ketentuan tentang peningkatan penggunaan produk dalam negeri (P3DN) dan kewajiban TKDN dalam belanja pemerintah.'
-  },
-  {
-    id: '7',
-    category: 'permen',
-    nomor: 'Permenaker No. 05 Tahun 2023',
-    title: 'Peraturan Menteri Ketenagakerjaan tentang Pedoman Pengadaan Barang dan Jasa di Lingkungan Kemnaker',
-    date: 'Senin, 04 Maret 2024',
-    status: 'Berlaku',
-    fileSize: '1.5 MB',
-    desc: 'Petunjuk teknis dan tata kelola internal pelaksanaan PBJ khusus di unit kerja Kementerian Ketenagakerjaan.'
-  },
-  {
-    id: '8',
-    category: 'se',
-    nomor: 'SE Menaker No. 02/2024',
-    title: 'Surat Edaran Menteri Ketenagakerjaan tentang Percepatan Pelaksanaan Pengadaan Dini Tahun Anggaran 2026',
-    date: 'Jumat, 16 Februari 2024',
-    status: 'Berlaku',
-    fileSize: '650 KB',
-    desc: 'Instruksi percepatan tender dini untuk memastikan penyerapan anggaran yang efektif dan tepat sasaran.'
   }
 ];
 
 export default function PeraturanPage() {
+  const { regulasiList } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  // Merge dynamic regulations from backend context
+  const dynamicRegulations: Regulation[] = useMemo(() => {
+    if (!regulasiList || regulasiList.length === 0) return DEFAULT_STATIC_REGULATIONS;
+
+    const dynamicMapped: Regulation[] = regulasiList
+      .filter(item => item.status === 'Aktif')
+      .map(item => ({
+        id: item.id,
+        category: mapCategoryToId(item.kategori),
+        nomor: item.nomor,
+        title: item.nomor + ' - ' + item.tentang,
+        date: `Tahun ${item.tahun}`,
+        status: 'Berlaku',
+        fileSize: item.fileSize || '2.0 MB',
+        desc: item.tentang
+      }));
+
+    return [...dynamicMapped, ...DEFAULT_STATIC_REGULATIONS];
+  }, [regulasiList]);
+
+  const categories = useMemo(() => [
+    { id: 'all', label: 'Semua Regulasi', icon: <BookOpen className="w-4 h-4" />, count: dynamicRegulations.length },
+    { id: 'uu', label: 'Undang-Undang', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'uu').length },
+    { id: 'pp', label: 'Peraturan Pemerintah', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'pp').length },
+    { id: 'perpres', label: 'Peraturan Presiden', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'perpres').length },
+    { id: 'permen', label: 'Peraturan Menteri / Lembaga', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'permen').length },
+    { id: 'kepmen', label: 'Keputusan Menteri', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'kepmen').length },
+    { id: 'se', label: 'Surat Edaran', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'se').length },
+    { id: 'lain', label: 'Lain-Lain & Pedoman', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'lain').length },
+  ], [dynamicRegulations]);
+
   const filteredRegulations = useMemo(() => {
-    return regulations.filter(item => {
+    return dynamicRegulations.filter(item => {
       const matchCat = selectedCategory === 'all' || item.category === selectedCategory;
       const matchSearch = searchQuery.trim() === '' || 
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -131,7 +125,7 @@ export default function PeraturanPage() {
         item.desc.toLowerCase().includes(searchQuery.toLowerCase());
       return matchCat && matchSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [dynamicRegulations, selectedCategory, searchQuery]);
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">

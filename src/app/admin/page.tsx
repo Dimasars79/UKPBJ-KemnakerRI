@@ -35,16 +35,20 @@ import {
   Check,
   RefreshCw,
   Sun,
-  Moon
+  Moon,
+  ChevronDown,
+  ScrollText,
+  Layers
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useData, NewsItem, AgendaItem, ProcurementPackage } from '@/contexts/DataContext';
+import { useData, NewsItem, AgendaItem, ProcurementPackage, RegulasiItem, SopItem } from '@/contexts/DataContext';
 
 export default function AdminPortalPage() {
   const router = useRouter();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'arsitektur' | 'penyedia' | 'manage-berita' | 'manage-agenda' | 'regulasi' | 'laporan' | 'pengaturan'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'manage-berita' | 'manage-agenda' | 'manage-regulasi' | 'manage-sop' | 'arsitektur' | 'penyedia' | 'laporan' | 'pengaturan'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isCmsOpen, setIsCmsOpen] = useState(true);
   
   // DataContext Hook
   const {
@@ -60,6 +64,15 @@ export default function AdminPortalPage() {
     packagesList,
     addPackage,
     deletePackage,
+    regulasiList,
+    addRegulasi,
+    updateRegulasi,
+    deleteRegulasi,
+    toggleRegulasiStatus,
+    sopList,
+    addSop,
+    updateSop,
+    deleteSop,
     siteSettings,
     updateSiteSettings,
     resetToDefaults
@@ -111,6 +124,29 @@ export default function AdminPortalPage() {
     organizer: 'UKPBJ Kemnaker RI',
     capacity: '100 Peserta',
     status: 'Terjadwal'
+  });
+
+  // REGULASI & SOP MODAL STATES
+  const [showRegulasiModal, setShowRegulasiModal] = useState(false);
+  const [editingRegulasi, setEditingRegulasi] = useState<RegulasiItem | null>(null);
+  const [regulasiFormData, setRegulasiFormData] = useState<Partial<RegulasiItem>>({
+    nomor: '',
+    tentang: '',
+    tahun: '2026',
+    kategori: 'Peraturan Menteri',
+    fileSize: '2.5 MB',
+    status: 'Aktif'
+  });
+
+  const [showSopModal, setShowSopModal] = useState(false);
+  const [editingSop, setEditingSop] = useState<SopItem | null>(null);
+  const [sopFormData, setSopFormData] = useState<Partial<SopItem>>({
+    kode: 'SOP/PBJ/06/2026',
+    judul: '',
+    unit: 'UKPBJ Kemnaker RI',
+    revisi: 'Rev. 01 (2026)',
+    tahapanCount: 5,
+    status: 'Berlaku'
   });
 
   const [previewNews, setPreviewNews] = useState<NewsItem | null>(null);
@@ -182,6 +218,69 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus agenda ini? Data akan langsung terhapus dari kalender publik.')) {
       deleteAgenda(id);
       showNotification('Agenda telah dihapus dari sistem backend dan frontend.');
+    }
+  };
+
+  // REGULASI HANDLERS
+  const handleSaveRegulasi = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingRegulasi) {
+      updateRegulasi(editingRegulasi.id, regulasiFormData);
+      showNotification('✓ Regulasi berhasil diperbarui dan disinkronkan ke Frontend (/informasi/peraturan)!');
+    } else {
+      addRegulasi({
+        nomor: regulasiFormData.nomor || 'Permenaker No. 01 Tahun 2026',
+        tentang: regulasiFormData.tentang || 'Pedoman Teknis Pengadaan Barang/Jasa',
+        tahun: regulasiFormData.tahun || '2026',
+        kategori: (regulasiFormData.kategori as RegulasiItem['kategori']) || 'Peraturan Menteri',
+        fileSize: regulasiFormData.fileSize || '2.0 MB',
+        downloadUrl: '#',
+        status: (regulasiFormData.status as RegulasiItem['status']) || 'Aktif'
+      });
+      showNotification('✓ Regulasi baru berhasil ditambahkan dan langsung aktif di Frontend!');
+    }
+    setShowRegulasiModal(false);
+    setEditingRegulasi(null);
+  };
+
+  const handleDeleteRegulasi = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus regulasi ini? Data akan langsung terhapus dari portal publik.')) {
+      deleteRegulasi(id);
+      showNotification('Regulasi telah dihapus dari sistem.');
+    }
+  };
+
+  const handleToggleRegulasiStatus = (id: string) => {
+    toggleRegulasiStatus(id);
+    showNotification('Status regulasi berhasil diubah!');
+  };
+
+  // SOP HANDLERS
+  const handleSaveSop = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingSop) {
+      updateSop(editingSop.id, sopFormData);
+      showNotification('✓ SOP berhasil diperbarui dan disinkronkan ke Frontend (/informasi/sop)!');
+    } else {
+      addSop({
+        kode: sopFormData.kode || `SOP/PBJ/0${sopList.length + 1}/2026`,
+        judul: sopFormData.judul || 'Standar Operasional Prosedur Pengadaan',
+        unit: sopFormData.unit || 'UKPBJ Kemnaker RI',
+        revisi: sopFormData.revisi || 'Rev. 01 (2026)',
+        tahapanCount: sopFormData.tahapanCount || 5,
+        downloadUrl: '#',
+        status: (sopFormData.status as SopItem['status']) || 'Berlaku'
+      });
+      showNotification('✓ SOP baru berhasil ditambahkan ke daftar panduan operasional!');
+    }
+    setShowSopModal(false);
+    setEditingSop(null);
+  };
+
+  const handleDeleteSop = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus SOP ini?')) {
+      deleteSop(id);
+      showNotification('SOP telah dihapus dari sistem.');
     }
   };
 
@@ -261,124 +360,188 @@ export default function AdminPortalPage() {
           </div>
 
           {/* Nav Items */}
-          <nav className="p-3 space-y-1">
-            <button
-              onClick={() => setActiveTab('dashboard')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'dashboard'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              <span>Dashboard</span>
-            </button>
+          <nav className="p-3 space-y-4">
+            {/* GRUP 1: UTAMA */}
+            <div className="space-y-1">
+              <p className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                Utama
+              </p>
+              
+              <button
+                onClick={() => setActiveTab('dashboard')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'dashboard'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Dashboard</span>
+              </button>
 
-            <button
-              onClick={() => setActiveTab('paket')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'paket'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <Package className="w-4 h-4" />
-              <span>Paket Pengadaan</span>
-              <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-accent-gold text-slate-950 rounded-full font-extrabold">128</span>
-            </button>
+              <button
+                onClick={() => setActiveTab('paket')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'paket'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                }`}
+              >
+                <Package className="w-4 h-4" />
+                <span>Paket Pengadaan</span>
+                <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-accent-gold text-slate-950 rounded-full font-extrabold">{packagesList.length}</span>
+              </button>
+            </div>
 
-            {/* MANAGE BERITA */}
-            <button
-              onClick={() => setActiveTab('manage-berita')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'manage-berita'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <Newspaper className="w-4 h-4 text-amber-500" />
-              <span>Manage Berita</span>
-              <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded font-bold">
-                {newsList.length}
-              </span>
-            </button>
+            {/* GRUP 2: KELOLA WEB PUBLIK (CMS) - SIDE DOWN ACCORDION */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between px-3 py-1">
+                <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent-gold">
+                  Kelola Web Publik (CMS)
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setIsCmsOpen(!isCmsOpen)}
+                  className="p-1 text-slate-400 hover:text-accent-gold transition-colors cursor-pointer rounded-md"
+                  title="Buka/Tutup Menu Kelola Web"
+                >
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
+                </button>
+              </div>
 
-            {/* MANAGE AGENDA */}
-            <button
-              onClick={() => setActiveTab('manage-agenda')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'manage-agenda'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <Calendar className="w-4 h-4 text-emerald-500" />
-              <span>Manage Agenda</span>
-              <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded font-bold">
-                {agendaList.length}
-              </span>
-            </button>
+              {/* Side-Down Collapsible Submenu */}
+              <AnimatePresence initial={false}>
+                {isCmsOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden space-y-1 pl-1.5 border-l-2 border-accent-gold/30 ml-2"
+                  >
+                    {/* Berita */}
+                    <button
+                      onClick={() => setActiveTab('manage-berita')}
+                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'manage-berita'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                      }`}
+                    >
+                      <Newspaper className="w-3.5 h-3.5 text-amber-500" />
+                      <span>Berita & Pengumuman</span>
+                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-amber-500/20 text-amber-500 dark:text-amber-400 rounded font-bold">
+                        {newsList.length}
+                      </span>
+                    </button>
 
-            <button
-              onClick={() => setActiveTab('arsitektur')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'arsitektur'
-                  ? 'bg-gradient-to-r from-accent-gold to-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/20'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <Network className="w-4 h-4" />
-              <span>Arsitektur Portal</span>
-              <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-blue-500/20 text-blue-600 dark:text-blue-300 rounded font-bold">5-Tier</span>
-            </button>
+                    {/* Agenda */}
+                    <button
+                      onClick={() => setActiveTab('manage-agenda')}
+                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'manage-agenda'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                      }`}
+                    >
+                      <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+                      <span>Agenda & Jadwal</span>
+                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 rounded font-bold">
+                        {agendaList.length}
+                      </span>
+                    </button>
 
-            <button
-              onClick={() => setActiveTab('penyedia')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'penyedia'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              <span>Vendor / Penyedia</span>
-            </button>
+                    {/* Regulasi */}
+                    <button
+                      onClick={() => setActiveTab('manage-regulasi')}
+                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'manage-regulasi'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                      }`}
+                    >
+                      <ScrollText className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Regulasi & Aturan</span>
+                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-blue-500/20 text-blue-400 rounded font-bold">
+                        {regulasiList.length}
+                      </span>
+                    </button>
 
-            <button
-              onClick={() => setActiveTab('regulasi')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'regulasi'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              <span>Regulasi & SOP</span>
-            </button>
+                    {/* SOP */}
+                    <button
+                      onClick={() => setActiveTab('manage-sop')}
+                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'manage-sop'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                      }`}
+                    >
+                      <Layers className="w-3.5 h-3.5 text-purple-400" />
+                      <span>Standar SOP</span>
+                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-purple-500/20 text-purple-400 rounded font-bold">
+                        {sopList.length}
+                      </span>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-            <button
-              onClick={() => setActiveTab('laporan')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'laporan'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <BarChart3 className="w-4 h-4" />
-              <span>Laporan & Kinerja</span>
-            </button>
+            {/* GRUP 3: SISTEM & BLUEPRINT */}
+            <div className="space-y-1">
+              <p className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                Sistem & Blueprint
+              </p>
 
-            <button
-              onClick={() => setActiveTab('pengaturan')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'pengaturan'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
-              }`}
-            >
-              <Settings className="w-4 h-4" />
-              <span>Pengaturan</span>
-            </button>
+              <button
+                onClick={() => setActiveTab('arsitektur')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'arsitektur'
+                    ? 'bg-gradient-to-r from-accent-gold to-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/20'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                }`}
+              >
+                <Network className="w-4 h-4" />
+                <span>Arsitektur Portal</span>
+                <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-blue-500/20 text-blue-600 dark:text-blue-300 rounded font-bold">5-Tier</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('penyedia')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'penyedia'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                }`}
+              >
+                <Users className="w-4 h-4" />
+                <span>Vendor / Penyedia</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('laporan')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'laporan'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                }`}
+              >
+                <BarChart3 className="w-4 h-4" />
+                <span>Laporan & Kinerja</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('pengaturan')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'pengaturan'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+                <span>Pengaturan</span>
+              </button>
+            </div>
           </nav>
         </div>
 
@@ -1460,35 +1623,256 @@ export default function AdminPortalPage() {
         )}
 
         {/* ========================================================= */}
-        {/* TAB 7: REGULASI & SOP */}
+        {/* TAB: MANAGE REGULASI (CMS) */}
         {/* ========================================================= */}
-        {activeTab === 'regulasi' && (
-          <div className="p-6 md:p-8 space-y-4">
-            <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Regulasi & Standar Operasional Prosedur (SOP)
-            </h2>
-            <p className="text-xs text-slate-400">Dokumen dan berita resmi kebijakan pengadaan barang/jasa Kementerian Ketenagakerjaan.</p>
-            
-            <div className="space-y-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className={`p-4 rounded-xl border flex justify-between items-center ${
-                  isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+        {activeTab === 'manage-regulasi' && (
+          <div className="p-6 md:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-xs font-bold uppercase mb-2">
+                  <ScrollText className="w-3.5 h-3.5" />
+                  <span>Backend Regulation & Legal CMS</span>
+                </div>
+                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Manage Regulasi & Aturan PBJ
+                </h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Kelola dokumen hukum dan peraturan resmi. Perubahan akan langsung disinkronkan ke halaman publik (<Link href="/informasi/peraturan" className="text-blue-500 hover:underline">/informasi/peraturan</Link>).
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setEditingRegulasi(null);
+                    setRegulasiFormData({
+                      nomor: '',
+                      tentang: '',
+                      tahun: '2026',
+                      kategori: 'Peraturan Menteri',
+                      fileSize: '2.5 MB',
+                      status: 'Aktif'
+                    });
+                    setShowRegulasiModal(true);
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Tambah Regulasi Baru</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Regulasi Table */}
+            <div className={`border rounded-2xl overflow-hidden ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
+              <div className={`p-4 border-b flex justify-between items-center text-xs ${
+                isDark ? 'border-slate-800' : 'border-slate-200'
+              }`}>
+                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  Daftar Regulasi Aktif ({regulasiList.length})
+                </span>
+                <span className="text-emerald-500 text-[11px] font-semibold flex items-center gap-1.5">
+                  <RefreshCw className="w-3 h-3 animate-spin" />
+                  <span>Live Dynamic Sync to Frontend</span>
+                </span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className={`text-[11px] border-b ${
+                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-500 border-slate-200'
+                  }`}>
+                    <tr>
+                      <th className="p-4 font-semibold">Nomor & Judul Regulasi</th>
+                      <th className="p-4 font-semibold">Kategori</th>
+                      <th className="p-4 font-semibold">Tahun</th>
+                      <th className="p-4 font-semibold">Ukuran File</th>
+                      <th className="p-4 font-semibold">Status</th>
+                      <th className="p-4 font-semibold text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody className={`divide-y ${
+                    isDark ? 'divide-slate-800/60' : 'divide-slate-100'
+                  }`}>
+                    {regulasiList.map((item) => (
+                      <tr key={item.id} className={`transition-colors ${
+                        isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
+                      }`}>
+                        <td className="p-4">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+                              <FileText className="w-4 h-4" />
+                            </div>
+                            <div className="min-w-0 max-w-md">
+                              <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.nomor}</p>
+                              <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">{item.tentang}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                            {item.kategori}
+                          </span>
+                        </td>
+                        <td className={`p-4 font-mono font-bold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                          {item.tahun}
+                        </td>
+                        <td className="p-4 text-slate-400 font-mono text-[11px]">
+                          {item.fileSize}
+                        </td>
+                        <td className="p-4">
+                          <button
+                            onClick={() => handleToggleRegulasiStatus(item.id)}
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer ${
+                              item.status === 'Aktif'
+                                ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30 hover:bg-emerald-500/20'
+                                : 'bg-amber-500/10 text-amber-500 border-amber-500/30 hover:bg-amber-500/20'
+                            }`}
+                          >
+                            {item.status === 'Aktif' ? '✓ Aktif (Live)' : 'Draft (Hidden)'}
+                          </button>
+                        </td>
+                        <td className="p-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => {
+                                setEditingRegulasi(item);
+                                setRegulasiFormData(item);
+                                setShowRegulasiModal(true);
+                              }}
+                              title="Edit Regulasi"
+                              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                                isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-600 hover:text-white'
+                              }`}
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteRegulasi(item.id)}
+                              title="Hapus Regulasi"
+                              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                                isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-600 hover:text-white'
+                              }`}
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB: MANAGE SOP (CMS) */}
+        {/* ========================================================= */}
+        {activeTab === 'manage-sop' && (
+          <div className="p-6 md:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-500 text-xs font-bold uppercase mb-2">
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Backend Standard Operating Procedures CMS</span>
+                </div>
+                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Manage Standar Operasional Prosedur (SOP)
+                </h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Kelola dokumen dan panduan alur tahapan operasional. Tersinkronisasi ke portal publik (<Link href="/informasi/sop" className="text-purple-500 hover:underline">/informasi/sop</Link>).
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setEditingSop(null);
+                    setSopFormData({
+                      kode: `SOP/PBJ/0${sopList.length + 1}/2026`,
+                      judul: '',
+                      unit: 'UKPBJ Kemnaker RI',
+                      revisi: 'Rev. 01 (2026)',
+                      tahapanCount: 5,
+                      status: 'Berlaku'
+                    });
+                    setShowSopModal(true);
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-purple-600/30 transition-all cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Tambah SOP Baru</span>
+                </button>
+              </div>
+            </div>
+
+            {/* SOP Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {sopList.map((item) => (
+                <div key={item.id} className={`p-5 rounded-2xl border transition-all space-y-3 ${
+                  isDark ? 'bg-slate-900 border-slate-800 hover:border-purple-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-purple-500/40'
                 }`}>
-                  <div className="flex items-center space-x-3">
-                    <FileText className="w-5 h-5 text-accent-gold" />
-                    <div>
-                      <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        Peraturan Menteri Ketenagakerjaan No. {i} Tahun 2026
-                      </h4>
-                      <p className="text-[10px] text-slate-400">Petunjuk teknis pengadaan dan tata cara pemilihan penyedia.</p>
+                  <div className="flex justify-between items-start">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-500 border border-purple-500/20">
+                      {item.kode}
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                      {item.status}
+                    </span>
+                  </div>
+
+                  <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.judul}</h3>
+
+                  <div className="space-y-1.5 text-xs text-slate-400">
+                    <div className="flex items-center justify-between">
+                      <span>Satuan Kerja / Unit:</span>
+                      <strong className={isDark ? 'text-slate-200' : 'text-slate-700'}>{item.unit}</strong>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Versi Dokumen:</span>
+                      <span className="font-semibold text-accent-gold">{item.revisi}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Jumlah Tahapan Prosedur:</span>
+                      <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 font-bold">{item.tahapanCount} Langkah</span>
                     </div>
                   </div>
-                  <button className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors ${
-                    isDark ? 'bg-slate-800 hover:bg-blue-600 text-white' : 'bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700'
+
+                  <div className={`pt-3 border-t flex justify-between items-center ${
+                    isDark ? 'border-slate-800' : 'border-slate-100'
                   }`}>
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Unduh PDF</span>
-                  </button>
+                    <span className="text-[10px] text-emerald-500 font-semibold flex items-center gap-1">
+                      <Check className="w-3 h-3" />
+                      <span>Synced to /informasi/sop</span>
+                    </span>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          setEditingSop(item);
+                          setSopFormData(item);
+                          setShowSopModal(true);
+                        }}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          isDark ? 'bg-slate-800 hover:bg-purple-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-purple-600 text-slate-700 hover:text-white'
+                        }`}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteSop(item.id)}
+                        className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
+                          isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                        }`}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -2303,6 +2687,293 @@ export default function AdminPortalPage() {
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* MODAL 6: REGULASI MODAL (TAMBAH / EDIT) */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showRegulasiModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+              }`}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <ScrollText className="w-5 h-5 text-blue-500" />
+                  <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {editingRegulasi ? 'Edit Regulasi / Peraturan' : 'Tambah Regulasi Baru (CMS)'}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setShowRegulasiModal(false)}
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveRegulasi} className="space-y-4 text-xs">
+                <div>
+                  <label className="font-bold block mb-1">Nomor Peraturan / Surat *</label>
+                  <input
+                    type="text"
+                    required
+                    value={regulasiFormData.nomor || ''}
+                    onChange={(e) => setRegulasiFormData({ ...regulasiFormData, nomor: e.target.value })}
+                    placeholder="e.g. Permenaker No. 05 Tahun 2026"
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                    }`}
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold block mb-1">Judul / Tentang Regulasi *</label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={regulasiFormData.tentang || ''}
+                    onChange={(e) => setRegulasiFormData({ ...regulasiFormData, tentang: e.target.value })}
+                    placeholder="e.g. Pedoman Pelaksanaan Pengadaan Barang dan Jasa Pemerintah Lingkungan Kemnaker..."
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Kategori Dokumen</label>
+                    <select
+                      value={regulasiFormData.kategori || 'Peraturan Menteri'}
+                      onChange={(e) => setRegulasiFormData({ ...regulasiFormData, kategori: e.target.value as RegulasiItem['kategori'] })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
+                      }`}
+                    >
+                      <option value="Peraturan Menteri">Peraturan Menteri</option>
+                      <option value="Peraturan LKPP">Peraturan LKPP</option>
+                      <option value="Keputusan Menteri">Keputusan Menteri</option>
+                      <option value="Surat Edaran">Surat Edaran</option>
+                      <option value="Undang-Undang">Undang-Undang</option>
+                      <option value="Peraturan Pemerintah">Peraturan Pemerintah</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Tahun Penerbitan *</label>
+                    <input
+                      type="text"
+                      required
+                      value={regulasiFormData.tahun || '2026'}
+                      onChange={(e) => setRegulasiFormData({ ...regulasiFormData, tahun: e.target.value })}
+                      placeholder="e.g. 2026"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Estimasi Ukuran File (PDF)</label>
+                    <input
+                      type="text"
+                      value={regulasiFormData.fileSize || '2.5 MB'}
+                      onChange={(e) => setRegulasiFormData({ ...regulasiFormData, fileSize: e.target.value })}
+                      placeholder="e.g. 2.5 MB"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Status Dokumen</label>
+                    <select
+                      value={regulasiFormData.status || 'Aktif'}
+                      onChange={(e) => setRegulasiFormData({ ...regulasiFormData, status: e.target.value as RegulasiItem['status'] })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
+                      }`}
+                    >
+                      <option value="Aktif">Aktif (Live di Portal Publik)</option>
+                      <option value="Draft">Draft (Disembunyikan)</option>
+                      <option value="Dicabut">Dicabut (Tidak Berlaku)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setShowRegulasiModal(false)}
+                    className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                    }`}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-600/30 cursor-pointer"
+                  >
+                    {editingRegulasi ? 'Perbarui Regulasi' : 'Publikasikan Regulasi'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* MODAL 7: SOP MODAL (TAMBAH / EDIT) */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showSopModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+              }`}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-purple-500" />
+                  <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {editingSop ? 'Edit Standar Operasional (SOP)' : 'Tambah SOP Baru (CMS)'}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setShowSopModal(false)}
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveSop} className="space-y-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Kode Dokumen SOP *</label>
+                    <input
+                      type="text"
+                      required
+                      value={sopFormData.kode || ''}
+                      onChange={(e) => setSopFormData({ ...sopFormData, kode: e.target.value })}
+                      placeholder="e.g. SOP/PBJ/06/2026"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none font-mono ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-purple-600'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Status Prosedur</label>
+                    <select
+                      value={sopFormData.status || 'Berlaku'}
+                      onChange={(e) => setSopFormData({ ...sopFormData, status: e.target.value as SopItem['status'] })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-purple-600'
+                      }`}
+                    >
+                      <option value="Berlaku">Berlaku (Live di Portal)</option>
+                      <option value="Dalam Revisi">Dalam Revisi</option>
+                      <option value="Draft">Draft Internal</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="font-bold block mb-1">Judul / Nama SOP *</label>
+                  <input
+                    type="text"
+                    required
+                    value={sopFormData.judul || ''}
+                    onChange={(e) => setSopFormData({ ...sopFormData, judul: e.target.value })}
+                    placeholder="e.g. SOP Penilaian Kinerja Penyedia & SIKaP"
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-purple-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Unit Pengampu *</label>
+                    <input
+                      type="text"
+                      required
+                      value={sopFormData.unit || 'UKPBJ Kemnaker RI'}
+                      onChange={(e) => setSopFormData({ ...sopFormData, unit: e.target.value })}
+                      placeholder="e.g. UKPBJ Kemnaker RI"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-purple-600'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Versi Revisi *</label>
+                    <input
+                      type="text"
+                      required
+                      value={sopFormData.revisi || 'Rev. 01 (2026)'}
+                      onChange={(e) => setSopFormData({ ...sopFormData, revisi: e.target.value })}
+                      placeholder="e.g. Rev. 02 (2026)"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-purple-600'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Jumlah Langkah</label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={sopFormData.tahapanCount || 5}
+                      onChange={(e) => setSopFormData({ ...sopFormData, tahapanCount: parseInt(e.target.value) || 5 })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-purple-600'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setShowSopModal(false)}
+                    className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                    }`}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-purple-600/30 cursor-pointer"
+                  >
+                    {editingSop ? 'Perbarui SOP' : 'Publikasikan SOP'}
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}
