@@ -7,84 +7,95 @@ import { useLanguage } from '@/contexts/LanguageContext';
 export function Footer() {
   const { t } = useLanguage();
   return (
-    <footer className="bg-primary-navy text-white pt-16 pb-8">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="relative z-30 w-full bg-[#061B30] text-white pt-16 pb-8 border-t border-slate-800 shadow-2xl mt-auto">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
 
           {/* Column 1: Identity */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center space-x-3 mb-6">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
-                <Image src="/logo.png" alt="Logo Kementerian" width={240} height={80} className="h-16 md:h-20 w-auto object-contain" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-lg leading-tight">UKPBJ</span>
-                <span className="text-secondary-soft text-sm font-medium">Kementerian Ketenagakerjaan</span>
+                <Image 
+                  src="/logo-ukpbj-kemnaker-putih.png" 
+                  alt="Logo UKPBJ Kemnaker RI" 
+                  width={220} 
+                  height={70} 
+                  className="h-12 md:h-14 w-auto object-contain" 
+                />
               </div>
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
+            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-md">
               {t('footer.desc')}
             </p>
-            <div className="space-y-3 text-sm text-slate-300">
+            <div className="space-y-2.5 text-xs sm:text-sm text-slate-300 pt-2">
               <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-secondary-soft flex-shrink-0 mt-0.5" />
-                <span>Gedung B Lantai 3, Jl. Jenderal Gatot Subroto Kav. 51, Jakarta.</span>
+                <MapPin className="w-4 h-4 text-accent-gold flex-shrink-0 mt-0.5" />
+                <span>Gedung B Lantai 3, Jl. Jenderal Gatot Subroto Kav. 51, Jakarta Selatan.</span>
               </div>
               <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-secondary-soft flex-shrink-0" />
+                <Phone className="w-4 h-4 text-accent-gold flex-shrink-0" />
                 <span>021-52921236</span>
               </div>
               <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-secondary-soft flex-shrink-0" />
-                <span>ukpbj@kemnaker.go.id</span>
+                <Mail className="w-4 h-4 text-accent-gold flex-shrink-0" />
+                <a href="mailto:ukpbj@kemnaker.go.id" className="hover:text-accent-gold transition-colors">ukpbj@kemnaker.go.id</a>
               </div>
             </div>
           </div>
 
           {/* Column 2: Layanan */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-white">{t('footer.services')}</h3>
-            <ul className="space-y-3 text-sm text-slate-300">
-              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">LPSE</Link></li>
-              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Pengaduan</Link></li>
-              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Permintaan Informasi</Link></li>
-              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Bimbingan Teknis</Link></li>
-              <li><Link href="/#layanan" className="hover:text-secondary-soft transition-colors">Clearing House</Link></li>
+            <h3 className="font-bold text-sm sm:text-base mb-4 text-white tracking-wide border-b border-slate-700/80 pb-2 inline-block">
+              {t('footer.services')}
+            </h3>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
+              <li><Link href="/#pengadaan" className="hover:text-accent-gold transition-colors">Tender & Seleksi</Link></li>
+              <li><Link href="/layanan" className="hover:text-accent-gold transition-colors">LPSE Kemnaker</Link></li>
+              <li><Link href="/informasi/clearing-house" className="hover:text-accent-gold transition-colors">Clearing House PBJ</Link></li>
+              <li><Link href="/informasi/sertifikat-pbj" className="hover:text-accent-gold transition-colors">Sertifikasi & Bimtek</Link></li>
+              <li><Link href="/layanan" className="hover:text-accent-gold transition-colors">Layanan Pengaduan</Link></li>
             </ul>
           </div>
 
           {/* Column 3: Informasi */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-white">{t('footer.socials')}</h3>
-            <ul className="space-y-3 text-sm text-slate-300">
-              <li><Link href="/#profil" className="hover:text-secondary-soft transition-colors">Profil UKPBJ</Link></li>
-              <li><Link href="/#berita" className="hover:text-secondary-soft transition-colors">Berita Terkini</Link></li>
+            <h3 className="font-bold text-sm sm:text-base mb-4 text-white tracking-wide border-b border-slate-700/80 pb-2 inline-block">
+              {t('footer.socials')}
+            </h3>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
+              <li><Link href="/tentang" className="hover:text-accent-gold transition-colors">Profil UKPBJ</Link></li>
+              <li><Link href="/informasi" className="hover:text-accent-gold transition-colors">Berita & Informasi</Link></li>
+              <li><Link href="/agenda" className="hover:text-accent-gold transition-colors">Kalender Agenda</Link></li>
+              <li><Link href="/galeri" className="hover:text-accent-gold transition-colors">Galeri Dokumentasi</Link></li>
+              <li><Link href="/monitoring" className="hover:text-accent-gold transition-colors">Dashboard Monitoring</Link></li>
             </ul>
           </div>
 
-          {/* Column 4: Tautan */}
+          {/* Column 4: Tautan Terkait */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-white">{t('footer.links')}</h3>
-            <ul className="space-y-3 text-sm text-slate-300">
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>Kementerian Ketenagakerjaan</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>LKPP</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>INAPROC</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>SPSE Nasional</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
-              <li><Link href="#" className="hover:text-secondary-soft transition-colors flex items-center group"><span>E-Katalog</span><ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
+            <h3 className="font-bold text-sm sm:text-base mb-4 text-white tracking-wide border-b border-slate-700/80 pb-2 inline-block">
+              {t('footer.links')}
+            </h3>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
+              <li><a href="https://kemnaker.go.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group"><span>Kementerian Ketenagakerjaan</span><ExternalLink className="w-3 h-3 ml-1 opacity-60 group-hover:opacity-100" /></a></li>
+              <li><a href="https://lkpp.go.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group"><span>LKPP RI</span><ExternalLink className="w-3 h-3 ml-1 opacity-60 group-hover:opacity-100" /></a></li>
+              <li><a href="https://inaproc.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group"><span>INAPROC</span><ExternalLink className="w-3 h-3 ml-1 opacity-60 group-hover:opacity-100" /></a></li>
+              <li><a href="https://spse.kemnaker.go.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group"><span>SPSE Kemnaker</span><ExternalLink className="w-3 h-3 ml-1 opacity-60 group-hover:opacity-100" /></a></li>
+              <li><a href="https://e-katalog.lkpp.go.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group"><span>E-Katalog Nasional</span><ExternalLink className="w-3 h-3 ml-1 opacity-60 group-hover:opacity-100" /></a></li>
             </ul>
           </div>
 
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-700/50 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400">
-          <p className="mb-4 md:mb-0 text-center md:text-left">
+        <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+          <p className="text-center md:text-left">
             {t('footer.rights')}
           </p>
-          <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link href="#" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
-            <Link href="#" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>
-            <Link href="#" className="hover:text-white transition-colors">Peta Situs</Link>
+          <div className="flex space-x-6">
+            <Link href="#" className="hover:text-accent-gold transition-colors">Kebijakan Privasi</Link>
+            <Link href="#" className="hover:text-accent-gold transition-colors">Syarat & Ketentuan</Link>
+            <Link href="#" className="hover:text-accent-gold transition-colors">Peta Situs</Link>
           </div>
         </div>
       </div>
