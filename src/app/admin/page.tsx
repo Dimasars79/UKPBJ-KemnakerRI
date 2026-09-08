@@ -8,14 +8,12 @@ import {
   Package, 
   Network, 
   Users, 
-  Bell, 
   FileText, 
   BarChart3, 
   Settings, 
   LogOut, 
   Search, 
   CheckCircle2, 
-  Clock, 
   Download, 
   ChevronRight, 
   ArrowLeft, 
@@ -28,7 +26,15 @@ import {
   FileCheck, 
   Sparkles, 
   ExternalLink, 
-  Plus
+  Plus,
+  Newspaper,
+  Calendar,
+  Edit3,
+  Trash2,
+  Eye,
+  MapPin,
+  Check,
+  RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -43,10 +49,38 @@ interface PackageItem {
   desc: string;
 }
 
+interface NewsItem {
+  id: string;
+  title: string;
+  category: 'Berita PBJ' | 'Pengumuman Lelang' | 'Regulasi' | 'Siaran Pers';
+  author: string;
+  date: string;
+  views: number;
+  status: 'Published' | 'Draft' | 'Archived';
+  excerpt: string;
+  content: string;
+  syncFrontend: boolean;
+}
+
+interface AgendaItem {
+  id: string;
+  title: string;
+  category: 'Tender' | 'Sosialisasi' | 'Sertifikasi' | 'Bimtek' | 'Rapat';
+  date: string;
+  time: string;
+  location: string;
+  organizer: string;
+  capacity: string;
+  status: 'Terjadwal' | 'Berlangsung' | 'Selesai' | 'Dibatalkan';
+  syncFrontend: boolean;
+}
+
 export default function AdminPortalPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'arsitektur' | 'penyedia' | 'pengumuman' | 'regulasi' | 'laporan' | 'pengaturan'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'arsitektur' | 'penyedia' | 'manage-berita' | 'manage-agenda' | 'regulasi' | 'laporan' | 'pengaturan'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Package Modal State
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PackageItem | null>(null);
 
@@ -54,7 +88,245 @@ export default function AdminPortalPage() {
   const [wizardStep, setWizardStep] = useState(1);
   const [vendorSuccess, setVendorSuccess] = useState(false);
 
-  const packagesList = [
+  // NEWS MANAGEMENT STATE
+  const [newsList, setNewsList] = useState<NewsItem[]>([
+    {
+      id: 'NWS-001',
+      title: 'Sosialisasi Peraturan LKPP Nomor 12 Tahun 2024 tentang Tata Cara Pengadaan',
+      category: 'Regulasi',
+      author: 'Biro Hukum & Humas Kemnaker',
+      date: '10 Agu 2026',
+      views: 1420,
+      status: 'Published',
+      excerpt: 'Pedoman pelaksanaan pengadaan barang dan jasa pemerintah terbaru yang berlaku di seluruh unit kerja kementerian.',
+      content: 'Dalam rangka meningkatkan akuntabilitas dan efisiensi belanja negara, UKPBJ Kemnaker menyelenggarakan sosialisasi regulasi LKPP terbaru dengan standar digital SPSE terintegrasi.',
+      syncFrontend: true
+    },
+    {
+      id: 'NWS-002',
+      title: 'Pengumuman Penetapan Pemenang Tender Jasa Konsultan IT & Portal',
+      category: 'Pengumuman Lelang',
+      author: 'Pokja Pemilihan I UKPBJ',
+      date: '08 Agu 2026',
+      views: 2850,
+      status: 'Published',
+      excerpt: 'Hasil evaluasi kualifikasi administrasi, teknis, dan harga untuk paket pengembangan arsitektur portal kementerian.',
+      content: 'Berdasarkan berita acara hasil pemilihan, Pokja Pemilihan menetapkan penyedia terpilih setelah melalui masa sanggah tanpa keberatan.',
+      syncFrontend: true
+    },
+    {
+      id: 'NWS-003',
+      title: 'Workshop Peningkatan Penggunaan Produk Dalam Negeri (P3DN) & Sertifikasi TKDN',
+      category: 'Berita PBJ',
+      author: 'Pusat Pasar Kerja & PBJ',
+      date: '05 Agu 2026',
+      views: 940,
+      status: 'Published',
+      excerpt: 'Mendorong komitmen belanja kementerian untuk mencapai target minimal 40% produk ber-TKDN tinggi.',
+      content: 'Kegiatan ini diikuti oleh seluruh PPK dan Pejabat Pengadaan di lingkungan Kementerian Ketenagakerjaan seluruh Indonesia.',
+      syncFrontend: true
+    },
+    {
+      id: 'NWS-004',
+      title: 'Draf Rencana Pengadaan Peralatan Pelatihan Balai Vokasi Tahun 2027',
+      category: 'Siaran Pers',
+      author: 'Ditjen Binalavotas',
+      date: '02 Agu 2026',
+      views: 310,
+      status: 'Draft',
+      excerpt: 'Rancangan awal spesifikasi teknis dan analisis kebutuhan alat kerja laboratorium vokasi.',
+      content: 'Draft internal persiapan Rencana Umum Pengadaan (SiRUP) tahun anggaran mendatang.',
+      syncFrontend: false
+    }
+  ]);
+
+  // AGENDA MANAGEMENT STATE
+  const [agendaList, setAgendaList] = useState<AgendaItem[]>([
+    {
+      id: 'AGD-001',
+      title: 'Bimbingan Teknis Penerapan SIKaP V.3 bagi Penyedia Barang & Jasa',
+      category: 'Bimtek',
+      date: '15 Sep 2026',
+      time: '10:00 - 12:00 WIB',
+      location: 'Auditorium Gedung A Kemnaker & Zoom',
+      organizer: 'Biro Perencanaan & PBJ',
+      capacity: '200 Peserta',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-002',
+      title: 'Pemberian Penjelasan (Aanwijzing) Tender Pengadaan IT Server',
+      category: 'Tender',
+      date: '18 Sep 2026',
+      time: '09:00 - 11:30 WIB',
+      location: 'Ruang Rapat UKPBJ Lt. 4',
+      organizer: 'Pokja Pemilihan II',
+      capacity: 'Khusus Rekanan Terdaftar',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-003',
+      title: 'Ujian Sertifikasi PBJ Tingkat Dasar Batch IV',
+      category: 'Sertifikasi',
+      date: '22 Sep 2026',
+      time: '08:00 - 16:00 WIB',
+      location: 'Pusdiklat Kemnaker RI',
+      organizer: 'Pusat Pengembangan SDM PBJ',
+      capacity: '50 Peserta',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-004',
+      title: 'Rapat Koordinasi Evaluasi Realisasi Anggaran PBJ Kuartal III',
+      category: 'Rapat',
+      date: '28 Sep 2026',
+      time: '13:30 - 16:30 WIB',
+      location: 'Ruang Rapat Utama Menteri',
+      organizer: 'Sekretariat Jenderal Kemnaker',
+      capacity: 'Internal PPK & KPA',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-005',
+      title: 'Sosialisasi Tata Cara Pengajuan Clearing House PBJ',
+      category: 'Sosialisasi',
+      date: '02 Okt 2026',
+      time: '09:00 - 12:00 WIB',
+      location: 'Hybrid (Ruang Komisi & Live Stream)',
+      organizer: 'Inspektorat Jenderal & UKPBJ',
+      capacity: '300 Peserta',
+      status: 'Terjadwal',
+      syncFrontend: true
+    }
+  ]);
+
+  // Modals for CRUD News & Agenda
+  const [showNewsModal, setShowNewsModal] = useState(false);
+  const [editingNews, setEditingNews] = useState<NewsItem | null>(null);
+  const [newsFormData, setNewsFormData] = useState<Partial<NewsItem>>({
+    title: '',
+    category: 'Berita PBJ',
+    author: 'Admin UKPBJ Kemnaker',
+    status: 'Published',
+    excerpt: '',
+    content: ''
+  });
+
+  const [showAgendaModal, setShowAgendaModal] = useState(false);
+  const [editingAgenda, setEditingAgenda] = useState<AgendaItem | null>(null);
+  const [agendaFormData, setAgendaFormData] = useState<Partial<AgendaItem>>({
+    title: '',
+    category: 'Bimtek',
+    date: '15 Sep 2026',
+    time: '09:00 - 12:00 WIB',
+    location: 'Gedung Kemnaker RI',
+    organizer: 'UKPBJ Kemnaker RI',
+    capacity: 'Terbuka',
+    status: 'Terjadwal'
+  });
+
+  const [previewNews, setPreviewNews] = useState<NewsItem | null>(null);
+  const [notificationMsg, setNotificationMsg] = useState<string | null>(null);
+
+  const showNotification = (msg: string) => {
+    setNotificationMsg(msg);
+    setTimeout(() => setNotificationMsg(null), 3500);
+  };
+
+  // NEWS HANDLERS
+  const handleSaveNews = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingNews) {
+      setNewsList(prev => prev.map(item => item.id === editingNews.id ? {
+        ...item,
+        ...newsFormData,
+        syncFrontend: newsFormData.status === 'Published'
+      } as NewsItem : item));
+      showNotification('✓ Berita berhasil diperbarui dan disinkronisasi ke Frontend (/informasi)!');
+    } else {
+      const newEntry: NewsItem = {
+        id: `NWS-00${newsList.length + 1}`,
+        title: newsFormData.title || 'Judul Berita Baru',
+        category: (newsFormData.category as NewsItem['category']) || 'Berita PBJ',
+        author: newsFormData.author || 'Admin UKPBJ Kemnaker',
+        date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+        views: 1,
+        status: (newsFormData.status as NewsItem['status']) || 'Published',
+        excerpt: newsFormData.excerpt || '',
+        content: newsFormData.content || '',
+        syncFrontend: newsFormData.status === 'Published'
+      };
+      setNewsList([newEntry, ...newsList]);
+      showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Frontend!');
+    }
+    setShowNewsModal(false);
+    setEditingNews(null);
+  };
+
+  const handleDeleteNews = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus berita ini?')) {
+      setNewsList(prev => prev.filter(item => item.id !== id));
+      showNotification('Berita telah dihapus dari backend & frontend.');
+    }
+  };
+
+  const handleToggleNewsStatus = (id: string) => {
+    setNewsList(prev => prev.map(item => {
+      if (item.id === id) {
+        const nextStatus = item.status === 'Published' ? 'Draft' : 'Published';
+        return {
+          ...item,
+          status: nextStatus,
+          syncFrontend: nextStatus === 'Published'
+        };
+      }
+      return item;
+    }));
+    showNotification('Status publikasi berita berhasil diubah!');
+  };
+
+  // AGENDA HANDLERS
+  const handleSaveAgenda = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingAgenda) {
+      setAgendaList(prev => prev.map(item => item.id === editingAgenda.id ? {
+        ...item,
+        ...agendaFormData,
+        syncFrontend: true
+      } as AgendaItem : item));
+      showNotification('✓ Agenda berhasil diperbarui dan disinkronisasi ke Frontend (/agenda)!');
+    } else {
+      const newEntry: AgendaItem = {
+        id: `AGD-00${agendaList.length + 1}`,
+        title: agendaFormData.title || 'Agenda Baru',
+        category: (agendaFormData.category as AgendaItem['category']) || 'Bimtek',
+        date: agendaFormData.date || '15 Sep 2026',
+        time: agendaFormData.time || '09:00 - 12:00 WIB',
+        location: agendaFormData.location || 'Gedung Kemnaker RI',
+        organizer: agendaFormData.organizer || 'UKPBJ Kemnaker RI',
+        capacity: agendaFormData.capacity || '100 Peserta',
+        status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal',
+        syncFrontend: true
+      };
+      setAgendaList([newEntry, ...agendaList]);
+      showNotification('✓ Agenda baru berhasil ditambahkan ke kalender publik (/agenda)!');
+    }
+    setShowAgendaModal(false);
+    setEditingAgenda(null);
+  };
+
+  const handleDeleteAgenda = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus agenda ini?')) {
+      setAgendaList(prev => prev.filter(item => item.id !== id));
+      showNotification('Agenda telah dihapus dari sistem.');
+    }
+  };
+
+  const packagesList: PackageItem[] = [
     {
       id: 1,
       name: 'Pengadaan Jasa Konsultan IT & Portal Terpadu',
@@ -94,16 +366,6 @@ export default function AdminPortalPage() {
       deadline: '14 Agu 2026',
       unit: 'Pusdatin Kemnaker RI',
       desc: 'Lisensi tahunan piranti lunak firewall, monitoring jaringan, dan keamanan data SPSE.'
-    },
-    {
-      id: 5,
-      name: 'Penyusunan Pedoman Standar Operasional PBJ',
-      hps: 'Rp 120.000.000',
-      status: 'Seleksi',
-      date: '1 Agu 2026',
-      deadline: '10 Agu 2026',
-      unit: 'UKPBJ Kemnaker RI',
-      desc: 'Kajian dan penyusunan buku pedoman standar operasional prosedur pengadaan barang/jasa pemerintah.'
     }
   ];
 
@@ -112,8 +374,23 @@ export default function AdminPortalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col md:flex-row font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row font-sans">
       
+      {/* NOTIFICATION TOAST */}
+      <AnimatePresence>
+        {notificationMsg && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-5 right-5 z-50 bg-emerald-600 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2 border border-emerald-400/30 text-xs font-bold"
+          >
+            <Check className="w-4 h-4" />
+            <span>{notificationMsg}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* SIDEBAR NAVIGATION */}
       <aside className="w-full md:w-64 bg-slate-950 border-r border-slate-800/80 flex flex-col justify-between shrink-0">
         <div>
@@ -134,7 +411,7 @@ export default function AdminPortalPage() {
           <nav className="p-3 space-y-1">
             <button
               onClick={() => setActiveTab('dashboard')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'dashboard'
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -146,7 +423,7 @@ export default function AdminPortalPage() {
 
             <button
               onClick={() => setActiveTab('paket')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'paket'
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -157,9 +434,41 @@ export default function AdminPortalPage() {
               <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-accent-gold text-slate-950 rounded-full font-extrabold">128</span>
             </button>
 
+            {/* MANAGE BERITA (NEW) */}
+            <button
+              onClick={() => setActiveTab('manage-berita')}
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'manage-berita'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              }`}
+            >
+              <Newspaper className="w-4 h-4 text-amber-400" />
+              <span>Manage Berita</span>
+              <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-emerald-500/20 text-emerald-400 rounded font-bold">
+                {newsList.length}
+              </span>
+            </button>
+
+            {/* MANAGE AGENDA (NEW) */}
+            <button
+              onClick={() => setActiveTab('manage-agenda')}
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'manage-agenda'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              }`}
+            >
+              <Calendar className="w-4 h-4 text-emerald-400" />
+              <span>Manage Agenda</span>
+              <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-emerald-500/20 text-emerald-400 rounded font-bold">
+                {agendaList.length}
+              </span>
+            </button>
+
             <button
               onClick={() => setActiveTab('arsitektur')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'arsitektur'
                   ? 'bg-gradient-to-r from-accent-gold to-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/20'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -172,7 +481,7 @@ export default function AdminPortalPage() {
 
             <button
               onClick={() => setActiveTab('penyedia')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'penyedia'
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -183,20 +492,8 @@ export default function AdminPortalPage() {
             </button>
 
             <button
-              onClick={() => setActiveTab('pengumuman')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                activeTab === 'pengumuman'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
-              }`}
-            >
-              <Bell className="w-4 h-4" />
-              <span>Pengumuman</span>
-            </button>
-
-            <button
               onClick={() => setActiveTab('regulasi')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'regulasi'
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -208,7 +505,7 @@ export default function AdminPortalPage() {
 
             <button
               onClick={() => setActiveTab('laporan')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'laporan'
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -220,7 +517,7 @@ export default function AdminPortalPage() {
 
             <button
               onClick={() => setActiveTab('pengaturan')}
-              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'pengaturan'
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -274,7 +571,7 @@ export default function AdminPortalPage() {
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="text"
-                placeholder="Cari di portal admin..."
+                placeholder="Cari berita, agenda, paket..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-4 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all"
@@ -282,7 +579,7 @@ export default function AdminPortalPage() {
             </div>
             <div className="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>SPSE Server Online</span>
+              <span>Backend & Database Ready</span>
             </div>
           </div>
 
@@ -292,27 +589,22 @@ export default function AdminPortalPage() {
               className="hidden lg:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-accent-gold/10 border border-accent-gold/30 text-accent-gold hover:bg-accent-gold/20 text-xs font-bold transition-all cursor-pointer"
             >
               <Network className="w-3.5 h-3.5" />
-              <span>Lihat Blueprint Arsitektur</span>
+              <span>Blueprint Arsitektur</span>
             </button>
-
-            <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 relative">
-              <Bell className="w-4 h-4" />
-              <span className="w-2 h-2 rounded-full bg-red-500 absolute top-1.5 right-1.5" />
-            </div>
           </div>
         </header>
 
+        {/* ========================================================= */}
         {/* TAB 1: DASHBOARD UTAMA */}
+        {/* ========================================================= */}
         {activeTab === 'dashboard' && (
           <div className="p-6 md:p-8 space-y-8">
-            
-            {/* Greeting */}
             <div>
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <span>Dashboard</span>
+                <span>Dashboard Admin</span>
               </h2>
               <p className="text-slate-400 text-xs mt-1">
-                Selamat datang, <strong className="text-white">Dimas Ars 👋</strong> — Berikut adalah ringkasan aktivitas pengadaan hari ini.
+                Selamat datang, <strong className="text-white">Dimas Ars 👋</strong> — Monitoring pengelolaan pengadaan, berita, dan agenda terkini.
               </p>
             </div>
 
@@ -320,7 +612,7 @@ export default function AdminPortalPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
                 <div className="flex justify-between items-center mb-3">
-                  <span className="text-xs font-semibold text-slate-400">Total Paket</span>
+                  <span className="text-xs font-semibold text-slate-400">Total Paket PBJ</span>
                   <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
                     <Package className="w-4 h-4" />
                   </div>
@@ -333,136 +625,110 @@ export default function AdminPortalPage() {
 
               <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
                 <div className="flex justify-between items-center mb-3">
-                  <span className="text-xs font-semibold text-slate-400">Sedang Berjalan</span>
+                  <span className="text-xs font-semibold text-slate-400">Berita Published</span>
                   <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
-                    <Clock className="w-4 h-4" />
+                    <Newspaper className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-3xl font-extrabold text-white">48</p>
+                <p className="text-3xl font-extrabold text-white">{newsList.filter(n => n.status === 'Published').length}</p>
                 <p className="text-[10px] text-emerald-400 font-bold mt-2 flex items-center gap-1">
-                  <span>↑ 8% dari bulan lalu</span>
+                  <span>Terkoneksi Frontend (/informasi)</span>
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
                 <div className="flex justify-between items-center mb-3">
-                  <span className="text-xs font-semibold text-slate-400">Selesai</span>
+                  <span className="text-xs font-semibold text-slate-400">Agenda Terjadwal</span>
                   <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                    <CheckCircle2 className="w-4 h-4" />
+                    <Calendar className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-3xl font-extrabold text-white">72</p>
+                <p className="text-3xl font-extrabold text-white">{agendaList.length}</p>
                 <p className="text-[10px] text-emerald-400 font-bold mt-2 flex items-center gap-1">
-                  <span>↑ 15% dari bulan lalu</span>
+                  <span>Terkoneksi Kalender (/agenda)</span>
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
                 <div className="flex justify-between items-center mb-3">
-                  <span className="text-xs font-semibold text-slate-400">Penyedia Terdaftar</span>
+                  <span className="text-xs font-semibold text-slate-400">Penyedia Terverifikasi</span>
                   <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
                     <Users className="w-4 h-4" />
                   </div>
                 </div>
                 <p className="text-3xl font-extrabold text-white">342</p>
                 <p className="text-[10px] text-emerald-400 font-bold mt-2 flex items-center gap-1">
-                  <span>↑ 5% dari bulan lalu</span>
+                  <span>SiKAP LKPP Sinkron</span>
                 </p>
               </div>
             </div>
 
-            {/* 2-Column Section: Paket Pengadaan Terbaru & Berita/Pengumuman */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Quick Actions & Recent Overview */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
-              {/* Left 2 Cols: Paket Pengadaan Terbaru Table */}
-              <div className="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-5">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-sm font-bold text-white">Paket Pengadaan Terbaru</h3>
+              {/* Left: Berita Terkini Quick Monitor */}
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Newspaper className="w-4 h-4 text-amber-400" />
+                    <h3 className="text-sm font-bold text-white">Monitoring Berita & Pengumuman</h3>
+                  </div>
                   <button 
-                    onClick={() => setActiveTab('paket')}
-                    className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1"
+                    onClick={() => setActiveTab('manage-berita')}
+                    className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 cursor-pointer"
                   >
-                    <span>Lihat Semua</span>
+                    <span>Buka Editor Berita</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead>
-                      <tr className="border-b border-slate-800 text-slate-400 text-[11px]">
-                        <th className="pb-3 font-semibold">No</th>
-                        <th className="pb-3 font-semibold">Nama Paket</th>
-                        <th className="pb-3 font-semibold">Nilai HPS</th>
-                        <th className="pb-3 font-semibold">Status</th>
-                        <th className="pb-3 font-semibold">Tanggal</th>
-                        <th className="pb-3 font-semibold text-right">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800/60">
-                      {packagesList.map((item, idx) => (
-                        <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-3 text-slate-500">{idx + 1}</td>
-                          <td className="py-3 font-semibold text-slate-200">{item.name}</td>
-                          <td className="py-3 text-slate-300 font-mono">{item.hps}</td>
-                          <td className="py-3">
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                              item.status === 'Tender' 
-                                ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' 
-                                : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                            }`}>
-                              {item.status}
-                            </span>
-                          </td>
-                          <td className="py-3 text-slate-400 text-[11px]">{item.date}</td>
-                          <td className="py-3 text-right">
-                            <button
-                              onClick={() => {
-                                setSelectedPackage(item);
-                                setShowDetailModal(true);
-                              }}
-                              className="px-2 py-1 rounded bg-slate-800 hover:bg-blue-600 hover:text-white text-slate-300 text-[10px] font-bold transition-colors"
-                            >
-                              Detail
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="space-y-2.5">
+                  {newsList.slice(0, 3).map((item) => (
+                    <div key={item.id} className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 flex justify-between items-center">
+                      <div className="min-w-0 pr-3">
+                        <p className="text-xs font-bold text-white truncate">{item.title}</p>
+                        <p className="text-[10px] text-slate-400 mt-0.5">{item.category} • {item.author}</p>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold shrink-0 ${
+                        item.status === 'Published' 
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                          : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                      }`}>
+                        {item.status}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Right 1 Col: Berita & Pengumuman */}
+              {/* Right: Agenda Terkini Quick Monitor */}
               <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-sm font-bold text-white">Berita & Pengumuman</h3>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-emerald-400" />
+                    <h3 className="text-sm font-bold text-white">Monitoring Agenda & Bimtek</h3>
+                  </div>
                   <button 
-                    onClick={() => setActiveTab('pengumuman')}
-                    className="text-xs text-blue-400 hover:text-blue-300 font-semibold"
+                    onClick={() => setActiveTab('manage-agenda')}
+                    className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 cursor-pointer"
                   >
-                    Lihat Semua &rarr;
+                    <span>Buka Kelola Agenda</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 hover:border-slate-700 transition-colors">
-                    <p className="text-xs font-bold text-white">Sosialisasi Peraturan LKPP No. 12 Tahun 2024</p>
-                    <p className="text-[10px] text-slate-400 mt-1">Pedoman pelaksanaan pengadaan barang/jasa pemerintah terkini.</p>
-                    <span className="text-[9px] text-slate-500 mt-2 block">10 Agu 2026</span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 hover:border-slate-700 transition-colors">
-                    <p className="text-xs font-bold text-white">Pengumuman Pemenang Tender Konsultan IT</p>
-                    <p className="text-[10px] text-slate-400 mt-1">Hasil evaluasi kualifikasi dan penetapan pemenang paket IT.</p>
-                    <span className="text-[9px] text-slate-500 mt-2 block">8 Agu 2026</span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 hover:border-slate-700 transition-colors">
-                    <p className="text-xs font-bold text-white">Revisi Jadwal Tender Peralatan Kantor</p>
-                    <p className="text-[10px] text-slate-400 mt-1">Perpanjangan masa sanggah dan upload penawaran teknis.</p>
-                    <span className="text-[9px] text-slate-500 mt-2 block">6 Agu 2026</span>
-                  </div>
+                <div className="space-y-2.5">
+                  {agendaList.slice(0, 3).map((item) => (
+                    <div key={item.id} className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 flex justify-between items-center">
+                      <div className="min-w-0 pr-3">
+                        <p className="text-xs font-bold text-white truncate">{item.title}</p>
+                        <p className="text-[10px] text-slate-400 mt-0.5">{item.date} • {item.location}</p>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
+                        {item.category}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -471,10 +737,249 @@ export default function AdminPortalPage() {
           </div>
         )}
 
-        {/* TAB 2: ARSITEKTUR PORTAL (5-TIER SYSTEM ARCHITECTURE BLUEPRINT) */}
+        {/* ========================================================= */}
+        {/* TAB 2: MANAGE BERITA (FRONTEND <-> BACKEND HANDLER) */}
+        {/* ========================================================= */}
+        {activeTab === 'manage-berita' && (
+          <div className="p-6 md:p-8 space-y-6">
+            
+            {/* Header with Backend Sync Status */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold uppercase mb-2">
+                  <Newspaper className="w-3.5 h-3.5" />
+                  <span>Backend Content Management System (CMS)</span>
+                </div>
+                <h2 className="text-2xl font-extrabold text-white">Manage Berita & Pengumuman</h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Kelola konten berita dari backend untuk otomatis tampil secara real-time pada halaman publik (<Link href="/informasi" className="text-blue-400 hover:underline">/informasi</Link>).
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setEditingNews(null);
+                    setNewsFormData({
+                      title: '',
+                      category: 'Berita PBJ',
+                      author: 'Admin UKPBJ Kemnaker',
+                      status: 'Published',
+                      excerpt: '',
+                      content: ''
+                    });
+                    setShowNewsModal(true);
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Buat Berita Baru</span>
+                </button>
+              </div>
+            </div>
+
+            {/* News Table */}
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+              <div className="p-4 border-b border-slate-800 flex justify-between items-center text-xs">
+                <span className="font-bold text-slate-300">Daftar Berita Aktif ({newsList.length})</span>
+                <span className="text-emerald-400 text-[11px] font-semibold flex items-center gap-1.5">
+                  <RefreshCw className="w-3 h-3 animate-spin" />
+                  <span>Auto-Sync to Frontend Active</span>
+                </span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-950/50 text-slate-400 text-[11px] border-b border-slate-800">
+                    <tr>
+                      <th className="p-4 font-semibold">Judul Berita</th>
+                      <th className="p-4 font-semibold">Kategori</th>
+                      <th className="p-4 font-semibold">Penulis / Unit</th>
+                      <th className="p-4 font-semibold">Status Publikasi</th>
+                      <th className="p-4 font-semibold">Tanggal & Views</th>
+                      <th className="p-4 font-semibold text-right">Aksi Manajemen</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60">
+                    {newsList.map((item) => (
+                      <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
+                        <td className="p-4">
+                          <p className="font-bold text-white text-xs max-w-sm">{item.title}</p>
+                          <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">{item.excerpt}</p>
+                        </td>
+                        <td className="p-4">
+                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            {item.category}
+                          </span>
+                        </td>
+                        <td className="p-4 text-slate-300 text-[11px]">
+                          {item.author}
+                        </td>
+                        <td className="p-4">
+                          <button
+                            onClick={() => handleToggleNewsStatus(item.id)}
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer ${
+                              item.status === 'Published'
+                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                                : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
+                            }`}
+                          >
+                            {item.status === 'Published' ? '✓ Published (Live)' : 'Draft (Hidden)'}
+                          </button>
+                        </td>
+                        <td className="p-4 text-slate-400 text-[11px]">
+                          <div>{item.date}</div>
+                          <div className="text-[10px] text-slate-500">{item.views.toLocaleString()} pembaca</div>
+                        </td>
+                        <td className="p-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => setPreviewNews(item)}
+                              title="Preview Frontend"
+                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-blue-600 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setEditingNews(item);
+                                setNewsFormData(item);
+                                setShowNewsModal(true);
+                              }}
+                              title="Edit Berita"
+                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteNews(item.id)}
+                              title="Hapus Berita"
+                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 3: MANAGE AGENDA (FRONTEND <-> BACKEND HANDLER) */}
+        {/* ========================================================= */}
+        {activeTab === 'manage-agenda' && (
+          <div className="p-6 md:p-8 space-y-6">
+            
+            {/* Header with Backend Sync Status */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase mb-2">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>Backend Schedule & Timeline Handler</span>
+                </div>
+                <h2 className="text-2xl font-extrabold text-white">Manage Agenda & Jadwal PBJ</h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Kelola jadwal tender, bimbingan teknis, dan sertifikasi untuk otomatis tersinkronisasi ke kalender publik (<Link href="/agenda" className="text-blue-400 hover:underline">/agenda</Link>).
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setEditingAgenda(null);
+                    setAgendaFormData({
+                      title: '',
+                      category: 'Bimtek',
+                      date: '15 Sep 2026',
+                      time: '09:00 - 12:00 WIB',
+                      location: 'Gedung Kemnaker RI',
+                      organizer: 'UKPBJ Kemnaker RI',
+                      capacity: '100 Peserta',
+                      status: 'Terjadwal'
+                    });
+                    setShowAgendaModal(true);
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Tambah Agenda Baru</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Agenda List & Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {agendaList.map((item) => (
+                <div key={item.id} className="p-5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition-all space-y-3">
+                  <div className="flex justify-between items-start">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      {item.category}
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-500/10 text-blue-400">
+                      {item.status}
+                    </span>
+                  </div>
+
+                  <h3 className="font-bold text-sm text-white">{item.title}</h3>
+
+                  <div className="space-y-1.5 text-xs text-slate-400">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>{item.date} • {item.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span className="truncate">{item.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Users className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                      <span>{item.organizer} ({item.capacity})</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-800 flex justify-between items-center">
+                    <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                      <Check className="w-3 h-3" />
+                      <span>Synced to /agenda</span>
+                    </span>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          setEditingAgenda(item);
+                          setAgendaFormData(item);
+                          setShowAgendaModal(true);
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white text-xs font-bold transition-all cursor-pointer"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteAgenda(item.id)}
+                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-600 text-slate-400 hover:text-white transition-all cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 4: ARSITEKTUR PORTAL (5-TIER SYSTEM ARCHITECTURE) */}
+        {/* ========================================================= */}
         {activeTab === 'arsitektur' && (
           <div className="p-6 md:p-8 space-y-8">
-            
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold text-xs font-bold uppercase mb-2">
@@ -712,7 +1217,9 @@ export default function AdminPortalPage() {
           </div>
         )}
 
-        {/* TAB 3: PAKET PENGADAAN & DETAIL */}
+        {/* ========================================================= */}
+        {/* TAB 5: PAKET PENGADAAN & DETAIL */}
+        {/* ========================================================= */}
         {activeTab === 'paket' && (
           <div className="p-6 md:p-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -766,7 +1273,9 @@ export default function AdminPortalPage() {
           </div>
         )}
 
-        {/* TAB 4: PENDAFTARAN PENYEDIA (WIZARD) */}
+        {/* ========================================================= */}
+        {/* TAB 6: PENDAFTARAN PENYEDIA */}
+        {/* ========================================================= */}
         {activeTab === 'penyedia' && (
           <div className="p-6 md:p-8 space-y-6 max-w-4xl mx-auto">
             <div className="text-center mb-6">
@@ -798,7 +1307,6 @@ export default function AdminPortalPage() {
               </div>
             </div>
 
-            {/* Wizard Step 1 */}
             {wizardStep === 1 && (
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -827,7 +1335,7 @@ export default function AdminPortalPage() {
                 <div className="flex justify-end pt-4">
                   <button 
                     onClick={() => setWizardStep(2)}
-                    className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-colors"
+                    className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-colors cursor-pointer"
                   >
                     Selanjutnya &rarr;
                   </button>
@@ -835,7 +1343,6 @@ export default function AdminPortalPage() {
               </div>
             )}
 
-            {/* Wizard Step 2 */}
             {wizardStep === 2 && (
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
                 <div className="space-y-3">
@@ -857,13 +1364,13 @@ export default function AdminPortalPage() {
                 <div className="flex justify-between pt-4">
                   <button 
                     onClick={() => setWizardStep(1)}
-                    className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold"
+                    className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold cursor-pointer"
                   >
                     &larr; Kembali
                   </button>
                   <button 
                     onClick={() => setWizardStep(3)}
-                    className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-colors"
+                    className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-colors cursor-pointer"
                   >
                     Konfirmasi &rarr;
                   </button>
@@ -871,7 +1378,6 @@ export default function AdminPortalPage() {
               </div>
             )}
 
-            {/* Wizard Step 3 */}
             {wizardStep === 3 && (
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 text-center">
                 <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
@@ -888,13 +1394,13 @@ export default function AdminPortalPage() {
                   <div className="flex justify-center gap-3 pt-4">
                     <button 
                       onClick={() => setWizardStep(2)}
-                      className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold"
+                      className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold cursor-pointer"
                     >
                       &larr; Ubah Data
                     </button>
                     <button 
                       onClick={() => setVendorSuccess(true)}
-                      className="px-6 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30"
+                      className="px-6 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 cursor-pointer"
                     >
                       Kirim Pendaftaran
                     </button>
@@ -902,14 +1408,15 @@ export default function AdminPortalPage() {
                 )}
               </div>
             )}
-
           </div>
         )}
 
-        {/* TAB 5: PENGUMUMAN & REGULASI */}
-        {(activeTab === 'pengumuman' || activeTab === 'regulasi') && (
+        {/* ========================================================= */}
+        {/* TAB 7: REGULASI & SOP */}
+        {/* ========================================================= */}
+        {activeTab === 'regulasi' && (
           <div className="p-6 md:p-8 space-y-4">
-            <h2 className="text-xl font-bold text-white capitalize">{activeTab} UKPBJ</h2>
+            <h2 className="text-xl font-bold text-white">Regulasi & Standar Operasional Prosedur (SOP)</h2>
             <p className="text-xs text-slate-400">Dokumen dan berita resmi kebijakan pengadaan barang/jasa Kementerian Ketenagakerjaan.</p>
             
             <div className="space-y-3">
@@ -922,7 +1429,7 @@ export default function AdminPortalPage() {
                       <p className="text-[10px] text-slate-400">Petunjuk teknis pengadaan dan tata cara pemilihan penyedia.</p>
                     </div>
                   </div>
-                  <button className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-blue-600 text-white text-xs font-bold flex items-center gap-1">
+                  <button className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-blue-600 text-white text-xs font-bold flex items-center gap-1 cursor-pointer">
                     <Download className="w-3.5 h-3.5" />
                     <span>Unduh PDF</span>
                   </button>
@@ -932,18 +1439,20 @@ export default function AdminPortalPage() {
           </div>
         )}
 
-        {/* TAB 6: LAPORAN & PENGATURAN */}
+        {/* ========================================================= */}
+        {/* TAB 8: LAPORAN & PENGATURAN */}
+        {/* ========================================================= */}
         {(activeTab === 'laporan' || activeTab === 'pengaturan') && (
           <div className="p-6 md:p-8 space-y-4">
             <h2 className="text-xl font-bold text-white capitalize">{activeTab}</h2>
             <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-3">
               <Sparkles className="w-8 h-8 text-accent-gold mx-auto" />
-              <h3 className="text-sm font-bold text-white">Modul Terintegrasi Database Cloud</h3>
+              <h3 className="text-sm font-bold text-white">Modul Terintegrasi Database Cloud & API</h3>
               <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                Konfigurasi sistem terhubung ke Neon PostgreSQL dan API LKPP secara real-time.
+                Konfigurasi sistem terhubung ke Neon PostgreSQL, API LKPP (SiKAP & SiRUP), dan Next.js Node API Route Handlers.
               </p>
               <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/30">
-                Semua Layanan Berjalan Normal
+                Semua Layanan Backend Berjalan Normal
               </span>
             </div>
           </div>
@@ -951,7 +1460,331 @@ export default function AdminPortalPage() {
 
       </main>
 
-      {/* DETAIL PAKET MODAL */}
+      {/* ========================================================= */}
+      {/* MODAL 1: CREATE / EDIT NEWS */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showNewsModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-slate-900 border border-slate-700 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl text-slate-100 max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    {editingNews ? 'Edit Berita Pengadaan' : 'Terbitkan Berita / Pengumuman Baru'}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">Konten akan langsung ter-update di backend dan tampil di frontend publik.</p>
+                </div>
+                <button
+                  onClick={() => setShowNewsModal(false)}
+                  className="p-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveNews} className="space-y-4 text-xs">
+                <div>
+                  <label className="font-bold text-slate-300 block mb-1">Judul Berita *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Masukkan judul berita lengkap..."
+                    value={newsFormData.title || ''}
+                    onChange={(e) => setNewsFormData({ ...newsFormData, title: e.target.value })}
+                    className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Kategori *</label>
+                    <select
+                      value={newsFormData.category || 'Berita PBJ'}
+                      onChange={(e) => setNewsFormData({ ...newsFormData, category: e.target.value as NewsItem['category'] })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+                    >
+                      <option value="Berita PBJ">Berita PBJ</option>
+                      <option value="Pengumuman Lelang">Pengumuman Lelang</option>
+                      <option value="Regulasi">Regulasi</option>
+                      <option value="Siaran Pers">Siaran Pers</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Penulis / Unit Kerja *</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Biro Umum & Pengadaan"
+                      value={newsFormData.author || ''}
+                      onChange={(e) => setNewsFormData({ ...newsFormData, author: e.target.value })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Status Publikasi *</label>
+                    <select
+                      value={newsFormData.status || 'Published'}
+                      onChange={(e) => setNewsFormData({ ...newsFormData, status: e.target.value as NewsItem['status'] })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+                    >
+                      <option value="Published">Published (Tayang di Frontend)</option>
+                      <option value="Draft">Draft (Simpan Internal)</option>
+                      <option value="Archived">Archived (Arsip)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="font-bold text-slate-300 block mb-1">Ringkasan / Excerpt *</label>
+                  <textarea
+                    rows={2}
+                    required
+                    placeholder="Ringkasan singkat untuk tampilan kartu di beranda / info..."
+                    value={newsFormData.excerpt || ''}
+                    onChange={(e) => setNewsFormData({ ...newsFormData, excerpt: e.target.value })}
+                    className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold text-slate-300 block mb-1">Konten Lengkap Berita *</label>
+                  <textarea
+                    rows={5}
+                    required
+                    placeholder="Isi berita atau pengumuman lengkap..."
+                    value={newsFormData.content || ''}
+                    onChange={(e) => setNewsFormData({ ...newsFormData, content: e.target.value })}
+                    className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setShowNewsModal(false)}
+                    className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-lg shadow-blue-600/30 cursor-pointer"
+                  >
+                    Simpan & Publikasikan
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* MODAL 2: CREATE / EDIT AGENDA */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showAgendaModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-slate-900 border border-slate-700 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl text-slate-100 max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    {editingAgenda ? 'Edit Agenda PBJ' : 'Tambah Agenda / Kegiatan Baru'}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">Jadwal akan otomatis muncul pada kalender interaktif (/agenda).</p>
+                </div>
+                <button
+                  onClick={() => setShowAgendaModal(false)}
+                  className="p-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveAgenda} className="space-y-4 text-xs">
+                <div>
+                  <label className="font-bold text-slate-300 block mb-1">Nama Kegiatan / Agenda *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Bimbingan Teknis E-Katalog Sektoral"
+                    value={agendaFormData.title || ''}
+                    onChange={(e) => setAgendaFormData({ ...agendaFormData, title: e.target.value })}
+                    className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Kategori *</label>
+                    <select
+                      value={agendaFormData.category || 'Bimtek'}
+                      onChange={(e) => setAgendaFormData({ ...agendaFormData, category: e.target.value as AgendaItem['category'] })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-emerald-500"
+                    >
+                      <option value="Bimtek">Bimbingan Teknis</option>
+                      <option value="Tender">Tender / Aanwijzing</option>
+                      <option value="Sertifikasi">Sertifikasi PBJ</option>
+                      <option value="Sosialisasi">Sosialisasi</option>
+                      <option value="Rapat">Rapat Koordinasi</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Status Kegiatan *</label>
+                    <select
+                      value={agendaFormData.status || 'Terjadwal'}
+                      onChange={(e) => setAgendaFormData({ ...agendaFormData, status: e.target.value as AgendaItem['status'] })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-emerald-500"
+                    >
+                      <option value="Terjadwal">Terjadwal</option>
+                      <option value="Berlangsung">Sedang Berlangsung</option>
+                      <option value="Selesai">Selesai</option>
+                      <option value="Dibatalkan">Dibatalkan</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Tanggal Pelaksanaan *</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 15 Sep 2026"
+                      value={agendaFormData.date || ''}
+                      onChange={(e) => setAgendaFormData({ ...agendaFormData, date: e.target.value })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Waktu Pelaksanaan *</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 09:00 - 12:00 WIB"
+                      value={agendaFormData.time || ''}
+                      onChange={(e) => setAgendaFormData({ ...agendaFormData, time: e.target.value })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Lokasi / Media *</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Gedung Kemnaker / Zoom"
+                      value={agendaFormData.location || ''}
+                      onChange={(e) => setAgendaFormData({ ...agendaFormData, location: e.target.value })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-300 block mb-1">Penyelenggara / Satker *</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Biro Umum & Pengadaan"
+                      value={agendaFormData.organizer || ''}
+                      onChange={(e) => setAgendaFormData({ ...agendaFormData, organizer: e.target.value })}
+                      className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setShowAgendaModal(false)}
+                    className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-600/30 cursor-pointer"
+                  >
+                    Simpan Agenda
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* MODAL 3: PREVIEW BERITA FRONTEND */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {previewNews && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <span className="px-3 py-1 rounded-full bg-blue-50 text-primary-navy text-xs font-bold border border-blue-200">
+                  {previewNews.category}
+                </span>
+                <button
+                  onClick={() => setPreviewNews(null)}
+                  className="p-1 text-slate-400 hover:text-slate-700 text-sm font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <h3 className="text-xl font-extrabold text-slate-900 leading-tight mb-2">
+                {previewNews.title}
+              </h3>
+              <p className="text-xs text-slate-500 mb-6 pb-4 border-b border-slate-100">
+                Oleh <strong className="text-slate-700">{previewNews.author}</strong> • {previewNews.date}
+              </p>
+
+              <div className="space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                <p className="font-semibold text-slate-900 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                  {previewNews.excerpt}
+                </p>
+                <p>{previewNews.content}</p>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+                <span className="text-emerald-600 font-bold flex items-center gap-1">
+                  <Check className="w-4 h-4" />
+                  <span>Pratinjau Tampilan Web Publik</span>
+                </span>
+                <button
+                  onClick={() => setPreviewNews(null)}
+                  className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs"
+                >
+                  Tutup Preview
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* MODAL 4: DETAIL PAKET PENGADAAN */}
+      {/* ========================================================= */}
       <AnimatePresence>
         {showDetailModal && selectedPackage && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
@@ -1022,20 +1855,6 @@ export default function AdminPortalPage() {
                         <div>
                           <p className="text-xs font-bold text-white">Spesifikasi Teknis.pdf</p>
                           <p className="text-[10px] text-slate-500">1.8 MB • Dokumen Teknis</p>
-                        </div>
-                      </div>
-                      <button className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1">
-                        <Download className="w-3 h-3" />
-                        <span>Unduh</span>
-                      </button>
-                    </div>
-
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800">
-                      <div className="flex items-center space-x-3">
-                        <FileText className="w-5 h-5 text-emerald-400" />
-                        <div>
-                          <p className="text-xs font-bold text-white">Formulir Pendaftaran.pdf</p>
-                          <p className="text-[10px] text-slate-500">1.2 MB • Formulir Isian</p>
                         </div>
                       </div>
                       <button className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1">
