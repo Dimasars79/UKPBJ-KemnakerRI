@@ -12,7 +12,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
-import { ArchitectureSection } from '@/components/home/ArchitectureSection';
+import { PengadaanSection } from '@/components/home/PengadaanSection';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 
@@ -345,8 +345,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3.5 Architecture & Interactive Portal Showcase */}
-        <ArchitectureSection />
+        {/* 3.5 Menu Pengadaan Barang & Jasa */}
+        <PengadaanSection />
 
         {/* 4. Berita / Pengumuman Terkini */}
         <section className="py-20 bg-gradient-to-bl from-white via-blue-50/30 to-slate-50 border-t border-slate-100 relative overflow-hidden" id="berita">

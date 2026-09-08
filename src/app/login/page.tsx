@@ -3,12 +3,24 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, Mail, Lock, LogIn } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Mail, Lock, LogIn, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Smooth transition to admin portal
+    setTimeout(() => {
+      router.push('/admin');
+    }, 600);
+  };
 
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-slate-50">
@@ -88,7 +100,7 @@ export default function LoginPage() {
             <p className="text-slate-500">Silakan masukkan kredensial Anda untuk melanjutkan</p>
           </div>
 
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-700 ml-1">Email / NIP</label>
               <div className="relative group">
@@ -128,10 +140,20 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full flex justify-center items-center space-x-2 bg-gradient-to-r from-primary-navy to-primary-blue hover:from-primary-blue hover:to-blue-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 hover:-translate-y-0.5 transition-all duration-300 mt-8"
+              disabled={isLoading}
+              className="w-full flex justify-center items-center space-x-2 bg-gradient-to-r from-primary-navy to-primary-blue hover:from-primary-blue hover:to-blue-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 hover:-translate-y-0.5 transition-all duration-300 mt-8 disabled:opacity-70 cursor-pointer"
             >
-              <span>Masuk Sekarang</span>
-              <LogIn className="w-5 h-5" />
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin text-accent-gold" />
+                  <span>Menghubungkan ke Portal Admin...</span>
+                </>
+              ) : (
+                <>
+                  <span>Masuk Sekarang</span>
+                  <LogIn className="w-5 h-5" />
+                </>
+              )}
             </button>
           </form>
 
