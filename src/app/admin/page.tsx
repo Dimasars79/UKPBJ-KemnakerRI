@@ -38,17 +38,21 @@ import {
   Moon,
   ChevronDown,
   ScrollText,
-  Layers
+  Layers,
+  Camera,
+  Video,
+  Play
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useData, NewsItem, AgendaItem, ProcurementPackage, RegulasiItem, SopItem } from '@/contexts/DataContext';
+import { useData, NewsItem, AgendaItem, ProcurementPackage, RegulasiItem, SopItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
 
 export default function AdminPortalPage() {
   const router = useRouter();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'manage-berita' | 'manage-agenda' | 'manage-regulasi' | 'manage-sop' | 'arsitektur' | 'penyedia' | 'laporan' | 'pengaturan'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'manage-berita' | 'manage-agenda' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'arsitektur' | 'penyedia' | 'laporan' | 'pengaturan'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCmsOpen, setIsCmsOpen] = useState(true);
+  const [galeriTab, setGaleriTab] = useState<'foto' | 'video'>('foto');
   
   // DataContext Hook
   const {
@@ -73,6 +77,14 @@ export default function AdminPortalPage() {
     addSop,
     updateSop,
     deleteSop,
+    photosList,
+    addPhoto,
+    updatePhoto,
+    deletePhoto,
+    videosList,
+    addVideo,
+    updateVideo,
+    deleteVideo,
     siteSettings,
     updateSiteSettings,
     resetToDefaults
@@ -147,6 +159,31 @@ export default function AdminPortalPage() {
     revisi: 'Rev. 01 (2026)',
     tahapanCount: 5,
     status: 'Berlaku'
+  });
+
+  // PHOTO & VIDEO MODAL STATES
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [editingPhoto, setEditingPhoto] = useState<PhotoItem | null>(null);
+  const [photoFormData, setPhotoFormData] = useState<Partial<PhotoItem>>({
+    title: '',
+    desc: '',
+    category: 'Dokumentasi Kerja',
+    src: '/gallery/gallery-1.jpg',
+    size: 'small',
+    date: '28 Agu 2026'
+  });
+
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [editingVideo, setEditingVideo] = useState<VideoMediaItem | null>(null);
+  const [videoFormData, setVideoFormData] = useState<Partial<VideoMediaItem>>({
+    title: '',
+    desc: '',
+    category: 'Sosialisasi Regulasi',
+    duration: '10:00',
+    date: '28 Agu 2026',
+    views: '1.2K x ditonton',
+    thumbnailUrl: '/gallery/gallery-1.jpg',
+    url: 'https://www.youtube.com/@kemenperin_ri'
   });
 
   const [previewNews, setPreviewNews] = useState<NewsItem | null>(null);
@@ -281,6 +318,64 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus SOP ini?')) {
       deleteSop(id);
       showNotification('SOP telah dihapus dari sistem.');
+    }
+  };
+
+  // PHOTO HANDLERS
+  const handleSavePhoto = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingPhoto) {
+      updatePhoto(editingPhoto.id, photoFormData);
+      showNotification('✓ Foto dokumentasi berhasil diperbarui dan disinkronkan ke Frontend (/galeri)!');
+    } else {
+      addPhoto({
+        title: photoFormData.title || 'Foto Dokumentasi Kegiatan PBJ',
+        desc: photoFormData.desc || 'Dokumentasi kegiatan dan rapat kerja pengadaan.',
+        category: photoFormData.category || 'Dokumentasi Kerja',
+        src: photoFormData.src || '/gallery/gallery-1.jpg',
+        size: (photoFormData.size as PhotoItem['size']) || 'small',
+        date: photoFormData.date || new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+      });
+      showNotification('✓ Foto dokumentasi baru berhasil ditambahkan dan langsung tayang di Galeri (/galeri)!');
+    }
+    setShowPhotoModal(false);
+    setEditingPhoto(null);
+  };
+
+  const handleDeletePhoto = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus foto ini dari galeri publik?')) {
+      deletePhoto(id);
+      showNotification('Foto dokumentasi telah dihapus.');
+    }
+  };
+
+  // VIDEO HANDLERS
+  const handleSaveVideo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingVideo) {
+      updateVideo(editingVideo.id, videoFormData);
+      showNotification('✓ Video dokumentasi berhasil diperbarui dan disinkronkan ke Frontend (/galeri)!');
+    } else {
+      addVideo({
+        title: videoFormData.title || 'Video Kegiatan PBJ Kemnaker',
+        desc: videoFormData.desc || 'Dokumentasi video sosialisasi dan bimbingan teknis.',
+        category: videoFormData.category || 'Sosialisasi Regulasi',
+        duration: videoFormData.duration || '10:00',
+        date: videoFormData.date || new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+        views: '1.0K x ditonton',
+        thumbnailUrl: videoFormData.thumbnailUrl || '/gallery/gallery-1.jpg',
+        url: videoFormData.url || 'https://www.youtube.com/@kemenperin_ri'
+      });
+      showNotification('✓ Video baru berhasil ditambahkan ke Galeri Video (/galeri)!');
+    }
+    setShowVideoModal(false);
+    setEditingVideo(null);
+  };
+
+  const handleDeleteVideo = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus video ini dari galeri publik?')) {
+      deleteVideo(id);
+      showNotification('Video dokumentasi telah dihapus.');
     }
   };
 
@@ -480,6 +575,22 @@ export default function AdminPortalPage() {
                       <span>Standar SOP</span>
                       <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-purple-500/20 text-purple-400 rounded font-bold">
                         {sopList.length}
+                      </span>
+                    </button>
+
+                    {/* Galeri & Media (Foto/Video) */}
+                    <button
+                      onClick={() => setActiveTab('manage-galeri')}
+                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'manage-galeri'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                      }`}
+                    >
+                      <Camera className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Galeri & Media</span>
+                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-cyan-500/20 text-cyan-400 rounded font-bold">
+                        {photosList.length + videosList.length}
                       </span>
                     </button>
                   </motion.div>
@@ -1880,6 +1991,218 @@ export default function AdminPortalPage() {
         )}
 
         {/* ========================================================= */}
+        {/* TAB: MANAGE GALERI (FOTO & VIDEO CMS) */}
+        {/* ========================================================= */}
+        {activeTab === 'manage-galeri' && (
+          <div className="p-6 md:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 text-xs font-bold uppercase mb-2">
+                  <Camera className="w-3.5 h-3.5" />
+                  <span>Backend Gallery & Media Management</span>
+                </div>
+                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Kelola Galeri Foto & Video
+                </h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Kelola dokumentasi visual dan video kegiatan resmi. Tersinkronisasi langsung ke halaman publik (<Link href="/galeri" className="text-cyan-500 hover:underline">/galeri</Link>).
+                </p>
+              </div>
+
+              {/* Sub-tab Switcher & Add Button */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className={`flex items-center p-1 rounded-xl border ${
+                  isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-200'
+                }`}>
+                  <button
+                    onClick={() => setGaleriTab('foto')}
+                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      galeriTab === 'foto'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Camera className="w-3.5 h-3.5" />
+                    <span>Foto ({photosList.length})</span>
+                  </button>
+                  <button
+                    onClick={() => setGaleriTab('video')}
+                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      galeriTab === 'video'
+                        ? 'bg-amber-500 text-slate-950 shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Video className="w-3.5 h-3.5" />
+                    <span>Video ({videosList.length})</span>
+                  </button>
+                </div>
+
+                {galeriTab === 'foto' ? (
+                  <button
+                    onClick={() => {
+                      setEditingPhoto(null);
+                      setPhotoFormData({
+                        title: '',
+                        desc: '',
+                        category: 'Dokumentasi Kerja',
+                        src: '/gallery/gallery-1.jpg',
+                        size: 'small',
+                        date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+                      });
+                      setShowPhotoModal(true);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Tambah Foto</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setEditingVideo(null);
+                      setVideoFormData({
+                        title: '',
+                        desc: '',
+                        category: 'Sosialisasi Regulasi',
+                        duration: '12:00',
+                        date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+                        views: '1.0K x ditonton',
+                        thumbnailUrl: '/gallery/gallery-1.jpg',
+                        url: 'https://www.youtube.com/@kemenperin_ri'
+                      });
+                      setShowVideoModal(true);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-bold flex items-center gap-2 shadow-lg shadow-amber-500/30 transition-all cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Tambah Video</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* TAB FOTO CONTENT */}
+            {galeriTab === 'foto' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {photosList.map((item) => (
+                  <div key={item.id} className={`p-4 rounded-2xl border transition-all space-y-3 ${
+                    isDark ? 'bg-slate-900 border-slate-800 hover:border-cyan-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-cyan-500/40'
+                  }`}>
+                    <div className="relative h-40 rounded-xl overflow-hidden bg-slate-800 flex items-center justify-center">
+                      <img src={item.src} alt={item.title} className="w-full h-full object-cover" />
+                      <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/60 text-white backdrop-blur-xs">
+                        {item.category}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className={`font-bold text-xs line-clamp-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</h4>
+                      <p className="text-[11px] text-slate-400 line-clamp-2 mt-0.5">{item.desc}</p>
+                    </div>
+
+                    <div className={`pt-2 border-t flex justify-between items-center text-[10px] text-slate-400 ${
+                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    }`}>
+                      <span>{item.date}</span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => {
+                            setEditingPhoto(item);
+                            setPhotoFormData(item);
+                            setShowPhotoModal(true);
+                          }}
+                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-cyan-600' : 'bg-slate-100 hover:bg-cyan-600'
+                          }`}
+                        >
+                          <Edit3 className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={() => handleDeletePhoto(item.id)}
+                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                          }`}
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* TAB VIDEO CONTENT */}
+            {galeriTab === 'video' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {videosList.map((item) => (
+                  <div key={item.id} className={`p-4 rounded-2xl border transition-all space-y-3 ${
+                    isDark ? 'bg-slate-900 border-slate-800 hover:border-amber-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-amber-500/40'
+                  }`}>
+                    <div className="relative h-40 rounded-xl overflow-hidden bg-slate-900 flex items-center justify-center group">
+                      <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover opacity-80" />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg">
+                          <Play className="w-4 h-4 ml-0.5" />
+                        </div>
+                      </div>
+                      <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded text-[9px] font-bold bg-black/80 text-white">
+                        {item.duration}
+                      </span>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">{item.category}</span>
+                      <h4 className={`font-bold text-xs line-clamp-1 mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</h4>
+                      <p className="text-[11px] text-slate-400 line-clamp-2 mt-0.5">{item.desc}</p>
+                    </div>
+
+                    <div className={`pt-2 border-t flex justify-between items-center text-[10px] text-slate-400 ${
+                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    }`}>
+                      <span>{item.date} • {item.views}</span>
+                      <div className="flex items-center gap-1.5">
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-blue-600' : 'bg-slate-100 hover:bg-blue-600'
+                          }`}
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                        <button
+                          onClick={() => {
+                            setEditingVideo(item);
+                            setVideoFormData(item);
+                            setShowVideoModal(true);
+                          }}
+                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-amber-600' : 'bg-slate-100 hover:bg-amber-600'
+                          }`}
+                        >
+                          <Edit3 className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteVideo(item.id)}
+                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                          }`}
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ========================================================= */}
         {/* TAB 8: LAPORAN & KINERJA */}
         {/* ========================================================= */}
         {activeTab === 'laporan' && (
@@ -2971,6 +3294,251 @@ export default function AdminPortalPage() {
                     className="px-6 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-purple-600/30 cursor-pointer"
                   >
                     {editingSop ? 'Perbarui SOP' : 'Publikasikan SOP'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* ========================================================= */}
+      {/* MODAL 8: PHOTO MODAL (TAMBAH / EDIT FOTO) */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showPhotoModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+              }`}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <Camera className="w-5 h-5 text-cyan-500" />
+                  <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {editingPhoto ? 'Edit Foto Kegiatan' : 'Tambah Foto Dokumentasi Baru'}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setShowPhotoModal(false)}
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSavePhoto} className="space-y-4 text-xs">
+                <div>
+                  <label className="font-bold block mb-1">Judul Foto / Kegiatan *</label>
+                  <input
+                    type="text"
+                    required
+                    value={photoFormData.title || ''}
+                    onChange={(e) => setPhotoFormData({ ...photoFormData, title: e.target.value })}
+                    placeholder="e.g. Kunjungan Kerja dan Koordinasi Pengadaan"
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-cyan-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-cyan-600'
+                    }`}
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold block mb-1">Deskripsi Foto Kegiatan</label>
+                  <textarea
+                    rows={3}
+                    value={photoFormData.desc || ''}
+                    onChange={(e) => setPhotoFormData({ ...photoFormData, desc: e.target.value })}
+                    placeholder="Keterangan singkat momen kegiatan pengadaan..."
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-cyan-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-cyan-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Kategori Kegiatan</label>
+                    <select
+                      value={photoFormData.category || 'Dokumentasi Kerja'}
+                      onChange={(e) => setPhotoFormData({ ...photoFormData, category: e.target.value })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-cyan-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-cyan-600'
+                      }`}
+                    >
+                      <option value="Kunjungan Kerja">Kunjungan Kerja</option>
+                      <option value="Rapat Koordinasi">Rapat Koordinasi</option>
+                      <option value="Sosialisasi">Sosialisasi</option>
+                      <option value="Bimtek">Bimtek</option>
+                      <option value="Kontrak Kerja">Kontrak Kerja</option>
+                      <option value="Monitoring">Monitoring</option>
+                      <option value="Dokumentasi Kerja">Dokumentasi Kerja</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Pilihan Gambar / Path File</label>
+                    <select
+                      value={photoFormData.src || '/gallery/gallery-1.jpg'}
+                      onChange={(e) => setPhotoFormData({ ...photoFormData, src: e.target.value })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-cyan-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-cyan-600'
+                      }`}
+                    >
+                      <option value="/gallery/gallery-1.jpg">Gallery Foto 1 (Kunjungan)</option>
+                      <option value="/gallery/gallery-2.jpg">Gallery Foto 2 (Rakornas)</option>
+                      <option value="/gallery/gallery-3.jpg">Gallery Foto 3 (Sosialisasi)</option>
+                      <option value="/gallery/gallery-4.jpg">Gallery Foto 4 (Bimtek)</option>
+                      <option value="/gallery/gallery-5.jpg">Gallery Foto 5 (Kontrak)</option>
+                      <option value="/gallery/gallery-6.jpg">Gallery Foto 6 (Monitoring)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setShowPhotoModal(false)}
+                    className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                    }`}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold shadow-lg shadow-blue-600/30 cursor-pointer"
+                  >
+                    {editingPhoto ? 'Perbarui Foto' : 'Terbitkan Foto'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* MODAL 9: VIDEO MODAL (TAMBAH / EDIT VIDEO) */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showVideoModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+              }`}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <Video className="w-5 h-5 text-amber-500" />
+                  <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {editingVideo ? 'Edit Video Dokumentasi' : 'Tambah Video Baru (CMS)'}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setShowVideoModal(false)}
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveVideo} className="space-y-4 text-xs">
+                <div>
+                  <label className="font-bold block mb-1">Judul Video *</label>
+                  <input
+                    type="text"
+                    required
+                    value={videoFormData.title || ''}
+                    onChange={(e) => setVideoFormData({ ...videoFormData, title: e.target.value })}
+                    placeholder="e.g. Sosialisasi Tata Cara Pengadaan Barang/Jasa..."
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-amber-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-amber-600'
+                    }`}
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold block mb-1">Deskripsi Singkat Video</label>
+                  <textarea
+                    rows={3}
+                    value={videoFormData.desc || ''}
+                    onChange={(e) => setVideoFormData({ ...videoFormData, desc: e.target.value })}
+                    placeholder="Uraian rangkuman materi atau rekaman acara..."
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-amber-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-amber-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold block mb-1">Kategori Video</label>
+                    <select
+                      value={videoFormData.category || 'Sosialisasi Regulasi'}
+                      onChange={(e) => setVideoFormData({ ...videoFormData, category: e.target.value })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-amber-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-amber-600'
+                      }`}
+                    >
+                      <option value="Sosialisasi Regulasi">Sosialisasi Regulasi</option>
+                      <option value="Tutorial & Juknis">Tutorial & Juknis</option>
+                      <option value="Dokumentasi Rakornas">Dokumentasi Rakornas</option>
+                      <option value="Bimtek & Sertifikasi">Bimtek & Sertifikasi</option>
+                      <option value="Panduan Pelaku Usaha">Panduan Pelaku Usaha</option>
+                      <option value="Integritas & Kepatuhan">Integritas & Kepatuhan</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1">Durasi Video</label>
+                    <input
+                      type="text"
+                      value={videoFormData.duration || '12:00'}
+                      onChange={(e) => setVideoFormData({ ...videoFormData, duration: e.target.value })}
+                      placeholder="e.g. 15:30"
+                      className={`w-full px-3 py-2 border rounded-xl outline-none font-mono ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-amber-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-amber-600'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="font-bold block mb-1">Link URL YouTube / Video *</label>
+                  <input
+                    type="text"
+                    required
+                    value={videoFormData.url || ''}
+                    onChange={(e) => setVideoFormData({ ...videoFormData, url: e.target.value })}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className={`w-full px-3 py-2 border rounded-xl outline-none font-mono ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-amber-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-amber-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setShowVideoModal(false)}
+                    className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                    }`}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold shadow-lg shadow-amber-500/30 cursor-pointer"
+                  >
+                    {editingVideo ? 'Perbarui Video' : 'Terbitkan Video'}
                   </button>
                 </div>
               </form>

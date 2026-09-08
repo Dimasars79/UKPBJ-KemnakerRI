@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useData, VideoMediaItem } from '@/contexts/DataContext';
 import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
@@ -13,101 +14,11 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type VideoItem = {
-  id: string;
-  title: string;
-  desc: string;
-  category: string;
-  duration: string;
-  date: string;
-  views: string;
-  thumbnailUrl: string;
-  youtubeId?: string;
-  url: string;
-};
-
 export default function GaleriPage() {
   const { t } = useLanguage();
+  const { photosList, videosList } = useData();
   const [activeTab, setActiveTab] = useState<'foto' | 'video'>('foto');
-  const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
-
-  const dummyImages = [
-    { id: 1, title: 'Kunjungan Kerja Pimpinan', desc: 'Kunjungan dan koordinasi pimpinan dengan jajaran pengurus UKPBJ.', size: 'large', src: '/gallery/gallery-1.jpg' },
-    { id: 2, title: 'Rapat Koordinasi Nasional PBJ', desc: 'Rapat koordinasi pimpinan mengenai evaluasi kinerja tahunan pengadaan.', size: 'large', src: '/gallery/gallery-2.jpg' },
-    { id: 3, title: 'Sosialisasi Tata Kelola Pengadaan', desc: 'Acara sosialisasi dan interaksi langsung dengan seluruh peserta stakeholder.', size: 'large', src: '/gallery/gallery-3.jpg' },
-    { id: 4, title: 'Bimbingan Teknis PPK & Pokja', desc: 'Pelatihan kompetensi pengadaan barang dan jasa untuk PPK dan Pokja.', size: 'small', src: '/gallery/gallery-4.jpg' },
-    { id: 5, title: 'Penandatanganan Kontrak Strategis', desc: 'Penandatanganan pakta integritas dan kontrak kerja sama strategis.', size: 'small', src: '/gallery/gallery-5.jpg' },
-    { id: 6, title: 'Rapat Evaluasi & Monitoring Berkala', desc: 'Sesi monitoring dan evaluasi target penyerapan anggaran pengadaan.', size: 'small', src: '/gallery/gallery-6.jpg' },
-  ];
-
-  const videoList: VideoItem[] = [
-    {
-      id: 'v1',
-      title: 'Sosialisasi & Tata Cara Pengadaan Barang/Jasa Sesuai Perpres No. 12 Tahun 2021',
-      desc: 'Penjelasan komprehensif mengenai kebijakan tata kelola, mitigasi risiko pengadaan, dan kewajiban penggunaan produk dalam negeri (P3DN).',
-      category: 'Sosialisasi Regulasi',
-      duration: '18:45',
-      date: '28 Agu 2026',
-      views: '1.4K x ditonton',
-      thumbnailUrl: '/gallery/gallery-1.jpg',
-      url: 'https://www.youtube.com/@kemenperin_ri'
-    },
-    {
-      id: 'v2',
-      title: 'Tutorial Lengkap Penginputan RUP pada SiRUP & Pemanfaatan E-Katalog Nasional LKPP',
-      desc: 'Panduan teknis langkah demi langkah pengisian rencana umum pengadaan dan transaksi e-purchasing bagi Pejabat Pembuat Komitmen (PPK).',
-      category: 'Tutorial & Petunjuk Teknis',
-      duration: '14:20',
-      date: '15 Agu 2026',
-      views: '2.8K x ditonton',
-      thumbnailUrl: '/gallery/gallery-2.jpg',
-      url: 'https://www.youtube.com/@kemenperin_ri'
-    },
-    {
-      id: 'v3',
-      title: 'Highlight Rakornas UKPBJ Kemnaker RI 2026: Akselerasi Transformasi Digital Pengadaan',
-      desc: 'Dokumentasi rangkuman sesi panel, arahan Menteri Ketenagakerjaan, dan pemberian penghargaan UKPBJ Berprestasi Tingkat Nasional.',
-      category: 'Dokumentasi Rakornas',
-      duration: '09:15',
-      date: '05 Agu 2026',
-      views: '3.1K x ditonton',
-      thumbnailUrl: '/gallery/gallery-3.jpg',
-      url: 'https://www.youtube.com/@kemenperin_ri'
-    },
-    {
-      id: 'v4',
-      title: 'Bimbingan Teknis Uji Kompetensi & Sertifikasi Pejabat Pengadaan Barang/Jasa Batch 3',
-      desc: 'Liputan kegiatan pelatihan peningkatan kapasitas SDM pengadaan barang dan jasa aparatur sipil negara di lingkungan kementerian.',
-      category: 'Bimtek & Sertifikasi',
-      duration: '12:30',
-      date: '22 Jul 2026',
-      views: '980 x ditonton',
-      thumbnailUrl: '/gallery/gallery-4.jpg',
-      url: 'https://www.youtube.com/@kemenperin_ri'
-    },
-    {
-      id: 'v5',
-      title: 'Tata Cara Pengajuan Sertifikasi TKDN Industri Kecil & Menengah Gratis Melalui SIINas',
-      desc: 'Panduan pelaku usaha dalam negeri untuk melakukan self-assessment nilai komponen lokal dan penerbitan sertifikat TKDN IK.',
-      category: 'Panduan Pelaku Usaha',
-      duration: '11:05',
-      date: '10 Jun 2026',
-      views: '4.5K x ditonton',
-      thumbnailUrl: '/gallery/gallery-5.jpg',
-      url: 'https://www.youtube.com/@kemenperin_ri'
-    },
-    {
-      id: 'v6',
-      title: 'Penerapan Manajemen Integritas & Pengawasan Anti-Gratifikasi PBJ Kemnaker',
-      desc: 'Sosialisasi penguatan sistem pengendalian intern dan kanal aduan Whistleblowing System (WBS) dalam mencegah tindak pidana korupsi.',
-      category: 'Integritas & Kepatuhan',
-      duration: '08:50',
-      date: '18 Mei 2026',
-      views: '1.2K x ditonton',
-      thumbnailUrl: '/gallery/gallery-6.jpg',
-      url: 'https://www.youtube.com/@kemenperin_ri'
-    }
-  ];
+  const [selectedVideo, setSelectedVideo] = useState<VideoMediaItem | null>(null);
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
@@ -152,7 +63,7 @@ export default function GaleriPage() {
                     }`}
                   >
                     <Camera className="w-4 h-4" />
-                    <span>Galeri Foto Kegiatan ({dummyImages.length})</span>
+                    <span>Galeri Foto Kegiatan ({photosList.length})</span>
                   </button>
 
                   <button
@@ -164,7 +75,7 @@ export default function GaleriPage() {
                     }`}
                   >
                     <Video className="w-4 h-4 text-accent-gold" />
-                    <span>Galeri Video Dokumentasi ({videoList.length})</span>
+                    <span>Galeri Video Dokumentasi ({videosList.length})</span>
                   </button>
                 </div>
 
@@ -219,7 +130,7 @@ export default function GaleriPage() {
               </div>
 
               <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                {dummyImages.map((img) => (
+                {photosList.map((img) => (
                   <StaggerItem 
                     key={img.id} 
                     className={`relative group overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 ${img.size === 'large' ? 'md:col-span-2 md:row-span-2' : ''}`}
@@ -245,10 +156,13 @@ export default function GaleriPage() {
                     
                     {/* Overlay on Hover */}
                     <div className="absolute inset-0 bg-gradient-to-t from-primary-navy via-primary-navy/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                      <span className="text-[10px] font-bold text-accent-gold uppercase tracking-wider mb-1">
+                        {img.category}
+                      </span>
                       <h3 className="text-white font-bold text-lg sm:text-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300 leading-snug">
                         {img.title}
                       </h3>
-                      <p className="text-slate-300 text-xs sm:text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                      <p className="text-slate-300 text-xs sm:text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                         {img.desc}
                       </p>
                     </div>
@@ -285,7 +199,7 @@ export default function GaleriPage() {
 
               {/* Video Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-                {videoList.map((video) => (
+                {videosList.map((video) => (
                   <div
                     key={video.id}
                     onClick={() => setSelectedVideo(video)}

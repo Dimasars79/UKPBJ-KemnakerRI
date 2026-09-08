@@ -67,6 +67,30 @@ export interface SopItem {
   syncFrontend: boolean;
 }
 
+export interface PhotoItem {
+  id: string;
+  title: string;
+  desc: string;
+  category: string;
+  src: string;
+  date: string;
+  size?: 'large' | 'small';
+  syncFrontend: boolean;
+}
+
+export interface VideoMediaItem {
+  id: string;
+  title: string;
+  desc: string;
+  category: string;
+  duration: string;
+  date: string;
+  views: string;
+  thumbnailUrl: string;
+  url: string;
+  syncFrontend: boolean;
+}
+
 export interface SiteSettings {
   announcementBanner: string;
   announcementActive: boolean;
@@ -106,6 +130,18 @@ interface DataContextType {
   addSop: (sop: Omit<SopItem, 'id' | 'syncFrontend'>) => void;
   updateSop: (id: string, updated: Partial<SopItem>) => void;
   deleteSop: (id: string) => void;
+
+  // Photos Gallery
+  photosList: PhotoItem[];
+  addPhoto: (photo: Omit<PhotoItem, 'id' | 'syncFrontend'>) => void;
+  updatePhoto: (id: string, updated: Partial<PhotoItem>) => void;
+  deletePhoto: (id: string) => void;
+
+  // Videos Media
+  videosList: VideoMediaItem[];
+  addVideo: (video: Omit<VideoMediaItem, 'id' | 'syncFrontend'>) => void;
+  updateVideo: (id: string, updated: Partial<VideoMediaItem>) => void;
+  deleteVideo: (id: string) => void;
 
   // Site Settings
   siteSettings: SiteSettings;
@@ -407,6 +443,54 @@ const DEFAULT_SOP: SopItem[] = [
   }
 ];
 
+const DEFAULT_PHOTOS: PhotoItem[] = [
+  { id: 'PHO-001', title: 'Kunjungan Kerja Pimpinan UKPBJ', desc: 'Kunjungan dan koordinasi pimpinan dengan jajaran pengurus UKPBJ kementerian.', category: 'Kunjungan Kerja', size: 'large', src: '/gallery/gallery-1.jpg', date: '25 Agu 2026', syncFrontend: true },
+  { id: 'PHO-002', title: 'Rapat Koordinasi Nasional PBJ', desc: 'Rapat koordinasi pimpinan mengenai evaluasi kinerja tahunan pengadaan barang/jasa.', category: 'Rapat Koordinasi', size: 'large', src: '/gallery/gallery-2.jpg', date: '18 Agu 2026', syncFrontend: true },
+  { id: 'PHO-003', title: 'Sosialisasi Tata Kelola Pengadaan', desc: 'Acara sosialisasi dan interaksi langsung dengan seluruh peserta stakeholder.', category: 'Sosialisasi', size: 'large', src: '/gallery/gallery-3.jpg', date: '10 Agu 2026', syncFrontend: true },
+  { id: 'PHO-004', title: 'Bimbingan Teknis PPK & Pokja', desc: 'Pelatihan kompetensi pengadaan barang dan jasa untuk PPK dan Pokja Pemilihan.', category: 'Bimtek', size: 'small', src: '/gallery/gallery-4.jpg', date: '02 Agu 2026', syncFrontend: true },
+  { id: 'PHO-005', title: 'Penandatanganan Kontrak Strategis', desc: 'Penandatanganan pakta integritas dan kontrak kerja sama strategis.', category: 'Kontrak Kerja', size: 'small', src: '/gallery/gallery-5.jpg', date: '26 Jul 2026', syncFrontend: true },
+  { id: 'PHO-006', title: 'Rapat Evaluasi & Monitoring Berkala', desc: 'Sesi monitoring dan evaluasi target penyerapan anggaran pengadaan.', category: 'Monitoring', size: 'small', src: '/gallery/gallery-6.jpg', date: '15 Jul 2026', syncFrontend: true },
+];
+
+const DEFAULT_VIDEOS: VideoMediaItem[] = [
+  {
+    id: 'VID-001',
+    title: 'Sosialisasi & Tata Cara Pengadaan Barang/Jasa Sesuai Perpres No. 12 Tahun 2021',
+    desc: 'Penjelasan komprehensif mengenai kebijakan tata kelola, mitigasi risiko pengadaan, dan kewajiban penggunaan produk dalam negeri (P3DN).',
+    category: 'Sosialisasi Regulasi',
+    duration: '18:45',
+    date: '28 Agu 2026',
+    views: '1.4K x ditonton',
+    thumbnailUrl: '/gallery/gallery-1.jpg',
+    url: 'https://www.youtube.com/@kemenperin_ri',
+    syncFrontend: true
+  },
+  {
+    id: 'VID-002',
+    title: 'Tutorial Lengkap Penginputan RUP pada SiRUP & Pemanfaatan E-Katalog Nasional LKPP',
+    desc: 'Panduan teknis langkah demi langkah pengisian rencana umum pengadaan dan transaksi e-purchasing bagi Pejabat Pembuat Komitmen (PPK).',
+    category: 'Tutorial & Juknis',
+    duration: '14:20',
+    date: '15 Agu 2026',
+    views: '2.8K x ditonton',
+    thumbnailUrl: '/gallery/gallery-2.jpg',
+    url: 'https://www.youtube.com/@kemenperin_ri',
+    syncFrontend: true
+  },
+  {
+    id: 'VID-003',
+    title: 'Highlight Rakornas UKPBJ Kemnaker RI 2026: Akselerasi Transformasi Digital Pengadaan',
+    desc: 'Dokumentasi rangkuman sesi panel, arahan Menteri Ketenagakerjaan, dan pemberian penghargaan UKPBJ Berprestasi Tingkat Nasional.',
+    category: 'Dokumentasi Rakornas',
+    duration: '09:15',
+    date: '05 Agu 2026',
+    views: '3.1K x ditonton',
+    thumbnailUrl: '/gallery/gallery-3.jpg',
+    url: 'https://www.youtube.com/@kemenperin_ri',
+    syncFrontend: true
+  }
+];
+
 const DEFAULT_SETTINGS: SiteSettings = {
   announcementBanner: 'Sosialisasi Peraturan LKPP Nomor 12 Tahun 2024 tentang Pedoman Pengadaan Barang/Jasa Pemerintah',
   announcementActive: true,
@@ -424,6 +508,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [packagesList, setPackagesList] = useState<ProcurementPackage[]>(DEFAULT_PACKAGES);
   const [regulasiList, setRegulasiList] = useState<RegulasiItem[]>(DEFAULT_REGULASI);
   const [sopList, setSopList] = useState<SopItem[]>(DEFAULT_SOP);
+  const [photosList, setPhotosList] = useState<PhotoItem[]>(DEFAULT_PHOTOS);
+  const [videosList, setVideosList] = useState<VideoMediaItem[]>(DEFAULT_VIDEOS);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -438,6 +524,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         if (parsed.packagesList) setPackagesList(parsed.packagesList);
         if (parsed.regulasiList) setRegulasiList(parsed.regulasiList);
         if (parsed.sopList) setSopList(parsed.sopList);
+        if (parsed.photosList) setPhotosList(parsed.photosList);
+        if (parsed.videosList) setVideosList(parsed.videosList);
         if (parsed.siteSettings) setSiteSettings(parsed.siteSettings);
       }
     } catch (e) {
@@ -454,6 +542,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     newPkgs = packagesList,
     newRegulasi = regulasiList,
     newSop = sopList,
+    newPhotos = photosList,
+    newVideos = videosList,
     newSettings = siteSettings
   ) => {
     try {
@@ -463,6 +553,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         packagesList: newPkgs,
         regulasiList: newRegulasi,
         sopList: newSop,
+        photosList: newPhotos,
+        videosList: newVideos,
         siteSettings: newSettings,
         updatedAt: new Date().toISOString()
       };
@@ -650,11 +742,63 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     persist(newsList, agendaList, packagesList, regulasiList, updated);
   };
 
+  // PHOTOS GALLERY ACTIONS
+  const addPhoto = (photo: Omit<PhotoItem, 'id' | 'syncFrontend'>) => {
+    const newEntry: PhotoItem = {
+      ...photo,
+      id: `PHO-${Date.now().toString().slice(-4)}`,
+      syncFrontend: true
+    };
+    const updated = [newEntry, ...photosList];
+    setPhotosList(updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
+  };
+
+  const updatePhoto = (id: string, updated: Partial<PhotoItem>) => {
+    const updatedList = photosList.map((item) =>
+      item.id === id ? { ...item, ...updated } : item
+    );
+    setPhotosList(updatedList);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList);
+  };
+
+  const deletePhoto = (id: string) => {
+    const updated = photosList.filter((item) => item.id !== id);
+    setPhotosList(updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
+  };
+
+  // VIDEOS MEDIA ACTIONS
+  const addVideo = (video: Omit<VideoMediaItem, 'id' | 'syncFrontend'>) => {
+    const newEntry: VideoMediaItem = {
+      ...video,
+      id: `VID-${Date.now().toString().slice(-4)}`,
+      syncFrontend: true
+    };
+    const updated = [newEntry, ...videosList];
+    setVideosList(updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updated);
+  };
+
+  const updateVideo = (id: string, updated: Partial<VideoMediaItem>) => {
+    const updatedList = videosList.map((item) =>
+      item.id === id ? { ...item, ...updated } : item
+    );
+    setVideosList(updatedList);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updatedList);
+  };
+
+  const deleteVideo = (id: string) => {
+    const updated = videosList.filter((item) => item.id !== id);
+    setVideosList(updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updated);
+  };
+
   // SITE SETTINGS ACTIONS
   const updateSiteSettings = (settings: Partial<SiteSettings>) => {
     const updated = { ...siteSettings, ...settings };
     setSiteSettings(updated);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, videosList, updated);
   };
 
   // RESET TO DEFAULT
@@ -664,8 +808,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPackagesList(DEFAULT_PACKAGES);
     setRegulasiList(DEFAULT_REGULASI);
     setSopList(DEFAULT_SOP);
+    setPhotosList(DEFAULT_PHOTOS);
+    setVideosList(DEFAULT_VIDEOS);
     setSiteSettings(DEFAULT_SETTINGS);
-    persist(DEFAULT_NEWS, DEFAULT_AGENDAS, DEFAULT_PACKAGES, DEFAULT_REGULASI, DEFAULT_SOP, DEFAULT_SETTINGS);
+    persist(DEFAULT_NEWS, DEFAULT_AGENDAS, DEFAULT_PACKAGES, DEFAULT_REGULASI, DEFAULT_SOP, DEFAULT_PHOTOS, DEFAULT_VIDEOS, DEFAULT_SETTINGS);
   };
 
   return (
@@ -693,6 +839,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         addSop,
         updateSop,
         deleteSop,
+        photosList,
+        addPhoto,
+        updatePhoto,
+        deletePhoto,
+        videosList,
+        addVideo,
+        updateVideo,
+        deleteVideo,
         siteSettings,
         updateSiteSettings,
         resetToDefaults,
