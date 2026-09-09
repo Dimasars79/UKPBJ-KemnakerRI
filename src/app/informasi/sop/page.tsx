@@ -23,6 +23,8 @@ type SOPItem = {
   date: string;
   revision: string;
   fileSize: string;
+  fileName?: string;
+  fileData?: string;
   desc: string;
   steps: string[];
 };
@@ -81,18 +83,20 @@ export default function SOPPage() {
       .map(item => ({
         id: item.id,
         code: item.kode,
-        category: 'tata-kelola',
+        category: item.kategori || 'tata-kelola',
         categoryLabel: item.unit,
         title: item.judul,
         date: 'Tahun 2026',
         revision: item.revisi,
-        fileSize: '2.1 MB',
-        desc: `Standar operasional prosedur resmi ${item.unit} dengan ${item.tahapanCount} langkah terstandarisasi.`,
+        fileSize: item.fileSize || '2.0 MB',
+        fileName: item.fileName || `${item.kode.replace(/\//g, '-')}.pdf`,
+        fileData: item.fileData,
+        desc: item.deskripsi || `Standar operasional prosedur resmi ${item.unit} dengan ${item.tahapanCount} langkah terstandarisasi.`,
         steps: [
-          'Pemeriksaan dan Verifikasi Permohonan',
-          'Validasi Persyaratan Teknis & Regulasi',
-          'Penelaahan Kelayakan Tim Kerja',
-          'Persetujuan & Penerbitan Dokumen Resmi'
+          'Pemeriksaan dan Verifikasi Permohonan Dokumen',
+          'Validasi Persyaratan Teknis & Regulasi Pengadaan',
+          'Penelaahan Kelayakan Tim Kerja & Pokja Pemilihan',
+          'Persetujuan & Penerbitan Dokumen Resmi Sesuai SOP'
         ]
       }));
 
@@ -351,13 +355,28 @@ export default function SOPPage() {
                               <span>Lihat Diagram</span>
                             </button>
 
-                            <button 
-                              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all"
-                              title="Unduh Dokumen SOP"
-                            >
-                              <Download className="w-3.5 h-3.5" />
-                              <span>Unduh SOP</span>
-                            </button>
+                            {item.fileData ? (
+                              <a 
+                                href={item.fileData}
+                                download={item.fileName || `${item.code.replace(/\//g, '-')}.pdf`}
+                                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
+                                title={`Unduh File ${item.fileName || 'SOP'}`}
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                <span>Unduh SOP</span>
+                              </a>
+                            ) : (
+                              <button 
+                                onClick={() => {
+                                  alert(`Mengunduh dokumen SOP resmi: ${item.title} (${item.fileSize})`);
+                                }}
+                                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
+                                title="Unduh Dokumen SOP"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                <span>Unduh SOP</span>
+                              </button>
+                            )}
                           </div>
                         </div>
                       </motion.div>

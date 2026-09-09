@@ -192,6 +192,11 @@ export default function AdminPortalPage() {
     unit: 'UKPBJ Kemnaker RI',
     revisi: 'Rev. 01 (2026)',
     tahapanCount: 5,
+    kategori: 'tata-kelola',
+    deskripsi: '',
+    fileName: '',
+    fileSize: '2.0 MB',
+    fileData: '',
     status: 'Berlaku'
   });
 
@@ -326,11 +331,42 @@ export default function AdminPortalPage() {
     showNotification('Status regulasi berhasil diubah!');
   };
 
-  // SOP HANDLERS
+  // SOP HANDLERS & FILE UPLOAD
+  const handleSopFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 8 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran dokumen SOP maksimal 8MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      const sizeStr = file.size > 1024 * 1024 
+        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+        : `${Math.round(file.size / 1024)} KB`;
+
+      setSopFormData((prev) => ({
+        ...prev,
+        fileName: file.name,
+        fileSize: sizeStr,
+        fileData: result,
+        downloadUrl: result
+      }));
+      showNotification(`✓ File "${file.name}" (${sizeStr}) berhasil dimuat & siap disimpan ke LocalStorage!`);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSaveSop = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingSop) {
-      updateSop(editingSop.id, sopFormData);
+      updateSop(editingSop.id, {
+        ...sopFormData,
+        downloadUrl: sopFormData.fileData || sopFormData.downloadUrl || '#'
+      });
       showNotification('✓ SOP berhasil diperbarui dan disinkronkan ke Frontend (/informasi/sop)!');
     } else {
       addSop({
@@ -339,10 +375,15 @@ export default function AdminPortalPage() {
         unit: sopFormData.unit || 'UKPBJ Kemnaker RI',
         revisi: sopFormData.revisi || 'Rev. 01 (2026)',
         tahapanCount: sopFormData.tahapanCount || 5,
-        downloadUrl: '#',
+        kategori: sopFormData.kategori || 'tata-kelola',
+        deskripsi: sopFormData.deskripsi || '',
+        fileName: sopFormData.fileName || 'Dokumen-SOP.pdf',
+        fileSize: sopFormData.fileSize || '2.0 MB',
+        fileData: sopFormData.fileData || '',
+        downloadUrl: sopFormData.fileData || '#',
         status: (sopFormData.status as SopItem['status']) || 'Berlaku'
       });
-      showNotification('✓ SOP baru berhasil ditambahkan ke daftar panduan operasional!');
+      showNotification('✓ SOP baru beserta lampiran file berhasil disimpan ke LocalStorage!');
     }
     setShowSopModal(false);
     setEditingSop(null);
@@ -1017,6 +1058,33 @@ export default function AdminPortalPage() {
                       >
                         <ScrollText className="w-3.5 h-3.5 text-blue-400" />
                         <span>Regulasi & Aturan</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowQuickAdd(false);
+                          setEditingSop(null);
+                          setSopFormData({
+                            kode: `SOP/PBJ/0${sopList.length + 1}/2026`,
+                            judul: '',
+                            unit: 'UKPBJ Kemnaker RI',
+                            revisi: 'Rev. 01 (2026)',
+                            tahapanCount: 5,
+                            kategori: 'tata-kelola',
+                            deskripsi: '',
+                            fileName: '',
+                            fileSize: '2.0 MB',
+                            fileData: '',
+                            status: 'Berlaku'
+                          });
+                          setShowSopModal(true);
+                        }}
+                        className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
+                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <Layers className="w-3.5 h-3.5 text-purple-400" />
+                        <span>Standar SOP</span>
                       </button>
 
                       <button
@@ -3394,7 +3462,7 @@ export default function AdminPortalPage() {
         )}
 
         {/* ========================================================= */}
-        {/* TAB: MANAGE SOP (CMS) */}
+        {/* TAB: MANAGE SOP (CMS - DOKUMEN & LOCALSTORAGE UPLOAD) */}
         {/* ========================================================= */}
         {activeTab === 'manage-sop' && (
           <div className="p-6 md:p-8 space-y-6">
@@ -3408,7 +3476,7 @@ export default function AdminPortalPage() {
                   Manage Standar Operasional Prosedur (SOP)
                 </h2>
                 <p className="text-xs text-slate-400 mt-1">
-                  Kelola dokumen dan panduan alur tahapan operasional. Tersinkronisasi ke portal publik (<Link href="/informasi/sop" className="text-purple-500 hover:underline">/informasi/sop</Link>).
+                  Kelola dokumen, lampiran file PDF/DOCX (tersimpan di LocalStorage), dan alur tahapan kerja. Tersinkronisasi ke portal publik (<Link href="/informasi/sop" className="text-purple-500 hover:underline">/informasi/sop</Link>).
                 </p>
               </div>
 
@@ -3422,6 +3490,11 @@ export default function AdminPortalPage() {
                       unit: 'UKPBJ Kemnaker RI',
                       revisi: 'Rev. 01 (2026)',
                       tahapanCount: 5,
+                      kategori: 'tata-kelola',
+                      deskripsi: '',
+                      fileName: '',
+                      fileSize: '2.0 MB',
+                      fileData: '',
                       status: 'Berlaku'
                     });
                     setShowSopModal(true);
@@ -3437,19 +3510,32 @@ export default function AdminPortalPage() {
             {/* SOP Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {sopList.map((item) => (
-                <div key={item.id} className={`p-5 rounded-2xl border transition-all space-y-3 ${
+                <div key={item.id} className={`p-5 rounded-2xl border transition-all space-y-3.5 ${
                   isDark ? 'bg-slate-900 border-slate-800 hover:border-purple-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-purple-500/40'
                 }`}>
                   <div className="flex justify-between items-start">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-500 border border-purple-500/20">
-                      {item.kode}
-                    </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                        {item.kode}
+                      </span>
+                      {item.kategori && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 capitalize">
+                          {item.kategori.replace('-', ' ')}
+                        </span>
+                      )}
+                    </div>
+                    <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold ${
+                      item.status === 'Berlaku' 
+                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        : item.status === 'Dalam Revisi'
+                        ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                        : 'bg-slate-800 text-slate-400'
+                    }`}>
                       {item.status}
                     </span>
                   </div>
 
-                  <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.judul}</h3>
+                  <h3 className={`font-bold text-sm leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.judul}</h3>
 
                   <div className="space-y-1.5 text-xs text-slate-400">
                     <div className="flex items-center justify-between">
@@ -3462,8 +3548,39 @@ export default function AdminPortalPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Jumlah Tahapan Prosedur:</span>
-                      <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 font-bold">{item.tahapanCount} Langkah</span>
+                      <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 font-bold">{item.tahapanCount} Langkah</span>
                     </div>
+                  </div>
+
+                  {/* Attachment Info */}
+                  <div className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 ${
+                    item.fileData
+                      ? isDark ? 'bg-emerald-950/20 border-emerald-800/40 text-emerald-300' : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                      : isDark ? 'bg-slate-950/60 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'
+                  }`}>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <FileText className={`w-4 h-4 flex-shrink-0 ${item.fileData ? 'text-emerald-500' : 'text-slate-400'}`} />
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-bold truncate">
+                          {item.fileName || 'Dokumen-SOP-Resmi.pdf'}
+                        </p>
+                        <p className="text-[9px] text-slate-400">
+                          {item.fileData ? `✓ File Tersimpan di LocalStorage (${item.fileSize || 'PDF'})` : `Template Sistem (${item.fileSize || '2.0 MB'})`}
+                        </p>
+                      </div>
+                    </div>
+
+                    {item.fileData && (
+                      <a
+                        href={item.fileData}
+                        download={item.fileName || `${item.kode.replace(/\//g, '-')}.pdf`}
+                        className="px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors flex-shrink-0"
+                        title="Unduh file yang tersimpan di LocalStorage"
+                      >
+                        <Download className="w-3 h-3" />
+                        <span>Unduh</span>
+                      </a>
+                    )}
                   </div>
 
                   <div className={`pt-3 border-t flex justify-between items-center ${
@@ -4674,7 +4791,7 @@ export default function AdminPortalPage() {
       </AnimatePresence>
 
       {/* ========================================================= */}
-      {/* MODAL 7: SOP MODAL (TAMBAH / EDIT) */}
+      {/* MODAL 7: SOP MODAL (TAMBAH / EDIT DENGAN UPLOAD LOCALSTORAGE) */}
       {/* ========================================================= */}
       <AnimatePresence>
         {showSopModal && (
@@ -4703,6 +4820,7 @@ export default function AdminPortalPage() {
               </div>
 
               <form onSubmit={handleSaveSop} className="space-y-4 text-xs">
+                {/* Kode & Status */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="font-bold block mb-1">Kode Dokumen SOP *</label>
@@ -4734,20 +4852,41 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
+                {/* Judul SOP */}
                 <div>
-                  <label className="font-bold block mb-1">Judul / Nama SOP *</label>
+                  <label className="font-bold block mb-1">Judul / Nama Dokumen SOP *</label>
                   <input
                     type="text"
                     required
                     value={sopFormData.judul || ''}
                     onChange={(e) => setSopFormData({ ...sopFormData, judul: e.target.value })}
-                    placeholder="e.g. SOP Penilaian Kinerja Penyedia & SIKaP"
+                    placeholder="e.g. SOP Penilaian Kinerja Penyedia & Integrasi SIKaP LKPP"
                     className={`w-full px-3 py-2 border rounded-xl outline-none ${
                       isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-purple-600'
                     }`}
                   />
                 </div>
 
+                {/* Kategori Klaster SOP */}
+                <div>
+                  <label className="font-bold block mb-1">Klaster / Kategori Tahapan SOP</label>
+                  <select
+                    value={sopFormData.kategori || 'tata-kelola'}
+                    onChange={(e) => setSopFormData({ ...sopFormData, kategori: e.target.value as SopItem['kategori'] })}
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-purple-600'
+                    }`}
+                  >
+                    <option value="tata-kelola">SOP Tata Kelola & Registrasi</option>
+                    <option value="perencanaan">SOP Perencanaan & Penyusunan HPS</option>
+                    <option value="pemilihan">SOP Pemilihan & E-Tendering</option>
+                    <option value="kontrak">SOP Pelaksanaan Kontrak & BAST</option>
+                    <option value="kinerja">SOP Pengelolaan Kinerja & SIKaP</option>
+                    <option value="risiko">SOP Manajemen Risiko & Pengawasan</option>
+                  </select>
+                </div>
+
+                {/* Unit, Revisi, Tahapan */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className="font-bold block mb-1">Unit Pengampu *</label>
@@ -4790,6 +4929,95 @@ export default function AdminPortalPage() {
                       }`}
                     />
                   </div>
+                </div>
+
+                {/* Deskripsi SOP */}
+                <div>
+                  <label className="font-bold block mb-1">Ringkasan Alur / Keterangan SOP</label>
+                  <textarea
+                    rows={2}
+                    value={sopFormData.deskripsi || ''}
+                    onChange={(e) => setSopFormData({ ...sopFormData, deskripsi: e.target.value })}
+                    placeholder="Jelaskan ringkas sasaran dan alur dokumen SOP ini..."
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-purple-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-purple-600'
+                    }`}
+                  />
+                </div>
+
+                {/* ========================================================= */}
+                {/* UPLOAD FILE DOKUMEN SOP (LOCALSTORAGE PERSISTENCE) */}
+                {/* ========================================================= */}
+                <div className="space-y-2 pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold flex items-center gap-1.5 text-purple-400">
+                      <Upload className="w-4 h-4" />
+                      <span>Unggah File Dokumen SOP (LocalStorage)</span>
+                    </label>
+                    <span className="text-[10px] text-slate-400 font-normal">
+                      PDF, DOCX, DOC, ZIP (Maks. 8MB)
+                    </span>
+                  </div>
+
+                  {/* Dropzone Container */}
+                  <label className={`block border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer transition-all ${
+                    sopFormData.fileData
+                      ? isDark ? 'border-emerald-500/50 bg-emerald-950/20' : 'border-emerald-500 bg-emerald-50/50'
+                      : isDark ? 'border-purple-500/30 hover:border-purple-500 bg-slate-950/50 hover:bg-purple-950/10' : 'border-purple-300 hover:border-purple-500 bg-purple-50/30'
+                  }`}>
+                    <input
+                      type="file"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.zip"
+                      className="hidden"
+                      onChange={handleSopFileUpload}
+                    />
+                    
+                    {sopFormData.fileData ? (
+                      <div className="space-y-2">
+                        <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                          <FileCheck className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-xs text-emerald-400">
+                            {sopFormData.fileName || 'Dokumen-SOP-Tersimpan.pdf'}
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            Ukuran: {sopFormData.fileSize || 'Tersimpan di LocalStorage'} • Format File Valid
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-center gap-2 pt-1">
+                          <span className="text-[10px] font-bold text-purple-400 hover:underline">
+                            Klik untuk ganti file
+                          </span>
+                          <span>•</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setSopFormData((prev) => ({
+                                ...prev,
+                                fileName: '',
+                                fileSize: '',
+                                fileData: '',
+                                downloadUrl: '#'
+                              }));
+                            }}
+                            className="text-[10px] font-bold text-red-400 hover:underline"
+                          >
+                            Hapus File
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-1.5 py-2">
+                        <Upload className="w-6 h-6 text-purple-400 mx-auto animate-bounce" />
+                        <p className="font-bold text-xs">Pilih atau Seret File SOP dari Komputer</p>
+                        <p className="text-[10px] text-slate-400">
+                          Dokumen akan otomatis dikonversi dan disimpan di LocalStorage browser Anda
+                        </p>
+                      </div>
+                    )}
+                  </label>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">

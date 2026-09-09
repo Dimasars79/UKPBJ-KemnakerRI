@@ -63,6 +63,11 @@ export interface SopItem {
   revisi: string;
   tahapanCount: number;
   downloadUrl?: string;
+  fileName?: string;
+  fileSize?: string;
+  fileData?: string; // Base64 Data URL for uploaded document (PDF, DOCX, etc.)
+  kategori?: 'tata-kelola' | 'perencanaan' | 'pemilihan' | 'kontrak' | 'kinerja' | 'risiko';
+  deskripsi?: string;
   status: 'Berlaku' | 'Dalam Revisi' | 'Draft';
   syncFrontend: boolean;
 }
@@ -393,6 +398,9 @@ const DEFAULT_SOP: SopItem[] = [
     unit: 'Biro Perencanaan & UKPBJ Kemnaker',
     revisi: 'Rev. 03 (2026)',
     tahapanCount: 6,
+    kategori: 'perencanaan',
+    fileSize: '2.4 MB',
+    fileName: 'SOP-Perencanaan-RUP-2026.pdf',
     downloadUrl: '#',
     status: 'Berlaku',
     syncFrontend: true
@@ -404,6 +412,9 @@ const DEFAULT_SOP: SopItem[] = [
     unit: 'Pokja Pemilihan UKPBJ',
     revisi: 'Rev. 02 (2026)',
     tahapanCount: 5,
+    kategori: 'pemilihan',
+    fileSize: '1.8 MB',
+    fileName: 'SOP-E-Purchasing-2026.pdf',
     downloadUrl: '#',
     status: 'Berlaku',
     syncFrontend: true
@@ -415,6 +426,9 @@ const DEFAULT_SOP: SopItem[] = [
     unit: 'Pokja Pemilihan I & II',
     revisi: 'Rev. 04 (2026)',
     tahapanCount: 8,
+    kategori: 'pemilihan',
+    fileSize: '3.2 MB',
+    fileName: 'SOP-Tender-SPSE-2026.pdf',
     downloadUrl: '#',
     status: 'Berlaku',
     syncFrontend: true
@@ -426,6 +440,9 @@ const DEFAULT_SOP: SopItem[] = [
     unit: 'Inspektorat Jenderal & UKPBJ',
     revisi: 'Rev. 01 (2025)',
     tahapanCount: 4,
+    kategori: 'risiko',
+    fileSize: '1.5 MB',
+    fileName: 'SOP-Clearing-House-2026.pdf',
     downloadUrl: '#',
     status: 'Berlaku',
     syncFrontend: true
@@ -437,6 +454,9 @@ const DEFAULT_SOP: SopItem[] = [
     unit: 'Pejabat Pembuat Komitmen (PPK)',
     revisi: 'Rev. 02 (2026)',
     tahapanCount: 5,
+    kategori: 'kontrak',
+    fileSize: '2.1 MB',
+    fileName: 'SOP-BAST-Evaluasi-Vendor.pdf',
     downloadUrl: '#',
     status: 'Berlaku',
     syncFrontend: true
