@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
@@ -546,8 +547,18 @@ export default function AdminPortalPage() {
             isDark ? 'border-slate-800/80' : 'border-slate-200'
           }`}>
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-blue to-accent-gold flex items-center justify-center shadow-md">
-                <Network className="w-5 h-5 text-white" />
+              <div className={`w-10 h-10 rounded-xl p-1.5 flex items-center justify-center shadow-md transition-all ${
+                isDark 
+                  ? 'bg-white/95 border border-white/20 shadow-blue-500/10' 
+                  : 'bg-white border border-slate-200 shadow-sm'
+              }`}>
+                <Image 
+                  src="/logo-ukpbj-emblem.png" 
+                  alt="Logo UKPBJ Kemnaker RI" 
+                  width={36} 
+                  height={36} 
+                  className="w-full h-full object-contain drop-shadow-xs" 
+                />
               </div>
               <div>
                 <h1 className={`font-extrabold text-sm tracking-wide ${isDark ? 'text-white' : 'text-primary-navy'}`}>
