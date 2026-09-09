@@ -65,7 +65,9 @@ import {
   Award,
   Target,
   UserCheck,
-  Bell
+  Bell,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
@@ -370,6 +372,35 @@ export default function AdminPortalPage() {
       deleteSop(id);
       showNotification('SOP telah dihapus dari sistem.');
     }
+  };
+
+  // Helper for converting file upload to Base64 data URL for local storage persistence
+  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'photo' | 'video-thumb') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 4 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran file maksimal 4MB. Silakan pilih foto yang lebih ringkas.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (type === 'photo') {
+        setPhotoFormData((prev) => ({ ...prev, src: result }));
+        showNotification('✓ Foto dari komputer berhasil dimuat & siap disimpan!');
+      } else if (type === 'video-thumb') {
+        setVideoFormData((prev) => ({ ...prev, thumbnailUrl: result }));
+        showNotification('✓ Thumbnail video berhasil dimuat & siap disimpan!');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const getYouTubeThumbnail = (url: string) => {
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
   };
 
   // PHOTO HANDLERS
@@ -4831,7 +4862,7 @@ export default function AdminPortalPage() {
         )}
       </AnimatePresence>
       {/* ========================================================= */}
-      {/* MODAL 8: PHOTO MODAL (TAMBAH / EDIT FOTO) */}
+      {/* MODAL 8: PHOTO MODAL (TAMBAH / EDIT FOTO - LOCAL UPLOAD READY) */}
       {/* ========================================================= */}
       <AnimatePresence>
         {showPhotoModal && (
@@ -4877,7 +4908,7 @@ export default function AdminPortalPage() {
                 <div>
                   <label className="font-bold block mb-1">Deskripsi Foto Kegiatan</label>
                   <textarea
-                    rows={3}
+                    rows={2}
                     value={photoFormData.desc || ''}
                     onChange={(e) => setPhotoFormData({ ...photoFormData, desc: e.target.value })}
                     placeholder="Keterangan singkat momen kegiatan pengadaan..."
@@ -4908,20 +4939,92 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Pilihan Gambar / Path File</label>
+                    <label className="font-bold block mb-1">Ukuran Tampilan Grid</label>
                     <select
-                      value={photoFormData.src || '/gallery/gallery-1.jpg'}
-                      onChange={(e) => setPhotoFormData({ ...photoFormData, src: e.target.value })}
+                      value={photoFormData.size || 'small'}
+                      onChange={(e) => setPhotoFormData({ ...photoFormData, size: e.target.value as PhotoItem['size'] })}
                       className={`w-full px-3 py-2 border rounded-xl outline-none ${
                         isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-cyan-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-cyan-600'
                       }`}
                     >
-                      <option value="/gallery/gallery-1.jpg">Gallery Foto 1 (Kunjungan)</option>
-                      <option value="/gallery/gallery-2.jpg">Gallery Foto 2 (Rakornas)</option>
-                      <option value="/gallery/gallery-3.jpg">Gallery Foto 3 (Sosialisasi)</option>
-                      <option value="/gallery/gallery-4.jpg">Gallery Foto 4 (Bimtek)</option>
-                      <option value="/gallery/gallery-5.jpg">Gallery Foto 5 (Kontrak)</option>
-                      <option value="/gallery/gallery-6.jpg">Gallery Foto 6 (Monitoring)</option>
+                      <option value="small">Standar (1 Kolom)</option>
+                      <option value="large">Featured / Unggulan (2 Kolom Besar)</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* FILE UPLOAD & PREVIEW SECTION */}
+                <div className={`p-4 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold flex items-center gap-1.5 text-cyan-400">
+                      <ImageIcon className="w-4 h-4" />
+                      <span>Upload Foto dari Komputer (Local Storage)</span>
+                    </label>
+                    <span className="text-[10px] text-slate-400">PNG, JPG, WEBP (Max 4MB)</span>
+                  </div>
+
+                  {/* Upload Dropzone */}
+                  <label 
+                    htmlFor="photo-file-upload" 
+                    className={`border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all ${
+                      isDark 
+                        ? 'border-slate-700 hover:border-cyan-500 hover:bg-cyan-500/5' 
+                        : 'border-slate-300 hover:border-cyan-600 hover:bg-cyan-50'
+                    }`}
+                  >
+                    <Upload className="w-6 h-6 text-cyan-500 mb-1.5 animate-bounce" />
+                    <span className="font-bold text-xs">Pilih File Foto dari Perangkat / Komputer</span>
+                    <span className="text-[10px] text-slate-400 mt-0.5">File otomatis dikonversi & disimpan ke database browser</span>
+                    <input 
+                      id="photo-file-upload"
+                      type="file" 
+                      accept="image/*" 
+                      onChange={(e) => handleImageFileUpload(e, 'photo')}
+                      className="hidden" 
+                    />
+                  </label>
+
+                  {/* Live Image Preview */}
+                  {photoFormData.src && (
+                    <div className="flex items-center gap-3 pt-2">
+                      <div className="relative w-20 h-14 rounded-xl overflow-hidden border border-slate-700 bg-slate-800 shrink-0">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img 
+                          src={photoFormData.src} 
+                          alt="Preview Foto" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-bold text-xs text-emerald-500 flex items-center gap-1">
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Foto Siap Ditayangkan</span>
+                        </p>
+                        <p className="text-[10px] text-slate-400 truncate mt-0.5">
+                          {photoFormData.src.startsWith('data:') ? '✓ Format: Base64 Data URL (Local)' : photoFormData.src}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Or select preset images */}
+                  <div className="pt-2 border-t border-slate-800/60">
+                    <span className="text-[10px] text-slate-400 block mb-1">Atau pilih dari koleksi bawaan:</span>
+                    <select
+                      value={photoFormData.src || '/gallery/gallery-1.jpg'}
+                      onChange={(e) => setPhotoFormData({ ...photoFormData, src: e.target.value })}
+                      className={`w-full px-3 py-1.5 border rounded-lg outline-none text-[11px] ${
+                        isDark ? 'bg-slate-900 border-slate-700 text-slate-300' : 'bg-white border-slate-300 text-slate-700'
+                      }`}
+                    >
+                      <option value="/gallery/gallery-1.jpg">Gallery Foto 1 (Kunjungan Kerja)</option>
+                      <option value="/gallery/gallery-2.jpg">Gallery Foto 2 (Rakornas Pengadaan)</option>
+                      <option value="/gallery/gallery-3.jpg">Gallery Foto 3 (Sosialisasi Regulasi)</option>
+                      <option value="/gallery/gallery-4.jpg">Gallery Foto 4 (Bimtek PBJ)</option>
+                      <option value="/gallery/gallery-5.jpg">Gallery Foto 5 (Penandatanganan Kontrak)</option>
+                      <option value="/gallery/gallery-6.jpg">Gallery Foto 6 (Monitoring Evaluasi)</option>
                     </select>
                   </div>
                 </div>
@@ -4950,7 +5053,7 @@ export default function AdminPortalPage() {
       </AnimatePresence>
 
       {/* ========================================================= */}
-      {/* MODAL 9: VIDEO MODAL (TAMBAH / EDIT VIDEO) */}
+      {/* MODAL 9: VIDEO MODAL (TAMBAH / EDIT VIDEO - LOCAL THUMBNAIL READY) */}
       {/* ========================================================= */}
       <AnimatePresence>
         {showVideoModal && (
@@ -4996,7 +5099,7 @@ export default function AdminPortalPage() {
                 <div>
                   <label className="font-bold block mb-1">Deskripsi Singkat Video</label>
                   <textarea
-                    rows={3}
+                    rows={2}
                     value={videoFormData.desc || ''}
                     onChange={(e) => setVideoFormData({ ...videoFormData, desc: e.target.value })}
                     placeholder="Uraian rangkuman materi atau rekaman acara..."
@@ -5040,17 +5143,100 @@ export default function AdminPortalPage() {
                 </div>
 
                 <div>
-                  <label className="font-bold block mb-1">Link URL YouTube / Video *</label>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="font-bold">Link URL YouTube / Video *</label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (videoFormData.url) {
+                          const ytThumb = getYouTubeThumbnail(videoFormData.url);
+                          if (ytThumb) {
+                            setVideoFormData((prev) => ({ ...prev, thumbnailUrl: ytThumb }));
+                            showNotification('✓ Thumbnail YouTube berhasil diambil secara otomatis!');
+                          } else {
+                            showNotification('⚠️ URL YouTube tidak valid untuk ekstraksi otomatis.');
+                          }
+                        } else {
+                          showNotification('⚠️ Masukkan link URL YouTube terlebih dahulu.');
+                        }
+                      }}
+                      className="text-[10px] text-amber-500 hover:underline font-bold cursor-pointer"
+                    >
+                      ⚡ Ambil Thumbnail dari YouTube
+                    </button>
+                  </div>
                   <input
                     type="text"
                     required
                     value={videoFormData.url || ''}
-                    onChange={(e) => setVideoFormData({ ...videoFormData, url: e.target.value })}
+                    onChange={(e) => {
+                      const newUrl = e.target.value;
+                      setVideoFormData({ ...videoFormData, url: newUrl });
+                      const autoThumb = getYouTubeThumbnail(newUrl);
+                      if (autoThumb && (!videoFormData.thumbnailUrl || videoFormData.thumbnailUrl === '/gallery/gallery-1.jpg')) {
+                        setVideoFormData((prev) => ({ ...prev, url: newUrl, thumbnailUrl: autoThumb }));
+                      }
+                    }}
                     placeholder="https://www.youtube.com/watch?v=..."
                     className={`w-full px-3 py-2 border rounded-xl outline-none font-mono ${
                       isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-amber-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-amber-600'
                     }`}
                   />
+                </div>
+
+                {/* THUMBNAIL UPLOAD & PREVIEW SECTION */}
+                <div className={`p-4 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold flex items-center gap-1.5 text-amber-400">
+                      <ImageIcon className="w-4 h-4" />
+                      <span>Upload Thumbnail Kustom (Local Storage)</span>
+                    </label>
+                    <span className="text-[10px] text-slate-400">PNG, JPG, WEBP</span>
+                  </div>
+
+                  <label 
+                    htmlFor="video-thumb-upload" 
+                    className={`border-2 border-dashed rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-all ${
+                      isDark 
+                        ? 'border-slate-700 hover:border-amber-500 hover:bg-amber-500/5' 
+                        : 'border-slate-300 hover:border-amber-600 hover:bg-amber-50'
+                    }`}
+                  >
+                    <Upload className="w-5 h-5 text-amber-500 mb-1" />
+                    <span className="font-bold text-xs">Pilih Gambar Thumbnail dari Komputer</span>
+                    <input 
+                      id="video-thumb-upload"
+                      type="file" 
+                      accept="image/*" 
+                      onChange={(e) => handleImageFileUpload(e, 'video-thumb')}
+                      className="hidden" 
+                    />
+                  </label>
+
+                  {/* Thumbnail Preview */}
+                  {videoFormData.thumbnailUrl && (
+                    <div className="flex items-center gap-3 pt-1">
+                      <div className="relative w-20 h-14 rounded-xl overflow-hidden border border-slate-700 bg-slate-800 shrink-0">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img 
+                          src={videoFormData.thumbnailUrl} 
+                          alt="Preview Thumbnail" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-bold text-xs text-emerald-500 flex items-center gap-1">
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Thumbnail Terpasang</span>
+                        </p>
+                        <p className="text-[10px] text-slate-400 truncate mt-0.5">
+                          {videoFormData.thumbnailUrl.startsWith('data:') ? '✓ Format: Base64 (Local File)' : videoFormData.thumbnailUrl}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
