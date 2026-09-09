@@ -605,7 +605,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!newsErr && newsData && newsData.length > 0) {
+      if (!newsErr && newsData) {
         const mappedNews: NewsItem[] = (newsData as Array<{
           id: string;
           title: string;
@@ -640,7 +640,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!agendaErr && agendaData && agendaData.length > 0) {
+      if (!agendaErr && agendaData) {
         const mappedAgendas: AgendaItem[] = (agendaData as Array<{
           id: string;
           title: string;
@@ -673,7 +673,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!pkgErr && pkgData && pkgData.length > 0) {
+      if (!pkgErr && pkgData) {
         const mappedPkgs: ProcurementPackage[] = (pkgData as Array<{
           id: string;
           code: string;
@@ -714,7 +714,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!regErr && regData && regData.length > 0) {
+      if (!regErr && regData) {
         const mappedReg: RegulasiItem[] = (regData as Array<{
           id: string;
           nomor: string;
@@ -745,7 +745,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!sopErr && sopData && sopData.length > 0) {
+      if (!sopErr && sopData) {
         const mappedSop: SopItem[] = (sopData as Array<{
           id: string;
           kode: string;
@@ -784,7 +784,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!photoErr && photoData && photoData.length > 0) {
+      if (!photoErr && photoData) {
         const mappedPhotos: PhotoItem[] = (photoData as Array<{
           id: string;
           title: string;
@@ -813,7 +813,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!videoErr && videoData && videoData.length > 0) {
+      if (!videoErr && videoData) {
         const mappedVideos: VideoMediaItem[] = (videoData as Array<{
           id: string;
           title: string;
@@ -870,13 +870,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed.newsList?.length) setNewsList(parsed.newsList);
-        if (parsed.agendaList?.length) setAgendaList(parsed.agendaList);
-        if (parsed.packagesList?.length) setPackagesList(parsed.packagesList);
-        if (parsed.regulasiList?.length) setRegulasiList(parsed.regulasiList);
-        if (parsed.sopList?.length) setSopList(parsed.sopList);
-        if (parsed.photosList?.length) setPhotosList(parsed.photosList);
-        if (parsed.videosList?.length) setVideosList(parsed.videosList);
+        if (Array.isArray(parsed.newsList)) setNewsList(parsed.newsList);
+        if (Array.isArray(parsed.agendaList)) setAgendaList(parsed.agendaList);
+        if (Array.isArray(parsed.packagesList)) setPackagesList(parsed.packagesList);
+        if (Array.isArray(parsed.regulasiList)) setRegulasiList(parsed.regulasiList);
+        if (Array.isArray(parsed.sopList)) setSopList(parsed.sopList);
+        if (Array.isArray(parsed.photosList)) setPhotosList(parsed.photosList);
+        if (Array.isArray(parsed.videosList)) setVideosList(parsed.videosList);
         if (parsed.siteSettings) setSiteSettings(parsed.siteSettings);
       }
     } catch (e) {
