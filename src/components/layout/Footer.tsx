@@ -13,14 +13,14 @@ export function Footer() {
 
           {/* Column 1: Identity */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 mb-2">
               <div className="flex-shrink-0">
                 <Image 
                   src="/logo-ukpbj-kemnaker-putih.png" 
                   alt="Logo UKPBJ Kemnaker RI" 
-                  width={220} 
-                  height={70} 
-                  className="h-12 md:h-14 w-auto object-contain" 
+                  width={300} 
+                  height={90} 
+                  className="h-12 sm:h-14 md:h-16 w-auto object-contain drop-shadow-md transition-transform duration-300 hover:scale-[1.02]" 
                 />
               </div>
             </div>
