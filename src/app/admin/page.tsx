@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
@@ -86,26 +86,7 @@ export default function AdminPortalPage() {
   // Header Interactive States
   const [showNotifications, setShowNotifications] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
-  const [liveTime, setLiveTime] = useState<string>('');
   const [unreadNotifs, setUnreadNotifs] = useState(3);
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const formatted = now.toLocaleDateString('id-ID', {
-        weekday: 'short',
-        day: 'numeric',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }) + ' WIB';
-      setLiveTime(formatted);
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
   
   // DataContext Hook
   const {
@@ -840,42 +821,42 @@ export default function AdminPortalPage() {
         isDark ? 'bg-slate-950' : 'bg-slate-100'
       }`}>
         
-        {/* Top Header - Modern Enterprise Command Bar */}
-        <header className={`h-16 border-b backdrop-blur-xl px-4 md:px-6 flex items-center justify-between sticky top-0 z-40 transition-all duration-300 ${
+        {/* Top Header - Spacious & Clean Modern Command Bar */}
+        <header className={`h-20 border-b backdrop-blur-xl px-6 md:px-8 flex items-center justify-between sticky top-0 z-40 transition-all duration-300 ${
           isDark 
             ? 'border-slate-800/80 bg-slate-950/85 shadow-sm shadow-black/20' 
             : 'border-slate-200/90 bg-white/90 shadow-sm shadow-slate-200/50'
         }`}>
-          {/* LEFT: Context Breadcrumb & Active Indicator */}
-          <div className="flex items-center space-x-3">
-            <div className={`p-2 rounded-xl border flex items-center justify-center shrink-0 ${
-              isDark ? 'bg-slate-900 border-slate-800 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
+          {/* LEFT: Clean Page Title & Context Indicator */}
+          <div className="flex items-center space-x-3.5">
+            <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 shadow-xs ${
+              isDark ? 'bg-slate-900/90 border-slate-800 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
             }`}>
-              {activeTab === 'dashboard' && <LayoutDashboard className="w-4 h-4" />}
-              {activeTab === 'paket' && <Package className="w-4 h-4 text-blue-400" />}
-              {activeTab === 'monitoring' && <Radio className="w-4 h-4 text-emerald-500 animate-pulse" />}
-              {activeTab === 'manage-berita' && <Newspaper className="w-4 h-4 text-amber-500" />}
-              {activeTab === 'manage-agenda' && <Calendar className="w-4 h-4 text-emerald-500" />}
-              {activeTab === 'manage-regulasi' && <ScrollText className="w-4 h-4 text-blue-400" />}
-              {activeTab === 'manage-sop' && <Layers className="w-4 h-4 text-purple-400" />}
-              {activeTab === 'manage-galeri' && <Camera className="w-4 h-4 text-cyan-400" />}
-              {activeTab === 'arsitektur' && <Network className="w-4 h-4 text-accent-gold" />}
-              {activeTab === 'penyedia' && <Users className="w-4 h-4 text-blue-400" />}
-              {activeTab === 'laporan' && <BarChart3 className="w-4 h-4 text-purple-400" />}
-              {activeTab === 'pengaturan' && <Settings className="w-4 h-4 text-slate-400" />}
+              {activeTab === 'dashboard' && <LayoutDashboard className="w-5 h-5" />}
+              {activeTab === 'paket' && <Package className="w-5 h-5 text-blue-400" />}
+              {activeTab === 'monitoring' && <Radio className="w-5 h-5 text-emerald-500 animate-pulse" />}
+              {activeTab === 'manage-berita' && <Newspaper className="w-5 h-5 text-amber-500" />}
+              {activeTab === 'manage-agenda' && <Calendar className="w-5 h-5 text-emerald-500" />}
+              {activeTab === 'manage-regulasi' && <ScrollText className="w-5 h-5 text-blue-400" />}
+              {activeTab === 'manage-sop' && <Layers className="w-5 h-5 text-purple-400" />}
+              {activeTab === 'manage-galeri' && <Camera className="w-5 h-5 text-cyan-400" />}
+              {activeTab === 'arsitektur' && <Network className="w-5 h-5 text-accent-gold" />}
+              {activeTab === 'penyedia' && <Users className="w-5 h-5 text-blue-400" />}
+              {activeTab === 'laporan' && <BarChart3 className="w-5 h-5 text-purple-400" />}
+              {activeTab === 'pengaturan' && <Settings className="w-5 h-5 text-slate-400" />}
             </div>
 
-            <div className="hidden sm:block">
-              <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
-                <span className="hover:text-blue-500 cursor-pointer" onClick={() => setActiveTab('dashboard')}>Portal Admin</span>
-                <span>/</span>
-                <span className="text-slate-500 uppercase tracking-wider">
+            <div>
+              <div className="flex items-center space-x-1.5 text-[11px] font-semibold text-slate-400">
+                <span className="hover:text-blue-500 cursor-pointer transition-colors" onClick={() => setActiveTab('dashboard')}>Portal Admin</span>
+                <span>•</span>
+                <span className="text-slate-500 uppercase tracking-wider text-[10px]">
                   {activeTab === 'dashboard' ? 'Utama' :
                    activeTab === 'paket' || activeTab === 'monitoring' || activeTab === 'laporan' ? 'Pengadaan' :
                    activeTab.startsWith('manage-') ? 'CMS Publik' : 'Sistem'}
                 </span>
               </div>
-              <h2 className={`text-xs md:text-sm font-extrabold capitalize leading-none mt-0.5 ${
+              <h1 className={`text-base md:text-lg font-black tracking-tight leading-tight mt-0.5 ${
                 isDark ? 'text-white' : 'text-slate-900'
               }`}>
                 {activeTab === 'dashboard' ? 'Executive Command Center' :
@@ -889,50 +870,31 @@ export default function AdminPortalPage() {
                  activeTab === 'arsitektur' ? 'Arsitektur Sistem 5-Tier' :
                  activeTab === 'penyedia' ? 'Database Vendor Rekanan' :
                  activeTab === 'laporan' ? 'Statistik & Kinerja PBJ' : 'Konfigurasi & Database'}
-              </h2>
+              </h1>
             </div>
           </div>
 
-          {/* CENTER: Smart Search Command Box with Keyboard Shortcut */}
-          <div className="flex items-center space-x-3">
-            <div className="relative w-44 md:w-64 lg:w-72 group">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+          {/* RIGHT: Spacious Actions (Search, Quick Add, Notif, Theme) */}
+          <div className="flex items-center space-x-3 md:space-x-4">
+            
+            {/* Search Input */}
+            <div className="relative w-48 sm:w-60 md:w-72 group">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
               <input
                 type="text"
                 placeholder="Cari berita, agenda, paket..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-8 pr-10 py-1.5 border rounded-xl text-xs transition-all outline-none ${
+                className={`w-full pl-9 pr-10 py-2 border rounded-xl text-xs transition-all outline-none ${
                   isDark 
                     ? 'bg-slate-900/80 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-900' 
                     : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:bg-white shadow-xs'
                 }`}
               />
-              <span className="hidden md:inline-flex absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-slate-700/60 bg-slate-800/60 text-slate-400">
+              <span className="hidden md:inline-flex absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-slate-700/60 bg-slate-800/60 text-slate-400">
                 ⌘K
               </span>
             </div>
-
-            {/* SPSE Live Health Sentinel Pill */}
-            <div className="hidden xl:flex items-center space-x-2 px-2.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-semibold shrink-0">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span>SPSE: 38ms</span>
-            </div>
-          </div>
-
-          {/* RIGHT: Actions, Live Clock, Notifications, Theme & Quick Profile */}
-          <div className="flex items-center space-x-2">
-            
-            {/* Live Clock Widget */}
-            {liveTime && (
-              <div className="hidden 2xl:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-semibold text-slate-400 border-slate-800/80 bg-slate-900/50">
-                <Clock className="w-3.5 h-3.5 text-accent-gold" />
-                <span>{liveTime}</span>
-              </div>
-            )}
 
             {/* QUICK ACTION BUTTON & DROPDOWN */}
             <div className="relative">
@@ -941,12 +903,12 @@ export default function AdminPortalPage() {
                   setShowQuickAdd(!showQuickAdd);
                   if (showNotifications) setShowNotifications(false);
                 }}
-                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-600/20 transition-all cursor-pointer"
+                className="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-600/25 transition-all cursor-pointer"
                 title="Tambah data baru secara instan"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Tambah Cepat</span>
-                <ChevronDown className={`w-3 h-3 transition-transform ${showQuickAdd ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showQuickAdd ? 'rotate-180' : ''}`} />
               </button>
 
               <AnimatePresence>
@@ -1091,7 +1053,7 @@ export default function AdminPortalPage() {
                   setShowNotifications(!showNotifications);
                   if (showQuickAdd) setShowQuickAdd(false);
                 }}
-                className={`relative p-2 rounded-xl border transition-colors cursor-pointer ${
+                className={`relative p-2.5 rounded-xl border transition-colors cursor-pointer ${
                   isDark ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
                 }`}
                 title="Pusat Notifikasi & Audit Log"
@@ -1196,7 +1158,7 @@ export default function AdminPortalPage() {
             </div>
 
             {/* THEME TOGGLE (LIGHT / DARK) */}
-            <div className={`flex items-center p-0.5 rounded-xl border ${
+            <div className={`flex items-center p-1 rounded-xl border ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-200'
             }`}>
               <button
@@ -1208,7 +1170,7 @@ export default function AdminPortalPage() {
                 }`}
                 title="Mode Terang (Light)"
               >
-                <Sun className="w-3.5 h-3.5" />
+                <Sun className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setTheme('dark')}
@@ -1219,19 +1181,10 @@ export default function AdminPortalPage() {
                 }`}
                 title="Mode Gelap (Dark)"
               >
-                <Moon className="w-3.5 h-3.5" />
+                <Moon className="w-4 h-4" />
               </button>
             </div>
 
-            {/* BLUEPRINT ARSITEKTUR QUICK BUTTON */}
-            <button 
-              onClick={() => setActiveTab('arsitektur')}
-              className="hidden lg:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-accent-gold/10 border border-accent-gold/30 text-accent-gold hover:bg-accent-gold/20 text-xs font-bold transition-all cursor-pointer"
-              title="Lihat Arsitektur Sistem 5-Tier"
-            >
-              <Network className="w-3.5 h-3.5" />
-              <span className="hidden xl:inline">Arsitektur</span>
-            </button>
           </div>
         </header>
 
