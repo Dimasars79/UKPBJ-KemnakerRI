@@ -11,6 +11,62 @@ const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
   },
 });
 
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const table = searchParams.get('table');
+
+    if (table) {
+      const { data, error } = await supabaseAdmin
+        .from(table)
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return NextResponse.json({ success: true, data });
+    }
+
+    // Fetch all 8 tables in parallel using service role
+    const [
+      newsRes,
+      agendasRes,
+      packagesRes,
+      regulasiRes,
+      sopRes,
+      photosRes,
+      videosRes,
+      settingsRes
+    ] = await Promise.all([
+      supabaseAdmin.from('news').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('agendas').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('procurement_packages').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('regulasi').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('sop').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('gallery_photos').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('gallery_videos').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('site_settings').select('*').eq('id', 'global_config').maybeSingle()
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        news: newsRes.data || [],
+        agendas: agendasRes.data || [],
+        procurement_packages: packagesRes.data || [],
+        regulasi: regulasiRes.data || [],
+        sop: sopRes.data || [],
+        gallery_photos: photosRes.data || [],
+        gallery_videos: videosRes.data || [],
+        site_settings: settingsRes.data || null
+      }
+    });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Gagal mengambil data database';
+    console.error('API GET Data Error:', err);
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

@@ -1,7 +1,6 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/supabase/client';
 
 export interface NewsItem {
   id: string;
@@ -594,271 +593,234 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // Sync / Fetch data from Supabase PostgreSQL
   const refreshFromSupabase = useCallback(async () => {
     try {
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-        setIsLoaded(true);
-        return;
+      const res = await fetch('/api/admin/data');
+      if (!res.ok) throw new Error('API fetch failed');
+      const json = await res.json();
+
+      if (json.success && json.data) {
+        const {
+          news,
+          agendas,
+          procurement_packages,
+          regulasi,
+          sop,
+          gallery_photos,
+          gallery_videos,
+          site_settings
+        } = json.data;
+
+        if (Array.isArray(news)) {
+          const mappedNews: NewsItem[] = news.map((n: {
+            id: string;
+            title: string;
+            category: NewsItem['category'];
+            author?: string;
+            date?: string;
+            views?: number;
+            status?: NewsItem['status'];
+            excerpt?: string;
+            content?: string;
+            image_url?: string;
+            sync_frontend?: boolean;
+          }) => ({
+            id: n.id,
+            title: n.title,
+            category: n.category,
+            author: n.author || 'Admin UKPBJ',
+            date: n.date ? (typeof n.date === 'string' && n.date.includes('T') ? new Date(n.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : n.date) : '2026',
+            views: n.views || 0,
+            status: n.status || 'Published',
+            excerpt: n.excerpt || '',
+            content: n.content || '',
+            imageUrl: n.image_url || '/news/news-1.png',
+            syncFrontend: n.sync_frontend ?? true
+          }));
+          setNewsList(mappedNews);
+        }
+
+        if (Array.isArray(agendas)) {
+          const mappedAgendas: AgendaItem[] = agendas.map((a: {
+            id: string;
+            title: string;
+            category: AgendaItem['category'];
+            date: string;
+            time: string;
+            location: string;
+            organizer: string;
+            capacity: string;
+            status: AgendaItem['status'];
+            sync_frontend?: boolean;
+          }) => ({
+            id: a.id,
+            title: a.title,
+            category: a.category,
+            date: a.date,
+            time: a.time,
+            location: a.location,
+            organizer: a.organizer,
+            capacity: a.capacity,
+            status: a.status,
+            syncFrontend: a.sync_frontend ?? true
+          }));
+          setAgendaList(mappedAgendas);
+        }
+
+        if (Array.isArray(procurement_packages)) {
+          const mappedPkgs: ProcurementPackage[] = procurement_packages.map((p: {
+            id: string;
+            code: string;
+            title: string;
+            unit: string;
+            hps: string;
+            category: ProcurementPackage['category'];
+            status: ProcurementPackage['status'];
+            deadline: string;
+            method: string;
+            doc_count?: number;
+            description?: string;
+            file_name?: string;
+            file_size?: string;
+            file_url?: string;
+          }) => ({
+            id: p.id,
+            code: p.code,
+            title: p.title,
+            unit: p.unit,
+            hps: p.hps,
+            category: p.category,
+            status: p.status,
+            deadline: p.deadline,
+            method: p.method,
+            docCount: p.doc_count ?? 1,
+            desc: p.description,
+            fileName: p.file_name,
+            fileSize: p.file_size,
+            downloadUrl: p.file_url || '#'
+          }));
+          setPackagesList(mappedPkgs);
+        }
+
+        if (Array.isArray(regulasi)) {
+          const mappedReg: RegulasiItem[] = regulasi.map((r: {
+            id: string;
+            nomor: string;
+            tentang: string;
+            tahun: string;
+            kategori: RegulasiItem['kategori'];
+            file_size: string;
+            download_url?: string;
+            status: RegulasiItem['status'];
+            sync_frontend?: boolean;
+          }) => ({
+            id: r.id,
+            nomor: r.nomor,
+            tentang: r.tentang,
+            tahun: r.tahun,
+            kategori: r.kategori,
+            fileSize: r.file_size,
+            downloadUrl: r.download_url || '#',
+            status: r.status,
+            syncFrontend: r.sync_frontend ?? true
+          }));
+          setRegulasiList(mappedReg);
+        }
+
+        if (Array.isArray(sop)) {
+          const mappedSop: SopItem[] = sop.map((s: {
+            id: string;
+            kode: string;
+            judul: string;
+            unit: string;
+            revisi: string;
+            tahapan_count?: number;
+            download_url?: string;
+            file_name?: string;
+            file_size?: string;
+            kategori?: SopItem['kategori'];
+            deskripsi?: string;
+            status: SopItem['status'];
+            sync_frontend?: boolean;
+          }) => ({
+            id: s.id,
+            kode: s.kode,
+            judul: s.judul,
+            unit: s.unit,
+            revisi: s.revisi,
+            tahapanCount: s.tahapan_count ?? 5,
+            downloadUrl: s.download_url || '#',
+            fileName: s.file_name,
+            fileSize: s.file_size,
+            kategori: s.kategori,
+            deskripsi: s.deskripsi,
+            status: s.status,
+            syncFrontend: s.sync_frontend ?? true
+          }));
+          setSopList(mappedSop);
+        }
+
+        if (Array.isArray(gallery_photos)) {
+          const mappedPhotos: PhotoItem[] = gallery_photos.map((p: {
+            id: string;
+            title: string;
+            description?: string;
+            category: string;
+            src: string;
+            date: string;
+            size?: 'large' | 'small';
+            sync_frontend?: boolean;
+          }) => ({
+            id: p.id,
+            title: p.title,
+            desc: p.description || '',
+            category: p.category,
+            src: p.src,
+            date: p.date,
+            size: p.size,
+            syncFrontend: p.sync_frontend ?? true
+          }));
+          setPhotosList(mappedPhotos);
+        }
+
+        if (Array.isArray(gallery_videos)) {
+          const mappedVideos: VideoMediaItem[] = gallery_videos.map((v: {
+            id: string;
+            title: string;
+            description?: string;
+            category: string;
+            duration: string;
+            date: string;
+            views: string;
+            thumbnail_url: string;
+            url: string;
+            sync_frontend?: boolean;
+          }) => ({
+            id: v.id,
+            title: v.title,
+            desc: v.description || '',
+            category: v.category,
+            duration: v.duration,
+            date: v.date,
+            views: v.views,
+            thumbnailUrl: v.thumbnail_url,
+            url: v.url,
+            syncFrontend: v.sync_frontend ?? true
+          }));
+          setVideosList(mappedVideos);
+        }
+
+        if (site_settings) {
+          setSiteSettings({
+            announcementBanner: site_settings.announcement_banner,
+            announcementActive: site_settings.announcement_active,
+            serverStatus: site_settings.server_status,
+            emergencyNotice: site_settings.emergency_notice || ''
+          });
+        }
+
+        setIsSupabaseConnected(true);
       }
-
-      // 1. Fetch News
-      const { data: newsData, error: newsErr } = await supabase
-        .from('news')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!newsErr && newsData) {
-        const mappedNews: NewsItem[] = (newsData as Array<{
-          id: string;
-          title: string;
-          category: NewsItem['category'];
-          author?: string;
-          date?: string;
-          views?: number;
-          status?: NewsItem['status'];
-          excerpt?: string;
-          content?: string;
-          image_url?: string;
-          sync_frontend?: boolean;
-        }>).map((n) => ({
-          id: n.id,
-          title: n.title,
-          category: n.category,
-          author: n.author || 'Admin UKPBJ',
-          date: n.date ? (typeof n.date === 'string' && n.date.includes('T') ? new Date(n.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : n.date) : '2026',
-          views: n.views || 0,
-          status: n.status || 'Published',
-          excerpt: n.excerpt || '',
-          content: n.content || '',
-          imageUrl: n.image_url || '/news/news-1.png',
-          syncFrontend: n.sync_frontend ?? true
-        }));
-        setNewsList(mappedNews);
-      }
-
-      // 2. Fetch Agendas
-      const { data: agendaData, error: agendaErr } = await supabase
-        .from('agendas')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!agendaErr && agendaData) {
-        const mappedAgendas: AgendaItem[] = (agendaData as Array<{
-          id: string;
-          title: string;
-          category: AgendaItem['category'];
-          date: string;
-          time: string;
-          location: string;
-          organizer: string;
-          capacity: string;
-          status: AgendaItem['status'];
-          sync_frontend?: boolean;
-        }>).map((a) => ({
-          id: a.id,
-          title: a.title,
-          category: a.category,
-          date: a.date,
-          time: a.time,
-          location: a.location,
-          organizer: a.organizer,
-          capacity: a.capacity,
-          status: a.status,
-          syncFrontend: a.sync_frontend ?? true
-        }));
-        setAgendaList(mappedAgendas);
-      }
-
-      // 3. Fetch Procurement Packages
-      const { data: pkgData, error: pkgErr } = await supabase
-        .from('procurement_packages')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!pkgErr && pkgData) {
-        const mappedPkgs: ProcurementPackage[] = (pkgData as Array<{
-          id: string;
-          code: string;
-          title: string;
-          unit: string;
-          hps: string;
-          category: ProcurementPackage['category'];
-          status: ProcurementPackage['status'];
-          deadline: string;
-          method: string;
-          doc_count?: number;
-          description?: string;
-          file_name?: string;
-          file_size?: string;
-          file_url?: string;
-        }>).map((p) => ({
-          id: p.id,
-          code: p.code,
-          title: p.title,
-          unit: p.unit,
-          hps: p.hps,
-          category: p.category,
-          status: p.status,
-          deadline: p.deadline,
-          method: p.method,
-          docCount: p.doc_count ?? 1,
-          desc: p.description,
-          fileName: p.file_name,
-          fileSize: p.file_size,
-          downloadUrl: p.file_url || '#'
-        }));
-        setPackagesList(mappedPkgs);
-      }
-
-      // 4. Fetch Regulasi
-      const { data: regData, error: regErr } = await supabase
-        .from('regulasi')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!regErr && regData) {
-        const mappedReg: RegulasiItem[] = (regData as Array<{
-          id: string;
-          nomor: string;
-          tentang: string;
-          tahun: string;
-          kategori: RegulasiItem['kategori'];
-          file_size: string;
-          download_url?: string;
-          status: RegulasiItem['status'];
-          sync_frontend?: boolean;
-        }>).map((r) => ({
-          id: r.id,
-          nomor: r.nomor,
-          tentang: r.tentang,
-          tahun: r.tahun,
-          kategori: r.kategori,
-          fileSize: r.file_size,
-          downloadUrl: r.download_url || '#',
-          status: r.status,
-          syncFrontend: r.sync_frontend ?? true
-        }));
-        setRegulasiList(mappedReg);
-      }
-
-      // 5. Fetch SOP
-      const { data: sopData, error: sopErr } = await supabase
-        .from('sop')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!sopErr && sopData) {
-        const mappedSop: SopItem[] = (sopData as Array<{
-          id: string;
-          kode: string;
-          judul: string;
-          unit: string;
-          revisi: string;
-          tahapan_count?: number;
-          download_url?: string;
-          file_name?: string;
-          file_size?: string;
-          kategori?: SopItem['kategori'];
-          deskripsi?: string;
-          status: SopItem['status'];
-          sync_frontend?: boolean;
-        }>).map((s) => ({
-          id: s.id,
-          kode: s.kode,
-          judul: s.judul,
-          unit: s.unit,
-          revisi: s.revisi,
-          tahapanCount: s.tahapan_count ?? 5,
-          downloadUrl: s.download_url || '#',
-          fileName: s.file_name,
-          fileSize: s.file_size,
-          kategori: s.kategori,
-          deskripsi: s.deskripsi,
-          status: s.status,
-          syncFrontend: s.sync_frontend ?? true
-        }));
-        setSopList(mappedSop);
-      }
-
-      // 6. Fetch Photos Gallery
-      const { data: photoData, error: photoErr } = await supabase
-        .from('gallery_photos')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!photoErr && photoData) {
-        const mappedPhotos: PhotoItem[] = (photoData as Array<{
-          id: string;
-          title: string;
-          description?: string;
-          category: string;
-          src: string;
-          date: string;
-          size?: 'large' | 'small';
-          sync_frontend?: boolean;
-        }>).map((p) => ({
-          id: p.id,
-          title: p.title,
-          desc: p.description || '',
-          category: p.category,
-          src: p.src,
-          date: p.date,
-          size: p.size,
-          syncFrontend: p.sync_frontend ?? true
-        }));
-        setPhotosList(mappedPhotos);
-      }
-
-      // 7. Fetch Videos Gallery
-      const { data: videoData, error: videoErr } = await supabase
-        .from('gallery_videos')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!videoErr && videoData) {
-        const mappedVideos: VideoMediaItem[] = (videoData as Array<{
-          id: string;
-          title: string;
-          description?: string;
-          category: string;
-          duration: string;
-          date: string;
-          views: string;
-          thumbnail_url: string;
-          url: string;
-          sync_frontend?: boolean;
-        }>).map((v) => ({
-          id: v.id,
-          title: v.title,
-          desc: v.description || '',
-          category: v.category,
-          duration: v.duration,
-          date: v.date,
-          views: v.views,
-          thumbnailUrl: v.thumbnail_url,
-          url: v.url,
-          syncFrontend: v.sync_frontend ?? true
-        }));
-        setVideosList(mappedVideos);
-      }
-
-      // 8. Fetch Site Settings
-      const { data: settingsData, error: settingsErr } = await supabase
-        .from('site_settings')
-        .select('*')
-        .eq('id', 'global_config')
-        .maybeSingle();
-
-      if (!settingsErr && settingsData) {
-        setSiteSettings({
-          announcementBanner: settingsData.announcement_banner,
-          announcementActive: settingsData.announcement_active,
-          serverStatus: settingsData.server_status,
-          emergencyNotice: settingsData.emergency_notice || ''
-        });
-      }
-
-      setIsSupabaseConnected(true);
     } catch (err) {
-      console.warn('Supabase fetch failed, falling back to LocalStorage cache:', err);
+      console.warn('Database sync fetch failed, using cached snapshot:', err);
     } finally {
       setIsLoaded(true);
     }

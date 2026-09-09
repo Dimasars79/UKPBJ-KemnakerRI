@@ -38,7 +38,7 @@ export default function SOPPage() {
   // Dynamic SOPs directly from Supabase / DataContext
   const dynamicSops: SOPItem[] = useMemo(() => {
     return sopList
-      .filter(item => item.status === 'Berlaku')
+      .filter(item => !item.status || item.status.toLowerCase() === 'berlaku')
       .map(item => ({
         id: item.id,
         code: item.kode,
