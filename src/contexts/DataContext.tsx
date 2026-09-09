@@ -910,6 +910,30 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  // Helper to sync changes with server-side admin API (bypasses RLS)
+  const syncAdminData = async (
+    table: string,
+    action: 'insert' | 'update' | 'delete' | 'upsert',
+    payload?: { id?: string; data?: Record<string, unknown> }
+  ) => {
+    try {
+      const res = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          table,
+          action,
+          id: payload?.id,
+          data: payload?.data
+        })
+      });
+      return await res.json();
+    } catch (err) {
+      console.error(`syncAdminData failed for table "${table}":`, err);
+      return { success: false, error: err };
+    }
+  };
+
   // ==========================================
   // NEWS CRUD & SUPABASE SYNC
   // ==========================================
@@ -927,8 +951,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setNewsList(updated);
     persist(updated);
 
-    try {
-      const { data, error } = await supabase.from('news').insert({
+    const res = await syncAdminData('news', 'insert', {
+      data: {
         title: news.title,
         category: news.category,
         author: news.author,
@@ -937,13 +961,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         content: news.content,
         image_url: news.imageUrl || '/news/news-1.png',
         sync_frontend: news.status === 'Published'
-      }).select().single();
-
-      if (!error && data) {
-        setNewsList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
       }
-    } catch (err) {
-      console.error('Supabase addNews error:', err);
+    });
+
+    if (res?.success && res.data) {
+      setNewsList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
     }
   };
 
@@ -959,8 +981,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setNewsList(updatedList);
     persist(updatedList);
 
-    try {
-      await supabase.from('news').update({
+    await syncAdminData('news', 'update', {
+      id,
+      data: {
         title: updated.title,
         category: updated.category,
         author: updated.author,
@@ -969,10 +992,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         content: updated.content,
         image_url: updated.imageUrl,
         sync_frontend: updated.status === 'Published'
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase updateNews error:', err);
-    }
+      }
+    });
   };
 
   const deleteNews = async (id: string) => {
@@ -980,11 +1001,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setNewsList(updated);
     persist(updated);
 
-    try {
-      await supabase.from('news').delete().eq('id', id);
-    } catch (err) {
-      console.error('Supabase deleteNews error:', err);
-    }
+    await syncAdminData('news', 'delete', { id });
   };
 
   const toggleNewsStatus = async (id: string) => {
@@ -998,14 +1015,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setNewsList(updatedList);
     persist(updatedList);
 
-    try {
-      await supabase.from('news').update({
+    await syncAdminData('news', 'update', {
+      id,
+      data: {
         status: nextStatus,
         sync_frontend: nextStatus === 'Published'
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase toggleNewsStatus error:', err);
-    }
+      }
+    });
   };
 
   // ==========================================
@@ -1022,8 +1038,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setAgendaList(updated);
     persist(newsList, updated);
 
-    try {
-      const { data, error } = await supabase.from('agendas').insert({
+    const res = await syncAdminData('agendas', 'insert', {
+      data: {
         title: agenda.title,
         category: agenda.category,
         date: agenda.date,
@@ -1033,13 +1049,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         capacity: agenda.capacity,
         status: agenda.status,
         sync_frontend: true
-      }).select().single();
-
-      if (!error && data) {
-        setAgendaList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
       }
-    } catch (err) {
-      console.error('Supabase addAgenda error:', err);
+    });
+
+    if (res?.success && res.data) {
+      setAgendaList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
     }
   };
 
@@ -1050,8 +1064,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setAgendaList(updatedList);
     persist(newsList, updatedList);
 
-    try {
-      await supabase.from('agendas').update({
+    await syncAdminData('agendas', 'update', {
+      id,
+      data: {
         title: updated.title,
         category: updated.category,
         date: updated.date,
@@ -1060,10 +1075,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         organizer: updated.organizer,
         capacity: updated.capacity,
         status: updated.status
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase updateAgenda error:', err);
-    }
+      }
+    });
   };
 
   const deleteAgenda = async (id: string) => {
@@ -1071,11 +1084,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setAgendaList(updated);
     persist(newsList, updated);
 
-    try {
-      await supabase.from('agendas').delete().eq('id', id);
-    } catch (err) {
-      console.error('Supabase deleteAgenda error:', err);
-    }
+    await syncAdminData('agendas', 'delete', { id });
   };
 
   // ==========================================
@@ -1091,8 +1100,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPackagesList(updated);
     persist(newsList, agendaList, updated);
 
-    try {
-      const { data, error } = await supabase.from('procurement_packages').insert({
+    const res = await syncAdminData('procurement_packages', 'insert', {
+      data: {
         code: pkg.code,
         title: pkg.title,
         unit: pkg.unit,
@@ -1106,13 +1115,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         file_name: pkg.fileName,
         file_size: pkg.fileSize,
         file_url: pkg.downloadUrl
-      }).select().single();
-
-      if (!error && data) {
-        setPackagesList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
       }
-    } catch (err) {
-      console.error('Supabase addPackage error:', err);
+    });
+
+    if (res?.success && res.data) {
+      setPackagesList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
     }
   };
 
@@ -1123,8 +1130,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPackagesList(updatedList);
     persist(newsList, agendaList, updatedList);
 
-    try {
-      await supabase.from('procurement_packages').update({
+    await syncAdminData('procurement_packages', 'update', {
+      id,
+      data: {
         code: updated.code,
         title: updated.title,
         unit: updated.unit,
@@ -1138,10 +1146,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         file_name: updated.fileName,
         file_size: updated.fileSize,
         file_url: updated.downloadUrl
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase updatePackage error:', err);
-    }
+      }
+    });
   };
 
   const deletePackage = async (id: string) => {
@@ -1149,11 +1155,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPackagesList(updated);
     persist(newsList, agendaList, updated);
 
-    try {
-      await supabase.from('procurement_packages').delete().eq('id', id);
-    } catch (err) {
-      console.error('Supabase deletePackage error:', err);
-    }
+    await syncAdminData('procurement_packages', 'delete', { id });
   };
 
   // ==========================================
@@ -1170,8 +1172,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setRegulasiList(updated);
     persist(newsList, agendaList, packagesList, updated);
 
-    try {
-      const { data, error } = await supabase.from('regulasi').insert({
+    const res = await syncAdminData('regulasi', 'insert', {
+      data: {
         nomor: reg.nomor,
         tentang: reg.tentang,
         tahun: reg.tahun,
@@ -1180,13 +1182,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         download_url: reg.downloadUrl,
         status: reg.status,
         sync_frontend: reg.status === 'Aktif'
-      }).select().single();
-
-      if (!error && data) {
-        setRegulasiList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
       }
-    } catch (err) {
-      console.error('Supabase addRegulasi error:', err);
+    });
+
+    if (res?.success && res.data) {
+      setRegulasiList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
     }
   };
 
@@ -1202,8 +1202,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setRegulasiList(updatedList);
     persist(newsList, agendaList, packagesList, updatedList);
 
-    try {
-      await supabase.from('regulasi').update({
+    await syncAdminData('regulasi', 'update', {
+      id,
+      data: {
         nomor: updated.nomor,
         tentang: updated.tentang,
         tahun: updated.tahun,
@@ -1212,10 +1213,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         download_url: updated.downloadUrl,
         status: updated.status,
         sync_frontend: updated.status === 'Aktif'
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase updateRegulasi error:', err);
-    }
+      }
+    });
   };
 
   const deleteRegulasi = async (id: string) => {
@@ -1223,11 +1222,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setRegulasiList(updated);
     persist(newsList, agendaList, packagesList, updated);
 
-    try {
-      await supabase.from('regulasi').delete().eq('id', id);
-    } catch (err) {
-      console.error('Supabase deleteRegulasi error:', err);
-    }
+    await syncAdminData('regulasi', 'delete', { id });
   };
 
   const toggleRegulasiStatus = async (id: string) => {
@@ -1241,14 +1236,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setRegulasiList(updatedList);
     persist(newsList, agendaList, packagesList, updatedList);
 
-    try {
-      await supabase.from('regulasi').update({
+    await syncAdminData('regulasi', 'update', {
+      id,
+      data: {
         status: nextStatus,
         sync_frontend: nextStatus === 'Aktif'
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase toggleRegulasiStatus error:', err);
-    }
+      }
+    });
   };
 
   // ==========================================
@@ -1265,8 +1259,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setSopList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, updated);
 
-    try {
-      const { data, error } = await supabase.from('sop').insert({
+    const res = await syncAdminData('sop', 'insert', {
+      data: {
         kode: sop.kode,
         judul: sop.judul,
         unit: sop.unit,
@@ -1279,13 +1273,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         deskripsi: sop.deskripsi,
         status: sop.status,
         sync_frontend: sop.status === 'Berlaku'
-      }).select().single();
-
-      if (!error && data) {
-        setSopList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
       }
-    } catch (err) {
-      console.error('Supabase addSop error:', err);
+    });
+
+    if (res?.success && res.data) {
+      setSopList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
     }
   };
 
@@ -1301,8 +1293,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setSopList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, updatedList);
 
-    try {
-      await supabase.from('sop').update({
+    await syncAdminData('sop', 'update', {
+      id,
+      data: {
         kode: updated.kode,
         judul: updated.judul,
         unit: updated.unit,
@@ -1315,10 +1308,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         deskripsi: updated.deskripsi,
         status: updated.status,
         sync_frontend: updated.status === 'Berlaku'
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase updateSop error:', err);
-    }
+      }
+    });
   };
 
   const deleteSop = async (id: string) => {
@@ -1326,11 +1317,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setSopList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, updated);
 
-    try {
-      await supabase.from('sop').delete().eq('id', id);
-    } catch (err) {
-      console.error('Supabase deleteSop error:', err);
-    }
+    await syncAdminData('sop', 'delete', { id });
   };
 
   // ==========================================
@@ -1347,8 +1334,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPhotosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
 
-    try {
-      const { data, error } = await supabase.from('gallery_photos').insert({
+    const res = await syncAdminData('gallery_photos', 'insert', {
+      data: {
         title: photo.title,
         description: photo.desc,
         category: photo.category,
@@ -1356,13 +1343,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         date: photo.date,
         size: photo.size || 'small',
         sync_frontend: true
-      }).select().single();
-
-      if (!error && data) {
-        setPhotosList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
       }
-    } catch (err) {
-      console.error('Supabase addPhoto error:', err);
+    });
+
+    if (res?.success && res.data) {
+      setPhotosList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
     }
   };
 
@@ -1373,18 +1358,17 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPhotosList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList);
 
-    try {
-      await supabase.from('gallery_photos').update({
+    await syncAdminData('gallery_photos', 'update', {
+      id,
+      data: {
         title: updated.title,
         description: updated.desc,
         category: updated.category,
         src: updated.src,
         date: updated.date,
         size: updated.size
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase updatePhoto error:', err);
-    }
+      }
+    });
   };
 
   const deletePhoto = async (id: string) => {
@@ -1392,11 +1376,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPhotosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
 
-    try {
-      await supabase.from('gallery_photos').delete().eq('id', id);
-    } catch (err) {
-      console.error('Supabase deletePhoto error:', err);
-    }
+    await syncAdminData('gallery_photos', 'delete', { id });
   };
 
   // ==========================================
@@ -1413,8 +1393,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setVideosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updated);
 
-    try {
-      const { data, error } = await supabase.from('gallery_videos').insert({
+    const res = await syncAdminData('gallery_videos', 'insert', {
+      data: {
         title: video.title,
         description: video.desc,
         category: video.category,
@@ -1424,13 +1404,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         thumbnail_url: video.thumbnailUrl,
         url: video.url,
         sync_frontend: true
-      }).select().single();
-
-      if (!error && data) {
-        setVideosList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
       }
-    } catch (err) {
-      console.error('Supabase addVideo error:', err);
+    });
+
+    if (res?.success && res.data) {
+      setVideosList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
     }
   };
 
@@ -1441,8 +1419,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setVideosList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updatedList);
 
-    try {
-      await supabase.from('gallery_videos').update({
+    await syncAdminData('gallery_videos', 'update', {
+      id,
+      data: {
         title: updated.title,
         description: updated.desc,
         category: updated.category,
@@ -1451,10 +1430,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         views: updated.views,
         thumbnail_url: updated.thumbnailUrl,
         url: updated.url
-      }).eq('id', id);
-    } catch (err) {
-      console.error('Supabase updateVideo error:', err);
-    }
+      }
+    });
   };
 
   const deleteVideo = async (id: string) => {
@@ -1462,11 +1439,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setVideosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updated);
 
-    try {
-      await supabase.from('gallery_videos').delete().eq('id', id);
-    } catch (err) {
-      console.error('Supabase deleteVideo error:', err);
-    }
+    await syncAdminData('gallery_videos', 'delete', { id });
   };
 
   // ==========================================
@@ -1477,18 +1450,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setSiteSettings(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, videosList, updated);
 
-    try {
-      await supabase.from('site_settings').upsert({
+    await syncAdminData('site_settings', 'upsert', {
+      data: {
         id: 'global_config',
         announcement_banner: updated.announcementBanner,
         announcement_active: updated.announcementActive,
         server_status: updated.serverStatus,
         emergency_notice: updated.emergencyNotice,
         updated_at: new Date().toISOString()
-      });
-    } catch (err) {
-      console.error('Supabase updateSiteSettings error:', err);
-    }
+      }
+    });
   };
 
   // ==========================================
