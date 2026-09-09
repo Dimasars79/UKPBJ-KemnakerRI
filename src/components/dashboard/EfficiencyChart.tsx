@@ -21,12 +21,12 @@ export function EfficiencyChart() {
             data={data}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-            <XAxis dataKey="name" tick={{fill: '#94a3b8', fontSize: 11}} tickLine={false} axisLine={false} />
-            <YAxis tick={{fill: '#94a3b8', fontSize: 11}} tickLine={false} axisLine={false} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+            <XAxis dataKey="name" tick={{fill: '#475569', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
+            <YAxis tick={{fill: '#475569', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
             <Tooltip 
-              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
-              cursor={{fill: '#f8fafc'}}
+              contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px', fontWeight: 600 }}
+              cursor={{fill: '#f1f5f9'}}
             />
             <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={50}>
               {data.map((entry, index) => (

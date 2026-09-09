@@ -609,7 +609,7 @@ export default function AdminPortalPage() {
           <nav className="p-3 space-y-4">
             {/* GRUP 1: UTAMA */}
             <div className="space-y-1">
-              <p className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+              <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
                 Utama
               </p>
               
@@ -618,7 +618,7 @@ export default function AdminPortalPage() {
                 className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === 'dashboard'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
@@ -629,13 +629,13 @@ export default function AdminPortalPage() {
             {/* GRUP: PENGADAAN (COLLAPSIBLE DROPDOWN) */}
             <div className="space-y-1">
               <div className="flex items-center justify-between px-3 py-1">
-                <p className="text-[10px] font-extrabold uppercase tracking-wider text-blue-400">
+                <p className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
                   Pengadaan
                 </p>
                 <button
                   type="button"
                   onClick={() => setIsPengadaanOpen(!isPengadaanOpen)}
-                  className="p-1 text-slate-400 hover:text-blue-400 transition-colors cursor-pointer rounded-md"
+                  className={`p-1 transition-colors cursor-pointer rounded-md ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-600 hover:text-blue-700'}`}
                   title="Buka/Tutup Menu Pengadaan"
                 >
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isPengadaanOpen ? 'rotate-180' : ''}`} />
@@ -658,12 +658,12 @@ export default function AdminPortalPage() {
                       className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         activeTab === 'paket'
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                       }`}
                     >
-                      <Package className="w-3.5 h-3.5 text-blue-400" />
+                      <Package className="w-3.5 h-3.5 text-blue-500" />
                       <span>Paket Pengadaan</span>
-                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-blue-500/20 text-blue-400 rounded font-bold">
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
                         {packagesList.length}
                       </span>
                     </button>
@@ -674,10 +674,10 @@ export default function AdminPortalPage() {
                       className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         activeTab === 'monitoring'
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                       }`}
                     >
-                      <Radio className="w-3.5 h-3.5 text-emerald-400" />
+                      <Radio className="w-3.5 h-3.5 text-emerald-500" />
                       <span>Monitoring</span>
                     </button>
 
@@ -687,10 +687,10 @@ export default function AdminPortalPage() {
                       className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         activeTab === 'laporan'
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                       }`}
                     >
-                      <BarChart3 className="w-3.5 h-3.5 text-purple-400" />
+                      <BarChart3 className="w-3.5 h-3.5 text-purple-500" />
                       <span>Statistik</span>
                     </button>
                   </motion.div>
@@ -701,13 +701,13 @@ export default function AdminPortalPage() {
             {/* GRUP 2: KELOLA WEB PUBLIK (CMS) - SIDE DOWN ACCORDION */}
             <div className="space-y-1">
               <div className="flex items-center justify-between px-3 py-1">
-                <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent-gold">
+                <p className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
                   Kelola Web Publik (CMS)
                 </p>
                 <button
                   type="button"
                   onClick={() => setIsCmsOpen(!isCmsOpen)}
-                  className="p-1 text-slate-400 hover:text-accent-gold transition-colors cursor-pointer rounded-md"
+                  className={`p-1 transition-colors cursor-pointer rounded-md ${isDark ? 'text-slate-400 hover:text-accent-gold' : 'text-slate-600 hover:text-amber-800'}`}
                   title="Buka/Tutup Menu Kelola Web"
                 >
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
@@ -730,12 +730,12 @@ export default function AdminPortalPage() {
                       className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         activeTab === 'manage-berita'
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                       }`}
                     >
                       <Newspaper className="w-3.5 h-3.5 text-amber-500" />
                       <span>Berita & Pengumuman</span>
-                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-amber-500/20 text-amber-500 dark:text-amber-400 rounded font-bold">
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
                         {newsList.length}
                       </span>
                     </button>
@@ -746,12 +746,12 @@ export default function AdminPortalPage() {
                       className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         activeTab === 'manage-agenda'
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                       }`}
                     >
                       <Calendar className="w-3.5 h-3.5 text-emerald-500" />
                       <span>Agenda & Jadwal</span>
-                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 rounded font-bold">
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
                         {agendaList.length}
                       </span>
                     </button>
@@ -762,12 +762,12 @@ export default function AdminPortalPage() {
                       className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         activeTab === 'manage-regulasi'
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                       }`}
                     >
-                      <ScrollText className="w-3.5 h-3.5 text-blue-400" />
+                      <ScrollText className="w-3.5 h-3.5 text-blue-500" />
                       <span>Regulasi & Aturan</span>
-                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-blue-500/20 text-blue-400 rounded font-bold">
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
                         {regulasiList.length}
                       </span>
                     </button>
@@ -778,12 +778,12 @@ export default function AdminPortalPage() {
                       className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         activeTab === 'manage-sop'
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                       }`}
                     >
-                      <Layers className="w-3.5 h-3.5 text-purple-400" />
+                      <Layers className="w-3.5 h-3.5 text-purple-500" />
                       <span>Standar SOP</span>
-                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-purple-500/20 text-purple-400 rounded font-bold">
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
                         {sopList.length}
                       </span>
                     </button>
@@ -794,12 +794,12 @@ export default function AdminPortalPage() {
                       className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         activeTab === 'manage-galeri'
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-700 hover:text-primary-navy hover:bg-slate-100'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                       }`}
                     >
-                      <Camera className="w-3.5 h-3.5 text-cyan-400" />
+                      <Camera className="w-3.5 h-3.5 text-cyan-500" />
                       <span>Galeri & Media</span>
-                      <span className="ml-auto px-1.5 py-0.2 text-[9px] bg-cyan-500/20 text-cyan-400 rounded font-bold">
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
                         {photosList.length + videosList.length}
                       </span>
                     </button>
@@ -810,7 +810,7 @@ export default function AdminPortalPage() {
 
             {/* GRUP 3: SISTEM & BLUEPRINT */}
             <div className="space-y-1">
-              <p className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+              <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
                 Sistem & Blueprint
               </p>
 
@@ -819,7 +819,7 @@ export default function AdminPortalPage() {
                 className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === 'arsitektur'
                     ? 'bg-gradient-to-r from-accent-gold to-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/20'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                 }`}
               >
                 <Network className="w-4 h-4" />
@@ -832,7 +832,7 @@ export default function AdminPortalPage() {
                 className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === 'penyedia'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                 }`}
               >
                 <Users className="w-4 h-4" />
@@ -844,7 +844,7 @@ export default function AdminPortalPage() {
                 className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === 'laporan'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                 }`}
               >
                 <BarChart3 className="w-4 h-4" />
@@ -856,7 +856,7 @@ export default function AdminPortalPage() {
                 className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === 'pengaturan'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-600 hover:text-primary-navy hover:bg-slate-100'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                 }`}
               >
                 <Settings className="w-4 h-4" />
@@ -877,8 +877,8 @@ export default function AdminPortalPage() {
               DA
             </div>
             <div className="flex-1 min-w-0">
-              <p className={`text-xs font-bold truncate ${isDark ? 'text-white' : 'text-slate-800'}`}>Dimas Ars</p>
-              <p className="text-[10px] text-slate-400 truncate">Admin UKPBJ Kemnaker</p>
+              <p className={`text-xs font-bold truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Dimas Ars</p>
+              <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>Admin UKPBJ Kemnaker</p>
             </div>
           </div>
 
@@ -886,7 +886,7 @@ export default function AdminPortalPage() {
             <Link
               href="/"
               className={`px-3 py-2 rounded-xl text-[11px] font-bold text-center flex items-center justify-center gap-1 transition-colors ${
-                isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
               }`}
             >
               <ArrowLeft className="w-3 h-3" />
@@ -935,10 +935,10 @@ export default function AdminPortalPage() {
             </div>
 
             <div className="space-y-0.5">
-              <div className="flex items-center space-x-2 text-[11px] font-semibold text-slate-400">
+              <div className={`flex items-center space-x-2 text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                 <span className="hover:text-blue-500 cursor-pointer transition-colors" onClick={() => setActiveTab('dashboard')}>Portal Admin</span>
-                <span className="text-slate-600">•</span>
-                <span className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                <span className={isDark ? 'text-slate-600' : 'text-slate-400'}>•</span>
+                <span className={`font-extrabold uppercase tracking-wider text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-800'}`}>
                   {activeTab === 'dashboard' ? 'Utama' :
                    activeTab === 'paket' || activeTab === 'monitoring' || activeTab === 'laporan' ? 'Pengadaan' :
                    activeTab.startsWith('manage-') ? 'CMS Publik' : 'Sistem'}
@@ -967,19 +967,23 @@ export default function AdminPortalPage() {
             
             {/* Search Input */}
             <div className="relative w-48 sm:w-64 md:w-80 group">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+              <Search className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
+                isDark ? 'text-slate-400 group-focus-within:text-blue-500' : 'text-slate-600 group-focus-within:text-blue-600'
+              }`} />
               <input
                 type="text"
                 placeholder="Cari berita, agenda, paket..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-10 pr-10 py-2.5 border rounded-xl text-xs transition-all outline-none ${
+                className={`w-full pl-10 pr-10 py-2.5 border rounded-xl text-xs transition-all outline-none font-medium ${
                   isDark 
                     ? 'bg-slate-900/80 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-900' 
-                    : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:bg-white shadow-xs'
+                    : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-500 focus:border-blue-600 focus:bg-white shadow-xs'
                 }`}
               />
-              <span className="hidden md:inline-flex absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-slate-700/60 bg-slate-800/60 text-slate-400">
+              <span className={`hidden md:inline-flex absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border ${
+                isDark ? 'border-slate-700/60 bg-slate-800/60 text-slate-400' : 'border-slate-300 bg-slate-100 text-slate-700'
+              }`}>
                 ⌘K
               </span>
             </div>
@@ -1010,7 +1014,9 @@ export default function AdminPortalPage() {
                       isDark ? 'bg-slate-900 border-slate-800 shadow-black/50' : 'bg-white border-slate-200 shadow-slate-300/60'
                     }`}
                   >
-                    <p className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-800/50">
+                    <p className={`px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider border-b ${
+                      isDark ? 'text-slate-400 border-slate-800/50' : 'text-slate-700 border-slate-200'
+                    }`}>
                       Buat Konten Baru
                     </p>
                     <div className="space-y-0.5 mt-1">
@@ -1032,7 +1038,7 @@ export default function AdminPortalPage() {
                           setShowPackageModal(true);
                         }}
                         className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
-                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-700'
+                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-800 font-bold'
                         }`}
                       >
                         <Package className="w-3.5 h-3.5 text-blue-500" />
@@ -1340,7 +1346,7 @@ export default function AdminPortalPage() {
                         </span>
                       </h2>
                       
-                      <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                      <p className={`text-xs max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                         Sistem kendali terpadu pengelolaan pengadaan barang/jasa, monitoring operasional SPSE, serta manajemen konten publik (CMS) terpusat dan tersinkronisasi real-time.
                       </p>
                     </div>
@@ -1403,18 +1409,18 @@ export default function AdminPortalPage() {
                       <span>Sistem Operasional Normal</span>
                     </div>
 
-                    <div className="hidden sm:flex items-center gap-1.5 text-slate-400">
-                      <Database className="w-3.5 h-3.5 text-blue-400" />
-                      <span>Persistent Engine: <strong className={isDark ? 'text-slate-200' : 'text-slate-700'}>Active</strong></span>
+                    <div className={`hidden sm:flex items-center gap-1.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
+                      <Database className="w-3.5 h-3.5 text-blue-500" />
+                      <span>Persistent Engine: <strong className={isDark ? 'text-slate-200' : 'text-slate-900 font-black'}>Active</strong></span>
                     </div>
 
-                    <div className="hidden md:flex items-center gap-1.5 text-slate-400">
-                      <Wifi className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Uptime: <strong className={isDark ? 'text-slate-200' : 'text-slate-700'}>99.98%</strong></span>
+                    <div className={`hidden md:flex items-center gap-1.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
+                      <Wifi className="w-3.5 h-3.5 text-cyan-500" />
+                      <span>Uptime: <strong className={isDark ? 'text-slate-200' : 'text-slate-900 font-black'}>99.98%</strong></span>
                     </div>
 
-                    <div className="hidden lg:flex items-center gap-1.5 text-slate-400 ml-auto font-mono text-[11px]">
-                      <Clock className="w-3.5 h-3.5 text-amber-400" />
+                    <div className={`hidden lg:flex items-center gap-1.5 ml-auto font-mono text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>
+                      <Clock className="w-3.5 h-3.5 text-amber-500" />
                       <span>WIB (UTC+7) Jakarta</span>
                     </div>
                   </div>
@@ -1428,7 +1434,7 @@ export default function AdminPortalPage() {
                     isDark ? 'bg-slate-900/90 border-slate-800 hover:border-blue-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-blue-500/40'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className="text-[11px] font-semibold text-slate-400 truncate">Paket PBJ</span>
+                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Paket PBJ</span>
                       <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
                         <Package className="w-3.5 h-3.5" />
                       </div>
@@ -1440,8 +1446,8 @@ export default function AdminPortalPage() {
                         <span>+12.4% MoM</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] text-slate-400 flex items-center justify-between ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                      isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
                       <span className="flex items-center gap-0.5"><Coins className="w-2.5 h-2.5 text-amber-500" /> 48.2M</span>
                       <span className="flex items-center gap-0.5 text-emerald-500 font-bold"><CheckCircle2 className="w-2.5 h-2.5" /> Live</span>
@@ -1453,7 +1459,7 @@ export default function AdminPortalPage() {
                     isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-amber-500/40'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className="text-[11px] font-semibold text-slate-400 truncate">Berita Publik</span>
+                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Berita Publik</span>
                       <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
                         <Newspaper className="w-3.5 h-3.5" />
                       </div>
@@ -1467,10 +1473,10 @@ export default function AdminPortalPage() {
                         <span>{newsList.length} Total</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] text-slate-400 flex items-center justify-between ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                      isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><Eye className="w-2.5 h-2.5 text-blue-400" /> 14.8K</span>
+                      <span className="flex items-center gap-0.5"><Eye className="w-2.5 h-2.5 text-blue-500" /> 14.8K</span>
                       <span className="flex items-center gap-0.5 text-emerald-500 font-bold"><Send className="w-2.5 h-2.5" /> Sync</span>
                     </div>
                   </div>
@@ -1480,7 +1486,7 @@ export default function AdminPortalPage() {
                     isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-emerald-500/40'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className="text-[11px] font-semibold text-slate-400 truncate">Agenda</span>
+                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Agenda</span>
                       <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
                         <Calendar className="w-3.5 h-3.5" />
                       </div>
@@ -1492,11 +1498,11 @@ export default function AdminPortalPage() {
                         <span>Aktif</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] text-slate-400 flex items-center justify-between ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                      isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5 text-red-400" /> Hybrid</span>
-                      <span className="flex items-center gap-0.5 text-blue-400 font-bold"><Users className="w-2.5 h-2.5" /> 850+</span>
+                      <span className="flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5 text-red-500" /> Hybrid</span>
+                      <span className="flex items-center gap-0.5 text-blue-600 font-bold"><Users className="w-2.5 h-2.5" /> 850+</span>
                     </div>
                   </div>
 
@@ -1505,8 +1511,8 @@ export default function AdminPortalPage() {
                     isDark ? 'bg-slate-900/90 border-slate-800 hover:border-cyan-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-cyan-500/40'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className="text-[11px] font-semibold text-slate-400 truncate">Galeri Media</span>
-                      <div className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Galeri Media</span>
+                      <div className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-500 flex items-center justify-center shrink-0">
                         <Camera className="w-3.5 h-3.5" />
                       </div>
                     </div>
@@ -1514,16 +1520,16 @@ export default function AdminPortalPage() {
                       <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         {photosList.length + videosList.length}
                       </p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-cyan-400">
+                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-cyan-500">
                         <Video className="w-2.5 h-2.5" />
                         <span>{videosList.length}V • {photosList.length}F</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] text-slate-400 flex items-center justify-between ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                      isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><Play className="w-2.5 h-2.5 text-amber-400" /> Stream</span>
-                      <span className="flex items-center gap-0.5 text-cyan-400 font-bold"><Share2 className="w-2.5 h-2.5" /> /galeri</span>
+                      <span className="flex items-center gap-0.5"><Play className="w-2.5 h-2.5 text-amber-500" /> Stream</span>
+                      <span className="flex items-center gap-0.5 text-cyan-600 font-bold"><Share2 className="w-2.5 h-2.5" /> /galeri</span>
                     </div>
                   </div>
 
@@ -1532,8 +1538,8 @@ export default function AdminPortalPage() {
                     isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-purple-500/40'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className="text-[11px] font-semibold text-slate-400 truncate">Regulasi/SOP</span>
-                      <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0">
+                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Regulasi/SOP</span>
+                      <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
                         <ScrollText className="w-3.5 h-3.5" />
                       </div>
                     </div>
@@ -1541,16 +1547,16 @@ export default function AdminPortalPage() {
                       <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         {regulasiList.length + sopList.length}
                       </p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-purple-400">
+                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-purple-500">
                         <Layers className="w-2.5 h-2.5" />
                         <span>{regulasiList.length}R • {sopList.length}S</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] text-slate-400 flex items-center justify-between ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                      isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><ShieldCheck className="w-2.5 h-2.5 text-emerald-400" /> JDIH</span>
-                      <span className="flex items-center gap-0.5 text-purple-400 font-bold"><CheckSquare className="w-2.5 h-2.5" /> Legal</span>
+                      <span className="flex items-center gap-0.5"><ShieldCheck className="w-2.5 h-2.5 text-emerald-500" /> JDIH</span>
+                      <span className="flex items-center gap-0.5 text-purple-600 font-bold"><CheckSquare className="w-2.5 h-2.5" /> Legal</span>
                     </div>
                   </div>
 
@@ -1559,23 +1565,23 @@ export default function AdminPortalPage() {
                     isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-indigo-500/40'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className="text-[11px] font-semibold text-slate-400 truncate">Penyedia</span>
-                      <div className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Penyedia</span>
+                      <div className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
                         <Building2 className="w-3.5 h-3.5" />
                       </div>
                     </div>
                     <div>
                       <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>342</p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-indigo-400">
+                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-indigo-500">
                         <CheckCheck className="w-2.5 h-2.5" />
                         <span>SiKAP Valid</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] text-slate-400 flex items-center justify-between ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                      isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><Shield className="w-2.5 h-2.5 text-blue-400" /> Lolos</span>
-                      <span className="flex items-center gap-0.5 text-indigo-400 font-bold"><Percent className="w-2.5 h-2.5" /> 98%</span>
+                      <span className="flex items-center gap-0.5"><Shield className="w-2.5 h-2.5 text-blue-500" /> Lolos</span>
+                      <span className="flex items-center gap-0.5 text-indigo-600 font-bold"><Percent className="w-2.5 h-2.5" /> 98%</span>
                     </div>
                   </div>
 
@@ -1596,7 +1602,7 @@ export default function AdminPortalPage() {
                             Target vs Realisasi Pengadaan Triwulan
                           </h3>
                         </div>
-                        <p className="text-[11px] text-slate-400">
+                        <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Komparasi kuota tender dengan realisasi kontrak belanja Kementerian.
                         </p>
                       </div>
@@ -1615,15 +1621,15 @@ export default function AdminPortalPage() {
                       isDark ? 'border-slate-800' : 'border-slate-100'
                     }`}>
                       <div className="p-2 rounded-xl bg-blue-500/5">
-                        <p className="text-[10px] text-slate-400">Total Pagu</p>
-                        <p className="font-bold text-blue-500 mt-0.5">Rp 48.2 M</p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Total Pagu</p>
+                        <p className="font-bold text-blue-600 mt-0.5">Rp 48.2 M</p>
                       </div>
                       <div className="p-2 rounded-xl bg-emerald-500/5">
-                        <p className="text-[10px] text-slate-400">Efisiensi HPS</p>
-                        <p className="font-bold text-emerald-500 mt-0.5">18.4%</p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Efisiensi HPS</p>
+                        <p className="font-bold text-emerald-600 mt-0.5">18.4%</p>
                       </div>
                       <div className="p-2 rounded-xl bg-amber-500/5">
-                        <p className="text-[10px] text-slate-400">P3DN Lokal</p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>P3DN Lokal</p>
                         <p className="font-bold text-accent-gold mt-0.5">84.6%</p>
                       </div>
                     </div>
@@ -1641,7 +1647,7 @@ export default function AdminPortalPage() {
                             Distribusi Berdasarkan Jenis Pengadaan
                           </h3>
                         </div>
-                        <p className="text-[11px] text-slate-400">
+                        <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Klasifikasi paket barang, jasa konsultansi, konstruksi, dan lainnya.
                         </p>
                       </div>
@@ -1660,19 +1666,19 @@ export default function AdminPortalPage() {
                       isDark ? 'border-slate-800' : 'border-slate-100'
                     }`}>
                       <div className="p-1.5 rounded-xl">
-                        <p className="text-[10px] text-slate-400">Barang</p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Barang</p>
                         <p className="font-bold text-blue-600 mt-0.5">180 Pkt</p>
                       </div>
                       <div className="p-1.5 rounded-xl">
-                        <p className="text-[10px] text-slate-400">Konstruksi</p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Konstruksi</p>
                         <p className="font-bold text-blue-500 mt-0.5">85 Pkt</p>
                       </div>
                       <div className="p-1.5 rounded-xl">
-                        <p className="text-[10px] text-slate-400">Konsultansi</p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Konsultansi</p>
                         <p className="font-bold text-blue-400 mt-0.5">65 Pkt</p>
                       </div>
                       <div className="p-1.5 rounded-xl">
-                        <p className="text-[10px] text-slate-400">Lainnya</p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Lainnya</p>
                         <p className="font-bold text-blue-300 mt-0.5">98 Pkt</p>
                       </div>
                     </div>
@@ -1688,7 +1694,7 @@ export default function AdminPortalPage() {
                         <Sliders className="w-4 h-4 text-blue-500" />
                         <span>Pusat Kendali Konten Web Publik (CMS Hub)</span>
                       </h3>
-                      <p className="text-xs text-slate-400">
+                      <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                         Akses cepat pengeditan modul frontend dan sinkronisasi data real-time.
                       </p>
                     </div>
@@ -1715,7 +1721,7 @@ export default function AdminPortalPage() {
                       </div>
                       <div>
                         <h4 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>Berita & Warta PBJ</h4>
-                        <p className="text-xs text-slate-400 line-clamp-2 mt-1">
+                        <p className={`text-xs line-clamp-2 mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Publikasikan siaran pers, artikel edukasi, dan pengumuman resmi.
                         </p>
                       </div>
@@ -1731,7 +1737,7 @@ export default function AdminPortalPage() {
                           href="/informasi"
                           target="_blank"
                           className={`p-2 rounded-xl border transition-colors ${
-                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-200 text-slate-500 hover:text-primary-navy'
+                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                           }`}
                           title="Lihat Frontend Berita"
                         >
@@ -1754,7 +1760,7 @@ export default function AdminPortalPage() {
                       </div>
                       <div>
                         <h4 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>Agenda & Sosialisasi</h4>
-                        <p className="text-xs text-slate-400 line-clamp-2 mt-1">
+                        <p className={`text-xs line-clamp-2 mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Kelola jadwal rapat kerja, bimbingan teknis, dan sosialisasi regulasi.
                         </p>
                       </div>
@@ -1770,7 +1776,7 @@ export default function AdminPortalPage() {
                           href="/agenda"
                           target="_blank"
                           className={`p-2 rounded-xl border transition-colors ${
-                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-200 text-slate-500 hover:text-primary-navy'
+                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                           }`}
                           title="Lihat Frontend Agenda"
                         >
@@ -1793,7 +1799,7 @@ export default function AdminPortalPage() {
                       </div>
                       <div>
                         <h4 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>Regulasi & Produk Hukum</h4>
-                        <p className="text-xs text-slate-400 line-clamp-2 mt-1">
+                        <p className={`text-xs line-clamp-2 mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Kelola dokumen Perpres, Permenaker, SE, dan keputusan LKPP terkini.
                         </p>
                       </div>
@@ -1809,7 +1815,7 @@ export default function AdminPortalPage() {
                           href="/informasi/peraturan"
                           target="_blank"
                           className={`p-2 rounded-xl border transition-colors ${
-                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-200 text-slate-500 hover:text-primary-navy'
+                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                           }`}
                           title="Lihat Frontend Regulasi"
                         >
@@ -1832,7 +1838,7 @@ export default function AdminPortalPage() {
                       </div>
                       <div>
                         <h4 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>Standar Operasional (SOP)</h4>
-                        <p className="text-xs text-slate-400 line-clamp-2 mt-1">
+                        <p className={`text-xs line-clamp-2 mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Kelola alur tahapan kerja pemilihan penyedia dan panduan operasional.
                         </p>
                       </div>
@@ -1848,7 +1854,7 @@ export default function AdminPortalPage() {
                           href="/informasi/sop"
                           target="_blank"
                           className={`p-2 rounded-xl border transition-colors ${
-                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-200 text-slate-500 hover:text-primary-navy'
+                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                           }`}
                           title="Lihat Frontend SOP"
                         >
@@ -1871,7 +1877,7 @@ export default function AdminPortalPage() {
                       </div>
                       <div>
                         <h4 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>Galeri Foto & Video</h4>
-                        <p className="text-xs text-slate-400 line-clamp-2 mt-1">
+                        <p className={`text-xs line-clamp-2 mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Kelola dokumentasi visual kegiatan, foto rapat, dan video edukasi PBJ.
                         </p>
                       </div>
@@ -1887,7 +1893,7 @@ export default function AdminPortalPage() {
                           href="/galeri"
                           target="_blank"
                           className={`p-2 rounded-xl border transition-colors ${
-                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-200 text-slate-500 hover:text-primary-navy'
+                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                           }`}
                           title="Lihat Frontend Galeri"
                         >
@@ -1910,7 +1916,7 @@ export default function AdminPortalPage() {
                       </div>
                       <div>
                         <h4 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>Daftar Paket Tender</h4>
-                        <p className="text-xs text-slate-400 line-clamp-2 mt-1">
+                        <p className={`text-xs line-clamp-2 mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Kelola pengumuman paket tender aktif, status penawaran, dan detail HPS.
                         </p>
                       </div>
@@ -1926,7 +1932,7 @@ export default function AdminPortalPage() {
                           href="/#pengadaan"
                           target="_blank"
                           className={`p-2 rounded-xl border transition-colors ${
-                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-200 text-slate-500 hover:text-primary-navy'
+                            isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                           }`}
                           title="Lihat Frontend Pengadaan"
                         >
@@ -1942,7 +1948,9 @@ export default function AdminPortalPage() {
                 <div className={`p-6 rounded-3xl border space-y-4 ${
                   isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
                 }`}>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800/60">
+                  <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b ${
+                    isDark ? 'border-slate-800/60' : 'border-slate-200'
+                  }`}>
                     <div className="flex items-center gap-2">
                       <Server className="w-4 h-4 text-emerald-500" />
                       <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -1962,7 +1970,7 @@ export default function AdminPortalPage() {
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
                       <Cpu className="w-4 h-4 text-blue-500 mx-auto" />
-                      <p className="text-[10px] text-slate-400">CPU Load</p>
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>CPU Load</p>
                       <p className={`font-mono text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>18.4%</p>
                     </div>
 
@@ -1970,7 +1978,7 @@ export default function AdminPortalPage() {
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
                       <HardDrive className="w-4 h-4 text-purple-400 mx-auto" />
-                      <p className="text-[10px] text-slate-400">Memory RAM</p>
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Memory RAM</p>
                       <p className={`font-mono text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>42.1% (3.3 GB)</p>
                     </div>
 
@@ -1978,7 +1986,7 @@ export default function AdminPortalPage() {
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
                       <Database className="w-4 h-4 text-amber-500 mx-auto" />
-                      <p className="text-[10px] text-slate-400">Database Pool</p>
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Database Pool</p>
                       <p className={`font-mono text-xs font-bold text-emerald-500`}>16/20 Active</p>
                     </div>
 
@@ -1986,7 +1994,7 @@ export default function AdminPortalPage() {
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
                       <Cloud className="w-4 h-4 text-cyan-400 mx-auto" />
-                      <p className="text-[10px] text-slate-400">Edge Cache</p>
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Edge Cache</p>
                       <p className={`font-mono text-xs font-bold text-emerald-500`}>HIT (99.4%)</p>
                     </div>
 
@@ -1994,7 +2002,7 @@ export default function AdminPortalPage() {
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
                       <ShieldCheck className="w-4 h-4 text-emerald-500 mx-auto" />
-                      <p className="text-[10px] text-slate-400">SSL Encryption</p>
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>SSL Encryption</p>
                       <p className={`font-mono text-xs font-bold text-emerald-500`}>TLS 1.3 Valid</p>
                     </div>
 
@@ -2002,7 +2010,7 @@ export default function AdminPortalPage() {
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
                       <Radio className="w-4 h-4 text-accent-gold mx-auto animate-pulse" />
-                      <p className="text-[10px] text-slate-400">SiKAP API</p>
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>SiKAP API</p>
                       <p className={`font-mono text-xs font-bold text-emerald-500`}>Connected</p>
                     </div>
                   </div>
@@ -2019,7 +2027,9 @@ export default function AdminPortalPage() {
                 <div className={`p-5 rounded-3xl border shadow-sm space-y-4 ${
                   isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
                 }`}>
-                  <div className="flex justify-between items-center pb-3 border-b border-slate-800/60">
+                  <div className={`flex justify-between items-center pb-3 border-b ${
+                    isDark ? 'border-slate-800/60' : 'border-slate-200'
+                  }`}>
                     <div className="flex items-center gap-2">
                       <Activity className="w-4 h-4 text-emerald-500" />
                       <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -2039,13 +2049,13 @@ export default function AdminPortalPage() {
                         <Newspaper className="w-3.5 h-3.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
                           Berita Pengadaan Terbit
                         </p>
-                        <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                           {newsList[0]?.title || 'Pembaruan Siaran Pers PBJ'}
                         </p>
-                        <span className="text-[10px] text-slate-400 font-mono">2 menit lalu • Dimas Ars</span>
+                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>2 menit lalu • Dimas Ars</span>
                       </div>
                     </div>
 
@@ -2055,13 +2065,13 @@ export default function AdminPortalPage() {
                         <ScrollText className="w-3.5 h-3.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
                           Regulasi Baru Tersinkron
                         </p>
-                        <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                           {regulasiList[0]?.nomor || 'Permenaker No. 01/2026'}
                         </p>
-                        <span className="text-[10px] text-slate-400 font-mono">14 menit lalu • JDIH Hook</span>
+                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>14 menit lalu • JDIH Hook</span>
                       </div>
                     </div>
 
@@ -2071,13 +2081,13 @@ export default function AdminPortalPage() {
                         <Building2 className="w-3.5 h-3.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
                           Verifikasi Vendor SiKAP
                         </p>
-                        <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                           PT Telkom Akses (Kualifikasi Lolos)
                         </p>
-                        <span className="text-[10px] text-slate-400 font-mono">1 jam lalu • Pokja Pemilihan</span>
+                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>1 jam lalu • Pokja Pemilihan</span>
                       </div>
                     </div>
 
@@ -2087,13 +2097,13 @@ export default function AdminPortalPage() {
                         <Camera className="w-3.5 h-3.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
                           Dokumentasi Galeri Terkini
                         </p>
-                        <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                           {photosList[0]?.title || 'Foto Rapat Koordinasi PBJ'}
                         </p>
-                        <span className="text-[10px] text-slate-400 font-mono">3 jam lalu • /galeri sync</span>
+                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>3 jam lalu • /galeri sync</span>
                       </div>
                     </div>
 
@@ -2103,19 +2113,19 @@ export default function AdminPortalPage() {
                         <Layers className="w-3.5 h-3.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
                           Pembaruan Tahapan SOP
                         </p>
-                        <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                           {sopList[0]?.judul || 'SOP Pengadaan Langsung'}
                         </p>
-                        <span className="text-[10px] text-slate-400 font-mono">Kemarin • Biro Hukum</span>
+                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>Kemarin • Biro Hukum</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className={`pt-2 border-t text-[10px] text-slate-400 text-center ${
-                    isDark ? 'border-slate-800' : 'border-slate-100'
+                  <div className={`pt-2 border-t text-[10px] text-center ${
+                    isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600 font-bold'
                   }`}>
                     <span>Auto-persisted to Local Database Engine v1</span>
                   </div>
@@ -2125,7 +2135,9 @@ export default function AdminPortalPage() {
                 <div className={`p-5 rounded-3xl border shadow-sm space-y-4 ${
                   isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
                 }`}>
-                  <div className="flex justify-between items-center pb-3 border-b border-slate-800/60">
+                  <div className={`flex justify-between items-center pb-3 border-b ${
+                    isDark ? 'border-slate-800/60' : 'border-slate-200'
+                  }`}>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-accent-gold" />
                       <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -2154,7 +2166,7 @@ export default function AdminPortalPage() {
                       <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         {packagesList[0]?.title || 'Pengadaan Server & Storage SPSE'}
                       </p>
-                      <p className="text-[10px] text-slate-400">
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                         Pagu: {packagesList[0]?.hps || 'Rp 500.000.000'} • {packagesList[0]?.unit || 'Biro Perencanaan'}
                       </p>
                     </div>
@@ -2165,17 +2177,17 @@ export default function AdminPortalPage() {
                         isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-slate-50 border-slate-200'
                       }`}>
                         <div className="min-w-0 pr-2">
-                          <p className={`font-bold text-xs truncate ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                          <p className={`font-bold text-xs truncate ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
                             {agenda.title}
                           </p>
-                          <p className="text-[10px] text-slate-400 mt-0.5 flex items-center gap-1">
+                          <p className={`text-[10px] mt-0.5 flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                             <Clock className="w-2.5 h-2.5 text-emerald-500" />
                             <span>{agenda.date}</span>
                             <span>•</span>
                             <span className="truncate">{agenda.location}</span>
                           </p>
                         </div>
-                        <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-500/10 text-blue-400 shrink-0">
+                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold shrink-0 ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
                           {agenda.category}
                         </span>
                       </div>
@@ -2195,7 +2207,9 @@ export default function AdminPortalPage() {
                 <div className={`p-5 rounded-3xl border shadow-sm space-y-4 ${
                   isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
                 }`}>
-                  <div className="flex justify-between items-center pb-3 border-b border-slate-800/60">
+                  <div className={`flex justify-between items-center pb-3 border-b ${
+                    isDark ? 'border-slate-800/60' : 'border-slate-200'
+                  }`}>
                     <div className="flex items-center gap-2">
                       <Globe className="w-4 h-4 text-blue-400" />
                       <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -2218,9 +2232,9 @@ export default function AdminPortalPage() {
                     >
                       <div className="flex items-center gap-2.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>LPSE Kemnaker RI</span>
+                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>LPSE Kemnaker RI</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                      <span className={`text-[10px] flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>
                         <span>18ms</span>
                         <ExternalLink className="w-3 h-3" />
                       </span>
@@ -2236,9 +2250,9 @@ export default function AdminPortalPage() {
                     >
                       <div className="flex items-center gap-2.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>SiKAP LKPP Nasional</span>
+                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>SiKAP LKPP Nasional</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                      <span className={`text-[10px] flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>
                         <span>Live Sync</span>
                         <ExternalLink className="w-3 h-3" />
                       </span>
@@ -2254,9 +2268,9 @@ export default function AdminPortalPage() {
                     >
                       <div className="flex items-center gap-2.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>JDIH Kemnaker RI</span>
+                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>JDIH Kemnaker RI</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                      <span className={`text-[10px] flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>
                         <span>Synced</span>
                         <ExternalLink className="w-3 h-3" />
                       </span>
@@ -2272,9 +2286,9 @@ export default function AdminPortalPage() {
                     >
                       <div className="flex items-center gap-2.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>e-Katalog LKPP v6</span>
+                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>e-Katalog LKPP v6</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                      <span className={`text-[10px] flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>
                         <span>Active</span>
                         <ExternalLink className="w-3 h-3" />
                       </span>
@@ -2345,8 +2359,8 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Berita & Pengumuman
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Kelola konten berita dari backend untuk otomatis tampil secara real-time pada halaman publik (<Link href="/informasi" className="text-blue-500 hover:underline">/informasi</Link>).
+                <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                  Kelola konten berita dari backend untuk otomatis tampil secara real-time pada halaman publik (<Link href="/informasi" className="text-blue-600 hover:underline font-bold">/informasi</Link>).
                 </p>
               </div>
 
@@ -2379,7 +2393,7 @@ export default function AdminPortalPage() {
               <div className={`p-4 border-b flex justify-between items-center text-xs ${
                 isDark ? 'border-slate-800' : 'border-slate-200'
               }`}>
-                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
                   Daftar Berita Aktif ({newsList.length})
                 </span>
                 <span className="text-emerald-500 text-[11px] font-semibold flex items-center gap-1.5">
@@ -2391,15 +2405,15 @@ export default function AdminPortalPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className={`text-[11px] border-b ${
-                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-500 border-slate-200'
+                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
                   }`}>
                     <tr>
-                      <th className="p-4 font-semibold">Judul Berita</th>
-                      <th className="p-4 font-semibold">Kategori</th>
-                      <th className="p-4 font-semibold">Penulis / Unit</th>
-                      <th className="p-4 font-semibold">Status Publikasi</th>
-                      <th className="p-4 font-semibold">Tanggal & Views</th>
-                      <th className="p-4 font-semibold text-right">Aksi Manajemen</th>
+                      <th className="p-4 font-bold">Judul Berita</th>
+                      <th className="p-4 font-bold">Kategori</th>
+                      <th className="p-4 font-bold">Penulis / Unit</th>
+                      <th className="p-4 font-bold">Status Publikasi</th>
+                      <th className="p-4 font-bold">Tanggal & Views</th>
+                      <th className="p-4 font-bold text-right">Aksi Manajemen</th>
                     </tr>
                   </thead>
                   <tbody className={`divide-y ${
@@ -2411,14 +2425,14 @@ export default function AdminPortalPage() {
                       }`}>
                         <td className="p-4">
                           <p className={`font-bold text-xs max-w-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</p>
-                          <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">{item.excerpt}</p>
+                          <p className={`text-[10px] line-clamp-1 mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>{item.excerpt}</p>
                         </td>
                         <td className="p-4">
-                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                          <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold border ${isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-100 text-blue-800 border-blue-200'}`}>
                             {item.category}
                           </span>
                         </td>
-                        <td className={`p-4 text-[11px] ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                        <td className={`p-4 text-[11px] font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                           {item.author}
                         </td>
                         <td className="p-4">
@@ -2433,9 +2447,9 @@ export default function AdminPortalPage() {
                             {item.status === 'Published' ? '✓ Published (Live)' : 'Draft (Hidden)'}
                           </button>
                         </td>
-                        <td className="p-4 text-slate-400 text-[11px]">
+                        <td className={`p-4 text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
                           <div>{item.date}</div>
-                          <div className="text-[10px] text-slate-500">{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} pembaca</div>
+                          <div className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} pembaca</div>
                         </td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
@@ -2443,7 +2457,7 @@ export default function AdminPortalPage() {
                               onClick={() => setPreviewNews(item)}
                               title="Preview Frontend"
                               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-600 hover:text-white'
+                                isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-700 hover:text-white'
                               }`}
                             >
                               <Eye className="w-3.5 h-3.5" />
@@ -2456,7 +2470,7 @@ export default function AdminPortalPage() {
                               }}
                               title="Edit Berita"
                               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-600 hover:text-white'
+                                isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-700 hover:text-white'
                               }`}
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -2465,7 +2479,7 @@ export default function AdminPortalPage() {
                               onClick={() => handleDeleteNews(item.id)}
                               title="Hapus Berita"
                               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-600 hover:text-white'
+                                isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-700 hover:text-white'
                               }`}
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -2498,8 +2512,8 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Agenda & Jadwal PBJ
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Kelola jadwal tender, bimbingan teknis, dan sertifikasi untuk otomatis tersinkronisasi ke kalender publik (<Link href="/agenda" className="text-blue-500 hover:underline">/agenda</Link>).
+                <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                  Kelola jadwal tender, bimbingan teknis, dan sertifikasi untuk otomatis tersinkronisasi ke kalender publik (<Link href="/agenda" className="text-blue-600 hover:underline font-bold">/agenda</Link>).
                 </p>
               </div>
 
@@ -2534,17 +2548,17 @@ export default function AdminPortalPage() {
                   isDark ? 'bg-slate-900 border-slate-800 hover:border-emerald-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-emerald-500/40'
                 }`}>
                   <div className="flex justify-between items-start">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${isDark ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-100 text-emerald-800 border-emerald-200'}`}>
                       {item.category}
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-500/10 text-blue-500">
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
                       {item.status}
                     </span>
                   </div>
 
                   <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</h3>
 
-                  <div className="space-y-1.5 text-xs text-slate-400">
+                  <div className={`space-y-1.5 text-xs ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                       <span>{item.date} • {item.time}</span>
@@ -2562,7 +2576,7 @@ export default function AdminPortalPage() {
                   <div className={`pt-3 border-t flex justify-between items-center ${
                     isDark ? 'border-slate-800' : 'border-slate-100'
                   }`}>
-                    <span className="text-[10px] text-emerald-500 font-semibold flex items-center gap-1">
+                    <span className="text-[10px] text-emerald-500 font-bold flex items-center gap-1">
                       <Check className="w-3 h-3" />
                       <span>Synced to /agenda</span>
                     </span>
@@ -2582,8 +2596,8 @@ export default function AdminPortalPage() {
                       </button>
                       <button
                         onClick={() => handleDeleteAgenda(item.id)}
-                        className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                          isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                        className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                          isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-400 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-600 hover:text-white'
                         }`}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -2611,7 +2625,7 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Arsitektur Portal UKPBJ Kementerian Ketenagakerjaan
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                   Satu Portal, Seluruh Informasi Pengadaan Terintegrasi.
                 </p>
               </div>
@@ -2631,7 +2645,7 @@ export default function AdminPortalPage() {
                 isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
               }`}>
                 <div>
-                  <div className="flex items-center space-x-2 text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-3">
+                  <div className={`flex items-center space-x-2 text-xs font-extrabold uppercase tracking-wider mb-3 ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
                     <Users className="w-4 h-4 text-blue-500" />
                     <span>Pengguna</span>
                   </div>
@@ -2643,13 +2657,13 @@ export default function AdminPortalPage() {
                         <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 text-[10px] font-bold">
                           {idx + 1}
                         </div>
-                        <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>{userRole}</span>
+                        <span className={isDark ? 'text-slate-300' : 'text-slate-800 font-semibold'}>{userRole}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] text-slate-400 ${
-                  isDark ? 'border-slate-800' : 'border-slate-100'
+                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
+                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
                 }`}>
                   Role-Based Access Control
                 </div>
@@ -2666,9 +2680,9 @@ export default function AdminPortalPage() {
                   </div>
                   <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 mb-3 text-center">
                     <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Web Browser</p>
-                    <p className="text-[10px] text-blue-500">(Desktop & Mobile)</p>
+                    <p className="text-[10px] text-blue-500 font-bold">(Desktop & Mobile)</p>
                   </div>
-                  <ul className="space-y-1.5 text-[11px] text-slate-400">
+                  <ul className={`space-y-1.5 text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                     <li className="flex items-center space-x-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                       <span>UI/UX Modern & Formal</span>
@@ -2687,8 +2701,8 @@ export default function AdminPortalPage() {
                     </li>
                   </ul>
                 </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] text-slate-400 ${
-                  isDark ? 'border-slate-800' : 'border-slate-100'
+                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
+                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
                 }`}>
                   Next.js Client Components
                 </div>
@@ -2705,9 +2719,9 @@ export default function AdminPortalPage() {
                   </div>
                   <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 mb-3 text-center">
                     <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Next.js / Node.js</p>
-                    <p className="text-[10px] text-accent-gold">(API & Business Logic)</p>
+                    <p className="text-[10px] text-accent-gold font-bold">(API & Business Logic)</p>
                   </div>
-                  <ul className="space-y-1.5 text-[11px] text-slate-400">
+                  <ul className={`space-y-1.5 text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                     <li className="flex items-center space-x-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
                       <span>Manajemen Pengguna</span>
@@ -2730,8 +2744,8 @@ export default function AdminPortalPage() {
                     </li>
                   </ul>
                 </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] text-slate-400 ${
-                  isDark ? 'border-slate-800' : 'border-slate-100'
+                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
+                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
                 }`}>
                   RESTful & Edge Endpoints
                 </div>
@@ -2748,9 +2762,9 @@ export default function AdminPortalPage() {
                   </div>
                   <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 mb-3 text-center">
                     <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>PostgreSQL</p>
-                    <p className="text-[10px] text-emerald-500">(Cloud Database)</p>
+                    <p className="text-[10px] text-emerald-500 font-bold">(Cloud Database)</p>
                   </div>
-                  <ul className="space-y-1.5 text-[11px] text-slate-400">
+                  <ul className={`space-y-1.5 text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                     <li className="flex items-center space-x-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       <span>Data Pengguna & Hak</span>
@@ -2773,8 +2787,8 @@ export default function AdminPortalPage() {
                     </li>
                   </ul>
                 </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] text-slate-400 ${
-                  isDark ? 'border-slate-800' : 'border-slate-100'
+                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
+                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
                 }`}>
                   ACID Compliant & Encrypted
                 </div>
@@ -2793,25 +2807,25 @@ export default function AdminPortalPage() {
                     <div className={`p-2.5 rounded-lg border ${
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
-                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-800'}`}>LKPP (SiKAP, SiRUP)</p>
-                      <p className="text-[9px] text-slate-400">API Integration</p>
+                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-900'}`}>LKPP (SiKAP, SiRUP)</p>
+                      <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>API Integration</p>
                     </div>
                     <div className={`p-2.5 rounded-lg border ${
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
-                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-800'}`}>Email / Notifikasi</p>
-                      <p className="text-[9px] text-slate-400">SMTP Notification Service</p>
+                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-900'}`}>Email / Notifikasi</p>
+                      <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>SMTP Notification Service</p>
                     </div>
                     <div className={`p-2.5 rounded-lg border ${
                       isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
-                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-800'}`}>Storage / CDN</p>
-                      <p className="text-[9px] text-slate-400">Cloud Storage & Dokumen</p>
+                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-900'}`}>Storage / CDN</p>
+                      <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Cloud Storage & Dokumen</p>
                     </div>
                   </div>
                 </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] text-slate-400 ${
-                  isDark ? 'border-slate-800' : 'border-slate-100'
+                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
+                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
                 }`}>
                   Secure API Gateway
                 </div>
@@ -2829,7 +2843,7 @@ export default function AdminPortalPage() {
                 </div>
                 <div>
                   <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Keamanan Berlapis</h4>
-                  <p className="text-[10px] text-slate-400">SSL/TLS, Firewall, Role Based Access Control, Audit Log</p>
+                  <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>SSL/TLS, Firewall, Role Based Access Control, Audit Log</p>
                 </div>
               </div>
 
@@ -2841,7 +2855,7 @@ export default function AdminPortalPage() {
                 </div>
                 <div>
                   <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Hosting & Deployment</h4>
-                  <p className="text-[10px] text-slate-400">Vercel Edge Network / Cloud Infrastructure</p>
+                  <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>Vercel Edge Network / Cloud Infrastructure</p>
                 </div>
               </div>
 
@@ -2853,7 +2867,7 @@ export default function AdminPortalPage() {
                 </div>
                 <div>
                   <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Monitoring & Logging</h4>
-                  <p className="text-[10px] text-slate-400">99.9% Uptime, Error Tracking, Audit Trail</p>
+                  <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>99.9% Uptime, Error Tracking, Audit Trail</p>
                 </div>
               </div>
             </div>
@@ -2876,7 +2890,7 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Monitoring Progres Pengadaan
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                   Pantau alur tahapan tender, performa SLA Pokja Pemilihan, dan status sinkronisasi SPSE secara live.
                 </p>
               </div>
@@ -2898,52 +2912,52 @@ export default function AdminPortalPage() {
                 isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
               }`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Paket Berjalan</span>
+                  <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Paket Berjalan</span>
                   <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center">
                     <Activity className="w-4 h-4" />
                   </div>
                 </div>
                 <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>42</p>
-                <p className="text-[10px] text-blue-400 font-semibold mt-1">100% On-Schedule</p>
+                <p className="text-[10px] text-blue-600 dark:text-blue-400 font-bold mt-1">100% On-Schedule</p>
               </div>
 
               <div className={`p-4 rounded-2xl border transition-all ${
                 isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
               }`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Kepatuhan SLA</span>
+                  <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Kepatuhan SLA</span>
                   <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-2xl font-black mt-2 text-emerald-500">97.8%</p>
-                <p className="text-[10px] text-slate-400 mt-1">Target Kementerian &gt;95%</p>
+                <p className="text-2xl font-black mt-2 text-emerald-600 dark:text-emerald-500">97.8%</p>
+                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Target Kementerian &gt;95%</p>
               </div>
 
               <div className={`p-4 rounded-2xl border transition-all ${
                 isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
               }`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Tahap Evaluasi</span>
+                  <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Tahap Evaluasi</span>
                   <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
                     <Clock className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-2xl font-black mt-2 text-amber-500">18</p>
-                <p className="text-[10px] text-slate-400 mt-1">Rata-rata 3 hari kerja</p>
+                <p className="text-2xl font-black mt-2 text-amber-600 dark:text-amber-500">18</p>
+                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Rata-rata 3 hari kerja</p>
               </div>
 
               <div className={`p-4 rounded-2xl border transition-all ${
                 isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
               }`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Konektivitas SPSE</span>
+                  <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Konektivitas SPSE</span>
                   <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-500 flex items-center justify-center">
                     <Wifi className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-2xl font-black mt-2 text-cyan-500">Normal</p>
-                <p className="text-[10px] text-emerald-400 font-semibold mt-1">Latency: 38ms (Healthy)</p>
+                <p className="text-2xl font-black mt-2 text-cyan-600 dark:text-cyan-500">Normal</p>
+                <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">Latency: 38ms (Healthy)</p>
               </div>
             </div>
 
@@ -2956,9 +2970,9 @@ export default function AdminPortalPage() {
                   <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     Distribusi Tahapan Pengadaan Aktif
                   </h3>
-                  <p className="text-[11px] text-slate-400">Tahapan tender dan seleksi berjalan T.A 2026</p>
+                  <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>Tahapan tender dan seleksi berjalan T.A 2026</p>
                 </div>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                   Total 42 Paket Aktif
                 </span>
               </div>
@@ -2967,9 +2981,9 @@ export default function AdminPortalPage() {
                 <div className={`p-3.5 rounded-xl border ${
                   isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">1. Persiapan & RUP</p>
+                  <p className={`text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>1. Persiapan & RUP</p>
                   <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>9</p>
-                  <div className="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
                     <div className="h-full bg-blue-500 rounded-full" style={{ width: '60%' }} />
                   </div>
                 </div>
@@ -2977,9 +2991,9 @@ export default function AdminPortalPage() {
                 <div className={`p-3.5 rounded-xl border ${
                   isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
-                  <p className="text-[10px] font-bold text-amber-500 uppercase">2. Pengumuman</p>
+                  <p className="text-[10px] font-bold text-amber-600 dark:text-amber-500 uppercase">2. Pengumuman</p>
                   <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>12</p>
-                  <div className="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
                     <div className="h-full bg-amber-500 rounded-full" style={{ width: '80%' }} />
                   </div>
                 </div>
@@ -2987,9 +3001,9 @@ export default function AdminPortalPage() {
                 <div className={`p-3.5 rounded-xl border ${
                   isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
-                  <p className="text-[10px] font-bold text-purple-400 uppercase">3. Evaluasi Penawaran</p>
+                  <p className="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase">3. Evaluasi Penawaran</p>
                   <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>11</p>
-                  <div className="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
                     <div className="h-full bg-purple-500 rounded-full" style={{ width: '70%' }} />
                   </div>
                 </div>
@@ -2997,9 +3011,9 @@ export default function AdminPortalPage() {
                 <div className={`p-3.5 rounded-xl border ${
                   isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
-                  <p className="text-[10px] font-bold text-cyan-400 uppercase">4. Masa Sanggah</p>
+                  <p className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase">4. Masa Sanggah</p>
                   <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>4</p>
-                  <div className="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
                     <div className="h-full bg-cyan-500 rounded-full" style={{ width: '30%' }} />
                   </div>
                 </div>
@@ -3007,9 +3021,9 @@ export default function AdminPortalPage() {
                 <div className={`p-3.5 rounded-xl border ${
                   isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
-                  <p className="text-[10px] font-bold text-emerald-400 uppercase">5. Penandatanganan</p>
+                  <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">5. Penandatanganan</p>
                   <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>6</p>
-                  <div className="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
                     <div className="h-full bg-emerald-500 rounded-full" style={{ width: '45%' }} />
                   </div>
                 </div>
@@ -3023,11 +3037,11 @@ export default function AdminPortalPage() {
               <div className={`p-4 border-b flex justify-between items-center text-xs ${
                 isDark ? 'border-slate-800' : 'border-slate-200'
               }`}>
-                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
                   Live SLA & Status Pengawasan Paket
                 </span>
-                <span className="text-emerald-500 text-[11px] font-semibold flex items-center gap-1.5">
-                  <Activity className="w-3 h-3 animate-pulse" />
+                <span className="text-emerald-600 dark:text-emerald-500 text-[11px] font-bold flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 animate-pulse" />
                   <span>Real-time Sentinel Active</span>
                 </span>
               </div>
@@ -3035,15 +3049,15 @@ export default function AdminPortalPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className={`text-[11px] border-b ${
-                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-500 border-slate-200'
+                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
                   }`}>
                     <tr>
-                      <th className="p-4 font-semibold">Paket & Kode</th>
-                      <th className="p-4 font-semibold">Satuan Kerja</th>
-                      <th className="p-4 font-semibold">Nilai HPS</th>
-                      <th className="p-4 font-semibold">Tahap Saat Ini</th>
-                      <th className="p-4 font-semibold">Batas Waktu</th>
-                      <th className="p-4 font-semibold text-right">Status SLA</th>
+                      <th className="p-4 font-bold">Paket & Kode</th>
+                      <th className="p-4 font-bold">Satuan Kerja</th>
+                      <th className="p-4 font-bold">Nilai HPS</th>
+                      <th className="p-4 font-bold">Tahap Saat Ini</th>
+                      <th className="p-4 font-bold">Batas Waktu</th>
+                      <th className="p-4 font-bold text-right">Status SLA</th>
                     </tr>
                   </thead>
                   <tbody className={`divide-y ${
@@ -3060,26 +3074,26 @@ export default function AdminPortalPage() {
                             </div>
                             <div>
                               <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.title}</p>
-                              <p className="text-[10px] text-slate-400 font-mono">{pkg.code}</p>
+                              <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'} font-mono`}>{pkg.code}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="p-4 text-slate-400 text-xs">
+                        <td className={`p-4 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'} text-xs`}>
                           {pkg.unit}
                         </td>
                         <td className={`p-4 font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
                           {pkg.hps}
                         </td>
                         <td className="p-4">
-                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                             {pkg.status}
                           </span>
                         </td>
-                        <td className="p-4 text-slate-400 font-mono text-[11px]">
+                        <td className={`p-4 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'} font-mono text-[11px]`}>
                           {pkg.deadline}
                         </td>
                         <td className="p-4 text-right">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                             <span>On Track (0 Hari Terlambat)</span>
                           </span>
@@ -3107,8 +3121,8 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manajemen Paket Pengadaan
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Kelola paket tender & seleksi aktif. Perubahan langsung tersinkronisasi ke homepage publik (<Link href="/#pengadaan" className="text-blue-500 hover:underline">/#pengadaan</Link>).
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                  Kelola paket tender & seleksi aktif. Perubahan langsung tersinkronisasi ke homepage publik (<Link href="/#pengadaan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/#pengadaan</Link>).
                 </p>
               </div>
               <button 
@@ -3141,38 +3155,38 @@ export default function AdminPortalPage() {
                 }`}>
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                         {pkg.category}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono font-bold">
+                      <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700'} font-mono font-bold`}>
                         {pkg.code}
                       </span>
                     </div>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                       {pkg.status}
                     </span>
                   </div>
 
                   <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.title}</h3>
-                  <p className="text-xs text-slate-400 line-clamp-2">{pkg.desc || 'Pengadaan barang/jasa untuk mendukung kegiatan operasional kementerian.'}</p>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-2`}>{pkg.desc || 'Pengadaan barang/jasa untuk mendukung kegiatan operasional kementerian.'}</p>
 
-                  <div className="text-[11px] text-slate-400">
+                  <div className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                     <span>Satuan Kerja: </span>
-                    <strong className={isDark ? 'text-slate-200' : 'text-slate-700'}>{pkg.unit}</strong>
+                    <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{pkg.unit}</strong>
                   </div>
 
                   {/* Attachment Document Badge */}
                   <div className={`p-2 rounded-xl border flex items-center justify-between gap-2 text-xs ${
                     pkg.fileData 
-                      ? isDark ? 'bg-blue-950/20 border-blue-800/40 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-800'
-                      : isDark ? 'bg-slate-950/40 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'
+                      ? isDark ? 'bg-blue-950/20 border-blue-800/40 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-900'
+                      : isDark ? 'bg-slate-950/40 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-700'
                   }`}>
                     <div className="flex items-center gap-2 min-w-0">
-                      <FileText className={`w-3.5 h-3.5 shrink-0 ${pkg.fileData ? 'text-blue-500' : 'text-slate-400'}`} />
-                      <span className="font-semibold text-[11px] truncate">
+                      <FileText className={`w-3.5 h-3.5 shrink-0 ${pkg.fileData ? 'text-blue-500' : isDark ? 'text-slate-400' : 'text-slate-600'}`} />
+                      <span className="font-bold text-[11px] truncate">
                         {pkg.fileName || 'Dokumen-Pengadaan.pdf'}
                       </span>
-                      <span className="text-[10px] text-slate-400 shrink-0 font-mono">
+                      <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'} shrink-0 font-mono`}>
                         ({pkg.fileSize || '2.5 MB'})
                       </span>
                     </div>
@@ -3194,8 +3208,8 @@ export default function AdminPortalPage() {
                     isDark ? 'border-slate-800' : 'border-slate-100'
                   }`}>
                     <div>
-                      <span className="text-[10px] text-slate-400 block">Nilai HPS:</span>
-                      <strong className="text-xs text-accent-gold font-mono font-bold">{pkg.hps}</strong>
+                      <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-bold'} block`}>Nilai HPS:</span>
+                      <strong className={`text-xs ${isDark ? 'text-accent-gold' : 'text-amber-700 font-black'} font-mono font-bold`}>{pkg.hps}</strong>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <button
@@ -3204,7 +3218,7 @@ export default function AdminPortalPage() {
                           setShowDetailModal(true);
                         }}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                          isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-700 hover:text-white'
+                          isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-800 hover:text-white'
                         }`}
                       >
                         Detail
@@ -3213,7 +3227,7 @@ export default function AdminPortalPage() {
                         onClick={() => handleDeletePackage(pkg.id)}
                         title="Hapus Paket"
                         className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                          isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                          isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600 text-slate-700'
                         }`}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -3233,27 +3247,27 @@ export default function AdminPortalPage() {
           <div className="p-6 md:p-8 space-y-6 max-w-4xl mx-auto">
             <div className="text-center mb-6">
               <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Formulir Pendaftaran Penyedia</h2>
-              <p className="text-xs text-slate-400 mt-1">Lengkapi data berikut untuk mendaftar sebagai penyedia barang/jasa Kemnaker RI.</p>
+              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Lengkapi data berikut untuk mendaftar sebagai penyedia barang/jasa Kemnaker RI.</p>
             </div>
 
             {/* Stepper Wizard Header */}
             <div className="flex items-center justify-center space-x-4 mb-8">
-              <div className={`flex items-center space-x-2 ${wizardStep >= 1 ? 'text-blue-500' : 'text-slate-400'}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-600'}`}>
+              <div className={`flex items-center space-x-2 ${wizardStep >= 1 ? 'text-blue-600 dark:text-blue-400 font-bold' : isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-700'}`}>
                   1
                 </div>
                 <span className="text-xs font-bold">Data Perusahaan</span>
               </div>
               <div className="w-12 h-0.5 bg-slate-300 dark:bg-slate-800" />
-              <div className={`flex items-center space-x-2 ${wizardStep >= 2 ? 'text-blue-500' : 'text-slate-400'}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-600'}`}>
+              <div className={`flex items-center space-x-2 ${wizardStep >= 2 ? 'text-blue-600 dark:text-blue-400 font-bold' : isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-700'}`}>
                   2
                 </div>
                 <span className="text-xs font-bold">Dokumen Legalitas</span>
               </div>
               <div className="w-12 h-0.5 bg-slate-300 dark:bg-slate-800" />
-              <div className={`flex items-center space-x-2 ${wizardStep >= 3 ? 'text-blue-500' : 'text-slate-400'}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 3 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-600'}`}>
+              <div className={`flex items-center space-x-2 ${wizardStep >= 3 ? 'text-blue-600 dark:text-blue-400 font-bold' : isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 3 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-700'}`}>
                   3
                 </div>
                 <span className="text-xs font-bold">Konfirmasi</span>
@@ -3266,21 +3280,21 @@ export default function AdminPortalPage() {
               }`}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Nama Perusahaan / PT / CV *</label>
+                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Nama Perusahaan / PT / CV *</label>
                     <input type="text" placeholder="Masukkan nama perusahaan" className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-600'
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                     }`} />
                   </div>
                   <div>
-                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>NPWP Perusahaan *</label>
+                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>NPWP Perusahaan *</label>
                     <input type="text" placeholder="00.000.000.0-000.000" className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-600'
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                     }`} />
                   </div>
                   <div>
-                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Jenis Usaha *</label>
+                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Jenis Usaha *</label>
                     <select className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-700 focus:border-blue-600'
+                      isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
                     }`}>
                       <option>Jasa Konsultansi IT & Konstruksi</option>
                       <option>Pengadaan Barang / Alat</option>
@@ -3288,9 +3302,9 @@ export default function AdminPortalPage() {
                     </select>
                   </div>
                   <div>
-                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Alamat Kantor *</label>
+                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Alamat Kantor *</label>
                     <input type="text" placeholder="Masukkan alamat lengkap kantor" className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-600'
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                     }`} />
                   </div>
                 </div>
@@ -3315,21 +3329,21 @@ export default function AdminPortalPage() {
                     isDark ? 'bg-slate-950 border-slate-700' : 'bg-slate-50 border-slate-300'
                   }`}>
                     <FileText className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>Unggah NIB & Akta Pendirian Perusahaan (PDF)</p>
-                    <p className="text-[10px] text-slate-400 mt-1">Maksimal 10 MB</p>
+                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Unggah NIB & Akta Pendirian Perusahaan (PDF)</p>
+                    <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Maksimal 10 MB</p>
                     <button className={`mt-3 px-3 py-1.5 rounded-lg text-xs font-bold ${
-                      isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}>Pilih File</button>
                   </div>
 
                   <div className={`p-4 rounded-xl border border-dashed text-center ${
                     isDark ? 'bg-slate-950 border-slate-700' : 'bg-slate-50 border-slate-300'
                   }`}>
-                    <FileCheck className="w-8 h-8 text-accent-gold mx-auto mb-2" />
-                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>Unggah Sertifikat Badan Usaha (SBU / KTA)</p>
-                    <p className="text-[10px] text-slate-400 mt-1">Maksimal 10 MB</p>
+                    <FileCheck className="w-8 h-8 text-amber-600 dark:text-accent-gold mx-auto mb-2" />
+                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Unggah Sertifikat Badan Usaha (SBU / KTA)</p>
+                    <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Maksimal 10 MB</p>
                     <button className={`mt-3 px-3 py-1.5 rounded-lg text-xs font-bold ${
-                      isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}>Pilih File</button>
                   </div>
                 </div>
@@ -3338,7 +3352,7 @@ export default function AdminPortalPage() {
                   <button 
                     onClick={() => setWizardStep(1)}
                     className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}
                   >
                     &larr; Kembali
@@ -3359,12 +3373,12 @@ export default function AdminPortalPage() {
               }`}>
                 <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
                 <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Konfirmasi Data Penyedia</h3>
-                <p className="text-xs text-slate-400 max-w-md mx-auto">
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} max-w-md mx-auto`}>
                   Dengan mengklik submit, data perusahaan Anda akan diverifikasi oleh Pokja Pemilihan UKPBJ Kemnaker RI.
                 </p>
 
                 {vendorSuccess ? (
-                  <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-600 dark:text-emerald-300 text-xs font-bold">
+                  <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
                     ✓ Pendaftaran Penyedia Berhasil Dikirimkan ke Sistem UKPBJ!
                   </div>
                 ) : (
@@ -3372,7 +3386,7 @@ export default function AdminPortalPage() {
                     <button 
                       onClick={() => setWizardStep(2)}
                       className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                        isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                        isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                       }`}
                     >
                       &larr; Ubah Data
@@ -3404,8 +3418,8 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Regulasi & Aturan PBJ
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Kelola dokumen hukum dan peraturan resmi. Perubahan akan langsung disinkronkan ke halaman publik (<Link href="/informasi/peraturan" className="text-blue-500 hover:underline">/informasi/peraturan</Link>).
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                  Kelola dokumen hukum dan peraturan resmi. Perubahan akan langsung disinkronkan ke halaman publik (<Link href="/informasi/peraturan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/informasi/peraturan</Link>).
                 </p>
               </div>
 
@@ -3438,11 +3452,11 @@ export default function AdminPortalPage() {
               <div className={`p-4 border-b flex justify-between items-center text-xs ${
                 isDark ? 'border-slate-800' : 'border-slate-200'
               }`}>
-                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
                   Daftar Regulasi Aktif ({regulasiList.length})
                 </span>
-                <span className="text-emerald-500 text-[11px] font-semibold flex items-center gap-1.5">
-                  <RefreshCw className="w-3 h-3 animate-spin" />
+                <span className="text-emerald-600 dark:text-emerald-500 text-[11px] font-bold flex items-center gap-1.5">
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                   <span>Live Dynamic Sync to Frontend</span>
                 </span>
               </div>
@@ -3450,15 +3464,15 @@ export default function AdminPortalPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className={`text-[11px] border-b ${
-                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-500 border-slate-200'
+                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
                   }`}>
                     <tr>
-                      <th className="p-4 font-semibold">Nomor & Judul Regulasi</th>
-                      <th className="p-4 font-semibold">Kategori</th>
-                      <th className="p-4 font-semibold">Tahun</th>
-                      <th className="p-4 font-semibold">Ukuran File</th>
-                      <th className="p-4 font-semibold">Status</th>
-                      <th className="p-4 font-semibold text-right">Aksi</th>
+                      <th className="p-4 font-bold">Nomor & Judul Regulasi</th>
+                      <th className="p-4 font-bold">Kategori</th>
+                      <th className="p-4 font-bold">Tahun</th>
+                      <th className="p-4 font-bold">Ukuran File</th>
+                      <th className="p-4 font-bold">Status</th>
+                      <th className="p-4 font-bold text-right">Aksi</th>
                     </tr>
                   </thead>
                   <tbody className={`divide-y ${
@@ -3475,19 +3489,19 @@ export default function AdminPortalPage() {
                             </div>
                             <div className="min-w-0 max-w-md">
                               <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.nomor}</p>
-                              <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">{item.tentang}</p>
+                              <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-1 mt-0.5`}>{item.tentang}</p>
                             </div>
                           </div>
                         </td>
                         <td className="p-4">
-                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                             {item.kategori}
                           </span>
                         </td>
-                        <td className={`p-4 font-mono font-bold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        <td className={`p-4 font-mono font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
                           {item.tahun}
                         </td>
-                        <td className="p-4 text-slate-400 font-mono text-[11px]">
+                        <td className={`p-4 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'} font-mono text-[11px]`}>
                           {item.fileSize}
                         </td>
                         <td className="p-4">
@@ -3495,8 +3509,8 @@ export default function AdminPortalPage() {
                             onClick={() => handleToggleRegulasiStatus(item.id)}
                             className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer ${
                               item.status === 'Aktif'
-                                ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30 hover:bg-emerald-500/20'
-                                : 'bg-amber-500/10 text-amber-500 border-amber-500/30 hover:bg-amber-500/20'
+                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
                             }`}
                           >
                             {item.status === 'Aktif' ? '✓ Aktif (Live)' : 'Draft (Hidden)'}
@@ -3512,7 +3526,7 @@ export default function AdminPortalPage() {
                               }}
                               title="Edit Regulasi"
                               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-600 hover:text-white'
+                                isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-700 hover:text-white'
                               }`}
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -3521,7 +3535,7 @@ export default function AdminPortalPage() {
                               onClick={() => handleDeleteRegulasi(item.id)}
                               title="Hapus Regulasi"
                               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-600 hover:text-white'
+                                isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-700 hover:text-white'
                               }`}
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -3551,8 +3565,8 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Standar Operasional Prosedur (SOP)
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Kelola dokumen, lampiran file PDF/DOCX (tersimpan di LocalStorage), dan alur tahapan kerja. Tersinkronisasi ke portal publik (<Link href="/informasi/sop" className="text-purple-500 hover:underline">/informasi/sop</Link>).
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                  Kelola dokumen, lampiran file PDF/DOCX (tersimpan di LocalStorage), dan alur tahapan kerja. Tersinkronisasi ke portal publik (<Link href="/informasi/sop" className="text-purple-600 dark:text-purple-400 font-bold hover:underline">/informasi/sop</Link>).
                 </p>
               </div>
 
@@ -3591,21 +3605,21 @@ export default function AdminPortalPage() {
                 }`}>
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
                         {item.kode}
                       </span>
                       {item.kategori && (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 capitalize">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 capitalize">
                           {item.kategori.replace('-', ' ')}
                         </span>
                       )}
                     </div>
                     <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold ${
                       item.status === 'Berlaku' 
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                         : item.status === 'Dalam Revisi'
-                        ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                        : 'bg-slate-800 text-slate-400'
+                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-400'
                     }`}>
                       {item.status}
                     </span>
@@ -3613,34 +3627,34 @@ export default function AdminPortalPage() {
 
                   <h3 className={`font-bold text-sm leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.judul}</h3>
 
-                  <div className="space-y-1.5 text-xs text-slate-400">
+                  <div className={`space-y-1.5 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                     <div className="flex items-center justify-between">
                       <span>Satuan Kerja / Unit:</span>
-                      <strong className={isDark ? 'text-slate-200' : 'text-slate-700'}>{item.unit}</strong>
+                      <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{item.unit}</strong>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Versi Dokumen:</span>
-                      <span className="font-semibold text-accent-gold">{item.revisi}</span>
+                      <span className={`font-bold ${isDark ? 'text-accent-gold' : 'text-amber-700'}`}>{item.revisi}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Jumlah Tahapan Prosedur:</span>
-                      <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 font-bold">{item.tahapanCount} Langkah</span>
+                      <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">{item.tahapanCount} Langkah</span>
                     </div>
                   </div>
 
                   {/* Attachment Info */}
                   <div className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 ${
                     item.fileData
-                      ? isDark ? 'bg-emerald-950/20 border-emerald-800/40 text-emerald-300' : 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                      : isDark ? 'bg-slate-950/60 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'
+                      ? isDark ? 'bg-emerald-950/20 border-emerald-800/40 text-emerald-300' : 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                      : isDark ? 'bg-slate-950/60 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-700'
                   }`}>
                     <div className="flex items-center gap-2 min-w-0">
-                      <FileText className={`w-4 h-4 flex-shrink-0 ${item.fileData ? 'text-emerald-500' : 'text-slate-400'}`} />
+                      <FileText className={`w-4 h-4 flex-shrink-0 ${item.fileData ? 'text-emerald-500' : isDark ? 'text-slate-400' : 'text-slate-600'}`} />
                       <div className="min-w-0">
                         <p className="text-[11px] font-bold truncate">
                           {item.fileName || 'Dokumen-SOP-Resmi.pdf'}
                         </p>
-                        <p className="text-[9px] text-slate-400">
+                        <p className={`text-[9px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           {item.fileData ? `✓ File Tersimpan di LocalStorage (${item.fileSize || 'PDF'})` : `Template Sistem (${item.fileSize || '2.0 MB'})`}
                         </p>
                       </div>
@@ -3662,8 +3676,8 @@ export default function AdminPortalPage() {
                   <div className={`pt-3 border-t flex justify-between items-center ${
                     isDark ? 'border-slate-800' : 'border-slate-100'
                   }`}>
-                    <span className="text-[10px] text-emerald-500 font-semibold flex items-center gap-1">
-                      <Check className="w-3 h-3" />
+                    <span className="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold flex items-center gap-1">
+                      <Check className="w-3.5 h-3.5" />
                       <span>Synced to /informasi/sop</span>
                     </span>
 
@@ -3675,7 +3689,7 @@ export default function AdminPortalPage() {
                           setShowSopModal(true);
                         }}
                         className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                          isDark ? 'bg-slate-800 hover:bg-purple-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-purple-600 text-slate-700 hover:text-white'
+                          isDark ? 'bg-slate-800 hover:bg-purple-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-purple-600 text-slate-800 hover:text-white'
                         }`}
                       >
                         Edit
@@ -3683,7 +3697,7 @@ export default function AdminPortalPage() {
                       <button
                         onClick={() => handleDeleteSop(item.id)}
                         className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                          isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                          isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600 text-slate-700'
                         }`}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -3710,8 +3724,8 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Kelola Galeri Foto & Video
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Kelola dokumentasi visual dan video kegiatan resmi. Tersinkronisasi langsung ke halaman publik (<Link href="/galeri" className="text-cyan-500 hover:underline">/galeri</Link>).
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                  Kelola dokumentasi visual dan video kegiatan resmi. Tersinkronisasi langsung ke halaman publik (<Link href="/galeri" className="text-cyan-600 dark:text-cyan-400 font-bold hover:underline">/galeri</Link>).
                 </p>
               </div>
 
@@ -3725,7 +3739,7 @@ export default function AdminPortalPage() {
                     className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       galeriTab === 'foto'
                         ? 'bg-blue-600 text-white shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+                        : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-700 hover:text-blue-900 font-bold'
                     }`}
                   >
                     <Camera className="w-3.5 h-3.5" />
@@ -3736,7 +3750,7 @@ export default function AdminPortalPage() {
                     className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       galeriTab === 'video'
                         ? 'bg-amber-500 text-slate-950 shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+                        : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-700 hover:text-amber-900 font-bold'
                     }`}
                   >
                     <Video className="w-3.5 h-3.5" />
@@ -3804,12 +3818,10 @@ export default function AdminPortalPage() {
 
                     <div>
                       <h4 className={`font-bold text-xs line-clamp-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</h4>
-                      <p className="text-[11px] text-slate-400 line-clamp-2 mt-0.5">{item.desc}</p>
+                      <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-2 mt-0.5`}>{item.desc}</p>
                     </div>
 
-                    <div className={`pt-2 border-t flex justify-between items-center text-[10px] text-slate-400 ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
-                    }`}>
+                    <div className={`pt-2 border-t flex justify-between items-center text-[10px] ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600 font-semibold'}`}>
                       <span>{item.date}</span>
                       <div className="flex items-center gap-1.5">
                         <button
@@ -3818,16 +3830,16 @@ export default function AdminPortalPage() {
                             setPhotoFormData(item);
                             setShowPhotoModal(true);
                           }}
-                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                            isDark ? 'bg-slate-800 hover:bg-cyan-600' : 'bg-slate-100 hover:bg-cyan-600'
+                          className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-cyan-600 text-slate-400 hover:text-white' : 'bg-slate-100 hover:bg-cyan-600 text-slate-700 hover:text-white'
                           }`}
                         >
                           <Edit3 className="w-3 h-3" />
                         </button>
                         <button
                           onClick={() => handleDeletePhoto(item.id)}
-                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                            isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                          className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-400 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-700 hover:text-white'
                           }`}
                         >
                           <Trash2 className="w-3 h-3" />
@@ -3859,22 +3871,20 @@ export default function AdminPortalPage() {
                     </div>
 
                     <div>
-                      <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">{item.category}</span>
+                      <span className="text-[10px] font-bold text-amber-600 dark:text-amber-500 uppercase tracking-wider">{item.category}</span>
                       <h4 className={`font-bold text-xs line-clamp-1 mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</h4>
-                      <p className="text-[11px] text-slate-400 line-clamp-2 mt-0.5">{item.desc}</p>
+                      <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-2 mt-0.5`}>{item.desc}</p>
                     </div>
 
-                    <div className={`pt-2 border-t flex justify-between items-center text-[10px] text-slate-400 ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
-                    }`}>
+                    <div className={`pt-2 border-t flex justify-between items-center text-[10px] ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600 font-semibold'}`}>
                       <span>{item.date} • {item.views}</span>
                       <div className="flex items-center gap-1.5">
                         <a
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                            isDark ? 'bg-slate-800 hover:bg-blue-600' : 'bg-slate-100 hover:bg-blue-600'
+                          className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-400 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-700 hover:text-white'
                           }`}
                         >
                           <ExternalLink className="w-3 h-3" />
@@ -3885,16 +3895,16 @@ export default function AdminPortalPage() {
                             setVideoFormData(item);
                             setShowVideoModal(true);
                           }}
-                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                            isDark ? 'bg-slate-800 hover:bg-amber-600' : 'bg-slate-100 hover:bg-amber-600'
+                          className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-400 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-700 hover:text-white'
                           }`}
                         >
                           <Edit3 className="w-3 h-3" />
                         </button>
                         <button
                           onClick={() => handleDeleteVideo(item.id)}
-                          className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                            isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600'
+                          className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                            isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-400 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-700 hover:text-white'
                           }`}
                         >
                           <Trash2 className="w-3 h-3" />
@@ -3918,7 +3928,7 @@ export default function AdminPortalPage() {
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Laporan & Evaluasi Kinerja Pengadaan
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                   Rekapitulasi efisiensi anggaran, realisasi belanja e-Katalog, dan kepatuhan regulasi PBJ.
                 </p>
               </div>
@@ -3933,19 +3943,19 @@ export default function AdminPortalPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
-                <p className="text-xs text-slate-400 font-medium">Realisasi Efisiensi Tender</p>
-                <p className={`text-2xl font-black mt-1 text-emerald-500`}>18.4%</p>
-                <p className="text-[10px] text-slate-400 mt-1">Penghematan dari total pagu HPS</p>
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Realisasi Efisiensi Tender</p>
+                <p className={`text-2xl font-black mt-1 text-emerald-600 dark:text-emerald-500`}>18.4%</p>
+                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Penghematan dari total pagu HPS</p>
               </div>
               <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
-                <p className="text-xs text-slate-400 font-medium">Tingkat Belanja Produk DN (P3DN)</p>
-                <p className={`text-2xl font-black mt-1 text-blue-500`}>84.6%</p>
-                <p className="text-[10px] text-slate-400 mt-1">Target nasional minimal 40%</p>
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Tingkat Belanja Produk DN (P3DN)</p>
+                <p className={`text-2xl font-black mt-1 text-blue-600 dark:text-blue-500`}>84.6%</p>
+                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Target nasional minimal 40%</p>
               </div>
               <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
-                <p className="text-xs text-slate-400 font-medium">Paket Selesai Tepat Waktu</p>
-                <p className={`text-2xl font-black mt-1 text-accent-gold`}>98.2%</p>
-                <p className="text-[10px] text-slate-400 mt-1">Kuartal berjalan T.A 2026</p>
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Paket Selesai Tepat Waktu</p>
+                <p className={`text-2xl font-black mt-1 ${isDark ? 'text-accent-gold' : 'text-amber-700'}`}>98.2%</p>
+                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Kuartal berjalan T.A 2026</p>
               </div>
             </div>
           </div>
@@ -3964,7 +3974,7 @@ export default function AdminPortalPage() {
               <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 Pengaturan Sistem & Database
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                 Atur konfigurasi portal publik, banner siaran, status server, dan kelola database sinkronisasi.
               </p>
             </div>
@@ -3978,7 +3988,7 @@ export default function AdminPortalPage() {
                   <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     Banner Pengumuman Darurat / Siaran Penting (Public Header)
                   </h3>
-                  <p className="text-[11px] text-slate-400">Teks ini akan muncul di bagian teratas website publik.</p>
+                  <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>Teks ini akan muncul di bagian teratas website publik.</p>
                 </div>
                 <button
                   type="button"
@@ -3988,8 +3998,8 @@ export default function AdminPortalPage() {
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                     siteSettings.announcementActive
-                      ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/40'
-                      : 'bg-slate-500/20 text-slate-400 border border-slate-500/30'
+                      ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-500 border border-emerald-500/40'
+                      : isDark ? 'bg-slate-500/20 text-slate-400 border border-slate-500/30' : 'bg-slate-200 text-slate-700 border border-slate-300'
                   }`}
                 >
                   {siteSettings.announcementActive ? '✓ Status: Aktif' : '✕ Status: Nonaktif'}
@@ -4003,11 +4013,11 @@ export default function AdminPortalPage() {
                   onChange={(e) => updateSiteSettings({ announcementBanner: e.target.value })}
                   placeholder="Tulis pesan pengumuman publik..."
                   className={`w-full px-3.5 py-2.5 rounded-xl text-xs border outline-none ${
-                    isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-600'
+                    isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                   }`}
                 />
-                <p className="text-[10px] text-emerald-500 font-semibold flex items-center gap-1">
-                  <Check className="w-3 h-3" />
+                <p className="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5" />
                   <span>Tersimpan otomatis ke database client & tersinkronisasi</span>
                 </p>
               </div>
@@ -4032,7 +4042,7 @@ export default function AdminPortalPage() {
                     className={`p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                       siteSettings.serverStatus === status
                         ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/30'
-                        : isDark ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white' : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
+                        : isDark ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white' : 'bg-slate-50 border-slate-300 text-slate-800 hover:text-blue-900 hover:bg-slate-100'
                     }`}
                   >
                     {status}
@@ -4045,11 +4055,11 @@ export default function AdminPortalPage() {
             <div className={`p-6 rounded-2xl border border-red-500/20 space-y-3 ${
               isDark ? 'bg-red-950/10' : 'bg-red-50/50'
             }`}>
-              <h3 className="text-sm font-bold text-red-500 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-red-600 dark:text-red-500 flex items-center gap-2">
                 <Database className="w-4 h-4" />
                 <span>Reset Database ke Pengaturan Awal (Factory Reset)</span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                 Mengembalikan seluruh data Berita, Agenda, dan Paket Pengadaan ke data bawaan resmi Kementerian Ketenagakerjaan.
               </p>
               <button
@@ -4081,7 +4091,7 @@ export default function AdminPortalPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`border rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
-                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
               <div className="flex justify-between items-center mb-6">
@@ -4089,11 +4099,11 @@ export default function AdminPortalPage() {
                   <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {editingNews ? 'Edit Berita Pengadaan' : 'Terbitkan Berita / Pengumuman Baru'}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Konten akan langsung ter-update di backend dan tampil di frontend publik.</p>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>Konten akan langsung ter-update di backend dan tampil di frontend publik.</p>
                 </div>
                 <button
                   onClick={() => setShowNewsModal(false)}
-                  className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                  className={`p-2 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                 >
                   ✕
                 </button>
@@ -4101,7 +4111,7 @@ export default function AdminPortalPage() {
 
               <form onSubmit={handleSaveNews} className="space-y-4 text-xs">
                 <div>
-                  <label className="font-bold block mb-1">Judul Berita *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Judul Berita *</label>
                   <input
                     type="text"
                     required
@@ -4109,19 +4119,19 @@ export default function AdminPortalPage() {
                     value={newsFormData.title || ''}
                     onChange={(e) => setNewsFormData({ ...newsFormData, title: e.target.value })}
                     className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-600'
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                     }`}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Kategori *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori *</label>
                     <select
                       value={newsFormData.category || 'Berita PBJ'}
                       onChange={(e) => setNewsFormData({ ...newsFormData, category: e.target.value as NewsItem['category'] })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-700 focus:border-blue-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
                       }`}
                     >
                       <option value="Berita PBJ">Berita PBJ</option>
@@ -4132,14 +4142,14 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Penulis / Unit Kerja *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Penulis / Unit Kerja *</label>
                     <input
                       type="text"
                       placeholder="e.g. Biro Umum & Pengadaan"
                       value={newsFormData.author || ''}
                       onChange={(e) => setNewsFormData({ ...newsFormData, author: e.target.value })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                       }`}
                     />
                   </div>
@@ -4147,12 +4157,12 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Status Publikasi *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Status Publikasi *</label>
                     <select
                       value={newsFormData.status || 'Published'}
                       onChange={(e) => setNewsFormData({ ...newsFormData, status: e.target.value as NewsItem['status'] })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-700 focus:border-blue-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
                       }`}
                     >
                       <option value="Published">Published (Tayang di Frontend)</option>
@@ -4163,7 +4173,7 @@ export default function AdminPortalPage() {
                 </div>
 
                 <div>
-                  <label className="font-bold block mb-1">Ringkasan / Excerpt *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Ringkasan / Excerpt *</label>
                   <textarea
                     rows={2}
                     required
@@ -4171,13 +4181,13 @@ export default function AdminPortalPage() {
                     value={newsFormData.excerpt || ''}
                     onChange={(e) => setNewsFormData({ ...newsFormData, excerpt: e.target.value })}
                     className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-600'
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                     }`}
                   />
                 </div>
 
                 <div>
-                  <label className="font-bold block mb-1">Konten Lengkap Berita *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Konten Lengkap Berita *</label>
                   <textarea
                     rows={5}
                     required
@@ -4185,7 +4195,7 @@ export default function AdminPortalPage() {
                     value={newsFormData.content || ''}
                     onChange={(e) => setNewsFormData({ ...newsFormData, content: e.target.value })}
                     className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-600'
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                     }`}
                   />
                 </div>
@@ -4196,7 +4206,7 @@ export default function AdminPortalPage() {
                   <button
                     type="button"
                     onClick={() => setShowNewsModal(false)}
-                    className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                    className={`px-4 py-2 rounded-xl font-bold ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}
                   >
                     Batal
                   </button>
@@ -4224,7 +4234,7 @@ export default function AdminPortalPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
-                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
               <div className="flex justify-between items-center mb-6">
@@ -4232,11 +4242,11 @@ export default function AdminPortalPage() {
                   <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {editingAgenda ? 'Edit Agenda PBJ' : 'Tambah Agenda / Kegiatan Baru'}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Jadwal akan otomatis muncul pada kalender interaktif (/agenda).</p>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>Jadwal akan otomatis muncul pada kalender interaktif (/agenda).</p>
                 </div>
                 <button
                   onClick={() => setShowAgendaModal(false)}
-                  className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                  className={`p-2 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                 >
                   ✕
                 </button>
@@ -4244,7 +4254,7 @@ export default function AdminPortalPage() {
 
               <form onSubmit={handleSaveAgenda} className="space-y-4 text-xs">
                 <div>
-                  <label className="font-bold block mb-1">Nama Kegiatan / Agenda *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Nama Kegiatan / Agenda *</label>
                   <input
                     type="text"
                     required
@@ -4252,19 +4262,19 @@ export default function AdminPortalPage() {
                     value={agendaFormData.title || ''}
                     onChange={(e) => setAgendaFormData({ ...agendaFormData, title: e.target.value })}
                     className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-emerald-600'
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-emerald-600'
                     }`}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Kategori *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori *</label>
                     <select
                       value={agendaFormData.category || 'Bimtek'}
                       onChange={(e) => setAgendaFormData({ ...agendaFormData, category: e.target.value as AgendaItem['category'] })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-emerald-500' : 'bg-slate-50 border-slate-200 text-slate-700 focus:border-emerald-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-emerald-600'
                       }`}
                     >
                       <option value="Bimtek">Bimbingan Teknis</option>
@@ -4276,12 +4286,12 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Status Kegiatan *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Status Kegiatan *</label>
                     <select
                       value={agendaFormData.status || 'Terjadwal'}
                       onChange={(e) => setAgendaFormData({ ...agendaFormData, status: e.target.value as AgendaItem['status'] })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-emerald-500' : 'bg-slate-50 border-slate-200 text-slate-700 focus:border-emerald-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-emerald-600'
                       }`}
                     >
                       <option value="Terjadwal">Terjadwal</option>
@@ -4294,27 +4304,27 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Tanggal Pelaksanaan *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Tanggal Pelaksanaan *</label>
                     <input
                       type="text"
                       placeholder="e.g. 15 Sep 2026"
                       value={agendaFormData.date || ''}
                       onChange={(e) => setAgendaFormData({ ...agendaFormData, date: e.target.value })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-emerald-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-emerald-600'
                       }`}
                     />
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Waktu Pelaksanaan *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Waktu Pelaksanaan *</label>
                     <input
                       type="text"
                       placeholder="e.g. 09:00 - 12:00 WIB"
                       value={agendaFormData.time || ''}
                       onChange={(e) => setAgendaFormData({ ...agendaFormData, time: e.target.value })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-emerald-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-emerald-600'
                       }`}
                     />
                   </div>
@@ -4322,27 +4332,27 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Lokasi / Media *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Lokasi / Media *</label>
                     <input
                       type="text"
                       placeholder="e.g. Gedung Kemnaker / Zoom"
                       value={agendaFormData.location || ''}
                       onChange={(e) => setAgendaFormData({ ...agendaFormData, location: e.target.value })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-emerald-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-emerald-600'
                       }`}
                     />
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Penyelenggara / Satker *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Penyelenggara / Satker *</label>
                     <input
                       type="text"
                       placeholder="e.g. Biro Umum & Pengadaan"
                       value={agendaFormData.organizer || ''}
                       onChange={(e) => setAgendaFormData({ ...agendaFormData, organizer: e.target.value })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-emerald-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-emerald-600'
                       }`}
                     />
                   </div>
@@ -4354,7 +4364,7 @@ export default function AdminPortalPage() {
                   <button
                     type="button"
                     onClick={() => setShowAgendaModal(false)}
-                    className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                    className={`px-4 py-2 rounded-xl font-bold ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}
                   >
                     Batal
                   </button>
@@ -4384,12 +4394,12 @@ export default function AdminPortalPage() {
               className="bg-white text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
             >
               <div className="flex justify-between items-start mb-4">
-                <span className="px-3 py-1 rounded-full bg-blue-50 text-primary-navy text-xs font-bold border border-blue-200">
+                <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-900 text-xs font-bold border border-blue-200">
                   {previewNews.category}
                 </span>
                 <button
                   onClick={() => setPreviewNews(null)}
-                  className="p-1 text-slate-400 hover:text-slate-700 text-sm font-bold"
+                  className="p-1 text-slate-500 hover:text-slate-900 text-sm font-bold"
                 >
                   ✕
                 </button>
@@ -4398,25 +4408,25 @@ export default function AdminPortalPage() {
               <h3 className="text-xl font-extrabold text-slate-900 leading-tight mb-2">
                 {previewNews.title}
               </h3>
-              <p className="text-xs text-slate-500 mb-6 pb-4 border-b border-slate-100">
-                Oleh <strong className="text-slate-700">{previewNews.author}</strong> • {previewNews.date}
+              <p className="text-xs text-slate-600 font-medium mb-6 pb-4 border-b border-slate-200">
+                Oleh <strong className="text-slate-900 font-bold">{previewNews.author}</strong> • {previewNews.date}
               </p>
 
-              <div className="space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
-                <p className="font-semibold text-slate-900 bg-slate-50 p-4 rounded-xl border border-slate-100">
+              <div className="space-y-4 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                <p className="font-bold text-slate-900 bg-slate-50 p-4 rounded-xl border border-slate-200">
                   {previewNews.excerpt}
                 </p>
                 <p>{previewNews.content}</p>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-                <span className="text-emerald-600 font-bold flex items-center gap-1">
+              <div className="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center text-xs">
+                <span className="text-emerald-700 font-bold flex items-center gap-1">
                   <Check className="w-4 h-4" />
                   <span>Pratinjau Tampilan Web Publik</span>
                 </span>
                 <button
                   onClick={() => setPreviewNews(null)}
-                  className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs"
+                  className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs"
                 >
                   Tutup Preview
                 </button>
@@ -4437,7 +4447,7 @@ export default function AdminPortalPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`border rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
-                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
               <div className="flex justify-between items-center mb-6">
@@ -4445,11 +4455,11 @@ export default function AdminPortalPage() {
                   <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     Tambah Paket Pengadaan Baru
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Paket baru akan langsung tersimpan di database dan muncul pada homepage publik (/#pengadaan).</p>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>Paket baru akan langsung tersimpan di database dan muncul pada homepage publik (/#pengadaan).</p>
                 </div>
                 <button
                   onClick={() => setShowPackageModal(false)}
-                  className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                  className={`p-2 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                 >
                   ✕
                 </button>
@@ -4458,7 +4468,7 @@ export default function AdminPortalPage() {
               <form onSubmit={handleSavePackage} className="space-y-4 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Kode Paket / RUP *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kode Paket / RUP *</label>
                     <input
                       type="text"
                       required
@@ -4472,7 +4482,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Kategori Pengadaan *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori Pengadaan *</label>
                     <select
                       value={packageFormData.category || 'Tender'}
                       onChange={(e) => setPackageFormData({ ...packageFormData, category: e.target.value as ProcurementPackage['category'] })}
@@ -4489,7 +4499,7 @@ export default function AdminPortalPage() {
                 </div>
 
                 <div>
-                  <label className="font-bold block mb-1">Nama / Judul Paket Pengadaan *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Nama / Judul Paket Pengadaan *</label>
                   <input
                     type="text"
                     required
@@ -4504,7 +4514,7 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Satuan Kerja / Unit *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Satuan Kerja / Unit *</label>
                     <input
                       type="text"
                       required
@@ -4518,7 +4528,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Nilai Pagu HPS *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Nilai Pagu HPS *</label>
                     <input
                       type="text"
                       required
@@ -4526,7 +4536,7 @@ export default function AdminPortalPage() {
                       onChange={(e) => setPackageFormData({ ...packageFormData, hps: e.target.value })}
                       placeholder="e.g. Rp 850.000.000"
                       className={`w-full px-3 py-2 border rounded-xl outline-none font-mono ${
-                        isDark ? 'bg-slate-950 border-slate-700 text-accent-gold focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-amber-600 focus:border-blue-600'
+                        isDark ? 'bg-slate-950 border-slate-700 text-accent-gold focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-amber-700 font-bold focus:border-blue-600'
                       }`}
                     />
                   </div>
@@ -4534,7 +4544,7 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Status Paket</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Status Paket</label>
                     <select
                       value={packageFormData.status || 'Pendaftaran Dibuka'}
                       onChange={(e) => setPackageFormData({ ...packageFormData, status: e.target.value as ProcurementPackage['status'] })}
@@ -4550,7 +4560,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Batas Akhir Pendaftaran *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Batas Akhir Pendaftaran *</label>
                     <input
                       type="text"
                       required
@@ -4565,7 +4575,7 @@ export default function AdminPortalPage() {
                 </div>
 
                 <div>
-                  <label className="font-bold block mb-1">Deskripsi / Ruang Lingkup Pekerjaan</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Deskripsi / Ruang Lingkup Pekerjaan</label>
                   <textarea
                     rows={3}
                     value={packageFormData.desc || ''}
@@ -4582,11 +4592,11 @@ export default function AdminPortalPage() {
                   isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'
                 } space-y-3`}>
                   <div className="flex items-center justify-between">
-                    <label className="font-bold flex items-center gap-1.5 text-xs text-blue-400">
+                    <label className="font-bold flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400">
                       <FileText className="w-4 h-4" />
                       <span>Lampirkan Dokumen Pengadaan (KAK / Spesifikasi Teknis / Dokumen Pemilihan)</span>
                     </label>
-                    <span className="text-[10px] text-slate-400">PDF, DOCX, ZIP (Maks 8MB)</span>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>PDF, DOCX, ZIP (Maks 8MB)</span>
                   </div>
 
                   {packageFormData.fileName ? (
@@ -4601,7 +4611,7 @@ export default function AdminPortalPage() {
                           <p className={`font-bold text-xs truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
                             {packageFormData.fileName}
                           </p>
-                          <p className="text-[10px] text-emerald-500 font-semibold">
+                          <p className="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold">
                             ✓ {packageFormData.fileSize || 'Ukuran valid'} • Tersimpan di LocalStorage
                           </p>
                         </div>
@@ -4622,7 +4632,7 @@ export default function AdminPortalPage() {
                         <button
                           type="button"
                           onClick={() => setPackageFormData((prev) => ({ ...prev, fileName: '', fileSize: '', fileData: '', downloadUrl: '#' }))}
-                          className="px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-[10px] font-bold transition-colors cursor-pointer"
+                          className="px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500 text-red-600 dark:text-red-400 hover:text-white text-[10px] font-bold transition-colors cursor-pointer"
                         >
                           Hapus File
                         </button>
@@ -4634,11 +4644,11 @@ export default function AdminPortalPage() {
                         ? 'border-slate-800 hover:border-blue-500 hover:bg-blue-950/10' 
                         : 'border-slate-300 hover:border-blue-500 hover:bg-blue-50/30'
                     }`}>
-                      <Upload className="w-6 h-6 text-blue-500 mb-1" />
-                      <span className="text-xs font-bold text-blue-400">
+                      <Upload className="w-6 h-6 text-blue-600 dark:text-blue-500 mb-1" />
+                      <span className="text-xs font-bold text-blue-600 dark:text-blue-400">
                         Klik untuk Memilih File Dokumen Pengadaan
                       </span>
-                      <span className="text-[10px] text-slate-400 mt-0.5">
+                      <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>
                         File akan otomatis dikonversi ke Base64 & disimpan di database LocalStorage
                       </span>
                       <input 
@@ -4656,7 +4666,7 @@ export default function AdminPortalPage() {
                     type="button"
                     onClick={() => setShowPackageModal(false)}
                     className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
-                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}
                   >
                     Batal
@@ -4685,16 +4695,16 @@ export default function AdminPortalPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`border rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
-                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-md bg-blue-500/20 text-blue-500 border border-blue-500/30 text-xs font-bold">
+                    <span className="px-2.5 py-0.5 rounded-md bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 text-xs font-bold">
                       {selectedPackage.status}
                     </span>
-                    <span className="text-xs font-mono font-bold text-slate-400">
+                    <span className={`text-xs font-mono font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
                       {selectedPackage.code}
                     </span>
                   </div>
@@ -4704,7 +4714,7 @@ export default function AdminPortalPage() {
                 </div>
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full transition-colors"
+                  className={`p-2 rounded-full transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                 >
                   ✕
                 </button>
@@ -4714,27 +4724,27 @@ export default function AdminPortalPage() {
                 isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}>
                 <div>
-                  <span className="text-slate-400 block">Nilai HPS:</span>
-                  <strong className="text-accent-gold text-sm font-mono">{selectedPackage.hps}</strong>
+                  <span className={`block ${isDark ? 'text-slate-400' : 'text-slate-600 font-bold'}`}>Nilai HPS:</span>
+                  <strong className={`text-sm font-mono font-bold ${isDark ? 'text-accent-gold' : 'text-amber-700'}`}>{selectedPackage.hps}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">Satuan Kerja:</span>
-                  <span className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>{selectedPackage.unit}</span>
+                  <span className={`block ${isDark ? 'text-slate-400' : 'text-slate-600 font-bold'}`}>Satuan Kerja:</span>
+                  <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{selectedPackage.unit}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">Batas Pendaftaran:</span>
-                  <span className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>{selectedPackage.deadline}</span>
+                  <span className={`block ${isDark ? 'text-slate-400' : 'text-slate-600 font-bold'}`}>Batas Pendaftaran:</span>
+                  <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{selectedPackage.deadline}</span>
                 </div>
               </div>
 
               <div className="space-y-4 mb-6">
                 <div>
-                  <h4 className="text-xs font-bold text-slate-400 uppercase">Deskripsi Pekerjaan</h4>
-                  <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{selectedPackage.desc || 'Pengadaan barang/jasa resmi unit kerja Kemnaker RI.'}</p>
+                  <h4 className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Deskripsi Pekerjaan</h4>
+                  <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700 font-medium'}`}>{selectedPackage.desc || 'Pengadaan barang/jasa resmi unit kerja Kemnaker RI.'}</p>
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Dokumen Pengadaan Resmi</h4>
+                  <h4 className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase mb-2`}>Dokumen Pengadaan Resmi</h4>
                   <div className="space-y-2">
                     {/* Primary Attachment Document */}
                     <div className={`flex items-center justify-between p-3 rounded-xl border ${
@@ -4745,10 +4755,10 @@ export default function AdminPortalPage() {
                       <div className="flex items-center space-x-3 min-w-0">
                         <FileText className="w-5 h-5 text-blue-500 shrink-0" />
                         <div className="min-w-0">
-                          <p className={`text-xs font-bold truncate ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                          <p className={`text-xs font-bold truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
                             {selectedPackage.fileName || 'Kerangka Acuan Kerja (KAK).pdf'}
                           </p>
-                          <p className="text-[10px] text-slate-400">
+                          <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                             {selectedPackage.fileSize || '2.5 MB'} • {selectedPackage.fileData ? '✓ File Terunggah (LocalStorage)' : 'Dokumen Resmi Unit Kerja'}
                           </p>
                         </div>
@@ -4780,8 +4790,8 @@ export default function AdminPortalPage() {
                       <div className="flex items-center space-x-3">
                         <FileText className="w-5 h-5 text-emerald-500" />
                         <div>
-                          <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>Spesifikasi Teknis & Rincian HPS.pdf</p>
-                          <p className="text-[10px] text-slate-400">1.8 MB • Dokumen Teknis Resmi</p>
+                          <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Spesifikasi Teknis & Rincian HPS.pdf</p>
+                          <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>1.8 MB • Dokumen Teknis Resmi</p>
                         </div>
                       </div>
                       <button 
@@ -4801,7 +4811,7 @@ export default function AdminPortalPage() {
               }`}>
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                  className={`px-4 py-2 rounded-xl text-xs font-bold ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}
                 >
                   Tutup
                 </button>
@@ -4831,7 +4841,7 @@ export default function AdminPortalPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
-                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
               <div className="flex justify-between items-center mb-6">
@@ -4843,7 +4853,7 @@ export default function AdminPortalPage() {
                 </div>
                 <button
                   onClick={() => setShowRegulasiModal(false)}
-                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                  className={`p-1 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                 >
                   ✕
                 </button>
@@ -4851,7 +4861,7 @@ export default function AdminPortalPage() {
 
               <form onSubmit={handleSaveRegulasi} className="space-y-4 text-xs">
                 <div>
-                  <label className="font-bold block mb-1">Nomor Peraturan / Surat *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Nomor Peraturan / Surat *</label>
                   <input
                     type="text"
                     required
@@ -4865,7 +4875,7 @@ export default function AdminPortalPage() {
                 </div>
 
                 <div>
-                  <label className="font-bold block mb-1">Judul / Tentang Regulasi *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Judul / Tentang Regulasi *</label>
                   <textarea
                     rows={3}
                     required
@@ -4880,7 +4890,7 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Kategori Dokumen</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori Dokumen</label>
                     <select
                       value={regulasiFormData.kategori || 'Peraturan Menteri'}
                       onChange={(e) => setRegulasiFormData({ ...regulasiFormData, kategori: e.target.value as RegulasiItem['kategori'] })}
@@ -4898,7 +4908,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Tahun Penerbitan *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Tahun Penerbitan *</label>
                     <input
                       type="text"
                       required
@@ -4914,7 +4924,7 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Estimasi Ukuran File (PDF)</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Estimasi Ukuran File (PDF)</label>
                     <input
                       type="text"
                       value={regulasiFormData.fileSize || '2.5 MB'}
@@ -4927,7 +4937,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Status Dokumen</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Status Dokumen</label>
                     <select
                       value={regulasiFormData.status || 'Aktif'}
                       onChange={(e) => setRegulasiFormData({ ...regulasiFormData, status: e.target.value as RegulasiItem['status'] })}
@@ -4942,12 +4952,12 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                <div className={`flex justify-end gap-3 pt-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
                   <button
                     type="button"
                     onClick={() => setShowRegulasiModal(false)}
                     className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
-                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}
                   >
                     Batal
@@ -4976,7 +4986,7 @@ export default function AdminPortalPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
-                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
               <div className="flex justify-between items-center mb-6">
@@ -4988,7 +4998,7 @@ export default function AdminPortalPage() {
                 </div>
                 <button
                   onClick={() => setShowSopModal(false)}
-                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                  className={`p-1 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                 >
                   ✕
                 </button>
@@ -4998,7 +5008,7 @@ export default function AdminPortalPage() {
                 {/* Kode & Status */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Kode Dokumen SOP *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kode Dokumen SOP *</label>
                     <input
                       type="text"
                       required
@@ -5012,7 +5022,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Status Prosedur</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Status Prosedur</label>
                     <select
                       value={sopFormData.status || 'Berlaku'}
                       onChange={(e) => setSopFormData({ ...sopFormData, status: e.target.value as SopItem['status'] })}
@@ -5029,7 +5039,7 @@ export default function AdminPortalPage() {
 
                 {/* Judul SOP */}
                 <div>
-                  <label className="font-bold block mb-1">Judul / Nama Dokumen SOP *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Judul / Nama Dokumen SOP *</label>
                   <input
                     type="text"
                     required
@@ -5044,7 +5054,7 @@ export default function AdminPortalPage() {
 
                 {/* Kategori Klaster SOP */}
                 <div>
-                  <label className="font-bold block mb-1">Klaster / Kategori Tahapan SOP</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Klaster / Kategori Tahapan SOP</label>
                   <select
                     value={sopFormData.kategori || 'tata-kelola'}
                     onChange={(e) => setSopFormData({ ...sopFormData, kategori: e.target.value as SopItem['kategori'] })}
@@ -5064,7 +5074,7 @@ export default function AdminPortalPage() {
                 {/* Unit, Revisi, Tahapan */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Unit Pengampu *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Unit Pengampu *</label>
                     <input
                       type="text"
                       required
@@ -5078,7 +5088,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Versi Revisi *</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Versi Revisi *</label>
                     <input
                       type="text"
                       required
@@ -5092,7 +5102,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Jumlah Langkah</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Jumlah Langkah</label>
                     <input
                       type="number"
                       min={1}
@@ -5108,7 +5118,7 @@ export default function AdminPortalPage() {
 
                 {/* Deskripsi SOP */}
                 <div>
-                  <label className="font-bold block mb-1">Ringkasan Alur / Keterangan SOP</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Ringkasan Alur / Keterangan SOP</label>
                   <textarea
                     rows={2}
                     value={sopFormData.deskripsi || ''}
@@ -5125,11 +5135,11 @@ export default function AdminPortalPage() {
                 {/* ========================================================= */}
                 <div className="space-y-2 pt-2 border-t border-slate-800/80">
                   <div className="flex items-center justify-between">
-                    <label className="font-bold flex items-center gap-1.5 text-purple-400">
+                    <label className="font-bold flex items-center gap-1.5 text-purple-600 dark:text-purple-400">
                       <Upload className="w-4 h-4" />
                       <span>Unggah File Dokumen SOP (LocalStorage)</span>
                     </label>
-                    <span className="text-[10px] text-slate-400 font-normal">
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                       PDF, DOCX, DOC, ZIP (Maks. 8MB)
                     </span>
                   </div>
@@ -5149,19 +5159,19 @@ export default function AdminPortalPage() {
                     
                     {sopFormData.fileData ? (
                       <div className="space-y-2">
-                        <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                        <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto">
                           <FileCheck className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="font-bold text-xs text-emerald-400">
+                          <p className="font-bold text-xs text-emerald-600 dark:text-emerald-400">
                             {sopFormData.fileName || 'Dokumen-SOP-Tersimpan.pdf'}
                           </p>
-                          <p className="text-[10px] text-slate-400">
+                          <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                             Ukuran: {sopFormData.fileSize || 'Tersimpan di LocalStorage'} • Format File Valid
                           </p>
                         </div>
                         <div className="flex items-center justify-center gap-2 pt-1">
-                          <span className="text-[10px] font-bold text-purple-400 hover:underline">
+                          <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 hover:underline">
                             Klik untuk ganti file
                           </span>
                           <span>•</span>
@@ -5177,7 +5187,7 @@ export default function AdminPortalPage() {
                                 downloadUrl: '#'
                               }));
                             }}
-                            className="text-[10px] font-bold text-red-400 hover:underline"
+                            className="text-[10px] font-bold text-red-600 dark:text-red-400 hover:underline"
                           >
                             Hapus File
                           </button>
@@ -5185,9 +5195,9 @@ export default function AdminPortalPage() {
                       </div>
                     ) : (
                       <div className="space-y-1.5 py-2">
-                        <Upload className="w-6 h-6 text-purple-400 mx-auto animate-bounce" />
-                        <p className="font-bold text-xs">Pilih atau Seret File SOP dari Komputer</p>
-                        <p className="text-[10px] text-slate-400">
+                        <Upload className="w-6 h-6 text-purple-600 dark:text-purple-400 mx-auto animate-bounce" />
+                        <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>Pilih atau Seret File SOP dari Komputer</p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                           Dokumen akan otomatis dikonversi dan disimpan di LocalStorage browser Anda
                         </p>
                       </div>
@@ -5195,12 +5205,12 @@ export default function AdminPortalPage() {
                   </label>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                <div className={`flex justify-end gap-3 pt-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
                   <button
                     type="button"
                     onClick={() => setShowSopModal(false)}
                     className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
-                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}
                   >
                     Batal
@@ -5217,6 +5227,7 @@ export default function AdminPortalPage() {
           </div>
         )}
       </AnimatePresence>
+
       {/* ========================================================= */}
       {/* MODAL 8: PHOTO MODAL (TAMBAH / EDIT FOTO - LOCAL UPLOAD READY) */}
       {/* ========================================================= */}
@@ -5228,7 +5239,7 @@ export default function AdminPortalPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
-                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
               <div className="flex justify-between items-center mb-6">
@@ -5240,7 +5251,7 @@ export default function AdminPortalPage() {
                 </div>
                 <button
                   onClick={() => setShowPhotoModal(false)}
-                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                  className={`p-1 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                 >
                   ✕
                 </button>
@@ -5248,7 +5259,7 @@ export default function AdminPortalPage() {
 
               <form onSubmit={handleSavePhoto} className="space-y-4 text-xs">
                 <div>
-                  <label className="font-bold block mb-1">Judul Foto / Kegiatan *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Judul Foto / Kegiatan *</label>
                   <input
                     type="text"
                     required
@@ -5262,7 +5273,7 @@ export default function AdminPortalPage() {
                 </div>
 
                 <div>
-                  <label className="font-bold block mb-1">Deskripsi Foto Kegiatan</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Deskripsi Foto Kegiatan</label>
                   <textarea
                     rows={2}
                     value={photoFormData.desc || ''}
@@ -5276,7 +5287,7 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Kategori Kegiatan</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori Kegiatan</label>
                     <select
                       value={photoFormData.category || 'Dokumentasi Kerja'}
                       onChange={(e) => setPhotoFormData({ ...photoFormData, category: e.target.value })}
@@ -5295,7 +5306,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Ukuran Tampilan Grid</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Ukuran Tampilan Grid</label>
                     <select
                       value={photoFormData.size || 'small'}
                       onChange={(e) => setPhotoFormData({ ...photoFormData, size: e.target.value as PhotoItem['size'] })}
@@ -5314,11 +5325,11 @@ export default function AdminPortalPage() {
                   isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
                   <div className="flex items-center justify-between">
-                    <label className="font-bold flex items-center gap-1.5 text-cyan-400">
+                    <label className="font-bold flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400">
                       <ImageIcon className="w-4 h-4" />
                       <span>Upload Foto dari Komputer (Local Storage)</span>
                     </label>
-                    <span className="text-[10px] text-slate-400">PNG, JPG, WEBP (Max 4MB)</span>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>PNG, JPG, WEBP (Max 4MB)</span>
                   </div>
 
                   {/* Upload Dropzone */}
@@ -5330,9 +5341,9 @@ export default function AdminPortalPage() {
                         : 'border-slate-300 hover:border-cyan-600 hover:bg-cyan-50'
                     }`}
                   >
-                    <Upload className="w-6 h-6 text-cyan-500 mb-1.5 animate-bounce" />
-                    <span className="font-bold text-xs">Pilih File Foto dari Perangkat / Komputer</span>
-                    <span className="text-[10px] text-slate-400 mt-0.5">File otomatis dikonversi & disimpan ke database browser</span>
+                    <Upload className="w-6 h-6 text-cyan-600 dark:text-cyan-500 mb-1.5 animate-bounce" />
+                    <span className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>Pilih File Foto dari Perangkat / Komputer</span>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>File otomatis dikonversi & disimpan ke database browser</span>
                     <input 
                       id="photo-file-upload"
                       type="file" 
@@ -5354,11 +5365,11 @@ export default function AdminPortalPage() {
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-bold text-xs text-emerald-500 flex items-center gap-1">
+                        <p className="font-bold text-xs text-emerald-600 dark:text-emerald-500 flex items-center gap-1">
                           <Check className="w-3.5 h-3.5" />
                           <span>Foto Siap Ditayangkan</span>
                         </p>
-                        <p className="text-[10px] text-slate-400 truncate mt-0.5">
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} truncate mt-0.5`}>
                           {photoFormData.src.startsWith('data:') ? '✓ Format: Base64 Data URL (Local)' : photoFormData.src}
                         </p>
                       </div>
@@ -5366,13 +5377,13 @@ export default function AdminPortalPage() {
                   )}
 
                   {/* Or select preset images */}
-                  <div className="pt-2 border-t border-slate-800/60">
-                    <span className="text-[10px] text-slate-400 block mb-1">Atau pilih dari koleksi bawaan:</span>
+                  <div className={`pt-2 border-t ${isDark ? 'border-slate-800/60' : 'border-slate-200'}`}>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-bold'} block mb-1`}>Atau pilih dari koleksi bawaan:</span>
                     <select
                       value={photoFormData.src || '/gallery/gallery-1.jpg'}
                       onChange={(e) => setPhotoFormData({ ...photoFormData, src: e.target.value })}
                       className={`w-full px-3 py-1.5 border rounded-lg outline-none text-[11px] ${
-                        isDark ? 'bg-slate-900 border-slate-700 text-slate-300' : 'bg-white border-slate-300 text-slate-700'
+                        isDark ? 'bg-slate-900 border-slate-700 text-slate-300' : 'bg-white border-slate-300 text-slate-800'
                       }`}
                     >
                       <option value="/gallery/gallery-1.jpg">Gallery Foto 1 (Kunjungan Kerja)</option>
@@ -5385,12 +5396,12 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                <div className={`flex justify-end gap-3 pt-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
                   <button
                     type="button"
                     onClick={() => setShowPhotoModal(false)}
                     className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
-                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}
                   >
                     Batal
@@ -5419,7 +5430,7 @@ export default function AdminPortalPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
-                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
               <div className="flex justify-between items-center mb-6">
@@ -5431,7 +5442,7 @@ export default function AdminPortalPage() {
                 </div>
                 <button
                   onClick={() => setShowVideoModal(false)}
-                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full"
+                  className={`p-1 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                 >
                   ✕
                 </button>
@@ -5439,7 +5450,7 @@ export default function AdminPortalPage() {
 
               <form onSubmit={handleSaveVideo} className="space-y-4 text-xs">
                 <div>
-                  <label className="font-bold block mb-1">Judul Video *</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Judul Video *</label>
                   <input
                     type="text"
                     required
@@ -5453,7 +5464,7 @@ export default function AdminPortalPage() {
                 </div>
 
                 <div>
-                  <label className="font-bold block mb-1">Deskripsi Singkat Video</label>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Deskripsi Singkat Video</label>
                   <textarea
                     rows={2}
                     value={videoFormData.desc || ''}
@@ -5467,7 +5478,7 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-bold block mb-1">Kategori Video</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori Video</label>
                     <select
                       value={videoFormData.category || 'Sosialisasi Regulasi'}
                       onChange={(e) => setVideoFormData({ ...videoFormData, category: e.target.value })}
@@ -5485,7 +5496,7 @@ export default function AdminPortalPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold block mb-1">Durasi Video</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Durasi Video</label>
                     <input
                       type="text"
                       value={videoFormData.duration || '12:00'}
@@ -5500,7 +5511,7 @@ export default function AdminPortalPage() {
 
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="font-bold">Link URL YouTube / Video *</label>
+                    <label className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Link URL YouTube / Video *</label>
                     <button
                       type="button"
                       onClick={() => {
@@ -5516,7 +5527,7 @@ export default function AdminPortalPage() {
                           showNotification('⚠️ Masukkan link URL YouTube terlebih dahulu.');
                         }
                       }}
-                      className="text-[10px] text-amber-500 hover:underline font-bold cursor-pointer"
+                      className="text-[10px] text-amber-600 dark:text-amber-500 hover:underline font-bold cursor-pointer"
                     >
                       ⚡ Ambil Thumbnail dari YouTube
                     </button>
@@ -5545,11 +5556,11 @@ export default function AdminPortalPage() {
                   isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
                   <div className="flex items-center justify-between">
-                    <label className="font-bold flex items-center gap-1.5 text-amber-400">
+                    <label className="font-bold flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
                       <ImageIcon className="w-4 h-4" />
                       <span>Upload Thumbnail Kustom (Local Storage)</span>
                     </label>
-                    <span className="text-[10px] text-slate-400">PNG, JPG, WEBP</span>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>PNG, JPG, WEBP</span>
                   </div>
 
                   <label 
@@ -5560,8 +5571,8 @@ export default function AdminPortalPage() {
                         : 'border-slate-300 hover:border-amber-600 hover:bg-amber-50'
                     }`}
                   >
-                    <Upload className="w-5 h-5 text-amber-500 mb-1" />
-                    <span className="font-bold text-xs">Pilih Gambar Thumbnail dari Komputer</span>
+                    <Upload className="w-5 h-5 text-amber-600 dark:text-amber-500 mb-1" />
+                    <span className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>Pilih Gambar Thumbnail dari Komputer</span>
                     <input 
                       id="video-thumb-upload"
                       type="file" 
@@ -5583,11 +5594,11 @@ export default function AdminPortalPage() {
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-bold text-xs text-emerald-500 flex items-center gap-1">
+                        <p className="font-bold text-xs text-emerald-600 dark:text-emerald-500 flex items-center gap-1">
                           <Check className="w-3.5 h-3.5" />
                           <span>Thumbnail Terpasang</span>
                         </p>
-                        <p className="text-[10px] text-slate-400 truncate mt-0.5">
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} truncate mt-0.5`}>
                           {videoFormData.thumbnailUrl.startsWith('data:') ? '✓ Format: Base64 (Local File)' : videoFormData.thumbnailUrl}
                         </p>
                       </div>
@@ -5595,12 +5606,12 @@ export default function AdminPortalPage() {
                   )}
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                <div className={`flex justify-end gap-3 pt-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
                   <button
                     type="button"
                     onClick={() => setShowVideoModal(false)}
                     className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
-                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}
                   >
                     Batal
@@ -5621,3 +5632,4 @@ export default function AdminPortalPage() {
     </div>
   );
 }
+

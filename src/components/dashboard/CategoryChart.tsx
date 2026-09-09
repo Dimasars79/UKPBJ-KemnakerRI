@@ -19,15 +19,15 @@ export function CategoryChart() {
             data={data}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-            <XAxis dataKey="name" tick={{fill: '#94a3b8', fontSize: 11}} tickLine={false} axisLine={false} />
-            <YAxis tick={{fill: '#94a3b8', fontSize: 11}} tickLine={false} axisLine={false} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+            <XAxis dataKey="name" tick={{fill: '#475569', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
+            <YAxis tick={{fill: '#475569', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
             <Tooltip 
-              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
-              cursor={{fill: '#f8fafc'}}
+              contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px', fontWeight: 600 }}
+              cursor={{fill: '#f1f5f9'}}
             />
-            <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} iconType="circle" />
-            <Bar dataKey="Target" fill="#93c5fd" radius={[4, 4, 0, 0]} maxBarSize={30} />
+            <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px', fontWeight: 600, color: '#334155' }} iconType="circle" />
+            <Bar dataKey="Target" fill="#60a5fa" radius={[4, 4, 0, 0]} maxBarSize={30} />
             <Bar dataKey="Realisasi" fill="#1e40af" radius={[4, 4, 0, 0]} maxBarSize={30} />
           </BarChart>
         </ResponsiveContainer>
