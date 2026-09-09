@@ -165,7 +165,8 @@ export default function AdminPortalPage() {
     author: 'Admin UKPBJ Kemnaker',
     status: 'Published',
     excerpt: '',
-    content: ''
+    content: '',
+    imageUrl: '/news/news-1.png'
   });
 
   const [showAgendaModal, setShowAgendaModal] = useState(false);
@@ -242,12 +243,41 @@ export default function AdminPortalPage() {
     setTimeout(() => setNotificationMsg(null), 3500);
   };
 
-  // NEWS HANDLERS
+  // NEWS HANDLERS & IMAGE UPLOAD
+  const handleNewsImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 8 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran gambar maksimal 8MB.');
+      return;
+    }
+
+    showNotification('Mengunggah gambar sampul berita ke Supabase Storage...');
+    const uploadRes = await uploadMedia(file, 'news');
+
+    if (uploadRes.publicUrl) {
+      setNewsFormData((prev) => ({ ...prev, imageUrl: uploadRes.publicUrl }));
+      showNotification('✓ Gambar sampul berhasil diunggah ke Supabase CDN!');
+    } else {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setNewsFormData((prev) => ({ ...prev, imageUrl: result }));
+        showNotification('✓ Gambar sampul berita dimuat.');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveNews = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingNews) {
-      updateNews(editingNews.id, newsFormData);
-      showNotification('✓ Berita berhasil diperbarui dan tersinkronisasi ke Frontend (/informasi & /)!');
+      updateNews(editingNews.id, {
+        ...newsFormData,
+        imageUrl: newsFormData.imageUrl || '/news/news-1.png'
+      });
+      showNotification('✓ Berita berhasil diperbarui dan tersinkronisasi ke Supabase & Frontend (/informasi & /)!');
     } else {
       addNews({
         title: newsFormData.title || 'Judul Berita Baru',
@@ -256,9 +286,9 @@ export default function AdminPortalPage() {
         status: (newsFormData.status as NewsItem['status']) || 'Published',
         excerpt: newsFormData.excerpt || '',
         content: newsFormData.content || '',
-        imageUrl: '/news/news-1.png'
+        imageUrl: newsFormData.imageUrl || '/news/news-1.png'
       });
-      showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Frontend (/informasi)!');
+      showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Supabase & Frontend (/informasi)!');
     }
     setShowNewsModal(false);
     setEditingNews(null);
@@ -2476,8 +2506,20 @@ export default function AdminPortalPage() {
                         isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
                       }`}>
                         <td className="p-4">
-                          <p className={`font-bold text-xs max-w-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</p>
-                          <p className={`text-[10px] line-clamp-1 mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>{item.excerpt}</p>
+                          <div className="flex items-start gap-3">
+                            <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 relative">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img 
+                                src={item.imageUrl || '/news/news-1.png'} 
+                                alt={item.title} 
+                                className="w-full h-full object-cover" 
+                              />
+                            </div>
+                            <div className="min-w-0">
+                              <p className={`font-bold text-xs max-w-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</p>
+                              <p className={`text-[10px] line-clamp-1 mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>{item.excerpt}</p>
+                            </div>
+                          </div>
                         </td>
                         <td className="p-4">
                           <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold border ${isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-100 text-blue-800 border-blue-200'}`}>
@@ -4236,6 +4278,92 @@ export default function AdminPortalPage() {
                       isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                     }`}
                   />
+                </div>
+
+                {/* Gambar Sampul Berita (Upload File ke Supabase / URL Custom) */}
+                <div>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Gambar Sampul Berita</label>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+                    {/* File Upload Dropzone */}
+                    <label className={`sm:col-span-2 flex flex-col items-center justify-center p-3.5 border-2 border-dashed rounded-xl cursor-pointer transition-all ${
+                      isDark 
+                        ? 'border-slate-800 bg-slate-950 hover:bg-slate-900 hover:border-blue-500' 
+                        : 'border-slate-300 bg-slate-50 hover:bg-white hover:border-blue-600'
+                    }`}>
+                      <Upload className="w-5 h-5 text-blue-500 mb-1" />
+                      <span className={`text-[11px] font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+                        Pilih / Drop Foto Sampul Berita
+                      </span>
+                      <span className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
+                        Maksimal 8MB (JPG, PNG, WebP)
+                      </span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden" 
+                        onChange={handleNewsImageUpload} 
+                      />
+                    </label>
+
+                    {/* Preview Thumbnail */}
+                    <div className={`h-24 rounded-xl border relative overflow-hidden flex items-center justify-center ${
+                      isDark ? 'border-slate-800 bg-slate-950' : 'border-slate-200 bg-slate-100'
+                    }`}>
+                      {newsFormData.imageUrl ? (
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img 
+                            src={newsFormData.imageUrl} 
+                            alt="Preview Sampul Berita" 
+                            className="w-full h-full object-cover" 
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setNewsFormData(prev => ({ ...prev, imageUrl: '' }))}
+                            className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px] hover:bg-red-600 cursor-pointer"
+                            title="Hapus gambar"
+                          >
+                            ✕
+                          </button>
+                        </>
+                      ) : (
+                        <div className="text-center p-2">
+                          <ImageIcon className="w-5 h-5 text-slate-400 mx-auto mb-0.5" />
+                          <span className="text-[10px] text-slate-400">Belum ada foto</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Preset & URL Direct Input */}
+                  <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="Atau masukkan URL gambar (https://... / /news/...)"
+                      value={newsFormData.imageUrl || ''}
+                      onChange={(e) => setNewsFormData({ ...newsFormData, imageUrl: e.target.value })}
+                      className={`flex-1 px-3 py-1.5 border rounded-lg text-[11px] outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
+                      }`}
+                    />
+                    <div className="flex gap-1 shrink-0">
+                      {['/news/news-1.png', '/news/news-2.png', '/news/news-3.png'].map((preset, idx) => (
+                        <button
+                          key={preset}
+                          type="button"
+                          onClick={() => setNewsFormData(prev => ({ ...prev, imageUrl: preset }))}
+                          className={`px-2 py-1 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
+                            newsFormData.imageUrl === preset
+                              ? 'bg-blue-600 text-white border-blue-600'
+                              : isDark ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 border-slate-300 text-slate-700 hover:bg-slate-300'
+                          }`}
+                        >
+                          Preset {idx + 1}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 <div>
