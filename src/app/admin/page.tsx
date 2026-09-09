@@ -910,14 +910,14 @@ export default function AdminPortalPage() {
       }`}>
         
         {/* Top Header - Spacious & Clean Modern Command Bar */}
-        <header className={`h-20 border-b backdrop-blur-xl px-6 md:px-8 flex items-center justify-between sticky top-0 z-40 transition-all duration-300 ${
+        <header className={`min-h-[5.5rem] py-5 md:py-5.5 border-b backdrop-blur-xl px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 transition-all duration-300 ${
           isDark 
-            ? 'border-slate-800/80 bg-slate-950/85 shadow-sm shadow-black/20' 
-            : 'border-slate-200/90 bg-white/90 shadow-sm shadow-slate-200/50'
+            ? 'border-slate-800/80 bg-slate-950/90 shadow-sm shadow-black/20' 
+            : 'border-slate-200/90 bg-white/95 shadow-sm shadow-slate-200/50'
         }`}>
           {/* LEFT: Clean Page Title & Context Indicator */}
-          <div className="flex items-center space-x-3.5">
-            <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 shadow-xs ${
+          <div className="flex items-center space-x-4">
+            <div className={`w-11 h-11 rounded-2xl border flex items-center justify-center shrink-0 shadow-xs ${
               isDark ? 'bg-slate-900/90 border-slate-800 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
             }`}>
               {activeTab === 'dashboard' && <LayoutDashboard className="w-5 h-5" />}
@@ -934,17 +934,17 @@ export default function AdminPortalPage() {
               {activeTab === 'pengaturan' && <Settings className="w-5 h-5 text-slate-400" />}
             </div>
 
-            <div>
-              <div className="flex items-center space-x-1.5 text-[11px] font-semibold text-slate-400">
+            <div className="space-y-0.5">
+              <div className="flex items-center space-x-2 text-[11px] font-semibold text-slate-400">
                 <span className="hover:text-blue-500 cursor-pointer transition-colors" onClick={() => setActiveTab('dashboard')}>Portal Admin</span>
-                <span>•</span>
-                <span className="text-slate-500 uppercase tracking-wider text-[10px]">
+                <span className="text-slate-600">•</span>
+                <span className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                   {activeTab === 'dashboard' ? 'Utama' :
                    activeTab === 'paket' || activeTab === 'monitoring' || activeTab === 'laporan' ? 'Pengadaan' :
                    activeTab.startsWith('manage-') ? 'CMS Publik' : 'Sistem'}
                 </span>
               </div>
-              <h1 className={`text-base md:text-lg font-black tracking-tight leading-tight mt-0.5 ${
+              <h1 className={`text-base md:text-lg lg:text-xl font-black tracking-tight leading-snug ${
                 isDark ? 'text-white' : 'text-slate-900'
               }`}>
                 {activeTab === 'dashboard' ? 'Executive Command Center' :
@@ -963,17 +963,17 @@ export default function AdminPortalPage() {
           </div>
 
           {/* RIGHT: Spacious Actions (Search, Quick Add, Notif, Theme) */}
-          <div className="flex items-center space-x-3 md:space-x-4">
+          <div className="flex items-center space-x-3.5 md:space-x-5">
             
             {/* Search Input */}
-            <div className="relative w-48 sm:w-60 md:w-72 group">
+            <div className="relative w-48 sm:w-64 md:w-80 group">
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
               <input
                 type="text"
                 placeholder="Cari berita, agenda, paket..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-9 pr-10 py-2 border rounded-xl text-xs transition-all outline-none ${
+                className={`w-full pl-10 pr-10 py-2.5 border rounded-xl text-xs transition-all outline-none ${
                   isDark 
                     ? 'bg-slate-900/80 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-900' 
                     : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:bg-white shadow-xs'
@@ -991,7 +991,7 @@ export default function AdminPortalPage() {
                   setShowQuickAdd(!showQuickAdd);
                   if (showNotifications) setShowNotifications(false);
                 }}
-                className="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-600/25 transition-all cursor-pointer"
+                className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-600/25 transition-all cursor-pointer"
                 title="Tambah data baru secara instan"
               >
                 <Plus className="w-4 h-4" />
@@ -1278,7 +1278,7 @@ export default function AdminPortalPage() {
             }`}>
               <button
                 onClick={() => setTheme('light')}
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`p-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   theme === 'light'
                     ? 'bg-white text-amber-600 shadow-sm'
                     : 'text-slate-400 hover:text-slate-600'
@@ -1289,7 +1289,7 @@ export default function AdminPortalPage() {
               </button>
               <button
                 onClick={() => setTheme('dark')}
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`p-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   theme === 'dark'
                     ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
