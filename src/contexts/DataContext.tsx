@@ -1,6 +1,7 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { supabase } from '@/lib/supabase/client';
 
 export interface NewsItem {
   id: string;
@@ -20,7 +21,7 @@ export interface AgendaItem {
   id: string;
   title: string;
   category: 'Tender' | 'Sosialisasi' | 'Sertifikasi' | 'Bimtek' | 'Rapat';
-  date: string; // e.g. '15 Sep 2026' or '2026-09-15'
+  date: string;
   time: string;
   location: string;
   organizer: string;
@@ -43,7 +44,7 @@ export interface ProcurementPackage {
   desc?: string;
   fileName?: string;
   fileSize?: string;
-  fileData?: string; // Base64 data URL for uploaded procurement document (KAK, Spek Teknis, etc.)
+  fileData?: string;
   downloadUrl?: string;
 }
 
@@ -69,7 +70,7 @@ export interface SopItem {
   downloadUrl?: string;
   fileName?: string;
   fileSize?: string;
-  fileData?: string; // Base64 Data URL for uploaded document (PDF, DOCX, etc.)
+  fileData?: string;
   kategori?: 'tata-kelola' | 'perencanaan' | 'pemilihan' | 'kontrak' | 'kinerja' | 'risiko';
   deskripsi?: string;
   status: 'Berlaku' | 'Dalam Revisi' | 'Draft';
@@ -157,8 +158,10 @@ interface DataContextType {
   updateSiteSettings: (settings: Partial<SiteSettings>) => void;
 
   // Database actions
+  refreshFromSupabase: () => Promise<void>;
   resetToDefaults: () => void;
   isLoaded: boolean;
+  isSupabaseConnected: boolean;
 }
 
 const DEFAULT_NEWS: NewsItem[] = [
@@ -577,30 +580,313 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [videosList, setVideosList] = useState<VideoMediaItem[]>(DEFAULT_VIDEOS);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
 
-  // Load from LocalStorage on mount
-  useEffect(() => {
+  // Local storage save helper
+  const saveToLocal = (data: Record<string, unknown>) => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed.newsList) setNewsList(parsed.newsList);
-        if (parsed.agendaList) setAgendaList(parsed.agendaList);
-        if (parsed.packagesList) setPackagesList(parsed.packagesList);
-        if (parsed.regulasiList) setRegulasiList(parsed.regulasiList);
-        if (parsed.sopList) setSopList(parsed.sopList);
-        if (parsed.photosList) setPhotosList(parsed.photosList);
-        if (parsed.videosList) setVideosList(parsed.videosList);
-        if (parsed.siteSettings) setSiteSettings(parsed.siteSettings);
-      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
-      console.error('Failed to load UKPBJ local database', e);
+      console.warn('LocalStorage save failed:', e);
+    }
+  };
+
+  // Sync / Fetch data from Supabase PostgreSQL
+  const refreshFromSupabase = useCallback(async () => {
+    try {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        setIsLoaded(true);
+        return;
+      }
+
+      // 1. Fetch News
+      const { data: newsData, error: newsErr } = await supabase
+        .from('news')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!newsErr && newsData && newsData.length > 0) {
+        const mappedNews: NewsItem[] = (newsData as Array<{
+          id: string;
+          title: string;
+          category: NewsItem['category'];
+          author?: string;
+          date?: string;
+          views?: number;
+          status?: NewsItem['status'];
+          excerpt?: string;
+          content?: string;
+          image_url?: string;
+          sync_frontend?: boolean;
+        }>).map((n) => ({
+          id: n.id,
+          title: n.title,
+          category: n.category,
+          author: n.author || 'Admin UKPBJ',
+          date: n.date ? (typeof n.date === 'string' && n.date.includes('T') ? new Date(n.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : n.date) : '2026',
+          views: n.views || 0,
+          status: n.status || 'Published',
+          excerpt: n.excerpt || '',
+          content: n.content || '',
+          imageUrl: n.image_url || '/news/news-1.png',
+          syncFrontend: n.sync_frontend ?? true
+        }));
+        setNewsList(mappedNews);
+      }
+
+      // 2. Fetch Agendas
+      const { data: agendaData, error: agendaErr } = await supabase
+        .from('agendas')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!agendaErr && agendaData && agendaData.length > 0) {
+        const mappedAgendas: AgendaItem[] = (agendaData as Array<{
+          id: string;
+          title: string;
+          category: AgendaItem['category'];
+          date: string;
+          time: string;
+          location: string;
+          organizer: string;
+          capacity: string;
+          status: AgendaItem['status'];
+          sync_frontend?: boolean;
+        }>).map((a) => ({
+          id: a.id,
+          title: a.title,
+          category: a.category,
+          date: a.date,
+          time: a.time,
+          location: a.location,
+          organizer: a.organizer,
+          capacity: a.capacity,
+          status: a.status,
+          syncFrontend: a.sync_frontend ?? true
+        }));
+        setAgendaList(mappedAgendas);
+      }
+
+      // 3. Fetch Procurement Packages
+      const { data: pkgData, error: pkgErr } = await supabase
+        .from('procurement_packages')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!pkgErr && pkgData && pkgData.length > 0) {
+        const mappedPkgs: ProcurementPackage[] = (pkgData as Array<{
+          id: string;
+          code: string;
+          title: string;
+          unit: string;
+          hps: string;
+          category: ProcurementPackage['category'];
+          status: ProcurementPackage['status'];
+          deadline: string;
+          method: string;
+          doc_count?: number;
+          description?: string;
+          file_name?: string;
+          file_size?: string;
+          file_url?: string;
+        }>).map((p) => ({
+          id: p.id,
+          code: p.code,
+          title: p.title,
+          unit: p.unit,
+          hps: p.hps,
+          category: p.category,
+          status: p.status,
+          deadline: p.deadline,
+          method: p.method,
+          docCount: p.doc_count ?? 1,
+          desc: p.description,
+          fileName: p.file_name,
+          fileSize: p.file_size,
+          downloadUrl: p.file_url || '#'
+        }));
+        setPackagesList(mappedPkgs);
+      }
+
+      // 4. Fetch Regulasi
+      const { data: regData, error: regErr } = await supabase
+        .from('regulasi')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!regErr && regData && regData.length > 0) {
+        const mappedReg: RegulasiItem[] = (regData as Array<{
+          id: string;
+          nomor: string;
+          tentang: string;
+          tahun: string;
+          kategori: RegulasiItem['kategori'];
+          file_size: string;
+          download_url?: string;
+          status: RegulasiItem['status'];
+          sync_frontend?: boolean;
+        }>).map((r) => ({
+          id: r.id,
+          nomor: r.nomor,
+          tentang: r.tentang,
+          tahun: r.tahun,
+          kategori: r.kategori,
+          fileSize: r.file_size,
+          downloadUrl: r.download_url || '#',
+          status: r.status,
+          syncFrontend: r.sync_frontend ?? true
+        }));
+        setRegulasiList(mappedReg);
+      }
+
+      // 5. Fetch SOP
+      const { data: sopData, error: sopErr } = await supabase
+        .from('sop')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!sopErr && sopData && sopData.length > 0) {
+        const mappedSop: SopItem[] = (sopData as Array<{
+          id: string;
+          kode: string;
+          judul: string;
+          unit: string;
+          revisi: string;
+          tahapan_count?: number;
+          download_url?: string;
+          file_name?: string;
+          file_size?: string;
+          kategori?: SopItem['kategori'];
+          deskripsi?: string;
+          status: SopItem['status'];
+          sync_frontend?: boolean;
+        }>).map((s) => ({
+          id: s.id,
+          kode: s.kode,
+          judul: s.judul,
+          unit: s.unit,
+          revisi: s.revisi,
+          tahapanCount: s.tahapan_count ?? 5,
+          downloadUrl: s.download_url || '#',
+          fileName: s.file_name,
+          fileSize: s.file_size,
+          kategori: s.kategori,
+          deskripsi: s.deskripsi,
+          status: s.status,
+          syncFrontend: s.sync_frontend ?? true
+        }));
+        setSopList(mappedSop);
+      }
+
+      // 6. Fetch Photos Gallery
+      const { data: photoData, error: photoErr } = await supabase
+        .from('gallery_photos')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!photoErr && photoData && photoData.length > 0) {
+        const mappedPhotos: PhotoItem[] = (photoData as Array<{
+          id: string;
+          title: string;
+          description?: string;
+          category: string;
+          src: string;
+          date: string;
+          size?: 'large' | 'small';
+          sync_frontend?: boolean;
+        }>).map((p) => ({
+          id: p.id,
+          title: p.title,
+          desc: p.description || '',
+          category: p.category,
+          src: p.src,
+          date: p.date,
+          size: p.size,
+          syncFrontend: p.sync_frontend ?? true
+        }));
+        setPhotosList(mappedPhotos);
+      }
+
+      // 7. Fetch Videos Gallery
+      const { data: videoData, error: videoErr } = await supabase
+        .from('gallery_videos')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!videoErr && videoData && videoData.length > 0) {
+        const mappedVideos: VideoMediaItem[] = (videoData as Array<{
+          id: string;
+          title: string;
+          description?: string;
+          category: string;
+          duration: string;
+          date: string;
+          views: string;
+          thumbnail_url: string;
+          url: string;
+          sync_frontend?: boolean;
+        }>).map((v) => ({
+          id: v.id,
+          title: v.title,
+          desc: v.description || '',
+          category: v.category,
+          duration: v.duration,
+          date: v.date,
+          views: v.views,
+          thumbnailUrl: v.thumbnail_url,
+          url: v.url,
+          syncFrontend: v.sync_frontend ?? true
+        }));
+        setVideosList(mappedVideos);
+      }
+
+      // 8. Fetch Site Settings
+      const { data: settingsData, error: settingsErr } = await supabase
+        .from('site_settings')
+        .select('*')
+        .eq('id', 'global_config')
+        .maybeSingle();
+
+      if (!settingsErr && settingsData) {
+        setSiteSettings({
+          announcementBanner: settingsData.announcement_banner,
+          announcementActive: settingsData.announcement_active,
+          serverStatus: settingsData.server_status,
+          emergencyNotice: settingsData.emergency_notice || ''
+        });
+      }
+
+      setIsSupabaseConnected(true);
+    } catch (err) {
+      console.warn('Supabase fetch failed, falling back to LocalStorage cache:', err);
     } finally {
       setIsLoaded(true);
     }
   }, []);
 
-  // Save to LocalStorage whenever data changes
+  // Initial load from LocalStorage fallback and then Supabase
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.newsList?.length) setNewsList(parsed.newsList);
+        if (parsed.agendaList?.length) setAgendaList(parsed.agendaList);
+        if (parsed.packagesList?.length) setPackagesList(parsed.packagesList);
+        if (parsed.regulasiList?.length) setRegulasiList(parsed.regulasiList);
+        if (parsed.sopList?.length) setSopList(parsed.sopList);
+        if (parsed.photosList?.length) setPhotosList(parsed.photosList);
+        if (parsed.videosList?.length) setVideosList(parsed.videosList);
+        if (parsed.siteSettings) setSiteSettings(parsed.siteSettings);
+      }
+    } catch (e) {
+      console.error('Failed to load LocalStorage fallback', e);
+    }
+
+    refreshFromSupabase();
+  }, [refreshFromSupabase]);
+
+  // Persist snapshot to LocalStorage
   const persist = (
     newNews = newsList,
     newAgenda = agendaList,
@@ -611,39 +897,57 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     newVideos = videosList,
     newSettings = siteSettings
   ) => {
-    try {
-      const payload = {
-        newsList: newNews,
-        agendaList: newAgenda,
-        packagesList: newPkgs,
-        regulasiList: newRegulasi,
-        sopList: newSop,
-        photosList: newPhotos,
-        videosList: newVideos,
-        siteSettings: newSettings,
-        updatedAt: new Date().toISOString()
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    } catch (e) {
-      console.error('Failed to persist UKPBJ data', e);
-    }
+    saveToLocal({
+      newsList: newNews,
+      agendaList: newAgenda,
+      packagesList: newPkgs,
+      regulasiList: newRegulasi,
+      sopList: newSop,
+      photosList: newPhotos,
+      videosList: newVideos,
+      siteSettings: newSettings,
+      updatedAt: new Date().toISOString()
+    });
   };
 
-  // NEWS ACTIONS
-  const addNews = (news: Omit<NewsItem, 'id' | 'views' | 'date' | 'syncFrontend'>) => {
+  // ==========================================
+  // NEWS CRUD & SUPABASE SYNC
+  // ==========================================
+  const addNews = async (news: Omit<NewsItem, 'id' | 'views' | 'date' | 'syncFrontend'>) => {
+    const tempId = `NWS-${Date.now().toString().slice(-4)}`;
     const newEntry: NewsItem = {
       ...news,
-      id: `NWS-${Date.now().toString().slice(-4)}`,
+      id: tempId,
       views: 1,
       date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
       syncFrontend: news.status === 'Published'
     };
+
     const updated = [newEntry, ...newsList];
     setNewsList(updated);
     persist(updated);
+
+    try {
+      const { data, error } = await supabase.from('news').insert({
+        title: news.title,
+        category: news.category,
+        author: news.author,
+        status: news.status,
+        excerpt: news.excerpt,
+        content: news.content,
+        image_url: news.imageUrl || '/news/news-1.png',
+        sync_frontend: news.status === 'Published'
+      }).select().single();
+
+      if (!error && data) {
+        setNewsList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
+      }
+    } catch (err) {
+      console.error('Supabase addNews error:', err);
+    }
   };
 
-  const updateNews = (id: string, updated: Partial<NewsItem>) => {
+  const updateNews = async (id: string, updated: Partial<NewsItem>) => {
     const updatedList = newsList.map((item) => {
       if (item.id === id) {
         const next = { ...item, ...updated };
@@ -654,94 +958,239 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     });
     setNewsList(updatedList);
     persist(updatedList);
+
+    try {
+      await supabase.from('news').update({
+        title: updated.title,
+        category: updated.category,
+        author: updated.author,
+        status: updated.status,
+        excerpt: updated.excerpt,
+        content: updated.content,
+        image_url: updated.imageUrl,
+        sync_frontend: updated.status === 'Published'
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase updateNews error:', err);
+    }
   };
 
-  const deleteNews = (id: string) => {
+  const deleteNews = async (id: string) => {
     const updated = newsList.filter((item) => item.id !== id);
     setNewsList(updated);
     persist(updated);
+
+    try {
+      await supabase.from('news').delete().eq('id', id);
+    } catch (err) {
+      console.error('Supabase deleteNews error:', err);
+    }
   };
 
-  const toggleNewsStatus = (id: string) => {
-    const updatedList = newsList.map((item) => {
-      if (item.id === id) {
-        const nextStatus: NewsItem['status'] = item.status === 'Published' ? 'Draft' : 'Published';
-        return {
-          ...item,
-          status: nextStatus,
-          syncFrontend: nextStatus === 'Published'
-        };
-      }
-      return item;
-    });
+  const toggleNewsStatus = async (id: string) => {
+    const target = newsList.find((n) => n.id === id);
+    if (!target) return;
+    const nextStatus: NewsItem['status'] = target.status === 'Published' ? 'Draft' : 'Published';
+
+    const updatedList = newsList.map((item) =>
+      item.id === id ? { ...item, status: nextStatus, syncFrontend: nextStatus === 'Published' } : item
+    );
     setNewsList(updatedList);
     persist(updatedList);
+
+    try {
+      await supabase.from('news').update({
+        status: nextStatus,
+        sync_frontend: nextStatus === 'Published'
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase toggleNewsStatus error:', err);
+    }
   };
 
-  // AGENDA ACTIONS
-  const addAgenda = (agenda: Omit<AgendaItem, 'id' | 'syncFrontend'>) => {
+  // ==========================================
+  // AGENDA CRUD & SUPABASE SYNC
+  // ==========================================
+  const addAgenda = async (agenda: Omit<AgendaItem, 'id' | 'syncFrontend'>) => {
+    const tempId = `AGD-${Date.now().toString().slice(-4)}`;
     const newEntry: AgendaItem = {
       ...agenda,
-      id: `AGD-${Date.now().toString().slice(-4)}`,
+      id: tempId,
       syncFrontend: true
     };
     const updated = [newEntry, ...agendaList];
     setAgendaList(updated);
     persist(newsList, updated);
+
+    try {
+      const { data, error } = await supabase.from('agendas').insert({
+        title: agenda.title,
+        category: agenda.category,
+        date: agenda.date,
+        time: agenda.time,
+        location: agenda.location,
+        organizer: agenda.organizer,
+        capacity: agenda.capacity,
+        status: agenda.status,
+        sync_frontend: true
+      }).select().single();
+
+      if (!error && data) {
+        setAgendaList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
+      }
+    } catch (err) {
+      console.error('Supabase addAgenda error:', err);
+    }
   };
 
-  const updateAgenda = (id: string, updated: Partial<AgendaItem>) => {
+  const updateAgenda = async (id: string, updated: Partial<AgendaItem>) => {
     const updatedList = agendaList.map((item) =>
       item.id === id ? { ...item, ...updated } : item
     );
     setAgendaList(updatedList);
     persist(newsList, updatedList);
+
+    try {
+      await supabase.from('agendas').update({
+        title: updated.title,
+        category: updated.category,
+        date: updated.date,
+        time: updated.time,
+        location: updated.location,
+        organizer: updated.organizer,
+        capacity: updated.capacity,
+        status: updated.status
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase updateAgenda error:', err);
+    }
   };
 
-  const deleteAgenda = (id: string) => {
+  const deleteAgenda = async (id: string) => {
     const updated = agendaList.filter((item) => item.id !== id);
     setAgendaList(updated);
     persist(newsList, updated);
+
+    try {
+      await supabase.from('agendas').delete().eq('id', id);
+    } catch (err) {
+      console.error('Supabase deleteAgenda error:', err);
+    }
   };
 
-  // PROCUREMENT PACKAGE ACTIONS
-  const addPackage = (pkg: Omit<ProcurementPackage, 'id'>) => {
+  // ==========================================
+  // PROCUREMENT PACKAGES CRUD & SUPABASE SYNC
+  // ==========================================
+  const addPackage = async (pkg: Omit<ProcurementPackage, 'id'>) => {
+    const tempId = `PKG-${Date.now().toString().slice(-4)}`;
     const newEntry: ProcurementPackage = {
       ...pkg,
-      id: `PKG-${Date.now().toString().slice(-4)}`
+      id: tempId
     };
     const updated = [newEntry, ...packagesList];
     setPackagesList(updated);
     persist(newsList, agendaList, updated);
+
+    try {
+      const { data, error } = await supabase.from('procurement_packages').insert({
+        code: pkg.code,
+        title: pkg.title,
+        unit: pkg.unit,
+        hps: pkg.hps,
+        category: pkg.category,
+        status: pkg.status,
+        deadline: pkg.deadline,
+        method: pkg.method,
+        doc_count: pkg.docCount || 1,
+        description: pkg.desc,
+        file_name: pkg.fileName,
+        file_size: pkg.fileSize,
+        file_url: pkg.downloadUrl
+      }).select().single();
+
+      if (!error && data) {
+        setPackagesList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
+      }
+    } catch (err) {
+      console.error('Supabase addPackage error:', err);
+    }
   };
 
-  const updatePackage = (id: string, updated: Partial<ProcurementPackage>) => {
+  const updatePackage = async (id: string, updated: Partial<ProcurementPackage>) => {
     const updatedList = packagesList.map((item) =>
       item.id === id ? { ...item, ...updated } : item
     );
     setPackagesList(updatedList);
     persist(newsList, agendaList, updatedList);
+
+    try {
+      await supabase.from('procurement_packages').update({
+        code: updated.code,
+        title: updated.title,
+        unit: updated.unit,
+        hps: updated.hps,
+        category: updated.category,
+        status: updated.status,
+        deadline: updated.deadline,
+        method: updated.method,
+        doc_count: updated.docCount,
+        description: updated.desc,
+        file_name: updated.fileName,
+        file_size: updated.fileSize,
+        file_url: updated.downloadUrl
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase updatePackage error:', err);
+    }
   };
 
-  const deletePackage = (id: string) => {
+  const deletePackage = async (id: string) => {
     const updated = packagesList.filter((item) => item.id !== id);
     setPackagesList(updated);
     persist(newsList, agendaList, updated);
+
+    try {
+      await supabase.from('procurement_packages').delete().eq('id', id);
+    } catch (err) {
+      console.error('Supabase deletePackage error:', err);
+    }
   };
 
-  // REGULASI ACTIONS
-  const addRegulasi = (reg: Omit<RegulasiItem, 'id' | 'syncFrontend'>) => {
+  // ==========================================
+  // REGULASI CRUD & SUPABASE SYNC
+  // ==========================================
+  const addRegulasi = async (reg: Omit<RegulasiItem, 'id' | 'syncFrontend'>) => {
+    const tempId = `REG-${Date.now().toString().slice(-4)}`;
     const newEntry: RegulasiItem = {
       ...reg,
-      id: `REG-${Date.now().toString().slice(-4)}`,
+      id: tempId,
       syncFrontend: reg.status === 'Aktif'
     };
     const updated = [newEntry, ...regulasiList];
     setRegulasiList(updated);
     persist(newsList, agendaList, packagesList, updated);
+
+    try {
+      const { data, error } = await supabase.from('regulasi').insert({
+        nomor: reg.nomor,
+        tentang: reg.tentang,
+        tahun: reg.tahun,
+        kategori: reg.kategori,
+        file_size: reg.fileSize,
+        download_url: reg.downloadUrl,
+        status: reg.status,
+        sync_frontend: reg.status === 'Aktif'
+      }).select().single();
+
+      if (!error && data) {
+        setRegulasiList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
+      }
+    } catch (err) {
+      console.error('Supabase addRegulasi error:', err);
+    }
   };
 
-  const updateRegulasi = (id: string, updated: Partial<RegulasiItem>) => {
+  const updateRegulasi = async (id: string, updated: Partial<RegulasiItem>) => {
     const updatedList = regulasiList.map((item) => {
       if (item.id === id) {
         const next = { ...item, ...updated };
@@ -752,43 +1201,95 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     });
     setRegulasiList(updatedList);
     persist(newsList, agendaList, packagesList, updatedList);
+
+    try {
+      await supabase.from('regulasi').update({
+        nomor: updated.nomor,
+        tentang: updated.tentang,
+        tahun: updated.tahun,
+        kategori: updated.kategori,
+        file_size: updated.fileSize,
+        download_url: updated.downloadUrl,
+        status: updated.status,
+        sync_frontend: updated.status === 'Aktif'
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase updateRegulasi error:', err);
+    }
   };
 
-  const deleteRegulasi = (id: string) => {
+  const deleteRegulasi = async (id: string) => {
     const updated = regulasiList.filter((item) => item.id !== id);
     setRegulasiList(updated);
     persist(newsList, agendaList, packagesList, updated);
+
+    try {
+      await supabase.from('regulasi').delete().eq('id', id);
+    } catch (err) {
+      console.error('Supabase deleteRegulasi error:', err);
+    }
   };
 
-  const toggleRegulasiStatus = (id: string) => {
-    const updatedList = regulasiList.map((item) => {
-      if (item.id === id) {
-        const nextStatus: RegulasiItem['status'] = item.status === 'Aktif' ? 'Draft' : 'Aktif';
-        return {
-          ...item,
-          status: nextStatus,
-          syncFrontend: nextStatus === 'Aktif'
-        };
-      }
-      return item;
-    });
+  const toggleRegulasiStatus = async (id: string) => {
+    const target = regulasiList.find((r) => r.id === id);
+    if (!target) return;
+    const nextStatus: RegulasiItem['status'] = target.status === 'Aktif' ? 'Draft' : 'Aktif';
+
+    const updatedList = regulasiList.map((item) =>
+      item.id === id ? { ...item, status: nextStatus, syncFrontend: nextStatus === 'Aktif' } : item
+    );
     setRegulasiList(updatedList);
     persist(newsList, agendaList, packagesList, updatedList);
+
+    try {
+      await supabase.from('regulasi').update({
+        status: nextStatus,
+        sync_frontend: nextStatus === 'Aktif'
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase toggleRegulasiStatus error:', err);
+    }
   };
 
-  // SOP ACTIONS
-  const addSop = (sop: Omit<SopItem, 'id' | 'syncFrontend'>) => {
+  // ==========================================
+  // SOP CRUD & SUPABASE SYNC
+  // ==========================================
+  const addSop = async (sop: Omit<SopItem, 'id' | 'syncFrontend'>) => {
+    const tempId = `SOP-${Date.now().toString().slice(-4)}`;
     const newEntry: SopItem = {
       ...sop,
-      id: `SOP-${Date.now().toString().slice(-4)}`,
+      id: tempId,
       syncFrontend: sop.status === 'Berlaku'
     };
     const updated = [newEntry, ...sopList];
     setSopList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, updated);
+
+    try {
+      const { data, error } = await supabase.from('sop').insert({
+        kode: sop.kode,
+        judul: sop.judul,
+        unit: sop.unit,
+        revisi: sop.revisi,
+        tahapan_count: sop.tahapanCount || 5,
+        download_url: sop.downloadUrl,
+        file_name: sop.fileName,
+        file_size: sop.fileSize,
+        kategori: sop.kategori,
+        deskripsi: sop.deskripsi,
+        status: sop.status,
+        sync_frontend: sop.status === 'Berlaku'
+      }).select().single();
+
+      if (!error && data) {
+        setSopList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
+      }
+    } catch (err) {
+      console.error('Supabase addSop error:', err);
+    }
   };
 
-  const updateSop = (id: string, updated: Partial<SopItem>) => {
+  const updateSop = async (id: string, updated: Partial<SopItem>) => {
     const updatedList = sopList.map((item) => {
       if (item.id === id) {
         const next = { ...item, ...updated };
@@ -799,74 +1300,200 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     });
     setSopList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, updatedList);
+
+    try {
+      await supabase.from('sop').update({
+        kode: updated.kode,
+        judul: updated.judul,
+        unit: updated.unit,
+        revisi: updated.revisi,
+        tahapan_count: updated.tahapanCount,
+        download_url: updated.downloadUrl,
+        file_name: updated.fileName,
+        file_size: updated.fileSize,
+        kategori: updated.kategori,
+        deskripsi: updated.deskripsi,
+        status: updated.status,
+        sync_frontend: updated.status === 'Berlaku'
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase updateSop error:', err);
+    }
   };
 
-  const deleteSop = (id: string) => {
+  const deleteSop = async (id: string) => {
     const updated = sopList.filter((item) => item.id !== id);
     setSopList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, updated);
+
+    try {
+      await supabase.from('sop').delete().eq('id', id);
+    } catch (err) {
+      console.error('Supabase deleteSop error:', err);
+    }
   };
 
-  // PHOTOS GALLERY ACTIONS
-  const addPhoto = (photo: Omit<PhotoItem, 'id' | 'syncFrontend'>) => {
+  // ==========================================
+  // PHOTOS GALLERY CRUD & SUPABASE SYNC
+  // ==========================================
+  const addPhoto = async (photo: Omit<PhotoItem, 'id' | 'syncFrontend'>) => {
+    const tempId = `PHO-${Date.now().toString().slice(-4)}`;
     const newEntry: PhotoItem = {
       ...photo,
-      id: `PHO-${Date.now().toString().slice(-4)}`,
+      id: tempId,
       syncFrontend: true
     };
     const updated = [newEntry, ...photosList];
     setPhotosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
+
+    try {
+      const { data, error } = await supabase.from('gallery_photos').insert({
+        title: photo.title,
+        description: photo.desc,
+        category: photo.category,
+        src: photo.src,
+        date: photo.date,
+        size: photo.size || 'small',
+        sync_frontend: true
+      }).select().single();
+
+      if (!error && data) {
+        setPhotosList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
+      }
+    } catch (err) {
+      console.error('Supabase addPhoto error:', err);
+    }
   };
 
-  const updatePhoto = (id: string, updated: Partial<PhotoItem>) => {
+  const updatePhoto = async (id: string, updated: Partial<PhotoItem>) => {
     const updatedList = photosList.map((item) =>
       item.id === id ? { ...item, ...updated } : item
     );
     setPhotosList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList);
+
+    try {
+      await supabase.from('gallery_photos').update({
+        title: updated.title,
+        description: updated.desc,
+        category: updated.category,
+        src: updated.src,
+        date: updated.date,
+        size: updated.size
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase updatePhoto error:', err);
+    }
   };
 
-  const deletePhoto = (id: string) => {
+  const deletePhoto = async (id: string) => {
     const updated = photosList.filter((item) => item.id !== id);
     setPhotosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
+
+    try {
+      await supabase.from('gallery_photos').delete().eq('id', id);
+    } catch (err) {
+      console.error('Supabase deletePhoto error:', err);
+    }
   };
 
-  // VIDEOS MEDIA ACTIONS
-  const addVideo = (video: Omit<VideoMediaItem, 'id' | 'syncFrontend'>) => {
+  // ==========================================
+  // VIDEOS GALLERY CRUD & SUPABASE SYNC
+  // ==========================================
+  const addVideo = async (video: Omit<VideoMediaItem, 'id' | 'syncFrontend'>) => {
+    const tempId = `VID-${Date.now().toString().slice(-4)}`;
     const newEntry: VideoMediaItem = {
       ...video,
-      id: `VID-${Date.now().toString().slice(-4)}`,
+      id: tempId,
       syncFrontend: true
     };
     const updated = [newEntry, ...videosList];
     setVideosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updated);
+
+    try {
+      const { data, error } = await supabase.from('gallery_videos').insert({
+        title: video.title,
+        description: video.desc,
+        category: video.category,
+        duration: video.duration,
+        date: video.date,
+        views: video.views,
+        thumbnail_url: video.thumbnailUrl,
+        url: video.url,
+        sync_frontend: true
+      }).select().single();
+
+      if (!error && data) {
+        setVideosList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: data.id } : item)));
+      }
+    } catch (err) {
+      console.error('Supabase addVideo error:', err);
+    }
   };
 
-  const updateVideo = (id: string, updated: Partial<VideoMediaItem>) => {
+  const updateVideo = async (id: string, updated: Partial<VideoMediaItem>) => {
     const updatedList = videosList.map((item) =>
       item.id === id ? { ...item, ...updated } : item
     );
     setVideosList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updatedList);
+
+    try {
+      await supabase.from('gallery_videos').update({
+        title: updated.title,
+        description: updated.desc,
+        category: updated.category,
+        duration: updated.duration,
+        date: updated.date,
+        views: updated.views,
+        thumbnail_url: updated.thumbnailUrl,
+        url: updated.url
+      }).eq('id', id);
+    } catch (err) {
+      console.error('Supabase updateVideo error:', err);
+    }
   };
 
-  const deleteVideo = (id: string) => {
+  const deleteVideo = async (id: string) => {
     const updated = videosList.filter((item) => item.id !== id);
     setVideosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updated);
+
+    try {
+      await supabase.from('gallery_videos').delete().eq('id', id);
+    } catch (err) {
+      console.error('Supabase deleteVideo error:', err);
+    }
   };
 
-  // SITE SETTINGS ACTIONS
-  const updateSiteSettings = (settings: Partial<SiteSettings>) => {
+  // ==========================================
+  // SITE SETTINGS & SUPABASE SYNC
+  // ==========================================
+  const updateSiteSettings = async (settings: Partial<SiteSettings>) => {
     const updated = { ...siteSettings, ...settings };
     setSiteSettings(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, videosList, updated);
+
+    try {
+      await supabase.from('site_settings').upsert({
+        id: 'global_config',
+        announcement_banner: updated.announcementBanner,
+        announcement_active: updated.announcementActive,
+        server_status: updated.serverStatus,
+        emergency_notice: updated.emergencyNotice,
+        updated_at: new Date().toISOString()
+      });
+    } catch (err) {
+      console.error('Supabase updateSiteSettings error:', err);
+    }
   };
 
+  // ==========================================
   // RESET TO DEFAULT
+  // ==========================================
   const resetToDefaults = () => {
     setNewsList(DEFAULT_NEWS);
     setAgendaList(DEFAULT_AGENDAS);
@@ -914,8 +1541,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         deleteVideo,
         siteSettings,
         updateSiteSettings,
+        refreshFromSupabase,
         resetToDefaults,
-        isLoaded
+        isLoaded,
+        isSupabaseConnected
       }}
     >
       {children}

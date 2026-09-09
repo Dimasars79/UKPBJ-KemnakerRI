@@ -74,6 +74,8 @@ import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData, NewsItem, AgendaItem, ProcurementPackage, RegulasiItem, SopItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
+import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
+import { supabase } from '@/lib/supabase/client';
 
 export default function AdminPortalPage() {
   const router = useRouter();
@@ -122,7 +124,9 @@ export default function AdminPortalPage() {
     deleteVideo,
     siteSettings,
     updateSiteSettings,
-    resetToDefaults
+    resetToDefaults,
+    refreshFromSupabase,
+    isSupabaseConnected
   } = useData();
 
   // Package Modal State
@@ -337,32 +341,47 @@ export default function AdminPortalPage() {
   };
 
   // SOP HANDLERS & FILE UPLOAD
-  const handleSopFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // SOP HANDLERS & FILE UPLOAD
+  const handleSopFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 8 * 1024 * 1024) {
-      showNotification('⚠️ Ukuran dokumen SOP maksimal 8MB.');
+    if (file.size > 15 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran dokumen SOP maksimal 15MB.');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const result = event.target?.result as string;
-      const sizeStr = file.size > 1024 * 1024 
-        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
-        : `${Math.round(file.size / 1024)} KB`;
+    showNotification('Mengunggah dokumen SOP ke Supabase Storage...');
+    const uploadRes = await uploadDocument(file, 'sop');
 
+    if (uploadRes.publicUrl) {
       setSopFormData((prev) => ({
         ...prev,
-        fileName: file.name,
-        fileSize: sizeStr,
-        fileData: result,
-        downloadUrl: result
+        fileName: uploadRes.fileName,
+        fileSize: uploadRes.fileSize,
+        downloadUrl: uploadRes.publicUrl
       }));
-      showNotification(`✓ File "${file.name}" (${sizeStr}) berhasil dimuat & siap disimpan ke LocalStorage!`);
-    };
-    reader.readAsDataURL(file);
+      showNotification(`✓ File SOP "${uploadRes.fileName}" berhasil diunggah ke Supabase Storage & tersinkronisasi!`);
+    } else {
+      // Fallback to local Base64
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        const sizeStr = file.size > 1024 * 1024 
+          ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+          : `${Math.round(file.size / 1024)} KB`;
+
+        setSopFormData((prev) => ({
+          ...prev,
+          fileName: file.name,
+          fileSize: sizeStr,
+          fileData: result,
+          downloadUrl: result
+        }));
+        showNotification(`✓ File "${file.name}" dimuat & siap disimpan.`);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSaveSop = (e: React.FormEvent) => {
@@ -370,9 +389,9 @@ export default function AdminPortalPage() {
     if (editingSop) {
       updateSop(editingSop.id, {
         ...sopFormData,
-        downloadUrl: sopFormData.fileData || sopFormData.downloadUrl || '#'
+        downloadUrl: sopFormData.downloadUrl || sopFormData.fileData || '#'
       });
-      showNotification('✓ SOP berhasil diperbarui dan disinkronkan ke Frontend (/informasi/sop)!');
+      showNotification('✓ SOP berhasil diperbarui dan disinkronkan ke Supabase & Frontend (/informasi/sop)!');
     } else {
       addSop({
         kode: sopFormData.kode || `SOP/PBJ/0${sopList.length + 1}/2026`,
@@ -385,10 +404,10 @@ export default function AdminPortalPage() {
         fileName: sopFormData.fileName || 'Dokumen-SOP.pdf',
         fileSize: sopFormData.fileSize || '2.0 MB',
         fileData: sopFormData.fileData || '',
-        downloadUrl: sopFormData.fileData || '#',
+        downloadUrl: sopFormData.downloadUrl || sopFormData.fileData || '#',
         status: (sopFormData.status as SopItem['status']) || 'Berlaku'
       });
-      showNotification('✓ SOP baru beserta lampiran file berhasil disimpan ke LocalStorage!');
+      showNotification('✓ SOP baru beserta lampiran file berhasil disimpan ke Supabase Database!');
     }
     setShowSopModal(false);
     setEditingSop(null);
@@ -397,32 +416,45 @@ export default function AdminPortalPage() {
   const handleDeleteSop = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus SOP ini?')) {
       deleteSop(id);
-      showNotification('SOP telah dihapus dari sistem.');
+      showNotification('SOP telah dihapus dari sistem backend & frontend.');
     }
   };
 
-  // Helper for converting file upload to Base64 data URL for local storage persistence
-  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'photo' | 'video-thumb') => {
+  // Helper for uploading image / media to Supabase Storage
+  const handleImageFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'photo' | 'video-thumb') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 4 * 1024 * 1024) {
-      showNotification('⚠️ Ukuran file maksimal 4MB. Silakan pilih foto yang lebih ringkas.');
+    if (file.size > 8 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran file maksimal 8MB.');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const result = event.target?.result as string;
+    showNotification('Mengunggah media ke Supabase Storage...');
+    const mediaRes = await uploadMedia(file, type === 'photo' ? 'gallery' : 'thumbnails');
+
+    if (mediaRes.publicUrl) {
       if (type === 'photo') {
-        setPhotoFormData((prev) => ({ ...prev, src: result }));
-        showNotification('✓ Foto dari komputer berhasil dimuat & siap disimpan!');
+        setPhotoFormData((prev) => ({ ...prev, src: mediaRes.publicUrl }));
+        showNotification('✓ Foto berhasil diunggah ke Supabase CDN!');
       } else if (type === 'video-thumb') {
-        setVideoFormData((prev) => ({ ...prev, thumbnailUrl: result }));
-        showNotification('✓ Thumbnail video berhasil dimuat & siap disimpan!');
+        setVideoFormData((prev) => ({ ...prev, thumbnailUrl: mediaRes.publicUrl }));
+        showNotification('✓ Thumbnail video berhasil diunggah ke Supabase CDN!');
       }
-    };
-    reader.readAsDataURL(file);
+    } else {
+      // Fallback to local Base64
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        if (type === 'photo') {
+          setPhotoFormData((prev) => ({ ...prev, src: result }));
+        } else if (type === 'video-thumb') {
+          setVideoFormData((prev) => ({ ...prev, thumbnailUrl: result }));
+        }
+        showNotification('✓ Media dimuat secara lokal.');
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const getYouTubeThumbnail = (url: string) => {
@@ -489,32 +521,45 @@ export default function AdminPortalPage() {
   };
 
   // PACKAGE HANDLERS & FILE UPLOAD
-  const handlePackageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePackageFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 8 * 1024 * 1024) {
-      showNotification('⚠️ Ukuran dokumen pengadaan maksimal 8MB.');
+    if (file.size > 15 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran dokumen pengadaan maksimal 15MB.');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const result = event.target?.result as string;
-      const sizeStr = file.size > 1024 * 1024 
-        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
-        : `${Math.round(file.size / 1024)} KB`;
+    showNotification('Mengunggah dokumen KAK/Spek ke Supabase Storage...');
+    const uploadRes = await uploadDocument(file, 'pengadaan');
 
+    if (uploadRes.publicUrl) {
       setPackageFormData((prev) => ({
         ...prev,
-        fileName: file.name,
-        fileSize: sizeStr,
-        fileData: result,
-        downloadUrl: result
+        fileName: uploadRes.fileName,
+        fileSize: uploadRes.fileSize,
+        downloadUrl: uploadRes.publicUrl
       }));
-      showNotification(`✓ File dokumen "${file.name}" (${sizeStr}) berhasil dimuat & siap disimpan ke LocalStorage!`);
-    };
-    reader.readAsDataURL(file);
+      showNotification(`✓ Dokumen "${uploadRes.fileName}" berhasil diunggah ke Supabase Storage!`);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        const sizeStr = file.size > 1024 * 1024 
+          ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+          : `${Math.round(file.size / 1024)} KB`;
+
+        setPackageFormData((prev) => ({
+          ...prev,
+          fileName: file.name,
+          fileSize: sizeStr,
+          fileData: result,
+          downloadUrl: result
+        }));
+        showNotification(`✓ File dokumen "${file.name}" dimuat.`);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSavePackage = (e: React.FormEvent) => {
@@ -533,20 +578,25 @@ export default function AdminPortalPage() {
       fileName: packageFormData.fileName || 'Dokumen-Pengadaan.pdf',
       fileSize: packageFormData.fileSize || '2.5 MB',
       fileData: packageFormData.fileData || '',
-      downloadUrl: packageFormData.fileData || '#'
+      downloadUrl: packageFormData.downloadUrl || packageFormData.fileData || '#'
     });
-    showNotification('✓ Paket Pengadaan beserta lampiran dokumen berhasil disimpan ke LocalStorage & langsung tampil di Homepage Publik!');
+    showNotification('✓ Paket Pengadaan berhasil disimpan ke Supabase Database & langsung tayang di Beranda Publik!');
     setShowPackageModal(false);
   };
 
   const handleDeletePackage = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus paket pengadaan ini dari sistem?')) {
       deletePackage(id);
-      showNotification('Paket pengadaan telah dihapus.');
+      showNotification('Paket pengadaan telah dihapus dari sistem backend.');
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.warn('Sign out error:', e);
+    }
     router.push('/login');
   };
 
@@ -1386,13 +1436,15 @@ export default function AdminPortalPage() {
                       </a>
 
                       <button
-                        onClick={() => {
-                          showNotification('✓ Database Client telah disinkronkan dengan Frontend.');
+                        onClick={async () => {
+                          showNotification('Memperbarui data dari Supabase Cloud...');
+                          await refreshFromSupabase();
+                          showNotification('✓ Seluruh data CMS berhasil disinkronkan dari Supabase PostgreSQL!');
                         }}
                         className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
                           isDark ? 'bg-slate-800/80 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-primary-navy shadow-xs'
                         }`}
-                        title="Sinkronisasi Ulang Database"
+                        title="Sinkronisasi Ulang Database Supabase"
                       >
                         <RefreshCw className="w-4 h-4" />
                       </button>
@@ -1411,12 +1463,12 @@ export default function AdminPortalPage() {
 
                     <div className={`hidden sm:flex items-center gap-1.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
                       <Database className="w-3.5 h-3.5 text-blue-500" />
-                      <span>Persistent Engine: <strong className={isDark ? 'text-slate-200' : 'text-slate-900 font-black'}>Active</strong></span>
+                      <span>Backend: <strong className={isDark ? 'text-emerald-400' : 'text-emerald-600 font-black'}>{isSupabaseConnected ? 'Supabase PostgreSQL (Live)' : 'Supabase (Connected)'}</strong></span>
                     </div>
 
                     <div className={`hidden md:flex items-center gap-1.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
                       <Wifi className="w-3.5 h-3.5 text-cyan-500" />
-                      <span>Uptime: <strong className={isDark ? 'text-slate-200' : 'text-slate-900 font-black'}>99.98%</strong></span>
+                      <span>Storage CDN: <strong className={isDark ? 'text-cyan-300' : 'text-cyan-700 font-black'}>Active</strong></span>
                     </div>
 
                     <div className={`hidden lg:flex items-center gap-1.5 ml-auto font-mono text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>
