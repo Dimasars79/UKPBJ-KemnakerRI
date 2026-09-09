@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
@@ -64,7 +64,8 @@ import {
   PlusCircle,
   Award,
   Target,
-  UserCheck
+  UserCheck,
+  Bell
 } from 'lucide-react';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
@@ -79,6 +80,30 @@ export default function AdminPortalPage() {
   const [isPengadaanOpen, setIsPengadaanOpen] = useState(true);
   const [isCmsOpen, setIsCmsOpen] = useState(true);
   const [galeriTab, setGaleriTab] = useState<'foto' | 'video'>('foto');
+  
+  // Header Interactive States
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [liveTime, setLiveTime] = useState<string>('');
+  const [unreadNotifs, setUnreadNotifs] = useState(3);
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const formatted = now.toLocaleDateString('id-ID', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }) + ' WIB';
+      setLiveTime(formatted);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
   
   // DataContext Hook
   const {
@@ -784,69 +809,397 @@ export default function AdminPortalPage() {
         isDark ? 'bg-slate-950' : 'bg-slate-100'
       }`}>
         
-        {/* Top Header */}
-        <header className={`h-16 border-b backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30 transition-colors duration-300 ${
-          isDark ? 'border-slate-800/80 bg-slate-950/80' : 'border-slate-200 bg-white/90'
+        {/* Top Header - Modern Enterprise Command Bar */}
+        <header className={`h-16 border-b backdrop-blur-xl px-4 md:px-6 flex items-center justify-between sticky top-0 z-40 transition-all duration-300 ${
+          isDark 
+            ? 'border-slate-800/80 bg-slate-950/85 shadow-sm shadow-black/20' 
+            : 'border-slate-200/90 bg-white/90 shadow-sm shadow-slate-200/50'
         }`}>
-          <div className="flex items-center space-x-4">
-            <div className="relative w-64 md:w-80">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          {/* LEFT: Context Breadcrumb & Active Indicator */}
+          <div className="flex items-center space-x-3">
+            <div className={`p-2 rounded-xl border flex items-center justify-center shrink-0 ${
+              isDark ? 'bg-slate-900 border-slate-800 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
+            }`}>
+              {activeTab === 'dashboard' && <LayoutDashboard className="w-4 h-4" />}
+              {activeTab === 'paket' && <Package className="w-4 h-4 text-blue-400" />}
+              {activeTab === 'monitoring' && <Radio className="w-4 h-4 text-emerald-500 animate-pulse" />}
+              {activeTab === 'manage-berita' && <Newspaper className="w-4 h-4 text-amber-500" />}
+              {activeTab === 'manage-agenda' && <Calendar className="w-4 h-4 text-emerald-500" />}
+              {activeTab === 'manage-regulasi' && <ScrollText className="w-4 h-4 text-blue-400" />}
+              {activeTab === 'manage-sop' && <Layers className="w-4 h-4 text-purple-400" />}
+              {activeTab === 'manage-galeri' && <Camera className="w-4 h-4 text-cyan-400" />}
+              {activeTab === 'arsitektur' && <Network className="w-4 h-4 text-accent-gold" />}
+              {activeTab === 'penyedia' && <Users className="w-4 h-4 text-blue-400" />}
+              {activeTab === 'laporan' && <BarChart3 className="w-4 h-4 text-purple-400" />}
+              {activeTab === 'pengaturan' && <Settings className="w-4 h-4 text-slate-400" />}
+            </div>
+
+            <div className="hidden sm:block">
+              <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
+                <span className="hover:text-blue-500 cursor-pointer" onClick={() => setActiveTab('dashboard')}>Portal Admin</span>
+                <span>/</span>
+                <span className="text-slate-500 uppercase tracking-wider">
+                  {activeTab === 'dashboard' ? 'Utama' :
+                   activeTab === 'paket' || activeTab === 'monitoring' || activeTab === 'laporan' ? 'Pengadaan' :
+                   activeTab.startsWith('manage-') ? 'CMS Publik' : 'Sistem'}
+                </span>
+              </div>
+              <h2 className={`text-xs md:text-sm font-extrabold capitalize leading-none mt-0.5 ${
+                isDark ? 'text-white' : 'text-slate-900'
+              }`}>
+                {activeTab === 'dashboard' ? 'Executive Command Center' :
+                 activeTab === 'paket' ? 'Manajemen Paket Pengadaan' :
+                 activeTab === 'monitoring' ? 'Surveillance & SLA Tracker' :
+                 activeTab === 'manage-berita' ? 'Kelola Berita & Siaran' :
+                 activeTab === 'manage-agenda' ? 'Kelola Jadwal & Agenda' :
+                 activeTab === 'manage-regulasi' ? 'Kelola Regulasi PBJ' :
+                 activeTab === 'manage-sop' ? 'Kelola Standar Operasional (SOP)' :
+                 activeTab === 'manage-galeri' ? 'Kelola Galeri Foto & Video' :
+                 activeTab === 'arsitektur' ? 'Arsitektur Sistem 5-Tier' :
+                 activeTab === 'penyedia' ? 'Database Vendor Rekanan' :
+                 activeTab === 'laporan' ? 'Statistik & Kinerja PBJ' : 'Konfigurasi & Database'}
+              </h2>
+            </div>
+          </div>
+
+          {/* CENTER: Smart Search Command Box with Keyboard Shortcut */}
+          <div className="flex items-center space-x-3">
+            <div className="relative w-44 md:w-64 lg:w-72 group">
+              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
               <input
                 type="text"
                 placeholder="Cari berita, agenda, paket..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-9 pr-4 py-1.5 border rounded-xl text-xs transition-all outline-none ${
+                className={`w-full pl-8 pr-10 py-1.5 border rounded-xl text-xs transition-all outline-none ${
                   isDark 
-                    ? 'bg-slate-900 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500' 
-                    : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:bg-white'
+                    ? 'bg-slate-900/80 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-900' 
+                    : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:bg-white shadow-xs'
                 }`}
               />
+              <span className="hidden md:inline-flex absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-slate-700/60 bg-slate-800/60 text-slate-400">
+                ⌘K
+              </span>
             </div>
-            <div className="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Backend Ready</span>
+
+            {/* SPSE Live Health Sentinel Pill */}
+            <div className="hidden xl:flex items-center space-x-2 px-2.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-semibold shrink-0">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>SPSE: 38ms</span>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
+          {/* RIGHT: Actions, Live Clock, Notifications, Theme & Quick Profile */}
+          <div className="flex items-center space-x-2">
             
-            {/* THEME TOGGLE BUTTON (LIGHT / DARK) */}
-            <div className={`flex items-center p-1 rounded-xl border ${
+            {/* Live Clock Widget */}
+            {liveTime && (
+              <div className="hidden 2xl:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-semibold text-slate-400 border-slate-800/80 bg-slate-900/50">
+                <Clock className="w-3.5 h-3.5 text-accent-gold" />
+                <span>{liveTime}</span>
+              </div>
+            )}
+
+            {/* QUICK ACTION BUTTON & DROPDOWN */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowQuickAdd(!showQuickAdd);
+                  if (showNotifications) setShowNotifications(false);
+                }}
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-600/20 transition-all cursor-pointer"
+                title="Tambah data baru secara instan"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Tambah Cepat</span>
+                <ChevronDown className={`w-3 h-3 transition-transform ${showQuickAdd ? 'rotate-180' : ''}`} />
+              </button>
+
+              <AnimatePresence>
+                {showQuickAdd && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.15 }}
+                    className={`absolute right-0 mt-2 w-56 p-1.5 rounded-2xl border shadow-xl z-50 ${
+                      isDark ? 'bg-slate-900 border-slate-800 shadow-black/50' : 'bg-white border-slate-200 shadow-slate-300/60'
+                    }`}
+                  >
+                    <p className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-800/50">
+                      Buat Konten Baru
+                    </p>
+                    <div className="space-y-0.5 mt-1">
+                      <button
+                        onClick={() => {
+                          setShowQuickAdd(false);
+                          setPackageFormData({
+                            code: `TND-2026-00${packagesList.length + 1}`,
+                            title: '',
+                            unit: 'Biro Perencanaan Kemnaker RI',
+                            hps: 'Rp 500.000.000',
+                            category: 'Tender',
+                            status: 'Pendaftaran Dibuka',
+                            deadline: '28 Sep 2026',
+                            method: 'Tender - Pascakualifikasi Satu File',
+                            docCount: 3,
+                            desc: ''
+                          });
+                          setShowPackageModal(true);
+                        }}
+                        className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
+                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <Package className="w-3.5 h-3.5 text-blue-500" />
+                        <span>Paket Pengadaan</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowQuickAdd(false);
+                          setEditingNews(null);
+                          setNewsFormData({
+                            title: '',
+                            category: 'Berita PBJ',
+                            author: 'Admin UKPBJ Kemnaker',
+                            status: 'Published',
+                            excerpt: '',
+                            content: ''
+                          });
+                          setShowNewsModal(true);
+                        }}
+                        className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
+                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <Newspaper className="w-3.5 h-3.5 text-amber-500" />
+                        <span>Berita / Pengumuman</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowQuickAdd(false);
+                          setEditingAgenda(null);
+                          setAgendaFormData({
+                            title: '',
+                            category: 'Bimtek',
+                            date: '15 Sep 2026',
+                            time: '09:00 - 12:00 WIB',
+                            location: 'Gedung Kemnaker RI',
+                            organizer: 'UKPBJ Kemnaker RI',
+                            capacity: '100 Peserta',
+                            status: 'Terjadwal'
+                          });
+                          setShowAgendaModal(true);
+                        }}
+                        className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
+                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>Agenda Kegiatan</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowQuickAdd(false);
+                          setEditingRegulasi(null);
+                          setRegulasiFormData({
+                            nomor: '',
+                            tentang: '',
+                            tahun: '2026',
+                            kategori: 'Peraturan Menteri',
+                            fileSize: '2.5 MB',
+                            status: 'Aktif'
+                          });
+                          setShowRegulasiModal(true);
+                        }}
+                        className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
+                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <ScrollText className="w-3.5 h-3.5 text-blue-400" />
+                        <span>Regulasi & Aturan</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowQuickAdd(false);
+                          setEditingPhoto(null);
+                          setPhotoFormData({
+                            title: '',
+                            desc: '',
+                            category: 'Dokumentasi Kerja',
+                            src: '/gallery/gallery-1.jpg',
+                            size: 'small',
+                            date: '28 Agu 2026'
+                          });
+                          setShowPhotoModal(true);
+                        }}
+                        className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
+                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <Camera className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>Foto / Video Galeri</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* NOTIFICATION BELL WITH DROPDOWN */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowNotifications(!showNotifications);
+                  if (showQuickAdd) setShowQuickAdd(false);
+                }}
+                className={`relative p-2 rounded-xl border transition-colors cursor-pointer ${
+                  isDark ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
+                }`}
+                title="Pusat Notifikasi & Audit Log"
+              >
+                <Bell className="w-4 h-4" />
+                {unreadNotifs > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center animate-pulse">
+                    {unreadNotifs}
+                  </span>
+                )}
+              </button>
+
+              <AnimatePresence>
+                {showNotifications && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.15 }}
+                    className={`absolute right-0 mt-2 w-80 sm:w-96 p-4 rounded-2xl border shadow-2xl z-50 space-y-3 ${
+                      isDark ? 'bg-slate-900 border-slate-800 shadow-black/60' : 'bg-white border-slate-200 shadow-slate-300/80'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between pb-2 border-b border-slate-800/60">
+                      <div className="flex items-center space-x-2">
+                        <Bell className="w-4 h-4 text-blue-500" />
+                        <span className={`text-xs font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>Notifikasi & Audit Log</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setUnreadNotifs(0);
+                          showNotification('Semua notifikasi ditandai sebagai sudah dibaca.');
+                        }}
+                        className="text-[10px] text-blue-400 hover:underline font-semibold cursor-pointer"
+                      >
+                        Tandai Dibaca
+                      </button>
+                    </div>
+
+                    <div className="space-y-2 max-h-64 overflow-y-auto">
+                      <div className={`p-2.5 rounded-xl border text-xs flex items-start gap-2.5 transition-colors ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:bg-white'
+                      }`}>
+                        <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 mt-0.5">
+                          <Package className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className={`font-bold text-[11px] leading-snug ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                            Tender Baru Diterbitkan
+                          </p>
+                          <p className="text-[10px] text-slate-400 truncate">Pengadaan Server Cloud DC T.A 2026</p>
+                          <p className="text-[9px] text-blue-400 font-mono mt-1">10 menit yang lalu</p>
+                        </div>
+                      </div>
+
+                      <div className={`p-2.5 rounded-xl border text-xs flex items-start gap-2.5 transition-colors ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:bg-white'
+                      }`}>
+                        <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 mt-0.5">
+                          <Wifi className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className={`font-bold text-[11px] leading-snug ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                            Sinkronisasi SPSE Berhasil
+                          </p>
+                          <p className="text-[10px] text-slate-400 truncate">42 Paket terhubung normal (Latency 38ms)</p>
+                          <p className="text-[9px] text-emerald-400 font-mono mt-1">25 menit yang lalu</p>
+                        </div>
+                      </div>
+
+                      <div className={`p-2.5 rounded-xl border text-xs flex items-start gap-2.5 transition-colors ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:bg-white'
+                      }`}>
+                        <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0 mt-0.5">
+                          <Users className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className={`font-bold text-[11px] leading-snug ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                            Pendaftar Vendor Rekanan
+                          </p>
+                          <p className="text-[10px] text-slate-400 truncate">PT Telekomunikasi Indonesia Tbk verifikasi KBLI</p>
+                          <p className="text-[9px] text-purple-400 font-mono mt-1">1 jam yang lalu</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-800/60 flex justify-between items-center text-[10px] text-slate-400">
+                      <span>3 notifikasi aktif</span>
+                      <button
+                        onClick={() => {
+                          setShowNotifications(false);
+                          setActiveTab('monitoring');
+                        }}
+                        className="text-blue-400 hover:underline font-bold"
+                      >
+                        Buka Monitoring &rarr;
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* THEME TOGGLE (LIGHT / DARK) */}
+            <div className={`flex items-center p-0.5 rounded-xl border ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-200'
             }`}>
               <button
                 onClick={() => setTheme('light')}
-                className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   theme === 'light'
                     ? 'bg-white text-amber-600 shadow-sm'
                     : 'text-slate-400 hover:text-slate-600'
                 }`}
-                title="Aktifkan Mode Terang (Light Mode)"
+                title="Mode Terang (Light)"
               >
                 <Sun className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Light</span>
               </button>
               <button
                 onClick={() => setTheme('dark')}
-                className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   theme === 'dark'
                     ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
-                title="Aktifkan Mode Gelap (Dark Mode)"
+                title="Mode Gelap (Dark)"
               >
                 <Moon className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Dark</span>
               </button>
             </div>
 
+            {/* BLUEPRINT ARSITEKTUR QUICK BUTTON */}
             <button 
               onClick={() => setActiveTab('arsitektur')}
-              className="hidden lg:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-accent-gold/10 border border-accent-gold/30 text-accent-gold hover:bg-accent-gold/20 text-xs font-bold transition-all cursor-pointer"
+              className="hidden lg:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-accent-gold/10 border border-accent-gold/30 text-accent-gold hover:bg-accent-gold/20 text-xs font-bold transition-all cursor-pointer"
+              title="Lihat Arsitektur Sistem 5-Tier"
             >
               <Network className="w-3.5 h-3.5" />
-              <span>Blueprint Arsitektur</span>
+              <span className="hidden xl:inline">Arsitektur</span>
             </button>
           </div>
         </header>
