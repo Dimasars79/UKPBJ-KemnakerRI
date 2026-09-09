@@ -41,6 +41,10 @@ export interface ProcurementPackage {
   method: string;
   docCount: number;
   desc?: string;
+  fileName?: string;
+  fileSize?: string;
+  fileData?: string; // Base64 data URL for uploaded procurement document (KAK, Spek Teknis, etc.)
+  downloadUrl?: string;
 }
 
 export interface RegulasiItem {
@@ -287,6 +291,9 @@ const DEFAULT_PACKAGES: ProcurementPackage[] = [
     deadline: '20 Agu 2026',
     method: 'Tender - Pascakualifikasi Satu File',
     docCount: 3,
+    fileName: 'KAK-Konsultan-Portal-UKPBJ.pdf',
+    fileSize: '2.4 MB',
+    downloadUrl: '#',
     desc: 'Pengadaan jasa konsultan IT untuk mendukung implementasi sistem informasi terintegrasi dan arsitektur satu portal di lingkungan Kemnaker.'
   },
   {
@@ -300,6 +307,9 @@ const DEFAULT_PACKAGES: ProcurementPackage[] = [
     deadline: '16 Agu 2026',
     method: 'Tender - Pascakualifikasi Dua File',
     docCount: 4,
+    fileName: 'Dokumen-Pemilihan-Peralatan-Workshop.pdf',
+    fileSize: '3.8 MB',
+    downloadUrl: '#',
     desc: 'Pengadaan sarana dan prasarana penunjang pelatihan vokasi tenaga kerja di balai besar pelatihan.'
   },
   {
@@ -313,6 +323,9 @@ const DEFAULT_PACKAGES: ProcurementPackage[] = [
     deadline: '22 Agu 2026',
     method: 'Seleksi Kualifikasi Kualitas & Biaya',
     docCount: 2,
+    fileName: 'Spesifikasi-Pengawasan-Renovasi.pdf',
+    fileSize: '1.9 MB',
+    downloadUrl: '#',
     desc: 'Pengawasan berkala mutu konstruksi fisik renovasi ruang layanan ketenagakerjaan terpadu.'
   },
   {
@@ -326,6 +339,9 @@ const DEFAULT_PACKAGES: ProcurementPackage[] = [
     deadline: '05 Agu 2026',
     method: 'Pengadaan Langsung',
     docCount: 2,
+    fileName: 'Rincian-Lisensi-Firewall-SPSE.pdf',
+    fileSize: '1.2 MB',
+    downloadUrl: '#',
     desc: 'Lisensi tahunan firewall dan perangkat pemantau lalu lintas jaringan pengadaan.'
   },
   {
@@ -339,6 +355,9 @@ const DEFAULT_PACKAGES: ProcurementPackage[] = [
     deadline: '25 Agu 2026',
     method: 'Tender Cepat',
     docCount: 3,
+    fileName: 'Kerangka-Acuan-Kerja-Cleaning-Security.pdf',
+    fileSize: '2.1 MB',
+    downloadUrl: '#',
     desc: 'Penyediaan alih daya tenaga pengamanan dan kebersihan gedung kementerian.'
   }
 ];

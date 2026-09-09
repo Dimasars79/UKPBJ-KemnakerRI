@@ -141,7 +141,11 @@ export default function AdminPortalPage() {
     deadline: '25 Sep 2026',
     method: 'Tender - Pascakualifikasi Satu File - Harga Terendah Sistem Gugur',
     docCount: 3,
-    desc: ''
+    desc: '',
+    fileName: '',
+    fileSize: '',
+    fileData: '',
+    downloadUrl: '#'
   });
 
   // Vendor Form Wizard State
@@ -484,7 +488,35 @@ export default function AdminPortalPage() {
     }
   };
 
-  // PACKAGE HANDLERS
+  // PACKAGE HANDLERS & FILE UPLOAD
+  const handlePackageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 8 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran dokumen pengadaan maksimal 8MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      const sizeStr = file.size > 1024 * 1024 
+        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+        : `${Math.round(file.size / 1024)} KB`;
+
+      setPackageFormData((prev) => ({
+        ...prev,
+        fileName: file.name,
+        fileSize: sizeStr,
+        fileData: result,
+        downloadUrl: result
+      }));
+      showNotification(`✓ File dokumen "${file.name}" (${sizeStr}) berhasil dimuat & siap disimpan ke LocalStorage!`);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSavePackage = (e: React.FormEvent) => {
     e.preventDefault();
     addPackage({
@@ -497,9 +529,13 @@ export default function AdminPortalPage() {
       deadline: packageFormData.deadline || '25 Sep 2026',
       method: packageFormData.method || 'Tender - Pascakualifikasi Satu File',
       docCount: 3,
-      desc: packageFormData.desc || ''
+      desc: packageFormData.desc || '',
+      fileName: packageFormData.fileName || 'Dokumen-Pengadaan.pdf',
+      fileSize: packageFormData.fileSize || '2.5 MB',
+      fileData: packageFormData.fileData || '',
+      downloadUrl: packageFormData.fileData || '#'
     });
-    showNotification('✓ Paket Pengadaan berhasil ditambahkan dan langsung tampil di Homepage Publik (/ & /#pengadaan)!');
+    showNotification('✓ Paket Pengadaan beserta lampiran dokumen berhasil disimpan ke LocalStorage & langsung tampil di Homepage Publik!');
     setShowPackageModal(false);
   };
 
@@ -3125,6 +3161,35 @@ export default function AdminPortalPage() {
                     <strong className={isDark ? 'text-slate-200' : 'text-slate-700'}>{pkg.unit}</strong>
                   </div>
 
+                  {/* Attachment Document Badge */}
+                  <div className={`p-2 rounded-xl border flex items-center justify-between gap-2 text-xs ${
+                    pkg.fileData 
+                      ? isDark ? 'bg-blue-950/20 border-blue-800/40 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-800'
+                      : isDark ? 'bg-slate-950/40 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'
+                  }`}>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <FileText className={`w-3.5 h-3.5 shrink-0 ${pkg.fileData ? 'text-blue-500' : 'text-slate-400'}`} />
+                      <span className="font-semibold text-[11px] truncate">
+                        {pkg.fileName || 'Dokumen-Pengadaan.pdf'}
+                      </span>
+                      <span className="text-[10px] text-slate-400 shrink-0 font-mono">
+                        ({pkg.fileSize || '2.5 MB'})
+                      </span>
+                    </div>
+
+                    {pkg.fileData && (
+                      <a
+                        href={pkg.fileData}
+                        download={pkg.fileName || `${pkg.code}-Dokumen.pdf`}
+                        className="px-2 py-0.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shrink-0"
+                        title="Unduh Dokumen Pengadaan"
+                      >
+                        <Download className="w-2.5 h-2.5" />
+                        <span>Unduh</span>
+                      </a>
+                    )}
+                  </div>
+
                   <div className={`pt-3 border-t flex justify-between items-center ${
                     isDark ? 'border-slate-800' : 'border-slate-100'
                   }`}>
@@ -4512,6 +4577,80 @@ export default function AdminPortalPage() {
                   />
                 </div>
 
+                {/* DOKUMEN / FILE PENGADAAN (UPLOAD KE LOCALSTORAGE) */}
+                <div className={`p-4 rounded-2xl border ${
+                  isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+                } space-y-3`}>
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold flex items-center gap-1.5 text-xs text-blue-400">
+                      <FileText className="w-4 h-4" />
+                      <span>Lampirkan Dokumen Pengadaan (KAK / Spesifikasi Teknis / Dokumen Pemilihan)</span>
+                    </label>
+                    <span className="text-[10px] text-slate-400">PDF, DOCX, ZIP (Maks 8MB)</span>
+                  </div>
+
+                  {packageFormData.fileName ? (
+                    <div className={`p-3 rounded-xl border flex items-center justify-between gap-3 ${
+                      isDark ? 'bg-blue-950/30 border-blue-800/60' : 'bg-blue-50/70 border-blue-200'
+                    }`}>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
+                          <FileText className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className={`font-bold text-xs truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            {packageFormData.fileName}
+                          </p>
+                          <p className="text-[10px] text-emerald-500 font-semibold">
+                            ✓ {packageFormData.fileSize || 'Ukuran valid'} • Tersimpan di LocalStorage
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {packageFormData.fileData && (
+                          <a
+                            href={packageFormData.fileData}
+                            download={packageFormData.fileName}
+                            className="px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors"
+                            title="Uji unduh dokumen"
+                          >
+                            <Download className="w-3 h-3" />
+                            <span>Tes Unduh</span>
+                          </a>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setPackageFormData((prev) => ({ ...prev, fileName: '', fileSize: '', fileData: '', downloadUrl: '#' }))}
+                          className="px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-[10px] font-bold transition-colors cursor-pointer"
+                        >
+                          Hapus File
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <label className={`border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all ${
+                      isDark 
+                        ? 'border-slate-800 hover:border-blue-500 hover:bg-blue-950/10' 
+                        : 'border-slate-300 hover:border-blue-500 hover:bg-blue-50/30'
+                    }`}>
+                      <Upload className="w-6 h-6 text-blue-500 mb-1" />
+                      <span className="text-xs font-bold text-blue-400">
+                        Klik untuk Memilih File Dokumen Pengadaan
+                      </span>
+                      <span className="text-[10px] text-slate-400 mt-0.5">
+                        File akan otomatis dikonversi ke Base64 & disimpan di database LocalStorage
+                      </span>
+                      <input 
+                        type="file" 
+                        accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.rar"
+                        className="hidden" 
+                        onChange={handlePackageFileUpload} 
+                      />
+                    </label>
+                  )}
+                </div>
+
                 <div className="flex justify-end gap-3 pt-4">
                   <button
                     type="button"
@@ -4597,33 +4736,58 @@ export default function AdminPortalPage() {
                 <div>
                   <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Dokumen Pengadaan Resmi</h4>
                   <div className="space-y-2">
+                    {/* Primary Attachment Document */}
                     <div className={`flex items-center justify-between p-3 rounded-xl border ${
-                      isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                      selectedPackage.fileData
+                        ? isDark ? 'bg-blue-950/30 border-blue-800/60' : 'bg-blue-50/70 border-blue-200'
+                        : isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
-                      <div className="flex items-center space-x-3">
-                        <FileText className="w-5 h-5 text-red-500" />
-                        <div>
-                          <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>KAK.pdf</p>
-                          <p className="text-[10px] text-slate-400">2.5 MB • Kerangka Acuan Kerja</p>
+                      <div className="flex items-center space-x-3 min-w-0">
+                        <FileText className="w-5 h-5 text-blue-500 shrink-0" />
+                        <div className="min-w-0">
+                          <p className={`text-xs font-bold truncate ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                            {selectedPackage.fileName || 'Kerangka Acuan Kerja (KAK).pdf'}
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            {selectedPackage.fileSize || '2.5 MB'} • {selectedPackage.fileData ? '✓ File Terunggah (LocalStorage)' : 'Dokumen Resmi Unit Kerja'}
+                          </p>
                         </div>
                       </div>
-                      <button className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1 cursor-pointer">
-                        <Download className="w-3 h-3" />
-                        <span>Unduh</span>
-                      </button>
+                      {selectedPackage.fileData ? (
+                        <a 
+                          href={selectedPackage.fileData}
+                          download={selectedPackage.fileName || `${selectedPackage.code}-KAK.pdf`}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors shrink-0"
+                          title="Unduh dokumen asli dari database"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Unduh File</span>
+                        </a>
+                      ) : (
+                        <button 
+                          onClick={() => showNotification(`Mengunduh template ${selectedPackage.fileName || 'KAK.pdf'}...`)}
+                          className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Download className="w-3 h-3" />
+                          <span>Unduh</span>
+                        </button>
+                      )}
                     </div>
 
                     <div className={`flex items-center justify-between p-3 rounded-xl border ${
                       isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
                     }`}>
                       <div className="flex items-center space-x-3">
-                        <FileText className="w-5 h-5 text-blue-500" />
+                        <FileText className="w-5 h-5 text-emerald-500" />
                         <div>
-                          <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>Spesifikasi Teknis.pdf</p>
-                          <p className="text-[10px] text-slate-400">1.8 MB • Dokumen Teknis</p>
+                          <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>Spesifikasi Teknis & Rincian HPS.pdf</p>
+                          <p className="text-[10px] text-slate-400">1.8 MB • Dokumen Teknis Resmi</p>
                         </div>
                       </div>
-                      <button className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1 cursor-pointer">
+                      <button 
+                        onClick={() => showNotification('Mengunduh Spesifikasi Teknis...')}
+                        className="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
+                      >
                         <Download className="w-3 h-3" />
                         <span>Unduh</span>
                       </button>
