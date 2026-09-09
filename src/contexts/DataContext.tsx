@@ -203,15 +203,41 @@ const DEFAULT_NEWS: NewsItem[] = [
   },
   {
     id: 'NWS-004',
+    title: 'Implementasi E-Katalog V6 untuk Percepatan Transaksi Belanja Sektoral',
+    category: 'Berita PBJ',
+    author: 'Tim Transformasi Digital PBJ',
+    date: '01 Agu 2026',
+    views: 1120,
+    status: 'Published',
+    excerpt: 'Optimalisasi sistem katalog elektronik versi 6 guna mempermudah satuan kerja dalam memilih produk terverifikasi LKPP.',
+    content: 'Penerapan e-Katalog V6 mempercepat siklus pengadaan barang/jasa pemerintah dengan efisiensi waktu hingga 60%.',
+    imageUrl: '/news/news-1.png',
+    syncFrontend: true
+  },
+  {
+    id: 'NWS-005',
+    title: 'Penandatanganan Pakta Integritas Pejabat Pembuat Komitmen Tahun 2026',
+    category: 'Siaran Pers',
+    author: 'Inspektorat Jenderal Kemnaker',
+    date: '28 Jul 2026',
+    views: 780,
+    status: 'Published',
+    excerpt: 'Komitmen bersama seluruh PPK untuk menjaga transparansi, netralitas, dan akuntabilitas pengelolaan anggaran.',
+    content: 'Seluruh Pejabat Pembuat Komitmen Kemnaker menandatangani pakta integritas sebagai komitmen anti-korupsi dalam proses pengadaan.',
+    imageUrl: '/news/news-2.png',
+    syncFrontend: true
+  },
+  {
+    id: 'NWS-006',
     title: 'Draf Rencana Pengadaan Peralatan Pelatihan Balai Vokasi Tahun 2027',
     category: 'Siaran Pers',
     author: 'Ditjen Binalavotas',
-    date: '02 Agu 2026',
+    date: '20 Jul 2026',
     views: 310,
     status: 'Draft',
     excerpt: 'Rancangan awal spesifikasi teknis dan analisis kebutuhan alat kerja laboratorium vokasi.',
     content: 'Draft internal persiapan Rencana Umum Pengadaan (SiRUP) tahun anggaran mendatang.',
-    imageUrl: '/news/news-1.png',
+    imageUrl: '/news/news-3.png',
     syncFrontend: false
   }
 ];

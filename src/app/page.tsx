@@ -5,7 +5,6 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ServiceCard } from '@/components/cards/ServiceCard';
-import { NewsCard } from '@/components/cards/NewsCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Users, Globe, ArrowRight, ShieldCheck, ChevronDown, Quote, ShoppingCart, BookOpen, Scale, Clock, TrendingDown, Award, ThumbsUp, Calendar, HelpCircle, AlertCircle, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
@@ -13,14 +12,14 @@ import Image from 'next/image';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { PengadaanSection } from '@/components/home/PengadaanSection';
+import { BeritaSection } from '@/components/home/BeritaSection';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { useData } from '@/contexts/DataContext';
 
 export default function Home() {
   const { t } = useLanguage();
-  const { newsList, agendaList } = useData();
-  const publishedNews = newsList.filter(n => n.status === 'Published');
+  const { agendaList } = useData();
   const latestAgenda = agendaList[0] || null;
 
   return (
@@ -352,37 +351,8 @@ export default function Home() {
         {/* 3.5 Menu Pengadaan Barang & Jasa */}
         <PengadaanSection />
 
-        {/* 4. Berita / Pengumuman Terkini */}
-        <section className="py-20 bg-gradient-to-bl from-white via-blue-50/30 to-slate-50 border-t border-slate-100 relative overflow-hidden" id="berita">
-          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent-gold/5 rounded-full blur-[100px] translate-x-1/4 translate-y-1/4 pointer-events-none" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-            <FadeIn>
-              <div className="flex justify-between items-end mb-8">
-                <SectionHeading title={t('home.news_title')} />
-              </div>
-            </FadeIn>
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {publishedNews.slice(0, 3).map((item, idx) => (
-                <StaggerItem key={item.id}>
-                  <NewsCard 
-                    featured={idx === 0}
-                    title={item.title}
-                    summary={item.excerpt}
-                    date={item.date}
-                    category={item.category}
-                    imageUrl={item.imageUrl || `/news/news-${(idx % 3) + 1}.png`}
-                    href="/informasi"
-                  />
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-            <FadeIn direction="up" delay={0.4} className="mt-8 text-center">
-              <Link href="/informasi" className="inline-flex items-center text-primary-blue font-bold hover:text-primary-navy transition-colors">
-                {t('home.news_more')} <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
-            </FadeIn>
-          </div>
-        </section>
+        {/* 4. Berita & Pengumuman Carousel */}
+        <BeritaSection />
 
         {/* 5. Agenda & Poster Kegiatan */}
         <section className="py-20 bg-primary-navy text-white relative overflow-hidden" id="agenda">
