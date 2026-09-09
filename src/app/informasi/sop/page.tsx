@@ -29,56 +29,15 @@ type SOPItem = {
   steps: string[];
 };
 
-const DEFAULT_STATIC_SOPS: SOPItem[] = [
-  {
-    id: 'SOP-STAT-1',
-    code: 'SOP-PBJ-01/2026',
-    category: 'tata-kelola',
-    categoryLabel: 'Tata Kelola',
-    title: 'SOP Registrasi, Verifikasi, dan Validasi Akun SPSE',
-    date: '04 Desember 2023',
-    revision: 'Rev. 02 (2026)',
-    fileSize: '1.8 MB',
-    desc: 'Standar baku verifikasi identitas badan usaha dan legalitas dokumen penyedia sebelum diaktifkan pada portal SPSE Kemnaker.',
-    steps: ['Pendaftaran Online Penyedia', 'Pemeriksaan Dokumen Fisik/Legalitas', 'Verifikasi Petugas Verifikator', 'Aktivasi Akun Terintegrasi']
-  },
-  {
-    id: 'SOP-STAT-2',
-    code: 'SOP-PBJ-02/2026',
-    category: 'tata-kelola',
-    categoryLabel: 'Sistem Informasi',
-    title: 'SOP Pengadaan Barang dan Jasa Berbasis Sistem Informasi',
-    date: '04 Desember 2023',
-    revision: 'Rev. 01 (2025)',
-    fileSize: '2.1 MB',
-    desc: 'Pedoman alur tata kelola operasional seluruh transaksi pengadaan digital melalui aplikasi SPSE, E-Katalog, dan Bela Pengadaan.',
-    steps: ['Pembuatan Paket Elektronik', 'Pemberitahuan Undangan Tender', 'Penyampaian Penawaran Terenkripsi', 'Pengumuman Pemenang Digital']
-  },
-  {
-    id: 'SOP-STAT-3',
-    code: 'SOP-PBJ-03/2026',
-    category: 'risiko',
-    categoryLabel: 'Manajemen Risiko',
-    title: 'SOP Pengendalian dan Mitigasi Risiko Pengadaan Barang/Jasa',
-    date: '04 Desember 2023',
-    revision: 'Rev. 03 (2026)',
-    fileSize: '2.4 MB',
-    desc: 'Mekanisme identifikasi dini, analisis potensi hambatan pelaksanaan, serta langkah pencegahan risiko hukum dan keterlambatan proyek.',
-    steps: ['Identifikasi Risiko Pra-Tender', 'Penyusunan Matriks Mitigasi', 'Monitoring Berkala Pelaksanaan', 'Evaluasi Pasca Serah Terima']
-  }
-];
-
 export default function SOPPage() {
   const { sopList } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeFlowchartSOP, setActiveFlowchartSOP] = useState<SOPItem | null>(null);
 
-  // Merge dynamic SOPs from backend context
+  // Dynamic SOPs directly from Supabase / DataContext
   const dynamicSops: SOPItem[] = useMemo(() => {
-    if (!sopList || sopList.length === 0) return DEFAULT_STATIC_SOPS;
-
-    const dynamicMapped: SOPItem[] = sopList
+    return sopList
       .filter(item => item.status === 'Berlaku')
       .map(item => ({
         id: item.id,
@@ -90,7 +49,7 @@ export default function SOPPage() {
         revision: item.revisi,
         fileSize: item.fileSize || '2.0 MB',
         fileName: item.fileName || `${item.kode.replace(/\//g, '-')}.pdf`,
-        fileData: item.fileData,
+        fileData: item.downloadUrl || item.fileData,
         desc: item.deskripsi || `Standar operasional prosedur resmi ${item.unit} dengan ${item.tahapanCount} langkah terstandarisasi.`,
         steps: [
           'Pemeriksaan dan Verifikasi Permohonan Dokumen',
@@ -99,8 +58,6 @@ export default function SOPPage() {
           'Persetujuan & Penerbitan Dokumen Resmi Sesuai SOP'
         ]
       }));
-
-    return [...dynamicMapped, ...DEFAULT_STATIC_SOPS];
   }, [sopList]);
 
   const sopCategories = useMemo(() => [

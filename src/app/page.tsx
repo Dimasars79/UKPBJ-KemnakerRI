@@ -19,7 +19,7 @@ import { useData } from '@/contexts/DataContext';
 
 export default function Home() {
   const { t } = useLanguage();
-  const { agendaList } = useData();
+  const { agendaList, siteSettings } = useData();
   const latestAgenda = agendaList[0] || null;
 
   return (
@@ -116,7 +116,15 @@ export default function Home() {
           {/* Marquee Text */}
           <div className="absolute bottom-0 left-0 w-full overflow-hidden bg-[#0a2342]/80 py-3 border-t border-white/10 z-20 backdrop-blur-sm">
             <p className="animate-marquee whitespace-nowrap text-xs md:text-sm font-bold tracking-[0.1em] text-[#f2b33a]">
-              Informasi Pengadaan Barang/Jasa &bull; Transparansi dan Akuntabilitas Pengadaan &bull; Pengumuman Terbaru &bull; Regulasi dan Kebijakan Pengadaan &bull; Rencana Umum Pengadaan &bull; Layanan Pengadaan untuk Penyedia &bull; Kementerian Ketenagakerjaan Republik Indonesia &nbsp;&nbsp;&nbsp;&nbsp; Informasi Pengadaan Barang/Jasa &bull; Transparansi dan Akuntabilitas Pengadaan &bull; Pengumuman Terbaru &bull; Regulasi dan Kebijakan Pengadaan &bull; Rencana Umum Pengadaan &bull; Layanan Pengadaan untuk Penyedia &bull; Kementerian Ketenagakerjaan Republik Indonesia
+              {siteSettings.announcementActive && siteSettings.announcementBanner ? (
+                <>
+                  {siteSettings.announcementBanner} &bull; {siteSettings.announcementBanner} &bull; Kementerian Ketenagakerjaan Republik Indonesia &nbsp;&nbsp;&nbsp;&nbsp; {siteSettings.announcementBanner} &bull; {siteSettings.announcementBanner} &bull; Kementerian Ketenagakerjaan Republik Indonesia
+                </>
+              ) : (
+                <>
+                  Informasi Pengadaan Barang/Jasa &bull; Transparansi dan Akuntabilitas Pengadaan &bull; Pengumuman Terbaru &bull; Regulasi dan Kebijakan Pengadaan &bull; Rencana Umum Pengadaan &bull; Layanan Pengadaan untuk Penyedia &bull; Kementerian Ketenagakerjaan Republik Indonesia &nbsp;&nbsp;&nbsp;&nbsp; Informasi Pengadaan Barang/Jasa &bull; Transparansi dan Akuntabilitas Pengadaan &bull; Pengumuman Terbaru &bull; Regulasi dan Kebijakan Pengadaan &bull; Rencana Umum Pengadaan &bull; Layanan Pengadaan untuk Penyedia &bull; Kementerian Ketenagakerjaan Republik Indonesia
+                </>
+              )}
             </p>
           </div>
         </section>

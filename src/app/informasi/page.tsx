@@ -14,7 +14,7 @@ import {
 import { useData } from '@/contexts/DataContext';
 
 export default function InformasiPage() {
-  const { newsList, agendaList } = useData();
+  const { newsList, agendaList, regulasiList, packagesList, siteSettings } = useData();
   const publishedNews = newsList.filter(n => n.status === 'Published');
   
   const recentUpdates = publishedNews.map((news) => ({
@@ -26,7 +26,7 @@ export default function InformasiPage() {
   }));
 
   const serviceStatuses = [
-    { name: 'SPSE Kemnaker', status: 'NORMAL', icon: <Laptop className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+    { name: 'SPSE Kemnaker', status: siteSettings.serverStatus === 'Maintenance' ? 'MAINTENANCE' : 'NORMAL', icon: <Laptop className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
     { name: 'Portal Informasi', status: 'NORMAL', icon: <Globe className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
     { name: 'Layanan Konsultasi', status: 'NORMAL', icon: <MessageSquare className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
     { name: 'Download Dokumen', status: 'NORMAL', icon: <Download className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
@@ -194,7 +194,7 @@ export default function InformasiPage() {
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
                     <FileText className="w-5 h-5" />
                   </div>
-                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">128</h3>
+                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">{regulasiList.length}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Regulasi</p>
                   <p className="text-[11px] text-slate-500 mb-3">Total Regulasi</p>
                   <div className="mt-auto flex items-center text-xs font-bold text-primary-navy group-hover:text-primary-blue">
@@ -222,9 +222,9 @@ export default function InformasiPage() {
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
                     <Megaphone className="w-5 h-5" />
                   </div>
-                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">36</h3>
-                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Pengumuman</p>
-                  <p className="text-[11px] text-slate-500 mb-3">Pengumuman Aktif</p>
+                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">{packagesList.length}</h3>
+                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Paket PBJ</p>
+                  <p className="text-[11px] text-slate-500 mb-3">Paket Terdaftar</p>
                   <div className="mt-auto flex items-center text-xs font-bold text-primary-navy group-hover:text-primary-blue">
                     <span>Lihat Semua</span>
                     <ArrowRight className="w-3 h-3 ml-1" />

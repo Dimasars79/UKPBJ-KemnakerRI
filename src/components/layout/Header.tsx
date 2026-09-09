@@ -15,8 +15,10 @@ import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
 import { SearchPalette } from '@/components/ui/SearchPalette';
+import { useData } from '@/contexts/DataContext';
 
 export function Header() {
+  const { newsList, packagesList, siteSettings } = useData();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -405,38 +407,50 @@ export function Header() {
                     </div>
                     
                     <div className="max-h-80 overflow-y-auto">
-                      <div className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3">
-                        <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-1">
-                          <AlertTriangle className="w-4 h-4 text-red-600" />
+                      {siteSettings.announcementActive && siteSettings.announcementBanner && (
+                        <div className="p-4 border-b border-amber-100 bg-amber-50/50 hover:bg-amber-50 transition-colors flex gap-3">
+                          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <AlertTriangle className="w-4 h-4 text-amber-600" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-amber-900 mb-1">Pengumuman Resmi</p>
+                            <p className="text-[11px] text-amber-800 leading-tight">{siteSettings.announcementBanner}</p>
+                            <p className="text-[9px] text-amber-600 mt-2">Status: Aktif</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-xs font-bold text-slate-800 mb-1">Peringatan Sistem</p>
-                          <p className="text-[11px] text-slate-500 leading-tight">Server SPSE akan mengalami pemeliharaan rutin malam ini jam 23:00 WIB.</p>
-                          <p className="text-[9px] text-slate-400 mt-2">15 menit yang lalu</p>
-                        </div>
-                      </div>
-                      
-                      <div className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3">
-                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
-                          <CheckCircle2 className="w-4 h-4 text-green-600" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-slate-800 mb-1">Pengumuman Tender</p>
-                          <p className="text-[11px] text-slate-500 leading-tight">Tender Baru: Pengadaan Fasilitas Pelatihan Kemenaker telah dibuka.</p>
-                          <p className="text-[9px] text-slate-400 mt-2">2 jam yang lalu</p>
-                        </div>
-                      </div>
+                      )}
 
-                      <div className="p-4 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3">
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                          <FileText className="w-4 h-4 text-blue-600" />
+                      {packagesList.slice(0, 2).map((pkg) => (
+                        <div key={pkg.id} className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors flex gap-3">
+                          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-slate-800 mb-1">{pkg.category}: {pkg.code}</p>
+                            <p className="text-[11px] text-slate-500 leading-tight line-clamp-2">{pkg.title}</p>
+                            <p className="text-[9px] text-slate-400 mt-2">{pkg.status} &bull; {pkg.hps}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-xs font-bold text-slate-800 mb-1">Regulasi Baru</p>
-                          <p className="text-[11px] text-slate-500 leading-tight">Dokumen Standar Kontrak versi 2026 telah diterbitkan.</p>
-                          <p className="text-[9px] text-slate-400 mt-2">1 hari yang lalu</p>
+                      ))}
+
+                      {newsList.filter(n => n.status === 'Published').slice(0, 2).map((news) => (
+                        <div key={news.id} className="p-4 hover:bg-slate-50 transition-colors flex gap-3">
+                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <FileText className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-slate-800 mb-1">{news.category}</p>
+                            <p className="text-[11px] text-slate-500 leading-tight line-clamp-2">{news.title}</p>
+                            <p className="text-[9px] text-slate-400 mt-2">{news.date}</p>
+                          </div>
                         </div>
-                      </div>
+                      ))}
+
+                      {!siteSettings.announcementActive && packagesList.length === 0 && newsList.length === 0 && (
+                        <div className="p-6 text-center text-slate-400 text-xs">
+                          Belum ada notifikasi baru saat ini.
+                        </div>
+                      )}
                     </div>
                     
                     <div className="p-3 bg-slate-50 border-t border-slate-100">

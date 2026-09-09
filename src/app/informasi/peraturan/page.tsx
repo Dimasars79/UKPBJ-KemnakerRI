@@ -21,6 +21,7 @@ type Regulation = {
   date: string;
   status: 'Berlaku' | 'Diubah' | 'Dicabut';
   fileSize: string;
+  downloadUrl?: string;
   desc: string;
 };
 
@@ -37,59 +38,14 @@ const mapCategoryToId = (kategori: string): string => {
   }
 };
 
-const DEFAULT_STATIC_REGULATIONS: Regulation[] = [
-  {
-    id: 'REG-STAT-1',
-    category: 'uu',
-    nomor: 'UU No. 03 Tahun 2014',
-    title: 'Undang-Undang Nomor 03 Tahun 2014 tentang Perindustrian',
-    date: '24 November 2023',
-    status: 'Berlaku',
-    fileSize: '1.4 MB',
-    desc: 'Mengatur mengenai penyelenggaraan perindustrian, standardisasi industri, dan pemanfaatan produk dalam negeri.'
-  },
-  {
-    id: 'REG-STAT-2',
-    category: 'uu',
-    nomor: 'UU No. 17 Tahun 2003',
-    title: 'Undang-Undang Nomor 17 Tahun 2003 tentang Keuangan Negara',
-    date: '01 November 2023',
-    status: 'Berlaku',
-    fileSize: '980 KB',
-    desc: 'Asas-asas umum pengelolaan keuangan negara dalam rangka mendukung terwujudnya tata kelola pemerintahan yang baik.'
-  },
-  {
-    id: 'REG-STAT-3',
-    category: 'perpres',
-    nomor: 'Perpres No. 12 Tahun 2021',
-    title: 'Peraturan Presiden Nomor 12 Tahun 2021 tentang Perubahan atas Perpres No. 16 Tahun 2018 tentang Pengadaan Barang/Jasa Pemerintah',
-    date: '15 Januari 2024',
-    status: 'Berlaku',
-    fileSize: '2.8 MB',
-    desc: 'Landasan hukum utama pelaksanaan pengadaan barang dan jasa pemerintah Republik Indonesia.'
-  },
-  {
-    id: 'REG-STAT-4',
-    category: 'pp',
-    nomor: 'PP No. 29 Tahun 2018',
-    title: 'Peraturan Pemerintah Nomor 29 Tahun 2018 tentang Pemberdayaan Industri',
-    date: '12 Desember 2023',
-    status: 'Berlaku',
-    fileSize: '1.7 MB',
-    desc: 'Ketentuan tentang peningkatan penggunaan produk dalam negeri (P3DN) dan kewajiban TKDN dalam belanja pemerintah.'
-  }
-];
-
 export default function PeraturanPage() {
   const { regulasiList } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Merge dynamic regulations from backend context
+  // Dynamic regulations directly from Supabase / DataContext
   const dynamicRegulations: Regulation[] = useMemo(() => {
-    if (!regulasiList || regulasiList.length === 0) return DEFAULT_STATIC_REGULATIONS;
-
-    const dynamicMapped: Regulation[] = regulasiList
+    return regulasiList
       .filter(item => item.status === 'Aktif')
       .map(item => ({
         id: item.id,
@@ -99,10 +55,9 @@ export default function PeraturanPage() {
         date: `Tahun ${item.tahun}`,
         status: 'Berlaku',
         fileSize: item.fileSize || '2.0 MB',
+        downloadUrl: item.downloadUrl,
         desc: item.tentang
       }));
-
-    return [...dynamicMapped, ...DEFAULT_STATIC_REGULATIONS];
   }, [regulasiList]);
 
   const categories = useMemo(() => [
@@ -339,21 +294,39 @@ export default function PeraturanPage() {
 
                           {/* Action Buttons */}
                           <div className="flex sm:flex-col items-center gap-2 flex-shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                            <button 
-                              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
-                              title="Unduh Salinan Resmi"
-                            >
-                              <Download className="w-3.5 h-3.5" />
-                              <span>Unduh PDF</span>
-                            </button>
+                            {item.downloadUrl ? (
+                              <a 
+                                href={item.downloadUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download={`${item.nomor.replace(/[\/\s]/g, '_')}.pdf`}
+                                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
+                                title="Unduh Salinan Resmi"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                <span>Unduh PDF</span>
+                              </a>
+                            ) : (
+                              <button 
+                                onClick={() => alert(`Mengunduh dokumen regulasi resmi: ${item.nomor} (${item.fileSize})`)}
+                                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
+                                title="Unduh Salinan Resmi"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                <span>Unduh PDF</span>
+                              </button>
+                            )}
 
-                            <button 
+                            <a 
+                              href={item.downloadUrl || `https://jdih.kemnaker.go.id`}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors"
                               title="Lihat Pratinjau Dokumen"
                             >
                               <Eye className="w-3.5 h-3.5 text-slate-500" />
                               <span>Pratinjau</span>
-                            </button>
+                            </a>
                           </div>
                         </div>
                       </motion.div>
