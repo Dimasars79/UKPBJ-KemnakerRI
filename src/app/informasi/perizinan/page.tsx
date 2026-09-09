@@ -331,7 +331,7 @@ export default function PerizinanPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* LEFT SIDEBAR - KATEGORI (Matching Screenshot Style) */}
-            <div className="lg:col-span-4 bg-white rounded-2xl p-5 shadow-xs border border-slate-200/80 sticky top-24">
+            <div className="lg:col-span-4 bg-white rounded-2xl p-5 shadow-xs border border-slate-200/80 static lg:sticky lg:top-24">
               <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 pb-3 border-b border-slate-100 flex items-center justify-between">
                 <span>Kategori</span>
                 <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">

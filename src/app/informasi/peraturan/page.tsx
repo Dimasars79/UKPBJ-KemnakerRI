@@ -197,7 +197,7 @@ export default function PeraturanPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* ================= LEFT SIDEBAR (Categories) ================= */}
-            <div className="lg:col-span-4 sticky top-28">
+            <div className="lg:col-span-4 static lg:sticky lg:top-28">
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div className="p-5 bg-gradient-to-r from-primary-navy to-[#113264] text-white flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
