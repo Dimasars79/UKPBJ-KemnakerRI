@@ -2435,7 +2435,7 @@ export default function AdminPortalPage() {
                         </td>
                         <td className="p-4 text-slate-400 text-[11px]">
                           <div>{item.date}</div>
-                          <div className="text-[10px] text-slate-500">{item.views.toLocaleString()} pembaca</div>
+                          <div className="text-[10px] text-slate-500">{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} pembaca</div>
                         </td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">

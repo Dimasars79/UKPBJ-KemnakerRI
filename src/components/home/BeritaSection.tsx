@@ -170,7 +170,7 @@ export function BeritaSection() {
                   {item.views > 0 && (
                     <div className="flex items-center gap-1 text-[11px] text-white/80 font-mono drop-shadow-sm">
                       <Eye className="w-3 h-3" />
-                      <span>{item.views.toLocaleString()}</span>
+                      <span>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                     </div>
                   )}
                 </div>
