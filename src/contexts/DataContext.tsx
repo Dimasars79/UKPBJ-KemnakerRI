@@ -257,6 +257,7 @@ const DEFAULT_AGENDAS: AgendaItem[] = [
     location: 'Auditorium Gedung A Kemnaker & Zoom',
     organizer: 'Biro Perencanaan & PBJ',
     capacity: '200 Peserta',
+    imageUrl: '/poster_kegiatan.jpg',
     status: 'Terjadwal',
     syncFrontend: true
   },

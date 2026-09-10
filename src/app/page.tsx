@@ -406,13 +406,14 @@ export default function Home() {
                   {t('home.agenda_btn')} <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </FadeIn>
-              <FadeIn direction="left" delay={0.2} className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group">
+              <FadeIn direction="left" delay={0.2} className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group aspect-square max-w-lg mx-auto w-full bg-slate-900 flex items-center justify-center">
                 <Image 
-                  src="/poster_kegiatan.jpg" 
-                  alt="Poster Bimbingan Teknis Pengadaan Barang dan Jasa" 
+                  src={latestAgenda?.imageUrl || "/poster_kegiatan.jpg"} 
+                  alt={latestAgenda?.title || "Poster Bimbingan Teknis Pengadaan Barang dan Jasa"} 
                   width={800} 
                   height={800} 
-                  className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500"
+                  unoptimized={Boolean(latestAgenda?.imageUrl && (latestAgenda.imageUrl.startsWith('http') || latestAgenda.imageUrl.startsWith('data:')))}
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-navy/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                   <p className="text-white font-medium">{t('home.agenda_hint')}</p>
