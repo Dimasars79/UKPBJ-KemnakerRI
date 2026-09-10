@@ -18,6 +18,39 @@ const data = [
   { name: 'Des', Selesai: 428 },
 ];
 
+interface TooltipPayloadItem {
+  color?: string;
+  fill?: string;
+  name: string;
+  value: number | string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-slate-950/95 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-700/80 shadow-2xl text-xs space-y-1.5 z-50">
+        <p className="font-bold text-slate-200 border-b border-slate-800/80 pb-1 flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-blue-400" />
+          <span>Bulan {label} 2026</span>
+        </p>
+        <div className="flex items-center justify-between gap-5 text-[11px] pt-0.5">
+          <span className="text-slate-400 font-medium">Paket Selesai:</span>
+          <span className="font-mono font-bold text-blue-400">
+            {payload[0].value} Paket
+          </span>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export function PerformanceChart() {
   return (
     <div className="h-[280px] w-full flex flex-col">
@@ -29,21 +62,22 @@ export function PerformanceChart() {
           >
             <defs>
               <linearGradient id="colorSelesai" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3}/>
+                <stop offset="5%" stopColor="#2563eb" stopOpacity={0.4}/>
                 <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-            <XAxis dataKey="name" tick={{fill: '#94a3b8', fontSize: 11}} tickLine={false} axisLine={false} />
-            <YAxis tick={{fill: '#94a3b8', fontSize: 11}} tickLine={false} axisLine={false} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.4} />
+            <XAxis dataKey="name" tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
+            <YAxis tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
             <Tooltip 
-              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
-              cursor={{ stroke: '#94a3b8', strokeWidth: 1, strokeDasharray: '5 5' }}
+              content={<CustomTooltip />}
+              cursor={{ stroke: 'rgba(59, 130, 246, 0.4)', strokeWidth: 1.5, strokeDasharray: '4 4' }}
             />
-            <Area type="monotone" dataKey="Selesai" stroke="#2563eb" strokeWidth={3} fillOpacity={1} fill="url(#colorSelesai)" />
+            <Area type="monotone" dataKey="Selesai" stroke="#3b82f6" strokeWidth={2.5} fillOpacity={1} fill="url(#colorSelesai)" />
           </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>
   );
 }
+
