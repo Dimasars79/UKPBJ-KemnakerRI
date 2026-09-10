@@ -1987,13 +1987,13 @@ export default function AdminPortalPage() {
 
                     {/* CMS Hub 6: Paket Tender */}
                     <div className={`p-5 rounded-2xl border transition-all space-y-3 ${
-                      isDark ? 'bg-slate-900/90 border-slate-800 hover:border-primary-blue/50' : 'bg-white border-slate-200/90 shadow-sm hover:border-primary-blue/50'
+                      isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50' : 'bg-white border-slate-200/90 shadow-sm hover:border-indigo-500/50'
                     }`}>
                       <div className="flex justify-between items-start">
-                        <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 flex items-center justify-center">
                           <Package className="w-5 h-5" />
                         </div>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
                           {packagesList.length} Paket
                         </span>
                       </div>
@@ -2006,18 +2006,18 @@ export default function AdminPortalPage() {
                       <div className="flex items-center gap-2 pt-2">
                         <button
                           onClick={() => setActiveTab('paket')}
-                          className="flex-1 py-2 rounded-xl bg-blue-500/10 hover:bg-blue-600 text-blue-400 hover:text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                          className="flex-1 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                         >
-                          <Search className="w-3.5 h-3.5" />
+                          <Package className="w-3.5 h-3.5" />
                           <span>Kelola Paket</span>
                         </button>
                         <Link
-                          href="/#pengadaan"
+                          href="/informasi/pemilu"
                           target="_blank"
                           className={`p-2 rounded-xl border transition-colors ${
                             isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                           }`}
-                          title="Lihat Frontend Pengadaan"
+                          title="Lihat Pengumuman Tender Frontend"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
                         </Link>
