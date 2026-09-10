@@ -54,6 +54,8 @@ export interface RegulasiItem {
   tahun: string;
   kategori: 'Peraturan Menteri' | 'Peraturan LKPP' | 'Keputusan Menteri' | 'Surat Edaran' | 'Undang-Undang' | 'Peraturan Pemerintah';
   fileSize: string;
+  fileName?: string;
+  fileData?: string;
   downloadUrl?: string;
   status: 'Aktif' | 'Draft' | 'Dicabut';
   syncFrontend: boolean;

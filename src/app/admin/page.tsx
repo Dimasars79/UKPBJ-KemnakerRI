@@ -192,6 +192,9 @@ export default function AdminPortalPage() {
     tahun: '2026',
     kategori: 'Peraturan Menteri',
     fileSize: '2.5 MB',
+    fileName: '',
+    fileData: '',
+    downloadUrl: '',
     status: 'Aktif'
   });
 
@@ -337,11 +340,56 @@ export default function AdminPortalPage() {
     }
   };
 
-  // REGULASI HANDLERS
+  // REGULASI HANDLERS & FILE UPLOAD
+  const handleRegulasiFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 15 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran dokumen regulasi maksimal 15MB.');
+      return;
+    }
+
+    showNotification('Mengunggah dokumen regulasi ke Supabase Storage...');
+    const uploadRes = await uploadDocument(file, 'regulasi');
+
+    if (uploadRes.publicUrl) {
+      setRegulasiFormData((prev) => ({
+        ...prev,
+        fileName: uploadRes.fileName,
+        fileSize: uploadRes.fileSize,
+        downloadUrl: uploadRes.publicUrl
+      }));
+      showNotification(`✓ File Regulasi "${uploadRes.fileName}" berhasil diunggah ke Supabase Storage & tersinkronisasi!`);
+    } else {
+      // Fallback to local Base64
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        const sizeStr = file.size > 1024 * 1024 
+          ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+          : `${Math.round(file.size / 1024)} KB`;
+
+        setRegulasiFormData((prev) => ({
+          ...prev,
+          fileName: file.name,
+          fileSize: sizeStr,
+          fileData: result,
+          downloadUrl: result
+        }));
+        showNotification(`✓ File "${file.name}" dimuat & siap disimpan.`);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveRegulasi = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingRegulasi) {
-      updateRegulasi(editingRegulasi.id, regulasiFormData);
+      updateRegulasi(editingRegulasi.id, {
+        ...regulasiFormData,
+        downloadUrl: regulasiFormData.downloadUrl || regulasiFormData.fileData || '#'
+      });
       showNotification('✓ Regulasi berhasil diperbarui dan disinkronkan ke Frontend (/informasi/peraturan)!');
     } else {
       addRegulasi({
@@ -350,7 +398,9 @@ export default function AdminPortalPage() {
         tahun: regulasiFormData.tahun || '2026',
         kategori: (regulasiFormData.kategori as RegulasiItem['kategori']) || 'Peraturan Menteri',
         fileSize: regulasiFormData.fileSize || '2.0 MB',
-        downloadUrl: '#',
+        fileName: regulasiFormData.fileName || 'Dokumen-Regulasi.pdf',
+        fileData: regulasiFormData.fileData || '',
+        downloadUrl: regulasiFormData.downloadUrl || regulasiFormData.fileData || '#',
         status: (regulasiFormData.status as RegulasiItem['status']) || 'Aktif'
       });
       showNotification('✓ Regulasi baru berhasil ditambahkan dan langsung aktif di Frontend!');
@@ -5165,9 +5215,84 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* ========================================================= */}
+                {/* UPLOAD FILE DOKUMEN REGULASI (SUPABASE / LOCAL PERSISTENCE) */}
+                {/* ========================================================= */}
+                <div className="space-y-2 pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+                      <Upload className="w-4 h-4" />
+                      <span>Unggah Salinan Dokumen Regulasi (PDF / Resmi)</span>
+                    </label>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                      PDF, DOCX, DOC, ZIP (Maks. 15MB)
+                    </span>
+                  </div>
+
+                  {/* Dropzone Container */}
+                  <label className={`block border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer transition-all ${
+                    regulasiFormData.fileData || regulasiFormData.downloadUrl
+                      ? isDark ? 'border-emerald-500/50 bg-emerald-950/20' : 'border-emerald-500 bg-emerald-50/50'
+                      : isDark ? 'border-blue-500/30 hover:border-blue-500 bg-slate-950/50 hover:bg-blue-950/10' : 'border-blue-300 hover:border-blue-500 bg-blue-50/30'
+                  }`}>
+                    <input
+                      type="file"
+                      accept=".pdf,.doc,.docx,.zip"
+                      className="hidden"
+                      onChange={handleRegulasiFileUpload}
+                    />
+                    
+                    {(regulasiFormData.fileData || (regulasiFormData.downloadUrl && regulasiFormData.downloadUrl !== '#')) ? (
+                      <div className="space-y-2">
+                        <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto">
+                          <FileCheck className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-xs text-emerald-600 dark:text-emerald-400">
+                            {regulasiFormData.fileName || 'Salinan-Regulasi-Tersimpan.pdf'}
+                          </p>
+                          <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                            Ukuran: {regulasiFormData.fileSize || 'Tersimpan'} • Siap Diunduh Pengunjung
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-center gap-2 pt-1">
+                          <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline">
+                            Klik untuk ganti file
+                          </span>
+                          <span>•</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setRegulasiFormData(prev => ({ ...prev, fileData: '', downloadUrl: '#', fileName: '' }));
+                              showNotification('File regulasi dilepas.');
+                            }}
+                            className="text-[10px] font-bold text-rose-500 hover:underline cursor-pointer"
+                          >
+                            Hapus File
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-1.5 py-2">
+                        <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center mx-auto">
+                          <Upload className="w-5 h-5" />
+                        </div>
+                        <p className={`font-bold text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                          Klik atau seret file PDF / Salinan Dokumen Regulasi ke sini
+                        </p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          File akan otomatis tersimpan & dapat diunduh pada tombol Unduh PDF di website publik
+                        </p>
+                      </div>
+                    )}
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div>
-                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Estimasi Ukuran File (PDF)</label>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Keterangan Ukuran File</label>
                     <input
                       type="text"
                       value={regulasiFormData.fileSize || '2.5 MB'}
