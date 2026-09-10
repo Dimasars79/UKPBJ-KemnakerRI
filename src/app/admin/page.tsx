@@ -4716,6 +4716,7 @@ export default function AdminPortalPage() {
                             src={agendaFormData.imageUrl}
                             alt="Poster Agenda"
                             fill
+                            unoptimized={true}
                             className="object-cover"
                           />
                         </div>

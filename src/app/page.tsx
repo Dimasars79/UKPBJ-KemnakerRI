@@ -20,7 +20,20 @@ import { useData } from '@/contexts/DataContext';
 export default function Home() {
   const { t } = useLanguage();
   const { agendaList, siteSettings } = useData();
-  const latestAgenda = agendaList[0] || null;
+
+  // Pick the most relevant active agenda (preferring one with a custom poster uploaded)
+  const latestAgenda = React.useMemo(() => {
+    return (
+      agendaList.find(
+        (a) =>
+          a.status !== 'Dibatalkan' &&
+          Boolean(a.imageUrl && a.imageUrl.trim() !== '' && a.imageUrl !== '/poster_kegiatan.jpg')
+      ) ||
+      agendaList.find((a) => a.status !== 'Dibatalkan') ||
+      agendaList[0] ||
+      null
+    );
+  }, [agendaList]);
 
   return (
     <>
@@ -406,17 +419,22 @@ export default function Home() {
                   {t('home.agenda_btn')} <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </FadeIn>
-              <FadeIn direction="left" delay={0.2} className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group aspect-square max-w-lg mx-auto w-full bg-slate-900 flex items-center justify-center">
-                <Image 
-                  src={latestAgenda?.imageUrl || "/poster_kegiatan.jpg"} 
-                  alt={latestAgenda?.title || "Poster Bimbingan Teknis Pengadaan Barang dan Jasa"} 
-                  width={800} 
-                  height={800} 
-                  unoptimized={Boolean(latestAgenda?.imageUrl && (latestAgenda.imageUrl.startsWith('http') || latestAgenda.imageUrl.startsWith('data:')))}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-navy/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <p className="text-white font-medium">{t('home.agenda_hint')}</p>
+              <FadeIn direction="left" delay={0.2} className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 group max-w-lg mx-auto w-full bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+                {/* Background ambient lighting */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-accent-gold/15 via-primary-blue/20 to-cyan-500/10 opacity-70 pointer-events-none" />
+
+                <div className="relative w-full flex items-center justify-center overflow-hidden rounded-2xl bg-slate-950/60 border border-white/10">
+                  <Image 
+                    src={latestAgenda?.imageUrl || "/poster_kegiatan.jpg"} 
+                    alt={latestAgenda?.title || "Poster Kegiatan Pengadaan Barang dan Jasa Kemnaker"} 
+                    width={800} 
+                    height={1000} 
+                    unoptimized={true}
+                    className="w-full h-auto max-h-[480px] object-contain transform group-hover:scale-[1.02] transition-transform duration-500 rounded-2xl drop-shadow-2xl"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a2342]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
+                    <p className="text-white text-xs sm:text-sm font-medium">{t('home.agenda_hint')}</p>
+                  </div>
                 </div>
               </FadeIn>
             </div>
