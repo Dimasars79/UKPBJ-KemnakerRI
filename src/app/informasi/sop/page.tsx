@@ -10,7 +10,8 @@ import {
   Search, FileText, Download, Calendar, 
   ChevronRight, Filter, GitBranch, 
   CheckCircle2, ArrowRight, ShieldCheck, 
-  Workflow, Layers, X, FileCheck, Check
+  Workflow, Layers, X, FileCheck, Check,
+  Eye, Building2, ExternalLink
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 
@@ -26,14 +27,14 @@ type SOPItem = {
   fileName?: string;
   fileData?: string;
   desc: string;
-  steps: string[];
+  unit: string;
 };
 
 export default function SOPPage() {
   const { sopList } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeFlowchartSOP, setActiveFlowchartSOP] = useState<SOPItem | null>(null);
+  const [activePreviewSOP, setActivePreviewSOP] = useState<SOPItem | null>(null);
 
   // Dynamic SOPs directly from Supabase / DataContext
   const dynamicSops: SOPItem[] = useMemo(() => {
@@ -44,19 +45,14 @@ export default function SOPPage() {
         code: item.kode,
         category: item.kategori || 'tata-kelola',
         categoryLabel: item.unit,
+        unit: item.unit || 'UKPBJ Kemnaker RI',
         title: item.judul,
         date: 'Tahun 2026',
         revision: item.revisi,
         fileSize: item.fileSize || '2.0 MB',
         fileName: item.fileName || `${item.kode.replace(/\//g, '-')}.pdf`,
         fileData: item.downloadUrl || item.fileData,
-        desc: item.deskripsi || `Standar operasional prosedur resmi ${item.unit} dengan ${item.tahapanCount} langkah terstandarisasi.`,
-        steps: [
-          'Pemeriksaan dan Verifikasi Permohonan Dokumen',
-          'Validasi Persyaratan Teknis & Regulasi Pengadaan',
-          'Penelaahan Kelayakan Tim Kerja & Pokja Pemilihan',
-          'Persetujuan & Penerbitan Dokumen Resmi Sesuai SOP'
-        ]
+        desc: item.deskripsi || `Standar operasional prosedur resmi ${item.unit} untuk menjamin tertib administrasi, transparansi, dan kepatuhan regulasi pengadaan.`
       }));
   }, [sopList]);
 
@@ -228,8 +224,9 @@ export default function SOPPage() {
                   )}
                 </div>
 
-                <div className="text-xs text-slate-400 font-medium">
-                  Dilengkapi Diagram Alur Interaktif
+                <div className="text-xs text-slate-400 font-medium flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Dokumen Resmi Terverifikasi & Berlaku</span>
                 </div>
               </div>
 
@@ -244,79 +241,73 @@ export default function SOPPage() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.98 }}
                         transition={{ duration: 0.25, delay: idx * 0.05 }}
-                        className="bg-white rounded-2xl p-6 shadow-xs border border-slate-200/80 hover:shadow-md hover:border-slate-300 transition-all duration-300 group"
+                        className="bg-white rounded-2xl p-6 sm:p-7 shadow-xs border border-slate-200/80 hover:shadow-md hover:border-slate-300 transition-all duration-300 group"
                       >
-                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                          <div className="flex-1">
+                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                          <div className="flex-1 min-w-0">
                             {/* Badges */}
-                            <div className="flex flex-wrap items-center gap-2 mb-2.5">
-                              <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-primary-navy text-white tracking-wider">
+                            <div className="flex flex-wrap items-center gap-2 mb-3">
+                              <span className="text-[11px] font-black uppercase px-3 py-1 rounded-lg bg-primary-navy text-white tracking-wider">
                                 {item.code}
                               </span>
-                              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-primary-blue border border-blue-100">
-                                {item.categoryLabel}
+                              <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-blue-50 text-primary-blue border border-blue-100 flex items-center gap-1">
+                                <Building2 className="w-3 h-3 text-primary-blue" />
+                                <span>{item.categoryLabel}</span>
                               </span>
-                              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                              <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">
                                 {item.revision}
+                              </span>
+                              <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                                <Check className="w-3 h-3 text-emerald-600" />
+                                <span>Berlaku (Aktif)</span>
                               </span>
                             </div>
 
                             {/* Title */}
-                            <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-primary-blue transition-colors leading-snug mb-2">
+                            <h3 className="text-base sm:text-xl font-bold text-slate-900 group-hover:text-primary-blue transition-colors leading-snug mb-2">
                               {item.title}
                             </h3>
 
                             {/* Description */}
-                            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mb-4">
+                            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
                               {item.desc}
                             </p>
 
-                            {/* Alur Tahapan Singkat / Mini Steps Badges */}
-                            <div className="mb-4 bg-slate-50/80 p-3 rounded-xl border border-slate-100">
-                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Ringkasan Alur Proses:</p>
-                              <div className="flex flex-wrap items-center gap-1.5">
-                                {item.steps.map((step, sIdx) => (
-                                  <React.Fragment key={sIdx}>
-                                    <span className="text-[11px] font-medium text-slate-700 bg-white border border-slate-200/80 px-2.5 py-1 rounded-md shadow-2xs">
-                                      {sIdx + 1}. {step}
-                                    </span>
-                                    {sIdx < item.steps.length - 1 && (
-                                      <span className="text-slate-300 text-xs">&rarr;</span>
-                                    )}
-                                  </React.Fragment>
-                                ))}
+                            {/* Clean Metadata Info */}
+                            <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500 pt-3 border-t border-slate-100">
+                              <div className="flex items-center gap-1.5">
+                                <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                                <span>Unit: {item.unit}</span>
                               </div>
-                            </div>
-
-                            {/* Meta Info */}
-                            <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-400">
+                              <span className="text-slate-300 hidden sm:inline">•</span>
                               <div className="flex items-center gap-1.5">
                                 <Calendar className="w-3.5 h-3.5 text-slate-400" />
                                 <span>{item.date}</span>
                               </div>
+                              <span className="text-slate-300 hidden sm:inline">•</span>
                               <div className="flex items-center gap-1.5">
                                 <FileText className="w-3.5 h-3.5 text-slate-400" />
-                                <span>PDF ({item.fileSize})</span>
+                                <span>Format: PDF ({item.fileSize})</span>
                               </div>
                             </div>
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex sm:flex-col items-center gap-2 flex-shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                          <div className="flex sm:flex-row lg:flex-col items-stretch gap-2.5 flex-shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100 min-w-[170px]">
                             <button 
-                              onClick={() => setActiveFlowchartSOP(item)}
-                              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
-                              title="Buka Diagram Alur Lengkap"
+                              onClick={() => setActivePreviewSOP(item)}
+                              className="flex-1 lg:flex-initial flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 cursor-pointer hover:border-slate-300"
+                              title="Buka Pratinjau Dokumen"
                             >
-                              <Workflow className="w-3.5 h-3.5" />
-                              <span>Lihat Diagram</span>
+                              <Eye className="w-3.5 h-3.5 text-primary-blue" />
+                              <span>Pratinjau SOP</span>
                             </button>
 
                             {item.fileData ? (
                               <a 
                                 href={item.fileData}
                                 download={item.fileName || `${item.code.replace(/\//g, '-')}.pdf`}
-                                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
+                                className="flex-1 lg:flex-initial flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
                                 title={`Unduh File ${item.fileName || 'SOP'}`}
                               >
                                 <Download className="w-3.5 h-3.5" />
@@ -327,7 +318,7 @@ export default function SOPPage() {
                                 onClick={() => {
                                   alert(`Mengunduh dokumen SOP resmi: ${item.title} (${item.fileSize})`);
                                 }}
-                                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
+                                className="flex-1 lg:flex-initial flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
                                 title="Unduh Dokumen SOP"
                               >
                                 <Download className="w-3.5 h-3.5" />
@@ -349,7 +340,7 @@ export default function SOPPage() {
                       </p>
                       <button
                         onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
-                        className="text-xs font-bold text-primary-blue hover:underline"
+                        className="text-xs font-bold text-primary-blue hover:underline cursor-pointer"
                       >
                         Reset Filter & Pencarian
                       </button>
@@ -373,16 +364,16 @@ export default function SOPPage() {
         </section>
       </main>
 
-      {/* ================= FLOWCHART MODAL VIEWER ================= */}
+      {/* ================= SOP PREVIEW MODAL VIEWER ================= */}
       <AnimatePresence>
-        {activeFlowchartSOP && (
+        {activePreviewSOP && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Dark Backdrop */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setActiveFlowchartSOP(null)}
+              onClick={() => setActivePreviewSOP(null)}
               className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
             />
 
@@ -395,64 +386,121 @@ export default function SOPPage() {
               className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden z-10 border border-slate-100 flex flex-col max-h-[90vh]"
             >
               {/* Modal Header */}
-              <div className="p-6 bg-gradient-to-r from-primary-navy to-[#113264] text-white flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-300 bg-white/10 px-2.5 py-0.5 rounded-full">
-                    {activeFlowchartSOP.code}
-                  </span>
-                  <h3 className="text-lg font-bold mt-1 text-white">
-                    Diagram Alur: {activeFlowchartSOP.title}
+              <div className="p-6 bg-gradient-to-r from-primary-navy via-[#113264] to-[#0A2342] text-white flex items-center justify-between">
+                <div className="min-w-0 pr-4">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                      {activePreviewSOP.code}
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-400/30">
+                      ✓ Dokumen Resmi Berlaku
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-white truncate">
+                    {activePreviewSOP.title}
                   </h3>
                 </div>
                 <button
-                  onClick={() => setActiveFlowchartSOP(null)}
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+                  onClick={() => setActivePreviewSOP(null)}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors cursor-pointer shrink-0"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Modal Body: Interactive Flowchart Steps */}
+              {/* Modal Body: Detailed SOP Preview */}
               <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
-                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 text-xs text-slate-700 leading-relaxed">
-                  <strong>Deskripsi Alur:</strong> {activeFlowchartSOP.desc}
+                {/* Meta Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs">
+                  <div>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block mb-0.5">Kode SOP</span>
+                    <span className="font-bold text-slate-800">{activePreviewSOP.code}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block mb-0.5">Unit Kerja</span>
+                    <span className="font-bold text-slate-800">{activePreviewSOP.unit}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block mb-0.5">Revisi</span>
+                    <span className="font-bold text-slate-800">{activePreviewSOP.revision}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block mb-0.5">Ukuran File</span>
+                    <span className="font-bold text-slate-800 font-mono">PDF ({activePreviewSOP.fileSize})</span>
+                  </div>
                 </div>
 
-                <div className="relative pl-6 space-y-8 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-primary-blue before:to-slate-200">
-                  {activeFlowchartSOP.steps.map((step, idx) => (
-                    <div key={idx} className="relative flex items-start gap-4">
-                      <div className="absolute -left-6 top-0 w-6 h-6 rounded-full bg-primary-navy text-accent-gold border-2 border-white shadow-md flex items-center justify-center text-xs font-bold">
-                        {idx + 1}
-                      </div>
-                      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex-1 hover:border-primary-blue/50 transition-colors">
-                        <h4 className="text-sm font-bold text-slate-900 mb-1">Tahap {idx + 1}: {step}</h4>
-                        <p className="text-xs text-slate-500">
-                          Dilaksanakan sesuai standar waktu dan spesifikasi dokumen SOP yang berlaku.
-                        </p>
-                      </div>
+                {/* Deskripsi & Ringkasan Dokumen */}
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <FileText className="w-4 h-4 text-primary-blue" />
+                    <span>Ruang Lingkup & Uraian Standar Pelayanan</span>
+                  </h4>
+                  <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100 text-xs text-slate-700 leading-relaxed">
+                    {activePreviewSOP.desc}
+                  </div>
+                </div>
+
+                {/* Dokumen Lampiran Info Box */}
+                <div className="p-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="w-12 h-12 rounded-xl bg-red-500/10 text-red-600 flex items-center justify-center shrink-0 border border-red-200">
+                      <FileText className="w-6 h-6" />
                     </div>
-                  ))}
+                    <div className="min-w-0">
+                      <p className="font-bold text-xs text-slate-900 truncate">
+                        {activePreviewSOP.fileName || `${activePreviewSOP.code.replace(/\//g, '-')}.pdf`}
+                      </p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        Dokumen digital tervalidasi siap cetak & diunduh ({activePreviewSOP.fileSize})
+                      </p>
+                    </div>
+                  </div>
+
+                  {activePreviewSOP.fileData && (
+                    <a
+                      href={activePreviewSOP.fileData}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center gap-1.5 shrink-0 transition-colors border border-slate-200"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-primary-blue" />
+                      <span>Buka Tab Baru</span>
+                    </a>
+                  )}
                 </div>
               </div>
 
               {/* Modal Footer */}
               <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                <div className="text-xs text-slate-500">
-                  Revisi Dokumen: <strong>{activeFlowchartSOP.revision}</strong>
+                <div className="text-xs text-slate-500 font-medium">
+                  Status: <strong className="text-emerald-700">Aktif Berlaku (2026)</strong>
                 </div>
                 <div className="flex gap-2">
                   <button 
-                    onClick={() => setActiveFlowchartSOP(null)}
-                    className="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl transition-colors"
+                    onClick={() => setActivePreviewSOP(null)}
+                    className="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl transition-colors cursor-pointer"
                   >
                     Tutup
                   </button>
-                  <button 
-                    className="px-5 py-2 bg-primary-navy hover:bg-primary-blue text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Unduh Dokumen Lengkap</span>
-                  </button>
+                  {activePreviewSOP.fileData ? (
+                    <a
+                      href={activePreviewSOP.fileData}
+                      download={activePreviewSOP.fileName || `${activePreviewSOP.code.replace(/\//g, '-')}.pdf`}
+                      className="px-5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Unduh Dokumen Lengkap</span>
+                    </a>
+                  ) : (
+                    <button 
+                      onClick={() => alert(`Mengunduh dokumen SOP resmi: ${activePreviewSOP.title}`)}
+                      className="px-5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Unduh Dokumen Lengkap</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>
