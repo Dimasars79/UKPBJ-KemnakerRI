@@ -180,6 +180,7 @@ export default function AdminPortalPage() {
     location: 'Gedung Kemnaker RI',
     organizer: 'UKPBJ Kemnaker RI',
     capacity: '100 Peserta',
+    imageUrl: '',
     status: 'Terjadwal'
   });
 
@@ -310,11 +311,40 @@ export default function AdminPortalPage() {
     showNotification('Status publikasi berita berhasil diubah dan disinkronkan!');
   };
 
-  // AGENDA HANDLERS
+  // AGENDA HANDLERS & IMAGE UPLOAD
+  const handleAgendaImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 8 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran gambar maksimal 8MB.');
+      return;
+    }
+
+    showNotification('Mengunggah poster/gambar agenda ke Supabase Storage...');
+    const uploadRes = await uploadMedia(file, 'gallery');
+
+    if (uploadRes.publicUrl) {
+      setAgendaFormData((prev) => ({ ...prev, imageUrl: uploadRes.publicUrl }));
+      showNotification('✓ Poster agenda berhasil diunggah ke Supabase CDN!');
+    } else {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setAgendaFormData((prev) => ({ ...prev, imageUrl: result }));
+        showNotification('✓ Gambar agenda berhasil dimuat.');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveAgenda = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingAgenda) {
-      updateAgenda(editingAgenda.id, agendaFormData);
+      updateAgenda(editingAgenda.id, {
+        ...agendaFormData,
+        imageUrl: agendaFormData.imageUrl || ''
+      });
       showNotification('✓ Agenda berhasil diperbarui dan tersinkronisasi ke Frontend (/agenda)!');
     } else {
       addAgenda({
@@ -325,6 +355,7 @@ export default function AdminPortalPage() {
         location: agendaFormData.location || 'Gedung Kemnaker RI',
         organizer: agendaFormData.organizer || 'UKPBJ Kemnaker RI',
         capacity: agendaFormData.capacity || '100 Peserta',
+        imageUrl: agendaFormData.imageUrl || '',
         status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal'
       });
       showNotification('✓ Agenda baru berhasil ditambahkan ke kalender publik (/agenda)!');
@@ -4649,6 +4680,86 @@ export default function AdminPortalPage() {
                       }`}
                     />
                   </div>
+                </div>
+
+                {/* ========================================================= */}
+                {/* UPLOAD POSTER / GAMBAR AGENDA (JPG, JPEG, PNG, WEBP) */}
+                {/* ========================================================= */}
+                <div className="space-y-2 pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                      <ImageIcon className="w-4 h-4" />
+                      <span>Poster / Gambar Kegiatan (JPG, JPEG, PNG)</span>
+                    </label>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                      JPG, PNG, WEBP (Maks. 8MB)
+                    </span>
+                  </div>
+
+                  {/* Dropzone Container */}
+                  <label className={`block border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer transition-all ${
+                    agendaFormData.imageUrl
+                      ? isDark ? 'border-emerald-500/50 bg-emerald-950/20' : 'border-emerald-500 bg-emerald-50/50'
+                      : isDark ? 'border-emerald-500/30 hover:border-emerald-500 bg-slate-950/50 hover:bg-emerald-950/10' : 'border-emerald-300 hover:border-emerald-500 bg-emerald-50/30'
+                  }`}>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                      className="hidden"
+                      onChange={handleAgendaImageUpload}
+                    />
+
+                    {agendaFormData.imageUrl ? (
+                      <div className="space-y-2.5">
+                        <div className="relative w-36 h-24 rounded-xl overflow-hidden mx-auto border border-emerald-500/40 shadow-sm bg-slate-950">
+                          <Image
+                            src={agendaFormData.imageUrl}
+                            alt="Poster Agenda"
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-bold text-xs text-emerald-600 dark:text-emerald-400">
+                            ✓ Gambar / Poster Terlampir
+                          </p>
+                          <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                            Siap ditampilkan pada kalender kegiatan & detail agenda
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-center gap-2 pt-1">
+                          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
+                            Klik untuk ganti gambar
+                          </span>
+                          <span>•</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setAgendaFormData(prev => ({ ...prev, imageUrl: '' }));
+                              showNotification('Gambar agenda dilepas.');
+                            }}
+                            className="text-[10px] font-bold text-rose-500 hover:underline cursor-pointer"
+                          >
+                            Hapus Gambar
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-1.5 py-2">
+                        <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
+                          <ImageIcon className="w-5 h-5" />
+                        </div>
+                        <p className={`font-bold text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                          Klik atau seret file gambar poster (JPG / PNG) ke sini
+                        </p>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Gambar akan otomatis tersimpan ke media storage & tayang di portal
+                        </p>
+                      </div>
+                    )}
+                  </label>
                 </div>
 
                 <div className={`flex justify-end gap-3 pt-4 border-t ${

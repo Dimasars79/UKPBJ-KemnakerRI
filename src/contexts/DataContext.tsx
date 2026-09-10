@@ -26,6 +26,7 @@ export interface AgendaItem {
   organizer: string;
   capacity: string;
   status: 'Terjadwal' | 'Berlangsung' | 'Selesai' | 'Dibatalkan';
+  imageUrl?: string;
   syncFrontend: boolean;
 }
 
@@ -651,6 +652,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             organizer: string;
             capacity: string;
             status: AgendaItem['status'];
+            image_url?: string;
+            imageUrl?: string;
             sync_frontend?: boolean;
           }) => ({
             id: a.id,
@@ -662,6 +665,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             organizer: a.organizer,
             capacity: a.capacity,
             status: a.status,
+            imageUrl: a.image_url || a.imageUrl,
             syncFrontend: a.sync_frontend ?? true
           }));
           setAgendaList(mappedAgendas);
@@ -1012,6 +1016,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         organizer: agenda.organizer,
         capacity: agenda.capacity,
         status: agenda.status,
+        image_url: agenda.imageUrl,
         sync_frontend: true
       }
     });
@@ -1038,7 +1043,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         location: updated.location,
         organizer: updated.organizer,
         capacity: updated.capacity,
-        status: updated.status
+        status: updated.status,
+        image_url: updated.imageUrl
       }
     });
   };
