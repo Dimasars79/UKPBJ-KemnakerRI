@@ -63,7 +63,7 @@ export function CategoryChart() {
             <YAxis tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
             <Tooltip 
               content={<CustomTooltip />}
-              cursor={{ fill: 'rgba(59, 130, 246, 0.08)', radius: 6 }}
+              cursor={false}
             />
             <Legend 
               wrapperStyle={{ paddingTop: '10px', fontSize: '12px', fontWeight: 600, color: '#94a3b8' }} 

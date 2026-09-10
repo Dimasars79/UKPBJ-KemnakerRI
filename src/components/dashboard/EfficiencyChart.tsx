@@ -59,7 +59,7 @@ export function EfficiencyChart() {
             <YAxis tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
             <Tooltip 
               content={<CustomTooltip />}
-              cursor={{ fill: 'rgba(245, 158, 11, 0.08)', radius: 6 }}
+              cursor={false}
             />
             <Bar dataKey="count" radius={[6, 6, 0, 0]} maxBarSize={48}>
               {data.map((entry, index) => (
