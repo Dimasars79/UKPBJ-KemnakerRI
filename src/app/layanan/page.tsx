@@ -8,7 +8,11 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { Monitor, FileText, HelpCircle, ShieldCheck, Zap, CheckCircle2 } from 'lucide-react';
+import { 
+  Monitor, FileText, HelpCircle, ShieldCheck, Zap, CheckCircle2,
+  PhoneCall, MessageSquare, Clock, MapPin, Building2, ExternalLink,
+  ArrowRight, Mail, Scale
+} from 'lucide-react';
 
 export default function LayananPage() {
   const { t } = useLanguage();
@@ -101,28 +105,159 @@ export default function LayananPage() {
           </StaggerContainer>
         </section>
 
+        {/* SECTION: PUSAT BANTUAN & KANAL KONSULTASI PBJ */}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-24">
-          <SectionHeading title="Alur Pelayanan" subtitle="Langkah-langkah umum dalam proses layanan pengadaan" />
+          <SectionHeading 
+            title="Pusat Bantuan & Kanal Konsultasi PBJ" 
+            subtitle="Saluran resmi bantuan teknis SPSE, konsultasi regulasi pengadaan, dan layanan pendampingan bagi stakeholder" 
+          />
           
-          <div className="mt-12 bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100 relative group">
-            <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-100 group-hover:bg-blue-100 transition-colors duration-700 -translate-y-1/2 z-0"></div>
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
-              {[
-                { step: 1, title: 'Registrasi', desc: 'Penyedia mendaftar melalui sistem SPSE' },
-                { step: 2, title: 'Verifikasi', desc: 'Pengecekan kelengkapan dokumen administrasi' },
-                { step: 3, title: 'Akses Sistem', desc: 'Penyedia mendapatkan akses penuh ke sistem' },
-                { step: 4, title: 'Proses Tender', desc: 'Mengikuti proses lelang/pengadaan' }
-              ].map((item) => (
-                <StaggerItem key={item.step}>
-                  <div className="flex flex-col items-center text-center bg-white p-4 hover:-translate-y-2 transition-transform duration-300 cursor-pointer rounded-xl hover:shadow-[0_10px_30px_rgba(30,58,138,0.08)] group/item">
-                    <div className="w-16 h-16 rounded-full bg-primary-navy text-accent-gold flex items-center justify-center text-2xl font-bold mb-4 shadow-lg border-4 border-white group-hover/item:bg-accent-gold group-hover/item:text-primary-navy group-hover/item:shadow-[0_0_20px_rgba(212,175,55,0.5)] group-hover/item:scale-110 group-hover/item:border-yellow-100 transition-all duration-300">
-                      {item.step}
+          <div className="mt-12">
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Card 1: Helpdesk LPSE */}
+              <StaggerItem>
+                <div className="h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-xl hover:border-blue-300 transition-all duration-300 flex flex-col justify-between group">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 text-primary-blue border border-blue-100 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-primary-blue group-hover:text-white transition-all duration-300">
+                      <PhoneCall className="w-6 h-6" />
                     </div>
-                    <h3 className="font-bold text-lg text-primary-navy mb-2 group-hover/item:text-primary-blue transition-colors">{item.title}</h3>
-                    <p className="text-sm text-slate-500">{item.desc}</p>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Senin - Jumat (08:00 - 16:00 WIB)</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-primary-blue transition-colors mb-2">
+                      Helpdesk SPSE & LPSE
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-4">
+                      Bantuan teknis penggunaan sistem SPSE, aktivasi akun penyedia, reset kata sandi, dan panduan e-katalog.
+                    </p>
                   </div>
-                </StaggerItem>
-              ))}
+                  <div className="pt-4 border-t border-slate-100 space-y-3">
+                    <div className="text-xs text-slate-700 font-semibold flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-slate-400" />
+                      <span>lpse@kemnaker.go.id</span>
+                    </div>
+                    <a
+                      href="https://wa.me/628119988776"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-blue-50 hover:bg-primary-blue text-primary-blue hover:text-white font-bold text-xs py-2.5 px-4 rounded-xl transition-colors"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>Chat WhatsApp Helpdesk</span>
+                    </a>
+                  </div>
+                </div>
+              </StaggerItem>
+
+              {/* Card 2: Klinik Konsultasi & Clearing House */}
+              <StaggerItem>
+                <div className="h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between group">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+                      <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <span className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                        Pendampingan Teknis
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-amber-600 transition-colors mb-2">
+                      Clearing House PBJ
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-4">
+                      Konsultasi mitigasi risiko, telaah hukum pengadaan, mediasi sengketa kontrak, dan pemberian rekomendasi teknis.
+                    </p>
+                  </div>
+                  <div className="pt-4 border-t border-slate-100 space-y-3">
+                    <div className="text-xs text-slate-700 font-semibold flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-slate-400" />
+                      <span>Reservasi Sesi Terjadwal</span>
+                    </div>
+                    <a
+                      href="/informasi/clearing-house"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-amber-50 hover:bg-amber-500 text-amber-700 hover:text-white font-bold text-xs py-2.5 px-4 rounded-xl transition-colors"
+                    >
+                      <span>Buka Layanan Konsultasi</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              </StaggerItem>
+
+              {/* Card 3: Kanal Pengaduan WBS */}
+              <StaggerItem>
+                <div className="h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-xl hover:border-rose-300 transition-all duration-300 flex flex-col justify-between group">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition-all duration-300">
+                      <Scale className="w-6 h-6" />
+                    </div>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <span className="text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">
+                        Kerahasiaan Terjamin
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-rose-600 transition-colors mb-2">
+                      Pengaduan & WBS
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-4">
+                      Saluran resmi pelaporan indikasi kecurangan, pelanggaran kode etik, dan penyimpangan proses tender secara aman.
+                    </p>
+                  </div>
+                  <div className="pt-4 border-t border-slate-100 space-y-3">
+                    <div className="text-xs text-slate-700 font-semibold flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-rose-500" />
+                      <span>Anonim & Terenkripsi</span>
+                    </div>
+                    <a
+                      href="https://wbs.kemnaker.go.id"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-bold text-xs py-2.5 px-4 rounded-xl transition-colors"
+                    >
+                      <span>Sampaikan Pengaduan</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              </StaggerItem>
+
+              {/* Card 4: Ruang Layanan Tatap Muka */}
+              <StaggerItem>
+                <div className="h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between group">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                      <Building2 className="w-6 h-6" />
+                    </div>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                        Ruang Layanan Terpadu
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mb-2">
+                      Layanan Tatap Muka
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-4">
+                      Verifikasi berkas fisik penyedia, penyerahan jaminan pelaksanaan, dan layanan informasi langsung di kantor UKPBJ.
+                    </p>
+                  </div>
+                  <div className="pt-4 border-t border-slate-100 space-y-3">
+                    <div className="text-xs text-slate-700 font-semibold flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span className="truncate">Gedung A Lt. 4 Kemnaker</span>
+                    </div>
+                    <a
+                      href="https://maps.google.com/?q=Kementerian+Ketenagakerjaan+RI+Gatot+Subroto"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-bold text-xs py-2.5 px-4 rounded-xl transition-colors"
+                    >
+                      <span>Petunjuk Lokasi Kantor</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              </StaggerItem>
             </StaggerContainer>
           </div>
         </section>
