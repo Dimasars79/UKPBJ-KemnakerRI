@@ -10,7 +10,7 @@ import {
   Search, ExternalLink, ChevronRight, Building2, 
   FileText, CheckCircle2, Calendar, 
   Vote, DollarSign, ArrowUpRight, X, Clock,
-  Award, ShieldAlert, BookOpen
+  Award, ShieldAlert, BookOpen, RotateCcw, Info
 } from 'lucide-react';
 
 type TenderAnnouncement = {
@@ -493,16 +493,12 @@ export default function TenderPemiluPage() {
                         </td>
 
                         <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                          <span className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                            item.category === 'pemenang'
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : item.category === 'tender-aktif'
-                              ? 'bg-blue-100 text-primary-navy'
-                              : item.category === 'sounding'
-                              ? 'bg-purple-100 text-purple-800'
-                              : 'bg-rose-100 text-rose-800'
-                          }`}>
-                            {item.categoryLabel}
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide bg-slate-100 text-slate-700 border border-slate-200/90 shadow-2xs">
+                            {item.category === 'pemenang' && <CheckCircle2 className="w-3 h-3 text-slate-600" />}
+                            {item.category === 'tender-aktif' && <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />}
+                            {item.category === 'sounding' && <Info className="w-3 h-3 text-slate-500" />}
+                            {item.category === 'tender-ulang' && <RotateCcw className="w-3 h-3 text-slate-500" />}
+                            <span>{item.categoryLabel}</span>
                           </span>
                         </td>
                       </tr>
