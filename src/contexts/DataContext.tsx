@@ -643,33 +643,38 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (Array.isArray(agendas)) {
-          const mappedAgendas: AgendaItem[] = agendas.map((a: {
-            id: string;
-            title: string;
-            category: AgendaItem['category'];
-            date: string;
-            time: string;
-            location: string;
-            organizer: string;
-            capacity: string;
-            status: AgendaItem['status'];
-            image_url?: string;
-            imageUrl?: string;
-            sync_frontend?: boolean;
-          }) => ({
-            id: a.id,
-            title: a.title,
-            category: a.category,
-            date: a.date,
-            time: a.time,
-            location: a.location,
-            organizer: a.organizer,
-            capacity: a.capacity,
-            status: a.status,
-            imageUrl: a.image_url || a.imageUrl,
-            syncFrontend: a.sync_frontend ?? true
-          }));
-          setAgendaList(mappedAgendas);
+          setAgendaList((prevList) => {
+            return agendas.map((a: {
+              id: string;
+              title: string;
+              category: AgendaItem['category'];
+              date: string;
+              time: string;
+              location: string;
+              organizer: string;
+              capacity: string;
+              status: AgendaItem['status'];
+              image_url?: string;
+              imageUrl?: string;
+              sync_frontend?: boolean;
+            }) => {
+              const localExisting = prevList.find((item) => item.id === a.id);
+              const defaultExisting = DEFAULT_AGENDAS.find((item) => item.id === a.id);
+              return {
+                id: a.id,
+                title: a.title,
+                category: a.category,
+                date: a.date,
+                time: a.time,
+                location: a.location,
+                organizer: a.organizer,
+                capacity: a.capacity,
+                status: a.status,
+                imageUrl: a.image_url || a.imageUrl || localExisting?.imageUrl || defaultExisting?.imageUrl || '',
+                syncFrontend: a.sync_frontend ?? true
+              };
+            });
+          });
         }
 
         if (Array.isArray(procurement_packages)) {
@@ -1034,18 +1039,20 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setAgendaList(updatedList);
     persist(newsList, updatedList);
 
+    const target = updatedList.find((item) => item.id === id);
+
     await syncAdminData('agendas', 'update', {
       id,
       data: {
-        title: updated.title,
-        category: updated.category,
-        date: updated.date,
-        time: updated.time,
-        location: updated.location,
-        organizer: updated.organizer,
-        capacity: updated.capacity,
-        status: updated.status,
-        image_url: updated.imageUrl
+        title: updated.title ?? target?.title,
+        category: updated.category ?? target?.category,
+        date: updated.date ?? target?.date,
+        time: updated.time ?? target?.time,
+        location: updated.location ?? target?.location,
+        organizer: updated.organizer ?? target?.organizer,
+        capacity: updated.capacity ?? target?.capacity,
+        status: updated.status ?? target?.status,
+        image_url: updated.imageUrl !== undefined ? updated.imageUrl : target?.imageUrl
       }
     });
   };

@@ -15,6 +15,41 @@ function getSupabaseAdmin() {
   });
 }
 
+// Helper to gracefully retry query if Supabase table is missing a non-critical column (e.g. PGRST204)
+async function executeWithColumnFallback<T>(
+  tableName: string,
+  operation: (dataPayload: Record<string, unknown>) => PromiseLike<{ data: T | null; error: { code?: string; message?: string } | null }>,
+  initialData: Record<string, unknown>
+): Promise<T | null> {
+  const currentData = { ...initialData };
+  let attempts = 0;
+  const maxAttempts = 5;
+
+  while (attempts < maxAttempts) {
+    attempts++;
+    const { data: opData, error } = await operation(currentData);
+    if (!error) {
+      return opData;
+    }
+
+    // Detect PostgREST missing column error (e.g. PGRST204 or error text)
+    const errMsg = typeof error?.message === 'string' ? error.message : '';
+    if (error?.code === 'PGRST204' || errMsg.includes('Could not find the') || errMsg.includes('schema cache')) {
+      const match = errMsg.match(/Could not find the '([^']+)' column/);
+      const missingColumn = match ? match[1] : null;
+      if (missingColumn && missingColumn in currentData) {
+        console.warn(`[Supabase Schema Fallback] Column '${missingColumn}' not found in table '${tableName}'. Retrying operation without this column.`);
+        delete currentData[missingColumn];
+        continue;
+      }
+    }
+
+    // If it cannot be resolved by stripping the missing column, throw original error
+    throw error;
+  }
+  return null;
+}
+
 export async function GET(req: NextRequest) {
   try {
     const supabaseAdmin = getSupabaseAdmin();
@@ -107,14 +142,16 @@ export async function POST(req: NextRequest) {
 
     switch (action) {
       case 'insert': {
-        const { data: inserted, error } = await supabaseAdmin
-          .from(table)
-          .insert(data)
-          .select()
-          .single();
-
-        if (error) throw error;
-        result = inserted;
+        result = await executeWithColumnFallback(
+          table,
+          (payload) =>
+            supabaseAdmin
+              .from(table)
+              .insert(payload)
+              .select()
+              .single(),
+          data || {}
+        );
         break;
       }
 
@@ -126,15 +163,17 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        const { data: updated, error } = await supabaseAdmin
-          .from(table)
-          .update(data)
-          .eq('id', id)
-          .select()
-          .single();
-
-        if (error) throw error;
-        result = updated;
+        result = await executeWithColumnFallback(
+          table,
+          (payload) =>
+            supabaseAdmin
+              .from(table)
+              .update(payload)
+              .eq('id', id)
+              .select()
+              .single(),
+          data || {}
+        );
         break;
       }
 
@@ -157,14 +196,16 @@ export async function POST(req: NextRequest) {
       }
 
       case 'upsert': {
-        const { data: upserted, error } = await supabaseAdmin
-          .from(table)
-          .upsert(data)
-          .select()
-          .single();
-
-        if (error) throw error;
-        result = upserted;
+        result = await executeWithColumnFallback(
+          table,
+          (payload) =>
+            supabaseAdmin
+              .from(table)
+              .upsert(payload)
+              .select()
+              .single(),
+          data || {}
+        );
         break;
       }
 
