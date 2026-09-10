@@ -741,8 +741,8 @@ export default function AdminPortalPage() {
       }`}>
         <div>
           {/* Logo & Portal Brand */}
-          <div className={`p-5 border-b flex items-center justify-between ${
-            isDark ? 'border-slate-800/80' : 'border-slate-200'
+          <div className={`h-[5.5rem] px-5 border-b flex items-center justify-between shrink-0 box-border ${
+            isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
           }`}>
             <div className="flex items-center space-x-3">
               <div className={`w-10 h-10 rounded-xl p-1.5 flex items-center justify-center shadow-md transition-all ${
@@ -1072,10 +1072,10 @@ export default function AdminPortalPage() {
       }`}>
         
         {/* Top Header - Spacious & Clean Modern Command Bar */}
-        <header className={`min-h-[5.5rem] py-5 md:py-5.5 border-b backdrop-blur-xl px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 transition-all duration-300 ${
+        <header className={`h-[5.5rem] border-b backdrop-blur-xl px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 shrink-0 box-border transition-all duration-300 ${
           isDark 
             ? 'border-slate-800/80 bg-slate-950/90 shadow-sm shadow-black/20' 
-            : 'border-slate-200/90 bg-white/95 shadow-sm shadow-slate-200/50'
+            : 'border-slate-200 bg-white/95 shadow-sm shadow-slate-200/50'
         }`}>
           {/* LEFT: Clean Page Title & Context Indicator */}
           <div className="flex items-center space-x-4">

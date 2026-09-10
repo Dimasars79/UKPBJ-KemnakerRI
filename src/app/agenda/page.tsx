@@ -222,9 +222,9 @@ export default function AgendaPage() {
             </div>
           </div>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {dummyAgendas.map((agenda, idx) => (
-              <StaggerItem key={idx}>
+              <StaggerItem key={idx} className="h-full flex">
                 <AgendaCard {...agenda} />
               </StaggerItem>
             ))}
