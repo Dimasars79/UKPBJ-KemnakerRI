@@ -17,12 +17,14 @@ import {
   CheckCircle2, 
   Download, 
   ArrowLeft, 
-  Server, 
-  Database, 
-  Cloud, 
+  Server,
+  Database,
+  Cloud,
+  Cpu,
+  Globe,
+  Radio,
+  Wifi,
   ShieldCheck, 
-  Cpu, 
-  Globe, 
   FileCheck, 
   ExternalLink, 
   Plus,
@@ -46,10 +48,6 @@ import {
   TrendingUp,
   Sparkles,
   Clock,
-  Radio,
-  Zap,
-  Wifi,
-  HardDrive,
   Coins,
   Percent,
   Shield,
@@ -68,6 +66,9 @@ import {
   UserCheck,
   Bell,
   Upload,
+  AlertCircle,
+  Briefcase,
+  Scale,
   Image as ImageIcon
 } from 'lucide-react';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
@@ -2026,75 +2027,137 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                {/* OPERATIONAL TELEMETRY & SYSTEM HEALTH */}
+                {/* PROCUREMENT ACTION ALERTS & OPERATIONAL READINESS */}
                 <div className={`p-6 rounded-3xl border space-y-4 ${
                   isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
                 }`}>
                   <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b ${
                     isDark ? 'border-slate-800/60' : 'border-slate-200'
                   }`}>
-                    <div className="flex items-center gap-2">
-                      <Server className="w-4 h-4 text-emerald-500" />
-                      <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        Status Infrastruktur & Telemetri Backend SPSE
-                      </h3>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+                        <AlertCircle className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          Status Tindak Lanjut & Perhatian Operasional UKPBJ
+                        </h3>
+                        <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Ringkasan berkas, jadwal tender aktif, dan kepatuhan prosedur pengadaan
+                        </p>
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">
-                        <Zap className="w-3 h-3" />
-                        <span>Response Time: 24ms</span>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                        <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                        <span>{packagesList.filter(p => p.status === 'Tahap Evaluasi' || p.status === 'Pendaftaran Dibuka').length} Paket Memerlukan Monitoring</span>
                       </span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <div className={`p-3.5 rounded-2xl border text-center space-y-1.5 ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <Cpu className="w-4 h-4 text-blue-500 mx-auto" />
-                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>CPU Load</p>
-                      <p className={`font-mono text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>18.4%</p>
-                    </div>
+                    {/* Item 1: Evaluasi Pokja */}
+                    <button
+                      onClick={() => setActiveTab('paket')}
+                      className={`p-3.5 rounded-2xl border text-center space-y-1.5 transition-all hover:scale-102 cursor-pointer group text-left sm:text-center ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-amber-500/50' : 'bg-slate-50 border-slate-200 hover:border-amber-400 hover:bg-amber-50/30'
+                      }`}
+                    >
+                      <Clock className="w-4 h-4 text-amber-500 mx-auto group-hover:scale-110 transition-transform" />
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Evaluasi Pokja</p>
+                      <p className={`font-mono text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {packagesList.filter(p => p.status === 'Tahap Evaluasi').length} Paket
+                      </p>
+                      <span className="inline-block text-[9px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                        Perlu Dinilai
+                      </span>
+                    </button>
 
-                    <div className={`p-3.5 rounded-2xl border text-center space-y-1.5 ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <HardDrive className="w-4 h-4 text-purple-400 mx-auto" />
-                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Memory RAM</p>
-                      <p className={`font-mono text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>42.1% (3.3 GB)</p>
-                    </div>
+                    {/* Item 2: Pendaftaran Buka */}
+                    <button
+                      onClick={() => setActiveTab('paket')}
+                      className={`p-3.5 rounded-2xl border text-center space-y-1.5 transition-all hover:scale-102 cursor-pointer group text-left sm:text-center ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50 border-slate-200 hover:border-blue-400 hover:bg-blue-50/30'
+                      }`}
+                    >
+                      <Briefcase className="w-4 h-4 text-blue-500 mx-auto group-hover:scale-110 transition-transform" />
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Pendaftaran Buka</p>
+                      <p className={`font-mono text-xs font-bold text-blue-600 dark:text-blue-400`}>
+                        {packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length} Paket
+                      </p>
+                      <span className="inline-block text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded">
+                        Penyedia Mendaftar
+                      </span>
+                    </button>
 
-                    <div className={`p-3.5 rounded-2xl border text-center space-y-1.5 ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <Database className="w-4 h-4 text-amber-500 mx-auto" />
-                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Database Pool</p>
-                      <p className={`font-mono text-xs font-bold text-emerald-500`}>16/20 Active</p>
-                    </div>
+                    {/* Item 3: Agenda Pokja */}
+                    <button
+                      onClick={() => setActiveTab('manage-agenda')}
+                      className={`p-3.5 rounded-2xl border text-center space-y-1.5 transition-all hover:scale-102 cursor-pointer group text-left sm:text-center ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-purple-500/50' : 'bg-slate-50 border-slate-200 hover:border-purple-400 hover:bg-purple-50/30'
+                      }`}
+                    >
+                      <Calendar className="w-4 h-4 text-purple-400 mx-auto group-hover:scale-110 transition-transform" />
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Agenda Pengadaan</p>
+                      <p className={`font-mono text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {agendaList.length} Jadwal
+                      </p>
+                      <span className="inline-block text-[9px] font-bold text-purple-600 dark:text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded">
+                        Pekan Ini Aktif
+                      </span>
+                    </button>
 
-                    <div className={`p-3.5 rounded-2xl border text-center space-y-1.5 ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <Cloud className="w-4 h-4 text-cyan-400 mx-auto" />
-                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Edge Cache</p>
-                      <p className={`font-mono text-xs font-bold text-emerald-500`}>HIT (99.4%)</p>
-                    </div>
+                    {/* Item 4: SOP Terverifikasi */}
+                    <button
+                      onClick={() => setActiveTab('manage-sop')}
+                      className={`p-3.5 rounded-2xl border text-center space-y-1.5 transition-all hover:scale-102 cursor-pointer group text-left sm:text-center ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/50' : 'bg-slate-50 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/30'
+                      }`}
+                    >
+                      <FileCheck className="w-4 h-4 text-emerald-500 mx-auto group-hover:scale-110 transition-transform" />
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>SOP Berlaku</p>
+                      <p className={`font-mono text-xs font-bold text-emerald-500`}>
+                        {sopList.filter(s => s.status === 'Berlaku').length} Dokumen
+                      </p>
+                      <span className="inline-block text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                        Standar Mutu ISO
+                      </span>
+                    </button>
 
-                    <div className={`p-3.5 rounded-2xl border text-center space-y-1.5 ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <ShieldCheck className="w-4 h-4 text-emerald-500 mx-auto" />
-                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>SSL Encryption</p>
-                      <p className={`font-mono text-xs font-bold text-emerald-500`}>TLS 1.3 Valid</p>
-                    </div>
+                    {/* Item 5: Regulasi Aktif */}
+                    <button
+                      onClick={() => setActiveTab('manage-regulasi')}
+                      className={`p-3.5 rounded-2xl border text-center space-y-1.5 transition-all hover:scale-102 cursor-pointer group text-left sm:text-center ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30'
+                      }`}
+                    >
+                      <Scale className="w-4 h-4 text-indigo-400 mx-auto group-hover:scale-110 transition-transform" />
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Dasar Regulasi</p>
+                      <p className={`font-mono text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {regulasiList.length} Aturan
+                      </p>
+                      <span className="inline-block text-[9px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded">
+                        Perpres & SE
+                      </span>
+                    </button>
 
-                    <div className={`p-3.5 rounded-2xl border text-center space-y-1.5 ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <Radio className="w-4 h-4 text-accent-gold mx-auto animate-pulse" />
-                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>SiKAP API</p>
-                      <p className={`font-mono text-xs font-bold text-emerald-500`}>Connected</p>
-                    </div>
+                    {/* Item 6: Integrasi Portal */}
+                    <button
+                      onClick={() => refreshFromSupabase()}
+                      className={`p-3.5 rounded-2xl border text-center space-y-1.5 transition-all hover:scale-102 cursor-pointer group text-left sm:text-center ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-teal-500/50' : 'bg-slate-50 border-slate-200 hover:border-teal-400 hover:bg-teal-50/30'
+                      }`}
+                      title="Klik untuk menyinkronkan ulang data dari database"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 mx-auto group-hover:rotate-180 transition-transform duration-500" />
+                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Integrasi Portal</p>
+                      <p className={`font-mono text-xs font-bold text-emerald-500`}>
+                        {isSupabaseConnected ? 'Terhubung' : 'Lokal Mode'}
+                      </p>
+                      <span className="inline-block text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                        Sinkron Publik
+                      </span>
+                    </button>
                   </div>
                 </div>
 
