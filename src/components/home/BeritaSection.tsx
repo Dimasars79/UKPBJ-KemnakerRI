@@ -9,8 +9,7 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Newspaper, 
-  Eye, 
-  Sparkles
+  Eye
 } from 'lucide-react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -97,12 +96,7 @@ export function BeritaSection() {
 
           {/* Controls: Left & Right Scroll Arrows */}
           <FadeIn direction="right">
-            <div className="flex items-center gap-3 self-end sm:self-auto">
-              <span className="text-xs text-slate-400 font-semibold hidden md:inline-flex items-center gap-1.5 mr-2">
-                <Sparkles className="w-3.5 h-3.5 text-accent-gold" />
-                <span>Geser ke kanan</span>
-              </span>
-
+            <div className="flex items-center gap-2 self-end sm:self-auto">
               <button
                 onClick={() => handleScroll('left')}
                 disabled={!canScrollLeft}
