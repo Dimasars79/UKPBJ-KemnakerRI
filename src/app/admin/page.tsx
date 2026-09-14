@@ -64,6 +64,130 @@ export interface AdminNotificationItem {
   read: boolean;
 }
 
+export interface ActivityLogItem {
+  id: string;
+  time: string;
+  date: string;
+  timestamp: number;
+  actor: string;
+  role: string;
+  entity: string;
+  category: 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'galeri' | 'sistem';
+  action: 'INSERT' | 'UPDATE' | 'DELETE' | 'SYNC';
+  actionColor: string;
+  desc: string;
+  target: string;
+  status: 'Berhasil' | 'Gagal';
+}
+
+const DEFAULT_ACTIVITY_LOGS: ActivityLogItem[] = [
+  {
+    id: 'LOG-2026-8821',
+    time: 'Baru saja',
+    date: '14 Sep 2026 08:14',
+    timestamp: Date.now() - 300000,
+    actor: 'Dimas Ars',
+    role: 'Super Administrator PBJ',
+    entity: 'Sistem',
+    category: 'sistem',
+    action: 'SYNC',
+    actionColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    desc: 'Sinkronisasi menyeluruh database Supabase PostgreSQL (8 tabel aktif)',
+    target: 'Database PostgreSQL / REST API',
+    status: 'Berhasil'
+  },
+  {
+    id: 'LOG-2026-8820',
+    time: '12 menit lalu',
+    date: '14 Sep 2026 08:02',
+    timestamp: Date.now() - 720000,
+    actor: 'Dimas Ars',
+    role: 'Super Administrator PBJ',
+    entity: 'Agenda',
+    category: 'agenda',
+    action: 'UPDATE',
+    actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    desc: 'Pembaruan poster kegiatan & tanggal jadwal Bimtek SIKaP V.3 Kemnaker',
+    target: 'AGD-001 (Bimtek SIKaP)',
+    status: 'Berhasil'
+  },
+  {
+    id: 'LOG-2026-8819',
+    time: '28 menit lalu',
+    date: '14 Sep 2026 07:46',
+    timestamp: Date.now() - 1680000,
+    actor: 'Dimas Ars',
+    role: 'Super Administrator PBJ',
+    entity: 'Berita',
+    category: 'berita',
+    action: 'INSERT',
+    actionColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    desc: 'Penambahan artikel berita siaran pers transparansi PBJ Kemnaker RI 2026',
+    target: 'NEWS-2026-004',
+    status: 'Berhasil'
+  },
+  {
+    id: 'LOG-2026-8818',
+    time: '1 jam lalu',
+    date: '14 Sep 2026 07:14',
+    timestamp: Date.now() - 3600000,
+    actor: 'Pokja Pemilihan II',
+    role: 'Pokja PBJ',
+    entity: 'Paket PBJ',
+    category: 'pengadaan',
+    action: 'UPDATE',
+    actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    desc: 'Verifikasi dokumen evaluasi kualifikasi tender Pengadaan Server IT Cloud',
+    target: 'TND-2026-001',
+    status: 'Berhasil'
+  },
+  {
+    id: 'LOG-2026-8817',
+    time: '2 jam lalu',
+    date: '14 Sep 2026 06:12',
+    timestamp: Date.now() - 7200000,
+    actor: 'Dimas Ars',
+    role: 'Super Administrator PBJ',
+    entity: 'Regulasi',
+    category: 'regulasi',
+    action: 'UPDATE',
+    actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    desc: 'Pembaruan tautan dokumen PDF Peraturan Presiden No. 12 Tahun 2021',
+    target: 'REG-001',
+    status: 'Berhasil'
+  },
+  {
+    id: 'LOG-2026-8816',
+    time: '3 jam lalu',
+    date: '14 Sep 2026 05:10',
+    timestamp: Date.now() - 10800000,
+    actor: 'Biro Perencanaan',
+    role: 'Admin Unit',
+    entity: 'SOP',
+    category: 'sop',
+    action: 'UPDATE',
+    actionColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+    desc: 'Sinkronisasi SOP Pelayanan Konsultasi dan Alur Clearing House PBJ',
+    target: 'SOP-001',
+    status: 'Berhasil'
+  },
+  {
+    id: 'LOG-2026-8815',
+    time: '5 jam lalu',
+    date: '14 Sep 2026 03:00',
+    timestamp: Date.now() - 18000000,
+    actor: 'System Daemon',
+    role: 'Automated Job',
+    entity: 'Galeri',
+    category: 'galeri',
+    action: 'SYNC',
+    actionColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    desc: 'Validasi CDN URL foto dokumentasi dan thumbnail video YouTube',
+    target: 'Gallery CDN Assets',
+    status: 'Berhasil'
+  }
+];
+
 const DEFAULT_NOTIFICATIONS: AdminNotificationItem[] = [
   {
     id: 'notif-1',
@@ -164,6 +288,63 @@ export default function AdminPortalPage() {
       setActiveTab(targetTab);
       setShowNotifications(false);
     }
+  };
+
+  // Persistent Dynamic Activity Log System
+  const [activityLogsList, setActivityLogsList] = useState<ActivityLogItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('ukpbj_admin_activity_logs');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.warn('Failed to load activity logs:', e);
+      }
+    }
+    return DEFAULT_ACTIVITY_LOGS;
+  });
+
+  const pushActivityLog = (
+    entity: string,
+    category: ActivityLogItem['category'],
+    action: ActivityLogItem['action'],
+    desc: string,
+    target: string,
+    actor: string = 'Dimas Ars',
+    role: string = 'Super Administrator PBJ'
+  ) => {
+    const actionColorMap: Record<ActivityLogItem['action'], string> = {
+      INSERT: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      UPDATE: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+      DELETE: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      SYNC: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+    };
+
+    const now = new Date();
+    const formattedDate = `${now.getDate()} ${['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][now.getMonth()]} ${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    const newLog: ActivityLogItem = {
+      id: `LOG-${now.getFullYear()}-${String(Date.now()).slice(-4)}`,
+      time: 'Baru saja',
+      date: formattedDate,
+      timestamp: Date.now(),
+      actor,
+      role,
+      entity,
+      category,
+      action,
+      actionColor: actionColorMap[action] || actionColorMap.UPDATE,
+      desc,
+      target,
+      status: 'Berhasil'
+    };
+
+    setActivityLogsList((prev) => {
+      const updated = [newLog, ...prev.slice(0, 99)];
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('ukpbj_admin_activity_logs', JSON.stringify(updated));
+      }
+      return updated;
+    });
   };
   
   // DataContext Hook
@@ -363,6 +544,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ Berita berhasil diperbarui dan tersinkronisasi ke Supabase & Frontend (/informasi & /)!');
       pushAdminNotification('Berita & Warta Diperbarui', `Berita "${newsFormData.title || 'Warta PBJ'}" telah diperbarui`, 'berita');
+      pushActivityLog('Berita', 'berita', 'UPDATE', `Pembaruan artikel warta: "${newsFormData.title || 'Warta PBJ'}"`, `NEWS-${editingNews.id}`);
     } else {
       addNews({
         title: newsFormData.title || 'Judul Berita Baru',
@@ -375,6 +557,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Supabase & Frontend (/informasi)!');
       pushAdminNotification('Berita & Warta Baru Diterbitkan', `"${newsFormData.title || 'Siaran Pers Baru'}" telah tayang di portal publik`, 'berita');
+      pushActivityLog('Berita', 'berita', 'INSERT', `Publikasi artikel warta baru: "${newsFormData.title || 'Siaran Pers'}"`, `NEWS-2026-${String(newsList.length + 1).padStart(3, '0')}`);
     }
     setShowNewsModal(false);
     setEditingNews(null);
@@ -382,16 +565,20 @@ export default function AdminPortalPage() {
 
   const handleDeleteNews = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus berita ini? Data akan langsung terhapus dari backend dan frontend.')) {
+      const targetNews = newsList.find(n => n.id === id);
       deleteNews(id);
       showNotification('Berita telah dihapus dari backend & frontend.');
       pushAdminNotification('Berita Dihapus', 'Satu publikasi berita telah dihapus dari database', 'berita');
+      pushActivityLog('Berita', 'berita', 'DELETE', `Penghapusan publikasi artikel warta: "${targetNews?.title || id}"`, `NEWS-${id}`);
     }
   };
 
   const handleToggleNewsStatus = (id: string) => {
+    const targetNews = newsList.find(n => n.id === id);
     toggleNewsStatus(id);
     showNotification('Status publikasi berita berhasil diubah dan disinkronkan!');
     pushAdminNotification('Status Berita Diubah', 'Status visibilitas berita telah diperbarui', 'berita');
+    pushActivityLog('Berita', 'berita', 'UPDATE', `Perubahan status tayang artikel warta: "${targetNews?.title || id}"`, `NEWS-${id}`);
   };
 
   // AGENDA HANDLERS & IMAGE UPLOAD
@@ -430,6 +617,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ Agenda berhasil diperbarui dan tersinkronisasi ke Frontend (/agenda)!');
       pushAdminNotification('Agenda Bimtek Diperbarui', `"${agendaFormData.title || 'Agenda PBJ'}" berhasil diperbarui`, 'agenda');
+      pushActivityLog('Agenda', 'agenda', 'UPDATE', `Pembaruan jadwal & rincian kegiatan: "${agendaFormData.title || 'Agenda'}"`, `AGD-${editingAgenda.id}`);
     } else {
       addAgenda({
         title: agendaFormData.title || 'Agenda Baru',
@@ -444,6 +632,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ Agenda baru berhasil ditambahkan ke kalender publik (/agenda)!');
       pushAdminNotification('Agenda PBJ Baru Dijadwalkan', `"${agendaFormData.title || 'Agenda Baru'}" pada ${agendaFormData.date || 'jadwal kegiatan'}`, 'agenda');
+      pushActivityLog('Agenda', 'agenda', 'INSERT', `Penjadwalan agenda kegiatan baru: "${agendaFormData.title || 'Agenda'}" (${agendaFormData.date || 'TBA'})`, `AGD-2026-${String(agendaList.length + 1).padStart(3, '0')}`);
     }
     setShowAgendaModal(false);
     setEditingAgenda(null);
@@ -451,9 +640,11 @@ export default function AdminPortalPage() {
 
   const handleDeleteAgenda = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus agenda ini? Data akan langsung terhapus dari kalender publik.')) {
+      const targetAgenda = agendaList.find(a => a.id === id);
       deleteAgenda(id);
       showNotification('Agenda telah dihapus dari sistem backend dan frontend.');
       pushAdminNotification('Agenda Dihapus', 'Satu jadwal kegiatan PBJ telah dihapus dari sistem', 'agenda');
+      pushActivityLog('Agenda', 'agenda', 'DELETE', `Penghapusan/pembatalan jadwal kegiatan: "${targetAgenda?.title || id}"`, `AGD-${id}`);
     }
   };
 
@@ -509,6 +700,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ Regulasi berhasil diperbarui dan disinkronkan ke Frontend (/informasi/peraturan)!');
       pushAdminNotification('Regulasi JDIH Diperbarui', `${regulasiFormData.nomor || 'Regulasi'} telah disesuaikan`, 'regulasi');
+      pushActivityLog('Regulasi', 'regulasi', 'UPDATE', `Pembaruan dokumen produk hukum: "${regulasiFormData.nomor || 'Regulasi'}"`, `REG-${editingRegulasi.id}`);
     } else {
       addRegulasi({
         nomor: regulasiFormData.nomor || 'Permenaker No. 01 Tahun 2026',
@@ -523,6 +715,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ Regulasi baru berhasil ditambahkan dan langsung aktif di Frontend!');
       pushAdminNotification('Regulasi JDIH Baru Diunggah', `${regulasiFormData.nomor || 'Permen'} - ${regulasiFormData.tentang || 'Pedoman PBJ'}`, 'regulasi');
+      pushActivityLog('Regulasi', 'regulasi', 'INSERT', `Upload regulasi JDIH baru: "${regulasiFormData.nomor || 'Permen'}" - ${regulasiFormData.tentang || 'Pedoman PBJ'}`, `REG-2026-${String(regulasiList.length + 1).padStart(3, '0')}`);
     }
     setShowRegulasiModal(false);
     setEditingRegulasi(null);
@@ -530,16 +723,20 @@ export default function AdminPortalPage() {
 
   const handleDeleteRegulasi = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus regulasi ini? Data akan langsung terhapus dari portal publik.')) {
+      const targetReg = regulasiList.find(r => r.id === id);
       deleteRegulasi(id);
       showNotification('Regulasi telah dihapus dari sistem.');
       pushAdminNotification('Regulasi Dihapus', 'Dokumen regulasi telah dihapus dari basis data JDIH', 'regulasi');
+      pushActivityLog('Regulasi', 'regulasi', 'DELETE', `Penghapusan dokumen regulasi JDIH: "${targetReg?.nomor || id}"`, `REG-${id}`);
     }
   };
 
   const handleToggleRegulasiStatus = (id: string) => {
+    const targetReg = regulasiList.find(r => r.id === id);
     toggleRegulasiStatus(id);
     showNotification('Status regulasi berhasil diubah!');
     pushAdminNotification('Status Regulasi Diubah', 'Status hukum regulasi telah diperbarui', 'regulasi');
+    pushActivityLog('Regulasi', 'regulasi', 'UPDATE', `Perubahan status masa berlaku regulasi: "${targetReg?.nomor || id}"`, `REG-${id}`);
   };
 
   // SOP HANDLERS & FILE UPLOAD
@@ -594,6 +791,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ SOP berhasil diperbarui dan disinkronkan ke Supabase & Frontend (/informasi/sop)!');
       pushAdminNotification('Dokumen SOP Diperbarui', `${sopFormData.kode || 'SOP'} berhasil diperbarui`, 'sop');
+      pushActivityLog('SOP', 'sop', 'UPDATE', `Pembaruan prosedur & dokumen: "${sopFormData.judul || 'SOP'}"`, `${sopFormData.kode || 'SOP'}`);
     } else {
       addSop({
         kode: sopFormData.kode || `SOP/PBJ/0${sopList.length + 1}/2026`,
@@ -611,6 +809,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ SOP baru beserta lampiran file berhasil disimpan ke Supabase Database!');
       pushAdminNotification('Dokumen SOP Baru Disimpan', `${sopFormData.kode || 'SOP Baru'} - ${sopFormData.judul || 'Standar Prosedur'}`, 'sop');
+      pushActivityLog('SOP', 'sop', 'INSERT', `Penerbitan dokumen SOP baru: "${sopFormData.judul || 'SOP'}"`, `${sopFormData.kode || 'SOP'}`);
     }
     setShowSopModal(false);
     setEditingSop(null);
@@ -618,9 +817,11 @@ export default function AdminPortalPage() {
 
   const handleDeleteSop = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus SOP ini?')) {
+      const targetSop = sopList.find(s => s.id === id);
       deleteSop(id);
       showNotification('SOP telah dihapus dari sistem backend & frontend.');
       pushAdminNotification('Dokumen SOP Dihapus', 'Dokumen tata kelola SOP telah dihapus', 'sop');
+      pushActivityLog('SOP', 'sop', 'DELETE', `Penghapusan dokumen SOP: "${targetSop?.judul || id}"`, `${targetSop?.kode || id}`);
     }
   };
 
@@ -673,6 +874,7 @@ export default function AdminPortalPage() {
       updatePhoto(editingPhoto.id, photoFormData);
       showNotification('✓ Foto dokumentasi berhasil diperbarui dan disinkronkan ke Frontend (/galeri)!');
       pushAdminNotification('Foto Galeri Diperbarui', photoFormData.title || 'Foto kegiatan PBJ', 'galeri');
+      pushActivityLog('Galeri', 'galeri', 'UPDATE', `Pembaruan foto galeri: "${photoFormData.title || 'Foto Kegiatan'}"`, `FOTO-${editingPhoto.id}`);
     } else {
       addPhoto({
         title: photoFormData.title || 'Foto Dokumentasi Kegiatan PBJ',
@@ -684,6 +886,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ Foto dokumentasi baru berhasil ditambahkan dan langsung tayang di Galeri (/galeri)!');
       pushAdminNotification('Foto Dokumentasi Baru Diunggah', photoFormData.title || 'Foto kegiatan PBJ', 'galeri');
+      pushActivityLog('Galeri', 'galeri', 'INSERT', `Upload foto dokumentasi kegiatan baru: "${photoFormData.title || 'Foto Baru'}"`, `FOTO-${Date.now()}`);
     }
     setShowPhotoModal(false);
     setEditingPhoto(null);
@@ -691,9 +894,11 @@ export default function AdminPortalPage() {
 
   const handleDeletePhoto = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus foto ini dari galeri publik?')) {
+      const targetPhoto = photosList.find(p => p.id === id);
       deletePhoto(id);
       showNotification('Foto dokumentasi telah dihapus.');
       pushAdminNotification('Foto Galeri Dihapus', 'Foto dokumentasi telah dihapus dari galeri publik', 'galeri');
+      pushActivityLog('Galeri', 'galeri', 'DELETE', `Penghapusan foto galeri: "${targetPhoto?.title || id}"`, `FOTO-${id}`);
     }
   };
 
@@ -704,6 +909,7 @@ export default function AdminPortalPage() {
       updateVideo(editingVideo.id, videoFormData);
       showNotification('✓ Video dokumentasi berhasil diperbarui dan disinkronkan ke Frontend (/galeri)!');
       pushAdminNotification('Video Media Diperbarui', videoFormData.title || 'Video sosialisasi', 'galeri');
+      pushActivityLog('Galeri', 'galeri', 'UPDATE', `Pembaruan data video edukasi/sosialisasi: "${videoFormData.title || 'Video'}"`, `VID-${editingVideo.id}`);
     } else {
       addVideo({
         title: videoFormData.title || 'Video Kegiatan PBJ Kemnaker',
@@ -717,6 +923,7 @@ export default function AdminPortalPage() {
       });
       showNotification('✓ Video baru berhasil ditambahkan ke Galeri Video (/galeri)!');
       pushAdminNotification('Video Media Baru Ditambahkan', videoFormData.title || 'Video sosialisasi PBJ', 'galeri');
+      pushActivityLog('Galeri', 'galeri', 'INSERT', `Penambahan tautan video sosialisasi: "${videoFormData.title || 'Video'}"`, `VID-${Date.now()}`);
     }
     setShowVideoModal(false);
     setEditingVideo(null);
@@ -724,9 +931,11 @@ export default function AdminPortalPage() {
 
   const handleDeleteVideo = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus video ini dari galeri publik?')) {
+      const targetVideo = videosList.find(v => v.id === id);
       deleteVideo(id);
       showNotification('Video dokumentasi telah dihapus.');
       pushAdminNotification('Video Media Dihapus', 'Video media telah dihapus dari galeri publik', 'galeri');
+      pushActivityLog('Galeri', 'galeri', 'DELETE', `Penghapusan video sosialisasi: "${targetVideo?.title || id}"`, `VID-${id}`);
     }
   };
 
@@ -839,14 +1048,17 @@ export default function AdminPortalPage() {
     });
     showNotification('✓ Paket Pengadaan berhasil disimpan ke database & langsung tayang di Beranda Publik!');
     pushAdminNotification('Paket Pengadaan Baru Diterbitkan', `${packageFormData.code || 'TND-2026'} - ${packageFormData.title || 'Paket Pengadaan'} (${docs.length} file)`, 'paket');
+    pushActivityLog('Paket PBJ', 'pengadaan', 'INSERT', `Penerbitan paket pengadaan tender baru: "${packageFormData.title || 'Paket PBJ'}" (${packageFormData.hps || 'Rp 0'})`, `${packageFormData.code || 'TND-2026'}`);
     setShowPackageModal(false);
   };
 
   const handleDeletePackage = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus paket pengadaan ini dari sistem?')) {
+      const targetPkg = packagesList.find(p => p.id === id);
       deletePackage(id);
       showNotification('Paket pengadaan telah dihapus dari sistem backend.');
       pushAdminNotification('Paket Pengadaan Dihapus', 'Satu paket pengadaan telah dihapus dari sistem backend', 'paket');
+      pushActivityLog('Paket PBJ', 'pengadaan', 'DELETE', `Penghapusan paket pengadaan tender: "${targetPkg?.title || id}"`, `${targetPkg?.code || id}`);
     }
   };
 
@@ -1968,6 +2180,8 @@ export default function AdminPortalPage() {
                         onClick={async () => {
                           showNotification('Memperbarui data dari Supabase Cloud...');
                           await refreshFromSupabase();
+                          pushActivityLog('Sistem', 'sistem', 'SYNC', 'Sinkronisasi menyeluruh database Supabase PostgreSQL (8 tabel aktif)', 'Supabase Cloud / REST API');
+                          pushAdminNotification('Sinkronisasi Database Berhasil', 'Seluruh data CMS tersinkronisasi dari Supabase Cloud', 'sistem');
                           showNotification('✓ Seluruh data CMS berhasil disinkronkan dari Supabase PostgreSQL!');
                         }}
                         className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
@@ -3772,14 +3986,24 @@ export default function AdminPortalPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => {
-                    const csvContent = [
-                      'ID Log,Waktu,Admin,Entitas,Aksi,Detail Perubahan,Status',
-                      'LOG-2026-0901,Baru saja,Dimas Ars,Sistem,SYNC,Sinkronisasi Database Supabase REST & PostgreSQL,SUKSES 200',
-                      'LOG-2026-0902,5 menit lalu,Dimas Ars,Agenda,UPDATE,Pembaruan poster kegiatan & jadwal bimtek SIKaP V.3,SUKSES',
-                      'LOG-2026-0903,18 menit lalu,Dimas Ars,Berita,INSERT,Publikasi siaran berita percepatan pengadaan SPSE,SUKSES',
-                      'LOG-2026-0904,42 menit lalu,Dimas Ars,Paket,UPDATE,Verifikasi dokumen pengadaan IT Server Pokja II,SUKSES',
-                      'LOG-2026-0905,1 jam lalu,Dimas Ars,SOP,UPDATE,Pembaruan standar operasional alur clearing house,SUKSES'
-                    ].join('\n');
+                    const csvRows = [
+                      ['ID Log', 'Waktu', 'Tanggal', 'Administrator', 'Role', 'Entitas', 'Aksi', 'Rincian Perubahan', 'ID Target', 'Status']
+                    ];
+                    activityLogsList.forEach((l) => {
+                      csvRows.push([
+                        `"${l.id}"`,
+                        `"${l.time}"`,
+                        `"${l.date}"`,
+                        `"${l.actor}"`,
+                        `"${l.role}"`,
+                        `"${l.entity}"`,
+                        `"${l.action}"`,
+                        `"${l.desc.replace(/"/g, '""')}"`,
+                        `"${l.target.replace(/"/g, '""')}"`,
+                        `"${l.status}"`
+                      ]);
+                    });
+                    const csvContent = csvRows.map(r => r.join(',')).join('\n');
                     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
@@ -3788,7 +4012,7 @@ export default function AdminPortalPage() {
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    showNotification('✓ Log audit berhasil diekspor ke file CSV.');
+                    showNotification(`✓ ${activityLogsList.length} baris log audit berhasil diekspor ke file CSV.`);
                   }}
                   className={`px-4 py-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                     isDark 
@@ -3801,7 +4025,9 @@ export default function AdminPortalPage() {
                 </button>
 
                 <button
-                  onClick={() => {
+                  onClick={async () => {
+                    showNotification('Memperbarui log aktivitas dari CMS & Supabase...');
+                    await refreshFromSupabase();
                     showNotification('✓ Log aktivitas telah diperbarui secara live.');
                   }}
                   className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
@@ -3913,120 +4139,7 @@ export default function AdminPortalPage() {
                   <tbody className={`divide-y ${
                     isDark ? 'divide-slate-800/60' : 'divide-slate-100'
                   }`}>
-                    {[
-                      {
-                        id: 'LOG-8821',
-                        time: 'Baru saja',
-                        date: '14 Sep 2026 08:14',
-                        actor: 'Dimas Ars',
-                        role: 'Admin UKPBJ',
-                        entity: 'Sistem',
-                        category: 'sistem',
-                        action: 'SYNC',
-                        actionColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-                        desc: 'Sinkronisasi menyeluruh database Supabase PostgreSQL (8 tabel aktif)',
-                        target: 'Database PostgreSQL / REST API',
-                        status: 'Berhasil'
-                      },
-                      {
-                        id: 'LOG-8820',
-                        time: '12 menit lalu',
-                        date: '14 Sep 2026 08:02',
-                        actor: 'Dimas Ars',
-                        role: 'Admin UKPBJ',
-                        entity: 'Agenda',
-                        category: 'agenda',
-                        action: 'UPDATE',
-                        actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-                        desc: 'Pembaruan poster kegiatan & tanggal jadwal Bimtek SIKaP V.3 Kemnaker',
-                        target: 'AGD-001 (Bimtek SIKaP)',
-                        status: 'Berhasil'
-                      },
-                      {
-                        id: 'LOG-8819',
-                        time: '28 menit lalu',
-                        date: '14 Sep 2026 07:46',
-                        actor: 'Dimas Ars',
-                        role: 'Admin UKPBJ',
-                        entity: 'Berita',
-                        category: 'berita',
-                        action: 'INSERT',
-                        actionColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-                        desc: 'Penambahan artikel berita siaran pers transparansi PBJ Kemnaker RI 2026',
-                        target: 'NEWS-2026-004',
-                        status: 'Berhasil'
-                      },
-                      {
-                        id: 'LOG-8818',
-                        time: '1 jam lalu',
-                        date: '14 Sep 2026 07:14',
-                        actor: 'Pokja Pemilihan II',
-                        role: 'Pokja PBJ',
-                        entity: 'Paket PBJ',
-                        category: 'pengadaan',
-                        action: 'UPDATE',
-                        actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-                        desc: 'Verifikasi dokumen evaluasi kualifikasi tender Pengadaan Server IT Cloud',
-                        target: 'TND-2026-001',
-                        status: 'Berhasil'
-                      },
-                      {
-                        id: 'LOG-8817',
-                        time: '2 jam lalu',
-                        date: '14 Sep 2026 06:12',
-                        actor: 'Dimas Ars',
-                        role: 'Admin UKPBJ',
-                        entity: 'Regulasi',
-                        category: 'regulasi',
-                        action: 'UPDATE',
-                        actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-                        desc: 'Pembaruan tautan dokumen PDF Peraturan Presiden No. 12 Tahun 2021',
-                        target: 'REG-001',
-                        status: 'Berhasil'
-                      },
-                      {
-                        id: 'LOG-8816',
-                        time: '3 jam lalu',
-                        date: '14 Sep 2026 05:10',
-                        actor: 'Biro Perencanaan',
-                        role: 'Admin Unit',
-                        entity: 'SOP',
-                        category: 'sop',
-                        action: 'UPDATE',
-                        actionColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
-                        desc: 'Sinkronisasi SOP Pelayanan Konsultasi dan Alur Clearing House PBJ',
-                        target: 'SOP-001',
-                        status: 'Berhasil'
-                      },
-                      {
-                        id: 'LOG-8815',
-                        time: '5 jam lalu',
-                        date: '14 Sep 2026 03:00',
-                        actor: 'System Daemon',
-                        role: 'Automated Job',
-                        entity: 'Galeri',
-                        category: 'galeri',
-                        action: 'SYNC',
-                        actionColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-                        desc: 'Validasi CDN URL foto dokumentasi dan thumbnail video YouTube',
-                        target: 'Gallery CDN Assets',
-                        status: 'Berhasil'
-                      },
-                      {
-                        id: 'LOG-8814',
-                        time: 'Kemarin',
-                        date: '13 Sep 2026 16:45',
-                        actor: 'Dimas Ars',
-                        role: 'Admin UKPBJ',
-                        entity: 'Sistem',
-                        category: 'sistem',
-                        action: 'UPDATE',
-                        actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-                        desc: 'Konfigurasi teks banner pengumuman darurat & server status monitoring',
-                        target: 'global_config',
-                        status: 'Berhasil'
-                      }
-                    ]
+                    {activityLogsList
                       .filter(item => {
                         if (logCategoryFilter !== 'all' && item.category !== logCategoryFilter) return false;
                         if (logSearchText) {
@@ -4035,7 +4148,9 @@ export default function AdminPortalPage() {
                             item.desc.toLowerCase().includes(query) ||
                             item.actor.toLowerCase().includes(query) ||
                             item.target.toLowerCase().includes(query) ||
-                            item.id.toLowerCase().includes(query)
+                            item.id.toLowerCase().includes(query) ||
+                            item.entity.toLowerCase().includes(query) ||
+                            item.action.toLowerCase().includes(query)
                           );
                         }
                         return true;
@@ -4090,6 +4205,27 @@ export default function AdminPortalPage() {
                           </td>
                         </tr>
                       ))}
+                    {activityLogsList.filter(item => {
+                      if (logCategoryFilter !== 'all' && item.category !== logCategoryFilter) return false;
+                      if (logSearchText) {
+                        const query = logSearchText.toLowerCase();
+                        return (
+                          item.desc.toLowerCase().includes(query) ||
+                          item.actor.toLowerCase().includes(query) ||
+                          item.target.toLowerCase().includes(query) ||
+                          item.id.toLowerCase().includes(query) ||
+                          item.entity.toLowerCase().includes(query) ||
+                          item.action.toLowerCase().includes(query)
+                        );
+                      }
+                      return true;
+                    }).length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="p-8 text-center text-xs text-slate-500">
+                          Tidak ada log aktivitas yang cocok dengan filter atau pencarian Anda.
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
