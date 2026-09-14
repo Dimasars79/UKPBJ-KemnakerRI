@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { 
   Search, User, Globe, Eye, Menu, X, ChevronDown, ChevronRight, 
-  Bell, AlertTriangle, FileText, CheckCircle2,
+  Bell, AlertTriangle, FileText,
   Home, Briefcase, Calendar, Image as ImageIcon, BarChart3, 
   Building2, Scale, BookOpen, FileCheck, Award, ShieldCheck, 
   FileSpreadsheet, Vote, Gavel, Target, ScrollText, HelpCircle
@@ -18,7 +18,7 @@ import { SearchPalette } from '@/components/ui/SearchPalette';
 import { useData } from '@/contexts/DataContext';
 
 export function Header() {
-  const { newsList, packagesList, siteSettings } = useData();
+  const { newsList, packagesList, agendaList, regulasiList, sopList, siteSettings } = useData();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -28,9 +28,147 @@ export function Header() {
   const [isMobileInfoOpen, setIsMobileInfoOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
+  const [isNotificationsRead, setIsNotificationsRead] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
+
+  // Top 5 Dynamic CMS Notifications
+  const cmsNotifications = React.useMemo(() => {
+    const list: Array<{
+      id: string;
+      category: string;
+      title: string;
+      desc: string;
+      time: string;
+      href: string;
+      badgeClass: string;
+      iconBg: string;
+      iconColor: string;
+      icon: React.ReactNode;
+    }> = [];
+
+    // 1. Priority Official Announcement Banner
+    if (siteSettings?.announcementActive && siteSettings?.announcementBanner) {
+      list.push({
+        id: 'banner-announcement',
+        category: 'Pengumuman Resmi',
+        title: 'Pemberitahuan UKPBJ',
+        desc: siteSettings.announcementBanner,
+        time: 'Penting',
+        href: '/informasi',
+        badgeClass: 'bg-red-50 text-red-700 border-red-200',
+        iconBg: 'bg-red-100',
+        iconColor: 'text-red-600',
+        icon: <AlertTriangle className="w-4 h-4" />
+      });
+    }
+
+    // 2. Latest Procurement Package (Tender/Seleksi)
+    if (packagesList && packagesList.length > 0) {
+      packagesList.slice(0, 2).forEach((pkg) => {
+        list.push({
+          id: `pkg-${pkg.id}`,
+          category: pkg.category || 'Tender PBJ',
+          title: `${pkg.code}: ${pkg.title}`,
+          desc: `Pagu HPS: ${pkg.hps} • Status: ${pkg.status}`,
+          time: pkg.deadline ? `Batas: ${pkg.deadline}` : 'Aktif',
+          href: '/informasi/pemilu',
+          badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+          iconBg: 'bg-indigo-100',
+          iconColor: 'text-indigo-600',
+          icon: <Briefcase className="w-4 h-4" />
+        });
+      });
+    }
+
+    // 3. Latest Published News
+    if (newsList && newsList.length > 0) {
+      newsList
+        .filter((n) => n.status === 'Published')
+        .slice(0, 2)
+        .forEach((news) => {
+          list.push({
+            id: `news-${news.id}`,
+            category: news.category || 'Warta PBJ',
+            title: news.title,
+            desc: news.excerpt || (news.content ? news.content.slice(0, 85) + '...' : ''),
+            time: news.date || 'Baru',
+            href: '/informasi',
+            badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
+            iconBg: 'bg-blue-100',
+            iconColor: 'text-blue-600',
+            icon: <FileText className="w-4 h-4" />
+          });
+        });
+    }
+
+    // 4. Latest Agenda & Bimtek
+    if (agendaList && agendaList.length > 0) {
+      agendaList
+        .filter((a) => a.status !== 'Dibatalkan')
+        .slice(0, 2)
+        .forEach((agenda) => {
+          list.push({
+            id: `agenda-${agenda.id}`,
+            category: `Agenda ${agenda.category}`,
+            title: agenda.title,
+            desc: `${agenda.location} • ${agenda.time}`,
+            time: agenda.date || 'Mendatang',
+            href: '/agenda',
+            badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+            iconBg: 'bg-emerald-100',
+            iconColor: 'text-emerald-600',
+            icon: <Calendar className="w-4 h-4" />
+          });
+        });
+    }
+
+    // 5. Latest Active Regulation
+    if (regulasiList && regulasiList.length > 0) {
+      regulasiList
+        .filter((r) => r.status === 'Aktif')
+        .slice(0, 1)
+        .forEach((reg) => {
+          list.push({
+            id: `reg-${reg.id}`,
+            category: reg.kategori || 'Produk Hukum',
+            title: reg.nomor,
+            desc: reg.tentang,
+            time: `Tahun ${reg.tahun}`,
+            href: '/informasi/peraturan',
+            badgeClass: 'bg-purple-50 text-purple-700 border-purple-200',
+            iconBg: 'bg-purple-100',
+            iconColor: 'text-purple-600',
+            icon: <Scale className="w-4 h-4" />
+          });
+        });
+    }
+
+    // 6. Latest Official SOP
+    if (sopList && sopList.length > 0) {
+      sopList
+        .filter((s) => s.status === 'Berlaku')
+        .slice(0, 1)
+        .forEach((sop) => {
+          list.push({
+            id: `sop-${sop.id}`,
+            category: 'Standar SOP',
+            title: `${sop.kode}: ${sop.judul}`,
+            desc: `${sop.unit} • ${sop.tahapanCount} Tahapan Kerja`,
+            time: sop.revisi,
+            href: '/informasi/sop',
+            badgeClass: 'bg-teal-50 text-teal-700 border-teal-200',
+            iconBg: 'bg-teal-100',
+            iconColor: 'text-teal-600',
+            icon: <FileCheck className="w-4 h-4" />
+          });
+        });
+    }
+
+    // Return the top 5 most relevant items
+    return list.slice(0, 5);
+  }, [packagesList, newsList, agendaList, regulasiList, sopList, siteSettings]);
 
   const infoSubmenu = [
     { label: 'Peraturan', href: '/informasi/peraturan', icon: <Scale className="w-4 h-4" />, desc: 'Regulasi & dasar hukum PBJ' },
@@ -384,10 +522,14 @@ export function Header() {
               <button 
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                 className="group flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-600 hover:text-accent-gold rounded-full transition-all duration-300 shadow-xs hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] relative"
-                title="Notifikasi"
+                title="Notifikasi & Pembaruan Terkini"
               >
                 <Bell className="w-4 h-4 sm:w-4.5 sm:h-4.5 transform group-hover:scale-110 transition-transform" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 border-2 border-white rounded-full animate-pulse" />
+                {!isNotificationsRead && cmsNotifications.length > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 px-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-extrabold rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-pulse">
+                    {cmsNotifications.length}
+                  </span>
+                )}
               </button>
 
               <AnimatePresence>
@@ -397,69 +539,67 @@ export function Header() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-3 w-80 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_20px_40px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50"
+                    className="absolute right-0 mt-3 w-84 sm:w-96 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_20px_40px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50"
                   >
-                    <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
-                      <h3 className="font-bold text-primary-navy">Notifikasi Terbaru</h3>
-                      <button className="text-[10px] text-primary-blue hover:text-accent-gold font-semibold transition-colors">
+                    <div className="p-3.5 border-b border-slate-100 flex justify-between items-center bg-slate-50/90">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-sm text-primary-navy">Notifikasi Terkini</h3>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
+                          {cmsNotifications.length} Update CMS
+                        </span>
+                      </div>
+                      <button 
+                        onClick={() => setIsNotificationsRead(true)}
+                        className="text-[11px] text-primary-blue hover:text-accent-gold font-semibold transition-colors cursor-pointer"
+                      >
                         Tandai dibaca
                       </button>
                     </div>
                     
-                    <div className="max-h-80 overflow-y-auto">
-                      {siteSettings.announcementActive && siteSettings.announcementBanner && (
-                        <div className="p-4 border-b border-amber-100 bg-amber-50/50 hover:bg-amber-50 transition-colors flex gap-3">
-                          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <AlertTriangle className="w-4 h-4 text-amber-600" />
-                          </div>
-                          <div>
-                            <p className="text-xs font-bold text-amber-900 mb-1">Pengumuman Resmi</p>
-                            <p className="text-[11px] text-amber-800 leading-tight">{siteSettings.announcementBanner}</p>
-                            <p className="text-[9px] text-amber-600 mt-2">Status: Aktif</p>
-                          </div>
-                        </div>
-                      )}
-
-                      {packagesList.slice(0, 2).map((pkg) => (
-                        <div key={pkg.id} className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors flex gap-3">
-                          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                          </div>
-                          <div>
-                            <p className="text-xs font-bold text-slate-800 mb-1">{pkg.category}: {pkg.code}</p>
-                            <p className="text-[11px] text-slate-500 leading-tight line-clamp-2">{pkg.title}</p>
-                            <p className="text-[9px] text-slate-400 mt-2">{pkg.status} &bull; {pkg.hps}</p>
-                          </div>
-                        </div>
-                      ))}
-
-                      {newsList.filter(n => n.status === 'Published').slice(0, 2).map((news) => (
-                        <div key={news.id} className="p-4 hover:bg-slate-50 transition-colors flex gap-3">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <FileText className="w-4 h-4 text-blue-600" />
-                          </div>
-                          <div>
-                            <p className="text-xs font-bold text-slate-800 mb-1">{news.category}</p>
-                            <p className="text-[11px] text-slate-500 leading-tight line-clamp-2">{news.title}</p>
-                            <p className="text-[9px] text-slate-400 mt-2">{news.date}</p>
-                          </div>
-                        </div>
-                      ))}
-
-                      {!siteSettings.announcementActive && packagesList.length === 0 && newsList.length === 0 && (
-                        <div className="p-6 text-center text-slate-400 text-xs">
-                          Belum ada notifikasi baru saat ini.
+                    <div className="max-h-96 overflow-y-auto divide-y divide-slate-100">
+                      {cmsNotifications.length > 0 ? (
+                        cmsNotifications.map((item) => (
+                          <Link
+                            key={item.id}
+                            href={item.href}
+                            onClick={() => setIsNotificationOpen(false)}
+                            className="p-3.5 hover:bg-slate-50/80 transition-colors flex gap-3 group cursor-pointer block"
+                          >
+                            <div className={`w-8 h-8 rounded-xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform`}>
+                              {item.icon}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center justify-between gap-1 mb-1">
+                                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold border ${item.badgeClass}`}>
+                                  {item.category}
+                                </span>
+                                <span className="text-[10px] text-slate-400 font-medium shrink-0">
+                                  {item.time}
+                                </span>
+                              </div>
+                              <h4 className="text-xs font-bold text-slate-800 group-hover:text-primary-blue transition-colors line-clamp-1">
+                                {item.title}
+                              </h4>
+                              <p className="text-[11px] text-slate-500 leading-snug line-clamp-2 mt-0.5">
+                                {item.desc}
+                              </p>
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center text-slate-400 text-xs">
+                          Belum ada notifikasi atau pembaruan konten baru.
                         </div>
                       )}
                     </div>
                     
-                    <div className="p-3 bg-slate-50 border-t border-slate-100">
+                    <div className="p-3 bg-slate-50/90 border-t border-slate-100 flex items-center justify-between gap-2">
                       <Link 
                         href="/informasi" 
                         onClick={() => setIsNotificationOpen(false)}
-                        className="block w-full py-2 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy to-primary-blue rounded-lg hover:shadow-md hover:-translate-y-0.5 transition-all"
+                        className="flex-1 py-2 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy to-primary-blue rounded-xl hover:shadow-md hover:-translate-y-0.5 transition-all"
                       >
-                        Lihat Semua Pembaruan &rarr;
+                        Lihat Pusat Informasi &rarr;
                       </Link>
                     </div>
                   </motion.div>
