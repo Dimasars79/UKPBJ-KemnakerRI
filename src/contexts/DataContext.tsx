@@ -30,6 +30,15 @@ export interface AgendaItem {
   syncFrontend: boolean;
 }
 
+export interface PackageDocument {
+  id: string;
+  name: string;
+  size: string;
+  data?: string;
+  url?: string;
+  type?: string;
+}
+
 export interface ProcurementPackage {
   id: string;
   code: string;
@@ -46,6 +55,7 @@ export interface ProcurementPackage {
   fileSize?: string;
   fileData?: string;
   downloadUrl?: string;
+  documents?: PackageDocument[];
 }
 
 export interface RegulasiItem {

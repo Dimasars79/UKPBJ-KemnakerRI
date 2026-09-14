@@ -405,66 +405,95 @@ export function PengadaanSection() {
                 </div>
               </div>
 
-              <div className="space-y-4 mb-6">
-                <h4 className="text-sm font-bold text-primary-navy">Dokumen Pengadaan Tersedia:</h4>
-                <div className="space-y-2">
-                  <div className={`flex items-center justify-between p-3.5 rounded-xl border transition-colors ${
-                    activeModalPackage.fileData 
-                      ? 'border-blue-200 bg-blue-50/50' 
-                      : 'border-slate-200 bg-white hover:bg-slate-50'
-                  }`}>
-                    <div className="flex items-center gap-3 min-w-0">
-                      <FileText className="w-5 h-5 text-blue-600 shrink-0" />
-                      <div className="min-w-0">
-                        <p className="text-xs font-bold text-slate-900 truncate">
-                          {activeModalPackage.fileName || 'Kerangka Acuan Kerja (KAK).pdf'}
-                        </p>
-                        <p className="text-[10px] text-slate-500">
-                          {activeModalPackage.fileSize || '2.4 MB'} • {activeModalPackage.fileData ? '✓ Dokumen Resmi Terverifikasi' : 'Versi Resmi'}
-                        </p>
-                      </div>
-                    </div>
-                    {activeModalPackage.fileData ? (
-                      <a
-                        href={activeModalPackage.fileData}
-                        download={activeModalPackage.fileName || `${activeModalPackage.code}-Dokumen.pdf`}
-                        className="px-3.5 py-1.5 rounded-lg bg-primary-navy hover:bg-primary-blue text-white text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
-                        title="Unduh Dokumen Pengadaan"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                        <span>Unduh Dokumen</span>
-                      </a>
-                    ) : (
-                      <a
-                        href="https://inaproc.lkpp.go.id"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-lg bg-blue-50 text-primary-blue text-xs font-bold hover:bg-primary-blue hover:text-white transition-all flex items-center gap-1"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                        <span>Unduh</span>
-                      </a>
-                    )}
-                  </div>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-bold text-primary-navy">Dokumen Pengadaan Tersedia:</h4>
+                  {activeModalPackage.documents && activeModalPackage.documents.length > 0 && (
+                    <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                      {activeModalPackage.documents.length} Dokumen
+                    </span>
+                  )}
+                </div>
 
-                  <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <FileText className="w-5 h-5 text-emerald-600 shrink-0" />
-                      <div>
-                        <p className="text-xs font-bold text-slate-800">Spesifikasi Teknis & Rincian HPS.pdf</p>
-                        <p className="text-[10px] text-slate-400">1.8 MB • Dokumen Teknis Resmi</p>
+                <div className="space-y-2">
+                  {(() => {
+                    const docs = (activeModalPackage.documents && activeModalPackage.documents.length > 0)
+                      ? activeModalPackage.documents
+                      : (activeModalPackage.fileName || activeModalPackage.fileData)
+                        ? [{
+                            id: 'doc-main',
+                            name: activeModalPackage.fileName || 'Kerangka Acuan Kerja (KAK).pdf',
+                            size: activeModalPackage.fileSize || '2.4 MB',
+                            data: activeModalPackage.fileData,
+                            url: activeModalPackage.downloadUrl
+                          }]
+                        : [];
+
+                    if (docs.length === 0) {
+                      return (
+                        <div className="p-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/50 text-center">
+                          <FileText className="w-6 h-6 text-slate-400 mx-auto mb-1.5" />
+                          <p className="text-xs text-slate-500 font-medium">Dokumen pengadaan dapat diakses langsung pada portal SPSE / INAPROC LKPP.</p>
+                        </div>
+                      );
+                    }
+
+                    return docs.map((doc, idx) => (
+                      <div 
+                        key={doc.id || idx}
+                        className={`flex items-center justify-between p-3.5 rounded-xl border transition-colors ${
+                          doc.data || (doc.url && doc.url !== '#')
+                            ? 'border-blue-200 bg-blue-50/40 hover:bg-blue-50/70' 
+                            : 'border-slate-200 bg-white hover:bg-slate-50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0 pr-2">
+                          <FileText className="w-5 h-5 text-blue-600 shrink-0" />
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold text-slate-900 truncate" title={doc.name}>
+                              {doc.name}
+                            </p>
+                            <p className="text-[10px] text-slate-500">
+                              {doc.size || 'Ukuran Standar'} • {doc.data ? '✓ Dokumen Resmi Terverifikasi' : 'Versi Resmi'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {doc.data ? (
+                          <a
+                            href={doc.data}
+                            download={doc.name || `${activeModalPackage.code}-Dokumen-${idx + 1}.pdf`}
+                            className="px-3.5 py-1.5 rounded-lg bg-primary-navy hover:bg-primary-blue text-white text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
+                            title="Unduh Dokumen Pengadaan"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            <span>Unduh</span>
+                          </a>
+                        ) : doc.url && doc.url !== '#' ? (
+                          <a
+                            href={doc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-1.5 rounded-lg bg-primary-navy hover:bg-primary-blue text-white text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
+                            title="Unduh Dokumen Pengadaan"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            <span>Unduh</span>
+                          </a>
+                        ) : (
+                          <a
+                            href="https://inaproc.lkpp.go.id"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1.5 rounded-lg bg-blue-50 text-primary-blue text-xs font-bold hover:bg-primary-blue hover:text-white transition-all flex items-center gap-1 shrink-0"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            <span>Unduh</span>
+                          </a>
+                        )}
                       </div>
-                    </div>
-                    <a
-                      href="https://inaproc.lkpp.go.id"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 transition-all flex items-center gap-1"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Unduh</span>
-                    </a>
-                  </div>
+                    ));
+                  })()}
                 </div>
               </div>
 
