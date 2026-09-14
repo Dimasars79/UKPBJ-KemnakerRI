@@ -9,7 +9,6 @@ import {
   Package, 
   Users, 
   FileText, 
-  BarChart3, 
   Settings, 
   LogOut, 
   Search, 
@@ -49,7 +48,6 @@ import {
   Coins,
   Building2,
   ArrowUpRight,
-  PieChart,
   Send,
   CheckSquare,
   PlusCircle,
@@ -58,8 +56,6 @@ import {
   Upload,
   Image as ImageIcon
 } from 'lucide-react';
-import { CategoryChart } from '@/components/dashboard/CategoryChart';
-import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData, NewsItem, AgendaItem, ProcurementPackage, RegulasiItem, SopItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
 import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
@@ -232,8 +228,7 @@ export default function AdminPortalPage() {
   const [logCategoryFilter, setLogCategoryFilter] = useState<'all' | 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'galeri' | 'sistem'>('all');
   const [logSearchText, setLogSearchText] = useState('');
 
-  // Dashboard Option 2 States: Tabbed Chart & Content Feed Filter
-  const [activeChartTab, setActiveChartTab] = useState<'realisasi' | 'distribusi'>('realisasi');
+  // Dashboard Content Feed Filter State
   const [contentFeedFilter, setContentFeedFilter] = useState<'all' | 'paket' | 'berita' | 'agenda' | 'regulasi' | 'sop'>('all');
 
   const showNotification = (msg: string) => {
@@ -1924,120 +1919,6 @@ export default function AdminPortalPage() {
                     </div>
                   </div>
 
-                </div>
-
-                {/* TABBED EXECUTIVE ANALYTICS PANEL (OPTION 2) */}
-                <div className={`p-6 rounded-3xl border shadow-sm space-y-5 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
-                }`}>
-                  {/* Panel Header with Tab Switcher */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800/80">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <BarChart3 className="w-5 h-5 text-blue-500" />
-                        <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                          Eksekutif Analytics & Kinerja Pengadaan
-                        </h3>
-                      </div>
-                      <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                        Monitoring capaian realisasi tender, kuota pagu, dan distribusi pengadaan barang/jasa.
-                      </p>
-                    </div>
-
-                    {/* Chart Tab Switcher */}
-                    <div className={`inline-flex p-1 rounded-xl border ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-100/80 border-slate-200'
-                    }`}>
-                      <button
-                        type="button"
-                        onClick={() => setActiveChartTab('realisasi')}
-                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                          activeChartTab === 'realisasi'
-                            ? 'bg-blue-600 text-white shadow-sm'
-                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                        }`}
-                      >
-                        <BarChart3 className="w-3.5 h-3.5" />
-                        <span>Target vs Realisasi</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setActiveChartTab('distribusi')}
-                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                          activeChartTab === 'distribusi'
-                            ? 'bg-blue-600 text-white shadow-sm'
-                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                        }`}
-                      >
-                        <PieChart className="w-3.5 h-3.5" />
-                        <span>Distribusi Sektor</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Tab 1 Content: Realisasi Triwulan */}
-                  {activeChartTab === 'realisasi' && (
-                    <div className="space-y-4 animate-in fade-in duration-200">
-                      <div className="pt-2">
-                        <CategoryChart />
-                      </div>
-
-                      <div className={`pt-4 border-t grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs ${
-                        isDark ? 'border-slate-800' : 'border-slate-100'
-                      }`}>
-                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-blue-50/40 border-blue-100'}`}>
-                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Total Kuota Pagu T.A 2026</p>
-                          <p className="text-base font-extrabold text-blue-600 dark:text-blue-400 mt-0.5">Rp 48.2 Miliar</p>
-                          <span className="text-[10px] text-slate-400">Terserap 68.4%</span>
-                        </div>
-                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-emerald-50/40 border-emerald-100'}`}>
-                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Efisiensi Belanja (HPS)</p>
-                          <p className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">18.4% (Rp 4.1 M)</p>
-                          <span className="text-[10px] text-emerald-500 font-semibold">Penghematan Anggaran</span>
-                        </div>
-                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-amber-50/40 border-amber-100'}`}>
-                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Komitmen P3DN / PDN Lokal</p>
-                          <p className="text-base font-extrabold text-amber-600 dark:text-accent-gold mt-0.5">84.6%</p>
-                          <span className="text-[10px] text-amber-500 font-semibold">Memenuhi Target Nasional</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tab 2 Content: Distribusi Kategori Belanja */}
-                  {activeChartTab === 'distribusi' && (
-                    <div className="space-y-4 animate-in fade-in duration-200">
-                      <div className="pt-2">
-                        <EfficiencyChart />
-                      </div>
-
-                      <div className={`pt-4 border-t grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs ${
-                        isDark ? 'border-slate-800' : 'border-slate-100'
-                      }`}>
-                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-blue-50/40 border-blue-100'}`}>
-                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Pengadaan Barang</p>
-                          <p className="text-base font-extrabold text-blue-600 mt-0.5">180 Paket</p>
-                          <span className="text-[10px] text-blue-500 font-semibold">45% dari Total Belanja</span>
-                        </div>
-                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-indigo-50/40 border-indigo-100'}`}>
-                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Pekerjaan Konstruksi</p>
-                          <p className="text-base font-extrabold text-indigo-600 mt-0.5">85 Paket</p>
-                          <span className="text-[10px] text-indigo-500 font-semibold">25% dari Total Belanja</span>
-                        </div>
-                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-purple-50/40 border-purple-100'}`}>
-                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Jasa Konsultansi</p>
-                          <p className="text-base font-extrabold text-purple-600 mt-0.5">65 Paket</p>
-                          <span className="text-[10px] text-purple-500 font-semibold">18% dari Total Belanja</span>
-                        </div>
-                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-emerald-50/40 border-emerald-100'}`}>
-                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Jasa Lainnya</p>
-                          <p className="text-base font-extrabold text-emerald-600 mt-0.5">98 Paket</p>
-                          <span className="text-[10px] text-emerald-500 font-semibold">12% dari Total Belanja</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* QUICK LAUNCH ACTION BAR */}
