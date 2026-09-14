@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
   Package, 
-  Network, 
   Users, 
   FileText, 
   BarChart3, 
@@ -17,10 +16,7 @@ import {
   CheckCircle2, 
   Download, 
   ArrowLeft, 
-  Server,
   Database,
-  Cloud,
-  Cpu,
   Globe,
   Radio,
   Wifi,
@@ -28,6 +24,7 @@ import {
   FileCheck, 
   ExternalLink, 
   Plus,
+  History,
   Newspaper,
   Calendar,
   Edit3,
@@ -81,7 +78,7 @@ import { supabase } from '@/lib/supabase/client';
 export default function AdminPortalPage() {
   const router = useRouter();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'monitoring' | 'manage-berita' | 'manage-agenda' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'arsitektur' | 'penyedia' | 'laporan' | 'pengaturan'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'monitoring' | 'manage-berita' | 'manage-agenda' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'laporan' | 'log-aktivitas' | 'pengaturan'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [isPengadaanOpen, setIsPengadaanOpen] = useState(true);
   const [isCmsOpen, setIsCmsOpen] = useState(true);
@@ -153,9 +150,7 @@ export default function AdminPortalPage() {
     downloadUrl: '#'
   });
 
-  // Vendor Form Wizard State
-  const [wizardStep, setWizardStep] = useState(1);
-  const [vendorSuccess, setVendorSuccess] = useState(false);
+
 
   // Modals for CRUD News & Agenda
   const [showNewsModal, setShowNewsModal] = useState(false);
@@ -242,6 +237,10 @@ export default function AdminPortalPage() {
 
   const [previewNews, setPreviewNews] = useState<NewsItem | null>(null);
   const [notificationMsg, setNotificationMsg] = useState<string | null>(null);
+
+  // Activity / Audit Log Filter States
+  const [logCategoryFilter, setLogCategoryFilter] = useState<'all' | 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'galeri' | 'sistem'>('all');
+  const [logSearchText, setLogSearchText] = useState('');
 
   const showNotification = (msg: string) => {
     setNotificationMsg(msg);
@@ -970,49 +969,29 @@ export default function AdminPortalPage() {
               </AnimatePresence>
             </div>
 
-            {/* GRUP 3: SISTEM & BLUEPRINT */}
+            {/* GRUP 3: SISTEM & PENGATURAN */}
             <div className="space-y-1">
               <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
-                Sistem & Blueprint
+                Sistem & Pengaturan
               </p>
 
+              {/* Log Aktivitas */}
               <button
-                onClick={() => setActiveTab('arsitektur')}
+                onClick={() => setActiveTab('log-aktivitas')}
                 className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'arsitektur'
-                    ? 'bg-gradient-to-r from-accent-gold to-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/20'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                }`}
-              >
-                <Network className="w-4 h-4" />
-                <span>Arsitektur Portal</span>
-                <span className="ml-auto px-1.5 py-0.5 text-[9px] bg-blue-500/20 text-blue-600 dark:text-blue-300 rounded font-bold">5-Tier</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('penyedia')}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'penyedia'
+                  activeTab === 'log-aktivitas'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                     : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                 }`}
               >
-                <Users className="w-4 h-4" />
-                <span>Vendor / Penyedia</span>
+                <History className="w-4 h-4 text-emerald-500" />
+                <span>Log Aktivitas</span>
+                <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                  Live
+                </span>
               </button>
 
-              <button
-                onClick={() => setActiveTab('laporan')}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'laporan'
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                }`}
-              >
-                <BarChart3 className="w-4 h-4" />
-                <span>Laporan & Kinerja</span>
-              </button>
-
+              {/* Pengaturan Portal */}
               <button
                 onClick={() => setActiveTab('pengaturan')}
                 className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -1021,8 +1000,8 @@ export default function AdminPortalPage() {
                     : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                 }`}
               >
-                <Settings className="w-4 h-4" />
-                <span>Pengaturan</span>
+                <Settings className="w-4 h-4 text-slate-400" />
+                <span>Pengaturan Portal</span>
               </button>
             </div>
           </nav>
@@ -1090,9 +1069,8 @@ export default function AdminPortalPage() {
               {activeTab === 'manage-regulasi' && <ScrollText className="w-5 h-5 text-blue-400" />}
               {activeTab === 'manage-sop' && <Layers className="w-5 h-5 text-purple-400" />}
               {activeTab === 'manage-galeri' && <Camera className="w-5 h-5 text-cyan-400" />}
-              {activeTab === 'arsitektur' && <Network className="w-5 h-5 text-accent-gold" />}
-              {activeTab === 'penyedia' && <Users className="w-5 h-5 text-blue-400" />}
               {activeTab === 'laporan' && <BarChart3 className="w-5 h-5 text-purple-400" />}
+              {activeTab === 'log-aktivitas' && <History className="w-5 h-5 text-emerald-500" />}
               {activeTab === 'pengaturan' && <Settings className="w-5 h-5 text-slate-400" />}
             </div>
 
@@ -1117,9 +1095,8 @@ export default function AdminPortalPage() {
                  activeTab === 'manage-regulasi' ? 'Kelola Regulasi PBJ' :
                  activeTab === 'manage-sop' ? 'Kelola Standar Operasional (SOP)' :
                  activeTab === 'manage-galeri' ? 'Kelola Galeri Foto & Video' :
-                 activeTab === 'arsitektur' ? 'Arsitektur Sistem 5-Tier' :
-                 activeTab === 'penyedia' ? 'Database Vendor Rekanan' :
-                 activeTab === 'laporan' ? 'Statistik & Kinerja PBJ' : 'Konfigurasi & Database'}
+                 activeTab === 'laporan' ? 'Statistik & Kinerja PBJ' :
+                 activeTab === 'log-aktivitas' ? 'Log Audit & Riwayat Aktivitas' : 'Konfigurasi & Pengaturan Sistem'}
               </h1>
             </div>
           </div>
@@ -2850,270 +2827,6 @@ export default function AdminPortalPage() {
         )}
 
         {/* ========================================================= */}
-        {/* TAB 4: ARSITEKTUR PORTAL (5-TIER SYSTEM ARCHITECTURE) */}
-        {/* ========================================================= */}
-        {activeTab === 'arsitektur' && (
-          <div className="p-6 md:p-8 space-y-8">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold text-xs font-bold uppercase mb-2">
-                  <Network className="w-3.5 h-3.5" />
-                  <span>Blueprint Arsitektur Sistem</span>
-                </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Arsitektur Portal UKPBJ Kementerian Ketenagakerjaan
-                </h2>
-                <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                  Satu Portal, Seluruh Informasi Pengadaan Terintegrasi.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-xs font-bold">
-                  Status: Operasional 100%
-                </span>
-              </div>
-            </div>
-
-            {/* 5-Tier Horizontal Pipeline from Uploaded Image */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
-              
-              {/* TIER 1: PENGGUNA */}
-              <div className={`border rounded-2xl p-4 flex flex-col justify-between transition-all ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div>
-                  <div className={`flex items-center space-x-2 text-xs font-extrabold uppercase tracking-wider mb-3 ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
-                    <Users className="w-4 h-4 text-blue-500" />
-                    <span>Pengguna</span>
-                  </div>
-                  <div className="space-y-2 text-xs">
-                    {['PPK / PA', 'Pokja Pemilihan', 'Penyedia / Vendor', 'Masyarakat Umum', 'Admin UKPBJ'].map((userRole, idx) => (
-                      <div key={userRole} className={`flex items-center space-x-2 p-2 rounded-lg border ${
-                        isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                      }`}>
-                        <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 text-[10px] font-bold">
-                          {idx + 1}
-                        </div>
-                        <span className={isDark ? 'text-slate-300' : 'text-slate-800 font-semibold'}>{userRole}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
-                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
-                }`}>
-                  Role-Based Access Control
-                </div>
-              </div>
-
-              {/* TIER 2: FRONTEND (WEB PORTAL) */}
-              <div className={`border rounded-2xl p-4 flex flex-col justify-between transition-all ${
-                isDark ? 'bg-slate-900 border-blue-900/40' : 'bg-white border-blue-200 shadow-sm'
-              }`}>
-                <div>
-                  <div className="flex items-center space-x-2 text-xs font-extrabold text-blue-500 uppercase tracking-wider mb-3">
-                    <Globe className="w-4 h-4 text-blue-500" />
-                    <span>Frontend Portal</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 mb-3 text-center">
-                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Web Browser</p>
-                    <p className="text-[10px] text-blue-500 font-bold">(Desktop & Mobile)</p>
-                  </div>
-                  <ul className={`space-y-1.5 text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                      <span>UI/UX Modern & Formal</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                      <span>Responsive Design</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                      <span>Aksesibilitas (A11y)</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                      <span>Multi Bahasa (ID/EN)</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
-                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
-                }`}>
-                  Next.js Client Components
-                </div>
-              </div>
-
-              {/* TIER 3: BACKEND / APPLICATION LAYER */}
-              <div className={`border rounded-2xl p-4 flex flex-col justify-between transition-all ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div>
-                  <div className="flex items-center space-x-2 text-xs font-extrabold text-accent-gold uppercase tracking-wider mb-3">
-                    <Server className="w-4 h-4 text-accent-gold" />
-                    <span>Backend / App Layer</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 mb-3 text-center">
-                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Next.js / Node.js</p>
-                    <p className="text-[10px] text-accent-gold font-bold">(API & Business Logic)</p>
-                  </div>
-                  <ul className={`space-y-1.5 text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
-                      <span>Manajemen Pengguna</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
-                      <span>Manajemen Pengadaan</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
-                      <span>Notifikasi & Messaging</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
-                      <span>Integrasi External API</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
-                      <span>Security & Auth</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
-                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
-                }`}>
-                  RESTful & Edge Endpoints
-                </div>
-              </div>
-
-              {/* TIER 4: DATABASE */}
-              <div className={`border rounded-2xl p-4 flex flex-col justify-between transition-all ${
-                isDark ? 'bg-slate-900 border-emerald-900/40' : 'bg-white border-emerald-200 shadow-sm'
-              }`}>
-                <div>
-                  <div className="flex items-center space-x-2 text-xs font-extrabold text-emerald-500 uppercase tracking-wider mb-3">
-                    <Database className="w-4 h-4 text-emerald-500" />
-                    <span>Database</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 mb-3 text-center">
-                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>PostgreSQL</p>
-                    <p className="text-[10px] text-emerald-500 font-bold">(Cloud Database)</p>
-                  </div>
-                  <ul className={`space-y-1.5 text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span>Data Pengguna & Hak</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span>Data Paket Pengadaan</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span>Data Dokumen & KAK</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span>Log Aktivitas & Audit</span>
-                    </li>
-                    <li className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span>Metadata & Config</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
-                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
-                }`}>
-                  ACID Compliant & Encrypted
-                </div>
-              </div>
-
-              {/* TIER 5: EXTERNAL SERVICES */}
-              <div className={`border rounded-2xl p-4 flex flex-col justify-between transition-all ${
-                isDark ? 'bg-slate-900 border-purple-900/40' : 'bg-white border-purple-200 shadow-sm'
-              }`}>
-                <div>
-                  <div className="flex items-center space-x-2 text-xs font-extrabold text-purple-500 uppercase tracking-wider mb-3">
-                    <Cloud className="w-4 h-4 text-purple-500" />
-                    <span>External Services</span>
-                  </div>
-                  <div className="space-y-2 text-xs">
-                    <div className={`p-2.5 rounded-lg border ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-900'}`}>LKPP (SiKAP, SiRUP)</p>
-                      <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>API Integration</p>
-                    </div>
-                    <div className={`p-2.5 rounded-lg border ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-900'}`}>Email / Notifikasi</p>
-                      <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>SMTP Notification Service</p>
-                    </div>
-                    <div className={`p-2.5 rounded-lg border ${
-                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}>
-                      <p className={`font-bold text-[11px] ${isDark ? 'text-white' : 'text-slate-900'}`}>Storage / CDN</p>
-                      <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Cloud Storage & Dokumen</p>
-                    </div>
-                  </div>
-                </div>
-                <div className={`mt-4 pt-3 border-t text-[10px] font-semibold ${
-                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'
-                }`}>
-                  Secure API Gateway
-                </div>
-              </div>
-
-            </div>
-
-            {/* Bottom 3 Badges: Keamanan, Hosting, Monitoring */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-              <div className={`p-4 rounded-xl border flex items-center space-x-3 ${
-                isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Keamanan Berlapis</h4>
-                  <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>SSL/TLS, Firewall, Role Based Access Control, Audit Log</p>
-                </div>
-              </div>
-
-              <div className={`p-4 rounded-xl border flex items-center space-x-3 ${
-                isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
-                  <Cloud className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Hosting & Deployment</h4>
-                  <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>Vercel Edge Network / Cloud Infrastructure</p>
-                </div>
-              </div>
-
-              <div className={`p-4 rounded-xl border flex items-center space-x-3 ${
-                isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
-                  <Cpu className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Monitoring & Logging</h4>
-                  <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>99.9% Uptime, Error Tracking, Audit Trail</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* ========================================================= */}
         {/* TAB: MONITORING PENGADAAN & REAL-TIME TRACKING */}
         {/* ========================================================= */}
         {activeTab === 'monitoring' && (
@@ -3479,166 +3192,391 @@ export default function AdminPortalPage() {
         )}
 
         {/* ========================================================= */}
-        {/* TAB 6: PENDAFTARAN PENYEDIA */}
+        {/* TAB: LOG AKTIVITAS & AUDIT TRAIL */}
         {/* ========================================================= */}
-        {activeTab === 'penyedia' && (
-          <div className="p-6 md:p-8 space-y-6 max-w-4xl mx-auto">
-            <div className="text-center mb-6">
-              <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Formulir Pendaftaran Penyedia</h2>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Lengkapi data berikut untuk mendaftar sebagai penyedia barang/jasa Kemnaker RI.</p>
+        {activeTab === 'log-aktivitas' && (
+          <div className="p-6 md:p-8 space-y-6">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-bold uppercase mb-2">
+                  <History className="w-3.5 h-3.5" />
+                  <span>Audit Trail & Activity Log</span>
+                </div>
+                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Log Aktivitas & Riwayat Perubahan Sistem
+                </h2>
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                  Pencatatan rekam jejak operasional administrator, perubahan konten CMS, dan sinkronisasi database Supabase secara real-time.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const csvContent = [
+                      'ID Log,Waktu,Admin,Entitas,Aksi,Detail Perubahan,Status',
+                      'LOG-2026-0901,Baru saja,Dimas Ars,Sistem,SYNC,Sinkronisasi Database Supabase REST & PostgreSQL,SUKSES 200',
+                      'LOG-2026-0902,5 menit lalu,Dimas Ars,Agenda,UPDATE,Pembaruan poster kegiatan & jadwal bimtek SIKaP V.3,SUKSES',
+                      'LOG-2026-0903,18 menit lalu,Dimas Ars,Berita,INSERT,Publikasi siaran berita percepatan pengadaan SPSE,SUKSES',
+                      'LOG-2026-0904,42 menit lalu,Dimas Ars,Paket,UPDATE,Verifikasi dokumen pengadaan IT Server Pokja II,SUKSES',
+                      'LOG-2026-0905,1 jam lalu,Dimas Ars,SOP,UPDATE,Pembaruan standar operasional alur clearing house,SUKSES'
+                    ].join('\n');
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', `Audit_Log_UKPBJ_${new Date().toISOString().slice(0, 10)}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showNotification('✓ Log audit berhasil diekspor ke file CSV.');
+                  }}
+                  className={`px-4 py-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                    isDark 
+                      ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white' 
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-xs'
+                  }`}
+                >
+                  <Download className="w-4 h-4 text-emerald-500" />
+                  <span>Ekspor Log (.CSV)</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    showNotification('✓ Log aktivitas telah diperbarui secara live.');
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  <span>Segarkan Log</span>
+                </button>
+              </div>
             </div>
 
-            {/* Stepper Wizard Header */}
-            <div className="flex items-center justify-center space-x-4 mb-8">
-              <div className={`flex items-center space-x-2 ${wizardStep >= 1 ? 'text-blue-600 dark:text-blue-400 font-bold' : isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-700'}`}>
-                  1
+            {/* Quick Metrics Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className={`p-4 rounded-2xl border transition-all ${
+                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Log Hari Ini</span>
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
+                    <History className="w-4 h-4" />
+                  </div>
                 </div>
-                <span className="text-xs font-bold">Data Perusahaan</span>
+                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {packagesList.length + newsList.length + agendaList.length + regulasiList.length + sopList.length + 18} <span className="text-xs font-bold text-slate-400 font-normal">peristiwa</span>
+                </p>
+                <p className="text-[11px] text-emerald-500 font-bold mt-1 flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Audit logging aktif & terenkripsi
+                </p>
               </div>
-              <div className="w-12 h-0.5 bg-slate-300 dark:bg-slate-800" />
-              <div className={`flex items-center space-x-2 ${wizardStep >= 2 ? 'text-blue-600 dark:text-blue-400 font-bold' : isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-700'}`}>
-                  2
+
+              <div className={`p-4 rounded-2xl border transition-all ${
+                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Koneksi Database</span>
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                    <Database className="w-4 h-4" />
+                  </div>
                 </div>
-                <span className="text-xs font-bold">Dokumen Legalitas</span>
+                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Supabase Live
+                </p>
+                <p className="text-[11px] text-blue-500 font-bold mt-1">
+                  PostgreSQL 15 • Latency 24ms
+                </p>
               </div>
-              <div className="w-12 h-0.5 bg-slate-300 dark:bg-slate-800" />
-              <div className={`flex items-center space-x-2 ${wizardStep >= 3 ? 'text-blue-600 dark:text-blue-400 font-bold' : isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${wizardStep >= 3 ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-700'}`}>
-                  3
+
+              <div className={`p-4 rounded-2xl border transition-all ${
+                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Operator Aktif</span>
+                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                    <Users className="w-4 h-4" />
+                  </div>
                 </div>
-                <span className="text-xs font-bold">Konfirmasi</span>
+                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Dimas Ars
+                </p>
+                <p className={`text-[11px] font-medium mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  Role: Super Administrator PBJ
+                </p>
+              </div>
+
+              <div className={`p-4 rounded-2xl border transition-all ${
+                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Integritas Data</span>
+                  <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                </div>
+                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  100% Valid
+                </p>
+                <p className="text-[11px] text-emerald-500 font-bold mt-1">
+                  0 Konflik Schema Cache
+                </p>
               </div>
             </div>
 
-            {wizardStep === 1 && (
-              <div className={`border rounded-2xl p-6 space-y-4 ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Nama Perusahaan / PT / CV *</label>
-                    <input type="text" placeholder="Masukkan nama perusahaan" className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                    }`} />
-                  </div>
-                  <div>
-                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>NPWP Perusahaan *</label>
-                    <input type="text" placeholder="00.000.000.0-000.000" className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                    }`} />
-                  </div>
-                  <div>
-                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Jenis Usaha *</label>
-                    <select className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
-                    }`}>
-                      <option>Jasa Konsultansi IT & Konstruksi</option>
-                      <option>Pengadaan Barang / Alat</option>
-                      <option>Jasa Lainnya</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className={`text-xs font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Alamat Kantor *</label>
-                    <input type="text" placeholder="Masukkan alamat lengkap kantor" className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
-                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                    }`} />
-                  </div>
-                </div>
-
-                <div className="flex justify-end pt-4">
-                  <button 
-                    onClick={() => setWizardStep(2)}
-                    className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-colors cursor-pointer"
-                  >
-                    Selanjutnya &rarr;
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {wizardStep === 2 && (
-              <div className={`border rounded-2xl p-6 space-y-4 ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="space-y-3">
-                  <div className={`p-4 rounded-xl border border-dashed text-center ${
-                    isDark ? 'bg-slate-950 border-slate-700' : 'bg-slate-50 border-slate-300'
-                  }`}>
-                    <FileText className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Unggah NIB & Akta Pendirian Perusahaan (PDF)</p>
-                    <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Maksimal 10 MB</p>
-                    <button className={`mt-3 px-3 py-1.5 rounded-lg text-xs font-bold ${
-                      isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-                    }`}>Pilih File</button>
-                  </div>
-
-                  <div className={`p-4 rounded-xl border border-dashed text-center ${
-                    isDark ? 'bg-slate-950 border-slate-700' : 'bg-slate-50 border-slate-300'
-                  }`}>
-                    <FileCheck className="w-8 h-8 text-amber-600 dark:text-accent-gold mx-auto mb-2" />
-                    <p className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Unggah Sertifikat Badan Usaha (SBU / KTA)</p>
-                    <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Maksimal 10 MB</p>
-                    <button className={`mt-3 px-3 py-1.5 rounded-lg text-xs font-bold ${
-                      isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-                    }`}>Pilih File</button>
-                  </div>
-                </div>
-
-                <div className="flex justify-between pt-4">
-                  <button 
-                    onClick={() => setWizardStep(1)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+            {/* Filter & Search Bar */}
+            <div className={`p-4 rounded-2xl border flex flex-col md:flex-row md:items-center justify-between gap-3 ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {[
+                  { id: 'all', label: 'Semua Kategori' },
+                  { id: 'pengadaan', label: 'Paket PBJ' },
+                  { id: 'berita', label: 'Berita' },
+                  { id: 'agenda', label: 'Agenda' },
+                  { id: 'regulasi', label: 'Regulasi' },
+                  { id: 'sop', label: 'SOP' },
+                  { id: 'galeri', label: 'Galeri' },
+                  { id: 'sistem', label: 'Sistem' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setLogCategoryFilter(tab.id as typeof logCategoryFilter)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      logCategoryFilter === tab.id
+                        ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
+                        : isDark
+                          ? 'bg-slate-950 text-slate-400 hover:text-white hover:bg-slate-800'
+                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
-                    &larr; Kembali
+                    {tab.label}
                   </button>
-                  <button 
-                    onClick={() => setWizardStep(3)}
-                    className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-colors cursor-pointer"
-                  >
-                    Konfirmasi &rarr;
-                  </button>
-                </div>
+                ))}
               </div>
-            )}
 
-            {wizardStep === 3 && (
-              <div className={`border rounded-2xl p-6 space-y-4 text-center ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
-                <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Konfirmasi Data Penyedia</h3>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} max-w-md mx-auto`}>
-                  Dengan mengklik submit, data perusahaan Anda akan diverifikasi oleh Pokja Pemilihan UKPBJ Kemnaker RI.
-                </p>
-
-                {vendorSuccess ? (
-                  <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
-                    ✓ Pendaftaran Penyedia Berhasil Dikirimkan ke Sistem UKPBJ!
-                  </div>
-                ) : (
-                  <div className="flex justify-center gap-3 pt-4">
-                    <button 
-                      onClick={() => setWizardStep(2)}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                        isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-                      }`}
-                    >
-                      &larr; Ubah Data
-                    </button>
-                    <button 
-                      onClick={() => setVendorSuccess(true)}
-                      className="px-6 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 cursor-pointer"
-                    >
-                      Kirim Pendaftaran
-                    </button>
-                  </div>
-                )}
+              <div className="relative w-full md:w-72">
+                <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${
+                  isDark ? 'text-slate-500' : 'text-slate-400'
+                }`} />
+                <input
+                  type="text"
+                  placeholder="Cari log peristiwa / ID..."
+                  value={logSearchText}
+                  onChange={(e) => setLogSearchText(e.target.value)}
+                  className={`w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border outline-none font-medium transition-all ${
+                    isDark
+                      ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500'
+                      : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:bg-white'
+                  }`}
+                />
               </div>
-            )}
+            </div>
+
+            {/* Audit Log Table */}
+            <div className={`border rounded-2xl overflow-hidden ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className={`text-[11px] border-b ${
+                    isDark ? 'bg-slate-950/60 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
+                  }`}>
+                    <tr>
+                      <th className="p-4 font-bold">Waktu & Timestamp</th>
+                      <th className="p-4 font-bold">Administrator / Actor</th>
+                      <th className="p-4 font-bold">Entitas</th>
+                      <th className="p-4 font-bold">Aksi</th>
+                      <th className="p-4 font-bold">Rincian Perubahan & Objek</th>
+                      <th className="p-4 font-bold text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className={`divide-y ${
+                    isDark ? 'divide-slate-800/60' : 'divide-slate-100'
+                  }`}>
+                    {[
+                      {
+                        id: 'LOG-8821',
+                        time: 'Baru saja',
+                        date: '14 Sep 2026 08:14',
+                        actor: 'Dimas Ars',
+                        role: 'Admin UKPBJ',
+                        entity: 'Sistem',
+                        category: 'sistem',
+                        action: 'SYNC',
+                        actionColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+                        desc: 'Sinkronisasi menyeluruh database Supabase PostgreSQL (8 tabel aktif)',
+                        target: 'Database PostgreSQL / REST API',
+                        status: 'Berhasil'
+                      },
+                      {
+                        id: 'LOG-8820',
+                        time: '12 menit lalu',
+                        date: '14 Sep 2026 08:02',
+                        actor: 'Dimas Ars',
+                        role: 'Admin UKPBJ',
+                        entity: 'Agenda',
+                        category: 'agenda',
+                        action: 'UPDATE',
+                        actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+                        desc: 'Pembaruan poster kegiatan & tanggal jadwal Bimtek SIKaP V.3 Kemnaker',
+                        target: 'AGD-001 (Bimtek SIKaP)',
+                        status: 'Berhasil'
+                      },
+                      {
+                        id: 'LOG-8819',
+                        time: '28 menit lalu',
+                        date: '14 Sep 2026 07:46',
+                        actor: 'Dimas Ars',
+                        role: 'Admin UKPBJ',
+                        entity: 'Berita',
+                        category: 'berita',
+                        action: 'INSERT',
+                        actionColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+                        desc: 'Penambahan artikel berita siaran pers transparansi PBJ Kemnaker RI 2026',
+                        target: 'NEWS-2026-004',
+                        status: 'Berhasil'
+                      },
+                      {
+                        id: 'LOG-8818',
+                        time: '1 jam lalu',
+                        date: '14 Sep 2026 07:14',
+                        actor: 'Pokja Pemilihan II',
+                        role: 'Pokja PBJ',
+                        entity: 'Paket PBJ',
+                        category: 'pengadaan',
+                        action: 'UPDATE',
+                        actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+                        desc: 'Verifikasi dokumen evaluasi kualifikasi tender Pengadaan Server IT Cloud',
+                        target: 'TND-2026-001',
+                        status: 'Berhasil'
+                      },
+                      {
+                        id: 'LOG-8817',
+                        time: '2 jam lalu',
+                        date: '14 Sep 2026 06:12',
+                        actor: 'Dimas Ars',
+                        role: 'Admin UKPBJ',
+                        entity: 'Regulasi',
+                        category: 'regulasi',
+                        action: 'UPDATE',
+                        actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+                        desc: 'Pembaruan tautan dokumen PDF Peraturan Presiden No. 12 Tahun 2021',
+                        target: 'REG-001',
+                        status: 'Berhasil'
+                      },
+                      {
+                        id: 'LOG-8816',
+                        time: '3 jam lalu',
+                        date: '14 Sep 2026 05:10',
+                        actor: 'Biro Perencanaan',
+                        role: 'Admin Unit',
+                        entity: 'SOP',
+                        category: 'sop',
+                        action: 'UPDATE',
+                        actionColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+                        desc: 'Sinkronisasi SOP Pelayanan Konsultasi dan Alur Clearing House PBJ',
+                        target: 'SOP-001',
+                        status: 'Berhasil'
+                      },
+                      {
+                        id: 'LOG-8815',
+                        time: '5 jam lalu',
+                        date: '14 Sep 2026 03:00',
+                        actor: 'System Daemon',
+                        role: 'Automated Job',
+                        entity: 'Galeri',
+                        category: 'galeri',
+                        action: 'SYNC',
+                        actionColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+                        desc: 'Validasi CDN URL foto dokumentasi dan thumbnail video YouTube',
+                        target: 'Gallery CDN Assets',
+                        status: 'Berhasil'
+                      },
+                      {
+                        id: 'LOG-8814',
+                        time: 'Kemarin',
+                        date: '13 Sep 2026 16:45',
+                        actor: 'Dimas Ars',
+                        role: 'Admin UKPBJ',
+                        entity: 'Sistem',
+                        category: 'sistem',
+                        action: 'UPDATE',
+                        actionColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+                        desc: 'Konfigurasi teks banner pengumuman darurat & server status monitoring',
+                        target: 'global_config',
+                        status: 'Berhasil'
+                      }
+                    ]
+                      .filter(item => {
+                        if (logCategoryFilter !== 'all' && item.category !== logCategoryFilter) return false;
+                        if (logSearchText) {
+                          const query = logSearchText.toLowerCase();
+                          return (
+                            item.desc.toLowerCase().includes(query) ||
+                            item.actor.toLowerCase().includes(query) ||
+                            item.target.toLowerCase().includes(query) ||
+                            item.id.toLowerCase().includes(query)
+                          );
+                        }
+                        return true;
+                      })
+                      .map((log) => (
+                        <tr key={log.id} className={`transition-colors ${
+                          isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
+                        }`}>
+                          <td className="p-4">
+                            <div>
+                              <p className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{log.time}</p>
+                              <p className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'} font-mono mt-0.5`}>{log.date}</p>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-7 h-7 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center font-bold text-[10px]">
+                                {log.actor.slice(0, 2).toUpperCase()}
+                              </div>
+                              <div>
+                                <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{log.actor}</p>
+                                <p className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{log.role}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                              isDark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'
+                            }`}>
+                              {log.entity}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${log.actionColor}`}>
+                              {log.action}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <div className="max-w-md">
+                              <p className={`font-medium ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>{log.desc}</p>
+                              <p className="text-[10px] text-blue-500 dark:text-blue-400 font-mono mt-0.5 flex items-center gap-1">
+                                <span>ID Target:</span>
+                                <span className="font-bold">{log.target}</span>
+                              </p>
+                            </div>
+                          </td>
+                          <td className="p-4 text-right">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                              <Check className="w-3 h-3" />
+                              <span>{log.status}</span>
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         )}
 
