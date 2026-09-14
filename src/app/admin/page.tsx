@@ -1807,18 +1807,18 @@ export default function AdminPortalPage() {
                 </div>
 
                 {/* OPTION 3: COMPACT STATUS RIBBON (INTERACTIVE & SPACE-SAVING) */}
-                {/* FORMAT 1: ACTIONABLE BREAKDOWN BOXES (HIGH FUNCTIONALITY) */}
+                {/* STRATEGIC ACTIONABLE METRIC CARDS */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   
                   {/* Box 1: Paket Pengadaan PBJ */}
-                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg space-y-3.5 ${
+                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg flex flex-col justify-between space-y-4 ${
                     contentFeedFilter === 'paket'
-                      ? isDark ? 'bg-indigo-950/30 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/60 border-indigo-400 ring-1 ring-indigo-400'
+                      ? isDark ? 'bg-indigo-950/40 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/70 border-indigo-400 ring-1 ring-indigo-400'
                       : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-indigo-300'
                   }`}>
-                    {/* Header: Icon + Title + Quick Action Button */}
+                    {/* Top Header: Icon + Category + Action Button */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
                           <Package className="w-4 h-4" />
                         </div>
@@ -1846,34 +1846,47 @@ export default function AdminPortalPage() {
                           });
                           setShowPackageModal(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
                         title="Tambah Paket Tender / Non-Tender"
                       >
                         <Plus className="w-3 h-3" />
-                        <span>+ Buat</span>
+                        <span>Buat</span>
                       </button>
                     </div>
 
-                    {/* Main Value & Financial Total */}
+                    {/* Strategic Number Hub: Hero Number (Left) + Financial Pagu (Right) */}
                     <div 
                       onClick={() => setContentFeedFilter('paket')}
-                      className="cursor-pointer group"
+                      className="flex items-end justify-between cursor-pointer py-0.5 group"
                     >
-                      <div className="flex items-baseline gap-2">
-                        <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</p>
-                        <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Total Paket</span>
+                      <div>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className={`text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            {packagesList.length}
+                          </span>
+                          <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">Paket</span>
+                        </div>
+                        <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Tender & Non-Tender
+                        </p>
                       </div>
-                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                        Pagu Anggaran: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Rp 48.2 M</strong>
-                      </p>
+
+                      <div className="text-right">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Pagu Anggaran
+                        </span>
+                        <span className="text-sm font-extrabold text-amber-500">
+                          Rp 48.2 M
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Actionable Status Pills */}
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                    {/* Bottom Status Pills */}
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[10px]">
                       <button
                         type="button"
                         onClick={() => setContentFeedFilter('paket')}
-                        className="px-2 py-0.5 rounded-md font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1 cursor-pointer hover:bg-emerald-500/20 transition-colors"
+                        className="px-2 py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 cursor-pointer hover:bg-emerald-500/20 transition-colors"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         <span>{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length} Dibuka</span>
@@ -1881,8 +1894,8 @@ export default function AdminPortalPage() {
                       <button
                         type="button"
                         onClick={() => setContentFeedFilter('paket')}
-                        className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-colors ${
-                          isDark ? 'bg-slate-800/70 text-slate-300 hover:bg-slate-800' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        className={`px-2 py-1 rounded-lg font-semibold cursor-pointer transition-colors ${
+                          isDark ? 'bg-slate-800/80 text-slate-300 hover:bg-slate-800' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}
                       >
                         <span>{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length} Evaluasi</span>
@@ -1891,14 +1904,14 @@ export default function AdminPortalPage() {
                   </div>
 
                   {/* Box 2: Berita & Publikasi CMS */}
-                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg space-y-3.5 ${
+                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg flex flex-col justify-between space-y-4 ${
                     contentFeedFilter === 'berita'
-                      ? isDark ? 'bg-amber-950/30 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/60 border-amber-400 ring-1 ring-amber-400'
+                      ? isDark ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/70 border-amber-400 ring-1 ring-amber-400'
                       : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-amber-300'
                   }`}>
-                    {/* Header: Icon + Title + Quick Action Button */}
+                    {/* Top Header: Icon + Category + Action Button */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
                           <Newspaper className="w-4 h-4" />
                         </div>
@@ -1920,34 +1933,47 @@ export default function AdminPortalPage() {
                           });
                           setShowNewsModal(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 transition-colors cursor-pointer flex items-center gap-1"
+                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 transition-colors cursor-pointer flex items-center gap-1"
                         title="Tulis Berita Baru"
                       >
                         <Plus className="w-3 h-3" />
-                        <span>+ Tulis</span>
+                        <span>Tulis</span>
                       </button>
                     </div>
 
-                    {/* Main Value & Audience Total */}
+                    {/* Strategic Number Hub: Hero Number (Left) + Audience Reach (Right) */}
                     <div 
                       onClick={() => setContentFeedFilter('berita')}
-                      className="cursor-pointer group"
+                      className="flex items-end justify-between cursor-pointer py-0.5 group"
                     >
-                      <div className="flex items-baseline gap-2">
-                        <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{newsList.length}</p>
-                        <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">Total Warta</span>
+                      <div>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className={`text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            {newsList.length}
+                          </span>
+                          <span className="text-xs font-bold text-amber-600 dark:text-amber-400">Warta</span>
+                        </div>
+                        <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Siaran Pers & Berita
+                        </p>
                       </div>
-                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                        Jangkauan: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>14.8K Pembaca</strong>
-                      </p>
+
+                      <div className="text-right">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Pembaca Aktif
+                        </span>
+                        <span className="text-sm font-extrabold text-blue-500">
+                          14.8K View
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Actionable Status Pills */}
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                    {/* Bottom Status Pills */}
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[10px]">
                       <button
                         type="button"
                         onClick={() => setContentFeedFilter('berita')}
-                        className="px-2 py-0.5 rounded-md font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1 cursor-pointer hover:bg-emerald-500/20 transition-colors"
+                        className="px-2 py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 cursor-pointer hover:bg-emerald-500/20 transition-colors"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <span>{newsList.filter(n => n.status === 'Published').length} Terbit</span>
@@ -1955,10 +1981,10 @@ export default function AdminPortalPage() {
                       <button
                         type="button"
                         onClick={() => setContentFeedFilter('berita')}
-                        className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-colors ${
+                        className={`px-2 py-1 rounded-lg font-semibold cursor-pointer transition-colors ${
                           newsList.filter(n => n.status !== 'Published').length > 0
                             ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 font-bold'
-                            : isDark ? 'bg-slate-800/70 text-slate-400' : 'bg-slate-100 text-slate-600'
+                            : isDark ? 'bg-slate-800/80 text-slate-400' : 'bg-slate-100 text-slate-600'
                         }`}
                       >
                         <span>{newsList.filter(n => n.status !== 'Published').length} Draft</span>
@@ -1967,14 +1993,14 @@ export default function AdminPortalPage() {
                   </div>
 
                   {/* Box 3: Agenda & Kegiatan PBJ */}
-                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg space-y-3.5 ${
+                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg flex flex-col justify-between space-y-4 ${
                     contentFeedFilter === 'agenda'
-                      ? isDark ? 'bg-emerald-950/30 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/60 border-emerald-400 ring-1 ring-emerald-400'
+                      ? isDark ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/70 border-emerald-400 ring-1 ring-emerald-400'
                       : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-emerald-300'
                   }`}>
-                    {/* Header: Icon + Title + Quick Action Button */}
+                    {/* Top Header: Icon + Category + Action Button */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
                           <Calendar className="w-4 h-4" />
                         </div>
@@ -1998,34 +2024,47 @@ export default function AdminPortalPage() {
                           });
                           setShowAgendaModal(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/10 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-500/10 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
                         title="Jadwalkan Agenda Baru"
                       >
                         <Plus className="w-3 h-3" />
-                        <span>+ Jadwal</span>
+                        <span>Jadwal</span>
                       </button>
                     </div>
 
-                    {/* Main Value & Capacity Total */}
+                    {/* Strategic Number Hub: Hero Number (Left) + Participant Capacity (Right) */}
                     <div 
                       onClick={() => setContentFeedFilter('agenda')}
-                      className="cursor-pointer group"
+                      className="flex items-end justify-between cursor-pointer py-0.5 group"
                     >
-                      <div className="flex items-baseline gap-2">
-                        <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{agendaList.length}</p>
-                        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Total Acara</span>
+                      <div>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className={`text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            {agendaList.length}
+                          </span>
+                          <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Acara</span>
+                        </div>
+                        <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Bimtek & Sosialisasi
+                        </p>
                       </div>
-                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                        Partisipasi: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>850+ Peserta</strong>
-                      </p>
+
+                      <div className="text-right">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Partisipasi
+                        </span>
+                        <span className="text-sm font-extrabold text-emerald-500">
+                          850+ Orang
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Actionable Status Pills */}
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                    {/* Bottom Status Pills */}
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[10px]">
                       <button
                         type="button"
                         onClick={() => setContentFeedFilter('agenda')}
-                        className="px-2 py-0.5 rounded-md font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1 cursor-pointer hover:bg-blue-500/20 transition-colors"
+                        className="px-2 py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1.5 cursor-pointer hover:bg-blue-500/20 transition-colors"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                         <span>{agendaList.filter(a => a.status === 'Terjadwal' || a.status === 'Berlangsung').length} Aktif</span>
@@ -2033,8 +2072,8 @@ export default function AdminPortalPage() {
                       <button
                         type="button"
                         onClick={() => setContentFeedFilter('agenda')}
-                        className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-colors ${
-                          isDark ? 'bg-slate-800/70 text-slate-300 hover:bg-slate-800' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        className={`px-2 py-1 rounded-lg font-semibold cursor-pointer transition-colors ${
+                          isDark ? 'bg-slate-800/80 text-slate-300 hover:bg-slate-800' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}
                       >
                         <span>{agendaList.filter(a => a.status === 'Selesai').length} Selesai</span>
@@ -2043,14 +2082,14 @@ export default function AdminPortalPage() {
                   </div>
 
                   {/* Box 4: Regulasi & Dokumen SOP */}
-                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg space-y-3.5 ${
+                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg flex flex-col justify-between space-y-4 ${
                     contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
-                      ? isDark ? 'bg-purple-950/30 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/60 border-purple-400 ring-1 ring-purple-400'
+                      ? isDark ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/70 border-purple-400 ring-1 ring-purple-400'
                       : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-purple-300'
                   }`}>
-                    {/* Header: Icon + Title + Quick Action Button */}
+                    {/* Top Header: Icon + Category + Action Button */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0">
                           <ScrollText className="w-4 h-4" />
                         </div>
@@ -2074,41 +2113,54 @@ export default function AdminPortalPage() {
                           });
                           setShowRegulasiModal(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
                         title="Upload Regulasi Baru"
                       >
                         <Plus className="w-3 h-3" />
-                        <span>+ Upload</span>
+                        <span>Upload</span>
                       </button>
                     </div>
 
-                    {/* Main Value & Legal Status */}
+                    {/* Strategic Number Hub: Hero Number (Left) + Legal Status (Right) */}
                     <div 
                       onClick={() => setContentFeedFilter('regulasi')}
-                      className="cursor-pointer group"
+                      className="flex items-end justify-between cursor-pointer py-0.5 group"
                     >
-                      <div className="flex items-baseline gap-2">
-                        <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{regulasiList.length + sopList.length}</p>
-                        <span className="text-xs font-semibold text-purple-600 dark:text-purple-400">Total Legalitas</span>
+                      <div>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className={`text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            {regulasiList.length + sopList.length}
+                          </span>
+                          <span className="text-xs font-bold text-purple-600 dark:text-purple-400">Dokumen</span>
+                        </div>
+                        <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Hukum & Tata Kelola
+                        </p>
                       </div>
-                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                        Kepatuhan: <strong className="text-emerald-500 font-bold">100% Valid & Sah</strong>
-                      </p>
+
+                      <div className="text-right">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Legalitas JDIH
+                        </span>
+                        <span className="text-sm font-extrabold text-emerald-500">
+                          100% Valid
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Actionable Status Pills */}
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                    {/* Bottom Status Pills */}
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[10px]">
                       <button
                         type="button"
                         onClick={() => setContentFeedFilter('regulasi')}
-                        className="px-2 py-0.5 rounded-md font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 cursor-pointer hover:bg-blue-500/20 transition-colors"
+                        className="px-2 py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 cursor-pointer hover:bg-blue-500/20 transition-colors"
                       >
                         <span>{regulasiList.length} Regulasi</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setContentFeedFilter('sop')}
-                        className="px-2 py-0.5 rounded-md font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 cursor-pointer hover:bg-purple-500/20 transition-colors"
+                        className="px-2 py-1 rounded-lg font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 cursor-pointer hover:bg-purple-500/20 transition-colors"
                       >
                         <span>{sopList.length} SOP</span>
                       </button>
