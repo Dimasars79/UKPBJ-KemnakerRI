@@ -16,6 +16,8 @@ import {
   CheckCircle2, 
   Download, 
   ArrowLeft, 
+  Menu,
+  X, 
   Database,
   Globe,
   Wifi,
@@ -81,6 +83,7 @@ export default function AdminPortalPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCmsOpen, setIsCmsOpen] = useState(true);
   const [galeriTab, setGaleriTab] = useState<'foto' | 'video'>('foto');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Header Interactive States
   const [showNotifications, setShowNotifications] = useState(false);
@@ -732,8 +735,298 @@ export default function AdminPortalPage() {
         )}
       </AnimatePresence>
 
-      {/* SIDEBAR NAVIGATION */}
-      <aside className={`w-full md:w-64 border-r flex flex-col justify-between shrink-0 transition-colors duration-300 ${
+      {/* ========================================================= */}
+      {/* MOBILE DRAWER SIDEBAR (SLIDE-IN ANIMATION) */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden flex">
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-xs"
+            />
+
+            {/* Slide-out Drawer Panel */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 280 }}
+              className={`relative w-72 max-w-[85vw] h-full flex flex-col justify-between overflow-y-auto shadow-2xl z-10 ${
+                isDark ? 'bg-slate-950 text-slate-100 border-r border-slate-800' : 'bg-white text-slate-900 border-r border-slate-200'
+              }`}
+            >
+              <div>
+                {/* Mobile Drawer Header with Logo & Close Button */}
+                <div className={`h-16 px-4 border-b flex items-center justify-between shrink-0 ${
+                  isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
+                }`}>
+                  <div className="flex items-center space-x-2.5">
+                    <div className={`w-8 h-8 rounded-xl p-1 flex items-center justify-center shadow-xs ${
+                      isDark ? 'bg-white/95 border border-white/20' : 'bg-white border border-slate-200'
+                    }`}>
+                      <Image 
+                        src="/logo-ukpbj-emblem.png" 
+                        alt="Logo UKPBJ" 
+                        width={28} 
+                        height={28} 
+                        className="w-full h-full object-contain" 
+                      />
+                    </div>
+                    <div>
+                      <h2 className={`font-extrabold text-xs tracking-wide ${isDark ? 'text-white' : 'text-primary-navy'}`}>
+                        PORTAL ADMIN
+                      </h2>
+                      <p className="text-[9px] text-accent-gold font-bold">UKPBJ KEMNAKER RI</p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-label="Tutup Menu"
+                    className={`p-1.5 rounded-xl transition-colors cursor-pointer ${
+                      isDark ? 'hover:bg-slate-800 text-slate-400 hover:text-white' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Mobile Navigation List */}
+                <nav className="p-3 space-y-4">
+                  {/* UTAMA */}
+                  <div className="space-y-1">
+                    <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+                      Utama
+                    </p>
+                    <button
+                      onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false); }}
+                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'dashboard'
+                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                          : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                      }`}
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      <span>Dashboard</span>
+                    </button>
+                  </div>
+
+                  {/* PENGADAAN */}
+                  <div className="space-y-1">
+                    <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                      Pengadaan
+                    </p>
+                    <button
+                      onClick={() => { setActiveTab('paket'); setMobileMenuOpen(false); }}
+                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'paket'
+                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                          : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                      }`}
+                    >
+                      <Package className="w-4 h-4 text-blue-500" />
+                      <span>Paket Pengadaan</span>
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${
+                        activeTab === 'paket' 
+                          ? 'bg-white/20 text-white' 
+                          : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {packagesList.length}
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* CMS */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between px-3 py-1">
+                      <p className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
+                        Kelola Web Publik (CMS)
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setIsCmsOpen(!isCmsOpen)}
+                        className={`p-1 transition-colors cursor-pointer rounded-md ${isDark ? 'text-slate-400 hover:text-accent-gold' : 'text-slate-600 hover:text-amber-800'}`}
+                      >
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                    </div>
+
+                    <AnimatePresence initial={false}>
+                      {isCmsOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden space-y-1 pl-1.5 border-l-2 border-accent-gold/30 ml-2"
+                        >
+                          <button
+                            onClick={() => { setActiveTab('manage-berita'); setMobileMenuOpen(false); }}
+                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                              activeTab === 'manage-berita'
+                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                            }`}
+                          >
+                            <Newspaper className="w-3.5 h-3.5 text-amber-500" />
+                            <span>Berita & Pengumuman</span>
+                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
+                              {newsList.length}
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => { setActiveTab('manage-agenda'); setMobileMenuOpen(false); }}
+                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                              activeTab === 'manage-agenda'
+                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                            }`}
+                          >
+                            <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+                            <span>Agenda & Jadwal</span>
+                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                              {agendaList.length}
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => { setActiveTab('manage-regulasi'); setMobileMenuOpen(false); }}
+                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                              activeTab === 'manage-regulasi'
+                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                            }`}
+                          >
+                            <ScrollText className="w-3.5 h-3.5 text-blue-500" />
+                            <span>Regulasi & Aturan</span>
+                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                              {regulasiList.length}
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => { setActiveTab('manage-sop'); setMobileMenuOpen(false); }}
+                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                              activeTab === 'manage-sop'
+                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                            }`}
+                          >
+                            <Layers className="w-3.5 h-3.5 text-purple-500" />
+                            <span>Standar SOP</span>
+                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
+                              {sopList.length}
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => { setActiveTab('manage-galeri'); setMobileMenuOpen(false); }}
+                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                              activeTab === 'manage-galeri'
+                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                            }`}
+                          >
+                            <Camera className="w-3.5 h-3.5 text-cyan-500" />
+                            <span>Galeri & Media</span>
+                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
+                              {photosList.length + videosList.length}
+                            </span>
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* SISTEM */}
+                  <div className="space-y-1">
+                    <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+                      Sistem & Pengaturan
+                    </p>
+                    <button
+                      onClick={() => { setActiveTab('log-aktivitas'); setMobileMenuOpen(false); }}
+                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'log-aktivitas'
+                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                          : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                      }`}
+                    >
+                      <History className="w-4 h-4 text-emerald-500" />
+                      <span>Log Aktivitas</span>
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                        Live
+                      </span>
+                    </button>
+
+                    <button
+                      onClick={() => { setActiveTab('pengaturan'); setMobileMenuOpen(false); }}
+                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'pengaturan'
+                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                          : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                      }`}
+                    >
+                      <Settings className="w-4 h-4 text-slate-400" />
+                      <span>Pengaturan Portal</span>
+                    </button>
+                  </div>
+                </nav>
+              </div>
+
+              {/* Profile Card & Back to Home */}
+              <div className={`p-4 border-t space-y-3 ${
+                isDark ? 'border-slate-800/80' : 'border-slate-200'
+              }`}>
+                <div className={`flex items-center space-x-3 px-2 py-2 rounded-xl border ${
+                  isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="w-8 h-8 rounded-full bg-accent-gold/20 border border-accent-gold/40 flex items-center justify-center font-bold text-accent-gold text-xs">
+                    DA
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-xs font-bold truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Dimas Ars</p>
+                    <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>Admin UKPBJ Kemnaker</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-3 py-2 rounded-xl text-[11px] font-bold text-center flex items-center justify-center gap-1 transition-colors ${
+                      isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
+                    }`}
+                  >
+                    <ArrowLeft className="w-3 h-3" />
+                    <span>Web Publik</span>
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="px-3 py-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-[11px] font-bold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span>Keluar</span>
+                  </button>
+                </div>
+              </div>
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* DESKTOP SIDEBAR NAVIGATION */}
+      {/* ========================================================= */}
+      <aside className={`hidden md:flex w-64 md:w-72 border-r flex-col justify-between shrink-0 h-screen sticky top-0 overflow-y-auto transition-colors duration-300 ${
         isDark ? 'bg-slate-950 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
       }`}>
         <div>
@@ -1004,29 +1297,44 @@ export default function AdminPortalPage() {
       }`}>
         
         {/* Top Header - Spacious & Clean Modern Command Bar */}
-        <header className={`h-[5.5rem] border-b backdrop-blur-xl px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 shrink-0 box-border transition-all duration-300 ${
+        {/* Top Header - Responsive Modern Command Bar with Mobile Drawer Toggle */}
+        <header className={`h-16 md:h-[5.5rem] border-b backdrop-blur-xl px-4 sm:px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 shrink-0 box-border transition-all duration-300 ${
           isDark 
             ? 'border-slate-800/80 bg-slate-950/90 shadow-sm shadow-black/20' 
             : 'border-slate-200 bg-white/95 shadow-sm shadow-slate-200/50'
         }`}>
-          {/* LEFT: Clean Page Title & Context Indicator */}
-          <div className="flex items-center space-x-4">
-            <div className={`w-11 h-11 rounded-2xl border flex items-center justify-center shrink-0 shadow-xs ${
+          {/* LEFT: Mobile Hamburger, Icon & Clean Page Title */}
+          <div className="flex items-center space-x-2.5 sm:space-x-3 md:space-x-4 min-w-0">
+            {/* Mobile Hamburger Button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Buka Menu Navigasi"
+              className={`p-2 rounded-xl border md:hidden flex items-center justify-center shrink-0 transition-colors cursor-pointer ${
+                isDark 
+                  ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' 
+                  : 'bg-white border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-50 shadow-xs'
+              }`}
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-2xl border flex items-center justify-center shrink-0 shadow-xs ${
               isDark ? 'bg-slate-900/90 border-slate-800 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
             }`}>
-              {activeTab === 'dashboard' && <LayoutDashboard className="w-5 h-5" />}
-              {activeTab === 'paket' && <Package className="w-5 h-5 text-blue-400" />}
-              {activeTab === 'manage-berita' && <Newspaper className="w-5 h-5 text-amber-500" />}
-              {activeTab === 'manage-agenda' && <Calendar className="w-5 h-5 text-emerald-500" />}
-              {activeTab === 'manage-regulasi' && <ScrollText className="w-5 h-5 text-blue-400" />}
-              {activeTab === 'manage-sop' && <Layers className="w-5 h-5 text-purple-400" />}
-              {activeTab === 'manage-galeri' && <Camera className="w-5 h-5 text-cyan-400" />}
-              {activeTab === 'log-aktivitas' && <History className="w-5 h-5 text-emerald-500" />}
-              {activeTab === 'pengaturan' && <Settings className="w-5 h-5 text-slate-400" />}
+              {activeTab === 'dashboard' && <LayoutDashboard className="w-4 h-4 sm:w-5 sm:h-5" />}
+              {activeTab === 'paket' && <Package className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />}
+              {activeTab === 'manage-berita' && <Newspaper className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />}
+              {activeTab === 'manage-agenda' && <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />}
+              {activeTab === 'manage-regulasi' && <ScrollText className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />}
+              {activeTab === 'manage-sop' && <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />}
+              {activeTab === 'manage-galeri' && <Camera className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />}
+              {activeTab === 'log-aktivitas' && <History className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />}
+              {activeTab === 'pengaturan' && <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />}
             </div>
 
-            <div className="space-y-0.5">
-              <div className={`flex items-center space-x-2 text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            <div className="space-y-0.5 min-w-0">
+              <div className={`hidden sm:flex items-center space-x-2 text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                 <span className="hover:text-blue-500 cursor-pointer transition-colors" onClick={() => setActiveTab('dashboard')}>Portal Admin</span>
                 <span className={isDark ? 'text-slate-600' : 'text-slate-400'}>•</span>
                 <span className={`font-extrabold uppercase tracking-wider text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-800'}`}>
@@ -1035,7 +1343,7 @@ export default function AdminPortalPage() {
                    activeTab.startsWith('manage-') ? 'CMS Publik' : 'Sistem'}
                 </span>
               </div>
-              <h1 className={`text-base md:text-lg lg:text-xl font-black tracking-tight leading-snug ${
+              <h1 className={`text-xs sm:text-base md:text-lg lg:text-xl font-black tracking-tight leading-tight truncate max-w-[120px] xs:max-w-[180px] sm:max-w-none ${
                 isDark ? 'text-white' : 'text-slate-900'
               }`}>
                 {activeTab === 'dashboard' ? 'Executive Command Center' :
@@ -1051,19 +1359,19 @@ export default function AdminPortalPage() {
           </div>
 
           {/* RIGHT: Spacious Actions (Search, Quick Add, Notif, Theme) */}
-          <div className="flex items-center space-x-3.5 md:space-x-5">
+          <div className="flex items-center space-x-2 sm:space-x-3.5 md:space-x-5">
             
             {/* Search Input */}
-            <div className="relative w-48 sm:w-64 md:w-80 group">
-              <Search className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
+            <div className="relative w-28 xs:w-36 sm:w-56 md:w-80 group">
+              <Search className={`w-3.5 h-3.5 sm:w-4 sm:h-4 absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
                 isDark ? 'text-slate-400 group-focus-within:text-blue-500' : 'text-slate-600 group-focus-within:text-blue-600'
               }`} />
               <input
                 type="text"
-                placeholder="Cari berita, agenda, paket..."
+                placeholder="Cari berita, agenda..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-10 pr-10 py-2.5 border rounded-xl text-xs transition-all outline-none font-medium ${
+                className={`w-full pl-8 sm:pl-10 pr-3 sm:pr-10 py-1.5 sm:py-2.5 border rounded-xl text-xs transition-all outline-none font-medium ${
                   isDark 
                     ? 'bg-slate-900/80 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-900' 
                     : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-500 focus:border-blue-600 focus:bg-white shadow-xs'
