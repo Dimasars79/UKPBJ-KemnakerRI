@@ -18,7 +18,6 @@ import {
   ArrowLeft, 
   Database,
   Globe,
-  Radio,
   Wifi,
   ShieldCheck, 
   FileCheck, 
@@ -78,9 +77,8 @@ import { supabase } from '@/lib/supabase/client';
 export default function AdminPortalPage() {
   const router = useRouter();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'monitoring' | 'manage-berita' | 'manage-agenda' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'laporan' | 'log-aktivitas' | 'pengaturan'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'manage-berita' | 'manage-agenda' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'log-aktivitas' | 'pengaturan'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isPengadaanOpen, setIsPengadaanOpen] = useState(true);
   const [isCmsOpen, setIsCmsOpen] = useState(true);
   const [galeriTab, setGaleriTab] = useState<'foto' | 'video'>('foto');
   
@@ -787,76 +785,31 @@ export default function AdminPortalPage() {
               </button>
             </div>
 
-            {/* GRUP: PENGADAAN (COLLAPSIBLE DROPDOWN) */}
+            {/* GRUP 1: PENGADAAN */}
             <div className="space-y-1">
-              <div className="flex items-center justify-between px-3 py-1">
-                <p className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
-                  Pengadaan
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setIsPengadaanOpen(!isPengadaanOpen)}
-                  className={`p-1 transition-colors cursor-pointer rounded-md ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-600 hover:text-blue-700'}`}
-                  title="Buka/Tutup Menu Pengadaan"
-                >
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isPengadaanOpen ? 'rotate-180' : ''}`} />
-                </button>
-              </div>
+              <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                Pengadaan
+              </p>
 
-              {/* Side-Down Collapsible Submenu */}
-              <AnimatePresence initial={false}>
-                {isPengadaanOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden space-y-1 pl-1.5 border-l-2 border-blue-500/30 ml-2"
-                  >
-                    {/* Paket Pengadaan */}
-                    <button
-                      onClick={() => setActiveTab('paket')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'paket'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Package className="w-3.5 h-3.5 text-blue-500" />
-                      <span>Paket Pengadaan</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                        {packagesList.length}
-                      </span>
-                    </button>
-
-                    {/* Monitoring */}
-                    <button
-                      onClick={() => setActiveTab('monitoring')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'monitoring'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Radio className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>Monitoring</span>
-                    </button>
-
-                    {/* Statistik */}
-                    <button
-                      onClick={() => setActiveTab('laporan')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'laporan'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <BarChart3 className="w-3.5 h-3.5 text-purple-500" />
-                      <span>Statistik</span>
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Paket Pengadaan */}
+              <button
+                onClick={() => setActiveTab('paket')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'paket'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                }`}
+              >
+                <Package className="w-4 h-4 text-blue-500" />
+                <span>Paket Pengadaan</span>
+                <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${
+                  activeTab === 'paket' 
+                    ? 'bg-white/20 text-white' 
+                    : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
+                }`}>
+                  {packagesList.length}
+                </span>
+              </button>
             </div>
 
             {/* GRUP 2: KELOLA WEB PUBLIK (CMS) - SIDE DOWN ACCORDION */}
@@ -1063,13 +1016,11 @@ export default function AdminPortalPage() {
             }`}>
               {activeTab === 'dashboard' && <LayoutDashboard className="w-5 h-5" />}
               {activeTab === 'paket' && <Package className="w-5 h-5 text-blue-400" />}
-              {activeTab === 'monitoring' && <Radio className="w-5 h-5 text-emerald-500 animate-pulse" />}
               {activeTab === 'manage-berita' && <Newspaper className="w-5 h-5 text-amber-500" />}
               {activeTab === 'manage-agenda' && <Calendar className="w-5 h-5 text-emerald-500" />}
               {activeTab === 'manage-regulasi' && <ScrollText className="w-5 h-5 text-blue-400" />}
               {activeTab === 'manage-sop' && <Layers className="w-5 h-5 text-purple-400" />}
               {activeTab === 'manage-galeri' && <Camera className="w-5 h-5 text-cyan-400" />}
-              {activeTab === 'laporan' && <BarChart3 className="w-5 h-5 text-purple-400" />}
               {activeTab === 'log-aktivitas' && <History className="w-5 h-5 text-emerald-500" />}
               {activeTab === 'pengaturan' && <Settings className="w-5 h-5 text-slate-400" />}
             </div>
@@ -1080,7 +1031,7 @@ export default function AdminPortalPage() {
                 <span className={isDark ? 'text-slate-600' : 'text-slate-400'}>•</span>
                 <span className={`font-extrabold uppercase tracking-wider text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-800'}`}>
                   {activeTab === 'dashboard' ? 'Utama' :
-                   activeTab === 'paket' || activeTab === 'monitoring' || activeTab === 'laporan' ? 'Pengadaan' :
+                   activeTab === 'paket' ? 'Pengadaan' :
                    activeTab.startsWith('manage-') ? 'CMS Publik' : 'Sistem'}
                 </span>
               </div>
@@ -1089,13 +1040,11 @@ export default function AdminPortalPage() {
               }`}>
                 {activeTab === 'dashboard' ? 'Executive Command Center' :
                  activeTab === 'paket' ? 'Manajemen Paket Pengadaan' :
-                 activeTab === 'monitoring' ? 'Surveillance & SLA Tracker' :
                  activeTab === 'manage-berita' ? 'Kelola Berita & Siaran' :
                  activeTab === 'manage-agenda' ? 'Kelola Jadwal & Agenda' :
                  activeTab === 'manage-regulasi' ? 'Kelola Regulasi PBJ' :
                  activeTab === 'manage-sop' ? 'Kelola Standar Operasional (SOP)' :
                  activeTab === 'manage-galeri' ? 'Kelola Galeri Foto & Video' :
-                 activeTab === 'laporan' ? 'Statistik & Kinerja PBJ' :
                  activeTab === 'log-aktivitas' ? 'Log Audit & Riwayat Aktivitas' : 'Konfigurasi & Pengaturan Sistem'}
               </h1>
             </div>
@@ -1405,11 +1354,11 @@ export default function AdminPortalPage() {
                       <button
                         onClick={() => {
                           setShowNotifications(false);
-                          setActiveTab('monitoring');
+                          setActiveTab('paket');
                         }}
                         className="text-blue-400 hover:underline font-bold"
                       >
-                        Buka Monitoring &rarr;
+                        Kelola Paket &rarr;
                       </button>
                     </div>
                   </motion.div>
@@ -2826,237 +2775,7 @@ export default function AdminPortalPage() {
           </div>
         )}
 
-        {/* ========================================================= */}
-        {/* TAB: MONITORING PENGADAAN & REAL-TIME TRACKING */}
-        {/* ========================================================= */}
-        {activeTab === 'monitoring' && (
-          <div className="p-6 md:p-8 space-y-6">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-bold uppercase mb-2">
-                  <Radio className="w-3.5 h-3.5 animate-pulse" />
-                  <span>Real-time Surveillance & SLA Tracking</span>
-                </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Monitoring Progres Pengadaan
-                </h2>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
-                  Pantau alur tahapan tender, performa SLA Pokja Pemilihan, dan status sinkronisasi SPSE secara live.
-                </p>
-              </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => showNotification('Data monitoring SPSE berhasil disinkronisasi ulang!')}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/20 transition-all cursor-pointer"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  <span>Refresh Real-time Data</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Quick KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className={`p-4 rounded-2xl border transition-all ${
-                isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Paket Berjalan</span>
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center">
-                    <Activity className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>42</p>
-                <p className="text-[10px] text-blue-600 dark:text-blue-400 font-bold mt-1">100% On-Schedule</p>
-              </div>
-
-              <div className={`p-4 rounded-2xl border transition-all ${
-                isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Kepatuhan SLA</span>
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className="text-2xl font-black mt-2 text-emerald-600 dark:text-emerald-500">97.8%</p>
-                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Target Kementerian &gt;95%</p>
-              </div>
-
-              <div className={`p-4 rounded-2xl border transition-all ${
-                isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Tahap Evaluasi</span>
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className="text-2xl font-black mt-2 text-amber-600 dark:text-amber-500">18</p>
-                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Rata-rata 3 hari kerja</p>
-              </div>
-
-              <div className={`p-4 rounded-2xl border transition-all ${
-                isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>Konektivitas SPSE</span>
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-500 flex items-center justify-center">
-                    <Wifi className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className="text-2xl font-black mt-2 text-cyan-600 dark:text-cyan-500">Normal</p>
-                <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">Latency: 38ms (Healthy)</p>
-              </div>
-            </div>
-
-            {/* Pipeline Stage Tracker */}
-            <div className={`p-5 rounded-2xl border ${
-              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-            }`}>
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    Distribusi Tahapan Pengadaan Aktif
-                  </h3>
-                  <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>Tahapan tender dan seleksi berjalan T.A 2026</p>
-                </div>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                  Total 42 Paket Aktif
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                <div className={`p-3.5 rounded-xl border ${
-                  isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                }`}>
-                  <p className={`text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'} uppercase`}>1. Persiapan & RUP</p>
-                  <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>9</p>
-                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: '60%' }} />
-                  </div>
-                </div>
-
-                <div className={`p-3.5 rounded-xl border ${
-                  isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                }`}>
-                  <p className="text-[10px] font-bold text-amber-600 dark:text-amber-500 uppercase">2. Pengumuman</p>
-                  <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>12</p>
-                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-amber-500 rounded-full" style={{ width: '80%' }} />
-                  </div>
-                </div>
-
-                <div className={`p-3.5 rounded-xl border ${
-                  isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                }`}>
-                  <p className="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase">3. Evaluasi Penawaran</p>
-                  <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>11</p>
-                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-purple-500 rounded-full" style={{ width: '70%' }} />
-                  </div>
-                </div>
-
-                <div className={`p-3.5 rounded-xl border ${
-                  isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                }`}>
-                  <p className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase">4. Masa Sanggah</p>
-                  <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>4</p>
-                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-cyan-500 rounded-full" style={{ width: '30%' }} />
-                  </div>
-                </div>
-
-                <div className={`p-3.5 rounded-xl border ${
-                  isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                }`}>
-                  <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">5. Penandatanganan</p>
-                  <p className={`text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>6</p>
-                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: '45%' }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Live Monitoring Table */}
-            <div className={`border rounded-2xl overflow-hidden ${
-              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-            }`}>
-              <div className={`p-4 border-b flex justify-between items-center text-xs ${
-                isDark ? 'border-slate-800' : 'border-slate-200'
-              }`}>
-                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
-                  Live SLA & Status Pengawasan Paket
-                </span>
-                <span className="text-emerald-600 dark:text-emerald-500 text-[11px] font-bold flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 animate-pulse" />
-                  <span>Real-time Sentinel Active</span>
-                </span>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className={`text-[11px] border-b ${
-                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
-                  }`}>
-                    <tr>
-                      <th className="p-4 font-bold">Paket & Kode</th>
-                      <th className="p-4 font-bold">Satuan Kerja</th>
-                      <th className="p-4 font-bold">Nilai HPS</th>
-                      <th className="p-4 font-bold">Tahap Saat Ini</th>
-                      <th className="p-4 font-bold">Batas Waktu</th>
-                      <th className="p-4 font-bold text-right">Status SLA</th>
-                    </tr>
-                  </thead>
-                  <tbody className={`divide-y ${
-                    isDark ? 'divide-slate-800/60' : 'divide-slate-100'
-                  }`}>
-                    {packagesList.map((pkg) => (
-                      <tr key={pkg.id} className={`transition-colors ${
-                        isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
-                      }`}>
-                        <td className="p-4">
-                          <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
-                              <Package className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.title}</p>
-                              <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'} font-mono`}>{pkg.code}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className={`p-4 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'} text-xs`}>
-                          {pkg.unit}
-                        </td>
-                        <td className={`p-4 font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                          {pkg.hps}
-                        </td>
-                        <td className="p-4">
-                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                            {pkg.status}
-                          </span>
-                        </td>
-                        <td className={`p-4 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'} font-mono text-[11px]`}>
-                          {pkg.deadline}
-                        </td>
-                        <td className="p-4 text-right">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                            <span>On Track (0 Hari Terlambat)</span>
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* ========================================================= */}
         {/* TAB 5: PAKET PENGADAAN & DETAIL (LIVE BACKEND CRUD) */}
@@ -4094,48 +3813,7 @@ export default function AdminPortalPage() {
           </div>
         )}
 
-        {/* ========================================================= */}
-        {/* TAB 8: LAPORAN & KINERJA */}
-        {/* ========================================================= */}
-        {activeTab === 'laporan' && (
-          <div className="p-6 md:p-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Laporan & Evaluasi Kinerja Pengadaan
-                </h2>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
-                  Rekapitulasi efisiensi anggaran, realisasi belanja e-Katalog, dan kepatuhan regulasi PBJ.
-                </p>
-              </div>
-              <button 
-                onClick={() => showNotification('Laporan Bulanan UKPBJ berhasil diexport ke format XLSX!')}
-                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer"
-              >
-                <Download className="w-4 h-4" />
-                <span>Export Rekap Excel</span>
-              </button>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Realisasi Efisiensi Tender</p>
-                <p className={`text-2xl font-black mt-1 text-emerald-600 dark:text-emerald-500`}>18.4%</p>
-                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Penghematan dari total pagu HPS</p>
-              </div>
-              <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Tingkat Belanja Produk DN (P3DN)</p>
-                <p className={`text-2xl font-black mt-1 text-blue-600 dark:text-blue-500`}>84.6%</p>
-                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Target nasional minimal 40%</p>
-              </div>
-              <div className={`p-5 rounded-2xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Paket Selesai Tepat Waktu</p>
-                <p className={`text-2xl font-black mt-1 ${isDark ? 'text-accent-gold' : 'text-amber-700'}`}>98.2%</p>
-                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>Kuartal berjalan T.A 2026</p>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* ========================================================= */}
         {/* TAB 9: PENGATURAN BACKEND & KONTROL DATABASE */}
