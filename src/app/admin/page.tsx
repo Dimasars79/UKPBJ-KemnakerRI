@@ -40,7 +40,6 @@ import {
   Video,
   Play,
   Activity,
-  Sparkles,
   Clock,
   Building2,
   ArrowUpRight,
@@ -1918,11 +1917,6 @@ export default function AdminPortalPage() {
 
                   <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div className="space-y-2">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-bold uppercase tracking-wider">
-                        <Sparkles className="w-3.5 h-3.5 text-accent-gold" />
-                        <span>Portal Command Center • UKPBJ Kemnaker RI</span>
-                      </div>
-                      
                       <h2 className={`text-2xl sm:text-3xl font-black tracking-tight flex flex-wrap items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         <span>Selamat Datang, Dimas Ars</span>
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
