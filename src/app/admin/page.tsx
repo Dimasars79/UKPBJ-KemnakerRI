@@ -47,18 +47,12 @@ import {
   Sparkles,
   Clock,
   Coins,
-  Percent,
-  Shield,
-  CheckCheck,
   Building2,
   ArrowUpRight,
   PieChart,
   Send,
   CheckSquare,
-  Share2,
   PlusCircle,
-  Award,
-  Target,
   UserCheck,
   Bell,
   Upload,
@@ -237,6 +231,10 @@ export default function AdminPortalPage() {
   // Activity / Audit Log Filter States
   const [logCategoryFilter, setLogCategoryFilter] = useState<'all' | 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'galeri' | 'sistem'>('all');
   const [logSearchText, setLogSearchText] = useState('');
+
+  // Dashboard Option 2 States: Tabbed Chart & Content Feed Filter
+  const [activeChartTab, setActiveChartTab] = useState<'realisasi' | 'distribusi'>('realisasi');
+  const [contentFeedFilter, setContentFeedFilter] = useState<'all' | 'paket' | 'berita' | 'agenda' | 'regulasi' | 'sop'>('all');
 
   const showNotification = (msg: string) => {
     setNotificationMsg(msg);
@@ -1819,267 +1817,230 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                {/* 6 KPI METRICS CARDS */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+                {/* 4 CORE HIGH-IMPACT KPI METRICS CARDS (OPTION 2) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   
                   {/* Metric 1: Total Paket PBJ */}
-                  <div className={`p-4 rounded-2xl border transition-all hover:shadow-lg space-y-2.5 ${
-                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-blue-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-blue-500/40'
+                  <div className={`p-4.5 rounded-2xl border transition-all hover:shadow-lg space-y-3 ${
+                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50' : 'bg-white border-slate-200/90 shadow-sm hover:border-indigo-400'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Paket PBJ</span>
-                      <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
-                        <Package className="w-3.5 h-3.5" />
+                      <span className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Paket Pengadaan PBJ</span>
+                      <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                        <Package className="w-4 h-4" />
                       </div>
                     </div>
                     <div>
-                      <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-emerald-500">
-                        <TrendingUp className="w-2.5 h-2.5" />
-                        <span>+12.4% MoM</span>
+                      <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</p>
+                      <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-emerald-500">
+                        <TrendingUp className="w-3 h-3" />
+                        <span>+12.4% MoM • Tender & Non-Tender</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                    <div className={`pt-2 border-t text-[10px] flex items-center justify-between ${
                       isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><Coins className="w-2.5 h-2.5 text-amber-500" /> 48.2M</span>
-                      <span className="flex items-center gap-0.5 text-emerald-500 font-bold"><CheckCircle2 className="w-2.5 h-2.5" /> Live</span>
+                      <span className="flex items-center gap-1"><Coins className="w-3 h-3 text-amber-500" /> Pagu: Rp 48.2 M</span>
+                      <span className="flex items-center gap-1 text-emerald-500 font-bold"><CheckCircle2 className="w-3 h-3" /> Live Terkoneksi</span>
                     </div>
                   </div>
 
-                  {/* Metric 2: Berita & Warta */}
-                  <div className={`p-4 rounded-2xl border transition-all hover:shadow-lg space-y-2.5 ${
-                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-amber-500/40'
+                  {/* Metric 2: Berita & Warta Publik */}
+                  <div className={`p-4.5 rounded-2xl border transition-all hover:shadow-lg space-y-3 ${
+                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50' : 'bg-white border-slate-200/90 shadow-sm hover:border-amber-400'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Berita Publik</span>
-                      <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
-                        <Newspaper className="w-3.5 h-3.5" />
+                      <span className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Berita & Publikasi</span>
+                      <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                        <Newspaper className="w-4 h-4" />
                       </div>
                     </div>
                     <div>
-                      <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        {newsList.filter(n => n.status === 'Published').length}
+                      <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {newsList.length}
                       </p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-amber-500">
-                        <Globe className="w-2.5 h-2.5" />
-                        <span>{newsList.length} Total</span>
+                      <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-amber-500">
+                        <Globe className="w-3 h-3" />
+                        <span>{newsList.filter(n => n.status === 'Published').length} Terbit • 14.8K Pembaca</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                    <div className={`pt-2 border-t text-[10px] flex items-center justify-between ${
                       isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><Eye className="w-2.5 h-2.5 text-blue-500" /> 14.8K</span>
-                      <span className="flex items-center gap-0.5 text-emerald-500 font-bold"><Send className="w-2.5 h-2.5" /> Sync</span>
+                      <span className="flex items-center gap-1"><Eye className="w-3 h-3 text-blue-500" /> Siaran Pers Publik</span>
+                      <span className="flex items-center gap-1 text-emerald-500 font-bold"><Send className="w-3 h-3" /> Auto Sync</span>
                     </div>
                   </div>
 
-                  {/* Metric 3: Agenda & Bimtek */}
-                  <div className={`p-4 rounded-2xl border transition-all hover:shadow-lg space-y-2.5 ${
-                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-emerald-500/40'
+                  {/* Metric 3: Agenda & Kegiatan */}
+                  <div className={`p-4.5 rounded-2xl border transition-all hover:shadow-lg space-y-3 ${
+                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50' : 'bg-white border-slate-200/90 shadow-sm hover:border-emerald-400'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Agenda</span>
-                      <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
-                        <Calendar className="w-3.5 h-3.5" />
+                      <span className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Agenda & Acara PBJ</span>
+                      <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+                        <Calendar className="w-4 h-4" />
                       </div>
                     </div>
                     <div>
-                      <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{agendaList.length}</p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-emerald-500">
-                        <Clock className="w-2.5 h-2.5" />
-                        <span>Aktif</span>
+                      <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{agendaList.length}</p>
+                      <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-emerald-500">
+                        <Clock className="w-3 h-3" />
+                        <span>Bimtek & Sosialisasi Aktif</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                    <div className={`pt-2 border-t text-[10px] flex items-center justify-between ${
                       isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5 text-red-500" /> Hybrid</span>
-                      <span className="flex items-center gap-0.5 text-blue-600 font-bold"><Users className="w-2.5 h-2.5" /> 850+</span>
+                      <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-red-500" /> Hybrid / Daring</span>
+                      <span className="flex items-center gap-1 text-blue-600 font-bold"><Users className="w-3 h-3" /> 850+ Peserta</span>
                     </div>
                   </div>
 
-                  {/* Metric 4: Galeri & Video */}
-                  <div className={`p-4 rounded-2xl border transition-all hover:shadow-lg space-y-2.5 ${
-                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-cyan-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-cyan-500/40'
+                  {/* Metric 4: Regulasi & Dokumen SOP */}
+                  <div className={`p-4.5 rounded-2xl border transition-all hover:shadow-lg space-y-3 ${
+                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50' : 'bg-white border-slate-200/90 shadow-sm hover:border-purple-400'
                   }`}>
                     <div className="flex justify-between items-center">
-                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Galeri Media</span>
-                      <div className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-500 flex items-center justify-center shrink-0">
-                        <Camera className="w-3.5 h-3.5" />
+                      <span className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Regulasi & Standar SOP</span>
+                      <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
+                        <ScrollText className="w-4 h-4" />
                       </div>
                     </div>
                     <div>
-                      <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        {photosList.length + videosList.length}
-                      </p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-cyan-500">
-                        <Video className="w-2.5 h-2.5" />
-                        <span>{videosList.length}V • {photosList.length}F</span>
-                      </div>
-                    </div>
-                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
-                      isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
-                    }`}>
-                      <span className="flex items-center gap-0.5"><Play className="w-2.5 h-2.5 text-amber-500" /> Stream</span>
-                      <span className="flex items-center gap-0.5 text-cyan-600 font-bold"><Share2 className="w-2.5 h-2.5" /> /galeri</span>
-                    </div>
-                  </div>
-
-                  {/* Metric 5: Regulasi & SOP */}
-                  <div className={`p-4 rounded-2xl border transition-all hover:shadow-lg space-y-2.5 ${
-                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-purple-500/40'
-                  }`}>
-                    <div className="flex justify-between items-center">
-                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Regulasi/SOP</span>
-                      <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
-                        <ScrollText className="w-3.5 h-3.5" />
-                      </div>
-                    </div>
-                    <div>
-                      <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         {regulasiList.length + sopList.length}
                       </p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-purple-500">
-                        <Layers className="w-2.5 h-2.5" />
-                        <span>{regulasiList.length}R • {sopList.length}S</span>
+                      <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-purple-500">
+                        <Layers className="w-3 h-3" />
+                        <span>{regulasiList.length} Regulasi • {sopList.length} SOP Berlaku</span>
                       </div>
                     </div>
-                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
+                    <div className={`pt-2 border-t text-[10px] flex items-center justify-between ${
                       isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
                     }`}>
-                      <span className="flex items-center gap-0.5"><ShieldCheck className="w-2.5 h-2.5 text-emerald-500" /> JDIH</span>
-                      <span className="flex items-center gap-0.5 text-purple-600 font-bold"><CheckSquare className="w-2.5 h-2.5" /> Legal</span>
-                    </div>
-                  </div>
-
-                  {/* Metric 6: Vendor SiKAP */}
-                  <div className={`p-4 rounded-2xl border transition-all hover:shadow-lg space-y-2.5 ${
-                    isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/40' : 'bg-white border-slate-200/90 shadow-sm hover:border-indigo-500/40'
-                  }`}>
-                    <div className="flex justify-between items-center">
-                      <span className={`text-[11px] font-bold truncate ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Penyedia</span>
-                      <div className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
-                        <Building2 className="w-3.5 h-3.5" />
-                      </div>
-                    </div>
-                    <div>
-                      <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>342</p>
-                      <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold text-indigo-500">
-                        <CheckCheck className="w-2.5 h-2.5" />
-                        <span>SiKAP Valid</span>
-                      </div>
-                    </div>
-                    <div className={`pt-1.5 border-t text-[9px] flex items-center justify-between ${
-                      isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-700 font-semibold'
-                    }`}>
-                      <span className="flex items-center gap-0.5"><Shield className="w-2.5 h-2.5 text-blue-500" /> Lolos</span>
-                      <span className="flex items-center gap-0.5 text-indigo-600 font-bold"><Percent className="w-2.5 h-2.5" /> 98%</span>
+                      <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3 text-emerald-500" /> JDIH Kemnaker</span>
+                      <span className="flex items-center gap-1 text-purple-600 font-bold"><CheckSquare className="w-3 h-3" /> Legalitas Valid</span>
                     </div>
                   </div>
 
                 </div>
 
-                {/* ANALYTICS & RECHARTS ROW */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  
-                  {/* Chart 1: Realisasi Pengadaan Triwulan */}
-                  <div className={`p-6 rounded-3xl border shadow-sm space-y-4 ${
-                    isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
-                  }`}>
-                    <div className="flex justify-between items-start">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <BarChart3 className="w-4 h-4 text-blue-500" />
-                          <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            Target vs Realisasi Pengadaan Triwulan
-                          </h3>
-                        </div>
-                        <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                          Komparasi kuota tender dengan realisasi kontrak belanja Kementerian.
-                        </p>
+                {/* TABBED EXECUTIVE ANALYTICS PANEL (OPTION 2) */}
+                <div className={`p-6 rounded-3xl border shadow-sm space-y-5 ${
+                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+                }`}>
+                  {/* Panel Header with Tab Switcher */}
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800/80">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5 text-blue-500" />
+                        <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          Eksekutif Analytics & Kinerja Pengadaan
+                        </h3>
                       </div>
-                      
-                      <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20 flex items-center gap-1">
-                        <Target className="w-3 h-3" />
-                        <span>T.A 2026</span>
-                      </span>
+                      <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                        Monitoring capaian realisasi tender, kuota pagu, dan distribusi pengadaan barang/jasa.
+                      </p>
                     </div>
 
-                    <div className="pt-2">
-                      <CategoryChart />
-                    </div>
-
-                    <div className={`pt-3 border-t grid grid-cols-3 gap-2 text-center text-xs ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
+                    {/* Chart Tab Switcher */}
+                    <div className={`inline-flex p-1 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-100/80 border-slate-200'
                     }`}>
-                      <div className="p-2 rounded-xl bg-blue-500/5">
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Total Pagu</p>
-                        <p className="font-bold text-blue-600 mt-0.5">Rp 48.2 M</p>
-                      </div>
-                      <div className="p-2 rounded-xl bg-emerald-500/5">
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Efisiensi HPS</p>
-                        <p className="font-bold text-emerald-600 mt-0.5">18.4%</p>
-                      </div>
-                      <div className="p-2 rounded-xl bg-amber-500/5">
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>P3DN Lokal</p>
-                        <p className="font-bold text-accent-gold mt-0.5">84.6%</p>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setActiveChartTab('realisasi')}
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                          activeChartTab === 'realisasi'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        <BarChart3 className="w-3.5 h-3.5" />
+                        <span>Target vs Realisasi</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setActiveChartTab('distribusi')}
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                          activeChartTab === 'distribusi'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        <PieChart className="w-3.5 h-3.5" />
+                        <span>Distribusi Sektor</span>
+                      </button>
                     </div>
                   </div>
 
-                  {/* Chart 2: Distribusi Kategori Belanja */}
-                  <div className={`p-6 rounded-3xl border shadow-sm space-y-4 ${
-                    isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
-                  }`}>
-                    <div className="flex justify-between items-start">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <PieChart className="w-4 h-4 text-accent-gold" />
-                          <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            Distribusi Berdasarkan Jenis Pengadaan
-                          </h3>
+                  {/* Tab 1 Content: Realisasi Triwulan */}
+                  {activeChartTab === 'realisasi' && (
+                    <div className="space-y-4 animate-in fade-in duration-200">
+                      <div className="pt-2">
+                        <CategoryChart />
+                      </div>
+
+                      <div className={`pt-4 border-t grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs ${
+                        isDark ? 'border-slate-800' : 'border-slate-100'
+                      }`}>
+                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-blue-50/40 border-blue-100'}`}>
+                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Total Kuota Pagu T.A 2026</p>
+                          <p className="text-base font-extrabold text-blue-600 dark:text-blue-400 mt-0.5">Rp 48.2 Miliar</p>
+                          <span className="text-[10px] text-slate-400">Terserap 68.4%</span>
                         </div>
-                        <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                          Klasifikasi paket barang, jasa konsultansi, konstruksi, dan lainnya.
-                        </p>
-                      </div>
-                      
-                      <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center gap-1">
-                        <Award className="w-3 h-3" />
-                        <span>4 Sektor</span>
-                      </span>
-                    </div>
-
-                    <div className="pt-2">
-                      <EfficiencyChart />
-                    </div>
-
-                    <div className={`pt-3 border-t grid grid-cols-4 gap-2 text-center text-xs ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
-                    }`}>
-                      <div className="p-1.5 rounded-xl">
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Barang</p>
-                        <p className="font-bold text-blue-600 mt-0.5">180 Pkt</p>
-                      </div>
-                      <div className="p-1.5 rounded-xl">
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Konstruksi</p>
-                        <p className="font-bold text-blue-500 mt-0.5">85 Pkt</p>
-                      </div>
-                      <div className="p-1.5 rounded-xl">
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Konsultansi</p>
-                        <p className="font-bold text-blue-400 mt-0.5">65 Pkt</p>
-                      </div>
-                      <div className="p-1.5 rounded-xl">
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>Lainnya</p>
-                        <p className="font-bold text-blue-300 mt-0.5">98 Pkt</p>
+                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-emerald-50/40 border-emerald-100'}`}>
+                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Efisiensi Belanja (HPS)</p>
+                          <p className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">18.4% (Rp 4.1 M)</p>
+                          <span className="text-[10px] text-emerald-500 font-semibold">Penghematan Anggaran</span>
+                        </div>
+                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-amber-50/40 border-amber-100'}`}>
+                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Komitmen P3DN / PDN Lokal</p>
+                          <p className="text-base font-extrabold text-amber-600 dark:text-accent-gold mt-0.5">84.6%</p>
+                          <span className="text-[10px] text-amber-500 font-semibold">Memenuhi Target Nasional</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
+                  {/* Tab 2 Content: Distribusi Kategori Belanja */}
+                  {activeChartTab === 'distribusi' && (
+                    <div className="space-y-4 animate-in fade-in duration-200">
+                      <div className="pt-2">
+                        <EfficiencyChart />
+                      </div>
+
+                      <div className={`pt-4 border-t grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs ${
+                        isDark ? 'border-slate-800' : 'border-slate-100'
+                      }`}>
+                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-blue-50/40 border-blue-100'}`}>
+                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Pengadaan Barang</p>
+                          <p className="text-base font-extrabold text-blue-600 mt-0.5">180 Paket</p>
+                          <span className="text-[10px] text-blue-500 font-semibold">45% dari Total Belanja</span>
+                        </div>
+                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-indigo-50/40 border-indigo-100'}`}>
+                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Pekerjaan Konstruksi</p>
+                          <p className="text-base font-extrabold text-indigo-600 mt-0.5">85 Paket</p>
+                          <span className="text-[10px] text-indigo-500 font-semibold">25% dari Total Belanja</span>
+                        </div>
+                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-purple-50/40 border-purple-100'}`}>
+                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Jasa Konsultansi</p>
+                          <p className="text-base font-extrabold text-purple-600 mt-0.5">65 Paket</p>
+                          <span className="text-[10px] text-purple-500 font-semibold">18% dari Total Belanja</span>
+                        </div>
+                        <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-emerald-50/40 border-emerald-100'}`}>
+                          <p className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>Jasa Lainnya</p>
+                          <p className="text-base font-extrabold text-emerald-600 mt-0.5">98 Paket</p>
+                          <span className="text-[10px] text-emerald-500 font-semibold">12% dari Total Belanja</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* QUICK LAUNCH BAR (MODAL SHORTCUTS & CREATE ACTION) */}
+                {/* QUICK LAUNCH ACTION BAR */}
                 <div className={`p-5 rounded-3xl border shadow-sm space-y-4 ${
                   isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
                 }`}>
@@ -2324,11 +2285,11 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                {/* LIVE CONTENT OVERVIEW & RECENT ITEMS FEED */}
+                {/* LIVE CONTENT & OPERATIONS MONITORING FEED (FILTERABLE) */}
                 <div className={`p-6 rounded-3xl border shadow-sm space-y-4 ${
                   isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
                 }`}>
-                  <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b ${
+                  <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b ${
                     isDark ? 'border-slate-800/60' : 'border-slate-200'
                   }`}>
                     <div className="flex items-center gap-2.5">
@@ -2337,29 +2298,410 @@ export default function AdminPortalPage() {
                       </div>
                       <div>
                         <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                          Daftar Konten & Monitoring Modul Terkini
+                          Monitoring Konten & Operasional Terkini
                         </h3>
                         <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Akses cepat pengelolaan dan pratinjau langsung ke laman publik
+                          Kelola entri data aktif dan pratinjau langsung ke antarmuka publik
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span>Sinkronisasi Otomatis Aktif</span>
-                      </span>
+
+                    {/* Filter Category Tabs */}
+                    <div className={`flex flex-wrap items-center gap-1.5 p-1 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-100/80 border-slate-200'
+                    }`}>
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('all')}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          contentFeedFilter === 'all'
+                            ? 'bg-blue-600 text-white shadow-xs'
+                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Semua
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('paket')}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          contentFeedFilter === 'paket'
+                            ? 'bg-indigo-600 text-white shadow-xs'
+                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Paket ({packagesList.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('berita')}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          contentFeedFilter === 'berita'
+                            ? 'bg-amber-600 text-white shadow-xs'
+                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Berita ({newsList.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('agenda')}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          contentFeedFilter === 'agenda'
+                            ? 'bg-emerald-600 text-white shadow-xs'
+                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Agenda ({agendaList.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('regulasi')}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          contentFeedFilter === 'regulasi'
+                            ? 'bg-blue-600 text-white shadow-xs'
+                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Regulasi ({regulasiList.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('sop')}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          contentFeedFilter === 'sop'
+                            ? 'bg-purple-600 text-white shadow-xs'
+                            : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        SOP ({sopList.length})
+                      </button>
                     </div>
                   </div>
 
-                  {/* Unified Live Content Feed List */}
+                  {/* Dynamic Filterable Content Feed List */}
                   <div className="space-y-2.5">
-                    
-                    {/* Item 1: Paket Tender Terbaru */}
-                    {packagesList[0] && (
-                      <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-indigo-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-indigo-300'
-                      }`}>
+
+                    {/* VIEW ALL: Shows summary card per active category */}
+                    {contentFeedFilter === 'all' && (
+                      <>
+                        {/* 1. Paket Tender */}
+                        {packagesList[0] && (
+                          <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-indigo-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-indigo-300'
+                          }`}>
+                            <div className="flex items-start gap-3 min-w-0">
+                              <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0 mt-0.5">
+                                <Package className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                                    Paket Pengadaan
+                                  </span>
+                                  <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                                    {packagesList[0].code}
+                                  </span>
+                                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                                    {packagesList[0].status}
+                                  </span>
+                                </div>
+                                <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                                  {packagesList[0].title}
+                                </h4>
+                                <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  HPS: <span className="font-semibold text-emerald-500">{packagesList[0].hps}</span> • {packagesList[0].unit} • Batas: {packagesList[0].deadline}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                              <button
+                                onClick={() => setActiveTab('paket')}
+                                className="px-3 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+                              >
+                                Kelola Paket
+                              </button>
+                              <Link
+                                href="/informasi/pemilu"
+                                target="_blank"
+                                className={`p-2 rounded-xl border transition-colors ${
+                                  isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
+                                }`}
+                                title="Buka Halaman Pengumuman"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 2. Berita */}
+                        {newsList[0] && (
+                          <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-amber-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-amber-300'
+                          }`}>
+                            <div className="flex items-start gap-3 min-w-0">
+                              <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 mt-0.5">
+                                <Newspaper className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                                    Berita & Warta
+                                  </span>
+                                  <span className="text-[10px] font-bold text-blue-500">
+                                    {newsList[0].category}
+                                  </span>
+                                  <span className="text-[10px] text-emerald-500 font-medium">
+                                    ✓ {newsList[0].status}
+                                  </span>
+                                </div>
+                                <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                                  {newsList[0].title}
+                                </h4>
+                                <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  {newsList[0].excerpt || newsList[0].content?.slice(0, 100)}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                              <button
+                                onClick={() => {
+                                  setEditingNews(newsList[0]);
+                                  setNewsFormData({ ...newsList[0] });
+                                  setShowNewsModal(true);
+                                }}
+                                className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
+                              >
+                                <Edit3 className="w-3 h-3" />
+                                <span>Edit</span>
+                              </button>
+                              <button
+                                onClick={() => setActiveTab('manage-berita')}
+                                className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                                  isDark ? 'border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'border-slate-200 text-slate-700 hover:bg-slate-200'
+                                }`}
+                              >
+                                Semua ({newsList.length})
+                              </button>
+                              <Link
+                                href="/informasi"
+                                target="_blank"
+                                className={`p-2 rounded-xl border transition-colors ${
+                                  isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
+                                }`}
+                                title="Buka Berita di Web Publik"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 3. Agenda */}
+                        {agendaList[0] && (
+                          <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-emerald-300'
+                          }`}>
+                            <div className="flex items-start gap-3 min-w-0">
+                              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 mt-0.5">
+                                <Calendar className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                                    Agenda & Event
+                                  </span>
+                                  <span className={`text-[10px] font-bold ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>
+                                    {agendaList[0].category}
+                                  </span>
+                                  <span className="text-[10px] text-amber-500 font-medium">
+                                    {agendaList[0].date} ({agendaList[0].time})
+                                  </span>
+                                </div>
+                                <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                                  {agendaList[0].title}
+                                </h4>
+                                <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  Lokasi: {agendaList[0].location} • Kapasitas: {agendaList[0].capacity}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                              <button
+                                onClick={() => {
+                                  setEditingAgenda(agendaList[0]);
+                                  setAgendaFormData({ ...agendaList[0] });
+                                  setShowAgendaModal(true);
+                                }}
+                                className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 dark:text-emerald-400 hover:text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
+                              >
+                                <Edit3 className="w-3 h-3" />
+                                <span>Edit</span>
+                              </button>
+                              <button
+                                onClick={() => setActiveTab('manage-agenda')}
+                                className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                                  isDark ? 'border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'border-slate-200 text-slate-700 hover:bg-slate-200'
+                                }`}
+                              >
+                                Semua ({agendaList.length})
+                              </button>
+                              <Link
+                                href="/agenda"
+                                target="_blank"
+                                className={`p-2 rounded-xl border transition-colors ${
+                                  isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
+                                }`}
+                                title="Buka Agenda di Web Publik"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 4. Regulasi */}
+                        {regulasiList[0] && (
+                          <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-blue-300'
+                          }`}>
+                            <div className="flex items-start gap-3 min-w-0">
+                              <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 mt-0.5">
+                                <ScrollText className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                                    Produk Hukum
+                                  </span>
+                                  <span className="text-[10px] font-bold text-indigo-500">
+                                    {regulasiList[0].kategori}
+                                  </span>
+                                  <span className="text-[10px] text-emerald-500 font-medium">
+                                    ✓ {regulasiList[0].status}
+                                  </span>
+                                </div>
+                                <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                                  {regulasiList[0].nomor}
+                                </h4>
+                                <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  {regulasiList[0].tentang} • Tahun: {regulasiList[0].tahun}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                              <button
+                                onClick={() => {
+                                  setEditingRegulasi(regulasiList[0]);
+                                  setRegulasiFormData({ ...regulasiList[0] });
+                                  setShowRegulasiModal(true);
+                                }}
+                                className="px-3 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-600 text-blue-600 dark:text-blue-400 hover:text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
+                              >
+                                <Edit3 className="w-3 h-3" />
+                                <span>Edit</span>
+                              </button>
+                              <button
+                                onClick={() => setActiveTab('manage-regulasi')}
+                                className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                                  isDark ? 'border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'border-slate-200 text-slate-700 hover:bg-slate-200'
+                                }`}
+                              >
+                                Semua ({regulasiList.length})
+                              </button>
+                              <Link
+                                href="/informasi/peraturan"
+                                target="_blank"
+                                className={`p-2 rounded-xl border transition-colors ${
+                                  isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
+                                }`}
+                                title="Buka Regulasi di Web Publik"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 5. SOP */}
+                        {sopList[0] && (
+                          <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-purple-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-purple-300'
+                          }`}>
+                            <div className="flex items-start gap-3 min-w-0">
+                              <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
+                                <Layers className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                                    Prosedur SOP
+                                  </span>
+                                  <span className="text-[10px] font-mono text-purple-500 font-semibold">
+                                    {sopList[0].kode}
+                                  </span>
+                                  <span className="text-[10px] text-emerald-500 font-medium">
+                                    ✓ {sopList[0].status}
+                                  </span>
+                                </div>
+                                <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                                  {sopList[0].judul}
+                                </h4>
+                                <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  {sopList[0].unit} • {sopList[0].revisi} • {sopList[0].tahapanCount} Tahapan Kerja
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                              <button
+                                onClick={() => {
+                                  setEditingSop(sopList[0]);
+                                  setSopFormData({ ...sopList[0] });
+                                  setShowSopModal(true);
+                                }}
+                                className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
+                              >
+                                <Edit3 className="w-3 h-3" />
+                                <span>Edit</span>
+                              </button>
+                              <button
+                                onClick={() => setActiveTab('manage-sop')}
+                                className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                                  isDark ? 'border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'border-slate-200 text-slate-700 hover:bg-slate-200'
+                                }`}
+                              >
+                                Semua ({sopList.length})
+                              </button>
+                              <Link
+                                href="/informasi/sop"
+                                target="_blank"
+                                className={`p-2 rounded-xl border transition-colors ${
+                                  isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
+                                }`}
+                                title="Buka SOP di Web Publik"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                    {/* VIEW PAKET: Filtered top 5 packages */}
+                    {contentFeedFilter === 'paket' && packagesList.slice(0, 5).map((pkg) => (
+                      <div
+                        key={pkg.id}
+                        className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-indigo-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-indigo-300'
+                        }`}
+                      >
                         <div className="flex items-start gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0 mt-0.5">
                             <Package className="w-4 h-4" />
@@ -2367,20 +2709,20 @@ export default function AdminPortalPage() {
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                                Paket Pengadaan
+                                {pkg.category}
                               </span>
                               <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                                {packagesList[0].code}
+                                {pkg.code}
                               </span>
                               <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                                {packagesList[0].status}
+                                {pkg.status}
                               </span>
                             </div>
                             <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                              {packagesList[0].title}
+                              {pkg.title}
                             </h4>
                             <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                              HPS: <span className="font-semibold text-emerald-500">{packagesList[0].hps}</span> • {packagesList[0].unit} • Batas: {packagesList[0].deadline}
+                              HPS: <span className="font-semibold text-emerald-500">{pkg.hps}</span> • {pkg.unit} • Batas: {pkg.deadline}
                             </p>
                           </div>
                         </div>
@@ -2389,7 +2731,7 @@ export default function AdminPortalPage() {
                             onClick={() => setActiveTab('paket')}
                             className="px-3 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white text-xs font-bold transition-colors cursor-pointer"
                           >
-                            Kelola Paket
+                            Kelola
                           </button>
                           <Link
                             href="/informasi/pemilu"
@@ -2397,19 +2739,21 @@ export default function AdminPortalPage() {
                             className={`p-2 rounded-xl border transition-colors ${
                               isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                             }`}
-                            title="Buka Halaman Pengumuman"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </Link>
                         </div>
                       </div>
-                    )}
+                    ))}
 
-                    {/* Item 2: Berita Terbaru */}
-                    {newsList[0] && (
-                      <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-amber-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-amber-300'
-                      }`}>
+                    {/* VIEW BERITA: Filtered top 5 news */}
+                    {contentFeedFilter === 'berita' && newsList.slice(0, 5).map((item) => (
+                      <div
+                        key={item.id}
+                        className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-amber-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-amber-300'
+                        }`}
+                      >
                         <div className="flex items-start gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 mt-0.5">
                             <Newspaper className="w-4 h-4" />
@@ -2417,28 +2761,28 @@ export default function AdminPortalPage() {
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                                Berita & Warta
-                              </span>
-                              <span className="text-[10px] font-bold text-blue-500">
-                                {newsList[0].category}
+                                {item.category}
                               </span>
                               <span className="text-[10px] text-emerald-500 font-medium">
-                                ✓ {newsList[0].status}
+                                ✓ {item.status}
+                              </span>
+                              <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                                {item.date}
                               </span>
                             </div>
                             <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                              {newsList[0].title}
+                              {item.title}
                             </h4>
                             <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                              {newsList[0].excerpt || newsList[0].content?.slice(0, 100)}
+                              {item.excerpt || item.content?.slice(0, 100)}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
                           <button
                             onClick={() => {
-                              setEditingNews(newsList[0]);
-                              setNewsFormData({ ...newsList[0] });
+                              setEditingNews(item);
+                              setNewsFormData({ ...item });
                               setShowNewsModal(true);
                             }}
                             className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
@@ -2446,33 +2790,27 @@ export default function AdminPortalPage() {
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
                           </button>
-                          <button
-                            onClick={() => setActiveTab('manage-berita')}
-                            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
-                              isDark ? 'border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'border-slate-200 text-slate-700 hover:bg-slate-200'
-                            }`}
-                          >
-                            Semua ({newsList.length})
-                          </button>
                           <Link
                             href="/informasi"
                             target="_blank"
                             className={`p-2 rounded-xl border transition-colors ${
                               isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                             }`}
-                            title="Buka Berita di Web Publik"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </Link>
                         </div>
                       </div>
-                    )}
+                    ))}
 
-                    {/* Item 3: Agenda Mendatang */}
-                    {agendaList[0] && (
-                      <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-emerald-300'
-                      }`}>
+                    {/* VIEW AGENDA: Filtered top 5 agenda */}
+                    {contentFeedFilter === 'agenda' && agendaList.slice(0, 5).map((item) => (
+                      <div
+                        key={item.id}
+                        className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-emerald-300'
+                        }`}
+                      >
                         <div className="flex items-start gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 mt-0.5">
                             <Calendar className="w-4 h-4" />
@@ -2480,28 +2818,25 @@ export default function AdminPortalPage() {
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                                Agenda & Event
-                              </span>
-                              <span className={`text-[10px] font-bold ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>
-                                {agendaList[0].category}
+                                {item.category}
                               </span>
                               <span className="text-[10px] text-amber-500 font-medium">
-                                {agendaList[0].date} ({agendaList[0].time})
+                                {item.date} ({item.time})
                               </span>
                             </div>
                             <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                              {agendaList[0].title}
+                              {item.title}
                             </h4>
                             <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                              Lokasi: {agendaList[0].location} • Kapasitas: {agendaList[0].capacity}
+                              Lokasi: {item.location} • Kapasitas: {item.capacity}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
                           <button
                             onClick={() => {
-                              setEditingAgenda(agendaList[0]);
-                              setAgendaFormData({ ...agendaList[0] });
+                              setEditingAgenda(item);
+                              setAgendaFormData({ ...item });
                               setShowAgendaModal(true);
                             }}
                             className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 dark:text-emerald-400 hover:text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
@@ -2509,33 +2844,27 @@ export default function AdminPortalPage() {
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
                           </button>
-                          <button
-                            onClick={() => setActiveTab('manage-agenda')}
-                            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
-                              isDark ? 'border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'border-slate-200 text-slate-700 hover:bg-slate-200'
-                            }`}
-                          >
-                            Semua ({agendaList.length})
-                          </button>
                           <Link
                             href="/agenda"
                             target="_blank"
                             className={`p-2 rounded-xl border transition-colors ${
                               isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                             }`}
-                            title="Buka Agenda di Web Publik"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </Link>
                         </div>
                       </div>
-                    )}
+                    ))}
 
-                    {/* Item 4: Regulasi Terbaru */}
-                    {regulasiList[0] && (
-                      <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-blue-300'
-                      }`}>
+                    {/* VIEW REGULASI: Filtered top 5 regulasi */}
+                    {contentFeedFilter === 'regulasi' && regulasiList.slice(0, 5).map((item) => (
+                      <div
+                        key={item.id}
+                        className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-blue-300'
+                        }`}
+                      >
                         <div className="flex items-start gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 mt-0.5">
                             <ScrollText className="w-4 h-4" />
@@ -2543,28 +2872,25 @@ export default function AdminPortalPage() {
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                                Produk Hukum
-                              </span>
-                              <span className="text-[10px] font-bold text-indigo-500">
-                                {regulasiList[0].kategori}
+                                {item.kategori}
                               </span>
                               <span className="text-[10px] text-emerald-500 font-medium">
-                                ✓ {regulasiList[0].status}
+                                ✓ {item.status}
                               </span>
                             </div>
                             <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                              {regulasiList[0].nomor}
+                              {item.nomor}
                             </h4>
                             <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                              {regulasiList[0].tentang} • Tahun: {regulasiList[0].tahun}
+                              {item.tentang} • Tahun {item.tahun}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
                           <button
                             onClick={() => {
-                              setEditingRegulasi(regulasiList[0]);
-                              setRegulasiFormData({ ...regulasiList[0] });
+                              setEditingRegulasi(item);
+                              setRegulasiFormData({ ...item });
                               setShowRegulasiModal(true);
                             }}
                             className="px-3 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-600 text-blue-600 dark:text-blue-400 hover:text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
@@ -2572,33 +2898,27 @@ export default function AdminPortalPage() {
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
                           </button>
-                          <button
-                            onClick={() => setActiveTab('manage-regulasi')}
-                            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
-                              isDark ? 'border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'border-slate-200 text-slate-700 hover:bg-slate-200'
-                            }`}
-                          >
-                            Semua ({regulasiList.length})
-                          </button>
                           <Link
                             href="/informasi/peraturan"
                             target="_blank"
                             className={`p-2 rounded-xl border transition-colors ${
                               isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                             }`}
-                            title="Buka Regulasi di Web Publik"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </Link>
                         </div>
                       </div>
-                    )}
+                    ))}
 
-                    {/* Item 5: Standar Operasional SOP */}
-                    {sopList[0] && (
-                      <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 hover:border-purple-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-purple-300'
-                      }`}>
+                    {/* VIEW SOP: Filtered top 5 SOP */}
+                    {contentFeedFilter === 'sop' && sopList.slice(0, 5).map((item) => (
+                      <div
+                        key={item.id}
+                        className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-purple-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-purple-300'
+                        }`}
+                      >
                         <div className="flex items-start gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
                             <Layers className="w-4 h-4" />
@@ -2606,28 +2926,28 @@ export default function AdminPortalPage() {
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                                Prosedur SOP
+                                {item.kategori}
                               </span>
                               <span className="text-[10px] font-mono text-purple-500 font-semibold">
-                                {sopList[0].kode}
+                                {item.kode}
                               </span>
                               <span className="text-[10px] text-emerald-500 font-medium">
-                                ✓ {sopList[0].status}
+                                ✓ {item.status}
                               </span>
                             </div>
                             <h4 className={`text-xs font-bold truncate mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                              {sopList[0].judul}
+                              {item.judul}
                             </h4>
                             <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                              {sopList[0].unit} • {sopList[0].revisi} • {sopList[0].tahapanCount} Tahapan Kerja
+                              {item.unit} • {item.revisi} • {item.tahapanCount} Tahapan Kerja
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
                           <button
                             onClick={() => {
-                              setEditingSop(sopList[0]);
-                              setSopFormData({ ...sopList[0] });
+                              setEditingSop(item);
+                              setSopFormData({ ...item });
                               setShowSopModal(true);
                             }}
                             className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
@@ -2635,27 +2955,18 @@ export default function AdminPortalPage() {
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
                           </button>
-                          <button
-                            onClick={() => setActiveTab('manage-sop')}
-                            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
-                              isDark ? 'border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'border-slate-200 text-slate-700 hover:bg-slate-200'
-                            }`}
-                          >
-                            Semua ({sopList.length})
-                          </button>
                           <Link
                             href="/informasi/sop"
                             target="_blank"
                             className={`p-2 rounded-xl border transition-colors ${
                               isDark ? 'border-slate-800 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-700 hover:text-primary-navy'
                             }`}
-                            title="Buka SOP di Web Publik"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </Link>
                         </div>
                       </div>
-                    )}
+                    ))}
 
                   </div>
                 </div>
