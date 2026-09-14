@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { 
   Search, User, Globe, Eye, Menu, X, ChevronDown, ChevronRight, 
-  Bell, AlertTriangle, FileText,
+  Bell, AlertTriangle, FileText, Package,
   Home, Briefcase, Calendar, Image as ImageIcon, BarChart3, 
   Building2, Scale, BookOpen, FileCheck, Award, ShieldCheck, 
   FileSpreadsheet, Vote, Gavel, Target, ScrollText, HelpCircle
@@ -18,7 +18,7 @@ import { SearchPalette } from '@/components/ui/SearchPalette';
 import { useData } from '@/contexts/DataContext';
 
 export function Header() {
-  const { newsList, agendaList, regulasiList, sopList, siteSettings } = useData();
+  const { newsList, agendaList, packagesList, regulasiList, sopList, siteSettings } = useData();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -28,12 +28,23 @@ export function Header() {
   const [isMobileInfoOpen, setIsMobileInfoOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
-  const [isNotificationsRead, setIsNotificationsRead] = useState(false);
+  const [readNotifCount, setReadNotifCount] = useState<number>(0);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
 
-  // Top 5 Dynamic CMS Notifications: Berita/Pengumuman, Agenda/Jadwal, Regulasi/Aturan, dan Standar SOP
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('ukpbj_public_read_notif_count');
+        if (saved) setReadNotifCount(parseInt(saved, 10));
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  }, []);
+
+  // Top Dynamic CMS Notifications: Paket Pengadaan PBJ, Berita/Pengumuman, Agenda/Jadwal, Regulasi/Aturan, dan Standar SOP
   const cmsNotifications = React.useMemo(() => {
     const list: Array<{
       id: string;
@@ -48,7 +59,7 @@ export function Header() {
       icon: React.ReactNode;
     }> = [];
 
-    // 1. Berita & Pengumuman (Banner Pengumuman & Berita Terbit)
+    // 1. Pengumuman Resmi (Banner Aktif)
     if (siteSettings?.announcementActive && siteSettings?.announcementBanner) {
       list.push({
         id: 'banner-announcement',
@@ -64,6 +75,27 @@ export function Header() {
       });
     }
 
+    // 2. Paket Pengadaan PBJ Terbaru (Tender, Seleksi, E-Purchasing)
+    if (packagesList && packagesList.length > 0) {
+      packagesList
+        .slice(0, 3)
+        .forEach((pkg) => {
+          list.push({
+            id: `pkg-${pkg.id}`,
+            category: `Tender ${pkg.category}`,
+            title: `${pkg.code}: ${pkg.title}`,
+            desc: `Nilai HPS: ${pkg.hps} • ${pkg.unit}`,
+            time: `Batas: ${pkg.deadline}`,
+            href: '/#pengadaan',
+            badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+            iconBg: 'bg-indigo-100',
+            iconColor: 'text-indigo-600',
+            icon: <Package className="w-4 h-4" />
+          });
+        });
+    }
+
+    // 3. Berita & Warta Terbit
     if (newsList && newsList.length > 0) {
       newsList
         .filter((n) => n.status === 'Published')
@@ -84,7 +116,7 @@ export function Header() {
         });
     }
 
-    // 2. Agenda & Jadwal (Bimtek, Rapat Kerja, Sosialisasi)
+    // 4. Agenda & Jadwal (Bimtek, Rapat Kerja, Sosialisasi)
     if (agendaList && agendaList.length > 0) {
       agendaList
         .filter((a) => a.status !== 'Dibatalkan')
@@ -105,7 +137,7 @@ export function Header() {
         });
     }
 
-    // 3. Regulasi & Aturan (Perpres, Permenaker, SE)
+    // 5. Regulasi & Aturan (Perpres, Permenaker, SE)
     if (regulasiList && regulasiList.length > 0) {
       regulasiList
         .filter((r) => r.status === 'Aktif')
@@ -113,7 +145,7 @@ export function Header() {
         .forEach((reg) => {
           list.push({
             id: `reg-${reg.id}`,
-            category: reg.kategori || 'Regulasi & Aturan',
+            category: reg.kategori || 'Regulasi JDIH',
             title: reg.nomor,
             desc: reg.tentang,
             time: `Tahun ${reg.tahun}`,
@@ -126,11 +158,11 @@ export function Header() {
         });
     }
 
-    // 4. Standar SOP (Prosedur & Alur Kerja)
+    // 6. Standar SOP (Prosedur & Alur Kerja)
     if (sopList && sopList.length > 0) {
       sopList
         .filter((s) => s.status === 'Berlaku')
-        .slice(0, 2)
+        .slice(0, 1)
         .forEach((sop) => {
           list.push({
             id: `sop-${sop.id}`,
@@ -147,9 +179,23 @@ export function Header() {
         });
     }
 
-    // Ambil tepat 5 data CMS teratas
-    return list.slice(0, 5);
-  }, [newsList, agendaList, regulasiList, sopList, siteSettings]);
+    // Ambil data CMS teratas
+    return list.slice(0, 7);
+  }, [packagesList, newsList, agendaList, regulasiList, sopList, siteSettings]);
+
+  const unreadPublicCount = Math.max(0, cmsNotifications.length - readNotifCount);
+
+  const handleOpenNotifications = () => {
+    setIsNotificationOpen(!isNotificationOpen);
+    setReadNotifCount(cmsNotifications.length);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('ukpbj_public_read_notif_count', String(cmsNotifications.length));
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  };
 
   const infoSubmenu = [
     { label: 'Peraturan', href: '/informasi/peraturan', icon: <Scale className="w-4 h-4" />, desc: 'Regulasi & dasar hukum PBJ' },
@@ -501,17 +547,14 @@ export function Header() {
             {/* Notification Bell */}
             <div className="relative">
               <button 
-                onClick={() => {
-                  setIsNotificationOpen(!isNotificationOpen);
-                  setIsNotificationsRead(true);
-                }}
-                className="group flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-600 hover:text-accent-gold rounded-full transition-all duration-300 shadow-xs hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] relative"
+                onClick={handleOpenNotifications}
+                className="group flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-600 hover:text-accent-gold rounded-full transition-all duration-300 shadow-xs hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] relative cursor-pointer"
                 title="Notifikasi & Pembaruan Terkini"
               >
                 <Bell className="w-4 h-4 sm:w-4.5 sm:h-4.5 transform group-hover:scale-110 transition-transform" />
-                {!isNotificationsRead && cmsNotifications.length > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 px-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-extrabold rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-pulse">
-                    {cmsNotifications.length}
+                {unreadPublicCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 px-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-pulse">
+                    {unreadPublicCount}
                   </span>
                 )}
               </button>
@@ -526,7 +569,17 @@ export function Header() {
                     className="absolute right-0 mt-3 w-84 sm:w-96 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_20px_40px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50"
                   >
                     <div className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/90">
-                      <h3 className="font-bold text-sm text-primary-navy">Notifikasi Terkini</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-sm text-primary-navy">Notifikasi & Pembaruan</h3>
+                        {unreadPublicCount > 0 && (
+                          <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold">
+                            {unreadPublicCount} baru
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        {cmsNotifications.length} Aktivitas
+                      </span>
                     </div>
                     
                     <div className="max-h-96 overflow-y-auto divide-y divide-slate-100">

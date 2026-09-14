@@ -9,7 +9,7 @@ import {
   BellRing, ChevronRight, FileText, Calendar, Megaphone, 
   Newspaper, Laptop, Globe, MessageSquare, Download, 
   BarChart2, Bookmark, QrCode, Share2, Printer, 
-  CheckCircle2, Clock, ShieldCheck, ArrowRight
+  CheckCircle2, Clock, ShieldCheck, ArrowRight, Package, Scale
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 
@@ -17,13 +17,67 @@ export default function InformasiPage() {
   const { newsList, agendaList, regulasiList, packagesList, siteSettings } = useData();
   const publishedNews = newsList.filter(n => n.status === 'Published');
   
-  const recentUpdates = publishedNews.map((news) => ({
-    date: news.date,
-    type: news.category.toUpperCase(),
-    title: news.title,
-    icon: <Newspaper className="w-5 h-5 text-blue-300"/>,
-    color: 'bg-blue-500/20'
-  }));
+  const recentUpdates = React.useMemo(() => {
+    const list: Array<{
+      date: string;
+      type: string;
+      title: string;
+      icon: React.ReactNode;
+      color: string;
+    }> = [];
+
+    // Packages
+    if (packagesList && packagesList.length > 0) {
+      packagesList.slice(0, 2).forEach((pkg) => {
+        list.push({
+          date: pkg.deadline ? pkg.deadline.slice(0, 6) : 'Baru',
+          type: `TENDER ${pkg.category.toUpperCase()}`,
+          title: `${pkg.code}: ${pkg.title}`,
+          icon: <Package className="w-5 h-5 text-indigo-300" />,
+          color: 'bg-indigo-500/20'
+        });
+      });
+    }
+
+    // Published News
+    publishedNews.slice(0, 2).forEach((news) => {
+      list.push({
+        date: news.date,
+        type: news.category.toUpperCase(),
+        title: news.title,
+        icon: <Newspaper className="w-5 h-5 text-blue-300" />,
+        color: 'bg-blue-500/20'
+      });
+    });
+
+    // Agenda
+    if (agendaList && agendaList.length > 0) {
+      agendaList.slice(0, 1).forEach((agenda) => {
+        list.push({
+          date: agenda.date,
+          type: `AGENDA ${agenda.category.toUpperCase()}`,
+          title: agenda.title,
+          icon: <Calendar className="w-5 h-5 text-emerald-300" />,
+          color: 'bg-emerald-500/20'
+        });
+      });
+    }
+
+    // Regulasi
+    if (regulasiList && regulasiList.length > 0) {
+      regulasiList.slice(0, 1).forEach((reg) => {
+        list.push({
+          date: `Thn ${reg.tahun}`,
+          type: 'REGULASI JDIH',
+          title: `${reg.nomor} - ${reg.tentang}`,
+          icon: <Scale className="w-5 h-5 text-purple-300" />,
+          color: 'bg-purple-500/20'
+        });
+      });
+    }
+
+    return list.slice(0, 5);
+  }, [packagesList, publishedNews, agendaList, regulasiList]);
 
   const serviceStatuses = [
     { name: 'SPSE Kemnaker', status: siteSettings.serverStatus === 'Maintenance' ? 'MAINTENANCE' : 'NORMAL', icon: <Laptop className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
