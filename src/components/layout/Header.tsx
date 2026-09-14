@@ -501,7 +501,10 @@ export function Header() {
             {/* Notification Bell */}
             <div className="relative">
               <button 
-                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                onClick={() => {
+                  setIsNotificationOpen(!isNotificationOpen);
+                  setIsNotificationsRead(true);
+                }}
                 className="group flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-600 hover:text-accent-gold rounded-full transition-all duration-300 shadow-xs hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] relative"
                 title="Notifikasi & Pembaruan Terkini"
               >
@@ -522,19 +525,8 @@ export function Header() {
                     transition={{ duration: 0.2 }}
                     className="absolute right-0 mt-3 w-84 sm:w-96 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_20px_40px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50"
                   >
-                    <div className="p-3.5 border-b border-slate-100 flex justify-between items-center bg-slate-50/90">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-sm text-primary-navy">Notifikasi Terkini</h3>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
-                          {cmsNotifications.length} Update CMS
-                        </span>
-                      </div>
-                      <button 
-                        onClick={() => setIsNotificationsRead(true)}
-                        className="text-[11px] text-primary-blue hover:text-accent-gold font-semibold transition-colors cursor-pointer"
-                      >
-                        Tandai dibaca
-                      </button>
+                    <div className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/90">
+                      <h3 className="font-bold text-sm text-primary-navy">Notifikasi Terkini</h3>
                     </div>
                     
                     <div className="max-h-96 overflow-y-auto divide-y divide-slate-100">
