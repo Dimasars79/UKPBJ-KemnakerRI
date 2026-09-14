@@ -3281,75 +3281,34 @@ export default function AdminPortalPage() {
               </div>
             </div>
 
-            {/* Quick Metrics Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className={`p-4 rounded-2xl border transition-all ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Log Hari Ini</span>
-                  <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
-                    <History className="w-4 h-4" />
+            {/* Operator Aktif Info Card */}
+            <div className={`p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
+              <div className="flex items-center space-x-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
+                  <Users className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    Operator Sesi Aktif
+                  </span>
+                  <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                    <h3 className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      Dimas Ars
+                    </h3>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                      Super Administrator PBJ
+                    </span>
                   </div>
                 </div>
-                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  {packagesList.length + newsList.length + agendaList.length + regulasiList.length + sopList.length + 18} <span className="text-xs font-bold text-slate-400 font-normal">peristiwa</span>
-                </p>
-                <p className="text-[11px] text-emerald-500 font-bold mt-1 flex items-center gap-1">
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-bold text-[11px]">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Audit logging aktif & terenkripsi
-                </p>
-              </div>
-
-              <div className={`p-4 rounded-2xl border transition-all ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Koneksi Database</span>
-                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
-                    <Database className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Supabase Live
-                </p>
-                <p className="text-[11px] text-blue-500 font-bold mt-1">
-                  PostgreSQL 15 • Latency 24ms
-                </p>
-              </div>
-
-              <div className={`p-4 rounded-2xl border transition-all ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Operator Aktif</span>
-                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
-                    <Users className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Dimas Ars
-                </p>
-                <p className={`text-[11px] font-medium mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                  Role: Super Administrator PBJ
-                </p>
-              </div>
-
-              <div className={`p-4 rounded-2xl border transition-all ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Integritas Data</span>
-                  <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center">
-                    <ShieldCheck className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className={`text-2xl font-black mt-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  100% Valid
-                </p>
-                <p className="text-[11px] text-emerald-500 font-bold mt-1">
-                  0 Konflik Schema Cache
-                </p>
+                  <span>Sesi Otentikasi Aktif & Terverifikasi</span>
+                </span>
               </div>
             </div>
 
