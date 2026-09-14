@@ -55,6 +55,46 @@ import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, Reg
 import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
 import { supabase } from '@/lib/supabase/client';
 
+export interface AdminNotificationItem {
+  id: string;
+  title: string;
+  desc: string;
+  time: string;
+  timestamp: number;
+  type: 'paket' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'galeri' | 'sistem';
+  read: boolean;
+}
+
+const DEFAULT_NOTIFICATIONS: AdminNotificationItem[] = [
+  {
+    id: 'notif-1',
+    title: 'Sistem Terhubung ke Database',
+    desc: 'Semua koneksi REST API & LocalStorage aktif normal',
+    time: 'Baru saja',
+    timestamp: Date.now() - 60000,
+    type: 'sistem',
+    read: false
+  },
+  {
+    id: 'notif-2',
+    title: 'Sinkronisasi SPSE Berhasil',
+    desc: 'Paket pengadaan terhubung dengan portal SPSE Kemnaker',
+    time: '25 menit yang lalu',
+    timestamp: Date.now() - 1500000,
+    type: 'paket',
+    read: false
+  },
+  {
+    id: 'notif-3',
+    title: 'Pembaruan JDIH & Regulasi',
+    desc: 'Regulasi dan SOP operasional PBJ siap diakses publik',
+    time: '1 jam yang lalu',
+    timestamp: Date.now() - 3600000,
+    type: 'regulasi',
+    read: true
+  }
+];
+
 export default function AdminPortalPage() {
   const router = useRouter();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
@@ -67,7 +107,65 @@ export default function AdminPortalPage() {
   // Header Interactive States
   const [showNotifications, setShowNotifications] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
-  const [unreadNotifs, setUnreadNotifs] = useState(3);
+  
+  // Persistent Dynamic Notifications System
+  const [notificationsList, setNotificationsList] = useState<AdminNotificationItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('ukpbj_admin_notifications');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.warn('Failed to load admin notifications:', e);
+      }
+    }
+    return DEFAULT_NOTIFICATIONS;
+  });
+
+  const unreadNotifs = notificationsList.filter(n => !n.read).length;
+
+  const pushAdminNotification = (title: string, desc: string, type: AdminNotificationItem['type']) => {
+    const newNotif: AdminNotificationItem = {
+      id: `notif-${Date.now()}`,
+      title,
+      desc,
+      time: 'Baru saja',
+      timestamp: Date.now(),
+      type,
+      read: false
+    };
+    setNotificationsList((prev) => {
+      const updated = [newNotif, ...prev.slice(0, 19)];
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('ukpbj_admin_notifications', JSON.stringify(updated));
+      }
+      return updated;
+    });
+  };
+
+  const markAllNotificationsAsRead = () => {
+    setNotificationsList((prev) => {
+      const updated = prev.map(n => ({ ...n, read: true }));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('ukpbj_admin_notifications', JSON.stringify(updated));
+      }
+      return updated;
+    });
+    showNotification('Semua notifikasi ditandai sebagai sudah dibaca.');
+  };
+
+  const markSingleNotificationRead = (notifId: string, targetTab?: typeof activeTab) => {
+    setNotificationsList((prev) => {
+      const updated = prev.map(n => n.id === notifId ? { ...n, read: true } : n);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('ukpbj_admin_notifications', JSON.stringify(updated));
+      }
+      return updated;
+    });
+    if (targetTab) {
+      setActiveTab(targetTab);
+      setShowNotifications(false);
+    }
+  };
   
   // DataContext Hook
   const {
@@ -266,6 +364,7 @@ export default function AdminPortalPage() {
         imageUrl: newsFormData.imageUrl || '/news/news-1.png'
       });
       showNotification('✓ Berita berhasil diperbarui dan tersinkronisasi ke Supabase & Frontend (/informasi & /)!');
+      pushAdminNotification('Berita & Warta Diperbarui', `Berita "${newsFormData.title || 'Warta PBJ'}" telah diperbarui`, 'berita');
     } else {
       addNews({
         title: newsFormData.title || 'Judul Berita Baru',
@@ -277,6 +376,7 @@ export default function AdminPortalPage() {
         imageUrl: newsFormData.imageUrl || '/news/news-1.png'
       });
       showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Supabase & Frontend (/informasi)!');
+      pushAdminNotification('Berita & Warta Baru Diterbitkan', `"${newsFormData.title || 'Siaran Pers Baru'}" telah tayang di portal publik`, 'berita');
     }
     setShowNewsModal(false);
     setEditingNews(null);
@@ -286,12 +386,14 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus berita ini? Data akan langsung terhapus dari backend dan frontend.')) {
       deleteNews(id);
       showNotification('Berita telah dihapus dari backend & frontend.');
+      pushAdminNotification('Berita Dihapus', 'Satu publikasi berita telah dihapus dari database', 'berita');
     }
   };
 
   const handleToggleNewsStatus = (id: string) => {
     toggleNewsStatus(id);
     showNotification('Status publikasi berita berhasil diubah dan disinkronkan!');
+    pushAdminNotification('Status Berita Diubah', 'Status visibilitas berita telah diperbarui', 'berita');
   };
 
   // AGENDA HANDLERS & IMAGE UPLOAD
@@ -329,6 +431,7 @@ export default function AdminPortalPage() {
         imageUrl: agendaFormData.imageUrl || ''
       });
       showNotification('✓ Agenda berhasil diperbarui dan tersinkronisasi ke Frontend (/agenda)!');
+      pushAdminNotification('Agenda Bimtek Diperbarui', `"${agendaFormData.title || 'Agenda PBJ'}" berhasil diperbarui`, 'agenda');
     } else {
       addAgenda({
         title: agendaFormData.title || 'Agenda Baru',
@@ -342,6 +445,7 @@ export default function AdminPortalPage() {
         status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal'
       });
       showNotification('✓ Agenda baru berhasil ditambahkan ke kalender publik (/agenda)!');
+      pushAdminNotification('Agenda PBJ Baru Dijadwalkan', `"${agendaFormData.title || 'Agenda Baru'}" pada ${agendaFormData.date || 'jadwal kegiatan'}`, 'agenda');
     }
     setShowAgendaModal(false);
     setEditingAgenda(null);
@@ -351,6 +455,7 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus agenda ini? Data akan langsung terhapus dari kalender publik.')) {
       deleteAgenda(id);
       showNotification('Agenda telah dihapus dari sistem backend dan frontend.');
+      pushAdminNotification('Agenda Dihapus', 'Satu jadwal kegiatan PBJ telah dihapus dari sistem', 'agenda');
     }
   };
 
@@ -405,6 +510,7 @@ export default function AdminPortalPage() {
         downloadUrl: regulasiFormData.downloadUrl || regulasiFormData.fileData || '#'
       });
       showNotification('✓ Regulasi berhasil diperbarui dan disinkronkan ke Frontend (/informasi/peraturan)!');
+      pushAdminNotification('Regulasi JDIH Diperbarui', `${regulasiFormData.nomor || 'Regulasi'} telah disesuaikan`, 'regulasi');
     } else {
       addRegulasi({
         nomor: regulasiFormData.nomor || 'Permenaker No. 01 Tahun 2026',
@@ -418,6 +524,7 @@ export default function AdminPortalPage() {
         status: (regulasiFormData.status as RegulasiItem['status']) || 'Aktif'
       });
       showNotification('✓ Regulasi baru berhasil ditambahkan dan langsung aktif di Frontend!');
+      pushAdminNotification('Regulasi JDIH Baru Diunggah', `${regulasiFormData.nomor || 'Permen'} - ${regulasiFormData.tentang || 'Pedoman PBJ'}`, 'regulasi');
     }
     setShowRegulasiModal(false);
     setEditingRegulasi(null);
@@ -427,15 +534,16 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus regulasi ini? Data akan langsung terhapus dari portal publik.')) {
       deleteRegulasi(id);
       showNotification('Regulasi telah dihapus dari sistem.');
+      pushAdminNotification('Regulasi Dihapus', 'Dokumen regulasi telah dihapus dari basis data JDIH', 'regulasi');
     }
   };
 
   const handleToggleRegulasiStatus = (id: string) => {
     toggleRegulasiStatus(id);
     showNotification('Status regulasi berhasil diubah!');
+    pushAdminNotification('Status Regulasi Diubah', 'Status hukum regulasi telah diperbarui', 'regulasi');
   };
 
-  // SOP HANDLERS & FILE UPLOAD
   // SOP HANDLERS & FILE UPLOAD
   const handleSopFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -487,6 +595,7 @@ export default function AdminPortalPage() {
         downloadUrl: sopFormData.downloadUrl || sopFormData.fileData || '#'
       });
       showNotification('✓ SOP berhasil diperbarui dan disinkronkan ke Supabase & Frontend (/informasi/sop)!');
+      pushAdminNotification('Dokumen SOP Diperbarui', `${sopFormData.kode || 'SOP'} berhasil diperbarui`, 'sop');
     } else {
       addSop({
         kode: sopFormData.kode || `SOP/PBJ/0${sopList.length + 1}/2026`,
@@ -503,6 +612,7 @@ export default function AdminPortalPage() {
         status: (sopFormData.status as SopItem['status']) || 'Berlaku'
       });
       showNotification('✓ SOP baru beserta lampiran file berhasil disimpan ke Supabase Database!');
+      pushAdminNotification('Dokumen SOP Baru Disimpan', `${sopFormData.kode || 'SOP Baru'} - ${sopFormData.judul || 'Standar Prosedur'}`, 'sop');
     }
     setShowSopModal(false);
     setEditingSop(null);
@@ -512,6 +622,7 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus SOP ini?')) {
       deleteSop(id);
       showNotification('SOP telah dihapus dari sistem backend & frontend.');
+      pushAdminNotification('Dokumen SOP Dihapus', 'Dokumen tata kelola SOP telah dihapus', 'sop');
     }
   };
 
@@ -563,6 +674,7 @@ export default function AdminPortalPage() {
     if (editingPhoto) {
       updatePhoto(editingPhoto.id, photoFormData);
       showNotification('✓ Foto dokumentasi berhasil diperbarui dan disinkronkan ke Frontend (/galeri)!');
+      pushAdminNotification('Foto Galeri Diperbarui', photoFormData.title || 'Foto kegiatan PBJ', 'galeri');
     } else {
       addPhoto({
         title: photoFormData.title || 'Foto Dokumentasi Kegiatan PBJ',
@@ -573,6 +685,7 @@ export default function AdminPortalPage() {
         date: photoFormData.date || new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
       });
       showNotification('✓ Foto dokumentasi baru berhasil ditambahkan dan langsung tayang di Galeri (/galeri)!');
+      pushAdminNotification('Foto Dokumentasi Baru Diunggah', photoFormData.title || 'Foto kegiatan PBJ', 'galeri');
     }
     setShowPhotoModal(false);
     setEditingPhoto(null);
@@ -582,6 +695,7 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus foto ini dari galeri publik?')) {
       deletePhoto(id);
       showNotification('Foto dokumentasi telah dihapus.');
+      pushAdminNotification('Foto Galeri Dihapus', 'Foto dokumentasi telah dihapus dari galeri publik', 'galeri');
     }
   };
 
@@ -591,6 +705,7 @@ export default function AdminPortalPage() {
     if (editingVideo) {
       updateVideo(editingVideo.id, videoFormData);
       showNotification('✓ Video dokumentasi berhasil diperbarui dan disinkronkan ke Frontend (/galeri)!');
+      pushAdminNotification('Video Media Diperbarui', videoFormData.title || 'Video sosialisasi', 'galeri');
     } else {
       addVideo({
         title: videoFormData.title || 'Video Kegiatan PBJ Kemnaker',
@@ -603,6 +718,7 @@ export default function AdminPortalPage() {
         url: videoFormData.url || 'https://www.youtube.com/@kemenperin_ri'
       });
       showNotification('✓ Video baru berhasil ditambahkan ke Galeri Video (/galeri)!');
+      pushAdminNotification('Video Media Baru Ditambahkan', videoFormData.title || 'Video sosialisasi PBJ', 'galeri');
     }
     setShowVideoModal(false);
     setEditingVideo(null);
@@ -612,6 +728,7 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus video ini dari galeri publik?')) {
       deleteVideo(id);
       showNotification('Video dokumentasi telah dihapus.');
+      pushAdminNotification('Video Media Dihapus', 'Video media telah dihapus dari galeri publik', 'galeri');
     }
   };
 
@@ -723,6 +840,7 @@ export default function AdminPortalPage() {
       documents: docs
     });
     showNotification('✓ Paket Pengadaan berhasil disimpan ke database & langsung tayang di Beranda Publik!');
+    pushAdminNotification('Paket Pengadaan Baru Diterbitkan', `${packageFormData.code || 'TND-2026'} - ${packageFormData.title || 'Paket Pengadaan'} (${docs.length} file)`, 'paket');
     setShowPackageModal(false);
   };
 
@@ -730,6 +848,7 @@ export default function AdminPortalPage() {
     if (confirm('Apakah Anda yakin ingin menghapus paket pengadaan ini dari sistem?')) {
       deletePackage(id);
       showNotification('Paket pengadaan telah dihapus dari sistem backend.');
+      pushAdminNotification('Paket Pengadaan Dihapus', 'Satu paket pengadaan telah dihapus dari sistem backend', 'paket');
     }
   };
 
@@ -1628,75 +1747,116 @@ export default function AdminPortalPage() {
                       <div className="flex items-center space-x-2">
                         <Bell className="w-4 h-4 text-blue-500" />
                         <span className={`text-xs font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>Notifikasi & Audit Log</span>
+                        {unreadNotifs > 0 && (
+                          <span className="px-1.5 py-0.2 rounded-full bg-red-500 text-white text-[9px] font-bold">
+                            {unreadNotifs} baru
+                          </span>
+                        )}
                       </div>
-                      <button
-                        onClick={() => {
-                          setUnreadNotifs(0);
-                          showNotification('Semua notifikasi ditandai sebagai sudah dibaca.');
-                        }}
-                        className="text-[10px] text-blue-400 hover:underline font-semibold cursor-pointer"
-                      >
-                        Tandai Dibaca
-                      </button>
+                      {unreadNotifs > 0 && (
+                        <button
+                          onClick={markAllNotificationsAsRead}
+                          className="text-[10px] text-blue-400 hover:underline font-semibold cursor-pointer"
+                        >
+                          Tandai Dibaca
+                        </button>
+                      )}
                     </div>
 
-                    <div className="space-y-2 max-h-64 overflow-y-auto">
-                      <div className={`p-2.5 rounded-xl border text-xs flex items-start gap-2.5 transition-colors ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:bg-white'
-                      }`}>
-                        <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 mt-0.5">
-                          <Package className="w-3.5 h-3.5" />
+                    <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                      {notificationsList.length === 0 ? (
+                        <div className="p-4 text-center text-xs text-slate-500">
+                          Tidak ada notifikasi aktivitas.
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <p className={`font-bold text-[11px] leading-snug ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-                            Tender Baru Diterbitkan
-                          </p>
-                          <p className="text-[10px] text-slate-400 truncate">Pengadaan Server Cloud DC T.A 2026</p>
-                          <p className="text-[9px] text-blue-400 font-mono mt-1">10 menit yang lalu</p>
-                        </div>
-                      </div>
+                      ) : (
+                        notificationsList.map((notif) => {
+                          let icon = <Package className="w-3.5 h-3.5" />;
+                          let iconColor = 'bg-blue-500/10 text-blue-500';
+                          let targetTab: typeof activeTab = 'dashboard';
 
-                      <div className={`p-2.5 rounded-xl border text-xs flex items-start gap-2.5 transition-colors ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:bg-white'
-                      }`}>
-                        <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 mt-0.5">
-                          <Wifi className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className={`font-bold text-[11px] leading-snug ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-                            Sinkronisasi SPSE Berhasil
-                          </p>
-                          <p className="text-[10px] text-slate-400 truncate">42 Paket terhubung normal (Latency 38ms)</p>
-                          <p className="text-[9px] text-emerald-400 font-mono mt-1">25 menit yang lalu</p>
-                        </div>
-                      </div>
+                          if (notif.type === 'paket') {
+                            icon = <Package className="w-3.5 h-3.5" />;
+                            iconColor = 'bg-blue-500/10 text-blue-500';
+                            targetTab = 'paket';
+                          } else if (notif.type === 'berita') {
+                            icon = <Newspaper className="w-3.5 h-3.5" />;
+                            iconColor = 'bg-amber-500/10 text-amber-500';
+                            targetTab = 'manage-berita';
+                          } else if (notif.type === 'agenda') {
+                            icon = <Calendar className="w-3.5 h-3.5" />;
+                            iconColor = 'bg-emerald-500/10 text-emerald-500';
+                            targetTab = 'manage-agenda';
+                          } else if (notif.type === 'regulasi') {
+                            icon = <ScrollText className="w-3.5 h-3.5" />;
+                            iconColor = 'bg-purple-500/10 text-purple-500';
+                            targetTab = 'manage-regulasi';
+                          } else if (notif.type === 'sop') {
+                            icon = <Layers className="w-3.5 h-3.5" />;
+                            iconColor = 'bg-indigo-500/10 text-indigo-500';
+                            targetTab = 'manage-sop';
+                          } else if (notif.type === 'galeri') {
+                            icon = <Camera className="w-3.5 h-3.5" />;
+                            iconColor = 'bg-pink-500/10 text-pink-500';
+                            targetTab = 'manage-galeri';
+                          } else if (notif.type === 'sistem') {
+                            icon = <Wifi className="w-3.5 h-3.5" />;
+                            iconColor = 'bg-cyan-500/10 text-cyan-500';
+                            targetTab = 'log-aktivitas';
+                          }
 
-                      <div className={`p-2.5 rounded-xl border text-xs flex items-start gap-2.5 transition-colors ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:bg-white'
-                      }`}>
-                        <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0 mt-0.5">
-                          <Users className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className={`font-bold text-[11px] leading-snug ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-                            Pendaftar Vendor Rekanan
-                          </p>
-                          <p className="text-[10px] text-slate-400 truncate">PT Telekomunikasi Indonesia Tbk verifikasi KBLI</p>
-                          <p className="text-[9px] text-purple-400 font-mono mt-1">1 jam yang lalu</p>
-                        </div>
-                      </div>
+                          return (
+                            <div
+                              key={notif.id}
+                              onClick={() => markSingleNotificationRead(notif.id, targetTab)}
+                              className={`p-2.5 rounded-xl border text-xs flex items-start gap-2.5 transition-all cursor-pointer ${
+                                !notif.read
+                                  ? isDark 
+                                    ? 'bg-blue-950/40 border-blue-800/80 hover:bg-blue-950/70' 
+                                    : 'bg-blue-50/70 border-blue-200 hover:bg-blue-100/70'
+                                  : isDark 
+                                    ? 'bg-slate-950/60 border-slate-800 hover:bg-slate-950' 
+                                    : 'bg-slate-50 border-slate-200 hover:bg-white'
+                              }`}
+                            >
+                              <div className={`w-7 h-7 rounded-lg ${iconColor} flex items-center justify-center shrink-0 mt-0.5`}>
+                                {icon}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center justify-between gap-1">
+                                  <p className={`font-bold text-[11px] leading-snug truncate ${
+                                    !notif.read 
+                                      ? 'text-blue-500 dark:text-blue-400 font-extrabold' 
+                                      : isDark ? 'text-slate-200' : 'text-slate-800'
+                                  }`}>
+                                    {notif.title}
+                                  </p>
+                                  {!notif.read && (
+                                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                                  )}
+                                </div>
+                                <p className="text-[10px] text-slate-400 truncate mt-0.5" title={notif.desc}>
+                                  {notif.desc}
+                                </p>
+                                <p className="text-[9px] text-slate-500 dark:text-slate-400 font-mono mt-1">
+                                  {notif.time}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
                     </div>
 
                     <div className="pt-2 border-t border-slate-800/60 flex justify-between items-center text-[10px] text-slate-400">
-                      <span>3 notifikasi aktif</span>
+                      <span>{notificationsList.length} aktivitas tercatat</span>
                       <button
                         onClick={() => {
                           setShowNotifications(false);
-                          setActiveTab('paket');
+                          setActiveTab('log-aktivitas');
                         }}
-                        className="text-blue-400 hover:underline font-bold"
+                        className="text-blue-400 hover:underline font-bold cursor-pointer"
                       >
-                        Kelola Paket &rarr;
+                        Lihat Audit Trail &rarr;
                       </button>
                     </div>
                   </motion.div>
