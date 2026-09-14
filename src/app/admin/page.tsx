@@ -1807,125 +1807,313 @@ export default function AdminPortalPage() {
                 </div>
 
                 {/* OPTION 3: COMPACT STATUS RIBBON (INTERACTIVE & SPACE-SAVING) */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                {/* FORMAT 1: ACTIONABLE BREAKDOWN BOXES (HIGH FUNCTIONALITY) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   
-                  {/* Ribbon 1: Paket PBJ */}
-                  <button
-                    type="button"
-                    onClick={() => setContentFeedFilter('paket')}
-                    className={`p-3 rounded-2xl border text-left transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group flex items-center justify-between ${
-                      contentFeedFilter === 'paket'
-                        ? isDark ? 'bg-indigo-950/50 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50 border-indigo-400 ring-1 ring-indigo-400'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/40' : 'bg-white border-slate-200/90 shadow-2xs hover:border-indigo-300'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                        <Package className="w-5 h-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</span>
-                          <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 truncate">Paket PBJ</span>
+                  {/* Box 1: Paket Pengadaan PBJ */}
+                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg space-y-3.5 ${
+                    contentFeedFilter === 'paket'
+                      ? isDark ? 'bg-indigo-950/30 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/60 border-indigo-400 ring-1 ring-indigo-400'
+                      : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-indigo-300'
+                  }`}>
+                    {/* Header: Icon + Title + Quick Action Button */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                          <Package className="w-4 h-4" />
                         </div>
-                        <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
-                          Tender & Non-Tender Live
-                        </p>
+                        <span className={`text-xs font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Pengadaan PBJ</span>
                       </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPackageFormData({
+                            code: `TND-2026-${String(packagesList.length + 1).padStart(3, '0')}`,
+                            title: '',
+                            unit: 'Biro Perencanaan Kemnaker RI',
+                            hps: '',
+                            category: 'Tender',
+                            status: 'Pendaftaran Dibuka',
+                            deadline: '30 Sep 2026',
+                            method: 'Tender - Pascakualifikasi Satu File - Harga Terendah Sistem Gugur',
+                            docCount: 1,
+                            desc: '',
+                            fileName: '',
+                            fileSize: '',
+                            fileData: '',
+                            downloadUrl: '#'
+                          });
+                          setShowPackageModal(true);
+                        }}
+                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                        title="Tambah Paket Tender / Non-Tender"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>+ Buat</span>
+                      </button>
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shrink-0 hidden sm:inline-block">
-                      Filter ↗
-                    </span>
-                  </button>
 
-                  {/* Ribbon 2: Berita & Publikasi */}
-                  <button
-                    type="button"
-                    onClick={() => setContentFeedFilter('berita')}
-                    className={`p-3 rounded-2xl border text-left transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group flex items-center justify-between ${
-                      contentFeedFilter === 'berita'
-                        ? isDark ? 'bg-amber-950/50 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50 border-amber-400 ring-1 ring-amber-400'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/40' : 'bg-white border-slate-200/90 shadow-2xs hover:border-amber-300'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
-                        <Newspaper className="w-5 h-5" />
+                    {/* Main Value & Financial Total */}
+                    <div 
+                      onClick={() => setContentFeedFilter('paket')}
+                      className="cursor-pointer group"
+                    >
+                      <div className="flex items-baseline gap-2">
+                        <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</p>
+                        <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Total Paket</span>
                       </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{newsList.length}</span>
-                          <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 truncate">Berita & Warta</span>
-                        </div>
-                        <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
-                          {newsList.filter(n => n.status === 'Published').length} Terbit • Publik
-                        </p>
-                      </div>
+                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                        Pagu Anggaran: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Rp 48.2 M</strong>
+                      </p>
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0 hidden sm:inline-block">
-                      Filter ↗
-                    </span>
-                  </button>
 
-                  {/* Ribbon 3: Agenda Acara */}
-                  <button
-                    type="button"
-                    onClick={() => setContentFeedFilter('agenda')}
-                    className={`p-3 rounded-2xl border text-left transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group flex items-center justify-between ${
-                      contentFeedFilter === 'agenda'
-                        ? isDark ? 'bg-emerald-950/50 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50 border-emerald-400 ring-1 ring-emerald-400'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/40' : 'bg-white border-slate-200/90 shadow-2xs hover:border-emerald-300'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                        <Calendar className="w-5 h-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{agendaList.length}</span>
-                          <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 truncate">Agenda PBJ</span>
-                        </div>
-                        <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
-                          Bimtek & Sosialisasi
-                        </p>
-                      </div>
+                    {/* Actionable Status Pills */}
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('paket')}
+                        className="px-2 py-0.5 rounded-md font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1 cursor-pointer hover:bg-emerald-500/20 transition-colors"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length} Dibuka</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('paket')}
+                        className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-colors ${
+                          isDark ? 'bg-slate-800/70 text-slate-300 hover:bg-slate-800' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        }`}
+                      >
+                        <span>{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length} Evaluasi</span>
+                      </button>
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0 hidden sm:inline-block">
-                      Filter ↗
-                    </span>
-                  </button>
+                  </div>
 
-                  {/* Ribbon 4: Regulasi & SOP */}
-                  <button
-                    type="button"
-                    onClick={() => setContentFeedFilter('regulasi')}
-                    className={`p-3 rounded-2xl border text-left transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group flex items-center justify-between ${
-                      contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
-                        ? isDark ? 'bg-purple-950/50 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50 border-purple-400 ring-1 ring-purple-400'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/40' : 'bg-white border-slate-200/90 shadow-2xs hover:border-purple-300'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                        <ScrollText className="w-5 h-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            {regulasiList.length + sopList.length}
-                          </span>
-                          <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 truncate">Regulasi & SOP</span>
+                  {/* Box 2: Berita & Publikasi CMS */}
+                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg space-y-3.5 ${
+                    contentFeedFilter === 'berita'
+                      ? isDark ? 'bg-amber-950/30 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/60 border-amber-400 ring-1 ring-amber-400'
+                      : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-amber-300'
+                  }`}>
+                    {/* Header: Icon + Title + Quick Action Button */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                          <Newspaper className="w-4 h-4" />
                         </div>
-                        <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
-                          {regulasiList.length} Reg • {sopList.length} SOP Berlaku
-                        </p>
+                        <span className={`text-xs font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Berita & Warta</span>
                       </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingNews(null);
+                          setNewsFormData({
+                            title: '',
+                            category: 'Berita PBJ',
+                            author: 'Admin UKPBJ Kemnaker',
+                            status: 'Published',
+                            excerpt: '',
+                            content: '',
+                            imageUrl: '/news/news-1.png'
+                          });
+                          setShowNewsModal(true);
+                        }}
+                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 transition-colors cursor-pointer flex items-center gap-1"
+                        title="Tulis Berita Baru"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>+ Tulis</span>
+                      </button>
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 shrink-0 hidden sm:inline-block">
-                      Filter ↗
-                    </span>
-                  </button>
+
+                    {/* Main Value & Audience Total */}
+                    <div 
+                      onClick={() => setContentFeedFilter('berita')}
+                      className="cursor-pointer group"
+                    >
+                      <div className="flex items-baseline gap-2">
+                        <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{newsList.length}</p>
+                        <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">Total Warta</span>
+                      </div>
+                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                        Jangkauan: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>14.8K Pembaca</strong>
+                      </p>
+                    </div>
+
+                    {/* Actionable Status Pills */}
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('berita')}
+                        className="px-2 py-0.5 rounded-md font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1 cursor-pointer hover:bg-emerald-500/20 transition-colors"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <span>{newsList.filter(n => n.status === 'Published').length} Terbit</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('berita')}
+                        className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-colors ${
+                          newsList.filter(n => n.status !== 'Published').length > 0
+                            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 font-bold'
+                            : isDark ? 'bg-slate-800/70 text-slate-400' : 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        <span>{newsList.filter(n => n.status !== 'Published').length} Draft</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Box 3: Agenda & Kegiatan PBJ */}
+                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg space-y-3.5 ${
+                    contentFeedFilter === 'agenda'
+                      ? isDark ? 'bg-emerald-950/30 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/60 border-emerald-400 ring-1 ring-emerald-400'
+                      : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-emerald-300'
+                  }`}>
+                    {/* Header: Icon + Title + Quick Action Button */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+                          <Calendar className="w-4 h-4" />
+                        </div>
+                        <span className={`text-xs font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Agenda & Bimtek</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingAgenda(null);
+                          setAgendaFormData({
+                            title: '',
+                            category: 'Bimtek',
+                            date: '20 Sep 2026',
+                            time: '09:00 - 12:00 WIB',
+                            location: 'Gedung Kemnaker RI',
+                            organizer: 'UKPBJ Kemnaker RI',
+                            capacity: '100 Peserta',
+                            imageUrl: '',
+                            status: 'Terjadwal'
+                          });
+                          setShowAgendaModal(true);
+                        }}
+                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/10 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                        title="Jadwalkan Agenda Baru"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>+ Jadwal</span>
+                      </button>
+                    </div>
+
+                    {/* Main Value & Capacity Total */}
+                    <div 
+                      onClick={() => setContentFeedFilter('agenda')}
+                      className="cursor-pointer group"
+                    >
+                      <div className="flex items-baseline gap-2">
+                        <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{agendaList.length}</p>
+                        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Total Acara</span>
+                      </div>
+                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                        Partisipasi: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>850+ Peserta</strong>
+                      </p>
+                    </div>
+
+                    {/* Actionable Status Pills */}
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('agenda')}
+                        className="px-2 py-0.5 rounded-md font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1 cursor-pointer hover:bg-blue-500/20 transition-colors"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                        <span>{agendaList.filter(a => a.status === 'Terjadwal' || a.status === 'Berlangsung').length} Aktif</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('agenda')}
+                        className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-colors ${
+                          isDark ? 'bg-slate-800/70 text-slate-300 hover:bg-slate-800' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        }`}
+                      >
+                        <span>{agendaList.filter(a => a.status === 'Selesai').length} Selesai</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Box 4: Regulasi & Dokumen SOP */}
+                  <div className={`p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-lg space-y-3.5 ${
+                    contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
+                      ? isDark ? 'bg-purple-950/30 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/60 border-purple-400 ring-1 ring-purple-400'
+                      : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-purple-300'
+                  }`}>
+                    {/* Header: Icon + Title + Quick Action Button */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0">
+                          <ScrollText className="w-4 h-4" />
+                        </div>
+                        <span className={`text-xs font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Regulasi & SOP</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingRegulasi(null);
+                          setRegulasiFormData({
+                            nomor: '',
+                            tentang: '',
+                            tahun: '2026',
+                            kategori: 'Peraturan Menteri',
+                            fileSize: '2.5 MB',
+                            fileName: '',
+                            fileData: '',
+                            downloadUrl: '',
+                            status: 'Aktif'
+                          });
+                          setShowRegulasiModal(true);
+                        }}
+                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                        title="Upload Regulasi Baru"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>+ Upload</span>
+                      </button>
+                    </div>
+
+                    {/* Main Value & Legal Status */}
+                    <div 
+                      onClick={() => setContentFeedFilter('regulasi')}
+                      className="cursor-pointer group"
+                    >
+                      <div className="flex items-baseline gap-2">
+                        <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{regulasiList.length + sopList.length}</p>
+                        <span className="text-xs font-semibold text-purple-600 dark:text-purple-400">Total Legalitas</span>
+                      </div>
+                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                        Kepatuhan: <strong className="text-emerald-500 font-bold">100% Valid & Sah</strong>
+                      </p>
+                    </div>
+
+                    {/* Actionable Status Pills */}
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('regulasi')}
+                        className="px-2 py-0.5 rounded-md font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 cursor-pointer hover:bg-blue-500/20 transition-colors"
+                      >
+                        <span>{regulasiList.length} Regulasi</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setContentFeedFilter('sop')}
+                        className="px-2 py-0.5 rounded-md font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 cursor-pointer hover:bg-purple-500/20 transition-colors"
+                      >
+                        <span>{sopList.length} SOP</span>
+                      </button>
+                    </div>
+                  </div>
 
                 </div>
 
