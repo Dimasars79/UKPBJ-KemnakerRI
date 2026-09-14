@@ -16,9 +16,9 @@ import {
   ArrowLeft, 
   Menu,
   X, 
-  Database, 
+  Database,
   Globe, 
-  Wifi, 
+  Wifi,
   FileCheck, 
   ExternalLink, 
   Plus,
@@ -201,8 +201,7 @@ export default function AdminPortalPage() {
     siteSettings,
     updateSiteSettings,
     resetToDefaults,
-    refreshFromSupabase,
-    isSupabaseConnected
+    refreshFromSupabase
   } = useData();
 
   // Package Modal State
@@ -1984,32 +1983,6 @@ export default function AdminPortalPage() {
                       >
                         <RefreshCw className="w-4 h-4" />
                       </button>
-                    </div>
-                  </div>
-
-                  {/* Status Chips Bar */}
-                  <div className={`mt-6 pt-4 border-t flex flex-wrap items-center gap-4 text-xs ${
-                    isDark ? 'border-slate-800/80' : 'border-slate-200/80'
-                  }`}>
-                    <div className="flex items-center gap-2 text-emerald-500 font-semibold">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <Activity className="w-3.5 h-3.5" />
-                      <span>Sistem Operasional Normal</span>
-                    </div>
-
-                    <div className={`hidden sm:flex items-center gap-1.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
-                      <Database className="w-3.5 h-3.5 text-blue-500" />
-                      <span>Backend: <strong className={isDark ? 'text-emerald-400' : 'text-emerald-600 font-black'}>{isSupabaseConnected ? 'Supabase PostgreSQL (Live)' : 'Supabase (Connected)'}</strong></span>
-                    </div>
-
-                    <div className={`hidden md:flex items-center gap-1.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
-                      <Wifi className="w-3.5 h-3.5 text-cyan-500" />
-                      <span>Storage CDN: <strong className={isDark ? 'text-cyan-300' : 'text-cyan-700 font-black'}>Active</strong></span>
-                    </div>
-
-                    <div className={`hidden lg:flex items-center gap-1.5 ml-auto font-mono text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-bold'}`}>
-                      <Clock className="w-3.5 h-3.5 text-amber-500" />
-                      <span>WIB (UTC+7) Jakarta</span>
                     </div>
                   </div>
                 </div>
