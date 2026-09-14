@@ -18,7 +18,7 @@ import { SearchPalette } from '@/components/ui/SearchPalette';
 import { useData } from '@/contexts/DataContext';
 
 export function Header() {
-  const { newsList, packagesList, agendaList, regulasiList, sopList, siteSettings } = useData();
+  const { newsList, agendaList, regulasiList, sopList, siteSettings } = useData();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -33,7 +33,7 @@ export function Header() {
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
 
-  // Top 5 Dynamic CMS Notifications
+  // Top 5 Dynamic CMS Notifications: Berita/Pengumuman, Agenda/Jadwal, Regulasi/Aturan, dan Standar SOP
   const cmsNotifications = React.useMemo(() => {
     const list: Array<{
       id: string;
@@ -48,7 +48,7 @@ export function Header() {
       icon: React.ReactNode;
     }> = [];
 
-    // 1. Priority Official Announcement Banner
+    // 1. Berita & Pengumuman (Banner Pengumuman & Berita Terbit)
     if (siteSettings?.announcementActive && siteSettings?.announcementBanner) {
       list.push({
         id: 'banner-announcement',
@@ -57,32 +57,13 @@ export function Header() {
         desc: siteSettings.announcementBanner,
         time: 'Penting',
         href: '/informasi',
-        badgeClass: 'bg-red-50 text-red-700 border-red-200',
-        iconBg: 'bg-red-100',
-        iconColor: 'text-red-600',
+        badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
+        iconBg: 'bg-amber-100',
+        iconColor: 'text-amber-600',
         icon: <AlertTriangle className="w-4 h-4" />
       });
     }
 
-    // 2. Latest Procurement Package (Tender/Seleksi)
-    if (packagesList && packagesList.length > 0) {
-      packagesList.slice(0, 2).forEach((pkg) => {
-        list.push({
-          id: `pkg-${pkg.id}`,
-          category: pkg.category || 'Tender PBJ',
-          title: `${pkg.code}: ${pkg.title}`,
-          desc: `Pagu HPS: ${pkg.hps} • Status: ${pkg.status}`,
-          time: pkg.deadline ? `Batas: ${pkg.deadline}` : 'Aktif',
-          href: '/informasi/pemilu',
-          badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-          iconBg: 'bg-indigo-100',
-          iconColor: 'text-indigo-600',
-          icon: <Briefcase className="w-4 h-4" />
-        });
-      });
-    }
-
-    // 3. Latest Published News
     if (newsList && newsList.length > 0) {
       newsList
         .filter((n) => n.status === 'Published')
@@ -90,10 +71,10 @@ export function Header() {
         .forEach((news) => {
           list.push({
             id: `news-${news.id}`,
-            category: news.category || 'Warta PBJ',
+            category: news.category || 'Berita & Pengumuman',
             title: news.title,
             desc: news.excerpt || (news.content ? news.content.slice(0, 85) + '...' : ''),
-            time: news.date || 'Baru',
+            time: news.date || 'Terbaru',
             href: '/informasi',
             badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
             iconBg: 'bg-blue-100',
@@ -103,7 +84,7 @@ export function Header() {
         });
     }
 
-    // 4. Latest Agenda & Bimtek
+    // 2. Agenda & Jadwal (Bimtek, Rapat Kerja, Sosialisasi)
     if (agendaList && agendaList.length > 0) {
       agendaList
         .filter((a) => a.status !== 'Dibatalkan')
@@ -114,7 +95,7 @@ export function Header() {
             category: `Agenda ${agenda.category}`,
             title: agenda.title,
             desc: `${agenda.location} • ${agenda.time}`,
-            time: agenda.date || 'Mendatang',
+            time: agenda.date || 'Jadwal Aktif',
             href: '/agenda',
             badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
             iconBg: 'bg-emerald-100',
@@ -124,15 +105,15 @@ export function Header() {
         });
     }
 
-    // 5. Latest Active Regulation
+    // 3. Regulasi & Aturan (Perpres, Permenaker, SE)
     if (regulasiList && regulasiList.length > 0) {
       regulasiList
         .filter((r) => r.status === 'Aktif')
-        .slice(0, 1)
+        .slice(0, 2)
         .forEach((reg) => {
           list.push({
             id: `reg-${reg.id}`,
-            category: reg.kategori || 'Produk Hukum',
+            category: reg.kategori || 'Regulasi & Aturan',
             title: reg.nomor,
             desc: reg.tentang,
             time: `Tahun ${reg.tahun}`,
@@ -145,18 +126,18 @@ export function Header() {
         });
     }
 
-    // 6. Latest Official SOP
+    // 4. Standar SOP (Prosedur & Alur Kerja)
     if (sopList && sopList.length > 0) {
       sopList
         .filter((s) => s.status === 'Berlaku')
-        .slice(0, 1)
+        .slice(0, 2)
         .forEach((sop) => {
           list.push({
             id: `sop-${sop.id}`,
             category: 'Standar SOP',
             title: `${sop.kode}: ${sop.judul}`,
             desc: `${sop.unit} • ${sop.tahapanCount} Tahapan Kerja`,
-            time: sop.revisi,
+            time: sop.revisi || 'Berlaku',
             href: '/informasi/sop',
             badgeClass: 'bg-teal-50 text-teal-700 border-teal-200',
             iconBg: 'bg-teal-100',
@@ -166,9 +147,9 @@ export function Header() {
         });
     }
 
-    // Return the top 5 most relevant items
+    // Ambil tepat 5 data CMS teratas
     return list.slice(0, 5);
-  }, [packagesList, newsList, agendaList, regulasiList, sopList, siteSettings]);
+  }, [newsList, agendaList, regulasiList, sopList, siteSettings]);
 
   const infoSubmenu = [
     { label: 'Peraturan', href: '/informasi/peraturan', icon: <Scale className="w-4 h-4" />, desc: 'Regulasi & dasar hukum PBJ' },
