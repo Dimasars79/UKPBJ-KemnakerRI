@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ShieldCheck, Target, Users, BookOpen, Building2, ScrollText, Compass } from 'lucide-react';
+import { ShieldCheck, Target, Users, BookOpen, Building2, Compass } from 'lucide-react';
 import { OrganizationChart } from '@/components/ui/OrganizationChart';
 
 export default function TentangPage() {
@@ -89,21 +89,13 @@ export default function TentangPage() {
               <div className="bg-gradient-to-br from-[#0B1D3A] via-[#102A54] to-[#0A1830] rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden border border-white/10">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-accent-gold/10 rounded-full blur-[100px] pointer-events-none" />
                 <div className="max-w-3xl mx-auto text-center relative z-10">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4">
-                    <ScrollText className="w-3.5 h-3.5 text-amber-300" />
-                    <span>Maklumat Resmi Pelayanan</span>
-                  </div>
                   <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-4">
                     Maklumat Pelayanan UKPBJ Kemnaker RI
                   </h3>
                   <div className="w-24 h-1 bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto mb-6" />
-                  <blockquote className="text-slate-200 text-base sm:text-lg italic leading-relaxed mb-6 font-medium">
+                  <blockquote className="text-slate-200 text-base sm:text-lg italic leading-relaxed font-medium">
                     &quot;Dengan ini, kami pimpinan dan seluruh jajaran Unit Kerja Pengadaan Barang/Jasa Kementerian Ketenagakerjaan RI menyatakan sanggup menyelenggarakan pelayanan pengadaan sesuai standar pelayanan yang telah ditetapkan, dan apabila tidak menepati janji ini, kami siap menerima sanksi sesuai peraturan perundang-undangan yang berlaku.&quot;
                   </blockquote>
-                  <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-white/15 text-xs font-semibold text-amber-300">
-                    <ShieldCheck className="w-4 h-4 text-accent-gold" />
-                    <span>Komitmen Pelayanan Bebas Pungli & Transparan</span>
-                  </div>
                 </div>
               </div>
             </FadeIn>
