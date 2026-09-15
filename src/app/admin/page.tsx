@@ -2399,27 +2399,27 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                {/* STRATEGIC ACTIONABLE METRIC CARDS */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4.5 items-stretch">
+                {/* STRATEGIC ACTIONABLE METRIC CARDS (2x2 BENTO GRID - SPACIOUS & PERFECTIONIST) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
                   
                   {/* Box 1: Paket Pengadaan PBJ */}
                   <div 
                     onClick={() => setContentFeedFilter('paket')}
-                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[172px] cursor-pointer group ${
+                    className={`p-5 sm:p-6 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'paket'
                         ? isDark ? 'bg-indigo-950/40 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/80 border-indigo-400 ring-1 ring-indigo-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-indigo-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2 h-10 shrink-0">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Package className="w-4.5 h-4.5" />
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Package className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className={`text-xs font-bold leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
-                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender</p>
+                          <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
+                          <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender Aktif</p>
                         </div>
                       </div>
                       <button
@@ -2444,69 +2444,69 @@ export default function AdminPortalPage() {
                           });
                           setShowPackageModal(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1 shrink-0"
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
                         title="Tambah Paket Tender / Non-Tender"
                       >
-                        <Plus className="w-3 h-3" />
-                        <span>Buat</span>
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Buat Paket</span>
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight (Locked Baseline) */}
-                    <div className="flex items-baseline justify-between my-auto py-2">
-                      <div className="flex items-baseline gap-2">
-                        <span className={`text-3xl lg:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {/* Main Hero Number & Metric Highlight */}
+                    <div className="flex items-baseline justify-between my-4">
+                      <div className="flex items-baseline gap-2.5">
+                        <span className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {packagesList.length}
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-tight">
-                          Paket
+                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-tight">
+                          Paket Terdaftar
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[9px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Pagu Total
+                        <span className={`text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Total Estimasi Pagu
                         </span>
-                        <span className="text-xs font-black text-amber-500 leading-tight">
+                        <span className="text-sm sm:text-base font-black text-amber-500 leading-tight">
                           Rp 48.2 M
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px] h-7 shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded-md font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          <span>{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length} Dibuka</span>
+                          <span>{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length} Pendaftaran Dibuka</span>
                         </span>
-                        <span className={`px-2 py-0.5 rounded-md font-semibold ${
+                        <span className={`px-2.5 py-1 rounded-lg font-semibold ${
                           isDark ? 'bg-slate-800/80 text-slate-300' : 'bg-slate-100 text-slate-700'
                         }`}>
                           <span>{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length} Evaluasi</span>
                         </span>
                       </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                     </div>
                   </div>
 
                   {/* Box 2: Berita & Publikasi CMS */}
                   <div 
                     onClick={() => setContentFeedFilter('berita')}
-                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[172px] cursor-pointer group ${
+                    className={`p-5 sm:p-6 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'berita'
                         ? isDark ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/80 border-amber-400 ring-1 ring-amber-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-amber-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2 h-10 shrink-0">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Newspaper className="w-4.5 h-4.5" />
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Newspaper className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className={`text-xs font-bold leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Berita & Warta</h4>
-                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Publikasi Informasi</p>
+                          <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Berita & Publikasi Warta</h4>
+                          <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Informasi & Siaran Pers PBJ</p>
                         </div>
                       </div>
                       <button
@@ -2525,42 +2525,42 @@ export default function AdminPortalPage() {
                           });
                           setShowNewsModal(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 transition-all shadow-2xs cursor-pointer flex items-center gap-1 shrink-0"
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
                         title="Tulis Berita Baru"
                       >
-                        <Plus className="w-3 h-3" />
-                        <span>Tulis</span>
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Tulis Berita</span>
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight (Locked Baseline) */}
-                    <div className="flex items-baseline justify-between my-auto py-2">
-                      <div className="flex items-baseline gap-2">
-                        <span className={`text-3xl lg:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {/* Main Hero Number & Metric Highlight */}
+                    <div className="flex items-baseline justify-between my-4">
+                      <div className="flex items-baseline gap-2.5">
+                        <span className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {newsList.length}
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 leading-tight">
-                          Warta
+                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 leading-tight">
+                          Artikel Terbit
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[9px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Pembaca
+                        <span className={`text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Estimasi Pembaca
                         </span>
-                        <span className="text-xs font-black text-blue-500 leading-tight">
-                          14.8K View
+                        <span className="text-sm sm:text-base font-black text-blue-500 leading-tight">
+                          14.8K Tayang
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px] h-7 shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded-md font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          <span>{newsList.filter(n => n.status === 'Published').length} Terbit</span>
+                          <span>{newsList.filter(n => n.status === 'Published').length} Publikasi Aktif</span>
                         </span>
-                        <span className={`px-2 py-0.5 rounded-md font-semibold ${
+                        <span className={`px-2.5 py-1 rounded-lg font-semibold ${
                           newsList.filter(n => n.status !== 'Published').length > 0
                             ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold'
                             : isDark ? 'bg-slate-800/80 text-slate-400' : 'bg-slate-100 text-slate-600'
@@ -2568,28 +2568,28 @@ export default function AdminPortalPage() {
                           <span>{newsList.filter(n => n.status !== 'Published').length} Draft</span>
                         </span>
                       </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                     </div>
                   </div>
 
                   {/* Box 3: Agenda & Kegiatan PBJ */}
                   <div 
                     onClick={() => setContentFeedFilter('agenda')}
-                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[172px] cursor-pointer group ${
+                    className={`p-5 sm:p-6 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'agenda'
                         ? isDark ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/80 border-emerald-400 ring-1 ring-emerald-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-emerald-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2 h-10 shrink-0">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Calendar className="w-4.5 h-4.5" />
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Calendar className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className={`text-xs font-bold leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Agenda & Bimtek</h4>
-                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Jadwal & Acara</p>
+                          <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Agenda & Bimbingan Teknis</h4>
+                          <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Jadwal Pelatihan & Bimtek</p>
                         </div>
                       </div>
                       <button
@@ -2610,69 +2610,69 @@ export default function AdminPortalPage() {
                           });
                           setShowAgendaModal(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-500/10 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1 shrink-0"
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/10 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
                         title="Jadwalkan Agenda Baru"
                       >
-                        <Plus className="w-3 h-3" />
-                        <span>Jadwal</span>
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Jadwalkan</span>
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight (Locked Baseline) */}
-                    <div className="flex items-baseline justify-between my-auto py-2">
-                      <div className="flex items-baseline gap-2">
-                        <span className={`text-3xl lg:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {/* Main Hero Number & Metric Highlight */}
+                    <div className="flex items-baseline justify-between my-4">
+                      <div className="flex items-baseline gap-2.5">
+                        <span className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {agendaList.length}
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-tight">
-                          Acara
+                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-tight">
+                          Jadwal Kegiatan
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[9px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Partisipasi
+                        <span className={`text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Target Partisipasi
                         </span>
-                        <span className="text-xs font-black text-emerald-500 leading-tight">
-                          850+ Orang
+                        <span className="text-sm sm:text-base font-black text-emerald-500 leading-tight">
+                          850+ Peserta
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px] h-7 shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded-md font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                          <span>{agendaList.filter(a => a.status === 'Terjadwal' || a.status === 'Berlangsung').length} Aktif</span>
+                          <span>{agendaList.filter(a => a.status === 'Terjadwal' || a.status === 'Berlangsung').length} Terjadwal</span>
                         </span>
-                        <span className={`px-2 py-0.5 rounded-md font-semibold ${
+                        <span className={`px-2.5 py-1 rounded-lg font-semibold ${
                           isDark ? 'bg-slate-800/80 text-slate-300' : 'bg-slate-100 text-slate-700'
                         }`}>
                           <span>{agendaList.filter(a => a.status === 'Selesai').length} Selesai</span>
                         </span>
                       </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                     </div>
                   </div>
 
                   {/* Box 4: Regulasi & Dokumen SOP */}
                   <div 
                     onClick={() => setContentFeedFilter('regulasi')}
-                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[172px] cursor-pointer group ${
+                    className={`p-5 sm:p-6 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
                         ? isDark ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/80 border-purple-400 ring-1 ring-purple-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-purple-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2 h-10 shrink-0">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <ScrollText className="w-4.5 h-4.5" />
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <ScrollText className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className={`text-xs font-bold leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Regulasi & SOP</h4>
-                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Hukum & Tata Kelola</p>
+                          <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Regulasi & Dokumen SOP</h4>
+                          <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Produk Hukum & Tata Kelola</p>
                         </div>
                       </div>
                       <button
@@ -2693,45 +2693,45 @@ export default function AdminPortalPage() {
                           });
                           setShowRegulasiModal(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1 shrink-0"
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
                         title="Upload Regulasi Baru"
                       >
-                        <Plus className="w-3 h-3" />
-                        <span>Upload</span>
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Upload File</span>
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight (Locked Baseline) */}
-                    <div className="flex items-baseline justify-between my-auto py-2">
-                      <div className="flex items-baseline gap-2">
-                        <span className={`text-3xl lg:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {/* Main Hero Number & Metric Highlight */}
+                    <div className="flex items-baseline justify-between my-4">
+                      <div className="flex items-baseline gap-2.5">
+                        <span className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {regulasiList.length + sopList.length}
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 leading-tight">
-                          Dokumen
+                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 leading-tight">
+                          Total Dokumen
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[9px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Validasi
+                        <span className={`text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Status Validasi
                         </span>
-                        <span className="text-xs font-black text-emerald-500 leading-tight">
-                          100% Valid
+                        <span className="text-sm sm:text-base font-black text-emerald-500 leading-tight">
+                          100% Sah & Aktif
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px] h-7 shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded-md font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                          <span>{regulasiList.length} Regulasi</span>
+                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                          <span>{regulasiList.length} Regulasi JDIH</span>
                         </span>
-                        <span className="px-2 py-0.5 rounded-md font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                          <span>{sopList.length} SOP</span>
+                        <span className="px-2.5 py-1 rounded-lg font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                          <span>{sopList.length} Standar SOP</span>
                         </span>
                       </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-purple-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                     </div>
                   </div>
 
