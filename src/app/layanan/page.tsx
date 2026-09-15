@@ -8,7 +8,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { 
+import {
   Monitor, FileText, HelpCircle, ShieldCheck, Zap,
   PhoneCall, MessageSquare, Clock, Building2, Mail
 } from 'lucide-react';
@@ -33,7 +33,7 @@ export default function LayananPage() {
       title: "Layanan Pengaduan",
       description: "Sampaikan laporan, kendala teknis, atau pengaduan pengadaan langsung via WhatsApp Helpdesk resmi UKPBJ.",
       icon: HelpCircle,
-      href: "https://wa.me/628119988776?text=Halo%20Helpdesk%20UKPBJ%20Kemnaker%2C%20saya%20ingin%20menyampaikan%20laporan%20atau%20pengaduan%20terkait%20layanan%20pengadaan."
+      href: "https://wa.me/628988180009?text=Halo%20Helpdesk%20UKPBJ%20Kemnaker%2C%20saya%20ingin%20menyampaikan%20laporan%20atau%20pengaduan%20terkait%20layanan%20pengadaan."
     },
     {
       title: "Clearing House",
@@ -53,7 +53,7 @@ export default function LayananPage() {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e3a8a15_1px,transparent_1px),linear-gradient(to_bottom,#1e3a8a15_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
           <div className="absolute -top-24 right-0 w-96 h-96 bg-primary-blue/20 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-accent-gold/10 rounded-full blur-[100px] pointer-events-none" />
-          
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
               <FadeIn direction="up">
@@ -101,7 +101,7 @@ export default function LayananPage() {
                 <div className="max-w-2xl">
                   <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-accent-gold text-xs font-bold uppercase tracking-wider mb-4">
                     <PhoneCall className="w-3.5 h-3.5" />
-                    <span>Pusat Bantuan & Layanan Konsultasi</span>
+                    <span></span>
                   </div>
 
                   <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-3">
@@ -133,7 +133,7 @@ export default function LayananPage() {
                 {/* Right: Actions */}
                 <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 lg:min-w-[220px]">
                   <a
-                    href="https://wa.me/628119988776"
+                    href="https://wa.me/628988180009"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 bg-accent-gold hover:bg-yellow-400 text-primary-navy font-bold text-xs py-3.5 px-6 rounded-xl transition-all shadow-md active:scale-95"
