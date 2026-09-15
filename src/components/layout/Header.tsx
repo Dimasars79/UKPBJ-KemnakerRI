@@ -209,11 +209,11 @@ export function Header() {
   ];
 
   const aboutSubmenu = [
-    { label: 'Visi & Misi', href: '/tentang/visi-misi', icon: <Target className="w-4 h-4" />, desc: 'Arah dan komitmen strategis' },
-    { label: 'Maklumat UKPBJ', href: '/tentang/maklumat', icon: <ScrollText className="w-4 h-4" />, desc: 'Janji standar mutu pelayanan' },
+    { label: 'Visi & Misi', href: '/tentang#visi-misi', icon: <Target className="w-4 h-4" />, desc: 'Arah dan komitmen strategis' },
+    { label: 'Maklumat UKPBJ', href: '/tentang#maklumat', icon: <ScrollText className="w-4 h-4" />, desc: 'Janji standar mutu pelayanan' },
     { label: 'Survey + Monitoring', href: '/monitoring', icon: <BarChart3 className="w-4 h-4" />, desc: 'Indeks kepuasan & evaluasi' },
-    { label: 'Standar Pelayanan Publik', href: '/tentang/standar-pelayanan', icon: <Building2 className="w-4 h-4" />, desc: 'Standar mutu operasional' },
-    { label: 'FAQ', href: '/tentang/faq', icon: <HelpCircle className="w-4 h-4" />, desc: 'Pertanyaan umum & informasi' },
+    { label: 'Standar Pelayanan Publik', href: '/informasi/sop', icon: <Building2 className="w-4 h-4" />, desc: 'Standar mutu operasional' },
+    { label: 'FAQ', href: '/tentang#faq', icon: <HelpCircle className="w-4 h-4" />, desc: 'Pertanyaan umum & informasi' },
   ];
 
   useEffect(() => {
