@@ -83,15 +83,9 @@ export default function AgendaPage() {
                   </span>
                 </h1>
 
-                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6">
+                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
                   {t('page_agenda.desc')}
                 </p>
-
-                {/* Quick Info Chips */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 font-medium">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                  <span>Waktu Indonesia Barat (WIB) • Diperbarui Secara Berkala</span>
-                </div>
               </FadeIn>
             </div>
           </div>

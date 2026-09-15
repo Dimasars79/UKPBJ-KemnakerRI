@@ -47,15 +47,9 @@ export default function MonitoringPage() {
                   </span>
                 </h1>
 
-                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6">
+                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
                   {t('page_monitoring.desc')}
                 </p>
-
-                {/* Audit Status Live Chip */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 font-medium">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Data Real-time SPSE • Terbuka & Terverifikasi Publik</span>
-                </div>
               </FadeIn>
             </div>
           </div>

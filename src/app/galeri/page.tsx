@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { 
-  Camera, Building2, GraduationCap, Video, Play, 
+  Camera, Video, Play, 
   ExternalLink, X, Film, Calendar, Eye, ZoomIn, 
   Search
 } from 'lucide-react';
@@ -80,7 +80,7 @@ export default function GaleriPage() {
                 </p>
 
                 {/* PRIMARY TAB SWITCHER BUTTONS */}
-                <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+                <div className="flex flex-wrap items-center justify-center gap-3">
                   <button
                     onClick={() => setActiveTab('foto')}
                     className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
@@ -104,26 +104,6 @@ export default function GaleriPage() {
                     <Video className="w-4 h-4 text-slate-950" />
                     <span>Video Dokumentasi ({videosList.length})</span>
                   </button>
-                </div>
-
-                {/* Quick Topic Tags */}
-                <div className="flex flex-wrap justify-center gap-2 sm:gap-3 text-xs font-semibold text-slate-300">
-                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full">
-                    <Camera className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Kunjungan Kerja</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full">
-                    <Building2 className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Rapat Koordinasi & Evaluasi</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full">
-                    <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Bimbingan Teknis PBJ</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full">
-                    <Film className="w-3.5 h-3.5 text-rose-400" />
-                    <span>Video Edukasi & Sosialisasi</span>
-                  </span>
                 </div>
               </FadeIn>
             </div>

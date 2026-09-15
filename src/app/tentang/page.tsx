@@ -45,21 +45,9 @@ export default function TentangPage() {
                   </span>
                 </h1>
 
-                <p className="text-slate-300 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mb-8">
+                <p className="text-slate-300 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl">
                   Pusat keunggulan pengadaan pemerintah yang berpegang teguh pada prinsip transparansi, profesionalisme, dan akuntabilitas berstandar nasional.
                 </p>
-
-                {/* Integrity Badges */}
-                <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/10">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-white/5 px-3.5 py-2 rounded-xl border border-white/10">
-                    <ShieldCheck className="w-4 h-4 text-accent-gold" />
-                    <span>Zona Integritas Bebas Korupsi</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-white/5 px-3.5 py-2 rounded-xl border border-white/10">
-                    <Target className="w-4 h-4 text-blue-400" />
-                    <span>Standar Pelayanan Prima UKPBJ</span>
-                  </div>
-                </div>
               </FadeIn>
             </div>
           </div>

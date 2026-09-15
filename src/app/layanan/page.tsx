@@ -9,7 +9,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { 
-  Monitor, FileText, HelpCircle, ShieldCheck, Zap, CheckCircle2,
+  Monitor, FileText, HelpCircle, ShieldCheck, Zap,
   PhoneCall, MessageSquare, Clock, Building2, Mail
 } from 'lucide-react';
 
@@ -70,25 +70,9 @@ export default function LayananPage() {
                   </span>
                 </h1>
 
-                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6">
+                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
                   {t('page_layanan.desc')}
                 </p>
-
-                {/* Service Indicator Chips */}
-                <div className="flex flex-wrap justify-center gap-3 text-xs font-semibold text-slate-300">
-                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Sistem SPSE Terintegrasi</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Akses SIKaP 24/7</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Konsultasi & Clearing House</span>
-                  </span>
-                </div>
               </FadeIn>
             </div>
           </div>
