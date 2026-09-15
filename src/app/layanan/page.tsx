@@ -19,27 +19,27 @@ export default function LayananPage() {
   const services = [
     {
       title: "LPSE",
-      description: "Layanan Pengadaan Secara Elektronik untuk penyelenggaraan pengadaan barang/jasa.",
+      description: "Layanan Pengadaan Secara Elektronik untuk penyelenggaraan tender dan e-purchasing pengadaan barang/jasa.",
       icon: Monitor,
-      href: "https://lpse.kemnaker.go.id"
+      href: "https://spse.inaproc.id/lkpp"
     },
     {
       title: "SIKaP",
-      description: "Sistem Informasi Kinerja Penyedia untuk mengelola data kinerja penyedia barang/jasa.",
+      description: "Sistem Informasi Kinerja Penyedia untuk mengelola kualifikasi dan rekam jejak data vendor terpusat.",
       icon: FileText,
-      href: "#"
+      href: "https://sikap.inaproc.id/"
     },
     {
       title: "Layanan Pengaduan",
-      description: "Sampaikan laporan atau pengaduan terkait proses pengadaan barang/jasa.",
+      description: "Sampaikan laporan, kendala teknis, atau pengaduan pengadaan langsung via WhatsApp Helpdesk resmi UKPBJ.",
       icon: HelpCircle,
-      href: "#"
+      href: "https://wa.me/628119988776?text=Halo%20Helpdesk%20UKPBJ%20Kemnaker%2C%20saya%20ingin%20menyampaikan%20laporan%20atau%20pengaduan%20terkait%20layanan%20pengadaan."
     },
     {
       title: "Clearing House",
-      description: "Konsultasi dan penyelesaian masalah terkait proses pengadaan barang/jasa.",
+      description: "Portal konsultasi advokasi hukum, penyelesaian sengketa, mitigasi risiko, dan mediasi permasalahan PBJ.",
       icon: ShieldCheck,
-      href: "#"
+      href: "/informasi/clearing-house"
     }
   ];
 
