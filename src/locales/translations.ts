@@ -38,7 +38,7 @@ export const translations: Translations = {
     },
     home: {
       hero_title: 'KEMENTERIAN KETENAGAKERJAAN',
-      hero_subtitle: 'Pusat Keunggulan Pengadaan Barang/Jasa Pemerintah',
+      hero_subtitle: '',
       hero_desc: 'Mewujudkan sistem pengadaan yang transparan, akuntabel, dan efisien untuk mendukung pembangunan nasional.',
       btn_services: 'Layanan Kami',
       btn_monitoring: 'Monitoring Kinerja',

@@ -6,7 +6,11 @@ import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { Users, Globe, ArrowRight, ShieldCheck, ChevronDown, Quote, ShoppingCart, BookOpen, Scale, Clock, TrendingDown, Award, ThumbsUp, Calendar, HelpCircle, AlertCircle, MessageSquare } from 'lucide-react';
+import { 
+  Users, Globe, ArrowRight, ShieldCheck, ChevronDown, Quote, ShoppingCart, 
+  BookOpen, Scale, Clock, TrendingDown, TrendingUp, Award, ThumbsUp, Calendar, 
+  HelpCircle, AlertCircle, MessageSquare, FileText
+} from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
@@ -55,7 +59,7 @@ export default function Home() {
           {/* Gradient Overlay for better readability on left side */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a2342] via-[#0a2342]/80 to-transparent z-0" />
           
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-32">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-28">
             <div className="max-w-4xl">
               <FadeIn direction="left" delay={0.1}>
                 <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
@@ -64,70 +68,36 @@ export default function Home() {
                 <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 text-white leading-tight">
                   {t('home.hero_title')}
                 </h2>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#f2b33a] mb-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#f2b33a] mb-6">
                   {t('home.hero_subtitle')}
                 </h3>
               </FadeIn>
               
               <FadeIn direction="left" delay={0.3}>
-                <p className="text-base md:text-lg text-slate-200 mb-12 max-w-3xl leading-relaxed">
+                <p className="text-base md:text-lg text-slate-200 mb-8 max-w-3xl leading-relaxed">
                   {t('home.hero_desc')}
                 </p>
-              </FadeIn>
-
-              {/* Four Pillars */}
-              <FadeIn direction="up" delay={0.5}>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 lg:gap-8 pt-8 border-t border-white/20 relative">
-                  
-                  {/* Item 1 */}
-                  <div className="flex flex-col border-r border-white/20 pr-4 group hover:bg-white/5 p-3 -m-3 rounded-xl transition-all duration-300">
-                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-md group-hover:bg-primary-blue/30 group-hover:border-accent-gold/50 animate-float-subtle group-hover:animate-glow-pulse transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
-                      <ShieldCheck className="w-6 h-6 text-[#f2b33a] group-hover:scale-110 transition-transform duration-300" />
-                    </div>
-                    <h4 className="font-bold text-sm md:text-base mb-1 group-hover:text-accent-gold transition-colors duration-300">TRANSPARAN</h4>
-                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors duration-300">Informasi terbuka dan dapat diakses oleh semua.</p>
-                  </div>
-                  
-                  {/* Item 2 */}
-                  <div className="flex flex-col border-r-0 md:border-r border-white/20 pr-0 md:pr-4 group hover:bg-white/5 p-3 -m-3 rounded-xl transition-all duration-300">
-                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-md group-hover:bg-primary-blue/30 group-hover:border-accent-gold/50 animate-float-subtle group-hover:animate-glow-pulse transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]" style={{ animationDelay: '0.5s' }}>
-                      <Users className="w-6 h-6 text-[#f2b33a] group-hover:scale-110 transition-transform duration-300" />
-                    </div>
-                    <h4 className="font-bold text-sm md:text-base mb-1 group-hover:text-accent-gold transition-colors duration-300">PROFESIONAL</h4>
-                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors duration-300">Dikelola oleh SDM yang kompeten dan berdedikasi.</p>
-                  </div>
-                  
-                  {/* Item 3 */}
-                  <div className="flex flex-col border-r border-white/20 pr-4 group hover:bg-white/5 p-3 -m-3 rounded-xl transition-all duration-300">
-                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-md group-hover:bg-primary-blue/30 group-hover:border-accent-gold/50 animate-float-subtle group-hover:animate-glow-pulse transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]" style={{ animationDelay: '1s' }}>
-                      <svg className="w-6 h-6 text-[#f2b33a] group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                      </svg>
-                    </div>
-                    <h4 className="font-bold text-sm md:text-base mb-1 group-hover:text-accent-gold transition-colors duration-300">AKUNTABEL</h4>
-                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors duration-300">Setiap proses dapat dipertanggungjawabkan.</p>
-                  </div>
-                  
-                  {/* Item 4 */}
-                  <div className="flex flex-col group hover:bg-white/5 p-3 -m-3 rounded-xl transition-all duration-300">
-                    <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center mb-4 bg-white/5 backdrop-blur-md group-hover:bg-primary-blue/30 group-hover:border-accent-gold/50 animate-float-subtle group-hover:animate-glow-pulse transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]" style={{ animationDelay: '1.5s' }}>
-                      <svg className="w-6 h-6 text-[#f2b33a] group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
-                    <h4 className="font-bold text-sm md:text-base mb-1 group-hover:text-accent-gold transition-colors duration-300">BERINTEGRITAS</h4>
-                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors duration-300">Menjunjung tinggi nilai etika, moralitas, dan keadilan.</p>
-                  </div>
-                  
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link 
+                    href="/layanan" 
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-blue to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-900/30 hover:scale-102 transition-all duration-300"
+                  >
+                    <span>{t('home.btn_services')}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link 
+                    href="/monitoring" 
+                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-6 py-3.5 rounded-xl backdrop-blur-md hover:scale-102 transition-all duration-300"
+                  >
+                    <span>{t('home.btn_monitoring')}</span>
+                  </Link>
                 </div>
               </FadeIn>
             </div>
           </div>
 
-
-
           {/* Marquee Text */}
-          <div className="absolute bottom-0 left-0 w-full overflow-hidden bg-[#0a2342]/80 py-3 border-t border-white/10 z-20 backdrop-blur-sm">
+          <div className="absolute bottom-0 left-0 w-full overflow-hidden bg-[#0a2342]/90 py-3 border-t border-white/10 z-20 backdrop-blur-sm">
             <p className="animate-marquee whitespace-nowrap text-xs md:text-sm font-bold tracking-[0.1em] text-[#f2b33a]">
               {siteSettings.announcementActive && siteSettings.announcementBanner ? (
                 <>
@@ -140,6 +110,117 @@ export default function Home() {
               )}
             </p>
           </div>
+        </section>
+
+        {/* Floating Core Values & Navy CTA Banner (Matches design screenshot) */}
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20 mb-8">
+          <FadeIn direction="up" delay={0.2}>
+            <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(10,35,66,0.12)] border border-slate-100 p-3 sm:p-4 lg:p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 lg:gap-0 items-stretch">
+                
+                {/* 1. Transparan */}
+                <Link 
+                  href="/informasi/pemilu" 
+                  className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
+                >
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">Transparan</h4>
+                      <p className="text-slate-500 text-xs mt-1 leading-relaxed">Informasi terbuka dan dapat diakses oleh semua.</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center text-blue-600">
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  </div>
+                </Link>
+
+                {/* 2. Profesional */}
+                <Link 
+                  href="/tentang" 
+                  className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
+                >
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <Users className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">Profesional</h4>
+                      <p className="text-slate-500 text-xs mt-1 leading-relaxed">Dikelola oleh SDM yang kompeten dan berdedikasi.</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center text-blue-600">
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  </div>
+                </Link>
+
+                {/* 3. Akuntabel */}
+                <Link 
+                  href="/monitoring" 
+                  className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
+                >
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <TrendingUp className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">Akuntabel</h4>
+                      <p className="text-slate-500 text-xs mt-1 leading-relaxed">Setiap proses dapat dipertanggungjawabkan.</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center text-blue-600">
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  </div>
+                </Link>
+
+                {/* 4. Berintegritas */}
+                <Link 
+                  href="/tentang#visi-misi" 
+                  className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
+                >
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <ShieldCheck className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">Berintegritas</h4>
+                      <p className="text-slate-500 text-xs mt-1 leading-relaxed">Menjunjung tinggi nilai etika, moralitas, dan keadilan.</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center text-blue-600">
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  </div>
+                </Link>
+
+                {/* 5. Navy CTA Card */}
+                <Link 
+                  href="/layanan" 
+                  className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0B1E3D] via-[#091833] to-[#040C1A] p-4 lg:p-5 text-white flex flex-col justify-between shadow-lg group hover:shadow-2xl hover:scale-[1.01] transition-all duration-300"
+                >
+                  {/* Subtle Grid / Glow */}
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+                  <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-primary-blue/20 rounded-full blur-xl pointer-events-none" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-10 h-0.5 bg-accent-gold rounded-full mb-3" />
+                    <p className="font-bold text-xs sm:text-sm text-white leading-snug">
+                      Dukung Pengadaan yang Lebih Baik untuk Ketenagakerjaan Indonesia
+                    </p>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between relative z-10">
+                    <ArrowRight className="w-4 h-4 text-accent-gold group-hover:translate-x-1 transition-transform duration-300" />
+                    <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center text-white/80 group-hover:border-accent-gold group-hover:text-accent-gold transition-colors">
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                </Link>
+
+              </div>
+            </div>
+          </FadeIn>
         </section>
 
         {/* 2. Profil UKPBJ (Prioritized) */}
