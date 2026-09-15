@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className={`${inter.variable} font-sans flex flex-col min-h-screen bg-[#061B30] text-slate-900`}>
+      <body className={`${inter.variable} font-sans flex flex-col min-h-screen`}>
         <AccessibilityProvider>
           <LanguageProvider>
             <DataProvider>

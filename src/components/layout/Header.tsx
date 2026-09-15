@@ -29,19 +29,9 @@ export function Header() {
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
   const [readNotifCount, setReadNotifCount] = useState<number>(0);
-  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -253,15 +243,9 @@ export function Header() {
   ];
 
   return (
-    <header className={`w-full flex flex-col z-50 sticky top-0 transition-all duration-500 ${
-      isScrolled
-        ? 'bg-[#061B30]/95 backdrop-blur-md border-b border-white/10 shadow-xl'
-        : 'bg-gradient-to-b from-[#061B30]/80 via-[#061B30]/30 to-transparent border-b border-transparent'
-    }`}>
+    <header className="w-full flex flex-col z-50 sticky top-0">
       {/* Top Government Bar */}
-      <div className={`text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide transition-colors duration-500 ${
-        isScrolled ? 'bg-[#061B30]/95 border-b border-white/10' : 'bg-[#061B30]/60 border-b border-white/10'
-      }`}>
+      <div className="bg-primary-navy text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full font-semibold">KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
@@ -414,7 +398,7 @@ export function Header() {
 
       {/* Main Navigation (Floating Island Dock) */}
       <div className="w-full px-3 sm:px-6 lg:px-8 py-2 md:py-3 transition-all duration-300">
-        <div className="max-w-7xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full border border-white/80 shadow-[0_10px_35px_rgba(0,0,0,0.22)] px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300 hover:shadow-[0_15px_45px_rgba(0,0,0,0.3)] hover:border-white">
+        <div className="max-w-7xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300 hover:shadow-[0_12px_35px_rgba(0,0,0,0.1)] hover:border-slate-300">
           
           {/* Logo Area */}
           <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
