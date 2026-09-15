@@ -26,23 +26,43 @@ export const FloatingContact = () => {
               <h4 className="text-white font-bold text-center">Butuh Bantuan?</h4>
             </div>
             <div className="flex flex-col p-2">
-              <a href="#" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors group">
-                <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center group-hover:bg-green-500 transition-colors">
+              <a 
+                href="https://wa.me/628988180009?text=Halo%20Helpdesk%20UKPBJ%20Kemnaker%2C%20saya%20butuh%20informasi%20atau%20bantuan%20terkait%20layanan%20pengadaan." 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center group-hover:bg-green-500 transition-colors shrink-0">
                   <MessageCircle className="w-5 h-5 text-green-600 group-hover:text-white transition-colors" />
                 </div>
-                <span className="font-medium text-slate-700 group-hover:text-green-600 transition-colors">WhatsApp</span>
+                <div className="flex flex-col">
+                  <span className="font-medium text-slate-700 group-hover:text-green-600 transition-colors text-sm">WhatsApp</span>
+                  <span className="text-[11px] text-slate-400">+62 898-8180-009</span>
+                </div>
               </a>
-              <a href="#" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors group">
-                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-primary-blue transition-colors">
+              <a 
+                href="mailto:ukpbj@kemnaker.go.id" 
+                className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-primary-blue transition-colors shrink-0">
                   <Mail className="w-5 h-5 text-primary-blue group-hover:text-white transition-colors" />
                 </div>
-                <span className="font-medium text-slate-700 group-hover:text-primary-blue transition-colors">Email</span>
+                <div className="flex flex-col">
+                  <span className="font-medium text-slate-700 group-hover:text-primary-blue transition-colors text-sm">Email</span>
+                  <span className="text-[11px] text-slate-400">ukpbj@kemnaker.go.id</span>
+                </div>
               </a>
-              <a href="#" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors group">
-                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center group-hover:bg-accent-gold transition-colors">
+              <a 
+                href="tel:02152921236" 
+                className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center group-hover:bg-accent-gold transition-colors shrink-0">
                   <PhoneCall className="w-5 h-5 text-accent-gold group-hover:text-white transition-colors" />
                 </div>
-                <span className="font-medium text-slate-700 group-hover:text-accent-gold transition-colors">Call Center</span>
+                <div className="flex flex-col">
+                  <span className="font-medium text-slate-700 group-hover:text-accent-gold transition-colors text-sm">Call Center</span>
+                  <span className="text-[11px] text-slate-400">021-52921236</span>
+                </div>
               </a>
             </div>
           </motion.div>
