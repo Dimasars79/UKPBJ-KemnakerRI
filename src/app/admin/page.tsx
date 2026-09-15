@@ -2400,26 +2400,26 @@ export default function AdminPortalPage() {
                 </div>
 
                 {/* STRATEGIC ACTIONABLE METRIC CARDS */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4.5 items-stretch">
                   
                   {/* Box 1: Paket Pengadaan PBJ */}
                   <div 
                     onClick={() => setContentFeedFilter('paket')}
-                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between space-y-3.5 cursor-pointer group ${
+                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[172px] cursor-pointer group ${
                       contentFeedFilter === 'paket'
                         ? isDark ? 'bg-indigo-950/40 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/80 border-indigo-400 ring-1 ring-indigo-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-indigo-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-between gap-2 h-10 shrink-0">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                           <Package className="w-4.5 h-4.5" />
                         </div>
-                        <div>
-                          <h4 className={`text-xs font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
-                          <p className={`text-[10px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender</p>
+                        <div className="min-w-0">
+                          <h4 className={`text-xs font-bold leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
+                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender</p>
                         </div>
                       </div>
                       <button
@@ -2452,28 +2452,28 @@ export default function AdminPortalPage() {
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between pt-1">
+                    {/* Main Hero Number & Metric Highlight (Locked Baseline) */}
+                    <div className="flex items-baseline justify-between my-auto py-2">
                       <div className="flex items-baseline gap-2">
-                        <span className={`text-3xl lg:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        <span className={`text-3xl lg:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {packagesList.length}
                         </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-tight">
                           Paket
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[9px] uppercase font-bold tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Pagu Total
                         </span>
-                        <span className="text-xs font-black text-amber-500">
+                        <span className="text-xs font-black text-amber-500 leading-tight">
                           Rp 48.2 M
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px]">
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px] h-7 shrink-0">
                       <div className="flex items-center gap-1.5">
                         <span className="px-2 py-0.5 rounded-md font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -2492,21 +2492,21 @@ export default function AdminPortalPage() {
                   {/* Box 2: Berita & Publikasi CMS */}
                   <div 
                     onClick={() => setContentFeedFilter('berita')}
-                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between space-y-3.5 cursor-pointer group ${
+                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[172px] cursor-pointer group ${
                       contentFeedFilter === 'berita'
                         ? isDark ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/80 border-amber-400 ring-1 ring-amber-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-amber-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-between gap-2 h-10 shrink-0">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                           <Newspaper className="w-4.5 h-4.5" />
                         </div>
-                        <div>
-                          <h4 className={`text-xs font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Berita & Warta</h4>
-                          <p className={`text-[10px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Publikasi Informasi</p>
+                        <div className="min-w-0">
+                          <h4 className={`text-xs font-bold leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Berita & Warta</h4>
+                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Publikasi Informasi</p>
                         </div>
                       </div>
                       <button
@@ -2533,28 +2533,28 @@ export default function AdminPortalPage() {
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between pt-1">
+                    {/* Main Hero Number & Metric Highlight (Locked Baseline) */}
+                    <div className="flex items-baseline justify-between my-auto py-2">
                       <div className="flex items-baseline gap-2">
-                        <span className={`text-3xl lg:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        <span className={`text-3xl lg:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {newsList.length}
                         </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 leading-tight">
                           Warta
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[9px] uppercase font-bold tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Pembaca
                         </span>
-                        <span className="text-xs font-black text-blue-500">
+                        <span className="text-xs font-black text-blue-500 leading-tight">
                           14.8K View
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px]">
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px] h-7 shrink-0">
                       <div className="flex items-center gap-1.5">
                         <span className="px-2 py-0.5 rounded-md font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -2575,21 +2575,21 @@ export default function AdminPortalPage() {
                   {/* Box 3: Agenda & Kegiatan PBJ */}
                   <div 
                     onClick={() => setContentFeedFilter('agenda')}
-                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between space-y-3.5 cursor-pointer group ${
+                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[172px] cursor-pointer group ${
                       contentFeedFilter === 'agenda'
                         ? isDark ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/80 border-emerald-400 ring-1 ring-emerald-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-emerald-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-between gap-2 h-10 shrink-0">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                           <Calendar className="w-4.5 h-4.5" />
                         </div>
-                        <div>
-                          <h4 className={`text-xs font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Agenda & Bimtek</h4>
-                          <p className={`text-[10px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Jadwal & Acara</p>
+                        <div className="min-w-0">
+                          <h4 className={`text-xs font-bold leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Agenda & Bimtek</h4>
+                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Jadwal & Acara</p>
                         </div>
                       </div>
                       <button
@@ -2618,28 +2618,28 @@ export default function AdminPortalPage() {
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between pt-1">
+                    {/* Main Hero Number & Metric Highlight (Locked Baseline) */}
+                    <div className="flex items-baseline justify-between my-auto py-2">
                       <div className="flex items-baseline gap-2">
-                        <span className={`text-3xl lg:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        <span className={`text-3xl lg:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {agendaList.length}
                         </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-tight">
                           Acara
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[9px] uppercase font-bold tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Partisipasi
                         </span>
-                        <span className="text-xs font-black text-emerald-500">
+                        <span className="text-xs font-black text-emerald-500 leading-tight">
                           850+ Orang
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px]">
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px] h-7 shrink-0">
                       <div className="flex items-center gap-1.5">
                         <span className="px-2 py-0.5 rounded-md font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
@@ -2658,21 +2658,21 @@ export default function AdminPortalPage() {
                   {/* Box 4: Regulasi & Dokumen SOP */}
                   <div 
                     onClick={() => setContentFeedFilter('regulasi')}
-                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between space-y-3.5 cursor-pointer group ${
+                    className={`p-5 rounded-2xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[172px] cursor-pointer group ${
                       contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
                         ? isDark ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/80 border-purple-400 ring-1 ring-purple-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-purple-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-between gap-2 h-10 shrink-0">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                           <ScrollText className="w-4.5 h-4.5" />
                         </div>
-                        <div>
-                          <h4 className={`text-xs font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Regulasi & SOP</h4>
-                          <p className={`text-[10px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Hukum & Tata Kelola</p>
+                        <div className="min-w-0">
+                          <h4 className={`text-xs font-bold leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>Regulasi & SOP</h4>
+                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Hukum & Tata Kelola</p>
                         </div>
                       </div>
                       <button
@@ -2701,28 +2701,28 @@ export default function AdminPortalPage() {
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between pt-1">
+                    {/* Main Hero Number & Metric Highlight (Locked Baseline) */}
+                    <div className="flex items-baseline justify-between my-auto py-2">
                       <div className="flex items-baseline gap-2">
-                        <span className={`text-3xl lg:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        <span className={`text-3xl lg:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {regulasiList.length + sopList.length}
                         </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 leading-tight">
                           Dokumen
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[9px] uppercase font-bold tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Validasi
                         </span>
-                        <span className="text-xs font-black text-emerald-500">
+                        <span className="text-xs font-black text-emerald-500 leading-tight">
                           100% Valid
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px]">
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 text-[10px] h-7 shrink-0">
                       <div className="flex items-center gap-1.5">
                         <span className="px-2 py-0.5 rounded-md font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">
                           <span>{regulasiList.length} Regulasi</span>
