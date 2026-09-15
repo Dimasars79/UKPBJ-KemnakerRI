@@ -1,7 +1,6 @@
 "use client"
 
 import React from 'react';
-import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -10,7 +9,7 @@ import { ServiceCard } from '@/components/cards/ServiceCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import {
   Monitor, FileText, HelpCircle, ShieldCheck, Zap,
-  PhoneCall, MessageSquare, Clock, Building2, Mail
+  MessageSquare, Clock, Building2, Mail
 } from 'lucide-react';
 
 export default function LayananPage() {
@@ -99,11 +98,6 @@ export default function LayananPage() {
               <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
                 {/* Left: Info */}
                 <div className="max-w-2xl">
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-accent-gold text-xs font-bold uppercase tracking-wider mb-4">
-                    <PhoneCall className="w-3.5 h-3.5" />
-                    <span></span>
-                  </div>
-
                   <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-3">
                     Butuh Bantuan Teknis atau Konsultasi Pengadaan?
                   </h2>
@@ -141,14 +135,6 @@ export default function LayananPage() {
                     <MessageSquare className="w-4 h-4" />
                     <span>Chat WhatsApp Helpdesk</span>
                   </a>
-
-                  <Link
-                    href="/informasi/clearing-house"
-                    className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs py-3.5 px-6 rounded-xl transition-all active:scale-95 backdrop-blur-xs"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-blue-300" />
-                    <span>Konsultasi Clearing House</span>
-                  </Link>
                 </div>
               </div>
             </div>
