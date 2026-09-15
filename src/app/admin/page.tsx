@@ -5528,52 +5528,8 @@ export default function AdminPortalPage() {
                 Pengaturan Sistem & Database
               </h2>
               <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
-                Atur konfigurasi portal publik, banner siaran, status server, dan kelola database sinkronisasi.
+                Atur status server operasional pengadaan dan kelola database sinkronisasi.
               </p>
-            </div>
-
-            {/* Section 1: Running Banner Announcement */}
-            <div className={`p-6 rounded-2xl border space-y-4 ${
-              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-            }`}>
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    Banner Pengumuman Darurat / Siaran Penting (Public Header)
-                  </h3>
-                  <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>Teks ini akan muncul di bagian teratas website publik.</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    updateSiteSettings({ announcementActive: !siteSettings.announcementActive });
-                    showNotification(`Banner pengumuman publik telah ${!siteSettings.announcementActive ? 'diaktifkan' : 'dinonaktifkan'}.`);
-                  }}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                    siteSettings.announcementActive
-                      ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-500 border border-emerald-500/40'
-                      : isDark ? 'bg-slate-500/20 text-slate-400 border border-slate-500/30' : 'bg-slate-200 text-slate-700 border border-slate-300'
-                  }`}
-                >
-                  {siteSettings.announcementActive ? '✓ Status: Aktif' : '✕ Status: Nonaktif'}
-                </button>
-              </div>
-
-              <div className="space-y-2">
-                <input
-                  type="text"
-                  value={siteSettings.announcementBanner}
-                  onChange={(e) => updateSiteSettings({ announcementBanner: e.target.value })}
-                  placeholder="Tulis pesan pengumuman publik..."
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-xs border outline-none ${
-                    isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                  }`}
-                />
-                <p className="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" />
-                  <span>Tersimpan otomatis ke database client & tersinkronisasi</span>
-                </p>
-              </div>
             </div>
 
             {/* Section 2: Server Status */}
