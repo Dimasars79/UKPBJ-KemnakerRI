@@ -353,6 +353,17 @@ export default function AdminPortalPage() {
     }
   };
 
+  // Dynamic Realtime Log Time Formatter Helper
+  const formatLogTime = (timestamp?: number, fallbackStr?: string) => {
+    if (!timestamp) return fallbackStr || 'Baru saja';
+    const diffSec = Math.floor((Date.now() - timestamp) / 1000);
+    if (diffSec < 15) return 'Baru saja';
+    if (diffSec < 60) return `${diffSec} detik lalu`;
+    if (diffSec < 3600) return `${Math.floor(diffSec / 60)} mnt lalu`;
+    if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} jam lalu`;
+    return `${Math.floor(diffSec / 86400)} hari lalu`;
+  };
+
   // Persistent Dynamic Activity Log System with Supabase Database Sync
   const [activityLogsList, setActivityLogsList] = useState<ActivityLogItem[]>([]);
 
@@ -373,12 +384,13 @@ export default function AdminPortalPage() {
     };
 
     const now = new Date();
-    const formattedDate = `${now.getDate()} ${['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][now.getMonth()]} ${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const exactTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')} WIB`;
+    const exactDate = `${now.getDate()} ${['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][now.getMonth()]} ${now.getFullYear()}`;
 
     const newLog: ActivityLogItem = {
       id: `LOG-${now.getFullYear()}-${String(Date.now()).slice(-4)}`,
-      time: 'Baru saja',
-      date: formattedDate,
+      time: exactTime,
+      date: exactDate,
       timestamp: Date.now(),
       actor,
       role,
@@ -443,6 +455,7 @@ export default function AdminPortalPage() {
           time?: string;
           date?: string;
           timestamp?: number;
+          created_at?: string;
           actor?: string;
           role?: string;
           entity?: string;
@@ -453,21 +466,32 @@ export default function AdminPortalPage() {
           desc?: string;
           target?: string;
           status?: string;
-        }) => ({
-          id: l.id,
-          time: l.time || 'Tercatat',
-          date: l.date || new Date().toLocaleDateString('id-ID'),
-          timestamp: l.timestamp || Date.now(),
-          actor: l.actor || 'Dimas Ars',
-          role: l.role || 'Super Administrator PBJ',
-          entity: l.entity || 'Sistem',
-          category: (l.category as ActivityLogItem['category']) || 'sistem',
-          action: (l.action as ActivityLogItem['action']) || 'UPDATE',
-          actionColor: l.action_color || 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-          desc: l.description || l.desc || 'Perubahan data sistem',
-          target: l.target || l.id,
-          status: l.status || 'Berhasil'
-        }));
+        }) => {
+          const ts = l.timestamp ? Number(l.timestamp) : (l.created_at ? new Date(l.created_at).getTime() : Date.now());
+          const dateObj = new Date(ts);
+          const exactTime = l.time && l.time.includes(':')
+            ? l.time
+            : `${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}:${String(dateObj.getSeconds()).padStart(2, '0')} WIB`;
+          const exactDate = l.date && !l.date.includes('undefined')
+            ? l.date
+            : `${dateObj.getDate()} ${['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+
+          return {
+            id: l.id,
+            time: exactTime,
+            date: exactDate,
+            timestamp: ts,
+            actor: l.actor || 'Dimas Ars',
+            role: l.role || 'Super Administrator PBJ',
+            entity: l.entity || 'Sistem',
+            category: (l.category as ActivityLogItem['category']) || 'sistem',
+            action: (l.action as ActivityLogItem['action']) || 'UPDATE',
+            actionColor: l.action_color || 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+            desc: l.description || l.desc || 'Perubahan data sistem',
+            target: l.target || l.id,
+            status: l.status || 'Berhasil'
+          };
+        });
         setActivityLogsList(mappedLogs);
         if (typeof window !== 'undefined') {
           localStorage.setItem('ukpbj_admin_activity_logs', JSON.stringify(mappedLogs));
@@ -4344,7 +4368,12 @@ export default function AdminPortalPage() {
                         }`}>
                           <td className="p-4">
                             <div>
-                              <p className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{log.time}</p>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{log.time}</span>
+                                <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.2 rounded-md">
+                                  {formatLogTime(log.timestamp, log.time)}
+                                </span>
+                              </div>
                               <p className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'} font-mono mt-0.5`}>{log.date}</p>
                             </div>
                           </td>
