@@ -243,7 +243,7 @@ export function Header() {
   ];
 
   return (
-    <header className="w-full flex flex-col z-50 sticky top-0">
+    <header className="w-full flex flex-col z-50 sticky top-0 bg-gradient-to-b from-[#061B30] via-[#0A2540] to-[#0A2342] border-b border-white/10 shadow-md">
       {/* Top Government Bar */}
       <div className="bg-primary-navy text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
         <div className="container mx-auto flex justify-between items-center">
@@ -398,7 +398,7 @@ export function Header() {
 
       {/* Main Navigation (Floating Island Dock) */}
       <div className="w-full px-3 sm:px-6 lg:px-8 py-2 md:py-3 transition-all duration-300">
-        <div className="max-w-7xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300 hover:shadow-[0_12px_35px_rgba(0,0,0,0.1)] hover:border-slate-300">
+        <div className="max-w-7xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full border border-white/80 shadow-[0_10px_35px_rgba(0,0,0,0.22)] px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300 hover:shadow-[0_15px_45px_rgba(0,0,0,0.3)] hover:border-white">
           
           {/* Logo Area */}
           <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
