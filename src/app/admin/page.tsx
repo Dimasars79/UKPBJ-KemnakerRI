@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -347,10 +347,10 @@ export default function AdminPortalPage() {
     }
   };
 
-  // Persistent Dynamic Activity Log System
+  // Persistent Dynamic Activity Log System with Supabase Database Sync
   const [activityLogsList, setActivityLogsList] = useState<ActivityLogItem[]>([]);
 
-  const pushActivityLog = (
+  const pushActivityLog = async (
     entity: string,
     category: ActivityLogItem['category'],
     action: ActivityLogItem['action'],
@@ -385,14 +385,94 @@ export default function AdminPortalPage() {
       status: 'Berhasil'
     };
 
+    // 1. Instant local optimistic update & LocalStorage fallback
     setActivityLogsList((prev) => {
-      const updated = [newLog, ...prev.slice(0, 99)];
+      const updated = [newLog, ...prev.filter(l => l.id !== newLog.id).slice(0, 99)];
       if (typeof window !== 'undefined') {
         localStorage.setItem('ukpbj_admin_activity_logs', JSON.stringify(updated));
       }
       return updated;
     });
+
+    // 2. Asynchronous write to Supabase Database (activity_logs table)
+    try {
+      fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          table: 'activity_logs',
+          action: 'insert',
+          data: {
+            id: newLog.id,
+            time: newLog.time,
+            date: newLog.date,
+            timestamp: newLog.timestamp,
+            actor: newLog.actor,
+            role: newLog.role,
+            entity: newLog.entity,
+            category: newLog.category,
+            action: newLog.action,
+            action_color: newLog.actionColor,
+            description: newLog.desc,
+            target: newLog.target,
+            status: newLog.status
+          }
+        })
+      }).catch((err) => {
+        console.warn('Asynchronous Supabase log insert notice (will persist locally):', err);
+      });
+    } catch {
+      // Graceful fallback
+    }
   };
+
+  // Helper to fetch live activity logs from Supabase
+  const fetchSupabaseActivityLogs = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/data?table=activity_logs');
+      const json = await res.json();
+      if (json?.success && Array.isArray(json.data) && json.data.length > 0) {
+        const mappedLogs: ActivityLogItem[] = json.data.map((l: {
+          id: string;
+          time?: string;
+          date?: string;
+          timestamp?: number;
+          actor?: string;
+          role?: string;
+          entity?: string;
+          category?: string;
+          action?: string;
+          action_color?: string;
+          description?: string;
+          desc?: string;
+          target?: string;
+          status?: string;
+        }) => ({
+          id: l.id,
+          time: l.time || 'Tercatat',
+          date: l.date || new Date().toLocaleDateString('id-ID'),
+          timestamp: l.timestamp || Date.now(),
+          actor: l.actor || 'Dimas Ars',
+          role: l.role || 'Super Administrator PBJ',
+          entity: l.entity || 'Sistem',
+          category: (l.category as ActivityLogItem['category']) || 'sistem',
+          action: (l.action as ActivityLogItem['action']) || 'UPDATE',
+          actionColor: l.action_color || 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+          desc: l.description || l.desc || 'Perubahan data sistem',
+          target: l.target || l.id,
+          status: l.status || 'Berhasil'
+        }));
+        setActivityLogsList(mappedLogs);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('ukpbj_admin_activity_logs', JSON.stringify(mappedLogs));
+        }
+        return true;
+      }
+    } catch (e) {
+      console.warn('Could not fetch Supabase activity logs, using local state:', e);
+    }
+    return false;
+  }, []);
   
   // DataContext Hook
   const {
@@ -431,42 +511,52 @@ export default function AdminPortalPage() {
     refreshFromSupabase
   } = useData();
 
-  // Initialize and synchronize Activity Logs with real CMS items (no dummy actors)
+  // Initialize and synchronize Activity Logs with real CMS items & Supabase
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('ukpbj_admin_activity_logs');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          const hasDummy = parsed.some((l: ActivityLogItem) => 
-            l.actor === 'Biro Perencanaan' || 
-            l.actor === 'System Daemon' || 
-            l.actor === 'Pokja Pemilihan II' || 
-            l.id === 'LOG-2026-8821'
-          );
-          if (!hasDummy && parsed.length > 0) {
-            setActivityLogsList(parsed);
-            return;
-          }
-        }
-      } catch (e) {
-        console.warn('Error reading logs:', e);
-      }
+    let isMounted = true;
+    (async () => {
+      const fetchedFromCloud = await fetchSupabaseActivityLogs();
+      if (!isMounted) return;
 
-      // Generate initial real-time logs strictly from live CMS collections
-      const realLogs = generateLogsFromCMS(
-        packagesList,
-        newsList,
-        agendaList,
-        regulasiList,
-        sopList,
-        photosList,
-        videosList
-      );
-      setActivityLogsList(realLogs);
-      localStorage.setItem('ukpbj_admin_activity_logs', JSON.stringify(realLogs));
-    }
-  }, [packagesList.length, newsList.length, agendaList.length, regulasiList.length, sopList.length, photosList.length, videosList.length]);
+      if (!fetchedFromCloud && typeof window !== 'undefined') {
+        try {
+          const saved = localStorage.getItem('ukpbj_admin_activity_logs');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            const hasDummy = parsed.some((l: ActivityLogItem) => 
+              l.actor === 'Biro Perencanaan' || 
+              l.actor === 'System Daemon' || 
+              l.actor === 'Pokja Pemilihan II' || 
+              l.id === 'LOG-2026-8821'
+            );
+            if (!hasDummy && parsed.length > 0) {
+              setActivityLogsList(parsed);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Error reading logs:', e);
+        }
+
+        // Generate initial real-time logs strictly from live CMS collections
+        const realLogs = generateLogsFromCMS(
+          packagesList,
+          newsList,
+          agendaList,
+          regulasiList,
+          sopList,
+          photosList,
+          videosList
+        );
+        setActivityLogsList(realLogs);
+        localStorage.setItem('ukpbj_admin_activity_logs', JSON.stringify(realLogs));
+      }
+    })();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [fetchSupabaseActivityLogs, packagesList.length, newsList.length, agendaList.length, regulasiList.length, sopList.length, photosList.length, videosList.length]);
 
   // Package Modal State
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -4111,7 +4201,10 @@ export default function AdminPortalPage() {
                 <button
                   onClick={async () => {
                     showNotification('Memperbarui log aktivitas dari CMS & Supabase...');
-                    await refreshFromSupabase();
+                    await Promise.all([
+                      refreshFromSupabase(),
+                      fetchSupabaseActivityLogs()
+                    ]);
                     showNotification('✓ Log aktivitas telah diperbarui secara live.');
                   }}
                   className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"

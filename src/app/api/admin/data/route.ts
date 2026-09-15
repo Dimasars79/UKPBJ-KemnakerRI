@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: true, data });
     }
 
-    // Fetch all 8 tables in parallel using service role
+    // Fetch all 9 tables in parallel using service role
     const [
       newsRes,
       agendasRes,
@@ -75,7 +75,8 @@ export async function GET(req: NextRequest) {
       sopRes,
       photosRes,
       videosRes,
-      settingsRes
+      settingsRes,
+      activityLogsRes
     ] = await Promise.all([
       supabaseAdmin.from('news').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('agendas').select('*').order('created_at', { ascending: false }),
@@ -84,7 +85,8 @@ export async function GET(req: NextRequest) {
       supabaseAdmin.from('sop').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('gallery_photos').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('gallery_videos').select('*').order('created_at', { ascending: false }),
-      supabaseAdmin.from('site_settings').select('*').eq('id', 'global_config').maybeSingle()
+      supabaseAdmin.from('site_settings').select('*').eq('id', 'global_config').maybeSingle(),
+      supabaseAdmin.from('activity_logs').select('*').order('created_at', { ascending: false }).limit(100)
     ]);
 
     return NextResponse.json({
@@ -97,7 +99,8 @@ export async function GET(req: NextRequest) {
         sop: sopRes.data || [],
         gallery_photos: photosRes.data || [],
         gallery_videos: videosRes.data || [],
-        site_settings: settingsRes.data || null
+        site_settings: settingsRes.data || null,
+        activity_logs: activityLogsRes.data || []
       }
     });
   } catch (err: unknown) {
@@ -128,7 +131,8 @@ export async function POST(req: NextRequest) {
       'sop',
       'gallery_photos',
       'gallery_videos',
-      'site_settings'
+      'site_settings',
+      'activity_logs'
     ];
 
     if (!validTables.includes(table)) {
