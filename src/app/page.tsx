@@ -4,12 +4,10 @@ import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ServiceCard } from '@/components/cards/ServiceCard';
-import { SectionHeading } from '@/components/ui/SectionHeading';
 import { 
-  Users, Globe, ArrowRight, ShieldCheck, ChevronDown, Quote, ShoppingCart, 
-  BookOpen, Scale, Clock, TrendingDown, TrendingUp, Award, ThumbsUp, Calendar, 
-  HelpCircle, AlertCircle, MessageSquare, FileText
+  Users, ArrowRight, ShieldCheck, ChevronDown, Quote, ShoppingCart, 
+  BookOpen, Scale, Clock, TrendingDown, TrendingUp, Award, ThumbsUp, 
+  Calendar, Globe, FileText
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -369,73 +367,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. Main Services (Tempat untuk services nantinya) */}
-        <section className="py-20 bg-gradient-to-tr from-blue-50/40 via-slate-50 to-white relative overflow-hidden border-y border-slate-100" id="layanan">
-          {/* Subtle cubes pattern */}
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
-          
-          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-primary-blue/10 rounded-full blur-[120px] -translate-x-1/3 -translate-y-1/3 pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent-gold/10 rounded-full blur-[100px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <FadeIn>
-              <div className="flex justify-between items-end mb-10">
-                <SectionHeading title={t('home.services_title')} />
-              </div>
-            </FadeIn>
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <StaggerItem>
-                <ServiceCard 
-                  title="LPSE" 
-                  description="Layanan Pengadaan Secara Elektronik untuk proses tender dan seleksi penyedia barang/jasa."
-                  icon={Globe}
-                  href="#"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <ServiceCard 
-                  title="Permintaan Informasi" 
-                  description="Akses layanan permohonan informasi publik terkait kegiatan pengadaan barang/jasa."
-                  icon={HelpCircle}
-                  href="#"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <ServiceCard 
-                  title="Pelatihan & Bimtek" 
-                  description="Program peningkatan kapasitas dan kompetensi SDM di bidang pengadaan barang/jasa."
-                  icon={Users}
-                  href="#"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <ServiceCard 
-                  title="Clearing House" 
-                  description="Fasilitasi penyelesaian permasalahan dan konsultasi khusus pengadaan barang/jasa."
-                  icon={ShieldCheck}
-                  href="#"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <ServiceCard 
-                  title="Pengaduan" 
-                  description="Saluran resmi penyampaian pengaduan masyarakat terkait proses pengadaan."
-                  icon={AlertCircle}
-                  href="#"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <ServiceCard 
-                  title="Konsultasi PBJ" 
-                  description="Layanan konsultasi umum mengenai kebijakan dan regulasi pengadaan barang/jasa."
-                  icon={MessageSquare}
-                  href="#"
-                />
-              </StaggerItem>
-            </StaggerContainer>
-          </div>
-        </section>
-
-        {/* 3.5 Menu Pengadaan Barang & Jasa */}
+        {/* 3. Menu Pengadaan Barang & Jasa */}
         <PengadaanSection />
 
         {/* 4. Berita & Pengumuman Carousel */}
