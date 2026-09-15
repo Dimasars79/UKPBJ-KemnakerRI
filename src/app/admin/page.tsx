@@ -288,18 +288,24 @@ export default function AdminPortalPage() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   
-  // Persistent Dynamic Notifications System
-  const [notificationsList, setNotificationsList] = useState<AdminNotificationItem[]>(() => {
+  // Persistent Dynamic Notifications System (Hydration Safe)
+  const [notificationsList, setNotificationsList] = useState<AdminNotificationItem[]>(DEFAULT_NOTIFICATIONS);
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
         const saved = localStorage.getItem('ukpbj_admin_notifications');
-        if (saved) return JSON.parse(saved);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setNotificationsList(parsed);
+          }
+        }
       } catch (e) {
         console.warn('Failed to load admin notifications:', e);
       }
     }
-    return DEFAULT_NOTIFICATIONS;
-  });
+  }, []);
 
   const unreadNotifs = notificationsList.filter(n => !n.read).length;
 
@@ -2110,7 +2116,7 @@ export default function AdminPortalPage() {
               >
                 <Bell className="w-4 h-4" />
                 {unreadNotifs > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center animate-pulse">
+                  <span suppressHydrationWarning className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center animate-pulse">
                     {unreadNotifs}
                   </span>
                 )}
@@ -2132,7 +2138,7 @@ export default function AdminPortalPage() {
                         <Bell className="w-4 h-4 text-blue-500" />
                         <span className={`text-xs font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>Notifikasi & Audit Log</span>
                         {unreadNotifs > 0 && (
-                          <span className="px-1.5 py-0.2 rounded-full bg-red-500 text-white text-[9px] font-bold">
+                          <span suppressHydrationWarning className="px-1.5 py-0.2 rounded-full bg-red-500 text-white text-[9px] font-bold">
                             {unreadNotifs} baru
                           </span>
                         )}
