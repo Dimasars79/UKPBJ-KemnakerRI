@@ -29,9 +29,19 @@ export function Header() {
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
   const [readNotifCount, setReadNotifCount] = useState<number>(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -243,9 +253,15 @@ export function Header() {
   ];
 
   return (
-    <header className="w-full flex flex-col z-50 sticky top-0 bg-gradient-to-b from-[#061B30] via-[#0A2540] to-[#0A2342] border-b border-white/10 shadow-md">
+    <header className={`w-full flex flex-col z-50 sticky top-0 transition-all duration-500 ${
+      isScrolled
+        ? 'bg-[#061B30]/95 backdrop-blur-md border-b border-white/10 shadow-xl'
+        : 'bg-gradient-to-b from-[#061B30]/80 via-[#061B30]/30 to-transparent border-b border-transparent'
+    }`}>
       {/* Top Government Bar */}
-      <div className="bg-primary-navy text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
+      <div className={`text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide transition-colors duration-500 ${
+        isScrolled ? 'bg-[#061B30]/95 border-b border-white/10' : 'bg-[#061B30]/60 border-b border-white/10'
+      }`}>
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full font-semibold">KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
