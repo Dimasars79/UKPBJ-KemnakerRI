@@ -1,11 +1,12 @@
 "use client"
 
 import React from 'react';
+import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ShieldCheck, Target, Users, BookOpen, Building2, ScrollText, Compass } from 'lucide-react';
+import { ShieldCheck, Target, Users, BookOpen, Building2, ScrollText, Compass, ArrowRight, HelpCircle } from 'lucide-react';
 import { OrganizationChart } from '@/components/ui/OrganizationChart';
 
 export default function TentangPage() {
@@ -14,6 +15,13 @@ export default function TentangPage() {
     { title: 'Profesionalisme', desc: 'Menjalankan tugas dengan kompetensi tinggi dan sesuai dengan peraturan perundang-undangan.', icon: <Target className="w-6 h-6" /> },
     { title: 'Kolaboratif', desc: 'Membangun kerja sama yang baik dengan seluruh pihak dan pemangku kepentingan.', icon: <Users className="w-6 h-6" /> },
     { title: 'Inovatif', desc: 'Terus mengembangkan sistem dan metode pengadaan untuk mencapai efisiensi maksimal.', icon: <BookOpen className="w-6 h-6" /> },
+  ];
+
+  const subpages = [
+    { title: "Visi & Misi", desc: "Arah dan komitmen strategis organisasi", href: "/tentang/visi-misi", icon: Target },
+    { title: "Maklumat Pelayanan", desc: "Deklarasi janji mutu & integritas UKPBJ", href: "/tentang/maklumat", icon: ScrollText },
+    { title: "Standar Pelayanan", desc: "SLA, prosedur, dan kepastian layanan", href: "/tentang/standar-pelayanan", icon: Building2 },
+    { title: "Pusat FAQ", desc: "Tanya jawab seputar pengadaan & SPSE", href: "/tentang/faq", icon: HelpCircle },
   ];
 
   return (
@@ -51,6 +59,42 @@ export default function TentangPage() {
               </FadeIn>
             </div>
           </div>
+        </section>
+
+        {/* SUBPAGES NAVIGATION STRIP */}
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+          <FadeIn direction="up">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {subpages.map((sp, idx) => {
+                const IconComponent = sp.icon;
+                return (
+                  <Link
+                    key={idx}
+                    href={sp.href}
+                    className="bg-white p-5 rounded-2xl shadow-lg border border-slate-100 hover:border-primary-blue/40 hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between"
+                  >
+                    <div className="flex items-start gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-primary-blue group-hover:bg-primary-navy group-hover:text-accent-gold flex items-center justify-center shrink-0 transition-colors">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm text-primary-navy group-hover:text-primary-blue transition-colors">
+                          {sp.title}
+                        </h4>
+                        <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                          {sp.desc}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-slate-100 flex items-center text-xs font-bold text-primary-blue">
+                      <span>Buka Halaman</span>
+                      <ArrowRight className="w-3.5 h-3.5 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </FadeIn>
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-16">

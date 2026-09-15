@@ -160,7 +160,7 @@ export default function Home() {
 
                 {/* 4. Berintegritas */}
                 <Link 
-                  href="/tentang#visi-misi" 
+                  href="/tentang/visi-misi" 
                   className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
                 >
                   <div className="flex items-start gap-3.5">
