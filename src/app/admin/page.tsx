@@ -3425,6 +3425,197 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
+                {/* ========================================================= */}
+                {/* 2-COLUMN SYSTEM ECOSYSTEM & UTILITIES (PERFECTIONIST GRID) */}
+                {/* ========================================================= */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                  
+                  {/* BOX 1: GOVERNMENT ECOSYSTEM INTEGRATION STATUS */}
+                  <div className={`p-6 rounded-3xl border shadow-sm flex flex-col justify-between h-full space-y-4 transition-all ${
+                    isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+                  }`}>
+                    <div>
+                      <div className={`flex justify-between items-center pb-3 border-b ${
+                        isDark ? 'border-slate-800/60' : 'border-slate-200'
+                      }`}>
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                            <Globe className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                              Ekosistem Layanan PBJ
+                            </h3>
+                            <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                              Integrasi Portal SPSE & LKPP Nasional
+                            </p>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span>All Connected</span>
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-4 text-xs">
+                        <a
+                          href="https://lpse.kemnaker.go.id"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${
+                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-white hover:shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                            <span className={`font-semibold text-xs truncate ${isDark ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>LPSE Kemnaker</span>
+                          </div>
+                          <span className={`text-[10px] flex items-center gap-1 shrink-0 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                            <span>18ms</span>
+                            <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
+                          </span>
+                        </a>
+
+                        <a
+                          href="https://sikap.lkpp.go.id"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${
+                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-white hover:shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                            <span className={`font-semibold text-xs truncate ${isDark ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>SiKAP LKPP</span>
+                          </div>
+                          <span className={`text-[10px] flex items-center gap-1 shrink-0 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                            <span>Live Sync</span>
+                            <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
+                          </span>
+                        </a>
+
+                        <a
+                          href="https://jdih.kemnaker.go.id"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${
+                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-white hover:shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                            <span className={`font-semibold text-xs truncate ${isDark ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>JDIH Kemnaker</span>
+                          </div>
+                          <span className={`text-[10px] flex items-center gap-1 shrink-0 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                            <span>Synced</span>
+                            <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
+                          </span>
+                        </a>
+
+                        <a
+                          href="https://e-katalog.lkpp.go.id"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${
+                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-white hover:shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                            <span className={`font-semibold text-xs truncate ${isDark ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>e-Katalog v6</span>
+                          </div>
+                          <span className={`text-[10px] flex items-center gap-1 shrink-0 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                            <span>Active</span>
+                            <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
+                          </span>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className={`pt-2 border-t flex items-center justify-between text-[10px] ${
+                      isDark ? 'border-slate-800/80 text-slate-400' : 'border-slate-100 text-slate-500'
+                    }`}>
+                      <span>Protokol Keamanan TLS 1.3 & API Gateway</span>
+                      <span className="font-bold text-emerald-500">100% Online</span>
+                    </div>
+                  </div>
+
+                  {/* BOX 2: QUICK EXPORT & DATA BACKUP UTILITIES */}
+                  <div className={`p-6 rounded-3xl border shadow-sm flex flex-col justify-between h-full space-y-4 transition-all ${
+                    isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+                  }`}>
+                    <div>
+                      <div className={`flex justify-between items-center pb-3 border-b ${
+                        isDark ? 'border-slate-800/60' : 'border-slate-200'
+                      }`}>
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+                            <Download className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                              Utilitas Rekap & Cadangan
+                            </h3>
+                            <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                              Ekspor Laporan & Snapshot Database
+                            </p>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold text-blue-500 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20">
+                          Siap Diunduh
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2.5 mt-4 text-xs">
+                        <button
+                          type="button"
+                          onClick={() => showNotification('✓ Laporan Rekap PBJ (.xlsx) berhasil diekspor.')}
+                          className={`p-3 rounded-2xl border font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer group ${
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/40 text-emerald-400 hover:bg-slate-950' : 'bg-emerald-50/60 border-emerald-200 text-emerald-700 hover:bg-emerald-100 hover:shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <Download className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+                            <span className="text-xs font-black">Export XLSX</span>
+                          </div>
+                          <span className={`text-[10px] font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Laporan PBJ</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const dataStr = JSON.stringify({ newsList, agendaList, packagesList, regulasiList, sopList, photosList, videosList }, null, 2);
+                            const blob = new Blob([dataStr], { type: 'application/json' });
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = `backup_ukpbj_db_${new Date().toISOString().slice(0,10)}.json`;
+                            link.click();
+                            showNotification('✓ Cadangan Database JSON berhasil diunduh.');
+                          }}
+                          className={`p-3 rounded-2xl border font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer group ${
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/40 text-blue-400 hover:bg-slate-950' : 'bg-blue-50/60 border-blue-200 text-blue-700 hover:bg-blue-100 hover:shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <Database className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+                            <span className="text-xs font-black">Backup JSON</span>
+                          </div>
+                          <span className={`text-[10px] font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Snapshot Data</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className={`pt-2 border-t flex items-center justify-between text-[10px] ${
+                      isDark ? 'border-slate-800/80 text-slate-400' : 'border-slate-100 text-slate-500'
+                    }`}>
+                      <span>Standar Satu Data Indonesia (SDI)</span>
+                      <span className="font-mono text-blue-500 font-bold">JSON & XLSX</span>
+                    </div>
+                  </div>
+
+                </div>
+
               </div>
 
               {/* ========================================================= */}
@@ -3610,140 +3801,6 @@ export default function AdminPortalPage() {
                     <PlusCircle className="w-3.5 h-3.5" />
                     <span>Jadwalkan Agenda Baru</span>
                   </button>
-                </div>
-
-                {/* WIDGET 3: GOVERNMENT ECOSYSTEM INTEGRATION STATUS */}
-                <div className={`p-5 rounded-3xl border shadow-sm space-y-4 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
-                }`}>
-                  <div className={`flex justify-between items-center pb-3 border-b ${
-                    isDark ? 'border-slate-800/60' : 'border-slate-200'
-                  }`}>
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-blue-400" />
-                      <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        Ekosistem Layanan PBJ
-                      </h3>
-                    </div>
-                    <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                      All Connected
-                    </span>
-                  </div>
-
-                  <div className="space-y-2 text-xs">
-                    <a
-                      href="https://lpse.kemnaker.go.id"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`p-2.5 rounded-xl border flex items-center justify-between transition-all ${
-                        isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-slate-100'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>LPSE Kemnaker RI</span>
-                      </div>
-                      <span className={`text-[10px] flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>
-                        <span>18ms</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </span>
-                    </a>
-
-                    <a
-                      href="https://sikap.lkpp.go.id"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`p-2.5 rounded-xl border flex items-center justify-between transition-all ${
-                        isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-slate-100'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>SiKAP LKPP Nasional</span>
-                      </div>
-                      <span className={`text-[10px] flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>
-                        <span>Live Sync</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </span>
-                    </a>
-
-                    <a
-                      href="https://jdih.kemnaker.go.id"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`p-2.5 rounded-xl border flex items-center justify-between transition-all ${
-                        isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-slate-100'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>JDIH Kemnaker RI</span>
-                      </div>
-                      <span className={`text-[10px] flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>
-                        <span>Synced</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </span>
-                    </a>
-
-                    <a
-                      href="https://e-katalog.lkpp.go.id"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`p-2.5 rounded-xl border flex items-center justify-between transition-all ${
-                        isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-slate-100'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>e-Katalog LKPP v6</span>
-                      </div>
-                      <span className={`text-[10px] flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>
-                        <span>Active</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* WIDGET 4: QUICK EXPORT & UTILITIES */}
-                <div className={`p-5 rounded-3xl border shadow-sm space-y-3 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
-                }`}>
-                  <h3 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    <Download className="w-4 h-4 text-emerald-500" />
-                    <span>Utilitas Rekap & Cadangan</span>
-                  </h3>
-                  
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <button
-                      onClick={() => showNotification('✓ Laporan Rekap PBJ (.xlsx) berhasil diexport.')}
-                      className={`p-2.5 rounded-xl border font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-emerald-400 hover:bg-slate-800' : 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100'
-                      }`}
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Export XLSX</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        const dataStr = JSON.stringify({ newsList, agendaList, packagesList, regulasiList, sopList, photosList, videosList }, null, 2);
-                        const blob = new Blob([dataStr], { type: 'application/json' });
-                        const url = URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.download = `backup_ukpbj_db_${new Date().toISOString().slice(0,10)}.json`;
-                        link.click();
-                        showNotification('✓ Cadangan Database JSON berhasil diunduh.');
-                      }}
-                      className={`p-2.5 rounded-xl border font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-blue-400 hover:bg-slate-800' : 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
-                      }`}
-                    >
-                      <Database className="w-3.5 h-3.5" />
-                      <span>Backup JSON</span>
-                    </button>
-                  </div>
                 </div>
 
               </div>
