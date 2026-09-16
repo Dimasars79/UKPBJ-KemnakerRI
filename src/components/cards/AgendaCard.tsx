@@ -8,11 +8,17 @@ interface AgendaCardProps {
   location: string;
   time: string;
   category?: string;
+  onClick?: () => void;
 }
 
-export function AgendaCard({ date, month, title, location, time, category }: AgendaCardProps) {
+export function AgendaCard({ date, month, title, location, time, category, onClick }: AgendaCardProps) {
   return (
-    <div className="flex items-start bg-white p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all group w-full h-full">
+    <div 
+      onClick={onClick}
+      className={`flex items-start bg-white p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all group w-full h-full ${
+        onClick ? 'cursor-pointer hover:border-primary-blue/30 hover:shadow-lg hover:-translate-y-0.5' : ''
+      }`}
+    >
       {/* Date badge */}
       <div className="flex flex-col items-center justify-center bg-secondary-offwhite border border-slate-200 rounded-lg p-3 min-w-[76px] w-[76px] shrink-0 self-start group-hover:bg-primary-blue group-hover:text-white group-hover:border-primary-blue transition-colors">
         <span className="text-2xl font-bold leading-none mb-1">{date}</span>

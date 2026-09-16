@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
 import { Header } from '@/components/layout/Header';
@@ -8,20 +8,32 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { AgendaCard } from '@/components/cards/AgendaCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, MessageSquare, Building2, Users, CheckCircle2, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '@/contexts/DataContext';
+
+interface SelectedAgendaModalData {
+  id?: string | number;
+  title: string;
+  category?: string;
+  date: string;
+  time: string;
+  location: string;
+  organizer?: string;
+  capacity?: string;
+  status?: string;
+  description?: string;
+}
 
 export default function AgendaPage() {
   const { t } = useLanguage();
   const { agendaList } = useData();
   const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 1)); // September 2026
   const [selectedDate, setSelectedDate] = useState<number | null>(15);
-
-  type Activity = { id: number | string; title: string; time: string; location: string };
+  const [selectedAgendaModal, setSelectedAgendaModal] = useState<SelectedAgendaModalData | null>(null);
   
   // Build activities dynamically from agendaList
-  const activities: Record<number, Activity[]> = {};
+  const activities: Record<number, SelectedAgendaModalData[]> = {};
   agendaList.forEach((ag, idx) => {
     // Extract day number from date string e.g. "15 Sep 2026"
     const dayMatch = ag.date.match(/\d+/);
@@ -32,8 +44,13 @@ export default function AgendaPage() {
     activities[dayNum].push({
       id: ag.id || idx,
       title: ag.title,
+      category: ag.category,
+      date: ag.date,
       time: ag.time,
-      location: ag.location
+      location: ag.location,
+      organizer: ag.organizer,
+      capacity: ag.capacity,
+      status: ag.status
     });
   });
 
@@ -47,12 +64,17 @@ export default function AgendaPage() {
   const dummyAgendas = agendaList.map((ag) => {
     const parts = ag.date.split(' ');
     return {
+      id: ag.id,
       title: ag.title,
       date: parts[0] || '15',
       month: parts[1] || 'Sep',
+      fullDate: ag.date,
       time: ag.time,
       location: ag.location,
-      category: ag.category
+      category: ag.category,
+      organizer: ag.organizer,
+      capacity: ag.capacity,
+      status: ag.status
     };
   });
 
@@ -100,10 +122,10 @@ export default function AgendaPage() {
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-primary-navy">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h3>
                 <div className="flex space-x-2">
-                  <button onClick={prevMonth} className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-sm">
+                  <button onClick={prevMonth} aria-label="Bulan sebelumnya" className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-sm">
                     <ChevronLeft className="w-5 h-5 text-slate-600" />
                   </button>
-                  <button onClick={nextMonth} className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-sm">
+                  <button onClick={nextMonth} aria-label="Bulan berikutnya" className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-sm">
                     <ChevronRight className="w-5 h-5 text-slate-600" />
                   </button>
                 </div>
@@ -165,26 +187,44 @@ export default function AgendaPage() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
-                    className="space-y-4 absolute inset-0"
+                    className="space-y-4"
                   >
-                    {selectedDate && activities[selectedDate] ? (
+                    {selectedDate && activities[selectedDate] && activities[selectedDate].length > 0 ? (
                       activities[selectedDate].map(activity => (
-                        <div key={activity.id} className="p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-md transition-all group border-l-4 border-l-accent-gold">
-                          <h4 className="font-bold text-primary-navy mb-3 group-hover:text-primary-blue transition-colors text-lg">{activity.title}</h4>
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-slate-500 font-medium">
+                        <div 
+                          key={activity.id} 
+                          onClick={() => setSelectedAgendaModal(activity)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedAgendaModal(activity); }}
+                          className="p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-lg hover:border-primary-blue/30 transition-all group border-l-4 border-l-accent-gold cursor-pointer text-left"
+                        >
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <h4 className="font-bold text-primary-navy group-hover:text-primary-blue transition-colors text-lg leading-snug">{activity.title}</h4>
+                            {activity.category && (
+                              <span className="shrink-0 px-2.5 py-0.5 rounded-full bg-blue-50 text-primary-blue text-xs font-bold">
+                                {activity.category}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-slate-500 font-medium mt-3">
                             <div className="flex items-center">
-                              <Clock className="w-4 h-4 mr-2 text-slate-400" />
+                              <Clock className="w-4 h-4 mr-2 text-slate-400 shrink-0" />
                               {activity.time}
                             </div>
                             <div className="flex items-center">
-                              <MapPin className="w-4 h-4 mr-2 text-slate-400" />
-                              {activity.location}
+                              <MapPin className="w-4 h-4 mr-2 text-slate-400 shrink-0" />
+                              <span className="truncate">{activity.location}</span>
                             </div>
+                          </div>
+                          <div className="mt-3 pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs font-semibold text-primary-blue">
+                            <span>Klik untuk detail kegiatan</span>
+                            <span className="group-hover:translate-x-1 transition-transform">→</span>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4">
+                      <div className="h-full py-12 flex flex-col items-center justify-center text-slate-400 space-y-4">
                         <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center">
                           <CalendarIcon className="w-8 h-8 text-slate-300" />
                         </div>
@@ -219,7 +259,20 @@ export default function AgendaPage() {
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {dummyAgendas.map((agenda, idx) => (
               <StaggerItem key={idx} className="h-full flex">
-                <AgendaCard {...agenda} />
+                <AgendaCard 
+                  {...agenda} 
+                  onClick={() => setSelectedAgendaModal({
+                    id: agenda.id || idx,
+                    title: agenda.title,
+                    category: agenda.category,
+                    date: agenda.fullDate,
+                    time: agenda.time,
+                    location: agenda.location,
+                    organizer: agenda.organizer,
+                    capacity: agenda.capacity,
+                    status: agenda.status
+                  })}
+                />
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -230,8 +283,149 @@ export default function AgendaPage() {
             </button>
           </div>
         </section>
+
+        {/* SIMPLE DETAIL POPUP MODAL */}
+        <AnimatePresence>
+          {selectedAgendaModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setSelectedAgendaModal(null)}
+                className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+              />
+
+              {/* Modal Dialog Card */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden z-10 my-8"
+              >
+                {/* Modal Header */}
+                <div className="bg-gradient-to-r from-primary-navy to-[#152a54] p-6 sm:p-7 text-white relative">
+                  <div className="flex items-center justify-between gap-4 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="px-3 py-1 rounded-full bg-white/15 border border-white/20 text-xs font-bold text-amber-300 uppercase tracking-wider">
+                        {selectedAgendaModal.category || 'Agenda PBJ'}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-xs font-bold text-emerald-300">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        {selectedAgendaModal.status || 'Terjadwal'}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => setSelectedAgendaModal(null)}
+                      aria-label="Tutup modal"
+                      className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <h3 className="text-xl sm:text-2xl font-black text-white leading-snug">
+                    {selectedAgendaModal.title}
+                  </h3>
+                </div>
+
+                {/* Modal Body */}
+                <div className="p-6 sm:p-7 space-y-6">
+                  {/* 4 Quick Info Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-primary-blue flex items-center justify-center shrink-0">
+                        <CalendarIcon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tanggal Kegiatan</div>
+                        <div className="text-sm sm:text-base font-bold text-primary-navy mt-0.5">{selectedAgendaModal.date}</div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                        <Clock className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Waktu Pelaksanaan</div>
+                        <div className="text-sm sm:text-base font-bold text-primary-navy mt-0.5">{selectedAgendaModal.time}</div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Lokasi / Ruang</div>
+                        <div className="text-sm sm:text-base font-bold text-primary-navy mt-0.5">{selectedAgendaModal.location}</div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                        <Building2 className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Penyelenggara</div>
+                        <div className="text-sm sm:text-base font-bold text-primary-navy mt-0.5">
+                          {selectedAgendaModal.organizer || 'Biro Perencanaan & UKPBJ Kemnaker'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Ringkasan Singkat / Deskripsi */}
+                  <div className="p-5 rounded-2xl bg-blue-50/50 border border-blue-100">
+                    <div className="flex items-center gap-2 mb-2 text-primary-navy font-bold text-sm">
+                      <Sparkles className="w-4 h-4 text-primary-blue" />
+                      <span>Keterangan & Informasi Kegiatan</span>
+                    </div>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      {selectedAgendaModal.description || 
+                        `Kegiatan resmi "${selectedAgendaModal.title}" ini diselenggarakan oleh ${selectedAgendaModal.organizer || 'UKPBJ Kemnaker'} guna memberikan bimbingan teknis, koordinasi pengadaan, serta pendampingan bagi para pemangku kepentingan demi kelancaran proses pengadaan barang dan jasa yang transparan dan akuntabel.`
+                      }
+                    </p>
+                    {selectedAgendaModal.capacity && (
+                      <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-slate-500">
+                        <Users className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Kapasitas / Target Peserta: <strong className="text-primary-navy">{selectedAgendaModal.capacity}</strong></span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Modal Footer Actions */}
+                <div className="bg-slate-50 px-6 sm:px-7 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-end gap-3">
+                  <button
+                    onClick={() => setSelectedAgendaModal(null)}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-sm transition-colors shadow-sm"
+                  >
+                    Tutup
+                  </button>
+
+                  <a
+                    href={`https://wa.me/628988180009?text=${encodeURIComponent(`Halo Admin UKPBJ Kemnaker, saya ingin bertanya informasi mengenai agenda: "${selectedAgendaModal.title}" (Tanggal: ${selectedAgendaModal.date})`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Tanya via WhatsApp</span>
+                  </a>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
       </main>
       <Footer />
     </>
   );
 }
+
