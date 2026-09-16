@@ -83,7 +83,7 @@ export function Header() {
         .forEach((pkg) => {
           list.push({
             id: `pkg-${pkg.id}`,
-            category: `Tender ${pkg.category}`,
+            category: pkg.category === 'Tender' ? 'Tender PBJ' : `${pkg.category}`,
             title: `${pkg.code}: ${pkg.title}`,
             desc: `Nilai HPS: ${pkg.hps} • ${pkg.unit}`,
             time: `Batas: ${pkg.deadline}`,
@@ -562,74 +562,98 @@ export function Header() {
 
               <AnimatePresence>
                 {isNotificationOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-3 w-84 sm:w-96 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_20px_40px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50"
-                  >
-                    <div className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/90">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-sm text-primary-navy">Notifikasi & Pembaruan</h3>
-                        {unreadPublicCount > 0 && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold">
-                            {unreadPublicCount} baru
+                  <>
+                    {/* Backdrop on mobile for clean focus & click-outside */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onClick={() => setIsNotificationOpen(false)}
+                      className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 sm:hidden"
+                    />
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="fixed inset-x-3 top-20 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-3 sm:w-96 max-w-md mx-auto sm:max-w-none bg-white/98 backdrop-blur-xl border border-slate-200/90 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] rounded-3xl overflow-hidden z-50 flex flex-col max-h-[80vh] sm:max-h-[500px]"
+                    >
+                      {/* Header Panel */}
+                      <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/90 shrink-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold text-sm text-primary-navy">Notifikasi & Pembaruan</h3>
+                          {unreadPublicCount > 0 && (
+                            <span className="px-2 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-black">
+                              {unreadPublicCount} baru
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] text-slate-400 font-semibold hidden sm:inline">
+                            {cmsNotifications.length} Aktivitas
                           </span>
+                          <button
+                            onClick={() => setIsNotificationOpen(false)}
+                            className="p-1 -mr-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer flex items-center justify-center w-7 h-7 text-xs font-bold"
+                            title="Tutup Notifikasi"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Scrollable list of notifications */}
+                      <div className="overflow-y-auto divide-y divide-slate-100/80 flex-1 overscroll-contain">
+                        {cmsNotifications.length > 0 ? (
+                          cmsNotifications.map((item) => (
+                            <Link
+                              key={item.id}
+                              href={item.href}
+                              onClick={() => setIsNotificationOpen(false)}
+                              className="p-3.5 sm:p-4 hover:bg-slate-50/80 transition-colors flex items-start gap-3 group cursor-pointer block"
+                            >
+                              <div className={`w-9 h-9 rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform shadow-2xs`}>
+                                {item.icon}
+                              </div>
+                              <div className="min-w-0 flex-1 space-y-1">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border max-w-[170px] truncate ${item.badgeClass}`}>
+                                    {item.category}
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 font-medium shrink-0">
+                                    {item.time}
+                                  </span>
+                                </div>
+                                <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-primary-blue transition-colors leading-snug line-clamp-2">
+                                  {item.title}
+                                </h4>
+                                <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
+                                  {item.desc}
+                                </p>
+                              </div>
+                            </Link>
+                          ))
+                        ) : (
+                          <div className="p-8 text-center text-slate-400 text-xs">
+                            Belum ada notifikasi atau pembaruan konten baru.
+                          </div>
                         )}
                       </div>
-                      <span className="text-[10px] text-slate-400 font-medium">
-                        {cmsNotifications.length} Aktivitas
-                      </span>
-                    </div>
-                    
-                    <div className="max-h-96 overflow-y-auto divide-y divide-slate-100">
-                      {cmsNotifications.length > 0 ? (
-                        cmsNotifications.map((item) => (
-                          <Link
-                            key={item.id}
-                            href={item.href}
-                            onClick={() => setIsNotificationOpen(false)}
-                            className="p-3.5 hover:bg-slate-50/80 transition-colors flex gap-3 group cursor-pointer block"
-                          >
-                            <div className={`w-8 h-8 rounded-xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform`}>
-                              {item.icon}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-center justify-between gap-1 mb-1">
-                                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold border ${item.badgeClass}`}>
-                                  {item.category}
-                                </span>
-                                <span className="text-[10px] text-slate-400 font-medium shrink-0">
-                                  {item.time}
-                                </span>
-                              </div>
-                              <h4 className="text-xs font-bold text-slate-800 group-hover:text-primary-blue transition-colors line-clamp-1">
-                                {item.title}
-                              </h4>
-                              <p className="text-[11px] text-slate-500 leading-snug line-clamp-2 mt-0.5">
-                                {item.desc}
-                              </p>
-                            </div>
-                          </Link>
-                        ))
-                      ) : (
-                        <div className="p-8 text-center text-slate-400 text-xs">
-                          Belum ada notifikasi atau pembaruan konten baru.
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="p-3 bg-slate-50/90 border-t border-slate-100 flex items-center justify-between gap-2">
-                      <Link 
-                        href="/informasi/pembaruan" 
-                        onClick={() => setIsNotificationOpen(false)}
-                        className="flex-1 py-2 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy to-primary-blue rounded-xl hover:shadow-md hover:-translate-y-0.5 transition-all"
-                      >
-                        Lihat Pusat Informasi &rarr;
-                      </Link>
-                    </div>
-                  </motion.div>
+                      
+                      {/* Bottom Footer Action */}
+                      <div className="p-3.5 bg-slate-50/95 border-t border-slate-100 shrink-0">
+                        <Link 
+                          href="/informasi/pembaruan" 
+                          onClick={() => setIsNotificationOpen(false)}
+                          className="w-full py-2.5 px-4 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy via-[#0c2b55] to-primary-blue rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-1.5 active:scale-98"
+                        >
+                          <span>Lihat Pusat Informasi & Pembaruan</span>
+                          <span className="text-amber-300">→</span>
+                        </Link>
+                      </div>
+                    </motion.div>
+                  </>
                 )}
               </AnimatePresence>
             </div>
