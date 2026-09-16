@@ -103,6 +103,8 @@ export default function AgendaPage() {
   // Category & Period Filters for Upcoming Activities
   const [categoryFilter, setCategoryFilter] = useState<string>('Semua Kategori');
   const [periodFilter, setPeriodFilter] = useState<string>('Semua');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const ITEMS_PER_PAGE = 6;
 
   const monthNames = [
     'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
@@ -186,6 +188,23 @@ export default function AgendaPage() {
       return matchCategory && matchPeriod;
     })
     .sort((a, b) => a.parsedTimestamp - b.parsedTimestamp);
+
+  // Pagination calculation (6 items per page)
+  const totalPages = Math.ceil(filteredAgendas.length / ITEMS_PER_PAGE) || 1;
+  const paginatedAgendas = filteredAgendas.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handleCategoryChange = (val: string) => {
+    setCategoryFilter(val);
+    setCurrentPage(1);
+  };
+
+  const handlePeriodChange = (val: string) => {
+    setPeriodFilter(val);
+    setCurrentPage(1);
+  };
 
   return (
     <>
@@ -353,14 +372,14 @@ export default function AgendaPage() {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
             <SectionHeading title="Kegiatan Mendatang" subtitle="Agenda resmi yang akan diselenggarakan dalam waktu dekat" />
             
             <div className="mt-4 md:mt-0 flex flex-wrap gap-2">
               <select 
                 value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-md shadow-sm outline-none focus:border-primary-blue text-sm cursor-pointer"
+                onChange={(e) => handleCategoryChange(e.target.value)}
+                className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-xl shadow-xs outline-none focus:border-primary-blue text-sm cursor-pointer"
               >
                 <option value="Semua Kategori">Semua Kategori</option>
                 <option value="Tender">Tender</option>
@@ -371,8 +390,8 @@ export default function AgendaPage() {
               </select>
               <select 
                 value={periodFilter}
-                onChange={(e) => setPeriodFilter(e.target.value)}
-                className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-md shadow-sm outline-none focus:border-primary-blue text-sm cursor-pointer"
+                onChange={(e) => handlePeriodChange(e.target.value)}
+                className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-xl shadow-xs outline-none focus:border-primary-blue text-sm cursor-pointer"
               >
                 <option value="Semua">Semua Jadwal</option>
                 <option value="Bulan Ini">Bulan Ini (September)</option>
@@ -381,8 +400,9 @@ export default function AgendaPage() {
             </div>
           </div>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-            {filteredAgendas.map((agenda, idx) => (
+          {/* 6 Cards Grid (2 Rows x 3 Columns) */}
+          <StaggerContainer key={currentPage} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            {paginatedAgendas.map((agenda, idx) => (
               <StaggerItem key={agenda.id || idx} className="h-full flex">
                 <AgendaCard 
                   {...agenda} 
@@ -405,6 +425,65 @@ export default function AgendaPage() {
           {filteredAgendas.length === 0 && (
             <div className="text-center py-12 bg-white rounded-2xl border border-slate-100 text-slate-400">
               <p className="text-sm font-medium">Tidak ada kegiatan yang sesuai dengan filter yang dipilih.</p>
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200/80 pt-6">
+              <p className="text-xs text-slate-500 font-medium">
+                Menampilkan <span className="font-bold text-primary-navy">{(currentPage - 1) * ITEMS_PER_PAGE + 1} - {Math.min(currentPage * ITEMS_PER_PAGE, filteredAgendas.length)}</span> dari <span className="font-bold text-primary-navy">{filteredAgendas.length}</span> kegiatan
+              </p>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => {
+                    setCurrentPage((prev) => Math.max(prev - 1, 1));
+                  }}
+                  disabled={currentPage === 1}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1 border transition-all ${
+                    currentPage === 1
+                      ? 'bg-slate-50 text-slate-300 border-slate-200 cursor-not-allowed'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-primary-blue shadow-xs'
+                  }`}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Sebelumnya</span>
+                </button>
+
+                {Array.from({ length: totalPages }).map((_, i) => {
+                  const pageNum = i + 1;
+                  const isActive = currentPage === pageNum;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-9 h-9 rounded-xl text-xs font-bold transition-all ${
+                        isActive
+                          ? 'bg-primary-navy text-white shadow-md shadow-blue-900/20 scale-105'
+                          : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={() => {
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                  }}
+                  disabled={currentPage === totalPages}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1 border transition-all ${
+                    currentPage === totalPages
+                      ? 'bg-slate-50 text-slate-300 border-slate-200 cursor-not-allowed'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-primary-blue shadow-xs'
+                  }`}
+                >
+                  <span>Selanjutnya</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           )}
         </section>
