@@ -622,7 +622,7 @@ export function Header() {
                     
                     <div className="p-3 bg-slate-50/90 border-t border-slate-100 flex items-center justify-between gap-2">
                       <Link 
-                        href="/informasi" 
+                        href="/informasi/pembaruan" 
                         onClick={() => setIsNotificationOpen(false)}
                         className="flex-1 py-2 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy to-primary-blue rounded-xl hover:shadow-md hover:-translate-y-0.5 transition-all"
                       >

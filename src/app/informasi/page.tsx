@@ -183,7 +183,7 @@ export default function InformasiPage() {
                 </div>
 
                 <div className="p-6 pt-2">
-                  <Link href="/informasi/peraturan" className="block text-center w-full py-3 bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl text-xs font-bold text-white transition-all">
+                  <Link href="/informasi/pembaruan" className="block text-center w-full py-3 bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl text-xs font-bold text-white transition-all">
                     Lihat Semua Pembaruan
                   </Link>
                 </div>
