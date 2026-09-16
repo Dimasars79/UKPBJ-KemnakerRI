@@ -25,57 +25,162 @@ interface SelectedAgendaModalData {
   description?: string;
 }
 
+// Robust helper to parse Indonesian / ISO / Standard date strings
+const parseAgendaDate = (dateStr: string): { day: number; month: number; year: number } | null => {
+  if (!dateStr) return null;
+  const cleaned = dateStr.trim();
+
+  // 1. ISO or standard format "YYYY-MM-DD"
+  if (/^\d{4}-\d{1,2}-\d{1,2}/.test(cleaned)) {
+    const parts = cleaned.split('-');
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // 0-indexed
+    const day = parseInt(parts[2], 10);
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+      return { day, month, year };
+    }
+  }
+
+  // 2. Format "DD/MM/YYYY" or "DD-MM-YYYY"
+  if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}/.test(cleaned)) {
+    const parts = cleaned.split(/[\/\-]/);
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+      return { day, month, year };
+    }
+  }
+
+  // 3. Textual Indonesian & English format e.g. "15 Sep 2026", "02 Oktober 2026"
+  const monthMap: Record<string, number> = {
+    jan: 0, januari: 0, january: 0,
+    feb: 1, februari: 1, february: 1,
+    mar: 2, maret: 2, march: 2,
+    apr: 3, april: 3,
+    mei: 4, may: 4,
+    jun: 5, juni: 5, june: 5,
+    jul: 6, juli: 6, july: 6,
+    agu: 7, ags: 7, agustus: 7, aug: 7, august: 7,
+    sep: 8, september: 8,
+    okt: 9, oktober: 9, oct: 9, october: 9,
+    nov: 10, november: 10,
+    des: 11, desember: 11, dec: 11, december: 11
+  };
+
+  const tokens = cleaned.split(/\s+/);
+  if (tokens.length >= 3) {
+    const day = parseInt(tokens[0], 10);
+    const monthKey = tokens[1].toLowerCase().replace(/[^a-z]/g, '');
+    const month = monthMap[monthKey] !== undefined ? monthMap[monthKey] : -1;
+    const year = parseInt(tokens[2], 10);
+
+    if (!isNaN(day) && month !== -1 && !isNaN(year)) {
+      return { day, month, year };
+    }
+  }
+
+  // 4. Native Date fallback
+  const parsed = new Date(cleaned);
+  if (!isNaN(parsed.getTime())) {
+    return {
+      day: parsed.getDate(),
+      month: parsed.getMonth(),
+      year: parsed.getFullYear()
+    };
+  }
+
+  return null;
+};
+
 export default function AgendaPage() {
   const { t } = useLanguage();
   const { agendaList } = useData();
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 1)); // September 2026
+  const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 1)); // Default: September 2026
   const [selectedDate, setSelectedDate] = useState<number | null>(15);
   const [selectedAgendaModal, setSelectedAgendaModal] = useState<SelectedAgendaModalData | null>(null);
   
-  // Build activities dynamically from agendaList
+  // Category & Period Filters for Upcoming Activities
+  const [categoryFilter, setCategoryFilter] = useState<string>('Semua Kategori');
+  const [periodFilter, setPeriodFilter] = useState<string>('Semua');
+
+  const monthNames = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ];
+
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+
+  // Build activities dynamically ONLY for the current active month and year
   const activities: Record<number, SelectedAgendaModalData[]> = {};
   agendaList.forEach((ag, idx) => {
-    // Extract day number from date string e.g. "15 Sep 2026"
-    const dayMatch = ag.date.match(/\d+/);
-    const dayNum = dayMatch ? parseInt(dayMatch[0], 10) : 15;
-    if (!activities[dayNum]) {
-      activities[dayNum] = [];
+    const parsed = parseAgendaDate(ag.date);
+    if (parsed && parsed.year === currentYear && parsed.month === currentMonth) {
+      if (!activities[parsed.day]) {
+        activities[parsed.day] = [];
+      }
+      activities[parsed.day].push({
+        id: ag.id || idx,
+        title: ag.title,
+        category: ag.category,
+        date: ag.date,
+        time: ag.time,
+        location: ag.location,
+        organizer: ag.organizer,
+        capacity: ag.capacity,
+        status: ag.status
+      });
     }
-    activities[dayNum].push({
-      id: ag.id || idx,
-      title: ag.title,
-      category: ag.category,
-      date: ag.date,
-      time: ag.time,
-      location: ag.location,
-      organizer: ag.organizer,
-      capacity: ag.capacity,
-      status: ag.status
-    });
   });
 
-  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
-  const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
-  const prevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-  const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  const prevMonth = () => {
+    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    setCurrentDate(newDate);
+    setSelectedDate(null);
+  };
 
+  const nextMonth = () => {
+    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    setCurrentDate(newDate);
+    setSelectedDate(null);
+  };
+
+  // Map dummyAgendas with parsed dates for filtering
   const dummyAgendas = agendaList.map((ag) => {
-    const parts = ag.date.split(' ');
+    const parsed = parseAgendaDate(ag.date);
+    const dayStr = parsed ? String(parsed.day).padStart(2, '0') : (ag.date.split(' ')[0] || '15');
+    const monthStr = parsed ? monthNames[parsed.month].slice(0, 3) : (ag.date.split(' ')[1] || 'Sep');
     return {
       id: ag.id,
       title: ag.title,
-      date: parts[0] || '15',
-      month: parts[1] || 'Sep',
+      date: dayStr,
+      month: monthStr,
       fullDate: ag.date,
       time: ag.time,
       location: ag.location,
       category: ag.category,
       organizer: ag.organizer,
       capacity: ag.capacity,
-      status: ag.status
+      status: ag.status,
+      parsedMonth: parsed ? parsed.month : 8,
+      parsedYear: parsed ? parsed.year : 2026
     };
+  });
+
+  // Filtered upcoming agendas
+  const filteredAgendas = dummyAgendas.filter((agenda) => {
+    const matchCategory = categoryFilter === 'Semua Kategori' || agenda.category === categoryFilter;
+    let matchPeriod = true;
+    if (periodFilter === 'Bulan Ini') {
+      matchPeriod = agenda.parsedMonth === 8 && agenda.parsedYear === 2026; // September 2026
+    } else if (periodFilter === 'Bulan Depan') {
+      matchPeriod = agenda.parsedMonth === 9 && agenda.parsedYear === 2026; // Oktober 2026
+    }
+    return matchCategory && matchPeriod;
   });
 
   return (
@@ -143,7 +248,7 @@ export default function AgendaPage() {
                 ))}
                 {Array.from({ length: daysInMonth }).map((_, i) => {
                   const day = i + 1;
-                  const hasActivity = activities[day];
+                  const hasActivity = activities[day] && activities[day].length > 0;
                   const isSelected = selectedDate === day;
                   return (
                     <button
@@ -182,7 +287,7 @@ export default function AgendaPage() {
               <div className="relative min-h-[250px]">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={selectedDate}
+                    key={`${currentDate.getFullYear()}-${currentDate.getMonth()}-${selectedDate}`}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -228,7 +333,12 @@ export default function AgendaPage() {
                         <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center">
                           <CalendarIcon className="w-8 h-8 text-slate-300" />
                         </div>
-                        <p className="font-medium text-sm">Tidak ada kegiatan pada tanggal ini.</p>
+                        <p className="font-medium text-sm">
+                          {selectedDate 
+                            ? `Tidak ada kegiatan pada ${selectedDate} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}.`
+                            : 'Pilih tanggal pada kalender untuk melihat rincian kegiatan.'
+                          }
+                        </p>
                       </div>
                     )}
                   </motion.div>
@@ -242,23 +352,34 @@ export default function AgendaPage() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-8">
             <SectionHeading title="Kegiatan Mendatang" subtitle="Agenda resmi yang akan diselenggarakan dalam waktu dekat" />
             
-            <div className="mt-4 md:mt-0 flex gap-2">
-              <select className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-md shadow-sm outline-none focus:border-primary-blue">
-                <option>Semua Kategori</option>
-                <option>Tender</option>
-                <option>Sosialisasi</option>
-                <option>Sertifikasi</option>
+            <div className="mt-4 md:mt-0 flex flex-wrap gap-2">
+              <select 
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-md shadow-sm outline-none focus:border-primary-blue text-sm cursor-pointer"
+              >
+                <option value="Semua Kategori">Semua Kategori</option>
+                <option value="Tender">Tender</option>
+                <option value="Bimtek">Bimtek</option>
+                <option value="Sosialisasi">Sosialisasi</option>
+                <option value="Sertifikasi">Sertifikasi</option>
+                <option value="Rapat">Rapat</option>
               </select>
-              <select className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-md shadow-sm outline-none focus:border-primary-blue">
-                <option>Bulan Ini</option>
-                <option>Bulan Depan</option>
+              <select 
+                value={periodFilter}
+                onChange={(e) => setPeriodFilter(e.target.value)}
+                className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-md shadow-sm outline-none focus:border-primary-blue text-sm cursor-pointer"
+              >
+                <option value="Semua">Semua Jadwal</option>
+                <option value="Bulan Ini">Bulan Ini (September)</option>
+                <option value="Bulan Depan">Bulan Depan (Oktober)</option>
               </select>
             </div>
           </div>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-            {dummyAgendas.map((agenda, idx) => (
-              <StaggerItem key={idx} className="h-full flex">
+            {filteredAgendas.map((agenda, idx) => (
+              <StaggerItem key={agenda.id || idx} className="h-full flex">
                 <AgendaCard 
                   {...agenda} 
                   onClick={() => setSelectedAgendaModal({
@@ -277,11 +398,11 @@ export default function AgendaPage() {
             ))}
           </StaggerContainer>
           
-          <div className="mt-12 text-center">
-            <button className="bg-white border border-slate-200 hover:border-primary-blue text-primary-navy font-bold py-3 px-8 rounded-md transition-colors shadow-sm">
-              Muat Lebih Banyak
-            </button>
-          </div>
+          {filteredAgendas.length === 0 && (
+            <div className="text-center py-12 bg-white rounded-2xl border border-slate-100 text-slate-400">
+              <p className="text-sm font-medium">Tidak ada kegiatan yang sesuai dengan filter yang dipilih.</p>
+            </div>
+          )}
         </section>
 
         {/* SIMPLE DETAIL POPUP MODAL */}

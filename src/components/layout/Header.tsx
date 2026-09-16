@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
-  Search, User, Globe, Eye, Menu, X, ChevronDown, ChevronRight, 
+  Search, User, Globe, Eye, ChevronDown, ChevronRight, 
   Bell, AlertTriangle, FileText, Package,
   Home, Briefcase, Calendar, Image as ImageIcon, BarChart3, 
   Building2, Scale, BookOpen, FileCheck, Award, ShieldCheck, 
