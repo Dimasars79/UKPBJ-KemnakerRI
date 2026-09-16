@@ -19,23 +19,82 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { useData } from '@/contexts/DataContext';
 
+// Helper function to parse agenda dates accurately for chronological sorting
+const parseAgendaDate = (dateStr: string): Date | null => {
+  if (!dateStr) return null;
+  const cleaned = dateStr.trim();
+
+  // 1. ISO format "YYYY-MM-DD"
+  if (/^\d{4}-\d{1,2}-\d{1,2}/.test(cleaned)) {
+    const parts = cleaned.split('-');
+    return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+  }
+
+  // 2. Format "DD/MM/YYYY" or "DD-MM-YYYY"
+  if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}/.test(cleaned)) {
+    const parts = cleaned.split(/[\/\-]/);
+    return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+  }
+
+  // 3. Textual Indonesian & English format e.g. "15 Sep 2026", "02 Oktober 2026"
+  const monthMap: Record<string, number> = {
+    jan: 0, januari: 0, january: 0,
+    feb: 1, februari: 1, february: 1,
+    mar: 2, maret: 2, march: 2,
+    apr: 3, april: 3,
+    mei: 4, may: 4,
+    jun: 5, juni: 5, june: 5,
+    jul: 6, juli: 6, july: 6,
+    agu: 7, ags: 7, agustus: 7, aug: 7, august: 7,
+    sep: 8, september: 8,
+    okt: 9, oktober: 9, oct: 9, october: 9,
+    nov: 10, november: 10,
+    des: 11, desember: 11, dec: 11, december: 11
+  };
+
+  const tokens = cleaned.split(/\s+/);
+  if (tokens.length >= 3) {
+    const day = parseInt(tokens[0], 10);
+    const monthKey = tokens[1].toLowerCase().replace(/[^a-z]/g, '');
+    const month = monthMap[monthKey] !== undefined ? monthMap[monthKey] : -1;
+    const year = parseInt(tokens[2], 10);
+
+    if (!isNaN(day) && month !== -1 && !isNaN(year)) {
+      return new Date(year, month, day);
+    }
+  }
+
+  const parsed = new Date(cleaned);
+  return isNaN(parsed.getTime()) ? null : parsed;
+};
+
 export default function Home() {
   const { t } = useLanguage();
   const { agendaList } = useData();
 
-  // Pick the most relevant active agenda (preferring one with a custom poster uploaded)
-  const latestAgenda = React.useMemo(() => {
-    return (
-      agendaList.find(
-        (a) =>
-          a.status !== 'Dibatalkan' &&
-          Boolean(a.imageUrl && a.imageUrl.trim() !== '' && a.imageUrl !== '/poster_kegiatan.jpg')
-      ) ||
-      agendaList.find((a) => a.status !== 'Dibatalkan') ||
-      agendaList[0] ||
-      null
+  // Dynamically sort and find the closest upcoming agenda (Jadwal Terdekat)
+  const sortedUpcomingAgendas = React.useMemo(() => {
+    const activeAgendas = agendaList.filter(
+      (a) => a.status !== 'Dibatalkan'
     );
+
+    const listToProcess = activeAgendas.length > 0 ? activeAgendas : agendaList;
+
+    const withParsed = listToProcess.map((item) => {
+      const d = parseAgendaDate(item.date);
+      return {
+        ...item,
+        parsedTime: d ? d.getTime() : Number.MAX_SAFE_INTEGER
+      };
+    });
+
+    // Sort ascending chronologically (closest upcoming date first)
+    return withParsed.sort((a, b) => a.parsedTime - b.parsedTime);
   }, [agendaList]);
+
+  // Pick the closest upcoming active agenda
+  const latestAgenda = sortedUpcomingAgendas[0] || null;
+  const nextAgendas = sortedUpcomingAgendas.slice(1, 3);
 
   return (
     <>
@@ -413,9 +472,36 @@ export default function Home() {
                     </div>
                   </StaggerItem>
                 </StaggerContainer>
-                <Link href="/agenda" className="inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-8 rounded-md transition-colors shadow-lg">
-                  {t('home.agenda_btn')} <ArrowRight className="w-5 h-5 ml-2" />
-                </Link>
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link href="/agenda" className="inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-8 rounded-xl transition-all shadow-lg hover:scale-102">
+                    {t('home.agenda_btn')} <ArrowRight className="w-5 h-5 ml-2" />
+                  </Link>
+                </div>
+
+                {nextAgendas && nextAgendas.length > 0 && (
+                  <div className="mt-8 pt-6 border-t border-white/10">
+                    <p className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
+                      Jadwal Kegiatan Berikutnya:
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      {nextAgendas.map((nextAg) => (
+                        <Link
+                          key={nextAg.id}
+                          href="/agenda"
+                          className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all text-xs group"
+                        >
+                          <span className="font-semibold text-slate-200 group-hover:text-accent-gold transition-colors truncate max-w-[260px] sm:max-w-xs">
+                            {nextAg.title}
+                          </span>
+                          <span className="text-[11px] text-accent-gold shrink-0 font-bold ml-2">
+                            {nextAg.date} &rarr;
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </FadeIn>
               <FadeIn direction="left" delay={0.2} className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 group max-w-lg mx-auto w-full bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
                 {/* Background ambient lighting */}
