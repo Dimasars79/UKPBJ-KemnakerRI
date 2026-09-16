@@ -15,7 +15,6 @@ import {
   AlertCircle,
   Download,
   ChevronRight,
-  Layers,
   Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -90,10 +89,6 @@ export function PengadaanSection() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
           <FadeIn direction="left">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-primary-navy text-xs font-bold tracking-wide uppercase mb-3">
-              <Layers className="w-3.5 h-3.5 text-accent-gold" />
-              <span>Satu Data Pengadaan</span>
-            </div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-primary-navy tracking-tight">
               Informasi & Paket Pengadaan
             </h2>

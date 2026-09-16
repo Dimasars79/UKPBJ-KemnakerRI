@@ -8,7 +8,6 @@ import {
   ArrowRight, 
   ChevronLeft, 
   ChevronRight, 
-  Newspaper, 
   Eye
 } from 'lucide-react';
 import { FadeIn } from '@/components/animations/FadeIn';
@@ -82,10 +81,6 @@ export function BeritaSection() {
         {/* Section Header with Carousel Navigation Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <FadeIn direction="left">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-primary-navy text-xs font-bold tracking-wide uppercase mb-2">
-              <Newspaper className="w-3.5 h-3.5 text-accent-gold" />
-              <span>Kabar & Publikasi</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-primary-navy tracking-tight">
               {t('home.news_title')}
             </h2>
