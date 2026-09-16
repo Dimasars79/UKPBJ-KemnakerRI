@@ -53,7 +53,7 @@ export const FloatingContact = () => {
                 </div>
               </a>
               <a 
-                href="tel:02152921236" 
+                href="tel:+628988180009" 
                 className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors group"
               >
                 <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center group-hover:bg-accent-gold transition-colors shrink-0">
@@ -61,7 +61,7 @@ export const FloatingContact = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="font-medium text-slate-700 group-hover:text-accent-gold transition-colors text-sm">Call Center</span>
-                  <span className="text-[11px] text-slate-400">021-52921236</span>
+                  <span className="text-[11px] text-slate-400">+62 898-8180-009</span>
                 </div>
               </a>
             </div>
