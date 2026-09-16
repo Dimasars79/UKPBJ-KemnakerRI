@@ -202,10 +202,10 @@ export default function InformasiPage() {
             
             {/* STATUS LAYANAN */}
             <FadeIn direction="up">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xl shadow-slate-200/70 backdrop-blur-md">
-                <div className="flex justify-between items-center mb-6">
+              <div className="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/80 shadow-xl shadow-slate-200/70 backdrop-blur-md">
+                <div className="flex justify-between items-center mb-4 sm:mb-6">
                   <div className="flex items-center space-x-2">
-                    <h2 className="text-lg sm:text-xl font-bold text-primary-navy tracking-tight">STATUS LAYANAN</h2>
+                    <h2 className="text-base sm:text-xl font-bold text-primary-navy tracking-tight">STATUS LAYANAN</h2>
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   </div>
                   <Link href="/layanan" className="text-xs sm:text-sm text-primary-navy hover:text-primary-blue flex items-center font-bold">
@@ -213,28 +213,28 @@ export default function InformasiPage() {
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 mb-4 sm:mb-6">
                   {serviceStatuses.map((service, idx) => (
-                    <div key={idx} className="flex items-center space-x-3.5 p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 hover:bg-white hover:border-blue-200 transition-colors">
-                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${service.color} shadow-2xs`}>
+                    <div key={idx} className="flex items-center space-x-3 p-2.5 sm:p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 hover:bg-white hover:border-blue-200 transition-colors">
+                      <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${service.color} shadow-2xs`}>
                         {service.icon}
                       </div>
-                      <div>
-                        <p className="text-xs sm:text-sm font-bold text-slate-800">{service.name}</p>
-                        <p className="text-[11px] font-extrabold text-emerald-600 mt-0.5 uppercase tracking-wide flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3" /> {service.status}
+                      <div className="min-w-0">
+                        <p className="text-xs sm:text-sm font-bold text-slate-800 truncate">{service.name}</p>
+                        <p className="text-[10px] sm:text-[11px] font-extrabold text-emerald-600 mt-0.5 uppercase tracking-wide flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3 shrink-0" /> {service.status}
                         </p>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-5 border-t border-slate-100 text-xs text-slate-500 gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 sm:pt-5 border-t border-slate-100 text-[11px] sm:text-xs text-slate-500 gap-1.5 sm:gap-2">
                   <div className="flex items-center text-emerald-700 font-bold">
-                    <CheckCircle2 className="w-4 h-4 mr-1.5" /> Semua layanan berjalan normal
+                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 shrink-0" /> Semua layanan normal
                   </div>
                   <div className="flex items-center">
-                    <Clock className="w-3.5 h-3.5 mr-1.5 text-slate-400" /> Terakhir diperbarui: 2 Sep 2026, 13:40 WIB
+                    <Clock className="w-3.5 h-3.5 mr-1.5 text-slate-400 shrink-0" /> Update: 2 Sep 2026, 13:40 WIB
                   </div>
                 </div>
               </div>
@@ -242,58 +242,58 @@ export default function InformasiPage() {
 
             {/* QUICK STATS ROW */}
             <FadeIn direction="up" delay={0.1}>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
                 {/* Regulasi */}
-                <Link href="/informasi/peraturan" className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
-                    <FileText className="w-5 h-5" />
+                <Link href="/informasi/peraturan" className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
+                    <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">{regulasiList.length}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{regulasiList.length}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Regulasi</p>
-                  <p className="text-[11px] text-slate-500 mb-3">Total Regulasi</p>
-                  <div className="mt-auto flex items-center text-xs font-bold text-primary-navy group-hover:text-primary-blue">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">Total Regulasi</p>
+                  <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
                     <span>Lihat Semua</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </div>
                 </Link>
 
                 {/* Agenda */}
-                <Link href="/agenda" className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
-                    <Calendar className="w-5 h-5" />
+                <Link href="/agenda" className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
+                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">{agendaList.length}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{agendaList.length}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Agenda</p>
-                  <p className="text-[11px] text-slate-500 mb-3">Agenda Mendatang</p>
-                  <div className="mt-auto flex items-center text-xs font-bold text-primary-navy group-hover:text-primary-blue">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">Jadwal PBJ</p>
+                  <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
                     <span>Lihat Semua</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </div>
                 </Link>
 
                 {/* Pengumuman */}
-                <Link href="/informasi/pemilu" className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
-                    <Megaphone className="w-5 h-5" />
+                <Link href="/informasi/pemilu" className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
+                    <Megaphone className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">{packagesList.length}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{packagesList.length}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Paket PBJ</p>
-                  <p className="text-[11px] text-slate-500 mb-3">Paket Terdaftar</p>
-                  <div className="mt-auto flex items-center text-xs font-bold text-primary-navy group-hover:text-primary-blue">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">Paket Terdaftar</p>
+                  <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
                     <span>Lihat Semua</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </div>
                 </Link>
 
                 {/* Berita */}
-                <Link href="/informasi" className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-4 transition-colors shadow-2xs">
-                    <Newspaper className="w-5 h-5" />
+                <Link href="/informasi" className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
+                    <Newspaper className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-2xl font-black text-primary-navy mb-0.5">{publishedNews.length}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{publishedNews.length}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Berita</p>
-                  <p className="text-[11px] text-slate-500 mb-3">Berita Publikasi</p>
-                  <div className="mt-auto flex items-center text-xs font-bold text-primary-navy group-hover:text-primary-blue">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">Publikasi Warta</p>
+                  <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
                     <span>Lihat Semua</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </div>
@@ -303,47 +303,47 @@ export default function InformasiPage() {
 
             {/* QUICK ACTIONS ROW */}
             <FadeIn direction="up" delay={0.2}>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 mt-auto">
                 
-                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-3 transition-colors shadow-2xs">
-                    <Bookmark className="w-5 h-5" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
+                    <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-1">Simpan Info</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-3">Simpan regulasi penting untuk dibaca nanti.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">Simpan Info</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">Simpan regulasi penting.</p>
                   <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
                     Tersimpan
                   </button>
                 </div>
 
-                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-3 transition-colors shadow-2xs">
-                    <QrCode className="w-5 h-5" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
+                    <QrCode className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-1">QR Code</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-3">Akses cepat dokumen melalui QR Code.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">QR Code</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">Pindai dokumen digital.</p>
                   <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
                     Pindai
                   </button>
                 </div>
 
-                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-3 transition-colors shadow-2xs">
-                    <Share2 className="w-5 h-5" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
+                    <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-1">Bagikan</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-3">Bagikan info ke rekan kerja secara instan.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">Bagikan</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">Bagikan ke rekan kerja.</p>
                   <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
                     Bagikan
                   </button>
                 </div>
 
-                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-3 transition-colors shadow-2xs">
-                    <Printer className="w-5 h-5" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
+                    <Printer className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-1">Cetak PDF</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-3">Cetak halaman atau simpan dokumen PDF.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">Cetak PDF</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">Simpan file lembar cetak.</p>
                   <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
                     Cetak
                   </button>

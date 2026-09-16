@@ -57,37 +57,48 @@ export default function MonitoringPage() {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
           {/* Stat Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-6 mb-8 sm:mb-12">
             {performanceStats.map((stat, idx) => (
-              <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex items-center">
-                <div className="bg-gradient-to-br from-primary-blue to-blue-600 rounded-xl p-4 mr-6 shadow-md">
-                  {stat.icon}
+              <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white rounded-2xl shadow-lg border border-slate-100 p-4 sm:p-6 flex items-center gap-3.5 sm:gap-5">
+                <div className="bg-gradient-to-br from-primary-blue to-blue-600 rounded-xl p-3 sm:p-4 shadow-md shrink-0">
+                  <div className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center">
+                    {stat.icon}
+                  </div>
                 </div>
-                <div>
-                  <p className="text-slate-500 text-sm font-medium mb-1">{stat.title}</p>
-                  <h3 className="text-2xl md:text-3xl font-bold text-primary-navy mb-1">{stat.value}</h3>
-                  <p className="text-green-600 text-xs font-bold">{stat.trend}</p>
+                <div className="min-w-0">
+                  <p className="text-slate-500 text-xs sm:text-sm font-medium mb-0.5 sm:mb-1 truncate">{stat.title}</p>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary-navy mb-0.5 sm:mb-1 truncate">{stat.value}</h3>
+                  <p className="text-green-600 text-[11px] sm:text-xs font-bold truncate">{stat.trend}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8">
             <FadeIn direction="up" delay={0.1}>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
-                <h3 className="text-lg font-bold text-slate-700 mb-6 border-b pb-4">Tren Penyelesaian Paket</h3>
+              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
+                <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                  <span>Tren Penyelesaian Paket</span>
+                </h3>
                 <PerformanceChart />
               </div>
             </FadeIn>
             <FadeIn direction="up" delay={0.2}>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
-                <h3 className="text-lg font-bold text-slate-700 mb-6 border-b pb-4">Paket per Kategori</h3>
+              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
+                <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span>Paket per Kategori</span>
+                </h3>
                 <EfficiencyChart />
               </div>
             </FadeIn>
             <FadeIn direction="up" delay={0.3}>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
-                <h3 className="text-lg font-bold text-slate-700 mb-6 border-b pb-4">Target vs Realisasi</h3>
+              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
+                <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  <span>Target vs Realisasi</span>
+                </h3>
                 <CategoryChart />
               </div>
             </FadeIn>

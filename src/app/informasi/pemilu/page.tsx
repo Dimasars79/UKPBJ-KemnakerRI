@@ -364,7 +364,7 @@ export default function TenderPemiluPage() {
 
         {/* MAIN DATA TABLE SECTION (Matching screenshot layout adapted to government theme) */}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-8">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-slate-200/80">
             
             {/* Table Header Controls */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-100">

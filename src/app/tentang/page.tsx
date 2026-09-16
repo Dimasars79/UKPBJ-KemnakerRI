@@ -55,26 +55,26 @@ export default function TentangPage() {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-16">
           {/* VISI & MISI SECTION */}
-          <div id="visi-misi" className="scroll-mt-32 grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-            <FadeIn direction="right" className="bg-white p-10 rounded-2xl shadow-lg border-t-4 border-t-primary-blue">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-primary-blue font-bold">
+          <div id="visi-misi" className="scroll-mt-32 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 mb-12 sm:mb-20">
+            <FadeIn direction="right" className="bg-white p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-lg border-t-4 border-t-primary-blue">
+              <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center text-primary-blue font-bold shrink-0">
                   <Target className="w-5 h-5 text-primary-blue" />
                 </div>
-                <h2 className="text-2xl font-bold text-primary-navy">Visi</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-primary-navy">Visi</h2>
               </div>
-              <p className="text-slate-600 text-lg leading-relaxed">
+              <p className="text-slate-600 text-sm sm:text-lg leading-relaxed">
                 &quot;Menjadi Unit Kerja Pengadaan Barang/Jasa Pemerintah yang Profesional, Modern, dan Berintegritas Tinggi untuk Mewujudkan Pengadaan yang Kredibel dan Akuntabel.&quot;
               </p>
             </FadeIn>
-            <FadeIn direction="left" className="bg-white p-10 rounded-2xl shadow-lg border-t-4 border-t-accent-gold">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-accent-gold font-bold">
+            <FadeIn direction="left" className="bg-white p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-lg border-t-4 border-t-accent-gold">
+              <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 flex items-center justify-center text-accent-gold font-bold shrink-0">
                   <Compass className="w-5 h-5 text-accent-gold" />
                 </div>
-                <h2 className="text-2xl font-bold text-primary-navy">Misi</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-primary-navy">Misi</h2>
               </div>
-              <ul className="text-slate-600 space-y-3 list-disc pl-5">
+              <ul className="text-slate-600 text-xs sm:text-base space-y-2 sm:space-y-3 list-disc pl-5">
                 <li>Meningkatkan kualitas sumber daya manusia pengadaan yang berintegritas.</li>
                 <li>Mewujudkan sistem pengadaan yang transparan dan terintegrasi berbasis teknologi informasi.</li>
                 <li>Memberikan pelayanan prima kepada seluruh pemangku kepentingan dan penyedia.</li>
@@ -84,16 +84,16 @@ export default function TentangPage() {
           </div>
 
           {/* MAKLUMAT PELAYANAN SECTION */}
-          <div id="maklumat" className="scroll-mt-32 mb-20">
+          <div id="maklumat" className="scroll-mt-32 mb-12 sm:mb-20">
             <FadeIn direction="up">
-              <div className="bg-gradient-to-br from-[#0B1D3A] via-[#102A54] to-[#0A1830] rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden border border-white/10">
+              <div className="bg-gradient-to-br from-[#0B1D3A] via-[#102A54] to-[#0A1830] rounded-3xl p-6 sm:p-12 text-white shadow-xl relative overflow-hidden border border-white/10">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-accent-gold/10 rounded-full blur-[100px] pointer-events-none" />
                 <div className="max-w-3xl mx-auto text-center relative z-10">
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-4">
+                  <h3 className="text-xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-3 sm:mb-4">
                     Maklumat Pelayanan UKPBJ Kemnaker RI
                   </h3>
-                  <div className="w-24 h-1 bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto mb-6" />
-                  <blockquote className="text-slate-200 text-base sm:text-lg italic leading-relaxed font-medium">
+                  <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto mb-4 sm:mb-6" />
+                  <blockquote className="text-slate-200 text-xs sm:text-lg italic leading-relaxed font-medium">
                     &quot;Dengan ini, kami pimpinan dan seluruh jajaran Unit Kerja Pengadaan Barang/Jasa Kementerian Ketenagakerjaan RI menyatakan sanggup menyelenggarakan pelayanan pengadaan sesuai standar pelayanan yang telah ditetapkan, dan apabila tidak menepati janji ini, kami siap menerima sanksi sesuai peraturan perundang-undangan yang berlaku.&quot;
                   </blockquote>
                 </div>
@@ -102,21 +102,21 @@ export default function TentangPage() {
           </div>
 
           <SectionHeading title="Nilai-Nilai Dasar" subtitle="Prinsip yang kami pegang teguh dalam setiap pelaksanaan tugas" />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12 mb-20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mt-8 sm:mt-12 mb-12 sm:mb-20">
             {values.map((val, idx) => (
-              <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 text-center group hover:shadow-xl transition-all duration-300">
-                <div className="w-16 h-16 bg-blue-50 text-primary-blue rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary-blue group-hover:text-white transition-colors duration-300">
+              <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-slate-100 text-center group hover:shadow-xl transition-all duration-300">
+                <div className="w-11 h-11 sm:w-16 sm:h-16 bg-blue-50 text-primary-blue rounded-xl sm:rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-6 group-hover:bg-primary-blue group-hover:text-white transition-colors duration-300 shrink-0 shadow-2xs">
                   {val.icon}
                 </div>
-                <h3 className="font-bold text-lg text-primary-navy mb-3">{val.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{val.desc}</p>
+                <h3 className="font-bold text-xs sm:text-lg text-primary-navy mb-1 sm:mb-3">{val.title}</h3>
+                <p className="text-[11px] sm:text-sm text-slate-500 leading-relaxed line-clamp-3 sm:line-clamp-none">{val.desc}</p>
               </FadeIn>
             ))}
           </div>
           
-          <div className="bg-white p-10 rounded-2xl shadow-sm border border-slate-100 mb-20">
+          <div className="bg-white p-5 sm:p-10 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-100 mb-12 sm:mb-20 overflow-hidden">
              <SectionHeading title="Struktur Organisasi" subtitle="Bagan struktur kepengurusan UKPBJ" />
-             <div className="mt-8">
+             <div className="mt-6 sm:mt-8 overflow-x-auto">
                <OrganizationChart />
              </div>
           </div>

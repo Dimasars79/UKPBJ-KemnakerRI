@@ -457,7 +457,7 @@ export default function PerizinanPage() {
                     <div
                       key={guide.id}
                       onClick={() => setSelectedGuide(guide)}
-                      className="bg-white hover:bg-slate-50/80 rounded-2xl p-5 border border-slate-200/80 hover:border-slate-300 shadow-2xs hover:shadow-sm transition-all duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                      className="bg-white hover:bg-slate-50/80 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-slate-200/80 hover:border-slate-300 shadow-2xs hover:shadow-sm transition-all duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 group"
                     >
                       <div className="flex-grow">
                         <div className="flex items-center gap-2 mb-2">

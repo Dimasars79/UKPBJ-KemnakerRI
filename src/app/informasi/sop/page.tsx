@@ -241,7 +241,7 @@ export default function SOPPage() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.98 }}
                         transition={{ duration: 0.25, delay: idx * 0.05 }}
-                        className="bg-white rounded-2xl p-6 sm:p-7 shadow-xs border border-slate-200/80 hover:shadow-md hover:border-slate-300 transition-all duration-300 group"
+                        className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-7 shadow-xs border border-slate-200/80 hover:shadow-md hover:border-slate-300 transition-all duration-300 group"
                       >
                         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                           <div className="flex-1 min-w-0">

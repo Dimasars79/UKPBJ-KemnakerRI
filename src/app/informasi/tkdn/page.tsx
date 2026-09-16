@@ -326,18 +326,18 @@ export default function TKDNPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
             {serviceCards.map((card, idx) => (
               <a
                 key={idx}
                 href={card.href}
                 target={card.href.startsWith('http') ? '_blank' : '_self'}
                 rel="noopener noreferrer"
-                className="bg-white rounded-2xl p-6 shadow-xs border border-slate-200/80 hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col justify-between group"
+                className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xs border border-slate-200/80 hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-primary-navy group-hover:text-white transition-colors shadow-2xs">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-primary-navy group-hover:text-white transition-colors shadow-2xs">
                       {card.icon}
                     </div>
                     <span className="text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">
@@ -345,7 +345,7 @@ export default function TKDNPage() {
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-primary-blue transition-colors mb-2">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-primary-blue transition-colors mb-1.5 sm:mb-2">
                     {card.title}
                   </h3>
                   <p className="text-xs text-slate-500 leading-relaxed">
@@ -353,7 +353,7 @@ export default function TKDNPage() {
                   </p>
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-primary-navy group-hover:text-primary-blue">
+                <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-primary-navy group-hover:text-primary-blue">
                   <span>Akses Menu</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </div>
@@ -363,8 +363,8 @@ export default function TKDNPage() {
         </section>
 
         {/* FAQ ACCORDION SECTION */}
-        <section id="faq" className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl mt-20 scroll-mt-28">
-          <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-slate-200/80">
+        <section id="faq" className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl mt-12 sm:mt-20 scroll-mt-28">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-sm border border-slate-200/80">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-primary-navy text-accent-gold flex items-center justify-center font-bold">
                 <HelpCircle className="w-5 h-5" />
