@@ -149,11 +149,12 @@ export default function AgendaPage() {
     setSelectedDate(null);
   };
 
-  // Map dummyAgendas with parsed dates for filtering
+  // Map dummyAgendas with parsed dates for chronological sorting & filtering
   const dummyAgendas = agendaList.map((ag) => {
     const parsed = parseAgendaDate(ag.date);
     const dayStr = parsed ? String(parsed.day).padStart(2, '0') : (ag.date.split(' ')[0] || '15');
     const monthStr = parsed ? monthNames[parsed.month].slice(0, 3) : (ag.date.split(' ')[1] || 'Sep');
+    const timestamp = parsed ? new Date(parsed.year, parsed.month, parsed.day).getTime() : Number.MAX_SAFE_INTEGER;
     return {
       id: ag.id,
       title: ag.title,
@@ -167,21 +168,24 @@ export default function AgendaPage() {
       capacity: ag.capacity,
       status: ag.status,
       parsedMonth: parsed ? parsed.month : 8,
-      parsedYear: parsed ? parsed.year : 2026
+      parsedYear: parsed ? parsed.year : 2026,
+      parsedTimestamp: timestamp
     };
   });
 
-  // Filtered upcoming agendas
-  const filteredAgendas = dummyAgendas.filter((agenda) => {
-    const matchCategory = categoryFilter === 'Semua Kategori' || agenda.category === categoryFilter;
-    let matchPeriod = true;
-    if (periodFilter === 'Bulan Ini') {
-      matchPeriod = agenda.parsedMonth === 8 && agenda.parsedYear === 2026; // September 2026
-    } else if (periodFilter === 'Bulan Depan') {
-      matchPeriod = agenda.parsedMonth === 9 && agenda.parsedYear === 2026; // Oktober 2026
-    }
-    return matchCategory && matchPeriod;
-  });
+  // Filtered upcoming agendas sorted chronologically from nearest/closest date
+  const filteredAgendas = dummyAgendas
+    .filter((agenda) => {
+      const matchCategory = categoryFilter === 'Semua Kategori' || agenda.category === categoryFilter;
+      let matchPeriod = true;
+      if (periodFilter === 'Bulan Ini') {
+        matchPeriod = agenda.parsedMonth === 8 && agenda.parsedYear === 2026; // September 2026
+      } else if (periodFilter === 'Bulan Depan') {
+        matchPeriod = agenda.parsedMonth === 9 && agenda.parsedYear === 2026; // Oktober 2026
+      }
+      return matchCategory && matchPeriod;
+    })
+    .sort((a, b) => a.parsedTimestamp - b.parsedTimestamp);
 
   return (
     <>
