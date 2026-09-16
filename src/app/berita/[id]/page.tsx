@@ -10,7 +10,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { useData, NewsItem } from '@/contexts/DataContext';
 import { 
   Calendar, Eye, User, ArrowLeft, ArrowRight, 
-  ChevronRight, Building2, CheckCircle2, Clock, Copy, 
+  ChevronRight, Building2, Copy, 
   MessageCircle, Printer, BookOpen, AlertCircle, Sparkles
 } from 'lucide-react';
 
@@ -117,10 +117,6 @@ export default function BeritaDetailPage() {
     );
   }
 
-  // Calculate approximate reading time (based on 180 words/min)
-  const totalWords = (currentNews.content || '').split(/\s+/).length + (currentNews.excerpt || '').split(/\s+/).length;
-  const readingTimeMin = Math.max(1, Math.ceil(totalWords / 150));
-
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
       <Header />
@@ -143,14 +139,10 @@ export default function BeritaDetailPage() {
             </div>
 
             <FadeIn direction="up">
-              {/* Category & Verified Badge */}
+              {/* Category Badge */}
               <div className="flex flex-wrap items-center gap-2.5 mb-4">
                 <span className={`px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm border ${getCategoryBadgeColor(currentNews.category)}`}>
                   {currentNews.category}
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Warta Resmi Terverifikasi</span>
                 </span>
               </div>
 
@@ -159,7 +151,7 @@ export default function BeritaDetailPage() {
                 {currentNews.title}
               </h1>
 
-              {/* Author, Date, Views, & Reading Time Meta Bar */}
+              {/* Author, Date, Views Meta Bar */}
               <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/10 text-xs text-slate-300 font-medium">
                 <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                   <div className="flex items-center gap-2">
@@ -172,11 +164,6 @@ export default function BeritaDetailPage() {
                   <div className="flex items-center gap-1.5 text-slate-400">
                     <Calendar className="w-3.5 h-3.5 text-amber-400" />
                     <span>{currentNews.date}</span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-slate-400">
-                    <Clock className="w-3.5 h-3.5 text-blue-400" />
-                    <span>± {readingTimeMin} Menit Baca</span>
                   </div>
 
                   {currentNews.views > 0 && (
