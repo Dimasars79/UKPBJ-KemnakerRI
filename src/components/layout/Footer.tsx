@@ -51,7 +51,7 @@ export function Footer() {
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
               <li><Link href="/#pengadaan" className="hover:text-accent-gold transition-colors">Tender & Seleksi</Link></li>
               <li><Link href="/layanan" className="hover:text-accent-gold transition-colors">LPSE Kemnaker</Link></li>
-              <li><Link href="/informasi/clearing-house" className="hover:text-accent-gold transition-colors">Clearing House PBJ</Link></li>
+              <li><Link href="/berita" className="hover:text-accent-gold transition-colors">Layanan Berita PBJ</Link></li>
               <li><Link href="/informasi/sertifikat-pbj" className="hover:text-accent-gold transition-colors">Sertifikasi & Bimtek</Link></li>
               <li><Link href="/layanan" className="hover:text-accent-gold transition-colors">Layanan Pengaduan</Link></li>
             </ul>

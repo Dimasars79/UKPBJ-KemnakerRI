@@ -8,8 +8,8 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import {
-  Monitor, FileText, HelpCircle, ShieldCheck, Zap,
-  MessageSquare, Clock, Building2, Mail
+  Monitor, FileText, HelpCircle, Zap,
+  MessageSquare, Clock, Building2, Mail, Newspaper
 } from 'lucide-react';
 
 export default function LayananPage() {
@@ -35,10 +35,10 @@ export default function LayananPage() {
       href: "https://wa.me/628988180009?text=Halo%20Helpdesk%20UKPBJ%20Kemnaker%2C%20saya%20ingin%20menyampaikan%20laporan%20atau%20pengaduan%20terkait%20layanan%20pengadaan."
     },
     {
-      title: "Clearing House",
-      description: "Portal konsultasi advokasi hukum, penyelesaian sengketa, mitigasi risiko, dan mediasi permasalahan PBJ.",
-      icon: ShieldCheck,
-      href: "/informasi/clearing-house"
+      title: "Layanan Berita",
+      description: "Pusat warta terkini, siaran pers, pengumuman pemenang lelang, dan publikasi resmi pengadaan barang/jasa.",
+      icon: Newspaper,
+      href: "/berita"
     }
   ];
 

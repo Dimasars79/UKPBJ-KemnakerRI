@@ -8,7 +8,8 @@ import {
   Bell, AlertTriangle, FileText, Package,
   Home, Briefcase, Calendar, Image as ImageIcon, BarChart3, 
   Building2, Scale, BookOpen, FileCheck, Award, ShieldCheck, 
-  FileSpreadsheet, Vote, Gavel, Target, ScrollText, HelpCircle
+  FileSpreadsheet, Vote, Target, ScrollText, HelpCircle,
+  Newspaper
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -205,7 +206,7 @@ export function Header() {
     { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi/tkdn', icon: <ShieldCheck className="w-4 h-4" />, desc: 'Tingkat Komponen Dalam Negeri' },
     { label: 'Panduan Perizinan/Usaha', href: '/informasi/perizinan', icon: <FileSpreadsheet className="w-4 h-4" />, desc: 'Legalitas & izin usaha penyedia' },
     { label: 'Tender/Seleksi Pemilu', href: '/informasi/pemilu', icon: <Vote className="w-4 h-4" />, desc: 'Paket tender & seleksi khusus' },
-    { label: 'Clearing House', href: '/informasi/clearing-house', icon: <Gavel className="w-4 h-4" />, desc: 'Konsultasi & penyelesaian PBJ' },
+    { label: 'Layanan Berita', href: '/berita', icon: <Newspaper className="w-4 h-4" />, desc: 'Warta terkini & siaran pers PBJ' },
   ];
 
   const aboutSubmenu = [
