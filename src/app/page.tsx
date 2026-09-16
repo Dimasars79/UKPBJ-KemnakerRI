@@ -158,102 +158,105 @@ export default function Home() {
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20 mb-8">
           <FadeIn direction="up" delay={0.2}>
             <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(10,35,66,0.12)] border border-slate-100 p-3 sm:p-4 lg:p-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 lg:gap-0 items-stretch">
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3 lg:gap-0 items-stretch">
                 
                 {/* 1. Transparan */}
                 <Link 
                   href="/informasi/pemilu" 
-                  className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
+                  className="p-3 sm:p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 border border-slate-100 lg:border-0 lg:border-r lg:border-slate-100 bg-slate-50/30 lg:bg-transparent"
                 >
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                      <FileText className="w-5 h-5" />
+                  <div className="flex flex-col sm:flex-row items-start gap-2.5 sm:gap-3.5">
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">Transparan</h4>
-                      <p className="text-slate-500 text-xs mt-1 leading-relaxed">Informasi terbuka dan dapat diakses oleh semua.</p>
+                      <h4 className="font-bold text-slate-900 text-xs sm:text-sm lg:text-base group-hover:text-blue-600 transition-colors">Transparan</h4>
+                      <p className="text-slate-500 text-[10px] sm:text-xs mt-0.5 sm:mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">Informasi terbuka dan dapat diakses oleh semua.</p>
                     </div>
                   </div>
-                  <div className="mt-4 flex items-center text-blue-600">
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  <div className="mt-2.5 sm:mt-4 flex items-center text-blue-600">
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
                   </div>
                 </Link>
 
                 {/* 2. Profesional */}
                 <Link 
                   href="/tentang" 
-                  className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
+                  className="p-3 sm:p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 border border-slate-100 lg:border-0 lg:border-r lg:border-slate-100 bg-slate-50/30 lg:bg-transparent"
                 >
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                      <Users className="w-5 h-5" />
+                  <div className="flex flex-col sm:flex-row items-start gap-2.5 sm:gap-3.5">
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <Users className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">Profesional</h4>
-                      <p className="text-slate-500 text-xs mt-1 leading-relaxed">Dikelola oleh SDM yang kompeten dan berdedikasi.</p>
+                      <h4 className="font-bold text-slate-900 text-xs sm:text-sm lg:text-base group-hover:text-blue-600 transition-colors">Profesional</h4>
+                      <p className="text-slate-500 text-[10px] sm:text-xs mt-0.5 sm:mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">Dikelola oleh SDM yang kompeten dan berdedikasi.</p>
                     </div>
                   </div>
-                  <div className="mt-4 flex items-center text-blue-600">
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  <div className="mt-2.5 sm:mt-4 flex items-center text-blue-600">
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
                   </div>
                 </Link>
 
                 {/* 3. Akuntabel */}
                 <Link 
                   href="/monitoring" 
-                  className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
+                  className="p-3 sm:p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 border border-slate-100 lg:border-0 lg:border-r lg:border-slate-100 bg-slate-50/30 lg:bg-transparent"
                 >
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                      <TrendingUp className="w-5 h-5" />
+                  <div className="flex flex-col sm:flex-row items-start gap-2.5 sm:gap-3.5">
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">Akuntabel</h4>
-                      <p className="text-slate-500 text-xs mt-1 leading-relaxed">Setiap proses dapat dipertanggungjawabkan.</p>
+                      <h4 className="font-bold text-slate-900 text-xs sm:text-sm lg:text-base group-hover:text-blue-600 transition-colors">Akuntabel</h4>
+                      <p className="text-slate-500 text-[10px] sm:text-xs mt-0.5 sm:mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">Setiap proses dapat dipertanggungjawabkan.</p>
                     </div>
                   </div>
-                  <div className="mt-4 flex items-center text-blue-600">
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  <div className="mt-2.5 sm:mt-4 flex items-center text-blue-600">
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
                   </div>
                 </Link>
 
                 {/* 4. Berintegritas */}
                 <Link 
                   href="/tentang#visi-misi" 
-                  className="p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 lg:border-r lg:border-slate-100"
+                  className="p-3 sm:p-4 lg:p-5 flex flex-col justify-between group hover:bg-slate-50/80 rounded-2xl transition-all duration-300 border border-slate-100 lg:border-0 lg:border-r lg:border-slate-100 bg-slate-50/30 lg:bg-transparent"
                 >
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                      <ShieldCheck className="w-5 h-5" />
+                  <div className="flex flex-col sm:flex-row items-start gap-2.5 sm:gap-3.5">
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">Berintegritas</h4>
-                      <p className="text-slate-500 text-xs mt-1 leading-relaxed">Menjunjung tinggi nilai etika, moralitas, dan keadilan.</p>
+                      <h4 className="font-bold text-slate-900 text-xs sm:text-sm lg:text-base group-hover:text-blue-600 transition-colors">Berintegritas</h4>
+                      <p className="text-slate-500 text-[10px] sm:text-xs mt-0.5 sm:mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">Menjunjung tinggi nilai etika, moralitas, dan keadilan.</p>
                     </div>
                   </div>
-                  <div className="mt-4 flex items-center text-blue-600">
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  <div className="mt-2.5 sm:mt-4 flex items-center text-blue-600">
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
                   </div>
                 </Link>
 
-                {/* 5. Navy CTA Card */}
+                {/* 5. Navy CTA Card (Full width on mobile 2-col layout) */}
                 <Link 
                   href="/layanan" 
-                  className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0B1E3D] via-[#091833] to-[#040C1A] p-4 lg:p-5 text-white flex flex-col justify-between shadow-lg group hover:shadow-2xl hover:scale-[1.01] transition-all duration-300"
+                  className="col-span-2 lg:col-span-1 relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0B1E3D] via-[#091833] to-[#040C1A] p-4 lg:p-5 text-white flex flex-col justify-between shadow-lg group hover:shadow-2xl hover:scale-[1.01] transition-all duration-300"
                 >
                   {/* Subtle Grid / Glow */}
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
                   <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-primary-blue/20 rounded-full blur-xl pointer-events-none" />
                   
                   <div className="relative z-10">
-                    <div className="w-10 h-0.5 bg-accent-gold rounded-full mb-3" />
+                    <div className="w-10 h-0.5 bg-accent-gold rounded-full mb-2 sm:mb-3" />
                     <p className="font-bold text-xs sm:text-sm text-white leading-snug">
                       Dukung Pengadaan yang Lebih Baik untuk Ketenagakerjaan Indonesia
                     </p>
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between relative z-10">
-                    <ArrowRight className="w-4 h-4 text-accent-gold group-hover:translate-x-1 transition-transform duration-300" />
+                  <div className="mt-3 sm:mt-4 flex items-center justify-between relative z-10">
+                    <span className="text-[11px] font-bold text-accent-gold group-hover:underline flex items-center gap-1">
+                      <span>Jelajahi Layanan</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
+                    </span>
                     <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center text-white/80 group-hover:border-accent-gold group-hover:text-accent-gold transition-colors">
                       <ArrowRight className="w-3.5 h-3.5" />
                     </div>
@@ -331,7 +334,7 @@ export default function Home() {
         </section>
 
         {/* 2.5 Performance Dashboard (ZEBRA STRIPING: DARK MODE) */}
-        <section className="py-24 relative overflow-hidden bg-[#0a2342] border-y border-white/10" id="kinerja">
+        <section className="py-14 sm:py-24 relative overflow-hidden bg-[#0a2342] border-y border-white/10" id="kinerja">
           {/* Subtle overlay grid for dark mode */}
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] pointer-events-none" />
           
@@ -339,7 +342,7 @@ export default function Home() {
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary-blue/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 sm:mb-10 gap-4 sm:gap-6">
               <FadeIn direction="left" className="mb-2 md:mb-0">
                 <div className="inline-block relative">
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 relative z-10">
@@ -347,80 +350,100 @@ export default function Home() {
                   </h2>
                   <div className="absolute -bottom-2 left-0 w-1/3 h-1 bg-accent-gold rounded-full" />
                 </div>
-                <p className="text-slate-300 max-w-2xl mt-6">
+                <p className="text-slate-300 max-w-2xl mt-4 sm:mt-6 text-xs sm:text-base leading-relaxed">
                   Indikator Kinerja Pengadaan Barang/Jasa UKPBJ Kementerian Ketenagakerjaan
                 </p>
               </FadeIn>
               
               {/* Year Dropdown */}
               <FadeIn direction="right">
-                <div className="relative group">
-                  <select className="appearance-none bg-white/5 backdrop-blur-md border border-white/10 text-white font-medium text-base rounded-full px-6 py-2.5 pr-12 focus:outline-none focus:border-accent-gold/40 focus:ring-2 focus:ring-accent-gold/20 hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer shadow-sm">
+                <div className="relative group self-start md:self-auto">
+                  <select className="appearance-none bg-white/5 backdrop-blur-md border border-white/10 text-white font-medium text-xs sm:text-base rounded-full px-4 sm:px-6 py-2 sm:py-2.5 pr-9 sm:pr-12 focus:outline-none focus:border-accent-gold/40 focus:ring-2 focus:ring-accent-gold/20 hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer shadow-sm">
                     <option value="2026" className="text-primary-navy">Tahun 2026</option>
                     <option value="2025" className="text-primary-navy">Tahun 2025</option>
                     <option value="2024" className="text-primary-navy">Tahun 2024</option>
                   </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white pointer-events-none group-hover:text-accent-gold transition-colors" />
+                  <ChevronDown className="absolute right-3.5 sm:right-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-white pointer-events-none group-hover:text-accent-gold transition-colors" />
                 </div>
               </FadeIn>
             </div>
             
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {/* 4 Stat Cards - 2x2 Matrix on Mobile, 4 Cols on Desktop */}
+            <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 mb-8 sm:mb-12">
               <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-accent-gold/50 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)] transition-all duration-300">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-accent-gold/50 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)] transition-all duration-300">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:bg-accent-gold/20 transition-colors">
-                    <Clock className="w-6 h-6 text-accent-gold" />
+                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-2.5 sm:mb-4 group-hover:bg-accent-gold/20 transition-colors">
+                    <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-accent-gold" />
                   </div>
-                  <h4 className="text-lg font-bold text-slate-200 mb-1 relative z-10">Waktu</h4>
-                  <p className="text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-accent-gold transition-colors">95%</p>
-                  <p className="text-xs text-slate-400 mt-2 relative z-10">Ketepatan waktu proses</p>
+                  <h4 className="text-xs sm:text-base font-bold text-slate-200 mb-0.5 sm:mb-1 relative z-10">Waktu</h4>
+                  <p className="text-xl sm:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-accent-gold transition-colors">95%</p>
+                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 sm:mt-2 relative z-10 line-clamp-1 sm:line-clamp-none">Ketepatan waktu proses</p>
                 </div>
               </StaggerItem>
               
               <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-green-400/50 hover:shadow-[0_8px_30px_rgba(74,222,128,0.15)] transition-all duration-300">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-green-400/50 hover:shadow-[0_8px_30px_rgba(74,222,128,0.15)] transition-all duration-300">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:bg-green-400/20 transition-colors">
-                    <TrendingDown className="w-6 h-6 text-green-400" />
+                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-2.5 sm:mb-4 group-hover:bg-green-400/20 transition-colors">
+                    <TrendingDown className="w-4 h-4 sm:w-6 sm:h-6 text-green-400" />
                   </div>
-                  <h4 className="text-lg font-bold text-slate-200 mb-1 relative z-10">Efisiensi</h4>
-                  <p className="text-2xl lg:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-green-400 transition-colors">Rp 12.4M</p>
-                  <p className="text-xs text-slate-400 mt-2 relative z-10">Penghematan anggaran</p>
+                  <h4 className="text-xs sm:text-base font-bold text-slate-200 mb-0.5 sm:mb-1 relative z-10">Efisiensi</h4>
+                  <p className="text-lg sm:text-2xl lg:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-green-400 transition-colors">Rp 12.4M</p>
+                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 sm:mt-2 relative z-10 line-clamp-1 sm:line-clamp-none">Penghematan anggaran</p>
                 </div>
               </StaggerItem>
 
               <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-purple-400/50 hover:shadow-[0_8px_30px_rgba(192,132,252,0.15)] transition-all duration-300">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-purple-400/50 hover:shadow-[0_8px_30px_rgba(192,132,252,0.15)] transition-all duration-300">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:bg-purple-400/20 transition-colors">
-                    <Award className="w-6 h-6 text-purple-400" />
+                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-2.5 sm:mb-4 group-hover:bg-purple-400/20 transition-colors">
+                    <Award className="w-4 h-4 sm:w-6 sm:h-6 text-purple-400" />
                   </div>
-                  <h4 className="text-lg font-bold text-slate-200 mb-1 relative z-10">Kualitas</h4>
-                  <p className="text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-purple-400 transition-colors">A+</p>
-                  <p className="text-xs text-slate-400 mt-2 relative z-10">Indeks tata kelola</p>
+                  <h4 className="text-xs sm:text-base font-bold text-slate-200 mb-0.5 sm:mb-1 relative z-10">Kualitas</h4>
+                  <p className="text-xl sm:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-purple-400 transition-colors">A+</p>
+                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 sm:mt-2 relative z-10 line-clamp-1 sm:line-clamp-none">Indeks tata kelola</p>
                 </div>
               </StaggerItem>
 
               <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-pink-400/50 hover:shadow-[0_8px_30px_rgba(244,114,182,0.15)] transition-all duration-300">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-pink-400/50 hover:shadow-[0_8px_30px_rgba(244,114,182,0.15)] transition-all duration-300">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:bg-pink-400/20 transition-colors">
-                    <ThumbsUp className="w-6 h-6 text-pink-400" />
+                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-2.5 sm:mb-4 group-hover:bg-pink-400/20 transition-colors">
+                    <ThumbsUp className="w-4 h-4 sm:w-6 sm:h-6 text-pink-400" />
                   </div>
-                  <h4 className="text-lg font-bold text-slate-200 mb-1 relative z-10">Tingkat Layanan</h4>
-                  <p className="text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-pink-400 transition-colors">98%</p>
-                  <p className="text-xs text-slate-400 mt-2 relative z-10">Kepuasan pengguna</p>
+                  <h4 className="text-xs sm:text-base font-bold text-slate-200 mb-0.5 sm:mb-1 relative z-10">Layanan</h4>
+                  <p className="text-xl sm:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-pink-400 transition-colors">98%</p>
+                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 sm:mt-2 relative z-10 line-clamp-1 sm:line-clamp-none">Kepuasan pengguna</p>
                 </div>
               </StaggerItem>
             </StaggerContainer>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Performance & Efficiency Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
               <FadeIn direction="up" delay={0.2}>
-                <PerformanceChart />
+                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                      <span>Realisasi Paket Selesai</span>
+                    </h4>
+                    <span className="text-[10px] sm:text-xs text-slate-400 font-semibold px-2.5 py-0.5 rounded-full bg-white/10">Tahun 2026</span>
+                  </div>
+                  <PerformanceChart />
+                </div>
               </FadeIn>
               <FadeIn direction="up" delay={0.4}>
-                <EfficiencyChart />
+                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                      <span>Efisiensi Anggaran PBJ</span>
+                    </h4>
+                    <span className="text-[10px] sm:text-xs text-slate-400 font-semibold px-2.5 py-0.5 rounded-full bg-white/10">Kuartal</span>
+                  </div>
+                  <EfficiencyChart />
+                </div>
               </FadeIn>
             </div>
           </div>
@@ -433,54 +456,55 @@ export default function Home() {
         <BeritaSection />
 
         {/* 5. Agenda & Poster Kegiatan */}
-        <section className="py-20 bg-primary-navy text-white relative overflow-hidden" id="agenda">
+        <section className="py-14 sm:py-20 bg-primary-navy text-white relative overflow-hidden" id="agenda">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <FadeIn direction="right">
-                <div className="inline-flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-full text-accent-gold font-medium text-sm mb-6">
-                  <Calendar className="w-4 h-4" />
+                <div className="inline-flex items-center space-x-2 bg-white/10 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-accent-gold font-medium text-xs sm:text-sm mb-4 sm:mb-6">
+                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>{t('home.agenda_title')}</span>
                 </div>
-                <h2 className="text-2xl md:text-4xl font-bold mb-6 leading-tight">
+                <h2 className="text-xl sm:text-2xl md:text-4xl font-bold mb-3 sm:mb-6 leading-tight">
                   {latestAgenda ? latestAgenda.title : t('home.agenda_subtitle')}
                 </h2>
-                <p className="text-lg text-slate-300 mb-8 leading-relaxed">
+                <p className="text-sm sm:text-lg text-slate-300 mb-6 sm:mb-8 leading-relaxed">
                   {t('home.agenda_desc')}
                 </p>
-                <StaggerContainer className="space-y-4 mb-8">
-                  <StaggerItem>
-                    <div className="flex items-start space-x-4">
-                      <div className="bg-white/10 p-3 rounded-lg text-accent-gold">
-                        <Calendar className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-lg">{latestAgenda ? latestAgenda.date : 'Sabtu, 26 Oktober 2026'}</h4>
-                        <p className="text-slate-400">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</p>
-                      </div>
+
+                {/* 2 Quick Info Cards side by side or responsive grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5 mb-6 sm:mb-8">
+                  <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 text-accent-gold flex items-center justify-center shrink-0">
+                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-accent-gold" />
                     </div>
-                  </StaggerItem>
-                  <StaggerItem>
-                    <div className="flex items-start space-x-4">
-                      <div className="bg-white/10 p-3 rounded-lg text-accent-gold">
-                        <Globe className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-lg">{latestAgenda ? latestAgenda.location : 'Auditorium Utama'}</h4>
-                        <p className="text-slate-400">{latestAgenda ? latestAgenda.organizer : 'Gedung Pusat LKPP, Jakarta Pusat'}</p>
-                      </div>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-xs sm:text-sm text-white truncate">{latestAgenda ? latestAgenda.date : 'Sabtu, 26 Oktober 2026'}</h4>
+                      <p className="text-[11px] text-slate-300 truncate">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</p>
                     </div>
-                  </StaggerItem>
-                </StaggerContainer>
-                <div className="flex flex-wrap items-center gap-4">
-                  <Link href="/agenda" className="inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-8 rounded-xl transition-all shadow-lg hover:scale-102">
-                    {t('home.agenda_btn')} <ArrowRight className="w-5 h-5 ml-2" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 text-accent-gold flex items-center justify-center shrink-0">
+                      <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-accent-gold" />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-xs sm:text-sm text-white truncate">{latestAgenda ? latestAgenda.location : 'Auditorium Utama'}</h4>
+                      <p className="text-[11px] text-slate-300 truncate">{latestAgenda ? latestAgenda.organizer : 'Gedung LKPP / Kemnaker'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                  <Link href="/agenda" className="w-full sm:w-auto inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-6 sm:px-8 rounded-xl transition-all shadow-lg hover:scale-102 text-xs sm:text-sm">
+                    <span>{t('home.agenda_btn')}</span>
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </div>
 
                 {nextAgendas && nextAgendas.length > 0 && (
-                  <div className="mt-8 pt-6 border-t border-white/10">
-                    <p className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
+                  <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/10">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-400 font-bold mb-2.5 sm:mb-3 flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
                       Jadwal Kegiatan Berikutnya:
                     </p>
@@ -491,7 +515,7 @@ export default function Home() {
                           href="/agenda"
                           className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all text-xs group"
                         >
-                          <span className="font-semibold text-slate-200 group-hover:text-accent-gold transition-colors truncate max-w-[260px] sm:max-w-xs">
+                          <span className="font-semibold text-slate-200 group-hover:text-accent-gold transition-colors truncate max-w-[200px] sm:max-w-xs">
                             {nextAg.title}
                           </span>
                           <span className="text-[11px] text-accent-gold shrink-0 font-bold ml-2">
@@ -503,6 +527,7 @@ export default function Home() {
                   </div>
                 )}
               </FadeIn>
+
               <FadeIn direction="left" delay={0.2} className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 group max-w-lg mx-auto w-full bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
                 {/* Background ambient lighting */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-accent-gold/15 via-primary-blue/20 to-cyan-500/10 opacity-70 pointer-events-none" />
@@ -514,9 +539,9 @@ export default function Home() {
                     width={800} 
                     height={1000} 
                     unoptimized={true}
-                    className="w-full h-auto max-h-[480px] object-contain transform group-hover:scale-[1.02] transition-transform duration-500 rounded-2xl drop-shadow-2xl"
+                    className="w-full h-auto max-h-[300px] sm:max-h-[480px] object-contain transform group-hover:scale-[1.02] transition-transform duration-500 rounded-2xl drop-shadow-2xl"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a2342]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a2342]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 sm:p-6 pointer-events-none">
                     <p className="text-white text-xs sm:text-sm font-medium">{t('home.agenda_hint')}</p>
                   </div>
                 </div>
