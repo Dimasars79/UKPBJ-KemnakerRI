@@ -577,10 +577,10 @@ export function Header() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="fixed inset-x-3 top-20 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-3 sm:w-96 max-w-md mx-auto sm:max-w-none bg-white/98 backdrop-blur-xl border border-slate-200/90 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] rounded-3xl overflow-hidden z-50 flex flex-col max-h-[80vh] sm:max-h-[500px]"
+                      className="fixed inset-x-3 top-20 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-3 sm:w-96 max-w-md mx-auto sm:max-w-none bg-white border border-slate-200 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] rounded-3xl overflow-hidden z-[100] flex flex-col max-h-[80vh] sm:max-h-[500px]"
                     >
                       {/* Header Panel */}
-                      <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/90 shrink-0">
+                      <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
                         <div className="flex items-center gap-2">
                           <h3 className="font-bold text-sm text-primary-navy">Notifikasi & Pembaruan</h3>
                           {unreadPublicCount > 0 && (
@@ -603,15 +603,15 @@ export function Header() {
                         </div>
                       </div>
                       
-                      {/* Scrollable list of notifications */}
-                      <div className="overflow-y-auto divide-y divide-slate-100/80 flex-1 overscroll-contain">
+                      {/* Scrollable list of notifications (Solid white background) */}
+                      <div className="overflow-y-auto divide-y divide-slate-100 bg-white flex-1 overscroll-contain">
                         {cmsNotifications.length > 0 ? (
                           cmsNotifications.map((item) => (
                             <Link
                               key={item.id}
                               href={item.href}
                               onClick={() => setIsNotificationOpen(false)}
-                              className="p-3.5 sm:p-4 hover:bg-slate-50/80 transition-colors flex items-start gap-3 group cursor-pointer block"
+                              className="p-3.5 sm:p-4 hover:bg-slate-50 transition-colors flex items-start gap-3 group cursor-pointer block bg-white"
                             >
                               <div className={`w-9 h-9 rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform shadow-2xs`}>
                                 {item.icon}
@@ -635,14 +635,14 @@ export function Header() {
                             </Link>
                           ))
                         ) : (
-                          <div className="p-8 text-center text-slate-400 text-xs">
+                          <div className="p-8 text-center text-slate-400 text-xs bg-white">
                             Belum ada notifikasi atau pembaruan konten baru.
                           </div>
                         )}
                       </div>
                       
                       {/* Bottom Footer Action */}
-                      <div className="p-3.5 bg-slate-50/95 border-t border-slate-100 shrink-0">
+                      <div className="p-3.5 bg-slate-50 border-t border-slate-100 shrink-0">
                         <Link 
                           href="/informasi/pembaruan" 
                           onClick={() => setIsNotificationOpen(false)}
