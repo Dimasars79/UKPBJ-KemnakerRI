@@ -9,7 +9,7 @@ import { useData } from '@/contexts/DataContext';
 import { 
   BellRing, ChevronRight, Search, Filter, Newspaper, Package, 
   Scale, Calendar, Layers, Clock, ArrowRight,
-  Sparkles, Laptop, Globe, MessageSquare
+  Laptop, Globe, MessageSquare
 } from 'lucide-react';
 
 type UpdateType = 'all' | 'berita' | 'paket' | 'regulasi' | 'agenda' | 'sop';
@@ -221,11 +221,6 @@ export default function PusatPembaruanPage() {
 
             <FadeIn direction="up">
               <div className="max-w-3xl">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-gold/10 border border-amber-400/30 text-amber-300 text-xs font-bold mb-4 shadow-xs">
-                  <Sparkles className="w-3.5 h-3.5 text-accent-gold" />
-                  <span>Integrated Real-time Content & Update Feed</span>
-                </div>
-
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
                   Pusat Seluruh Informasi & Pembaruan
                 </h1>
