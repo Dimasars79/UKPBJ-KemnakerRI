@@ -8,7 +8,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { AgendaCard } from '@/components/cards/AgendaCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, MessageSquare, Building2, Users, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, MessageSquare, Building2, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '@/contexts/DataContext';
 
@@ -508,12 +508,6 @@ export default function AgendaPage() {
                         `Kegiatan resmi "${selectedAgendaModal.title}" ini diselenggarakan oleh ${selectedAgendaModal.organizer || 'UKPBJ Kemnaker'} guna memberikan bimbingan teknis, koordinasi pengadaan, serta pendampingan bagi para pemangku kepentingan demi kelancaran proses pengadaan barang dan jasa yang transparan dan akuntabel.`
                       }
                     </p>
-                    {selectedAgendaModal.capacity && (
-                      <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-slate-600">
-                        <Users className="w-3.5 h-3.5 text-slate-800" />
-                        <span>Kapasitas / Target Peserta: <strong className="text-primary-navy">{selectedAgendaModal.capacity}</strong></span>
-                      </div>
-                    )}
                   </div>
                 </div>
 
