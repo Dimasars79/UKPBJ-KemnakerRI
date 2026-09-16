@@ -122,12 +122,6 @@ export default function GaleriPage() {
               {/* Header & Filter Control Bar */}
               <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-500 animate-pulse" />
-                    <span className="text-xs font-black uppercase tracking-wider text-cyan-700 bg-cyan-50 px-2.5 py-0.5 rounded-md border border-cyan-200">
-                      Dokumentasi Visual
-                    </span>
-                  </div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                     Foto Liputan & Kegiatan Pengadaan ({filteredPhotos.length})
                   </h2>
