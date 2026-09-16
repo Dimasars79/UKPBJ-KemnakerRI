@@ -8,7 +8,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { AgendaCard } from '@/components/cards/AgendaCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, MessageSquare, Building2, Users, CheckCircle2, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, MessageSquare, Building2, Users, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '@/contexts/DataContext';
 
@@ -313,10 +313,6 @@ export default function AgendaPage() {
                       <span className="px-3 py-1 rounded-full bg-white/15 border border-white/20 text-xs font-bold text-amber-300 uppercase tracking-wider">
                         {selectedAgendaModal.category || 'Agenda PBJ'}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-xs font-bold text-emerald-300">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        {selectedAgendaModal.status || 'Terjadwal'}
-                      </span>
                     </div>
 
                     <button
@@ -338,8 +334,8 @@ export default function AgendaPage() {
                   {/* 4 Quick Info Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-primary-blue flex items-center justify-center shrink-0">
-                        <CalendarIcon className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
+                        <CalendarIcon className="w-5 h-5 text-slate-900" />
                       </div>
                       <div>
                         <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tanggal Kegiatan</div>
@@ -348,8 +344,8 @@ export default function AgendaPage() {
                     </div>
 
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-                        <Clock className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
+                        <Clock className="w-5 h-5 text-slate-900" />
                       </div>
                       <div>
                         <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Waktu Pelaksanaan</div>
@@ -358,8 +354,8 @@ export default function AgendaPage() {
                     </div>
 
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
-                        <MapPin className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
+                        <MapPin className="w-5 h-5 text-slate-900" />
                       </div>
                       <div>
                         <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Lokasi / Ruang</div>
@@ -368,8 +364,8 @@ export default function AgendaPage() {
                     </div>
 
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                        <Building2 className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
+                        <Building2 className="w-5 h-5 text-slate-900" />
                       </div>
                       <div>
                         <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Penyelenggara</div>
@@ -381,9 +377,9 @@ export default function AgendaPage() {
                   </div>
 
                   {/* Ringkasan Singkat / Deskripsi */}
-                  <div className="p-5 rounded-2xl bg-blue-50/50 border border-blue-100">
+                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                     <div className="flex items-center gap-2 mb-2 text-primary-navy font-bold text-sm">
-                      <Sparkles className="w-4 h-4 text-primary-blue" />
+                      <Sparkles className="w-4 h-4 text-slate-900" />
                       <span>Keterangan & Informasi Kegiatan</span>
                     </div>
                     <p className="text-slate-600 text-sm leading-relaxed">
@@ -392,8 +388,8 @@ export default function AgendaPage() {
                       }
                     </p>
                     {selectedAgendaModal.capacity && (
-                      <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-slate-500">
-                        <Users className="w-3.5 h-3.5 text-slate-400" />
+                      <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-slate-600">
+                        <Users className="w-3.5 h-3.5 text-slate-800" />
                         <span>Kapasitas / Target Peserta: <strong className="text-primary-navy">{selectedAgendaModal.capacity}</strong></span>
                       </div>
                     )}
