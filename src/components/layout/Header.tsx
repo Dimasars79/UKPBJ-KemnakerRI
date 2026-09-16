@@ -107,7 +107,7 @@ export function Header() {
             title: news.title,
             desc: news.excerpt || (news.content ? news.content.slice(0, 85) + '...' : ''),
             time: news.date || 'Terbaru',
-            href: '/informasi',
+            href: `/berita/${news.id}`,
             badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
             iconBg: 'bg-blue-100',
             iconColor: 'text-blue-600',

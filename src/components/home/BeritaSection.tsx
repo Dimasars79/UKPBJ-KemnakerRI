@@ -133,8 +133,11 @@ export function BeritaSection() {
               key={item.id}
               className="w-[300px] sm:w-[350px] md:w-[380px] shrink-0 snap-start flex flex-col bg-white rounded-3xl border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-primary-blue/30 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group"
             >
-              {/* Card Image Cover */}
-              <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100 shrink-0">
+              {/* Card Image Cover with Link */}
+              <Link 
+                href={`/berita/${item.id}`}
+                className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100 shrink-0 block cursor-pointer"
+              >
                 <Image
                   src={item.imageUrl || `/news/news-${(idx % 3) + 1}.png`}
                   alt={item.title}
@@ -158,19 +161,21 @@ export function BeritaSection() {
                   </div>
                   {item.views > 0 && (
                     <div className="flex items-center gap-1 text-[11px] text-white/80 font-mono drop-shadow-sm">
-                      <Eye className="w-3 h-3" />
+                      <Eye className="w-3.5 h-3.5" />
                       <span>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                     </div>
                   )}
                 </div>
-              </div>
+              </Link>
 
               {/* Card Content Body */}
               <div className="p-5 sm:p-6 flex flex-col flex-grow justify-between space-y-4">
                 <div className="space-y-2">
-                  <h3 className="font-bold text-base sm:text-lg text-primary-navy leading-snug line-clamp-2 group-hover:text-primary-blue transition-colors">
-                    {item.title}
-                  </h3>
+                  <Link href={`/berita/${item.id}`} className="block">
+                    <h3 className="font-bold text-base sm:text-lg text-primary-navy leading-snug line-clamp-2 group-hover:text-primary-blue transition-colors">
+                      {item.title}
+                    </h3>
+                  </Link>
                   <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-3">
                     {item.excerpt}
                   </p>
@@ -183,7 +188,7 @@ export function BeritaSection() {
                   </span>
 
                   <Link 
-                    href="/informasi"
+                    href={`/berita/${item.id}`}
                     className="inline-flex items-center text-xs font-bold text-primary-blue group-hover:text-primary-navy transition-colors gap-1.5"
                   >
                     <span>Baca Selengkapnya</span>
@@ -208,10 +213,10 @@ export function BeritaSection() {
           </span>
         </div>
 
-        {/* Bottom CTA to /informasi */}
+        {/* Bottom CTA to /berita */}
         <FadeIn direction="up" delay={0.2} className="mt-8 text-center">
           <Link 
-            href="/informasi" 
+            href="/berita" 
             className="inline-flex items-center space-x-2 px-6 py-3 rounded-2xl bg-white hover:bg-primary-navy text-primary-navy hover:text-white font-bold text-xs sm:text-sm border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 group"
           >
             <span>{t('home.news_more')}</span>

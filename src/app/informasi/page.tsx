@@ -22,6 +22,7 @@ export default function InformasiPage() {
       date: string;
       type: string;
       title: string;
+      href?: string;
       icon: React.ReactNode;
       color: string;
     }> = [];
@@ -33,6 +34,7 @@ export default function InformasiPage() {
           date: pkg.deadline ? pkg.deadline.slice(0, 6) : 'Baru',
           type: `TENDER ${pkg.category.toUpperCase()}`,
           title: `${pkg.code}: ${pkg.title}`,
+          href: '/#pengadaan',
           icon: <Package className="w-5 h-5 text-indigo-300" />,
           color: 'bg-indigo-500/20'
         });
@@ -45,6 +47,7 @@ export default function InformasiPage() {
         date: news.date,
         type: news.category.toUpperCase(),
         title: news.title,
+        href: `/berita/${news.id}`,
         icon: <Newspaper className="w-5 h-5 text-blue-300" />,
         color: 'bg-blue-500/20'
       });
@@ -57,6 +60,7 @@ export default function InformasiPage() {
           date: agenda.date,
           type: `AGENDA ${agenda.category.toUpperCase()}`,
           title: agenda.title,
+          href: '/agenda',
           icon: <Calendar className="w-5 h-5 text-emerald-300" />,
           color: 'bg-emerald-500/20'
         });
@@ -70,6 +74,7 @@ export default function InformasiPage() {
           date: `Thn ${reg.tahun}`,
           type: 'REGULASI JDIH',
           title: `${reg.nomor} - ${reg.tentang}`,
+          href: '/informasi/peraturan',
           icon: <Scale className="w-5 h-5 text-purple-300" />,
           color: 'bg-purple-500/20'
         });
@@ -144,7 +149,7 @@ export default function InformasiPage() {
                       {recentUpdates.length}
                     </span>
                   </div>
-                  <Link href="/informasi/peraturan" className="text-xs sm:text-sm text-slate-300 hover:text-accent-gold flex items-center transition-colors font-semibold">
+                  <Link href="/berita" className="text-xs sm:text-sm text-slate-300 hover:text-accent-gold flex items-center transition-colors font-semibold">
                     Lihat Semua <ChevronRight className="w-4 h-4 ml-1" />
                   </Link>
                 </div>
@@ -152,7 +157,11 @@ export default function InformasiPage() {
                 <div className="flex-grow flex flex-col justify-center">
                   <div className="px-6 md:px-8 py-2">
                     {recentUpdates.map((item, idx) => (
-                      <div key={idx} className="flex items-center py-4 border-b border-white/5 last:border-0 group cursor-pointer hover:bg-white/5 rounded-xl px-2 -mx-2 transition-colors">
+                      <Link 
+                        key={idx} 
+                        href={item.href || '/berita'}
+                        className="flex items-center py-4 border-b border-white/5 last:border-0 group cursor-pointer hover:bg-white/5 rounded-xl px-2 -mx-2 transition-colors"
+                      >
                         <div className="w-12 text-center text-[11px] font-bold text-slate-400 whitespace-pre-line leading-tight">
                           {item.date}
                         </div>
@@ -168,7 +177,7 @@ export default function InformasiPage() {
                             Baru
                           </span>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </div>
