@@ -131,7 +131,8 @@ export default function AgendaPage() {
         location: ag.location,
         organizer: ag.organizer,
         capacity: ag.capacity,
-        status: ag.status
+        status: ag.status,
+        description: ag.description
       });
     }
   });
@@ -169,6 +170,7 @@ export default function AgendaPage() {
       organizer: ag.organizer,
       capacity: ag.capacity,
       status: ag.status,
+      description: ag.description,
       parsedMonth: parsed ? parsed.month : 8,
       parsedYear: parsed ? parsed.year : 2026,
       parsedTimestamp: timestamp
@@ -415,7 +417,8 @@ export default function AgendaPage() {
                     location: agenda.location,
                     organizer: agenda.organizer,
                     capacity: agenda.capacity,
-                    status: agenda.status
+                    status: agenda.status,
+                    description: agenda.description
                   })}
                 />
               </StaggerItem>

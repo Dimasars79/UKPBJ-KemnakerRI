@@ -27,6 +27,7 @@ export interface AgendaItem {
   capacity: string;
   status: 'Terjadwal' | 'Berlangsung' | 'Selesai' | 'Dibatalkan';
   imageUrl?: string;
+  description?: string;
   syncFrontend: boolean;
 }
 
@@ -268,6 +269,7 @@ const DEFAULT_AGENDAS: AgendaItem[] = [
     organizer: 'Biro Perencanaan & PBJ',
     capacity: '200 Peserta',
     imageUrl: '/poster_kegiatan.jpg',
+    description: 'Bimbingan teknis intensif mengenai implementasi dan optimalisasi Sistem Informasi Kinerja Penyedia (SIKaP) Versi 3.0 guna mempercepat proses kualifikasi penyedia barang dan jasa pemerintah secara terintegrasi.',
     status: 'Terjadwal',
     syncFrontend: true
   },
@@ -280,6 +282,7 @@ const DEFAULT_AGENDAS: AgendaItem[] = [
     location: 'Ruang Rapat UKPBJ Lt. 4',
     organizer: 'Pokja Pemilihan II',
     capacity: 'Khusus Rekanan Terdaftar',
+    description: 'Pemberian penjelasan teknis, spesifikasi server, dan syarat administrasi penawaran untuk paket Pengadaan Infrastruktur Server IT UKPBJ Kemnaker Tahun Anggaran 2026.',
     status: 'Terjadwal',
     syncFrontend: true
   },
@@ -292,6 +295,7 @@ const DEFAULT_AGENDAS: AgendaItem[] = [
     location: 'Pusdiklat Kemnaker RI',
     organizer: 'Pusat Pengembangan SDM PBJ',
     capacity: '50 Peserta',
+    description: 'Pelaksanaan ujian sertifikasi keahlian Pengadaan Barang/Jasa Tingkat Dasar sesuai standar LKPP bagi para aparatur sipil negara dan pengelola pengadaan.',
     status: 'Terjadwal',
     syncFrontend: true
   },
@@ -304,6 +308,7 @@ const DEFAULT_AGENDAS: AgendaItem[] = [
     location: 'Ruang Rapat Utama Menteri',
     organizer: 'Sekretariat Jenderal Kemnaker',
     capacity: 'Internal PPK & KPA',
+    description: 'Rapat evaluasi progres serapan anggaran pengadaan barang/jasa kuartal III tahun 2026 serta pemetaan langkah strategis percepatan penyelesaian paket pekerjaan.',
     status: 'Terjadwal',
     syncFrontend: true
   },
@@ -316,6 +321,7 @@ const DEFAULT_AGENDAS: AgendaItem[] = [
     location: 'Hybrid (Ruang Komisi & Live Stream)',
     organizer: 'Inspektorat Jenderal & UKPBJ',
     capacity: '300 Peserta',
+    description: 'Sosialisasi alur mekanisme dan konsultasi penyelesaian permasalahan pengadaan barang/jasa melalui forum Clearing House PBJ Kementerian Ketenagakerjaan.',
     status: 'Terjadwal',
     syncFrontend: true
   }
@@ -664,6 +670,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
               organizer: string;
               capacity: string;
               status: AgendaItem['status'];
+              description?: string;
+              deskripsi?: string;
               image_url?: string;
               imageUrl?: string;
               sync_frontend?: boolean;
@@ -680,6 +688,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 organizer: a.organizer,
                 capacity: a.capacity,
                 status: a.status,
+                description: a.description || a.deskripsi || localExisting?.description || defaultExisting?.description || '',
                 imageUrl: a.image_url || a.imageUrl || localExisting?.imageUrl || defaultExisting?.imageUrl || '',
                 syncFrontend: a.sync_frontend ?? true
               };
@@ -1032,6 +1041,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         organizer: agenda.organizer,
         capacity: agenda.capacity,
         status: agenda.status,
+        description: agenda.description || '',
         image_url: agenda.imageUrl,
         sync_frontend: true
       }
@@ -1062,6 +1072,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         organizer: updated.organizer ?? target?.organizer,
         capacity: updated.capacity ?? target?.capacity,
         status: updated.status ?? target?.status,
+        description: updated.description !== undefined ? updated.description : target?.description,
         image_url: updated.imageUrl !== undefined ? updated.imageUrl : target?.imageUrl
       }
     });

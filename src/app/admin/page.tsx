@@ -650,6 +650,7 @@ export default function AdminPortalPage() {
     location: 'Gedung Kemnaker RI',
     organizer: 'UKPBJ Kemnaker RI',
     capacity: '100 Peserta',
+    description: '',
     imageUrl: '',
     status: 'Terjadwal'
   });
@@ -830,6 +831,7 @@ export default function AdminPortalPage() {
     if (editingAgenda) {
       updateAgenda(editingAgenda.id, {
         ...agendaFormData,
+        description: agendaFormData.description || '',
         imageUrl: agendaFormData.imageUrl || ''
       });
       showNotification('✓ Agenda berhasil diperbarui dan tersinkronisasi ke Frontend (/agenda)!');
@@ -844,6 +846,7 @@ export default function AdminPortalPage() {
         location: agendaFormData.location || 'Gedung Kemnaker RI',
         organizer: agendaFormData.organizer || 'UKPBJ Kemnaker RI',
         capacity: agendaFormData.capacity || '100 Peserta',
+        description: agendaFormData.description || '',
         imageUrl: agendaFormData.imageUrl || '',
         status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal'
       });
@@ -2051,6 +2054,8 @@ export default function AdminPortalPage() {
                             location: 'Gedung Kemnaker RI',
                             organizer: 'UKPBJ Kemnaker RI',
                             capacity: '100 Peserta',
+                            description: '',
+                            imageUrl: '',
                             status: 'Terjadwal'
                           });
                           setShowAgendaModal(true);
@@ -2618,6 +2623,7 @@ export default function AdminPortalPage() {
                             location: 'Gedung Kemnaker RI',
                             organizer: 'UKPBJ Kemnaker RI',
                             capacity: '100 Peserta',
+                            description: '',
                             imageUrl: '',
                             status: 'Terjadwal'
                           });
@@ -4020,6 +4026,8 @@ export default function AdminPortalPage() {
                       location: 'Gedung Kemnaker RI',
                       organizer: 'UKPBJ Kemnaker RI',
                       capacity: '100 Peserta',
+                      description: '',
+                      imageUrl: '',
                       status: 'Terjadwal'
                     });
                     setShowAgendaModal(true);
@@ -5951,6 +5959,30 @@ export default function AdminPortalPage() {
                       }`}
                     />
                   </div>
+                </div>
+
+                {/* Deskripsi & Informasi Detail Kegiatan */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className={`font-bold block ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+                      Deskripsi & Informasi Kegiatan
+                    </label>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Rincian & Petunjuk Kegiatan
+                    </span>
+                  </div>
+                  <textarea
+                    rows={3}
+                    placeholder="Jelaskan isi agenda, materi pembahasan, ketentuan pelaksanaan, atau informasi penting bagi peserta..."
+                    value={agendaFormData.description || ''}
+                    onChange={(e) => setAgendaFormData({ ...agendaFormData, description: e.target.value })}
+                    className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none resize-y min-h-[80px] ${
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500 placeholder-slate-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-emerald-600 placeholder-slate-400'
+                    }`}
+                  />
+                  <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'} mt-1`}>
+                    Keterangan ini akan langsung tampil pada jendela pop-up detail kegiatan kalender publik (/agenda).
+                  </p>
                 </div>
 
                 {/* ========================================================= */}
