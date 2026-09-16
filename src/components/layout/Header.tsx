@@ -651,17 +651,39 @@ export function Header() {
               <span className="relative z-10">{t('nav.login')}</span>
             </Link>
 
-            {/* Mobile Navbar Toggler */}
+            {/* Mobile Navbar Toggler with smooth Morphing 3-lines to X */}
             <button 
-              className="lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 hover:bg-primary-blue text-primary-navy hover:text-white rounded-full transition-all duration-300 border border-slate-200 shadow-xs"
+              className={`lg:hidden flex items-center justify-center w-10 h-10 rounded-2xl transition-all duration-300 border shadow-xs relative z-[1001] cursor-pointer ${
+                isMobileMenuOpen 
+                  ? 'bg-primary-navy text-white border-white/20 shadow-xl' 
+                  : 'bg-slate-50 hover:bg-slate-100 text-primary-navy border-slate-200'
+              }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle Navigation Menu"
+              aria-label={isMobileMenuOpen ? "Tutup Menu" : "Buka Menu"}
             >
-              {isMobileMenuOpen ? (
-                <X className="w-5 h-5 transform rotate-90 transition-transform duration-300" />
-              ) : (
-                <Menu className="w-5 h-5 transform hover:scale-110 transition-transform duration-300" />
-              )}
+              <div className="w-5 h-4 flex flex-col justify-between items-center relative pointer-events-none">
+                <motion.span
+                  animate={isMobileMenuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className={`w-5 h-0.5 rounded-full origin-center ${
+                    isMobileMenuOpen ? 'bg-white' : 'bg-primary-navy'
+                  }`}
+                />
+                <motion.span
+                  animate={isMobileMenuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                  transition={{ duration: 0.2 }}
+                  className={`w-5 h-0.5 rounded-full ${
+                    isMobileMenuOpen ? 'bg-white' : 'bg-primary-navy'
+                  }`}
+                />
+                <motion.span
+                  animate={isMobileMenuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className={`w-5 h-0.5 rounded-full origin-center ${
+                    isMobileMenuOpen ? 'bg-white' : 'bg-primary-navy'
+                  }`}
+                />
+              </div>
             </button>
           </div>
         </div>
@@ -679,19 +701,6 @@ export function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="absolute inset-0 bg-slate-950/60 backdrop-blur-xs"
             />
-
-            {/* Close Button on Top Right of Overlay */}
-            <motion.button 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 bg-primary-navy hover:bg-primary-blue text-white p-3 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95 z-[1001]"
-              aria-label="Tutup Menu"
-            >
-              <X className="w-6 h-6" />
-            </motion.button>
 
             {/* Side Drawer Panel */}
             <motion.div 
