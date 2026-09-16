@@ -9,7 +9,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, FileText, Download, Eye, Calendar, 
   ChevronRight, Filter, BookOpen, GraduationCap, 
-  ArrowRight, Video, FileCheck, Users, HelpCircle
+  ArrowRight, Video, FileCheck, Users, HelpCircle,
+  X, ShieldCheck, Building2, ChevronLeft,
+  ZoomIn, ZoomOut
 } from 'lucide-react';
 
 type GuideItem = {
@@ -21,6 +23,7 @@ type GuideItem = {
   format: 'PDF' | 'DOCX' | 'VIDEO' | 'SLIDE';
   fileSize: string;
   desc: string;
+  downloadUrl?: string;
 };
 
 const guideCategories = [
@@ -121,6 +124,9 @@ const guideItems: GuideItem[] = [
 export default function PanduanPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [activePreviewGuide, setActivePreviewGuide] = useState<GuideItem | null>(null);
+  const [previewPage, setPreviewPage] = useState<number>(1);
+  const [zoomLevel, setZoomLevel] = useState<number>(100);
 
   const filteredGuides = useMemo(() => {
     return guideItems.filter(item => {
@@ -132,6 +138,36 @@ export default function PanduanPage() {
       return matchCat && matchSearch;
     });
   }, [selectedCategory, searchQuery]);
+
+  const handleDownloadFile = (guide: GuideItem) => {
+    if (guide.downloadUrl) {
+      window.open(guide.downloadUrl, '_blank');
+      return;
+    }
+    const content = `PANDUAN RESMI PENGADAAN BARANG DAN JASA (PBJ)\n` +
+      `KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA\n` +
+      `============================================================\n\n` +
+      `Judul Dokumen  : ${guide.title}\n` +
+      `Peruntukan     : ${guide.role}\n` +
+      `Format         : ${guide.format} (${guide.fileSize})\n` +
+      `Tanggal Rilis  : ${guide.date}\n` +
+      `Status         : Dokumen Resmi Terverifikasi UKPBJ Kemnaker\n\n` +
+      `DESKRIPSI & PETUNJUK RINGKAS:\n` +
+      `${guide.desc}\n\n` +
+      `------------------------------------------------------------\n` +
+      `Dokumen ini diunduh secara resmi melalui Portal UKPBJ Kemnaker RI.\n` +
+      `Untuk bimbingan teknis lebih lanjut hubungi helpdesk UKPBJ Kemnaker.`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${guide.title.replace(/[\/\s:,]/g, '_')}.${guide.format === 'DOCX' ? 'docx' : 'pdf'}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
@@ -159,15 +195,15 @@ export default function PanduanPage() {
               <FadeIn direction="up">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
                   <BookOpen className="w-3.5 h-3.5 text-blue-300" />
-                  <span>Pedoman & Petunjuk Teknis Operasional PBJ</span>
+                  <span>Modul & Petunjuk Operasional PBJ</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
-                  Panduan Pelaksanaan Pengadaan
+                  Panduan Pengadaan Barang & Jasa
                 </h1>
 
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl mx-auto">
-                  Modul, petunjuk teknis aplikasi (SPSE, SiRUP, SIKaP), serta pedoman kerja bagi seluruh pelaku pengadaan barang dan jasa.
+                  Kumpulan petunjuk teknis, standar operasional, dan modul tata cara pelaksanaan pengadaan bagi PA/KPA, PPK, Pokja Pemilihan, dan Penyedia.
                 </p>
 
                 {/* Main Search Bar */}
@@ -180,7 +216,7 @@ export default function PanduanPage() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Cari modul panduan (e.g. SiRUP, PPK, SIKaP)..."
+                      placeholder="Cari judul modul, peran (PPK/Pokja), atau kata kunci..."
                       className="w-full px-3 py-2 text-sm text-slate-800 placeholder-slate-400 bg-transparent outline-none font-medium"
                     />
                     {searchQuery && (
@@ -208,7 +244,7 @@ export default function PanduanPage() {
                 <div className="p-5 bg-gradient-to-r from-primary-navy to-[#113264] text-white flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <Filter className="w-4 h-4 text-accent-gold" />
-                    <h3 className="font-bold text-sm tracking-wide">Kategori Panduan</h3>
+                    <h3 className="font-bold text-sm tracking-wide">Kategori Pengguna</h3>
                   </div>
                   <span className="text-[11px] font-bold text-blue-200 bg-white/10 px-2.5 py-0.5 rounded-full">
                     {guideCategories.length - 1} Peran
@@ -339,16 +375,22 @@ export default function PanduanPage() {
                           {/* Action Buttons */}
                           <div className="flex sm:flex-col items-center gap-2 flex-shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100">
                             <button 
-                              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95"
-                              title="Unduh Panduan"
+                              onClick={() => handleDownloadFile(item)}
+                              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
+                              title="Unduh Modul File"
                             >
                               <Download className="w-3.5 h-3.5" />
                               <span>Unduh Modul</span>
                             </button>
 
                             <button 
-                              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors"
-                              title="Buka Pratinjau Petunjuk"
+                              onClick={() => {
+                                setActivePreviewGuide(item);
+                                setPreviewPage(1);
+                                setZoomLevel(100);
+                              }}
+                              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-primary-navy px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+                              title="Buka Pratinjau File"
                             >
                               <Eye className="w-3.5 h-3.5 text-slate-500" />
                               <span>Pratinjau</span>
@@ -391,6 +433,291 @@ export default function PanduanPage() {
           </div>
         </section>
       </main>
+
+      {/* ================= DEDICATED FILE PREVIEW MODAL VIEWER ================= */}
+      <AnimatePresence>
+        {activePreviewGuide && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6">
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActivePreviewGuide(null)}
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
+            />
+
+            {/* Document Viewer Modal Window */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25 }}
+              className="relative w-full max-w-4xl bg-[#1e293b] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 border border-slate-700 flex flex-col h-[92vh]"
+            >
+              {/* Topbar: Document Metadata & Tools */}
+              <div className="px-4 sm:px-6 py-3.5 bg-[#0f172a] border-b border-slate-800 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-primary-blue/20 text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded">
+                        {activePreviewGuide.format}
+                      </span>
+                      <span className="text-[11px] text-slate-400 hidden sm:inline">• {activePreviewGuide.fileSize}</span>
+                    </div>
+                    <h3 className="text-xs sm:text-sm font-bold text-white truncate max-w-md">
+                      {activePreviewGuide.title}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Right Action Tools */}
+                <div className="flex items-center gap-2 sm:gap-3">
+                  {/* Zoom Controls (Desktop) */}
+                  <div className="hidden sm:flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700 text-slate-300 text-xs">
+                    <button 
+                      onClick={() => setZoomLevel(prev => Math.max(75, prev - 15))}
+                      className="p-1 hover:text-white transition-colors"
+                      title="Perkecil"
+                    >
+                      <ZoomOut className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="px-2 font-mono text-[11px]">{zoomLevel}%</span>
+                    <button 
+                      onClick={() => setZoomLevel(prev => Math.min(150, prev + 15))}
+                      className="p-1 hover:text-white transition-colors"
+                      title="Perbesar"
+                    >
+                      <ZoomIn className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Unduh Modul Button */}
+                  <button
+                    onClick={() => handleDownloadFile(activePreviewGuide)}
+                    className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer"
+                    title="Unduh File Ini"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Unduh File</span>
+                  </button>
+
+                  {/* Close Button */}
+                  <button
+                    onClick={() => setActivePreviewGuide(null)}
+                    className="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                    title="Tutup Pratinjau"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Main Document Canvas Viewport */}
+              <div className="flex-1 bg-[#334155] p-3 sm:p-6 overflow-y-auto flex justify-center items-start custom-scrollbar">
+                <div 
+                  style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }}
+                  className="bg-white text-slate-800 w-full max-w-[760px] min-h-[920px] rounded-lg shadow-2xl p-6 sm:p-12 relative flex flex-col justify-between transition-transform duration-200 border border-slate-200"
+                >
+                  {/* Watermark */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04] select-none">
+                    <span className="text-5xl sm:text-7xl font-black uppercase rotate-[-35deg] text-slate-900 tracking-widest text-center">
+                      UKPBJ KEMNAKER RI
+                    </span>
+                  </div>
+
+                  {/* Document Header (Kop Surat Resmi) */}
+                  <div>
+                    <div className="flex items-start justify-between border-b-2 border-slate-900 pb-4 mb-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-primary-navy text-accent-gold flex items-center justify-center font-bold text-xl shadow-xs">
+                          <Building2 className="w-6 h-6 text-amber-400" />
+                        </div>
+                        <div>
+                          <h4 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-tight">
+                            Kementerian Ketenagakerjaan Republik Indonesia
+                          </h4>
+                          <p className="text-[10px] sm:text-xs text-slate-600 font-semibold">
+                            Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kemnaker RI
+                          </p>
+                          <p className="text-[9px] text-slate-400">
+                            Jl. Jenderal Gatot Subroto Kav. 51, Jakarta Selatan 12950
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="inline-block text-[9px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 uppercase">
+                          Salinan Resmi
+                        </span>
+                        <p className="text-[9px] text-slate-400 mt-1 font-mono">{activePreviewGuide.date}</p>
+                      </div>
+                    </div>
+
+                    {/* Document Title Banner */}
+                    <div className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200 mb-6">
+                      <span className="text-[10px] font-black uppercase text-primary-blue tracking-wider block mb-1">
+                        PETUNJUK OPERASIONAL • PERUNTUKAN: {activePreviewGuide.role}
+                      </span>
+                      <h2 className="text-base sm:text-xl font-black text-slate-900 leading-snug">
+                        {activePreviewGuide.title}
+                      </h2>
+                    </div>
+
+                    {/* Document Body (Page 1 vs Page 2 vs Page 3) */}
+                    {previewPage === 1 && (
+                      <div className="space-y-4 text-xs sm:text-[13px] text-slate-700 leading-relaxed">
+                        <div>
+                          <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-1.5 flex items-center gap-1.5 text-primary-navy">
+                            <span>I. Ringkasan & Ruang Lingkup Dokumen</span>
+                          </h5>
+                          <p className="p-3 bg-blue-50/50 rounded-xl border border-blue-100 text-slate-700 leading-relaxed">
+                            {activePreviewGuide.desc}
+                          </p>
+                        </div>
+
+                        <div className="pt-2">
+                          <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-2 text-primary-navy">
+                            <span>II. Dasar Hukum & Standar Pelaksanaan</span>
+                          </h5>
+                          <ul className="space-y-2 list-disc list-inside text-slate-600 pl-1">
+                            <li>Peraturan Presiden No. 12 Tahun 2021 tentang Perubahan atas Perpres No. 16 Tahun 2018 tentang PBJ Pemerintah.</li>
+                            <li>Peraturan LKPP terkait Pedoman Pelaksanaan Pengadaan Barang/Jasa Secara Elektronik.</li>
+                            <li>Keputusan Menteri Ketenagakerjaan RI tentang Tata Kelola UKPBJ Kemnaker.</li>
+                          </ul>
+                        </div>
+
+                        <div className="pt-2">
+                          <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-2 text-primary-navy">
+                            <span>III. Ketentuan & Persyaratan Pengguna ({activePreviewGuide.role})</span>
+                          </h5>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                              <span className="font-bold text-slate-800 text-[11px] block mb-1">1. Hak Akses & Akun</span>
+                              <p className="text-[11px] text-slate-500">Telah memiliki akun terverifikasi pada portal SPSE / SiRUP / SIKaP Kemnaker.</p>
+                            </div>
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                              <span className="font-bold text-slate-800 text-[11px] block mb-1">2. Kelengkapan Berkas</span>
+                              <p className="text-[11px] text-slate-500">Menyiapkan dokumen perencanaan, HPS, KAK, atau kualifikasi badan usaha.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {previewPage === 2 && (
+                      <div className="space-y-4 text-xs sm:text-[13px] text-slate-700 leading-relaxed">
+                        <div>
+                          <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-2 text-primary-navy">
+                            <span>IV. Alur Langkah-Langkah Operasional</span>
+                          </h5>
+                          <div className="space-y-2.5">
+                            {[
+                              { no: '1', title: 'Autentikasi & Masuk ke Portal PBJ', desc: 'Akses sistem menggunakan username dan kata sandi resmi yang telah terdaftar pada database UKPBJ.' },
+                              { no: '2', title: 'Pemilihan Menu & Penginputan Data Paket', desc: 'Isi seluruh parameter paket belanja meliputi kode satker, pagu anggaran, serta spesifikasi teknis.' },
+                              { no: '3', title: 'Validasi & Pemeriksaan Kelayakan', desc: 'Lakukan validasi silang data sebelum dilakukan pengesahan atau pengumuman ke publik.' },
+                              { no: '4', title: 'Penerbitan Bukti & Arsip Digital', desc: 'Unduh tanda terima digital dan simpan nomor registrasi pengadaan untuk pelaporan berkala.' }
+                            ].map((step) => (
+                              <div key={step.no} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                <span className="w-6 h-6 rounded-lg bg-primary-navy text-accent-gold font-bold text-xs flex items-center justify-center shrink-0">
+                                  {step.no}
+                                </span>
+                                <div>
+                                  <span className="font-bold text-slate-800 block text-xs">{step.title}</span>
+                                  <span className="text-[11px] text-slate-500">{step.desc}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {previewPage === 3 && (
+                      <div className="space-y-4 text-xs sm:text-[13px] text-slate-700 leading-relaxed">
+                        <div>
+                          <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-2 text-primary-navy">
+                            <span>V. Layanan Bantuan & Konsultasi Teknis</span>
+                          </h5>
+                          <p className="text-slate-600 mb-3">
+                            Apabila dalam pelaksanaan panduan ini ditemukan kendala sistem atau ketidaksesuaian data, pihak {activePreviewGuide.role} dapat menghubungi kanal resmi berikut:
+                          </p>
+                          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900">
+                            <div className="flex items-center gap-2 font-bold mb-1">
+                              <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                              <span>Helpdesk & Klinik PBJ Kemnaker RI</span>
+                            </div>
+                            <p className="text-xs text-emerald-800 mb-2">
+                              Layanan pendampingan teknis tatap muka dan daring (Senin - Jumat, 08.00 - 16.00 WIB).
+                            </p>
+                            <span className="text-[11px] font-semibold text-emerald-700 block">
+                              Email: helpdesk.ukpbj@kemnaker.go.id • WhatsApp: +62 898-8180-009
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400">
+                          <span>Dokumen Terverifikasi Digital</span>
+                          <span>UKPBJ-KMK-DOC-REV2026</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Document Footer (Page Number & Official Notice) */}
+                  <div className="pt-6 mt-8 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-400">
+                    <span>Kementerian Ketenagakerjaan RI • Biro UKPBJ</span>
+                    <span className="font-bold text-slate-600">Halaman {previewPage} dari 3</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Pagination & Navigation Footer */}
+              <div className="px-4 sm:px-6 py-3 bg-[#0f172a] border-t border-slate-800 flex items-center justify-between gap-3 shrink-0">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setPreviewPage(prev => Math.max(1, prev - 1))}
+                    disabled={previewPage === 1}
+                    className="flex items-center gap-1 text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                    <span>Sebelumnya</span>
+                  </button>
+                  <span className="text-xs text-slate-400 font-semibold px-2">
+                    Hal <strong className="text-white">{previewPage}</strong> / 3
+                  </span>
+                  <button
+                    onClick={() => setPreviewPage(prev => Math.min(3, prev + 1))}
+                    disabled={previewPage === 3}
+                    className="flex items-center gap-1 text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                  >
+                    <span>Berikutnya</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setActivePreviewGuide(null)}
+                    className="text-xs font-bold text-slate-400 hover:text-white px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+                  >
+                    Tutup
+                  </button>
+                  <button
+                    onClick={() => handleDownloadFile(activePreviewGuide)}
+                    className="flex items-center gap-1.5 bg-primary-blue hover:bg-blue-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-md"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Unduh Sekarang</span>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>
