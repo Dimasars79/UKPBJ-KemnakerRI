@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, MessageCircle, PhoneCall, X } from 'lucide-react';
+import { Mail, MessageCircle, X } from 'lucide-react';
 
 export const FloatingContact = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,18 +50,6 @@ export const FloatingContact = () => {
                 <div className="flex flex-col">
                   <span className="font-medium text-slate-700 group-hover:text-primary-blue transition-colors text-sm">Email</span>
                   <span className="text-[11px] text-slate-400">ukpbj@kemnaker.go.id</span>
-                </div>
-              </a>
-              <a 
-                href="tel:+628988180009" 
-                className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors group"
-              >
-                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center group-hover:bg-accent-gold transition-colors shrink-0">
-                  <PhoneCall className="w-5 h-5 text-accent-gold group-hover:text-white transition-colors" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-medium text-slate-700 group-hover:text-accent-gold transition-colors text-sm">Call Center</span>
-                  <span className="text-[11px] text-slate-400">+62 898-8180-009</span>
                 </div>
               </a>
             </div>
