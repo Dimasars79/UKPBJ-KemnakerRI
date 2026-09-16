@@ -630,14 +630,17 @@ export default function AdminPortalPage() {
   // Modals for CRUD News & Agenda
   const [showNewsModal, setShowNewsModal] = useState(false);
   const [editingNews, setEditingNews] = useState<NewsItem | null>(null);
-  const [newsFormData, setNewsFormData] = useState<Partial<NewsItem>>({
+  const [newsFormData, setNewsFormData] = useState<Partial<NewsItem> & { tagsInput?: string }>({
     title: '',
     category: 'Berita PBJ',
     author: 'Admin UKPBJ Kemnaker',
     status: 'Published',
     excerpt: '',
     content: '',
-    imageUrl: '/news/news-1.png'
+    imageUrl: '/news/news-1.png',
+    noticeTitle: 'Pemberitahuan Resmi UKPBJ Kemnaker RI',
+    noticeContent: 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
+    tagsInput: '#UKPBJKemnaker, #TransparansiPengadaan, #SPSEKemnaker'
   });
 
   const [showAgendaModal, setShowAgendaModal] = useState(false);
@@ -755,12 +758,25 @@ export default function AdminPortalPage() {
 
   const handleSaveNews = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const rawTags = newsFormData.tagsInput 
+      ? newsFormData.tagsInput.split(',').map(t => t.trim()).filter(Boolean)
+      : (newsFormData.tags || ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker']);
+    
+    const formattedTags = rawTags.map(t => t.startsWith('#') ? t : `#${t}`);
+
+    const finalNoticeTitle = newsFormData.noticeTitle?.trim() || 'Pemberitahuan Resmi UKPBJ Kemnaker RI';
+    const finalNoticeContent = newsFormData.noticeContent?.trim() || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.';
+
     if (editingNews) {
       updateNews(editingNews.id, {
         ...newsFormData,
-        imageUrl: newsFormData.imageUrl || '/news/news-1.png'
+        imageUrl: newsFormData.imageUrl || '/news/news-1.png',
+        noticeTitle: finalNoticeTitle,
+        noticeContent: finalNoticeContent,
+        tags: formattedTags
       });
-      showNotification('✓ Berita berhasil diperbarui dan tersinkronisasi ke Supabase & Frontend (/informasi & /)!');
+      showNotification('✓ Berita berhasil diperbarui dan tersinkronisasi ke Supabase & Frontend (/berita & /)!');
       pushAdminNotification('Berita & Warta Diperbarui', `Berita "${newsFormData.title || 'Warta PBJ'}" telah diperbarui`, 'berita');
       pushActivityLog('Berita', 'berita', 'UPDATE', `Pembaruan artikel warta: "${newsFormData.title || 'Warta PBJ'}"`, `NEWS-${editingNews.id}`);
     } else {
@@ -771,9 +787,12 @@ export default function AdminPortalPage() {
         status: (newsFormData.status as NewsItem['status']) || 'Published',
         excerpt: newsFormData.excerpt || '',
         content: newsFormData.content || '',
-        imageUrl: newsFormData.imageUrl || '/news/news-1.png'
+        imageUrl: newsFormData.imageUrl || '/news/news-1.png',
+        noticeTitle: finalNoticeTitle,
+        noticeContent: finalNoticeContent,
+        tags: formattedTags
       });
-      showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Supabase & Frontend (/informasi)!');
+      showNotification('✓ Berita baru berhasil diterbitkan dan langsung tayang di Supabase & Frontend (/berita)!');
       pushAdminNotification('Berita & Warta Baru Diterbitkan', `"${newsFormData.title || 'Siaran Pers Baru'}" telah tayang di portal publik`, 'berita');
       pushActivityLog('Berita', 'berita', 'INSERT', `Publikasi artikel warta baru: "${newsFormData.title || 'Siaran Pers'}"`, `NEWS-2026-${String(newsList.length + 1).padStart(3, '0')}`);
     }
@@ -3255,7 +3274,12 @@ export default function AdminPortalPage() {
                           <button
                             onClick={() => {
                               setEditingNews(item);
-                              setNewsFormData({ ...item });
+                              setNewsFormData({
+                                ...item,
+                                noticeTitle: item.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI',
+                                noticeContent: item.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
+                                tagsInput: item.tags && item.tags.length > 0 ? item.tags.join(', ') : '#UKPBJKemnaker, #TransparansiPengadaan, #SPSEKemnaker'
+                              });
                               setShowNewsModal(true);
                             }}
                             className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
@@ -3859,7 +3883,11 @@ export default function AdminPortalPage() {
                       author: 'Admin UKPBJ Kemnaker',
                       status: 'Published',
                       excerpt: '',
-                      content: ''
+                      content: '',
+                      imageUrl: '/news/news-1.png',
+                      noticeTitle: 'Pemberitahuan Resmi UKPBJ Kemnaker RI',
+                      noticeContent: 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
+                      tagsInput: '#UKPBJKemnaker, #TransparansiPengadaan, #SPSEKemnaker'
                     });
                     setShowNewsModal(true);
                   }}
@@ -3962,7 +3990,12 @@ export default function AdminPortalPage() {
                             <button
                               onClick={() => {
                                 setEditingNews(item);
-                                setNewsFormData(item);
+                                setNewsFormData({
+                                  ...item,
+                                  noticeTitle: item.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI',
+                                  noticeContent: item.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
+                                  tagsInput: item.tags && item.tags.length > 0 ? item.tags.join(', ') : '#UKPBJKemnaker, #TransparansiPengadaan, #SPSEKemnaker'
+                                });
                                 setShowNewsModal(true);
                               }}
                               title="Edit Berita"
@@ -5803,6 +5836,109 @@ export default function AdminPortalPage() {
                   />
                 </div>
 
+                {/* ========================================================= */}
+                {/* KOTAK PEMBERITAHUAN RESMI & TAGAR / HASHTAGS BERITA */}
+                {/* ========================================================= */}
+                <div className={`p-4 rounded-2xl border space-y-3.5 ${
+                  isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50/80 border-slate-200'
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center">
+                        <Building2 className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className={`text-xs font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                          Kotak Pemberitahuan Resmi & Tagar / Hashtags
+                        </h4>
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Elemen sorotan himbauan resmi & kata kunci yang tampil di bawah artikel berita
+                        </p>
+                      </div>
+                    </div>
+                    <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                      Elemen Halaman Berita
+                    </span>
+                  </div>
+
+                  {/* Judul Pemberitahuan Resmi */}
+                  <div>
+                    <label className={`font-bold block mb-1 text-[11px] ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                      Judul Pemberitahuan Resmi
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Pemberitahuan Resmi UKPBJ Kemnaker RI"
+                      value={newsFormData.noticeTitle || ''}
+                      onChange={(e) => setNewsFormData({ ...newsFormData, noticeTitle: e.target.value })}
+                      className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
+                        isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-blue-500' : 'bg-white border-slate-300 text-slate-900 focus:border-blue-600'
+                      }`}
+                    />
+                  </div>
+
+                  {/* Isi Teks Pemberitahuan Resmi */}
+                  <div>
+                    <label className={`font-bold block mb-1 text-[11px] ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                      Isi Teks Himbauan / Informasi Pengadaan
+                    </label>
+                    <textarea
+                      rows={3}
+                      placeholder="e.g. Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan..."
+                      value={newsFormData.noticeContent || ''}
+                      onChange={(e) => setNewsFormData({ ...newsFormData, noticeContent: e.target.value })}
+                      className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
+                        isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-blue-500' : 'bg-white border-slate-300 text-slate-900 focus:border-blue-600'
+                      }`}
+                    />
+                  </div>
+
+                  {/* Tagar / Hashtags */}
+                  <div>
+                    <label className={`font-bold block mb-1 text-[11px] ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                      Tagar / Hashtags Berita
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. #UKPBJKemnaker, #TransparansiPengadaan, #SPSEKemnaker"
+                      value={newsFormData.tagsInput ?? (newsFormData.tags ? newsFormData.tags.join(', ') : '#UKPBJKemnaker, #TransparansiPengadaan, #SPSEKemnaker')}
+                      onChange={(e) => setNewsFormData({ ...newsFormData, tagsInput: e.target.value })}
+                      className={`w-full px-3 py-2 border rounded-xl text-xs outline-none ${
+                        isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-blue-500' : 'bg-white border-slate-300 text-slate-900 focus:border-blue-600'
+                      }`}
+                    />
+                    <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'} mt-1`}>
+                      Pisahkan setiap tagar dengan tanda koma (contoh: <code className="font-bold">#UKPBJKemnaker, #TransparansiPengadaan, #SPSEKemnaker</code>).
+                    </p>
+                  </div>
+
+                  {/* Live Mini Preview Box */}
+                  <div className="pt-2 border-t border-slate-200/50 dark:border-slate-800/50">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                      Pratinjau Langsung Kotak Pemberitahuan:
+                    </span>
+                    <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                      <h5 className="text-xs font-bold text-primary-navy dark:text-blue-300 flex items-center gap-1.5">
+                        <Building2 className="w-3.5 h-3.5 text-primary-blue" />
+                        <span>{newsFormData.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI'}</span>
+                      </h5>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {newsFormData.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.'}
+                      </p>
+                      <div className="pt-1 flex flex-wrap gap-1.5 text-[10px] font-bold">
+                        {((newsFormData.tagsInput
+                          ? newsFormData.tagsInput.split(',').map(t => t.trim()).filter(Boolean)
+                          : (newsFormData.tags || ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker'])
+                        )).map((tag, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">
+                            {tag.startsWith('#') ? tag : `#${tag}`}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className={`flex justify-end gap-3 pt-4 border-t ${
                   isDark ? 'border-slate-800' : 'border-slate-200'
                 }`}>
@@ -6125,6 +6261,27 @@ export default function AdminPortalPage() {
                   {previewNews.excerpt}
                 </p>
                 <p>{previewNews.content}</p>
+
+                {/* Notice Box & Hashtags Preview */}
+                <div className="my-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <h4 className="text-xs font-bold text-primary-navy flex items-center gap-1.5">
+                    <Building2 className="w-4 h-4 text-primary-blue" />
+                    <span>{previewNews.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI'}</span>
+                  </h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    {previewNews.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.'}
+                  </p>
+                  <div className="pt-1 flex flex-wrap gap-1.5 text-[10px] font-bold">
+                    {(previewNews.tags && previewNews.tags.length > 0
+                      ? previewNews.tags
+                      : ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker']
+                    ).map((tag, i) => (
+                      <span key={i} className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700">
+                        {tag.startsWith('#') ? tag : `#${tag}`}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center text-xs">

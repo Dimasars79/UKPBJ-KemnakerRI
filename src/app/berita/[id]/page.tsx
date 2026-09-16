@@ -272,15 +272,20 @@ export default function BeritaDetailPage() {
                 <div className="my-8 p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
                   <h3 className="text-base font-bold text-primary-navy flex items-center gap-2">
                     <Building2 className="w-5 h-5 text-primary-blue" />
-                    <span>Pemberitahuan Resmi UKPBJ Kemnaker RI</span>
+                    <span>{currentNews.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI'}</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.
+                    {currentNews.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.'}
                   </p>
                   <div className="pt-2 flex flex-wrap gap-2 text-[11px] font-bold">
-                    <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700">#UKPBJKemnaker</span>
-                    <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700">#TransparansiPengadaan</span>
-                    <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700">#SPSEKemnaker</span>
+                    {(currentNews.tags && currentNews.tags.length > 0
+                      ? currentNews.tags
+                      : ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker']
+                    ).map((tag, i) => (
+                      <span key={i} className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700">
+                        {tag.startsWith('#') ? tag : `#${tag}`}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>

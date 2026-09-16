@@ -14,6 +14,9 @@ export interface NewsItem {
   content: string;
   imageUrl?: string;
   syncFrontend: boolean;
+  noticeTitle?: string;
+  noticeContent?: string;
+  tags?: string[];
 }
 
 export interface AgendaItem {
@@ -642,6 +645,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             content?: string;
             image_url?: string;
             sync_frontend?: boolean;
+            notice_title?: string;
+            noticeTitle?: string;
+            notice_content?: string;
+            noticeContent?: string;
+            tags?: string[];
           }) => ({
             id: n.id,
             title: n.title,
@@ -653,7 +661,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             excerpt: n.excerpt || '',
             content: n.content || '',
             imageUrl: n.image_url || '/news/news-1.png',
-            syncFrontend: n.sync_frontend ?? true
+            syncFrontend: n.sync_frontend ?? true,
+            noticeTitle: n.notice_title || n.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI',
+            noticeContent: n.notice_content || n.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
+            tags: n.tags || ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker']
           }));
           setNewsList(mappedNews);
         }
@@ -937,7 +948,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       id: tempId,
       views: 1,
       date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
-      syncFrontend: news.status === 'Published'
+      syncFrontend: news.status === 'Published',
+      noticeTitle: news.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI',
+      noticeContent: news.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
+      tags: news.tags || ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker']
     };
 
     const updated = [newEntry, ...newsList];
@@ -953,7 +967,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         excerpt: news.excerpt,
         content: news.content,
         image_url: news.imageUrl || '/news/news-1.png',
-        sync_frontend: news.status === 'Published'
+        sync_frontend: news.status === 'Published',
+        notice_title: news.noticeTitle,
+        notice_content: news.noticeContent,
+        tags: news.tags
       }
     });
 
@@ -984,7 +1001,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         excerpt: updated.excerpt,
         content: updated.content,
         image_url: updated.imageUrl,
-        sync_frontend: updated.status === 'Published'
+        sync_frontend: updated.status === 'Published',
+        notice_title: updated.noticeTitle,
+        notice_content: updated.noticeContent,
+        tags: updated.tags
       }
     });
   };
