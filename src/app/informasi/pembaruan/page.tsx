@@ -59,7 +59,7 @@ export default function PusatPembaruanPage() {
           meta: `Oleh ${item.author} • ${item.views || 0} Pembaca`,
           href: `/berita/${item.id}`,
           actionLabel: 'Baca Berita',
-          icon: <Newspaper className="w-4 h-4 text-blue-600" />,
+          icon: <Newspaper className="w-4 h-4 text-slate-950 dark:text-white" />,
           tags: item.tags && item.tags.length > 0 ? item.tags : ['#BeritaPBJ', '#UKPBJKemnaker']
         });
       });
@@ -79,7 +79,7 @@ export default function PusatPembaruanPage() {
         meta: `Satker: ${pkg.unit} • HPS: ${pkg.hps}`,
         href: '/#pengadaan',
         actionLabel: 'Lihat Paket Tender',
-        icon: <Package className="w-4 h-4 text-indigo-600" />,
+        icon: <Package className="w-4 h-4 text-slate-950 dark:text-white" />,
         extraInfo: pkg.status
       });
     });
@@ -101,7 +101,7 @@ export default function PusatPembaruanPage() {
           meta: `JDIH Kemnaker • Status: ${reg.status}`,
           href: '/informasi/peraturan',
           actionLabel: 'Buka Regulasi',
-          icon: <Scale className="w-4 h-4 text-purple-600" />
+          icon: <Scale className="w-4 h-4 text-slate-950 dark:text-white" />
         });
       });
 
@@ -122,7 +122,7 @@ export default function PusatPembaruanPage() {
           meta: `Lokasi: ${agd.location} • ${agd.organizer}`,
           href: '/agenda',
           actionLabel: 'Lihat Jadwal Agenda',
-          icon: <Calendar className="w-4 h-4 text-emerald-600" />,
+          icon: <Calendar className="w-4 h-4 text-slate-950 dark:text-white" />,
           extraInfo: agd.status
         });
       });
