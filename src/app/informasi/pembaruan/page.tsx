@@ -447,7 +447,7 @@ export default function PusatPembaruanPage() {
 
                           <Link
                             href={item.href}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary-navy hover:bg-primary-blue text-white font-bold text-xs shadow-xs hover:shadow transition-all active:scale-95 shrink-0"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-slate-200/80 hover:border-primary-blue/50 bg-transparent hover:bg-blue-50/60 text-primary-blue font-bold text-xs transition-all active:scale-95 shrink-0"
                           >
                             <span>{item.actionLabel}</span>
                             <ArrowRight className="w-3 h-3" />
