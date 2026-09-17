@@ -6,7 +6,7 @@ import { supabase } from './client';
  */
 export async function uploadDocument(
   file: File, 
-  folder: 'sop' | 'pengadaan' | 'regulasi' | 'documents' = 'documents'
+  folder: 'sop' | 'pengadaan' | 'regulasi' | 'documents' | 'panduan' = 'documents'
 ): Promise<{
   publicUrl: string;
   fileName: string;

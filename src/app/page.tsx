@@ -102,49 +102,51 @@ export default function Home() {
       
       <main className="flex-grow overflow-hidden">
         {/* 1. Hero Section */}
-        <section className="relative text-white overflow-hidden min-h-[90vh] flex items-center">
+        <section className="relative text-white overflow-hidden min-h-[85vh] sm:min-h-[90vh] flex items-center">
           {/* Background image & overlays */}
           <div className="absolute inset-0 z-0">
             <Image 
               src="/hero-bg.png" 
               alt="Gedung Kementerian Ketenagakerjaan" 
               fill
-              className="object-cover object-center animate-slow-zoom"
+              className="object-cover object-[75%_center] md:object-center animate-slow-zoom"
               priority
             />
           </div>
-          {/* Gradient Overlay for better readability on left side */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a2342] via-[#0a2342]/80 to-transparent z-0" />
+          {/* Gradient Overlay for better readability on left side across mobile and desktop */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a2342] via-[#0a2342]/90 to-[#0a2342]/70 sm:bg-gradient-to-r sm:from-[#0a2342] sm:via-[#0a2342]/85 sm:to-transparent z-0" />
           
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-28">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-28 pb-20 sm:py-24 lg:py-32">
             <div className="max-w-4xl">
               <FadeIn direction="left" delay={0.1}>
-                <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
+                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
                   UKPBJ
                 </h1>
-                <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 text-white leading-tight">
+                <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 sm:mb-6 text-white leading-tight">
                   {t('home.hero_title')}
                 </h2>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#f2b33a] mb-6">
-                  {t('home.hero_subtitle')}
-                </h3>
+                {t('home.hero_subtitle') ? (
+                  <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#f2b33a] mb-4 sm:mb-6">
+                    {t('home.hero_subtitle')}
+                  </h3>
+                ) : null}
               </FadeIn>
               
               <FadeIn direction="left" delay={0.3}>
-                <p className="text-base md:text-lg text-slate-200 mb-8 max-w-3xl leading-relaxed">
+                <p className="text-sm sm:text-base md:text-lg text-slate-200/90 mb-6 sm:mb-8 max-w-2xl leading-relaxed">
                   {t('home.hero_desc')}
                 </p>
-                <div className="flex flex-wrap items-center gap-4">
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                   <Link 
                     href="/layanan" 
-                    className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-blue to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-900/30 hover:scale-102 transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-blue to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl shadow-lg shadow-blue-900/30 hover:scale-102 transition-all duration-300 text-sm sm:text-base"
                   >
                     <span>{t('home.btn_services')}</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link 
                     href="/monitoring" 
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-6 py-3.5 rounded-xl backdrop-blur-md hover:scale-102 transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl backdrop-blur-md hover:scale-102 transition-all duration-300 text-sm sm:text-base"
                   >
                     <span>{t('home.btn_monitoring')}</span>
                   </Link>

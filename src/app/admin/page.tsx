@@ -47,10 +47,11 @@ import {
   UserCheck,
   Bell,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, RegulasiItem, SopItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
+import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, RegulasiItem, SopItem, PanduanItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
 import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
 import { supabase } from '@/lib/supabase/client';
 
@@ -60,7 +61,7 @@ export interface AdminNotificationItem {
   desc: string;
   time: string;
   timestamp: number;
-  type: 'paket' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'galeri' | 'sistem';
+  type: 'paket' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'panduan' | 'galeri' | 'sistem';
   read: boolean;
 }
 
@@ -72,7 +73,7 @@ export interface ActivityLogItem {
   actor: string;
   role: string;
   entity: string;
-  category: 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'galeri' | 'sistem';
+  category: 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'panduan' | 'galeri' | 'sistem';
   action: 'INSERT' | 'UPDATE' | 'DELETE' | 'SYNC';
   actionColor: string;
   desc: string;
@@ -86,8 +87,9 @@ const generateLogsFromCMS = (
   agenda: AgendaItem[],
   regulasi: RegulasiItem[],
   sop: SopItem[],
-  photos: PhotoItem[],
-  videos: VideoMediaItem[]
+  panduan: PanduanItem[] = [],
+  photos: PhotoItem[] = [],
+  videos: VideoMediaItem[] = []
 ): ActivityLogItem[] => {
   const logs: ActivityLogItem[] = [];
   const now = Date.now();
@@ -204,7 +206,26 @@ const generateLogsFromCMS = (
     });
   });
 
-  // 7. Real Photos from CMS
+  // 7. Real Panduan from CMS
+  panduan.forEach((p, idx) => {
+    logs.push({
+      id: `LOG-2026-${String(logs.length + 1).padStart(3, '0')}`,
+      time: `${idx + 2} hari lalu`,
+      date: `11 Sep 2026 10:${String(10 + idx * 5).padStart(2, '0')}`,
+      timestamp: now - (200000000 + idx * 3600000),
+      actor: 'Dimas Ars',
+      role: 'Super Administrator PBJ',
+      entity: 'Panduan PBJ',
+      category: 'panduan',
+      action: 'INSERT',
+      actionColor: 'bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/20',
+      desc: `Penerbitan modul panduan teknis: "${p.title}" (${p.role})`,
+      target: p.id,
+      status: 'Berhasil'
+    });
+  });
+
+  // 8. Real Photos from CMS
   if (photos.length > 0) {
     logs.push({
       id: `LOG-2026-${String(logs.length + 1).padStart(3, '0')}`,
@@ -223,7 +244,7 @@ const generateLogsFromCMS = (
     });
   }
 
-  // 8. Real Videos from CMS
+  // 9. Real Videos from CMS
   if (videos.length > 0) {
     logs.push({
       id: `LOG-2026-${String(logs.length + 1).padStart(3, '0')}`,
@@ -278,7 +299,7 @@ const DEFAULT_NOTIFICATIONS: AdminNotificationItem[] = [
 export default function AdminPortalPage() {
   const router = useRouter();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'manage-berita' | 'manage-agenda' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'log-aktivitas' | 'pengaturan'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'manage-berita' | 'manage-agenda' | 'manage-panduan' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'log-aktivitas' | 'pengaturan'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCmsOpen, setIsCmsOpen] = useState(true);
   const [galeriTab, setGaleriTab] = useState<'all' | 'foto' | 'video'>('all');
@@ -530,6 +551,7 @@ export default function AdminPortalPage() {
     deleteAgenda,
     packagesList,
     addPackage,
+    updatePackage,
     deletePackage,
     regulasiList,
     addRegulasi,
@@ -540,6 +562,11 @@ export default function AdminPortalPage() {
     addSop,
     updateSop,
     deleteSop,
+    panduanList,
+    addPanduan,
+    updatePanduan,
+    deletePanduan,
+    togglePanduanStatus,
     photosList,
     addPhoto,
     updatePhoto,
@@ -588,6 +615,7 @@ export default function AdminPortalPage() {
           agendaList,
           regulasiList,
           sopList,
+          panduanList,
           photosList,
           videosList
         );
@@ -599,13 +627,16 @@ export default function AdminPortalPage() {
     return () => {
       isMounted = false;
     };
-  }, [fetchSupabaseActivityLogs, packagesList.length, newsList.length, agendaList.length, regulasiList.length, sopList.length, photosList.length, videosList.length]);
+  }, [fetchSupabaseActivityLogs, packagesList.length, newsList.length, agendaList.length, regulasiList.length, sopList.length, panduanList.length, photosList.length, videosList.length]);
 
   // Package Modal State
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<ProcurementPackage | null>(null);
+  const [editingPackage, setEditingPackage] = useState<ProcurementPackage | null>(null);
+  const [packageCategoryFilter, setPackageCategoryFilter] = useState('all');
+  const [packageSearchText, setPackageSearchText] = useState('');
 
-  // Add Package Modal State
+  // Add / Edit Package Modal State
   const [showPackageModal, setShowPackageModal] = useState(false);
   const [packageFormData, setPackageFormData] = useState<Partial<ProcurementPackage>>({
     code: 'TND-2026-009',
@@ -689,6 +720,27 @@ export default function AdminPortalPage() {
     status: 'Berlaku'
   });
 
+  // PANDUAN & JUKNIS MODAL STATES
+  const [showPanduanModal, setShowPanduanModal] = useState(false);
+  const [editingPanduan, setEditingPanduan] = useState<PanduanItem | null>(null);
+  const [panduanCategoryFilter, setPanduanCategoryFilter] = useState('all');
+  const [panduanRoleFilter, setPanduanRoleFilter] = useState('all');
+  const [panduanSearchText, setPanduanSearchText] = useState('');
+  const [panduanFormData, setPanduanFormData] = useState<Partial<PanduanItem>>({
+    title: '',
+    desc: '',
+    category: 'aplikasi',
+    role: 'Semua Pengguna',
+    version: 'v2026.1',
+    updatedDate: '15 Sep 2026',
+    format: 'PDF',
+    fileSize: '2.5 MB',
+    downloadUrl: '#',
+    fileData: '',
+    downloads: '0 Unduhan',
+    status: 'Published'
+  });
+
   // PHOTO & VIDEO MODAL STATES
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [editingPhoto, setEditingPhoto] = useState<PhotoItem | null>(null);
@@ -718,11 +770,11 @@ export default function AdminPortalPage() {
   const [notificationMsg, setNotificationMsg] = useState<string | null>(null);
 
   // Activity / Audit Log Filter States
-  const [logCategoryFilter, setLogCategoryFilter] = useState<'all' | 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'galeri' | 'sistem'>('all');
+  const [logCategoryFilter, setLogCategoryFilter] = useState<'all' | 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'panduan' | 'galeri' | 'sistem'>('all');
   const [logSearchText, setLogSearchText] = useState('');
 
   // Dashboard Content Feed Filter State
-  const [contentFeedFilter, setContentFeedFilter] = useState<'all' | 'paket' | 'berita' | 'agenda' | 'regulasi' | 'sop'>('all');
+  const [contentFeedFilter, setContentFeedFilter] = useState<'all' | 'paket' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'panduan'>('all');
 
   const showNotification = (msg: string) => {
     setNotificationMsg(msg);
@@ -1064,6 +1116,107 @@ export default function AdminPortalPage() {
     }
   };
 
+  // PANDUAN HANDLERS & FILE UPLOAD
+  const handlePanduanFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 20 * 1024 * 1024) {
+      showNotification('⚠️ Ukuran dokumen panduan maksimal 20MB.');
+      return;
+    }
+
+    showNotification('Mengunggah dokumen panduan ke Supabase Storage...');
+    const uploadRes = await uploadDocument(file, 'panduan');
+
+    const ext = file.name.split('.').pop()?.toUpperCase() || 'PDF';
+    const sizeStr = file.size > 1024 * 1024 
+      ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+      : `${Math.round(file.size / 1024)} KB`;
+
+    if (uploadRes.publicUrl) {
+      setPanduanFormData((prev) => ({
+        ...prev,
+        fileName: uploadRes.fileName,
+        fileSize: uploadRes.fileSize || sizeStr,
+        format: (ext === 'DOCX' || ext === 'DOC') ? 'DOCX' : (ext === 'ZIP' ? 'ZIP' : 'PDF'),
+        downloadUrl: uploadRes.publicUrl
+      }));
+      showNotification(`✓ File Panduan "${uploadRes.fileName}" berhasil diunggah ke Supabase Storage!`);
+    } else {
+      // Fallback to local Base64
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setPanduanFormData((prev) => ({
+          ...prev,
+          fileName: file.name,
+          fileSize: sizeStr,
+          format: (ext === 'DOCX' || ext === 'DOC') ? 'DOCX' : (ext === 'ZIP' ? 'ZIP' : 'PDF'),
+          fileData: result,
+          downloadUrl: result
+        }));
+        showNotification(`✓ File "${file.name}" dimuat & siap disimpan.`);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSavePanduan = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingPanduan) {
+      updatePanduan(editingPanduan.id, {
+        ...panduanFormData,
+        downloadUrl: panduanFormData.downloadUrl || panduanFormData.fileData || '#'
+      });
+      showNotification('✓ Modul Panduan berhasil diperbarui dan disinkronkan ke Supabase & Frontend (/informasi/panduan)!');
+      pushAdminNotification('Modul Panduan Diperbarui', `"${panduanFormData.title || 'Panduan'}" telah disesuaikan`, 'panduan');
+      pushActivityLog('Panduan', 'panduan', 'UPDATE', `Pembaruan modul panduan teknis: "${panduanFormData.title || 'Panduan'}"`, `GUIDE-${editingPanduan.id}`);
+    } else {
+      const now = new Date();
+      const dateStr = `${now.getDate()} ${['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][now.getMonth()]} ${now.getFullYear()}`;
+      addPanduan({
+        title: panduanFormData.title || 'Panduan Teknis Pengadaan',
+        desc: panduanFormData.desc || '',
+        category: (panduanFormData.category as PanduanItem['category']) || 'aplikasi',
+        role: panduanFormData.role || 'Semua Pengguna',
+        date: panduanFormData.date || dateStr,
+        version: panduanFormData.version || 'v2026.1',
+        updatedDate: panduanFormData.updatedDate || dateStr,
+        format: (panduanFormData.format as PanduanItem['format']) || 'PDF',
+        fileSize: panduanFormData.fileSize || '2.5 MB',
+        fileName: panduanFormData.fileName || 'Buku-Panduan.pdf',
+        fileData: panduanFormData.fileData || '',
+        downloadUrl: panduanFormData.downloadUrl || panduanFormData.fileData || '#',
+        downloads: panduanFormData.downloads || '0 Unduhan',
+        status: (panduanFormData.status as PanduanItem['status']) || 'Published'
+      });
+      showNotification('✓ Modul Panduan baru berhasil diterbitkan dan langsung tayang di (/informasi/panduan)!');
+      pushAdminNotification('Panduan Baru Diterbitkan', `${panduanFormData.title || 'Panduan PBJ'} (${panduanFormData.role || 'Umum'})`, 'panduan');
+      pushActivityLog('Panduan', 'panduan', 'INSERT', `Publikasi buku/modul panduan baru: "${panduanFormData.title || 'Panduan'}"`, `GUIDE-${Date.now()}`);
+    }
+    setShowPanduanModal(false);
+    setEditingPanduan(null);
+  };
+
+  const handleDeletePanduan = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus panduan ini? Data akan langsung terhapus dari portal publik.')) {
+      const targetPanduan = panduanList.find(p => p.id === id);
+      deletePanduan(id);
+      showNotification('Panduan telah dihapus dari sistem backend & frontend.');
+      pushAdminNotification('Panduan Dihapus', 'Satu dokumen panduan telah dihapus dari sistem', 'panduan');
+      pushActivityLog('Panduan', 'panduan', 'DELETE', `Penghapusan dokumen panduan: "${targetPanduan?.title || id}"`, `GUIDE-${id}`);
+    }
+  };
+
+  const handleTogglePanduanStatus = (id: string) => {
+    const targetPanduan = panduanList.find(p => p.id === id);
+    togglePanduanStatus(id);
+    showNotification('Status visibilitas panduan berhasil diperbarui!');
+    pushAdminNotification('Status Panduan Diubah', 'Status publikasi modul panduan telah diperbarui', 'panduan');
+    pushActivityLog('Panduan', 'panduan', 'UPDATE', `Perubahan status tayang modul panduan: "${targetPanduan?.title || id}"`, `GUIDE-${id}`);
+  };
+
   // Helper for uploading image / media to Supabase Storage
   const handleImageFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'photo' | 'video-thumb') => {
     const file = e.target.files?.[0];
@@ -1268,27 +1421,51 @@ export default function AdminPortalPage() {
   const handleSavePackage = (e: React.FormEvent) => {
     e.preventDefault();
     const docs = packageFormData.documents || [];
-    addPackage({
-      code: packageFormData.code || `TND-2026-00${packagesList.length + 1}`,
-      title: packageFormData.title || 'Paket Pengadaan Baru',
-      unit: packageFormData.unit || 'Biro Perencanaan Kemnaker RI',
-      hps: packageFormData.hps || 'Rp 500.000.000',
-      category: (packageFormData.category as ProcurementPackage['category']) || 'Tender',
-      status: (packageFormData.status as ProcurementPackage['status']) || 'Pendaftaran Dibuka',
-      deadline: packageFormData.deadline || '25 Sep 2026',
-      method: packageFormData.method || 'Tender - Pascakualifikasi Satu File',
-      docCount: docs.length > 0 ? docs.length : 1,
-      desc: packageFormData.desc || '',
-      fileName: docs[0]?.name || packageFormData.fileName || 'Dokumen-Pengadaan.pdf',
-      fileSize: docs[0]?.size || packageFormData.fileSize || '2.5 MB',
-      fileData: docs[0]?.data || packageFormData.fileData || '',
-      downloadUrl: docs[0]?.url || packageFormData.downloadUrl || '#',
-      documents: docs
-    });
-    showNotification('✓ Paket Pengadaan berhasil disimpan ke database & langsung tayang di Beranda Publik!');
-    pushAdminNotification('Paket Pengadaan Baru Diterbitkan', `${packageFormData.code || 'TND-2026'} - ${packageFormData.title || 'Paket Pengadaan'} (${docs.length} file)`, 'paket');
-    pushActivityLog('Paket PBJ', 'pengadaan', 'INSERT', `Penerbitan paket pengadaan tender baru: "${packageFormData.title || 'Paket PBJ'}" (${packageFormData.hps || 'Rp 0'})`, `${packageFormData.code || 'TND-2026'}`);
+    if (editingPackage) {
+      updatePackage(editingPackage.id, {
+        code: packageFormData.code || editingPackage.code,
+        title: packageFormData.title || editingPackage.title,
+        unit: packageFormData.unit || editingPackage.unit,
+        hps: packageFormData.hps || editingPackage.hps,
+        category: (packageFormData.category as ProcurementPackage['category']) || editingPackage.category,
+        status: (packageFormData.status as ProcurementPackage['status']) || editingPackage.status,
+        deadline: packageFormData.deadline || editingPackage.deadline,
+        method: packageFormData.method || editingPackage.method,
+        docCount: docs.length > 0 ? docs.length : (editingPackage.docCount || 1),
+        desc: packageFormData.desc || '',
+        fileName: docs[0]?.name || packageFormData.fileName || editingPackage.fileName || 'Dokumen-Pengadaan.pdf',
+        fileSize: docs[0]?.size || packageFormData.fileSize || editingPackage.fileSize || '2.5 MB',
+        fileData: docs[0]?.data || packageFormData.fileData || editingPackage.fileData || '',
+        downloadUrl: docs[0]?.url || packageFormData.downloadUrl || editingPackage.downloadUrl || '#',
+        documents: docs.length > 0 ? docs : editingPackage.documents
+      });
+      showNotification('✓ Paket Pengadaan berhasil diperbarui dan disinkronkan ke Supabase Database & Frontend!');
+      pushAdminNotification('Paket Pengadaan Diperbarui', `${packageFormData.code || editingPackage.code} - ${packageFormData.title || editingPackage.title}`, 'paket');
+      pushActivityLog('Paket PBJ', 'pengadaan', 'UPDATE', `Pembaruan data paket pengadaan: "${packageFormData.title || editingPackage.title}"`, `${packageFormData.code || editingPackage.code}`);
+    } else {
+      addPackage({
+        code: packageFormData.code || `TND-2026-00${packagesList.length + 1}`,
+        title: packageFormData.title || 'Paket Pengadaan Baru',
+        unit: packageFormData.unit || 'Biro Perencanaan Kemnaker RI',
+        hps: packageFormData.hps || 'Rp 500.000.000',
+        category: (packageFormData.category as ProcurementPackage['category']) || 'Tender',
+        status: (packageFormData.status as ProcurementPackage['status']) || 'Pendaftaran Dibuka',
+        deadline: packageFormData.deadline || '25 Sep 2026',
+        method: packageFormData.method || 'Tender - Pascakualifikasi Satu File',
+        docCount: docs.length > 0 ? docs.length : 1,
+        desc: packageFormData.desc || '',
+        fileName: docs[0]?.name || packageFormData.fileName || 'Dokumen-Pengadaan.pdf',
+        fileSize: docs[0]?.size || packageFormData.fileSize || '2.5 MB',
+        fileData: docs[0]?.data || packageFormData.fileData || '',
+        downloadUrl: docs[0]?.url || packageFormData.downloadUrl || '#',
+        documents: docs
+      });
+      showNotification('✓ Paket Pengadaan berhasil disimpan ke database & langsung tayang di Beranda Publik!');
+      pushAdminNotification('Paket Pengadaan Baru Diterbitkan', `${packageFormData.code || 'TND-2026'} - ${packageFormData.title || 'Paket Pengadaan'} (${docs.length} file)`, 'paket');
+      pushActivityLog('Paket PBJ', 'pengadaan', 'INSERT', `Penerbitan paket pengadaan tender baru: "${packageFormData.title || 'Paket PBJ'}" (${packageFormData.hps || 'Rp 0'})`, `${packageFormData.code || 'TND-2026'}`);
+    }
     setShowPackageModal(false);
+    setEditingPackage(null);
   };
 
   const handleDeletePackage = (id: string) => {
@@ -1465,6 +1642,23 @@ export default function AdminPortalPage() {
                           transition={{ duration: 0.2 }}
                           className="overflow-hidden space-y-1 pl-1.5 border-l-2 border-accent-gold/30 ml-2"
                         >
+                          {/* Tender & Seleksi */}
+                          <button
+                            onClick={() => { setActiveTab('paket'); setMobileMenuOpen(false); }}
+                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                              activeTab === 'paket'
+                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                            }`}
+                          >
+                            <Package className="w-3.5 h-3.5 text-blue-500" />
+                            <span>Tender & Seleksi</span>
+                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                              {packagesList.length}
+                            </span>
+                          </button>
+
+                          {/* Berita */}
                           <button
                             onClick={() => { setActiveTab('manage-berita'); setMobileMenuOpen(false); }}
                             className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -1480,6 +1674,7 @@ export default function AdminPortalPage() {
                             </span>
                           </button>
 
+                          {/* Agenda */}
                           <button
                             onClick={() => { setActiveTab('manage-agenda'); setMobileMenuOpen(false); }}
                             className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -1495,6 +1690,23 @@ export default function AdminPortalPage() {
                             </span>
                           </button>
 
+                          {/* Panduan & Juknis */}
+                          <button
+                            onClick={() => { setActiveTab('manage-panduan'); setMobileMenuOpen(false); }}
+                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                              activeTab === 'manage-panduan'
+                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                            }`}
+                          >
+                            <BookOpen className="w-3.5 h-3.5 text-teal-500" />
+                            <span>Panduan & Juknis</span>
+                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
+                              {panduanList.length}
+                            </span>
+                          </button>
+
+                          {/* Regulasi */}
                           <button
                             onClick={() => { setActiveTab('manage-regulasi'); setMobileMenuOpen(false); }}
                             className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -1510,6 +1722,7 @@ export default function AdminPortalPage() {
                             </span>
                           </button>
 
+                          {/* SOP */}
                           <button
                             onClick={() => { setActiveTab('manage-sop'); setMobileMenuOpen(false); }}
                             className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -1525,6 +1738,7 @@ export default function AdminPortalPage() {
                             </span>
                           </button>
 
+                          {/* Galeri & Media */}
                           <button
                             onClick={() => { setActiveTab('manage-galeri'); setMobileMenuOpen(false); }}
                             className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -1729,6 +1943,22 @@ export default function AdminPortalPage() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden space-y-1 pl-1.5 border-l-2 border-accent-gold/30 ml-2"
                   >
+                    {/* Tender & Seleksi */}
+                    <button
+                      onClick={() => setActiveTab('paket')}
+                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'paket'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                      }`}
+                    >
+                      <Package className="w-3.5 h-3.5 text-blue-500" />
+                      <span>Tender & Seleksi</span>
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                        {packagesList.length}
+                      </span>
+                    </button>
+
                     {/* Berita */}
                     <button
                       onClick={() => setActiveTab('manage-berita')}
@@ -1758,6 +1988,22 @@ export default function AdminPortalPage() {
                       <span>Agenda & Jadwal</span>
                       <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
                         {agendaList.length}
+                      </span>
+                    </button>
+
+                    {/* Panduan & Juknis */}
+                    <button
+                      onClick={() => setActiveTab('manage-panduan')}
+                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        activeTab === 'manage-panduan'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                      }`}
+                    >
+                      <BookOpen className="w-3.5 h-3.5 text-teal-500" />
+                      <span>Panduan & Juknis</span>
+                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
+                        {panduanList.length}
                       </span>
                     </button>
 
@@ -2107,6 +2353,34 @@ export default function AdminPortalPage() {
                       >
                         <ScrollText className="w-3.5 h-3.5 text-blue-400" />
                         <span>Regulasi & Aturan</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowQuickAdd(false);
+                          setEditingPanduan(null);
+                          setPanduanFormData({
+                            title: '',
+                            desc: '',
+                            category: 'aplikasi',
+                            role: 'Semua Pengguna',
+                            version: 'v2026.1',
+                            updatedDate: '15 Sep 2026',
+                            format: 'PDF',
+                            fileSize: '2.5 MB',
+                            downloadUrl: '#',
+                            fileData: '',
+                            downloads: '0 Unduhan',
+                            status: 'Published'
+                          });
+                          setShowPanduanModal(true);
+                        }}
+                        className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
+                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <BookOpen className="w-3.5 h-3.5 text-teal-400" />
+                        <span>Panduan & Juknis</span>
                       </button>
 
                       <button
@@ -4146,7 +4420,7 @@ export default function AdminPortalPage() {
 
 
         {/* ========================================================= */}
-        {/* TAB 5: PAKET PENGADAAN & DETAIL (LIVE BACKEND CRUD) */}
+        {/* TAB 5: PAKET PENGADAAN / TENDER & SELEKSI (LIVE BACKEND CRUD) */}
         {/* ========================================================= */}
         {activeTab === 'paket' && (
           <div className="p-6 md:p-8 space-y-6">
@@ -4154,17 +4428,18 @@ export default function AdminPortalPage() {
               <div>
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-xs font-bold uppercase mb-2">
                   <Package className="w-3.5 h-3.5" />
-                  <span>Backend Procurement Database</span>
+                  <span>Tender & Seleksi Procurement Database</span>
                 </div>
                 <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Manajemen Paket Pengadaan
+                  Kelola Tender, Seleksi & Paket Pengadaan
                 </h2>
                 <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
-                  Kelola paket tender & seleksi aktif. Perubahan langsung tersinkronisasi ke homepage publik (<Link href="/#pengadaan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/#pengadaan</Link>).
+                  Kelola paket tender, seleksi, pengadaan langsung, dan e-purchasing. Perubahan langsung tersinkronisasi ke database Supabase dan beranda publik (<Link href="/#pengadaan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/#pengadaan</Link>).
                 </p>
               </div>
               <button 
                 onClick={() => {
+                  setEditingPackage(null);
                   setPackageFormData({
                     code: `TND-2026-00${packagesList.length + 1}`,
                     title: '',
@@ -4174,72 +4449,203 @@ export default function AdminPortalPage() {
                     status: 'Pendaftaran Dibuka',
                     deadline: '28 Sep 2026',
                     method: 'Tender - Pascakualifikasi Satu File',
-                    docCount: 3,
-                    desc: ''
+                    docCount: 1,
+                    desc: '',
+                    fileName: '',
+                    fileSize: '',
+                    fileData: '',
+                    downloadUrl: '#',
+                    documents: []
                   });
                   setShowPackageModal(true);
                 }}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer shrink-0"
               >
                 <Plus className="w-4 h-4" />
-                <span>Tambah Paket Pengadaan</span>
+                <span>Tambah Paket Baru</span>
               </button>
             </div>
 
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Paket</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</span>
+                  <span className="text-[10px] font-bold text-blue-500">Paket Terdaftar</span>
+                </div>
+              </div>
+              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Pendaftaran Dibuka</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-2xl font-black text-emerald-500">{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length}</span>
+                  <span className="text-[10px] font-bold text-emerald-600">Sedang Berjalan</span>
+                </div>
+              </div>
+              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Evaluasi / Selesai</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-2xl font-black text-amber-500">{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length}</span>
+                  <span className="text-[10px] font-bold text-amber-600">Tahap Penilaian</span>
+                </div>
+              </div>
+              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Tender & Seleksi</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-2xl font-black text-indigo-500">{packagesList.filter(p => p.category === 'Tender' || p.category === 'Seleksi').length}</span>
+                  <span className="text-[10px] font-bold text-indigo-600">Kompetitif</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Filter & Search Toolbar */}
+            <div className={`p-4 rounded-2xl border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {[
+                  { id: 'all', label: `Semua (${packagesList.length})` },
+                  { id: 'Tender', label: `Tender (${packagesList.filter(p => p.category === 'Tender').length})` },
+                  { id: 'Seleksi', label: `Seleksi (${packagesList.filter(p => p.category === 'Seleksi').length})` },
+                  { id: 'Pengadaan Langsung', label: `Pengadaan Langsung (${packagesList.filter(p => p.category === 'Pengadaan Langsung').length})` },
+                  { id: 'E-Purchasing', label: `E-Purchasing (${packagesList.filter(p => p.category === 'E-Purchasing').length})` },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setPackageCategoryFilter(tab.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      packageCategoryFilter === tab.id
+                        ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
+                        : isDark
+                          ? 'bg-slate-950 text-slate-400 hover:text-white hover:bg-slate-800'
+                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative w-full md:w-72">
+                <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${
+                  isDark ? 'text-slate-500' : 'text-slate-400'
+                }`} />
+                <input
+                  type="text"
+                  placeholder="Cari kode, paket, satker..."
+                  value={packageSearchText}
+                  onChange={(e) => setPackageSearchText(e.target.value)}
+                  className={`w-full pl-9 pr-3.5 py-1.5 border rounded-xl text-xs outline-none transition-all ${
+                    isDark
+                      ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500'
+                      : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-600'
+                  }`}
+                />
+                {packageSearchText && (
+                  <button
+                    onClick={() => setPackageSearchText('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Packages Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {packagesList.map((pkg) => (
-                <div key={pkg.id} className={`p-5 rounded-2xl border transition-all space-y-3 ${
+              {packagesList
+                .filter((pkg) => {
+                  const matchCat = packageCategoryFilter === 'all' || pkg.category === packageCategoryFilter;
+                  if (!matchCat) return false;
+                  if (packageSearchText) {
+                    const q = packageSearchText.toLowerCase();
+                    return (
+                      pkg.title.toLowerCase().includes(q) ||
+                      pkg.code.toLowerCase().includes(q) ||
+                      pkg.unit.toLowerCase().includes(q) ||
+                      (pkg.method && pkg.method.toLowerCase().includes(q)) ||
+                      (pkg.hps && pkg.hps.toLowerCase().includes(q))
+                    );
+                  }
+                  return true;
+                })
+                .map((pkg) => (
+                <div key={pkg.id} className={`p-5 rounded-2xl border transition-all space-y-3 flex flex-col justify-between ${
                   isDark ? 'bg-slate-900 border-slate-800 hover:border-blue-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-blue-500/40'
                 }`}>
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                        {pkg.category}
-                      </span>
-                      <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700'} font-mono font-bold`}>
-                        {pkg.code}
-                      </span>
-                    </div>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                      {pkg.status}
-                    </span>
-                  </div>
-
-                  <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.title}</h3>
-                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-2`}>{pkg.desc || 'Pengadaan barang/jasa untuk mendukung kegiatan operasional kementerian.'}</p>
-
-                  <div className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                    <span>Satuan Kerja: </span>
-                    <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{pkg.unit}</strong>
-                  </div>
-
-                  {/* Attachment Document Badge */}
-                  <div className={`p-2 rounded-xl border flex items-center justify-between gap-2 text-xs ${
-                    pkg.fileData 
-                      ? isDark ? 'bg-blue-950/20 border-blue-800/40 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-900'
-                      : isDark ? 'bg-slate-950/40 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-700'
-                  }`}>
-                    <div className="flex items-center gap-2 min-w-0">
-                      <FileText className={`w-3.5 h-3.5 shrink-0 ${pkg.fileData ? 'text-blue-500' : isDark ? 'text-slate-400' : 'text-slate-600'}`} />
-                      <span className="font-bold text-[11px] truncate">
-                        {pkg.fileName || 'Dokumen-Pengadaan.pdf'}
-                      </span>
-                      <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'} shrink-0 font-mono`}>
-                        ({pkg.fileSize || '2.5 MB'})
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                          {pkg.category}
+                        </span>
+                        <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700'} font-mono font-bold`}>
+                          {pkg.code}
+                        </span>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                        pkg.status === 'Pendaftaran Dibuka'
+                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                          : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                      }`}>
+                        {pkg.status}
                       </span>
                     </div>
 
-                    {pkg.fileData && (
-                      <a
-                        href={pkg.fileData}
-                        download={pkg.fileName || `${pkg.code}-Dokumen.pdf`}
-                        className="px-2 py-0.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shrink-0"
-                        title="Unduh Dokumen Pengadaan"
-                      >
-                        <Download className="w-2.5 h-2.5" />
-                        <span>Unduh</span>
-                      </a>
-                    )}
+                    <h3 className={`font-bold text-sm leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.title}</h3>
+                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-2`}>{pkg.desc || 'Pengadaan barang/jasa untuk mendukung kegiatan operasional kementerian.'}</p>
+
+                    <div className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} flex items-center justify-between`}>
+                      <div>
+                        <span>Satuan Kerja: </span>
+                        <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{pkg.unit}</strong>
+                      </div>
+                      <div>
+                        <span>Batas: </span>
+                        <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{pkg.deadline}</strong>
+                      </div>
+                    </div>
+
+                    {/* Attachment Document Badge */}
+                    <div className={`p-2 rounded-xl border flex items-center justify-between gap-2 text-xs ${
+                      pkg.fileData || (pkg.downloadUrl && pkg.downloadUrl !== '#')
+                        ? isDark ? 'bg-blue-950/20 border-blue-800/40 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-900'
+                        : isDark ? 'bg-slate-950/40 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-700'
+                    }`}>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <FileText className={`w-3.5 h-3.5 shrink-0 ${pkg.fileData || (pkg.downloadUrl && pkg.downloadUrl !== '#') ? 'text-blue-500' : isDark ? 'text-slate-400' : 'text-slate-600'}`} />
+                        <span className="font-bold text-[11px] truncate">
+                          {pkg.fileName || (pkg.documents && pkg.documents[0]?.name) || 'Dokumen-Pengadaan.pdf'}
+                        </span>
+                        <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'} shrink-0 font-mono`}>
+                          ({pkg.fileSize || (pkg.documents && pkg.documents[0]?.size) || '2.5 MB'})
+                        </span>
+                      </div>
+
+                      {pkg.fileData ? (
+                        <a
+                          href={pkg.fileData}
+                          download={pkg.fileName || `${pkg.code}-Dokumen.pdf`}
+                          className="px-2 py-0.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shrink-0"
+                          title="Unduh Dokumen Pengadaan"
+                        >
+                          <Download className="w-2.5 h-2.5" />
+                          <span>Unduh</span>
+                        </a>
+                      ) : pkg.downloadUrl && pkg.downloadUrl !== '#' ? (
+                        <a
+                          href={pkg.downloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-2 py-0.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shrink-0"
+                          title="Unduh Dokumen"
+                        >
+                          <Download className="w-2.5 h-2.5" />
+                          <span>Unduh</span>
+                        </a>
+                      ) : null}
+                    </div>
                   </div>
 
                   <div className={`pt-3 border-t flex justify-between items-center ${
@@ -4262,6 +4668,22 @@ export default function AdminPortalPage() {
                         Detail
                       </button>
                       <button
+                        onClick={() => {
+                          setEditingPackage(pkg);
+                          setPackageFormData({
+                            ...pkg,
+                            documents: pkg.documents || []
+                          });
+                          setShowPackageModal(true);
+                        }}
+                        title="Edit Paket"
+                        className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                          isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-700 hover:text-white'
+                        }`}
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
                         onClick={() => handleDeletePackage(pkg.id)}
                         title="Hapus Paket"
                         className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
@@ -4274,6 +4696,338 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB: MANAGE PANDUAN & JUKNIS (CMS) */}
+        {/* ========================================================= */}
+        {activeTab === 'manage-panduan' && (
+          <div className="p-6 md:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-500 text-xs font-bold uppercase mb-2">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Backend Manual & Technical Guide CMS</span>
+                </div>
+                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Manage Panduan, Petunjuk Teknis & Modul PBJ
+                </h2>
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                  Kelola buku panduan, pedoman aplikasi, dan juknis pengadaan. Perubahan langsung tersinkronisasi ke database Supabase dan portal publik (<Link href="/informasi/panduan" className="text-teal-600 dark:text-teal-400 font-bold hover:underline">/informasi/panduan</Link>).
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const now = new Date();
+                    const dateStr = `${now.getDate()} ${['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][now.getMonth()]} ${now.getFullYear()}`;
+                    setEditingPanduan(null);
+                    setPanduanFormData({
+                      title: '',
+                      desc: '',
+                      category: 'aplikasi',
+                      role: 'Semua Pengguna',
+                      version: 'v2026.1',
+                      updatedDate: dateStr,
+                      format: 'PDF',
+                      fileSize: '2.5 MB',
+                      fileName: '',
+                      fileData: '',
+                      downloadUrl: '#',
+                      downloads: '0 Unduhan',
+                      status: 'Published'
+                    });
+                    setShowPanduanModal(true);
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-600/30 transition-all cursor-pointer shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Tambah Panduan Baru</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Panduan</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{panduanList.length}</span>
+                  <span className="text-[10px] font-bold text-teal-500">Modul Terdaftar</span>
+                </div>
+              </div>
+              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Status Aktif</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-2xl font-black text-emerald-500">{panduanList.filter(p => p.status === 'Published').length}</span>
+                  <span className="text-[10px] font-bold text-emerald-600">Tayang di Publik</span>
+                </div>
+              </div>
+              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Kategori Aplikasi</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-2xl font-black text-blue-500">{panduanList.filter(p => p.category === 'aplikasi').length}</span>
+                  <span className="text-[10px] font-bold text-blue-600">SPSE & Katalog</span>
+                </div>
+              </div>
+              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Panduan Penyedia & Pokja</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-2xl font-black text-amber-500">{panduanList.filter(p => p.category === 'penyedia' || p.category === 'panitia').length}</span>
+                  <span className="text-[10px] font-bold text-amber-600">Juknis Teknis</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Filter & Search Toolbar */}
+            <div className={`p-4 rounded-2xl border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {[
+                  { id: 'all', label: `Semua (${panduanList.length})` },
+                  { id: 'aplikasi', label: `Aplikasi (${panduanList.filter(p => p.category === 'aplikasi').length})` },
+                  { id: 'penyedia', label: `Penyedia (${panduanList.filter(p => p.category === 'penyedia').length})` },
+                  { id: 'panitia', label: `Panitia/PPK (${panduanList.filter(p => p.category === 'panitia').length})` },
+                  { id: 'regulasi', label: `Regulasi (${panduanList.filter(p => p.category === 'regulasi').length})` },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setPanduanCategoryFilter(tab.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      panduanCategoryFilter === tab.id
+                        ? 'bg-teal-600 text-white shadow-sm shadow-teal-600/30'
+                        : isDark
+                          ? 'bg-slate-950 text-slate-400 hover:text-white hover:bg-slate-800'
+                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <select
+                  value={panduanRoleFilter}
+                  onChange={(e) => setPanduanRoleFilter(e.target.value)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border outline-none cursor-pointer ${
+                    isDark
+                      ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-teal-500'
+                      : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-teal-600'
+                  }`}
+                >
+                  <option value="all">Semua Peran / Role</option>
+                  <option value="Semua Pengguna">Semua Pengguna</option>
+                  <option value="PPK / Pokja">PPK / Pokja</option>
+                  <option value="Penyedia / Rekanan">Penyedia / Rekanan</option>
+                  <option value="Auditor / Pengawas">Auditor / Pengawas</option>
+                </select>
+
+                <div className="relative w-full sm:w-60">
+                  <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${
+                    isDark ? 'text-slate-500' : 'text-slate-400'
+                  }`} />
+                  <input
+                    type="text"
+                    placeholder="Cari panduan, kata kunci..."
+                    value={panduanSearchText}
+                    onChange={(e) => setPanduanSearchText(e.target.value)}
+                    className={`w-full pl-9 pr-3.5 py-1.5 border rounded-xl text-xs outline-none transition-all ${
+                      isDark
+                        ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-teal-500'
+                        : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-teal-600'
+                    }`}
+                  />
+                  {panduanSearchText && (
+                    <button
+                      onClick={() => setPanduanSearchText('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Panduan Table View */}
+            <div className={`border rounded-2xl overflow-hidden ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
+              <div className={`p-4 border-b flex justify-between items-center text-xs ${
+                isDark ? 'border-slate-800' : 'border-slate-200'
+              }`}>
+                <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+                  Daftar Panduan & Juknis Aktif ({panduanList.length})
+                </span>
+                <span className="text-teal-500 text-[11px] font-bold flex items-center gap-1.5">
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <span>Live Dynamic Sync to Frontend</span>
+                </span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className={`text-[11px] border-b ${
+                    isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
+                  }`}>
+                    <tr>
+                      <th className="p-4 font-bold">Judul & Rincian Panduan</th>
+                      <th className="p-4 font-bold">Kategori & Role</th>
+                      <th className="p-4 font-bold">Versi & Format</th>
+                      <th className="p-4 font-bold">Diperbarui</th>
+                      <th className="p-4 font-bold">Status</th>
+                      <th className="p-4 font-bold text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody className={`divide-y ${
+                    isDark ? 'divide-slate-800/60' : 'divide-slate-100'
+                  }`}>
+                    {panduanList
+                      .filter((p) => {
+                        const matchCat = panduanCategoryFilter === 'all' || p.category === panduanCategoryFilter;
+                        const matchRole = panduanRoleFilter === 'all' || p.role === panduanRoleFilter;
+                        if (!matchCat || !matchRole) return false;
+                        if (panduanSearchText) {
+                          const q = panduanSearchText.toLowerCase();
+                          return (
+                            p.title.toLowerCase().includes(q) ||
+                            (p.desc && p.desc.toLowerCase().includes(q)) ||
+                            p.role.toLowerCase().includes(q)
+                          );
+                        }
+                        return true;
+                      })
+                      .map((item) => (
+                      <tr key={item.id} className={`transition-colors ${
+                        isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
+                      }`}>
+                        <td className="p-4">
+                          <div className="flex items-start gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                              <BookOpen className="w-4 h-4" />
+                            </div>
+                            <div className="min-w-0 max-w-sm">
+                              <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.title}</p>
+                              <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-1 mt-0.5`}>{item.desc}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="space-y-1">
+                            <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 block w-fit">
+                              {item.category === 'aplikasi' ? 'Aplikasi PBJ' : item.category === 'penyedia' ? 'Penyedia' : item.category === 'panitia' ? 'Panitia / Pokja' : 'Regulasi'}
+                            </span>
+                            <span className={`text-[10px] block ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                              {item.role}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="space-y-0.5">
+                            <span className="font-mono font-bold text-[11px] text-blue-500 dark:text-blue-400">{item.version}</span>
+                            <div className="flex items-center gap-1.5 text-[10px]">
+                              <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-bold">{item.format}</span>
+                              <span className={isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}>{item.fileSize}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={`p-4 ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'} text-[11px]`}>
+                          <div>{item.updatedDate}</div>
+                          <div className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>{item.downloads || '0 Unduhan'}</div>
+                        </td>
+                        <td className="p-4">
+                          <button
+                            onClick={() => handleTogglePanduanStatus(item.id)}
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer ${
+                              item.status === 'Published'
+                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
+                            }`}
+                          >
+                            {item.status === 'Published' ? '✓ Published (Live)' : item.status === 'Archived' ? 'Archived' : 'Draft (Hidden)'}
+                          </button>
+                        </td>
+                        <td className="p-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {item.fileData ? (
+                              <a
+                                href={item.fileData}
+                                download={item.fileName || `${item.title}.pdf`}
+                                className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                                  isDark ? 'bg-slate-800 hover:bg-teal-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-teal-600 text-slate-700 hover:text-white'
+                                }`}
+                                title="Unduh File"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                              </a>
+                            ) : item.downloadUrl && item.downloadUrl !== '#' ? (
+                              <a
+                                href={item.downloadUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                                  isDark ? 'bg-slate-800 hover:bg-teal-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-teal-600 text-slate-700 hover:text-white'
+                                }`}
+                                title="Unduh File"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                              </a>
+                            ) : null}
+
+                            <button
+                              onClick={() => {
+                                setEditingPanduan(item);
+                                setPanduanFormData(item);
+                                setShowPanduanModal(true);
+                              }}
+                              title="Edit Panduan"
+                              className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                                isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-700 hover:text-white'
+                              }`}
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeletePanduan(item.id)}
+                              title="Hapus Panduan"
+                              className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                                isDark ? 'bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-red-600 text-slate-700 hover:text-white'
+                              }`}
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {panduanList.filter((p) => {
+                      const matchCat = panduanCategoryFilter === 'all' || p.category === panduanCategoryFilter;
+                      const matchRole = panduanRoleFilter === 'all' || p.role === panduanRoleFilter;
+                      if (!matchCat || !matchRole) return false;
+                      if (panduanSearchText) {
+                        const q = panduanSearchText.toLowerCase();
+                        return (
+                          p.title.toLowerCase().includes(q) ||
+                          (p.desc && p.desc.toLowerCase().includes(q)) ||
+                          p.role.toLowerCase().includes(q)
+                        );
+                      }
+                      return true;
+                    }).length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="p-8 text-center text-xs text-slate-500">
+                          Tidak ada modul panduan yang cocok dengan filter atau pencarian Anda.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
@@ -6302,7 +7056,7 @@ export default function AdminPortalPage() {
       </AnimatePresence>
 
       {/* ========================================================= */}
-      {/* MODAL 4: TAMBAH PAKET PENGADAAN BARU */}
+      {/* MODAL 4: TAMBAH / EDIT PAKET PENGADAAN */}
       {/* ========================================================= */}
       <AnimatePresence>
         {showPackageModal && (
@@ -6318,9 +7072,11 @@ export default function AdminPortalPage() {
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    Tambah Paket Pengadaan Baru
+                    {editingPackage ? 'Edit Paket Pengadaan / Tender' : 'Tambah Paket Pengadaan Baru'}
                   </h3>
-                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>Paket baru akan langsung tersimpan di database dan muncul pada homepage publik (/#pengadaan).</p>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>
+                    {editingPackage ? 'Perbarui data paket pengadaan. Perubahan langsung tersinkronkan ke Supabase dan portal publik.' : 'Paket baru akan langsung tersimpan di database dan muncul pada homepage publik (/#pengadaan).'}
+                  </p>
                 </div>
                 <button
                   onClick={() => setShowPackageModal(false)}
@@ -6556,7 +7312,233 @@ export default function AdminPortalPage() {
                     type="submit"
                     className="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-600/30 cursor-pointer"
                   >
-                    Simpan & Publikasikan
+                    {editingPackage ? 'Simpan Perubahan' : 'Simpan & Publikasikan'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* MODAL: CREATE / EDIT PANDUAN & JUKNIS */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showPanduanModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+                isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
+              }`}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-teal-500" />
+                  <div>
+                    <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {editingPanduan ? 'Edit Modul Panduan & Juknis' : 'Tambah Panduan Baru (CMS)'}
+                    </h3>
+                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>
+                      Modul panduan akan langsung tersimpan di Supabase dan tampil pada halaman publik (/informasi/panduan).
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowPanduanModal(false)}
+                  className={`p-1.5 rounded-full transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSavePanduan} className="space-y-4 text-xs">
+                <div>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Judul Modul / Buku Panduan *</label>
+                  <input
+                    type="text"
+                    required
+                    value={panduanFormData.title || ''}
+                    onChange={(e) => setPanduanFormData({ ...panduanFormData, title: e.target.value })}
+                    placeholder="e.g. Petunjuk Teknis Pengisian Kualifikasi SPSE v4.5"
+                    className={`w-full px-3 py-2.5 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-teal-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-teal-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori Panduan *</label>
+                    <select
+                      value={panduanFormData.category || 'aplikasi'}
+                      onChange={(e) => setPanduanFormData({ ...panduanFormData, category: e.target.value as PanduanItem['category'] })}
+                      className={`w-full px-3 py-2.5 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-teal-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-teal-600'
+                      }`}
+                    >
+                      <option value="aplikasi">Aplikasi SPSE / Katalog</option>
+                      <option value="penyedia">Pelaku Usaha / Penyedia</option>
+                      <option value="panitia">Panitia / Pejabat Pengadaan (PPK)</option>
+                      <option value="regulasi">Regulasi & Standar Prosedur</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Target Sasaran / Peran *</label>
+                    <select
+                      value={panduanFormData.role || 'Semua Pengguna'}
+                      onChange={(e) => setPanduanFormData({ ...panduanFormData, role: e.target.value })}
+                      className={`w-full px-3 py-2.5 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-teal-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-teal-600'
+                      }`}
+                    >
+                      <option value="Semua Pengguna">Semua Pengguna</option>
+                      <option value="Penyedia / Rekanan">Penyedia / Rekanan</option>
+                      <option value="PPK / Pokja">PPK / Pokja</option>
+                      <option value="Auditor / Pengawas">Auditor / Pengawas</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Versi Dokumen</label>
+                    <input
+                      type="text"
+                      value={panduanFormData.version || 'v2026.1'}
+                      onChange={(e) => setPanduanFormData({ ...panduanFormData, version: e.target.value })}
+                      placeholder="e.g. v2026.1"
+                      className={`w-full px-3 py-2 border rounded-xl font-mono outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-800 text-blue-400 focus:border-teal-500' : 'bg-slate-50 border-slate-300 text-blue-800 focus:border-teal-600'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Format File</label>
+                    <select
+                      value={panduanFormData.format || 'PDF'}
+                      onChange={(e) => setPanduanFormData({ ...panduanFormData, format: e.target.value as PanduanItem['format'] })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-teal-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-teal-600'
+                      }`}
+                    >
+                      <option value="PDF">PDF</option>
+                      <option value="DOCX">DOCX</option>
+                      <option value="ZIP">ZIP</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Status Publikasi</label>
+                    <select
+                      value={panduanFormData.status || 'Published'}
+                      onChange={(e) => setPanduanFormData({ ...panduanFormData, status: e.target.value as PanduanItem['status'] })}
+                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-teal-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-teal-600'
+                      }`}
+                    >
+                      <option value="Published">Published (Live)</option>
+                      <option value="Draft">Draft (Tersembunyi)</option>
+                      <option value="Archived">Archived</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Deskripsi / Ringkasan Isi Panduan</label>
+                  <textarea
+                    rows={3}
+                    value={panduanFormData.desc || ''}
+                    onChange={(e) => setPanduanFormData({ ...panduanFormData, desc: e.target.value })}
+                    placeholder="Ringkasan isi modul, target pengguna, dan pokok bahasan panduan..."
+                    className={`w-full px-3 py-2.5 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-teal-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-teal-600'
+                    }`}
+                  />
+                </div>
+
+                {/* FILE UPLOAD PANDUAN */}
+                <div className={`p-4 rounded-2xl border ${
+                  isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+                } space-y-3`}>
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold flex items-center gap-1.5 text-xs text-teal-600 dark:text-teal-400">
+                      <FileText className="w-4 h-4" />
+                      <span>File Dokumen Panduan (PDF, DOCX, ZIP)</span>
+                    </label>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                      Maksimal 20MB
+                    </span>
+                  </div>
+
+                  {(panduanFormData.fileName || panduanFormData.fileData || (panduanFormData.downloadUrl && panduanFormData.downloadUrl !== '#')) ? (
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-teal-500/10 border border-teal-500/30">
+                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                        <FileText className="w-5 h-5 text-teal-500 shrink-0" />
+                        <div className="min-w-0">
+                          <p className={`font-bold text-xs truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            {panduanFormData.fileName || 'Dokumen-Panduan.pdf'}
+                          </p>
+                          <p className="text-[10px] text-teal-600 dark:text-teal-400 font-mono font-medium">
+                            {panduanFormData.fileSize || '2.5 MB'} • Siap Disimpan ke Storage
+                          </p>
+                        </div>
+                      </div>
+                      <label className="px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold cursor-pointer transition-colors shrink-0">
+                        <span>Ganti File</span>
+                        <input
+                          type="file"
+                          accept=".pdf,.doc,.docx,.zip,.rar"
+                          className="hidden"
+                          onChange={handlePanduanFileUpload}
+                        />
+                      </label>
+                    </div>
+                  ) : (
+                    <label className={`border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all ${
+                      isDark 
+                        ? 'border-slate-800 hover:border-teal-500 hover:bg-teal-950/10' 
+                        : 'border-slate-300 hover:border-teal-500 hover:bg-teal-50/30'
+                    }`}>
+                      <Upload className="w-6 h-6 text-teal-600 dark:text-teal-500 mb-1" />
+                      <span className="text-xs font-bold text-teal-600 dark:text-teal-400 text-center">
+                        Klik untuk Memilih File Dokumen Panduan
+                      </span>
+                      <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5 text-center`}>
+                        Mendukung format PDF, DOCX, ZIP (Maks 20MB)
+                      </span>
+                      <input 
+                        type="file" 
+                        accept=".pdf,.doc,.docx,.zip,.rar"
+                        className="hidden" 
+                        onChange={handlePanduanFileUpload} 
+                      />
+                    </label>
+                  )}
+                </div>
+
+                <div className={`flex justify-end gap-3 pt-4 border-t ${
+                  isDark ? 'border-slate-800' : 'border-slate-200'
+                }`}>
+                  <button
+                    type="button"
+                    onClick={() => setShowPanduanModal(false)}
+                    className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
+                      isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+                    }`}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold shadow-lg shadow-teal-600/30 cursor-pointer"
+                  >
+                    {editingPanduan ? 'Simpan Perubahan' : 'Simpan & Publikasikan'}
                   </button>
                 </div>
               </form>

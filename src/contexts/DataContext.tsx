@@ -93,6 +93,25 @@ export interface SopItem {
   syncFrontend: boolean;
 }
 
+export interface PanduanItem {
+  id: string;
+  category: string; // 'pa-kpa' | 'ppk' | 'pp' | 'pokja' | 'penyedia' | 'mdp' | 'bimtek' | 'lain' | 'aplikasi' | 'panitia' | 'regulasi'
+  role: string; // 'PA / KPA' | 'PPK' | 'Pejabat Pengadaan' | 'Pokja Pemilihan' | 'Penyedia' | 'Standar Dokumen' | 'Materi Pelatihan' | 'Umum' | 'Semua Pengguna'
+  title: string;
+  date: string;
+  updatedDate?: string;
+  version?: string;
+  downloads?: string;
+  format: 'PDF' | 'DOCX' | 'VIDEO' | 'SLIDE' | 'ZIP';
+  fileSize: string;
+  fileName?: string;
+  fileData?: string;
+  desc: string;
+  downloadUrl?: string;
+  status: 'Published' | 'Draft' | 'Archived';
+  syncFrontend: boolean;
+}
+
 export interface PhotoItem {
   id: string;
   title: string;
@@ -138,7 +157,7 @@ interface DataContextType {
   updateAgenda: (id: string, updated: Partial<AgendaItem>) => void;
   deleteAgenda: (id: string) => void;
 
-  // Procurement Packages
+  // Procurement Packages (Tender & Seleksi)
   packagesList: ProcurementPackage[];
   addPackage: (pkg: Omit<ProcurementPackage, 'id'>) => void;
   updatePackage: (id: string, updated: Partial<ProcurementPackage>) => void;
@@ -156,6 +175,13 @@ interface DataContextType {
   addSop: (sop: Omit<SopItem, 'id' | 'syncFrontend'>) => void;
   updateSop: (id: string, updated: Partial<SopItem>) => void;
   deleteSop: (id: string) => void;
+
+  // Panduan & Juknis
+  panduanList: PanduanItem[];
+  addPanduan: (panduan: Omit<PanduanItem, 'id' | 'syncFrontend'>) => void;
+  updatePanduan: (id: string, updated: Partial<PanduanItem>) => void;
+  deletePanduan: (id: string) => void;
+  togglePanduanStatus: (id: string) => void;
 
   // Photos Gallery
   photosList: PhotoItem[];
@@ -581,6 +607,121 @@ const DEFAULT_VIDEOS: VideoMediaItem[] = [
   }
 ];
 
+export const DEFAULT_PANDUAN: PanduanItem[] = [
+  {
+    id: 'GUI-001',
+    category: 'pa-kpa',
+    role: 'PA / KPA',
+    title: 'Panduan Pengisian Sistem Informasi Rencana Umum Pengadaan (SiRUP)',
+    date: '28 Nov 2023',
+    format: 'PDF',
+    fileSize: '3.2 MB',
+    fileName: 'Panduan-SiRUP-Kemnaker.pdf',
+    desc: 'Petunjuk teknis penginputan paket RUP, penetapan struktur anggaran, dan pengumuman paket belanja kementerian.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-002',
+    category: 'pa-kpa',
+    role: 'PA / KPA',
+    title: 'Panduan INAPROC - Tata Kelola dan Monitoring Daftar Hitam Terpusat',
+    date: '01 Nov 2023',
+    format: 'PDF',
+    fileSize: '1.8 MB',
+    fileName: 'Panduan-INAPROC-Daftar-Hitam.pdf',
+    desc: 'Pedoman verifikasi status badan usaha dan tata cara pengusulan sanksi daftar hitam melalui portal LKPP.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-003',
+    category: 'pa-kpa',
+    role: 'PA / KPA',
+    title: 'Panduan SPSE untuk Kepala Unit Pengelola PBJ (UKPBJ Kemnaker)',
+    date: '01 Nov 2023',
+    format: 'PDF',
+    fileSize: '2.4 MB',
+    fileName: 'Panduan-SPSE-Kepala-UKPBJ.pdf',
+    desc: 'Manual operasional pengelolaan sistem SPSE, penetapan admin Pokja, dan monitoring progres tender secara berkala.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-004',
+    category: 'ppk',
+    role: 'PPK',
+    title: 'Modul Penyusunan Harga Perkiraan Sendiri (HPS) dan Spesifikasi Teknis',
+    date: '14 Des 2023',
+    format: 'PDF',
+    fileSize: '4.1 MB',
+    fileName: 'Modul-Penyusunan-HPS.pdf',
+    desc: 'Tata cara survei pasar, penghitungan komponen HPS, serta penyusunan Kerangka Acuan Kerja (KAK) pengadaan barang/jasa.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-005',
+    category: 'penyedia',
+    role: 'Penyedia',
+    title: 'Panduan Registrasi & Verifikasi Dokumen Kualifikasi SIKaP bagi Pelaku Usaha',
+    date: '08 Jan 2024',
+    format: 'PDF',
+    fileSize: '2.9 MB',
+    fileName: 'Panduan-SIKaP-Pelaku-Usaha.pdf',
+    desc: 'Langkah pendaftaran izin usaha, NIB, laporan keuangan, dan pengalaman kerja pada portal Sistem Informasi Kinerja Penyedia.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-006',
+    category: 'pokja',
+    role: 'Pokja Pemilihan',
+    title: 'Tata Cara Evaluasi Dokumen Penawaran & Pembuktian Kualifikasi E-Tendering',
+    date: '26 Jan 2024',
+    format: 'PDF',
+    fileSize: '3.5 MB',
+    fileName: 'Juknis-Evaluasi-Pokja.pdf',
+    desc: 'Panduan teknis bagi anggota Pokja dalam melakukan evaluasi administrasi, teknis, harga, serta klarifikasi dokumen tender.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-007',
+    category: 'mdp',
+    role: 'Standar Dokumen',
+    title: 'Model Dokumen Pengadaan (MDP) Pekerjaan Konstruksi & Jasa Konsultansi 2026',
+    date: '19 Feb 2024',
+    format: 'DOCX',
+    fileSize: '1.1 MB',
+    fileName: 'MDP-Konstruksi-2026.docx',
+    desc: 'Template rancangan kontrak, syarat umum dan khusus kontrak (SUKK/SSKK), serta form standar penawaran.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-008',
+    category: 'bimtek',
+    role: 'Materi Pelatihan',
+    title: 'Slide Presentasi Sosialisasi E-Katalog Sektoral Ketenagakerjaan',
+    date: '06 Mar 2024',
+    format: 'SLIDE',
+    fileSize: '8.4 MB',
+    fileName: 'Slide-E-Katalog-Kemnaker.pdf',
+    desc: 'Materi komprehensif tata cara e-purchasing produk barang dan jasa pelatihan vokasi melalui katalog elektronik sektor Kemnaker.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  }
+];
+
 const DEFAULT_SETTINGS: SiteSettings = {
   announcementBanner: 'Sosialisasi Peraturan LKPP Nomor 12 Tahun 2024 tentang Pedoman Pengadaan Barang/Jasa Pemerintah',
   announcementActive: true,
@@ -598,6 +739,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [packagesList, setPackagesList] = useState<ProcurementPackage[]>(DEFAULT_PACKAGES);
   const [regulasiList, setRegulasiList] = useState<RegulasiItem[]>(DEFAULT_REGULASI);
   const [sopList, setSopList] = useState<SopItem[]>(DEFAULT_SOP);
+  const [panduanList, setPanduanList] = useState<PanduanItem[]>(DEFAULT_PANDUAN);
   const [photosList, setPhotosList] = useState<PhotoItem[]>(DEFAULT_PHOTOS);
   const [videosList, setVideosList] = useState<VideoMediaItem[]>(DEFAULT_VIDEOS);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
@@ -627,6 +769,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           procurement_packages,
           regulasi,
           sop,
+          panduan,
           gallery_photos,
           gallery_videos,
           site_settings
@@ -800,6 +943,46 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           setSopList(mappedSop);
         }
 
+        if (Array.isArray(panduan)) {
+          const mappedPanduan: PanduanItem[] = panduan.map((p: {
+            id: string;
+            title: string;
+            category?: string;
+            role?: string;
+            date?: string;
+            updatedDate?: string;
+            updated_date?: string;
+            version?: string;
+            downloads?: string;
+            format?: 'PDF' | 'DOCX' | 'VIDEO' | 'SLIDE' | 'ZIP';
+            file_size?: string;
+            file_name?: string;
+            file_url?: string;
+            download_url?: string;
+            description?: string;
+            desc?: string;
+            status?: 'Published' | 'Draft' | 'Archived';
+            sync_frontend?: boolean;
+          }) => ({
+            id: p.id,
+            title: p.title,
+            category: p.category || 'pa-kpa',
+            role: p.role || 'PA / KPA',
+            date: p.date || '2026',
+            updatedDate: p.updated_date || p.updatedDate || p.date || '15 Sep 2026',
+            version: p.version || 'v2026.1',
+            downloads: p.downloads || '0 Unduhan',
+            format: p.format || 'PDF',
+            fileSize: p.file_size || '2.5 MB',
+            fileName: p.file_name,
+            desc: p.description || p.desc || '',
+            downloadUrl: p.file_url || p.download_url || '#',
+            status: p.status || 'Published',
+            syncFrontend: p.sync_frontend ?? true
+          }));
+          setPanduanList(mappedPanduan);
+        }
+
         if (Array.isArray(gallery_photos)) {
           const mappedPhotos: PhotoItem[] = gallery_photos.map((p: {
             id: string;
@@ -879,6 +1062,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         if (Array.isArray(parsed.packagesList)) setPackagesList(parsed.packagesList);
         if (Array.isArray(parsed.regulasiList)) setRegulasiList(parsed.regulasiList);
         if (Array.isArray(parsed.sopList)) setSopList(parsed.sopList);
+        if (Array.isArray(parsed.panduanList)) setPanduanList(parsed.panduanList);
         if (Array.isArray(parsed.photosList)) setPhotosList(parsed.photosList);
         if (Array.isArray(parsed.videosList)) setVideosList(parsed.videosList);
         if (parsed.siteSettings) setSiteSettings(parsed.siteSettings);
@@ -897,6 +1081,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     newPkgs = packagesList,
     newRegulasi = regulasiList,
     newSop = sopList,
+    newPanduan = panduanList,
     newPhotos = photosList,
     newVideos = videosList,
     newSettings = siteSettings
@@ -907,6 +1092,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       packagesList: newPkgs,
       regulasiList: newRegulasi,
       sopList: newSop,
+      panduanList: newPanduan,
       photosList: newPhotos,
       videosList: newVideos,
       siteSettings: newSettings,
@@ -1351,7 +1537,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     };
     const updated = [newEntry, ...photosList];
     setPhotosList(updated);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, updated);
 
     const res = await syncAdminData('gallery_photos', 'insert', {
       data: {
@@ -1375,7 +1561,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       item.id === id ? { ...item, ...updated } : item
     );
     setPhotosList(updatedList);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, updatedList);
 
     await syncAdminData('gallery_photos', 'update', {
       id,
@@ -1393,7 +1579,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const deletePhoto = async (id: string) => {
     const updated = photosList.filter((item) => item.id !== id);
     setPhotosList(updated);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, updated);
 
     await syncAdminData('gallery_photos', 'delete', { id });
   };
@@ -1410,7 +1596,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     };
     const updated = [newEntry, ...videosList];
     setVideosList(updated);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, photosList, updated);
 
     const res = await syncAdminData('gallery_videos', 'insert', {
       data: {
@@ -1436,7 +1622,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       item.id === id ? { ...item, ...updated } : item
     );
     setVideosList(updatedList);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updatedList);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, photosList, updatedList);
 
     await syncAdminData('gallery_videos', 'update', {
       id,
@@ -1456,9 +1642,104 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const deleteVideo = async (id: string) => {
     const updated = videosList.filter((item) => item.id !== id);
     setVideosList(updated);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, photosList, updated);
 
     await syncAdminData('gallery_videos', 'delete', { id });
+  };
+
+  // ==========================================
+  // PANDUAN & JUKNIS CRUD & SUPABASE SYNC
+  // ==========================================
+  const addPanduan = async (panduan: Omit<PanduanItem, 'id' | 'syncFrontend'>) => {
+    const tempId = `GUI-${Date.now().toString().slice(-4)}`;
+    const newEntry: PanduanItem = {
+      ...panduan,
+      id: tempId,
+      syncFrontend: panduan.status === 'Published'
+    };
+    const updated = [newEntry, ...panduanList];
+    setPanduanList(updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated, photosList, videosList);
+
+    const res = await syncAdminData('panduan', 'insert', {
+      data: {
+        title: panduan.title,
+        category: panduan.category,
+        role: panduan.role,
+        date: panduan.date,
+        format: panduan.format,
+        file_size: panduan.fileSize,
+        file_name: panduan.fileName,
+        file_url: panduan.downloadUrl,
+        download_url: panduan.downloadUrl,
+        description: panduan.desc,
+        status: panduan.status,
+        sync_frontend: panduan.status === 'Published'
+      }
+    });
+
+    if (res?.success && res.data) {
+      setPanduanList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
+    }
+  };
+
+  const updatePanduan = async (id: string, updated: Partial<PanduanItem>) => {
+    const updatedList = panduanList.map((item) => {
+      if (item.id === id) {
+        const next = { ...item, ...updated };
+        next.syncFrontend = next.status === 'Published';
+        return next;
+      }
+      return item;
+    });
+    setPanduanList(updatedList);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList, photosList, videosList);
+
+    await syncAdminData('panduan', 'update', {
+      id,
+      data: {
+        title: updated.title,
+        category: updated.category,
+        role: updated.role,
+        date: updated.date,
+        format: updated.format,
+        file_size: updated.fileSize,
+        file_name: updated.fileName,
+        file_url: updated.downloadUrl,
+        download_url: updated.downloadUrl,
+        description: updated.desc,
+        status: updated.status,
+        sync_frontend: updated.status === 'Published'
+      }
+    });
+  };
+
+  const deletePanduan = async (id: string) => {
+    const updated = panduanList.filter((item) => item.id !== id);
+    setPanduanList(updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated, photosList, videosList);
+
+    await syncAdminData('panduan', 'delete', { id });
+  };
+
+  const togglePanduanStatus = async (id: string) => {
+    const target = panduanList.find((p) => p.id === id);
+    if (!target) return;
+    const nextStatus: PanduanItem['status'] = target.status === 'Published' ? 'Draft' : 'Published';
+
+    const updatedList = panduanList.map((item) =>
+      item.id === id ? { ...item, status: nextStatus, syncFrontend: nextStatus === 'Published' } : item
+    );
+    setPanduanList(updatedList);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList, photosList, videosList);
+
+    await syncAdminData('panduan', 'update', {
+      id,
+      data: {
+        status: nextStatus,
+        sync_frontend: nextStatus === 'Published'
+      }
+    });
   };
 
   // ==========================================
@@ -1467,7 +1748,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const updateSiteSettings = async (settings: Partial<SiteSettings>) => {
     const updated = { ...siteSettings, ...settings };
     setSiteSettings(updated);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, photosList, videosList, updated);
+    persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, photosList, videosList, updated);
 
     await syncAdminData('site_settings', 'upsert', {
       data: {
@@ -1490,10 +1771,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPackagesList(DEFAULT_PACKAGES);
     setRegulasiList(DEFAULT_REGULASI);
     setSopList(DEFAULT_SOP);
+    setPanduanList(DEFAULT_PANDUAN);
     setPhotosList(DEFAULT_PHOTOS);
     setVideosList(DEFAULT_VIDEOS);
     setSiteSettings(DEFAULT_SETTINGS);
-    persist(DEFAULT_NEWS, DEFAULT_AGENDAS, DEFAULT_PACKAGES, DEFAULT_REGULASI, DEFAULT_SOP, DEFAULT_PHOTOS, DEFAULT_VIDEOS, DEFAULT_SETTINGS);
+    persist(DEFAULT_NEWS, DEFAULT_AGENDAS, DEFAULT_PACKAGES, DEFAULT_REGULASI, DEFAULT_SOP, DEFAULT_PANDUAN, DEFAULT_PHOTOS, DEFAULT_VIDEOS, DEFAULT_SETTINGS);
   };
 
   return (
@@ -1521,6 +1803,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         addSop,
         updateSop,
         deleteSop,
+        panduanList,
+        addPanduan,
+        updatePanduan,
+        deletePanduan,
+        togglePanduanStatus,
         photosList,
         addPhoto,
         updatePhoto,
@@ -1549,3 +1836,4 @@ export function useData() {
   }
   return context;
 }
+

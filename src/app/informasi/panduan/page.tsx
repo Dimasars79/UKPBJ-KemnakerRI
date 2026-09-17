@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useData, PanduanItem } from '@/contexts/DataContext';
 import { 
   Search, FileText, Download, Eye, Calendar, 
   ChevronRight, Filter, BookOpen, GraduationCap, 
@@ -14,122 +15,41 @@ import {
   ZoomIn, ZoomOut
 } from 'lucide-react';
 
-type GuideItem = {
-  id: string;
-  category: string;
-  role: string;
-  title: string;
-  date: string;
-  format: 'PDF' | 'DOCX' | 'VIDEO' | 'SLIDE';
-  fileSize: string;
-  desc: string;
-  downloadUrl?: string;
-};
-
-const guideCategories = [
-  { id: 'all', label: 'Semua Panduan', icon: <BookOpen className="w-4 h-4" />, count: 16 },
-  { id: 'pa-kpa', label: 'Panduan PA / KPA', icon: <Users className="w-4 h-4" />, count: 3 },
-  { id: 'ppk', label: 'Panduan PPK', icon: <FileCheck className="w-4 h-4" />, count: 4 },
-  { id: 'pp', label: 'Panduan Pejabat Pengadaan', icon: <FileText className="w-4 h-4" />, count: 2 },
-  { id: 'pokja', label: 'Panduan Pokja Pemilihan', icon: <Users className="w-4 h-4" />, count: 3 },
-  { id: 'penyedia', label: 'Panduan Pelaku Usaha / Penyedia', icon: <GraduationCap className="w-4 h-4" />, count: 4 },
-  { id: 'mdp', label: 'Model Dokumen Pengadaan (MDP)', icon: <FileText className="w-4 h-4" />, count: 3 },
-  { id: 'bimtek', label: 'Materi Bimtek & Sosialisasi', icon: <Video className="w-4 h-4" />, count: 3 },
-  { id: 'lain', label: 'Lain-Lain & Standar Teknis', icon: <BookOpen className="w-4 h-4" />, count: 2 },
-];
-
-const guideItems: GuideItem[] = [
-  {
-    id: '1',
-    category: 'pa-kpa',
-    role: 'PA / KPA',
-    title: 'Panduan Pengisian Sistem Informasi Rencana Umum Pengadaan (SiRUP)',
-    date: 'Selasa, 28 November 2023',
-    format: 'PDF',
-    fileSize: '3.2 MB',
-    desc: 'Petunjuk teknis penginputan paket RUP, penetapan struktur anggaran, dan pengumuman paket belanja kementerian.'
-  },
-  {
-    id: '2',
-    category: 'pa-kpa',
-    role: 'PA / KPA',
-    title: 'Panduan INAPROC - Tata Kelola dan Monitoring Daftar Hitam Terpusat',
-    date: 'Rabu, 01 November 2023',
-    format: 'PDF',
-    fileSize: '1.8 MB',
-    desc: 'Pedoman verifikasi status badan usaha dan tata cara pengusulan sanksi daftar hitam melalui portal LKPP.'
-  },
-  {
-    id: '3',
-    category: 'pa-kpa',
-    role: 'PA / KPA',
-    title: 'Panduan SPSE untuk Kepala Unit Pengelola PBJ (UKPBJ Kemnaker)',
-    date: 'Rabu, 01 November 2023',
-    format: 'PDF',
-    fileSize: '2.4 MB',
-    desc: 'Manual operasional pengelolaan sistem SPSE, penetapan admin Pokja, dan monitoring progres tender secara berkala.'
-  },
-  {
-    id: '4',
-    category: 'ppk',
-    role: 'PPK',
-    title: 'Modul Penyusunan Harga Perkiraan Sendiri (HPS) dan Spesifikasi Teknis',
-    date: 'Kamis, 14 Desember 2023',
-    format: 'PDF',
-    fileSize: '4.1 MB',
-    desc: 'Tata cara survei pasar, penghitungan komponen HPS, serta penyusunan Kerangka Acuan Kerja (KAK) pengadaan barang/jasa.'
-  },
-  {
-    id: '5',
-    category: 'penyedia',
-    role: 'Penyedia',
-    title: 'Panduan Registrasi & Verifikasi Dokumen Kualifikasi SIKaP bagi Pelaku Usaha',
-    date: 'Senin, 08 Januari 2024',
-    format: 'PDF',
-    fileSize: '2.9 MB',
-    desc: 'Langkah pendaftaran izin usaha, NIB, laporan keuangan, dan pengalaman kerja pada portal Sistem Informasi Kinerja Penyedia.'
-  },
-  {
-    id: '6',
-    category: 'pokja',
-    role: 'Pokja Pemilihan',
-    title: 'Tata Cara Evaluasi Dokumen Penawaran & Pembuktian Kualifikasi E-Tendering',
-    date: 'Jumat, 26 Januari 2024',
-    format: 'PDF',
-    fileSize: '3.5 MB',
-    desc: 'Panduan teknis bagi anggota Pokja dalam melakukan evaluasi administrasi, teknis, harga, serta klarifikasi dokumen tender.'
-  },
-  {
-    id: '7',
-    category: 'mdp',
-    role: 'Standar Dokumen',
-    title: 'Model Dokumen Pengadaan (MDP) Pekerjaan Konstruksi & Jasa Konsultansi 2026',
-    date: 'Senin, 19 Februari 2024',
-    format: 'DOCX',
-    fileSize: '1.1 MB',
-    desc: 'Template rancangan kontrak, syarat umum dan khusus kontrak (SUKK/SSKK), serta form standar penawaran.'
-  },
-  {
-    id: '8',
-    category: 'bimtek',
-    role: 'Materi Pelatihan',
-    title: 'Slide Presentasi Sosialisasi E-Katalog Sektoral Ketenagakerjaan',
-    date: 'Rabu, 06 Maret 2024',
-    format: 'SLIDE',
-    fileSize: '8.4 MB',
-    desc: 'Materi komprehensif tata cara e-purchasing produk barang dan jasa pelatihan vokasi melalui katalog elektronik sektor Kemnaker.'
-  }
+const guideCategoryMeta = [
+  { id: 'all', label: 'Semua Panduan', icon: <BookOpen className="w-4 h-4" /> },
+  { id: 'pa-kpa', label: 'Panduan PA / KPA', icon: <Users className="w-4 h-4" /> },
+  { id: 'ppk', label: 'Panduan PPK', icon: <FileCheck className="w-4 h-4" /> },
+  { id: 'pp', label: 'Panduan Pejabat Pengadaan', icon: <FileText className="w-4 h-4" /> },
+  { id: 'pokja', label: 'Panduan Pokja Pemilihan', icon: <Users className="w-4 h-4" /> },
+  { id: 'penyedia', label: 'Panduan Pelaku Usaha / Penyedia', icon: <GraduationCap className="w-4 h-4" /> },
+  { id: 'mdp', label: 'Model Dokumen Pengadaan (MDP)', icon: <FileText className="w-4 h-4" /> },
+  { id: 'bimtek', label: 'Materi Bimtek & Sosialisasi', icon: <Video className="w-4 h-4" /> },
+  { id: 'lain', label: 'Lain-Lain & Standar Teknis', icon: <BookOpen className="w-4 h-4" /> },
 ];
 
 export default function PanduanPage() {
+  const { panduanList } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activePreviewGuide, setActivePreviewGuide] = useState<GuideItem | null>(null);
+  const [activePreviewGuide, setActivePreviewGuide] = useState<PanduanItem | null>(null);
   const [previewPage, setPreviewPage] = useState<number>(1);
   const [zoomLevel, setZoomLevel] = useState<number>(100);
 
+  const publishedGuides = useMemo(() => {
+    return panduanList.filter(item => item.status === 'Published' || item.syncFrontend);
+  }, [panduanList]);
+
+  const guideCategories = useMemo(() => {
+    return guideCategoryMeta.map(cat => {
+      const count = cat.id === 'all' 
+        ? publishedGuides.length 
+        : publishedGuides.filter(g => g.category === cat.id).length;
+      return { ...cat, count };
+    });
+  }, [publishedGuides]);
+
   const filteredGuides = useMemo(() => {
-    return guideItems.filter(item => {
+    return publishedGuides.filter(item => {
       const matchCat = selectedCategory === 'all' || item.category === selectedCategory;
       const matchSearch = searchQuery.trim() === '' || 
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -137,9 +57,9 @@ export default function PanduanPage() {
         item.desc.toLowerCase().includes(searchQuery.toLowerCase());
       return matchCat && matchSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [publishedGuides, selectedCategory, searchQuery]);
 
-  const handleDownloadFile = (guide: GuideItem) => {
+  const handleDownloadFile = (guide: PanduanItem) => {
     if (guide.downloadUrl) {
       window.open(guide.downloadUrl, '_blank');
       return;

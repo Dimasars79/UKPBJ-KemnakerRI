@@ -66,13 +66,14 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: true, data });
     }
 
-    // Fetch all 9 tables in parallel using service role
+    // Fetch all 10 tables in parallel using service role
     const [
       newsRes,
       agendasRes,
       packagesRes,
       regulasiRes,
       sopRes,
+      panduanRes,
       photosRes,
       videosRes,
       settingsRes,
@@ -83,6 +84,7 @@ export async function GET(req: NextRequest) {
       supabaseAdmin.from('procurement_packages').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('regulasi').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('sop').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('panduan').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('gallery_photos').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('gallery_videos').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('site_settings').select('*').eq('id', 'global_config').maybeSingle(),
@@ -97,6 +99,7 @@ export async function GET(req: NextRequest) {
         procurement_packages: packagesRes.data || [],
         regulasi: regulasiRes.data || [],
         sop: sopRes.data || [],
+        panduan: panduanRes.data || [],
         gallery_photos: photosRes.data || [],
         gallery_videos: videosRes.data || [],
         site_settings: settingsRes.data || null,
@@ -129,6 +132,7 @@ export async function POST(req: NextRequest) {
       'procurement_packages',
       'regulasi',
       'sop',
+      'panduan',
       'gallery_photos',
       'gallery_videos',
       'site_settings',
