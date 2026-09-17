@@ -360,7 +360,7 @@ export default function PusatPembaruanPage() {
                     }}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-primary-navy text-white shadow-md'
+                        ? 'bg-primary-blue text-white shadow-md shadow-blue-500/20'
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
                     }`}
                   >
@@ -487,7 +487,7 @@ export default function PusatPembaruanPage() {
                               onClick={() => setCurrentPage(pageNum)}
                               className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                                 isActive
-                                  ? 'bg-primary-navy text-white shadow-sm scale-105'
+                                  ? 'bg-primary-blue text-white shadow-sm shadow-blue-500/25 scale-105'
                                   : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                               }`}
                             >
