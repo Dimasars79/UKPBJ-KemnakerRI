@@ -135,8 +135,8 @@ export default function PusatPembaruanPage() {
           id: `sop-${sop.id}`,
           type: 'sop',
           typeLabel: 'STANDAR OPERASIONAL (SOP)',
-          badgeColor: 'text-white border-slate-900 dark:border-slate-800',
-          badgeBg: 'bg-slate-900 dark:bg-black',
+          badgeColor: 'text-slate-950 dark:text-white border-slate-300 dark:border-slate-700',
+          badgeBg: 'bg-slate-100 dark:bg-slate-800',
           title: `${sop.kode}: ${sop.judul}`,
           date: sop.revisi,
           rawDate: sop.revisi,
@@ -144,7 +144,7 @@ export default function PusatPembaruanPage() {
           meta: `Unit: ${sop.unit} • ${sop.tahapanCount} Tahapan • ${sop.status}`,
           href: '/informasi/sop',
           actionLabel: 'Buka Dokumen SOP',
-          icon: <Layers className="w-4 h-4 text-white" />
+          icon: <Layers className="w-4 h-4 text-slate-950 dark:text-white" />
         });
       });
 
@@ -238,7 +238,7 @@ export default function PusatPembaruanPage() {
                   { label: 'Paket Tender', count: countStats.paket, icon: <Package className="w-4 h-4 text-indigo-300" />, bg: 'bg-indigo-500/20' },
                   { label: 'Regulasi JDIH', count: countStats.regulasi, icon: <Scale className="w-4 h-4 text-purple-300" />, bg: 'bg-purple-500/20' },
                   { label: 'Agenda & Jadwal', count: countStats.agenda, icon: <Calendar className="w-4 h-4 text-emerald-300" />, bg: 'bg-emerald-500/20' },
-                  { label: 'Prosedur SOP', count: countStats.sop, icon: <Layers className="w-4 h-4 text-amber-300" />, bg: 'bg-amber-500/20' },
+                  { label: 'Prosedur SOP', count: countStats.sop, icon: <Layers className="w-4 h-4 text-slate-200" />, bg: 'bg-slate-700/30' },
                 ].map((stat, idx) => (
                   <div key={idx} className={`${stat.bg} backdrop-blur-md rounded-2xl p-3.5 border border-white/10 text-white`}>
                     <div className="flex items-center justify-between mb-1">
