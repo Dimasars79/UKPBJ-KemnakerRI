@@ -230,24 +230,46 @@ export default function PusatPembaruanPage() {
                 </p>
               </div>
 
-              {/* Statistics Counter Cards Strip */}
+              {/* Statistics Counter Cards Strip - Sleek Transparent Glassmorphism */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2">
                 {[
-                  { label: 'Total Pembaruan', count: countStats.all, icon: <BellRing className="w-4 h-4 text-amber-300" />, bg: 'bg-white/10' },
-                  { label: 'Berita & Warta', count: countStats.berita, icon: <Newspaper className="w-4 h-4 text-blue-300" />, bg: 'bg-blue-500/20' },
-                  { label: 'Paket Tender', count: countStats.paket, icon: <Package className="w-4 h-4 text-indigo-300" />, bg: 'bg-indigo-500/20' },
-                  { label: 'Regulasi JDIH', count: countStats.regulasi, icon: <Scale className="w-4 h-4 text-purple-300" />, bg: 'bg-purple-500/20' },
-                  { label: 'Agenda & Jadwal', count: countStats.agenda, icon: <Calendar className="w-4 h-4 text-emerald-300" />, bg: 'bg-emerald-500/20' },
-                  { label: 'Prosedur SOP', count: countStats.sop, icon: <Layers className="w-4 h-4 text-slate-200" />, bg: 'bg-slate-700/30' },
-                ].map((stat, idx) => (
-                  <div key={idx} className={`${stat.bg} backdrop-blur-md rounded-2xl p-3.5 border border-white/10 text-white`}>
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-[11px] font-semibold text-slate-300 truncate">{stat.label}</span>
-                      {stat.icon}
-                    </div>
-                    <p className="text-xl font-black">{stat.count}</p>
-                  </div>
-                ))}
+                  { type: 'all' as UpdateType, label: 'Total Pembaruan', count: countStats.all, icon: <BellRing className="w-4 h-4 text-amber-300" /> },
+                  { type: 'berita' as UpdateType, label: 'Berita & Warta', count: countStats.berita, icon: <Newspaper className="w-4 h-4 text-sky-300" /> },
+                  { type: 'paket' as UpdateType, label: 'Paket Tender', count: countStats.paket, icon: <Package className="w-4 h-4 text-indigo-300" /> },
+                  { type: 'regulasi' as UpdateType, label: 'Regulasi JDIH', count: countStats.regulasi, icon: <Scale className="w-4 h-4 text-purple-300" /> },
+                  { type: 'agenda' as UpdateType, label: 'Agenda & Jadwal', count: countStats.agenda, icon: <Calendar className="w-4 h-4 text-emerald-300" /> },
+                  { type: 'sop' as UpdateType, label: 'Prosedur SOP', count: countStats.sop, icon: <Layers className="w-4 h-4 text-slate-200" /> },
+                ].map((stat, idx) => {
+                  const isSelected = selectedType === stat.type;
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedType(stat.type)}
+                      className={`text-left rounded-2xl p-3.5 backdrop-blur-xl transition-all duration-300 group cursor-pointer border ${
+                        isSelected
+                          ? 'bg-white/[0.16] border-accent-gold/70 shadow-lg shadow-black/20 ring-1 ring-accent-gold/40 -translate-y-0.5'
+                          : 'bg-white/[0.05] hover:bg-white/[0.10] border-white/10 hover:border-white/25 hover:-translate-y-0.5'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[11px] font-semibold text-slate-300 group-hover:text-white transition-colors truncate">
+                          {stat.label}
+                        </span>
+                        <div className="transition-transform duration-300 group-hover:scale-110">
+                          {stat.icon}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline justify-between">
+                        <p className="text-2xl font-black text-white tracking-tight leading-none">
+                          {stat.count}
+                        </p>
+                        {isSelected && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-pulse" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </FadeIn>
           </div>
