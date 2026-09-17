@@ -109,12 +109,12 @@ export default function Home() {
               src="/hero-bg.png" 
               alt="Gedung Kementerian Ketenagakerjaan" 
               fill
-              className="object-cover object-[75%_center] md:object-center animate-slow-zoom"
+              className="object-cover object-center animate-slow-zoom"
               priority
             />
           </div>
-          {/* Gradient Overlay for better readability on left side across mobile and desktop */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a2342] via-[#0a2342]/90 to-[#0a2342]/70 sm:bg-gradient-to-r sm:from-[#0a2342] sm:via-[#0a2342]/85 sm:to-transparent z-0" />
+          {/* Gradient Overlay - consistent across mobile and laptop */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a2342] via-[#0a2342]/85 to-transparent z-0" />
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-28 pb-20 sm:py-24 lg:py-32">
             <div className="max-w-4xl">
@@ -271,62 +271,68 @@ export default function Home() {
         </section>
 
         {/* 2. Profil UKPBJ (Prioritized) */}
-        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white" id="profil">
+        <section className="py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white" id="profil">
           {/* Subtle Polkadot Pattern */}
           <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-60 pointer-events-none" />
           
           {/* Giant Blur Orbs */}
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-blue/10 rounded-full blur-[150px] -translate-y-1/3 translate-x-1/3 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent-gold/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] bg-primary-blue/10 rounded-full blur-[150px] -translate-y-1/3 translate-x-1/3 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-accent-gold/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
-            <div className="flex flex-col lg:flex-row items-center gap-16">
-              <FadeIn direction="right" className="lg:w-1/3 flex justify-center">
+            <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-10 md:gap-12 lg:gap-16">
+              <FadeIn direction="right" className="w-full lg:w-1/3 flex justify-center">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-accent-gold/20 rounded-full blur-3xl group-hover:bg-accent-gold/40 transition-colors duration-700 pointer-events-none animate-pulse" />
-                  <Image src="/logo-ukpbj-kemnaker.png" alt="Logo UKPBJ" width={400} height={145} className="w-64 md:w-80 h-auto object-contain drop-shadow-[0_20px_50px_rgba(10,35,66,0.15)] group-hover:scale-105 transition-transform duration-700 relative z-10" />
+                  <div className="absolute inset-0 bg-accent-gold/20 rounded-full blur-2xl sm:blur-3xl group-hover:bg-accent-gold/40 transition-colors duration-700 pointer-events-none animate-pulse" />
+                  <Image 
+                    src="/logo-ukpbj-kemnaker.png" 
+                    alt="Logo UKPBJ" 
+                    width={400} 
+                    height={145} 
+                    className="w-44 sm:w-56 md:w-64 lg:w-80 h-auto object-contain drop-shadow-[0_15px_35px_rgba(10,35,66,0.12)] group-hover:scale-105 transition-transform duration-700 relative z-10" 
+                  />
                 </div>
               </FadeIn>
               
-              <div className="lg:w-2/3">
+              <div className="w-full lg:w-2/3 text-left">
                 <FadeIn direction="left">
-                  <h2 className="text-2xl md:text-4xl font-bold mb-6 text-primary-navy">{t('home.about_title')}</h2>
-                  <div className="w-16 h-1 bg-accent-gold mb-8 rounded-full" />
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 md:mb-6 text-primary-navy tracking-tight">{t('home.about_title')}</h2>
+                  <div className="w-12 sm:w-16 h-1 bg-accent-gold mb-5 sm:mb-6 md:mb-8 rounded-full" />
                   
-                  <div className="relative p-6 md:p-8 rounded-3xl bg-white/60 backdrop-blur-md border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-12 group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
-                    <Quote className="absolute top-6 left-6 w-16 h-16 text-accent-gold/10 transform -scale-x-100 group-hover:scale-110 group-hover:-scale-x-110 transition-transform duration-500" />
-                    <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-medium relative z-10 pl-4 md:pl-8 border-l-4 border-accent-gold/50">
+                  <div className="relative p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white/80 backdrop-blur-md border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-6 sm:mb-8 md:mb-10 group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                    <Quote className="absolute top-3 left-3 sm:top-5 sm:left-5 w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 text-accent-gold/15 transform -scale-x-100 group-hover:scale-110 group-hover:-scale-x-110 transition-transform duration-500" />
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-700 leading-relaxed font-medium relative z-10 pl-3 sm:pl-4 md:pl-8 border-l-2 sm:border-l-4 border-accent-gold/50">
                       &quot;Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Ketenagakerjaan merupakan <span className="text-primary-blue font-bold">pusat keunggulan</span> pengadaan barang/jasa pemerintah yang berkomitmen untuk mewujudkan proses pengadaan yang berkualitas dan berintegritas.&quot;
                     </p>
                   </div>
                 </FadeIn>
                 
-                <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 md:gap-6">
                   <StaggerItem>
-                    <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
-                      <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
-                        <ShoppingCart className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                    <div className="flex flex-col p-4 sm:p-5 md:p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center mb-3 sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
+                        <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Eksekusi Pengadaan</h3>
-                      <p className="text-slate-500 text-sm leading-relaxed">Menyelenggarakan proses tender dan pemilihan penyedia yang tangkas dan adil.</p>
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-2 md:mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Eksekusi Pengadaan</h3>
+                      <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">Menyelenggarakan proses tender dan pemilihan penyedia yang tangkas dan adil.</p>
                     </div>
                   </StaggerItem>
                   <StaggerItem>
-                    <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
-                      <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
-                        <BookOpen className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                    <div className="flex flex-col p-4 sm:p-5 md:p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center mb-3 sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
+                        <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Pembinaan SDM</h3>
-                      <p className="text-slate-500 text-sm leading-relaxed">Meningkatkan kapasitas dan keahlian Pejabat Pembuat Komitmen (PPK) secara berkelanjutan.</p>
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-2 md:mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Pembinaan SDM</h3>
+                      <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">Meningkatkan kapasitas dan keahlian Pejabat Pembuat Komitmen (PPK) secara berkelanjutan.</p>
                     </div>
                   </StaggerItem>
                   <StaggerItem>
-                    <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-2 h-full">
-                      <div className="w-14 h-14 rounded-xl bg-blue-50/50 group-hover:bg-primary-blue flex items-center justify-center mb-5 transition-colors duration-300">
-                        <Scale className="w-7 h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                    <div className="flex flex-col p-4 sm:p-5 md:p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center mb-3 sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
+                        <Scale className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Advokasi & Konsultasi</h3>
-                      <p className="text-slate-500 text-sm leading-relaxed">Memberikan pendampingan hukum dan solusi penyelesaian sengketa pengadaan.</p>
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-2 md:mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">Advokasi & Konsultasi</h3>
+                      <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">Memberikan pendampingan hukum dan solusi penyelesaian sengketa pengadaan.</p>
                     </div>
                   </StaggerItem>
                 </StaggerContainer>

@@ -234,8 +234,19 @@ const tenderData: TenderAnnouncement[] = [
 export default function TenderPemiluPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [pageSize, setPageSize] = useState<number>(25);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedTender, setSelectedTender] = useState<TenderAnnouncement | null>(null);
+
+  const handleCategorySelect = (catId: string) => {
+    setSelectedCategory(catId);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    setCurrentPage(1);
+  };
 
   const filteredData = useMemo(() => {
     return tenderData.filter(item => {
@@ -249,7 +260,48 @@ export default function TenderPemiluPage() {
     });
   }, [selectedCategory, searchQuery]);
 
-  const displayedData = filteredData.slice(0, pageSize);
+  const totalPages = Math.ceil(filteredData.length / pageSize) || 1;
+  const validCurrentPage = Math.min(currentPage, totalPages);
+  const displayedData = filteredData.slice((validCurrentPage - 1) * pageSize, validCurrentPage * pageSize);
+
+  const renderCategoryBadge = (category: string, label: string) => {
+    switch (category) {
+      case 'pemenang':
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>{label}</span>
+          </span>
+        );
+      case 'tender-aktif':
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+            <span>{label}</span>
+          </span>
+        );
+      case 'sounding':
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide bg-amber-50 text-amber-800 border border-amber-200/80 shadow-2xs">
+            <Info className="w-3.5 h-3.5 text-amber-600" />
+            <span>{label}</span>
+          </span>
+        );
+      case 'tender-ulang':
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide bg-rose-50 text-rose-700 border border-rose-200/80 shadow-2xs">
+            <RotateCcw className="w-3.5 h-3.5 text-rose-600" />
+            <span>{label}</span>
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide bg-slate-100 text-slate-700 border border-slate-200/90 shadow-2xs">
+            <span>{label}</span>
+          </span>
+        );
+    }
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
@@ -314,49 +366,49 @@ export default function TenderPemiluPage() {
         </section>
 
         {/* METRICS SUMMARY CARDS */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl -mt-6 relative z-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-primary-navy flex items-center justify-center font-bold flex-shrink-0">
-                <FileText className="w-6 h-6" />
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl -mt-5 sm:-mt-6 relative z-20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 lg:gap-4">
+            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 shadow-xs border border-slate-200/80 flex items-center gap-2.5 sm:gap-3.5 lg:gap-4 hover:border-slate-300 transition-all">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl bg-blue-50 text-primary-navy flex items-center justify-center font-bold flex-shrink-0">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               </div>
-              <div>
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Pengumuman</span>
-                <div className="text-xl font-black text-slate-900">{tenderData.length} Paket</div>
+              <div className="min-w-0">
+                <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider block truncate">Total Pengumuman</span>
+                <div className="text-xs sm:text-base lg:text-xl font-black text-slate-900 leading-tight truncate mt-0.5">{tenderData.length} Paket</div>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0">
-                <Award className="w-6 h-6" />
+            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 shadow-xs border border-slate-200/80 flex items-center gap-2.5 sm:gap-3.5 lg:gap-4 hover:border-slate-300 transition-all">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0">
+                <Award className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               </div>
-              <div>
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Pemenang Ditetapkan</span>
-                <div className="text-xl font-black text-slate-900">
+              <div className="min-w-0">
+                <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider block truncate">Pemenang Ditetapkan</span>
+                <div className="text-xs sm:text-base lg:text-xl font-black text-slate-900 leading-tight truncate mt-0.5">
                   {tenderData.filter(t => t.category === 'pemenang').length} Paket
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold flex-shrink-0">
-                <Clock className="w-6 h-6" />
+            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 shadow-xs border border-slate-200/80 flex items-center gap-2.5 sm:gap-3.5 lg:gap-4 hover:border-slate-300 transition-all">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold flex-shrink-0">
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               </div>
-              <div>
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tender Aktif & Sounding</span>
-                <div className="text-xl font-black text-slate-900">
+              <div className="min-w-0">
+                <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider block truncate">Tender Aktif & Sounding</span>
+                <div className="text-xs sm:text-base lg:text-xl font-black text-slate-900 leading-tight truncate mt-0.5">
                   {tenderData.filter(t => t.category === 'tender-aktif' || t.category === 'sounding').length} Paket
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold flex-shrink-0">
-                <DollarSign className="w-6 h-6" />
+            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 shadow-xs border border-slate-200/80 flex items-center gap-2.5 sm:gap-3.5 lg:gap-4 hover:border-slate-300 transition-all">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold flex-shrink-0">
+                <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               </div>
-              <div>
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Pagu Terdaftar</span>
-                <div className="text-xl font-black text-slate-900">Rp 83,5 M</div>
+              <div className="min-w-0">
+                <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider block truncate">Total Pagu Terdaftar</span>
+                <div className="text-xs sm:text-base lg:text-xl font-black text-slate-900 leading-tight truncate mt-0.5">Rp 83,5 M</div>
               </div>
             </div>
           </div>
@@ -381,7 +433,7 @@ export default function TenderPemiluPage() {
               </div>
 
               {/* Category Filter Tabs */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60">
+              <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60 overflow-x-auto scrollbar-none w-full lg:w-auto">
                 {[
                   { id: 'all', label: 'Semua' },
                   { id: 'tender-aktif', label: 'Tender Aktif' },
@@ -391,10 +443,10 @@ export default function TenderPemiluPage() {
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setSelectedCategory(tab.id)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    onClick={() => handleCategorySelect(tab.id)}
+                    className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold whitespace-nowrap shrink-0 transition-all ${
                       selectedCategory === tab.id
-                        ? 'bg-white text-primary-navy shadow-xs'
+                        ? 'bg-white text-primary-navy shadow-xs border border-slate-200/80'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
@@ -405,34 +457,38 @@ export default function TenderPemiluPage() {
             </div>
 
             {/* Sub Filter Controls (Page Size & Search Bar) */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 py-4">
               <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                 <span>Tampilan</span>
                 <select
                   value={pageSize}
-                  onChange={(e) => setPageSize(Number(e.target.value))}
-                  className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-primary-blue"
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-primary-blue cursor-pointer"
                 >
                   <option value={10}>10 data</option>
                   <option value={25}>25 data</option>
                   <option value={50}>50 data</option>
                 </select>
-                <span className="text-slate-400">dari {filteredData.length} pengumuman</span>
+                <span className="text-slate-400 text-xs">dari {filteredData.length} pengumuman</span>
               </div>
 
               <div className="relative max-w-sm w-full">
-                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Cari kata kunci judul, kode, atau satker..."
+                  placeholder="Cari judul, kode tender, atau satker..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-50 pl-10 pr-9 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue shadow-2xs"
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className="w-full bg-slate-50 pl-10 pr-9 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue shadow-2xs placeholder-slate-400"
                 />
                 {searchQuery && (
                   <button
-                    onClick={() => setSearchQuery('')}
+                    onClick={() => handleSearchChange('')}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+                    aria-label="Bersihkan pencarian"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -440,15 +496,63 @@ export default function TenderPemiluPage() {
               </div>
             </div>
 
-            {/* DATA TABLE */}
-            <div className="overflow-x-auto rounded-2xl border border-slate-200/80 mt-2">
+            {/* 1. MOBILE RESPONSIVE CARD VIEW (< 768px) */}
+            <div className="block md:hidden space-y-3 mt-1">
+              {displayedData.length === 0 ? (
+                <div className="py-12 text-center text-slate-400 text-xs font-medium bg-slate-50/50 rounded-2xl border border-slate-100">
+                  Tidak ada pengumuman tender yang sesuai dengan kriteria pencarian.
+                </div>
+              ) : (
+                displayedData.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => setSelectedTender(item)}
+                    className="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-primary-blue/40 transition-all cursor-pointer group active:scale-[0.99]"
+                  >
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      {renderCategoryBadge(item.category, item.categoryLabel)}
+                      <div className="flex items-center gap-1 text-[11px] text-slate-400 font-medium">
+                        <Calendar className="w-3 h-3 text-slate-400" />
+                        <span>{item.date}</span>
+                      </div>
+                    </div>
+
+                    <h4 className="font-bold text-xs sm:text-sm text-primary-navy group-hover:text-primary-blue transition-colors leading-snug mb-2">
+                      {item.title}
+                    </h4>
+
+                    <div className="text-[11px] text-slate-500 mb-3 flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span>Kode: <strong className="text-slate-700 font-mono">{item.code}</strong></span>
+                      <span>•</span>
+                      <span>{item.workUnit}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 mt-1">
+                      <div>
+                        <span className="text-[9px] text-slate-400 block uppercase font-bold tracking-wider">Nilai Pagu</span>
+                        <span className="text-xs font-black text-primary-navy font-mono bg-slate-100/80 px-2 py-0.5 rounded-md border border-slate-200/60 inline-block mt-0.5">
+                          {item.paguBudget}
+                        </span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-xs font-bold text-primary-blue group-hover:underline">
+                        <span>Detail</span>
+                        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* 2. DESKTOP & TABLET TABULAR VIEW (>= 768px) */}
+            <div className="hidden md:block overflow-x-auto rounded-2xl border border-slate-200/80 mt-1">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50/90 text-[11px] font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200">
                     <th className="py-3.5 px-4 w-44">Tanggal & Waktu</th>
                     <th className="py-3.5 px-4">Judul Pengumuman</th>
                     <th className="py-3.5 px-4 w-44">Metode Pengadaan</th>
-                    <th className="py-3.5 px-4 w-36">Nilai Pagu</th>
+                    <th className="py-3.5 px-4 w-40">Nilai Pagu</th>
                     <th className="py-3.5 px-4 w-36 text-center">Status</th>
                   </tr>
                 </thead>
@@ -478,7 +582,7 @@ export default function TenderPemiluPage() {
                             {item.title}
                           </div>
                           <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-1">
-                            <span>Kode: <strong className="text-slate-600">{item.code}</strong></span>
+                            <span>Kode: <strong className="text-slate-600 font-mono">{item.code}</strong></span>
                             <span>•</span>
                             <span>{item.workUnit}</span>
                           </div>
@@ -488,18 +592,14 @@ export default function TenderPemiluPage() {
                           {item.procurementMethod}
                         </td>
 
-                        <td className="py-3.5 px-4 text-slate-800 font-bold whitespace-nowrap text-xs">
-                          {item.paguBudget}
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span className="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 inline-block">
+                            {item.paguBudget}
+                          </span>
                         </td>
 
                         <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide bg-slate-100 text-slate-700 border border-slate-200/90 shadow-2xs">
-                            {item.category === 'pemenang' && <CheckCircle2 className="w-3 h-3 text-slate-600" />}
-                            {item.category === 'tender-aktif' && <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />}
-                            {item.category === 'sounding' && <Info className="w-3 h-3 text-slate-500" />}
-                            {item.category === 'tender-ulang' && <RotateCcw className="w-3 h-3 text-slate-500" />}
-                            <span>{item.categoryLabel}</span>
-                          </span>
+                          {renderCategoryBadge(item.category, item.categoryLabel)}
                         </td>
                       </tr>
                     ))
@@ -508,17 +608,50 @@ export default function TenderPemiluPage() {
               </table>
             </div>
 
-            {/* Table Footer */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-5 text-xs text-slate-500">
+            {/* Table Footer & Pagination Controls */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-slate-100 mt-4 text-xs text-slate-500">
               <div>
-                Menampilkan <strong>1 - {displayedData.length}</strong> dari <strong>{filteredData.length}</strong> pengumuman
+                Menampilkan <strong>{displayedData.length > 0 ? (validCurrentPage - 1) * pageSize + 1 : 0} - {Math.min(validCurrentPage * pageSize, filteredData.length)}</strong> dari <strong>{filteredData.length}</strong> pengumuman
               </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center gap-1.5 self-center sm:self-auto">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={validCurrentPage === 1}
+                    className="px-2.5 py-1 rounded-lg border border-slate-200 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+                  >
+                    Prev
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+                    <button
+                      key={num}
+                      onClick={() => setCurrentPage(num)}
+                      className={`w-7 h-7 rounded-lg text-xs font-bold transition-all ${
+                        validCurrentPage === num
+                          ? 'bg-primary-navy text-white shadow-xs'
+                          : 'border border-slate-200 text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      {num}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={validCurrentPage === totalPages}
+                    className="px-2.5 py-1 rounded-lg border border-slate-200 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+
               <div className="flex items-center gap-2">
                 <a
                   href="https://inaproc.id"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 font-bold text-primary-navy hover:underline"
+                  className="inline-flex items-center gap-1.5 font-bold text-primary-navy hover:underline text-xs"
                 >
                   <span>Lihat Seluruh Paket di INAPROC SPSE</span>
                   <ExternalLink className="w-3.5 h-3.5" />

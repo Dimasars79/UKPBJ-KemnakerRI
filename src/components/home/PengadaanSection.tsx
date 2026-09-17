@@ -256,25 +256,25 @@ export function PengadaanSection() {
 
         {/* Quick Links Banner */}
         <FadeIn direction="up">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 md:gap-5 lg:gap-6">
             {/* Card 1: Pendaftaran Penyedia Baru */}
             <motion.div
               whileHover={{ y: -6, scale: 1.015 }}
               whileTap={{ scale: 0.985 }}
               transition={{ type: "spring", stiffness: 350, damping: 22 }}
-              className="bg-gradient-to-br from-primary-navy via-[#0c2242] to-slate-900 text-white rounded-3xl p-6 relative overflow-hidden group border border-white/10 hover:border-amber-400/50 shadow-md hover:shadow-2xl hover:shadow-amber-500/15 transition-colors duration-300 flex flex-col justify-between"
+              className="bg-gradient-to-br from-primary-navy via-[#0c2242] to-slate-900 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 relative overflow-hidden group border border-white/10 hover:border-amber-400/50 shadow-md hover:shadow-2xl hover:shadow-amber-500/15 transition-colors duration-300 flex flex-col justify-between"
             >
-              <div className="absolute -top-6 -right-6 w-36 h-36 bg-amber-400/15 rounded-full blur-2xl group-hover:scale-175 group-hover:bg-amber-400/25 transition-all duration-700 pointer-events-none" />
+              <div className="absolute -top-6 -right-6 w-28 sm:w-36 h-28 sm:h-36 bg-amber-400/15 rounded-full blur-2xl group-hover:scale-175 group-hover:bg-amber-400/25 transition-all duration-700 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
               
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center mb-4 text-accent-gold group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-amber-400/25 transition-all duration-300 shadow-inner">
-                  <ShieldCheck className="w-6 h-6" />
+                <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl sm:rounded-2xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center mb-3 sm:mb-4 text-accent-gold group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-amber-400/25 transition-all duration-300 shadow-inner shrink-0">
+                  <ShieldCheck className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6" />
                 </div>
-                <h4 className="font-bold text-base mb-1.5 text-white group-hover:text-amber-300 transition-colors">
+                <h4 className="font-bold text-sm sm:text-base mb-1 sm:mb-1.5 text-white group-hover:text-amber-300 transition-colors">
                   Pendaftaran Penyedia Baru
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed mb-5">
+                <p className="text-xs text-slate-300 leading-relaxed mb-4 sm:mb-5">
                   Daftarkan perusahaan Anda dalam sistem SiKAP & LPSE untuk mengikuti tender pengadaan Kemnaker.
                 </p>
               </div>
@@ -293,19 +293,19 @@ export function PengadaanSection() {
               whileHover={{ y: -6, scale: 1.015 }}
               whileTap={{ scale: 0.985 }}
               transition={{ type: "spring", stiffness: 350, damping: 22 }}
-              className="bg-white rounded-3xl p-6 border border-slate-200/90 hover:border-blue-300 shadow-xs hover:shadow-2xl hover:shadow-blue-500/10 relative overflow-hidden group transition-colors duration-300 flex flex-col justify-between"
+              className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 border border-slate-200/90 hover:border-blue-300 shadow-xs hover:shadow-2xl hover:shadow-blue-500/10 relative overflow-hidden group transition-colors duration-300 flex flex-col justify-between"
             >
-              <div className="absolute -top-6 -right-6 w-36 h-36 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-175 group-hover:bg-blue-500/20 transition-all duration-700 pointer-events-none" />
+              <div className="absolute -top-6 -right-6 w-28 sm:w-36 h-28 sm:h-36 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-175 group-hover:bg-blue-500/20 transition-all duration-700 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
 
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100/80 flex items-center justify-center mb-4 text-primary-blue group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-primary-blue group-hover:text-white transition-all duration-300 shadow-inner">
-                  <FileText className="w-6 h-6" />
+                <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl sm:rounded-2xl bg-blue-50 border border-blue-100/80 flex items-center justify-center mb-3 sm:mb-4 text-primary-blue group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-primary-blue group-hover:text-white transition-all duration-300 shadow-inner shrink-0">
+                  <FileText className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6" />
                 </div>
-                <h4 className="font-bold text-base text-primary-navy mb-1.5 group-hover:text-primary-blue transition-colors">
+                <h4 className="font-bold text-sm sm:text-base text-primary-navy mb-1 sm:mb-1.5 group-hover:text-primary-blue transition-colors">
                   Rencana Umum Pengadaan (SiRUP)
                 </h4>
-                <p className="text-xs text-slate-500 leading-relaxed mb-5">
+                <p className="text-xs text-slate-500 leading-relaxed mb-4 sm:mb-5">
                   Transparansi seluruh rencana paket pengadaan barang dan jasa Kemnaker RI Tahun Anggaran 2026.
                 </p>
               </div>
@@ -326,19 +326,19 @@ export function PengadaanSection() {
               whileHover={{ y: -6, scale: 1.015 }}
               whileTap={{ scale: 0.985 }}
               transition={{ type: "spring", stiffness: 350, damping: 22 }}
-              className="bg-white rounded-3xl p-6 border border-slate-200/90 hover:border-amber-300 shadow-xs hover:shadow-2xl hover:shadow-amber-500/10 relative overflow-hidden group transition-colors duration-300 flex flex-col justify-between"
+              className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 border border-slate-200/90 hover:border-amber-300 shadow-xs hover:shadow-2xl hover:shadow-amber-500/10 relative overflow-hidden group transition-colors duration-300 flex flex-col justify-between"
             >
-              <div className="absolute -top-6 -right-6 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl group-hover:scale-175 group-hover:bg-amber-500/20 transition-all duration-700 pointer-events-none" />
+              <div className="absolute -top-6 -right-6 w-28 sm:w-36 h-28 sm:h-36 bg-amber-500/10 rounded-full blur-2xl group-hover:scale-175 group-hover:bg-amber-500/20 transition-all duration-700 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-50/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
 
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/70 flex items-center justify-center mb-4 text-amber-600 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-gradient-to-tr group-hover:from-amber-500 group-hover:to-yellow-400 group-hover:text-white transition-all duration-300 shadow-inner">
-                  <Sparkles className="w-6 h-6" />
+                <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl sm:rounded-2xl bg-amber-50 border border-amber-200/70 flex items-center justify-center mb-3 sm:mb-4 text-amber-600 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-gradient-to-tr group-hover:from-amber-500 group-hover:to-yellow-400 group-hover:text-white transition-all duration-300 shadow-inner shrink-0">
+                  <Sparkles className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6" />
                 </div>
-                <h4 className="font-bold text-base text-primary-navy mb-1.5 group-hover:text-amber-600 transition-colors">
+                <h4 className="font-bold text-sm sm:text-base text-primary-navy mb-1 sm:mb-1.5 group-hover:text-amber-600 transition-colors">
                   Portal Admin & Operator PBJ
                 </h4>
-                <p className="text-xs text-slate-500 leading-relaxed mb-5">
+                <p className="text-xs text-slate-500 leading-relaxed mb-4 sm:mb-5">
                   Akses dashboard internal UKPBJ untuk pengelolaan paket, verifikasi vendor, dan arsitektur data.
                 </p>
               </div>
