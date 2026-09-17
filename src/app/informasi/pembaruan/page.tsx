@@ -135,8 +135,8 @@ export default function PusatPembaruanPage() {
           id: `sop-${sop.id}`,
           type: 'sop',
           typeLabel: 'STANDAR OPERASIONAL (SOP)',
-          badgeColor: 'text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60',
-          badgeBg: 'bg-amber-50 dark:bg-amber-950/40',
+          badgeColor: 'text-white border-slate-900 dark:border-slate-800',
+          badgeBg: 'bg-slate-900 dark:bg-black',
           title: `${sop.kode}: ${sop.judul}`,
           date: sop.revisi,
           rawDate: sop.revisi,
@@ -144,7 +144,7 @@ export default function PusatPembaruanPage() {
           meta: `Unit: ${sop.unit} • ${sop.tahapanCount} Tahapan • ${sop.status}`,
           href: '/informasi/sop',
           actionLabel: 'Buka Dokumen SOP',
-          icon: <Layers className="w-4 h-4 text-amber-600" />
+          icon: <Layers className="w-4 h-4 text-white" />
         });
       });
 
