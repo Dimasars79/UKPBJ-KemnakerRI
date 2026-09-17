@@ -9,7 +9,7 @@ import { useData } from '@/contexts/DataContext';
 import { 
   BellRing, ChevronRight, Search, Filter, Newspaper, Package, 
   Scale, Calendar, Layers, Clock, ArrowRight,
-  Laptop, Globe, MessageSquare
+  Globe, MessageSquare
 } from 'lucide-react';
 
 type UpdateType = 'all' | 'berita' | 'paket' | 'regulasi' | 'agenda' | 'sop';
@@ -457,34 +457,6 @@ export default function PusatPembaruanPage() {
 
             {/* RIGHT SIDEBAR (4 cols) */}
             <aside className="lg:col-span-4 space-y-6">
-              
-              {/* STATUS SISTEM & SERVER */}
-              <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <h4 className="font-bold text-sm text-primary-navy flex items-center gap-2">
-                    <Laptop className="w-4 h-4 text-emerald-600" />
-                    <span>Status Layanan Digital</span>
-                  </h4>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>Online</span>
-                  </span>
-                </div>
-
-                <div className="space-y-2.5 text-xs">
-                  {[
-                    { name: 'Portal SPSE Kemnaker', status: siteSettings.serverStatus || 'Normal' },
-                    { name: 'SiRUP LKPP Terintegrasi', status: 'Normal' },
-                    { name: 'Sistem Katalog Elektronik', status: 'Normal' },
-                    { name: 'Layanan Pengaduan & WBS', status: 'Normal' }
-                  ].map((srv, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="font-semibold text-slate-700">{srv.name}</span>
-                      <span className="font-bold text-emerald-600 text-[11px]">✓ {srv.status}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
 
               {/* TAUTAN CEPAT PUSAT INFORMASI */}
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 space-y-3">
