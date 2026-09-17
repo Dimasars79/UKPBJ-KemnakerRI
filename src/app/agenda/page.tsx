@@ -494,7 +494,7 @@ export default function AgendaPage() {
         {/* SIMPLE DETAIL POPUP MODAL */}
         <AnimatePresence>
           {selectedAgendaModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
               {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
@@ -511,13 +511,13 @@ export default function AgendaPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden z-10 my-8"
+                className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 overflow-hidden z-10 my-auto"
               >
                 {/* Modal Header */}
-                <div className="bg-gradient-to-r from-primary-navy to-[#152a54] p-6 sm:p-7 text-white relative">
-                  <div className="flex items-center justify-between gap-4 mb-3">
+                <div className="bg-gradient-to-r from-primary-navy to-[#152a54] p-4 sm:p-6 text-white relative shrink-0">
+                  <div className="flex items-center justify-between gap-3 mb-2 sm:mb-3">
                     <div className="flex items-center gap-2">
-                      <span className="px-3 py-1 rounded-full bg-white/15 border border-white/20 text-xs font-bold text-amber-300 uppercase tracking-wider">
+                      <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/15 border border-white/20 text-[10px] sm:text-xs font-bold text-amber-300 uppercase tracking-wider">
                         {selectedAgendaModal.category || 'Agenda PBJ'}
                       </span>
                     </div>
@@ -525,58 +525,58 @@ export default function AgendaPage() {
                     <button
                       onClick={() => setSelectedAgendaModal(null)}
                       aria-label="Tutup modal"
-                      className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
                     >
-                      <X className="w-5 h-5" />
+                      <X className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl font-black text-white leading-snug">
+                  <h3 className="text-base sm:text-2xl font-bold sm:font-black text-white leading-snug">
                     {selectedAgendaModal.title}
                   </h3>
                 </div>
 
-                {/* Modal Body */}
-                <div className="p-6 sm:p-7 space-y-6">
+                {/* Modal Body (Scrollable if content overflows on tiny screens) */}
+                <div className="p-4 sm:p-6 space-y-3.5 sm:space-y-5 overflow-y-auto">
                   {/* 4 Quick Info Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
-                        <CalendarIcon className="w-5 h-5 text-slate-900" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                    <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-2.5 sm:gap-3.5">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
+                        <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-900" />
                       </div>
-                      <div>
-                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tanggal Kegiatan</div>
-                        <div className="text-sm sm:text-base font-bold text-primary-navy mt-0.5">{selectedAgendaModal.date}</div>
-                      </div>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
-                        <Clock className="w-5 h-5 text-slate-900" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Waktu Pelaksanaan</div>
-                        <div className="text-sm sm:text-base font-bold text-primary-navy mt-0.5">{selectedAgendaModal.time}</div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Tanggal Kegiatan</div>
+                        <div className="text-xs sm:text-base font-bold text-primary-navy mt-0.5 truncate">{selectedAgendaModal.date}</div>
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
-                        <MapPin className="w-5 h-5 text-slate-900" />
+                    <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-2.5 sm:gap-3.5">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
+                        <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-slate-900" />
                       </div>
-                      <div>
-                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Lokasi / Ruang</div>
-                        <div className="text-sm sm:text-base font-bold text-primary-navy mt-0.5">{selectedAgendaModal.location}</div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Waktu Pelaksanaan</div>
+                        <div className="text-xs sm:text-base font-bold text-primary-navy mt-0.5 truncate">{selectedAgendaModal.time}</div>
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
-                        <Building2 className="w-5 h-5 text-slate-900" />
+                    <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-2.5 sm:gap-3.5">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
+                        <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-slate-900" />
                       </div>
-                      <div>
-                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Penyelenggara</div>
-                        <div className="text-sm sm:text-base font-bold text-primary-navy mt-0.5">
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Lokasi / Ruang</div>
+                        <div className="text-xs sm:text-base font-bold text-primary-navy mt-0.5 truncate">{selectedAgendaModal.location}</div>
+                      </div>
+                    </div>
+
+                    <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-2.5 sm:gap-3.5">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-slate-200/70 text-slate-900 flex items-center justify-center shrink-0">
+                        <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-slate-900" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Penyelenggara</div>
+                        <div className="text-xs sm:text-base font-bold text-primary-navy mt-0.5 truncate">
                           {selectedAgendaModal.organizer || 'Biro Perencanaan & UKPBJ Kemnaker'}
                         </div>
                       </div>
@@ -584,12 +584,12 @@ export default function AgendaPage() {
                   </div>
 
                   {/* Ringkasan Singkat / Deskripsi */}
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/70">
-                    <div className="flex items-center gap-2 mb-2 text-primary-navy font-bold text-sm">
-                      <Sparkles className="w-4 h-4 text-slate-900" />
+                  <div className="p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200/70">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 text-primary-navy font-bold text-xs sm:text-sm">
+                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-900" />
                       <span>Keterangan & Informasi Kegiatan</span>
                     </div>
-                    <p className="text-slate-600 text-sm leading-relaxed">
+                    <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
                       {selectedAgendaModal.description || 
                         `Kegiatan resmi "${selectedAgendaModal.title}" ini diselenggarakan oleh ${selectedAgendaModal.organizer || 'UKPBJ Kemnaker'} guna memberikan bimbingan teknis, koordinasi pengadaan, serta pendampingan bagi para pemangku kepentingan demi kelancaran proses pengadaan barang dan jasa yang transparan dan akuntabel.`
                       }
