@@ -244,7 +244,7 @@ export function Header() {
   ];
 
   return (
-    <header className="w-full flex flex-col z-50 sticky top-0 bg-[#07172E] border-b border-white/10">
+    <header className="w-full flex flex-col z-50 sticky top-0 bg-[#07172E]">
       {/* Top Government Bar */}
       <div className="bg-[#051122] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
         <div className="container mx-auto flex justify-between items-center">

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, BarChart3, Scan, 
@@ -13,8 +12,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 export function HeroSection() {
   const { trans } = useLanguage();
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
 
   const visualItems = [
     {
@@ -52,15 +49,6 @@ export function HeroSection() {
     }
   ];
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/monitoring?q=${encodeURIComponent(searchQuery.trim())}`);
-    } else {
-      router.push('/monitoring');
-    }
-  };
-
   return (
     <section 
       className="relative min-h-[90vh] lg:min-h-screen bg-[#07172E] text-white flex items-center overflow-hidden pt-28 pb-16 lg:pt-32 lg:pb-20 select-none"
@@ -84,7 +72,7 @@ export function HeroSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           
-          {/* ================= LEFT COLUMN: HEADLINE, SEARCH & CTAS ================= */}
+          {/* ================= LEFT COLUMN: HEADLINE & CTAS ================= */}
           <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center text-left">
             
             {/* Header Tag */}
@@ -121,44 +109,6 @@ export function HeroSection() {
               </p>
             </motion.div>
 
-            {/* Tracking Search Input */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="w-full max-w-xl mb-6"
-            >
-              <form 
-                onSubmit={handleSearchSubmit}
-                className="relative flex items-center rounded-full bg-slate-900/80 border border-white/20 p-2 sm:p-2.5 backdrop-blur-xl shadow-2xl focus-within:border-cyan-400/80 focus-within:ring-2 focus-within:ring-cyan-400/20 transition-all"
-              >
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={trans('Contoh: PBJ-20260906-001', 'Example: PBJ-20260906-001')}
-                  className="w-full bg-transparent px-4 sm:px-5 py-2 text-sm sm:text-base text-white placeholder:text-slate-400 focus:outline-none"
-                />
-
-                <button
-                  type="submit"
-                  className="shrink-0 px-5 sm:px-7 py-2.5 sm:py-3 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs sm:text-sm transition-all duration-200 shadow-md hover:scale-102 cursor-pointer flex items-center gap-1.5"
-                >
-                  <span>{trans('Lacak Sekarang', 'Track Now')}</span>
-                </button>
-              </form>
-
-              <p className="text-[11px] sm:text-xs text-slate-400 mt-2 pl-4 flex items-center gap-1.5">
-                <span className="text-slate-300 font-bold">ⓘ</span>
-                <span>
-                  {trans(
-                    'Format: [KODE-JENIS]-YYYYMMDD-XXX atau Nama Paket Tender',
-                    'Format: [TYPE-CODE]-YYYYMMDD-XXX or Tender Package Name'
-                  )}
-                </span>
-              </p>
-            </motion.div>
-
             {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -182,28 +132,6 @@ export function HeroSection() {
                 <span>{trans('Monitoring & Realisasi', 'Monitoring & Realization')}</span>
               </Link>
             </motion.div>
-
-            {/* Stats Row */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="grid grid-cols-3 gap-3 pt-6 border-t border-white/10"
-            >
-              <div>
-                <span className="text-xl sm:text-2xl font-black text-amber-300 font-mono">100%</span>
-                <p className="text-[11px] text-slate-400 mt-0.5">{trans('Digital SPSE', 'Digital SPSE')}</p>
-              </div>
-              <div className="border-l border-white/10 pl-3">
-                <span className="text-xl sm:text-2xl font-black text-emerald-400 font-mono">Rp 12.4M</span>
-                <p className="text-[11px] text-slate-400 mt-0.5">{trans('Efisiensi Anggaran', 'Budget Efficiency')}</p>
-              </div>
-              <div className="border-l border-white/10 pl-3">
-                <span className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">95%</span>
-                <p className="text-[11px] text-slate-400 mt-0.5">{trans('Tepat Waktu', 'On-Time Delivery')}</p>
-              </div>
-            </motion.div>
-
           </div>
 
           {/* ================= RIGHT COLUMN: PURE AUTOMATED 3D REVOLVING ORBIT (NO BUTTONS) ================= */}
