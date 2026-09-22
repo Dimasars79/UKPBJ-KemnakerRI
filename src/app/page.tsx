@@ -15,6 +15,7 @@ import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { PengadaanSection } from '@/components/home/PengadaanSection';
 import { BeritaSection } from '@/components/home/BeritaSection';
+import { ScrollVideoSection } from '@/components/home/ScrollVideoSection';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { useData } from '@/contexts/DataContext';
@@ -156,8 +157,11 @@ export default function Home() {
           </div>
         </section>
 
+        {/* 2. Scroll-Driven Video Section (GSAP ScrollTrigger) */}
+        <ScrollVideoSection />
+
         {/* Floating Core Values & Navy CTA Banner */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20 mb-8">
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 my-8 sm:my-12">
           <FadeIn direction="up" delay={0.2}>
             <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(10,35,66,0.12)] border border-slate-100 p-3 sm:p-4 lg:p-4">
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3 lg:gap-0 items-stretch">
