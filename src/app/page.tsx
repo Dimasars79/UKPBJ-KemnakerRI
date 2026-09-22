@@ -11,11 +11,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { HeroSection } from '@/components/home/HeroSection';
 import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { PengadaanSection } from '@/components/home/PengadaanSection';
 import { BeritaSection } from '@/components/home/BeritaSection';
-import { ScrollVideoSection } from '@/components/home/ScrollVideoSection';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { useData } from '@/contexts/DataContext';
@@ -102,66 +102,11 @@ export default function Home() {
       <Header />
       
       <main className="flex-grow overflow-hidden">
-        {/* 1. Hero Section */}
-        <section className="relative text-white overflow-hidden min-h-[85vh] sm:min-h-[90vh] flex items-center">
-          {/* Background image & overlays */}
-          <div className="absolute inset-0 z-0">
-            <Image 
-              src="/hero-bg.png" 
-              alt="Gedung Kementerian Ketenagakerjaan" 
-              fill
-              className="object-cover object-center animate-slow-zoom"
-              priority
-            />
-          </div>
-          {/* Gradient Overlay - consistent across mobile and laptop */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a2342] via-[#0a2342]/85 to-transparent z-0" />
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-28 pb-20 sm:py-24 lg:py-32">
-            <div className="max-w-4xl">
-              <FadeIn direction="left" delay={0.1}>
-                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-2 text-white">
-                  UKPBJ
-                </h1>
-                <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 sm:mb-6 text-white leading-tight">
-                  {t('home.hero_title')}
-                </h2>
-                {t('home.hero_subtitle') ? (
-                  <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#f2b33a] mb-4 sm:mb-6">
-                    {t('home.hero_subtitle')}
-                  </h3>
-                ) : null}
-              </FadeIn>
-              
-              <FadeIn direction="left" delay={0.3}>
-                <p className="text-sm sm:text-base md:text-lg text-slate-200/90 mb-6 sm:mb-8 max-w-2xl leading-relaxed">
-                  {t('home.hero_desc')}
-                </p>
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                  <Link 
-                    href="/layanan" 
-                    className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-blue to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl shadow-lg shadow-blue-900/30 hover:scale-102 transition-all duration-300 text-sm sm:text-base"
-                  >
-                    <span>{t('home.btn_services')}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <Link 
-                    href="/monitoring" 
-                    className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl backdrop-blur-md hover:scale-102 transition-all duration-300 text-sm sm:text-base"
-                  >
-                    <span>{t('home.btn_monitoring')}</span>
-                  </Link>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-
-        {/* 2. Scroll-Driven Video Section (GSAP ScrollTrigger) */}
-        <ScrollVideoSection />
+        {/* 1. Modern 3D Hero Section with Moving Buildings and Procurement Cardboard Box Visual */}
+        <HeroSection />
 
         {/* Floating Core Values & Navy CTA Banner */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 my-8 sm:my-12">
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20 mb-8">
           <FadeIn direction="up" delay={0.2}>
             <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(10,35,66,0.12)] border border-slate-100 p-3 sm:p-4 lg:p-4">
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3 lg:gap-0 items-stretch">

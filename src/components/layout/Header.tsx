@@ -244,12 +244,12 @@ export function Header() {
   ];
 
   return (
-    <header className="w-full flex flex-col z-50 sticky top-0">
+    <header className="w-full flex flex-col z-50 sticky top-0 bg-[#07172E] border-b border-white/10">
       {/* Top Government Bar */}
-      <div className="bg-primary-navy text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
+      <div className="bg-[#051122] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full font-semibold">
+            <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full font-semibold text-slate-200">
               {t('nav.gov_title')}
             </span>
           </div>
@@ -259,7 +259,7 @@ export function Header() {
               <button 
                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} 
                 onBlur={() => setTimeout(() => setIsLangMenuOpen(false), 200)}
-                className="hover:text-accent-gold transition-colors flex items-center space-x-1.5 cursor-pointer bg-white/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20 hover:border-accent-gold hover:shadow-[0_0_10px_rgba(212,175,55,0.4)] relative overflow-hidden group text-[10px] sm:text-xs"
+                className="hover:text-accent-gold transition-colors flex items-center space-x-1.5 cursor-pointer bg-white/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20 hover:border-accent-gold hover:shadow-[0_0_10px_rgba(212,175,55,0.4)] relative overflow-hidden group text-[10px] sm:text-xs text-white"
               >
                 <div className="absolute inset-0 bg-accent-gold/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5 relative z-10" />
@@ -274,28 +274,28 @@ export function Header() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2, type: 'spring', stiffness: 300, damping: 25 }}
-                    className="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-100 z-50 text-slate-800"
+                    className="absolute right-0 mt-2 w-36 bg-[#0A2246] rounded-xl shadow-2xl overflow-hidden border border-white/15 z-50 text-white"
                   >
                     <div className="p-1">
                       <button 
                         onClick={() => toggleLanguage('id')}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between transition-colors ${language === 'id' ? 'bg-blue-50 text-primary-blue font-bold' : 'hover:bg-slate-50'}`}
+                        className={`w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between transition-colors ${language === 'id' ? 'bg-blue-600 text-white font-bold' : 'hover:bg-white/10 text-slate-200'}`}
                       >
                         <span className="flex items-center space-x-2">
                           <span className="text-base">🇮🇩</span>
                           <span>Indonesia</span>
                         </span>
-                        {language === 'id' && <div className="w-1.5 h-1.5 rounded-full bg-primary-blue" />}
+                        {language === 'id' && <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
                       </button>
                       <button 
                         onClick={() => toggleLanguage('en')}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between transition-colors ${language === 'en' ? 'bg-blue-50 text-primary-blue font-bold' : 'hover:bg-slate-50'}`}
+                        className={`w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between transition-colors ${language === 'en' ? 'bg-blue-600 text-white font-bold' : 'hover:bg-white/10 text-slate-200'}`}
                       >
                         <span className="flex items-center space-x-2">
                           <span className="text-base">🇬🇧</span>
                           <span>English</span>
                         </span>
-                        {language === 'en' && <div className="w-1.5 h-1.5 rounded-full bg-primary-blue" />}
+                        {language === 'en' && <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
                       </button>
                     </div>
                   </motion.div>
@@ -306,7 +306,7 @@ export function Header() {
             <div className="relative">
               <button 
                 onClick={() => setIsA11yMenuOpen(!isA11yMenuOpen)}
-                className="hover:text-secondary-soft transition-colors flex items-center space-x-1 cursor-pointer"
+                className="hover:text-amber-300 transition-colors flex items-center space-x-1 cursor-pointer text-slate-300 hover:text-white"
               >
                 <Eye className="w-3 h-3" />
                 <span>{t('nav.accessibility')}</span>
@@ -319,21 +319,21 @@ export function Header() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-100 z-50 text-slate-800"
+                    className="absolute right-0 mt-3 w-72 bg-[#0A2246] rounded-xl shadow-2xl overflow-hidden border border-white/15 z-50 text-white"
                   >
-                    <div className="p-4 border-b border-slate-100 bg-slate-50">
-                      <h3 className="font-bold text-primary-navy">Mode Aksesibilitas</h3>
-                      <p className="text-xs text-slate-500">Sesuaikan tampilan untuk kenyamanan Anda.</p>
+                    <div className="p-4 border-b border-white/10 bg-[#07172E]">
+                      <h3 className="font-bold text-white">Mode Aksesibilitas</h3>
+                      <p className="text-xs text-slate-400">Sesuaikan tampilan untuk kenyamanan Anda.</p>
                     </div>
                     
                     <div className="p-2 space-y-1">
                       {/* Toggle Large Text */}
                       <div 
                         onClick={() => a11y.toggleSetting('isLargeText')}
-                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                        className="flex items-center justify-between p-3 hover:bg-white/10 rounded-lg cursor-pointer transition-colors"
                       >
-                        <span className="text-sm font-medium">Perbesar Teks</span>
-                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isLargeText ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                        <span className="text-sm font-medium text-slate-200">Perbesar Teks</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isLargeText ? 'bg-blue-600' : 'bg-white/20'}`}>
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isLargeText ? 'translate-x-5' : 'translate-x-0'}`} />
                         </div>
                       </div>
@@ -341,10 +341,10 @@ export function Header() {
                       {/* Toggle High Contrast */}
                       <div 
                         onClick={() => a11y.toggleSetting('isHighContrast')}
-                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                        className="flex items-center justify-between p-3 hover:bg-white/10 rounded-lg cursor-pointer transition-colors"
                       >
-                        <span className="text-sm font-medium">Kontras Tinggi</span>
-                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isHighContrast ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                        <span className="text-sm font-medium text-slate-200">Kontras Tinggi</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isHighContrast ? 'bg-blue-600' : 'bg-white/20'}`}>
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isHighContrast ? 'translate-x-5' : 'translate-x-0'}`} />
                         </div>
                       </div>
@@ -352,10 +352,10 @@ export function Header() {
                       {/* Toggle Grayscale */}
                       <div 
                         onClick={() => a11y.toggleSetting('isGrayscale')}
-                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                        className="flex items-center justify-between p-3 hover:bg-white/10 rounded-lg cursor-pointer transition-colors"
                       >
-                        <span className="text-sm font-medium">Mode Monokrom</span>
-                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isGrayscale ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                        <span className="text-sm font-medium text-slate-200">Mode Monokrom</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isGrayscale ? 'bg-blue-600' : 'bg-white/20'}`}>
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isGrayscale ? 'translate-x-5' : 'translate-x-0'}`} />
                         </div>
                       </div>
@@ -363,10 +363,10 @@ export function Header() {
                       {/* Toggle Highlight Links */}
                       <div 
                         onClick={() => a11y.toggleSetting('isHighlightLinks')}
-                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                        className="flex items-center justify-between p-3 hover:bg-white/10 rounded-lg cursor-pointer transition-colors"
                       >
-                        <span className="text-sm font-medium">Sorot Tautan</span>
-                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isHighlightLinks ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                        <span className="text-sm font-medium text-slate-200">Sorot Tautan</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isHighlightLinks ? 'bg-blue-600' : 'bg-white/20'}`}>
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isHighlightLinks ? 'translate-x-5' : 'translate-x-0'}`} />
                         </div>
                       </div>
@@ -374,19 +374,19 @@ export function Header() {
                       {/* Toggle Reduce Motion */}
                       <div 
                         onClick={() => a11y.toggleSetting('isReduceMotion')}
-                        className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                        className="flex items-center justify-between p-3 hover:bg-white/10 rounded-lg cursor-pointer transition-colors"
                       >
-                        <span className="text-sm font-medium">Hentikan Animasi</span>
-                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isReduceMotion ? 'bg-primary-blue' : 'bg-slate-300'}`}>
+                        <span className="text-sm font-medium text-slate-200">Hentikan Animasi</span>
+                        <div className={`w-10 h-5 rounded-full relative transition-colors ${a11y.isReduceMotion ? 'bg-blue-600' : 'bg-white/20'}`}>
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${a11y.isReduceMotion ? 'translate-x-5' : 'translate-x-0'}`} />
                         </div>
                       </div>
                     </div>
                     
-                    <div className="p-3 border-t border-slate-100">
+                    <div className="p-3 border-t border-white/10">
                       <button 
                         onClick={() => { a11y.resetSettings(); setIsA11yMenuOpen(false); }}
-                        className="w-full py-2 text-xs font-bold text-slate-500 hover:text-red-500 transition-colors"
+                        className="w-full py-2 text-xs font-bold text-slate-400 hover:text-red-400 transition-colors"
                       >
                         Kembalikan ke Pengaturan Awal
                       </button>
@@ -399,9 +399,9 @@ export function Header() {
         </div>
       </div>
 
-      {/* Main Navigation (Floating Island Dock) */}
-      <div className="w-full px-3 sm:px-6 lg:px-8 py-2 md:py-3 transition-all duration-300">
-        <div className="max-w-7xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300 hover:shadow-[0_12px_35px_rgba(0,0,0,0.1)] hover:border-slate-300">
+      {/* Main Navigation (Floating White Island Dock on Blue Background) */}
+      <div className="w-full px-3 sm:px-6 lg:px-8 py-2 md:py-2.5 transition-all duration-300 bg-[#07172E]">
+        <div className="max-w-7xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300">
           
           {/* Logo Area */}
           <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
@@ -413,7 +413,7 @@ export function Header() {
                 height={44} 
                 className="h-9 md:h-11 w-auto object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105" 
               />
-              <div className="h-6 md:h-7 border-l border-slate-300"></div>
+              <div className="h-6 md:h-7 border-l border-slate-200"></div>
               <Image 
                 src="/logo-ukpbj-kemnaker-new.png" 
                 alt="Logo UKPBJ" 
@@ -579,10 +579,10 @@ export function Header() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="fixed inset-x-3 top-20 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-3 sm:w-96 max-w-md mx-auto sm:max-w-none bg-white border border-slate-200 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] rounded-3xl overflow-hidden z-[100] flex flex-col max-h-[80vh] sm:max-h-[500px]"
+                      className="fixed inset-x-3 top-20 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-3 sm:w-96 max-w-md mx-auto sm:max-w-none bg-white border border-slate-100 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.2)] rounded-3xl overflow-hidden z-[100] flex flex-col max-h-[80vh] sm:max-h-[500px]"
                     >
                       {/* Header Panel */}
-                      <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
+                      <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
                         <div className="flex items-center gap-2">
                           <h3 className="font-bold text-sm text-primary-navy">Notifikasi & Pembaruan</h3>
                           {unreadPublicCount > 0 && (
@@ -597,7 +597,7 @@ export function Header() {
                           </span>
                           <button
                             onClick={() => setIsNotificationOpen(false)}
-                            className="p-1 -mr-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer flex items-center justify-center w-7 h-7 text-xs font-bold"
+                            className="p-1 -mr-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors cursor-pointer flex items-center justify-center w-7 h-7 text-xs font-bold"
                             title="Tutup Notifikasi"
                           >
                             ✕
@@ -605,7 +605,7 @@ export function Header() {
                         </div>
                       </div>
                       
-                      {/* Scrollable list of notifications (Solid white background) */}
+                      {/* Scrollable list of notifications */}
                       <div className="overflow-y-auto divide-y divide-slate-100 bg-white flex-1 overscroll-contain">
                         {cmsNotifications.length > 0 ? (
                           cmsNotifications.map((item) => (
@@ -613,21 +613,21 @@ export function Header() {
                               key={item.id}
                               href={item.href}
                               onClick={() => setIsNotificationOpen(false)}
-                              className="p-3.5 sm:p-4 hover:bg-slate-50 transition-colors flex items-start gap-3 group cursor-pointer block bg-white"
+                              className="p-3.5 sm:p-4 hover:bg-slate-50/80 transition-colors flex items-start gap-3 group cursor-pointer block bg-white"
                             >
                               <div className={`w-9 h-9 rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform shadow-2xs`}>
                                 {item.icon}
                               </div>
                               <div className="min-w-0 flex-1 space-y-1">
                                 <div className="flex items-center justify-between gap-2">
-                                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border max-w-[170px] truncate ${item.badgeClass}`}>
+                                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border max-w-[170px] truncate bg-slate-100 text-slate-600 border-slate-200`}>
                                     {item.category}
                                   </span>
                                   <span className="text-[10px] text-slate-400 font-medium shrink-0">
                                     {item.time}
                                   </span>
                                 </div>
-                                <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-primary-blue transition-colors leading-snug line-clamp-2">
+                                <h4 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary-blue transition-colors leading-snug line-clamp-2">
                                   {item.title}
                                 </h4>
                                 <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
@@ -648,10 +648,10 @@ export function Header() {
                         <Link 
                           href="/informasi/pembaruan" 
                           onClick={() => setIsNotificationOpen(false)}
-                          className="w-full py-2.5 px-4 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy via-[#0c2b55] to-primary-blue rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-1.5 active:scale-98"
+                          className="w-full py-2.5 px-4 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy to-primary-blue rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-1.5 active:scale-98"
                         >
                           <span>Lihat Pusat Informasi & Pembaruan</span>
-                          <span className="text-amber-300">→</span>
+                          <span className="text-accent-gold">→</span>
                         </Link>
                       </div>
                     </motion.div>
@@ -660,7 +660,7 @@ export function Header() {
               </AnimatePresence>
             </div>
 
-            {/* Elegant Search (Hidden on very small screens to save space, but visible on md+) */}
+            {/* Elegant Search */}
             <button 
               onClick={() => setIsSearchOpen(true)}
               className="hidden sm:flex group items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 border border-slate-200 hover:border-accent-gold/50 text-slate-600 hover:text-accent-gold rounded-full transition-all duration-300 shadow-xs hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
@@ -672,18 +672,18 @@ export function Header() {
             {/* Elegant Login */}
             <Link
               href="/login"
-              className="hidden md:flex relative overflow-hidden group items-center space-x-2 bg-gradient-to-r from-primary-navy to-primary-blue text-white px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(30,58,138,0.4)] hover:-translate-y-0.5 border border-transparent hover:border-blue-400/30"
+              className="hidden md:flex relative overflow-hidden group items-center space-x-2 bg-gradient-to-r from-primary-navy to-primary-blue text-white px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
               <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 relative z-10 transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300" />
               <span className="relative z-10">{t('nav.login')}</span>
             </Link>
 
-            {/* Mobile Navbar Toggler with smooth Morphing 3-lines to X */}
+            {/* Mobile Navbar Toggler */}
             <button 
               className={`lg:hidden flex items-center justify-center w-10 h-10 rounded-2xl transition-all duration-300 border shadow-xs relative z-[1001] cursor-pointer ${
                 isMobileMenuOpen 
-                  ? 'bg-primary-navy text-white border-white/20 shadow-xl' 
-                  : 'bg-slate-50 hover:bg-slate-100 text-primary-navy border-slate-200'
+                  ? 'bg-primary-navy text-white border-primary-navy shadow-lg' 
+                  : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
               }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label={isMobileMenuOpen ? "Tutup Menu" : "Buka Menu"}
@@ -692,28 +692,23 @@ export function Header() {
                 <motion.span
                   animate={isMobileMenuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
                   transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className={`w-5 h-0.5 rounded-full origin-center ${
-                    isMobileMenuOpen ? 'bg-white' : 'bg-primary-navy'
-                  }`}
+                  className={`w-5 h-0.5 rounded-full origin-center ${isMobileMenuOpen ? 'bg-white' : 'bg-slate-700'}`}
                 />
                 <motion.span
                   animate={isMobileMenuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
                   transition={{ duration: 0.2 }}
-                  className={`w-5 h-0.5 rounded-full ${
-                    isMobileMenuOpen ? 'bg-white' : 'bg-primary-navy'
-                  }`}
+                  className={`w-5 h-0.5 rounded-full ${isMobileMenuOpen ? 'bg-white' : 'bg-slate-700'}`}
                 />
                 <motion.span
                   animate={isMobileMenuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
                   transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className={`w-5 h-0.5 rounded-full origin-center ${
-                    isMobileMenuOpen ? 'bg-white' : 'bg-primary-navy'
-                  }`}
+                  className={`w-5 h-0.5 rounded-full origin-center ${isMobileMenuOpen ? 'bg-white' : 'bg-slate-700'}`}
                 />
               </div>
             </button>
           </div>
         </div>
+      </div>
 
       {/* Mobile Navigation Side Drawer */}
       <AnimatePresence>
@@ -726,7 +721,7 @@ export function Header() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute inset-0 bg-slate-950/60 backdrop-blur-xs"
+              className="absolute inset-0 bg-black/50 backdrop-blur-xs"
             />
 
             {/* Side Drawer Panel */}
@@ -735,11 +730,11 @@ export function Header() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 220 }}
-              className="relative w-[82%] max-w-[340px] h-full bg-white shadow-2xl z-[1000] flex flex-col justify-between overflow-y-auto"
+              className="relative w-[82%] max-w-[340px] h-full bg-white border-r border-slate-200 shadow-2xl z-[1000] flex flex-col justify-between overflow-y-auto"
             >
               <div>
                 {/* Drawer Header with Logos */}
-                <div className="p-5 border-b border-slate-100 flex items-center space-x-3 bg-white">
+                <div className="p-5 border-b border-slate-100 flex items-center space-x-3 bg-slate-50/80">
                   <Image 
                     src="/logo-kemnaker.png" 
                     alt="Logo Kementerian Ketenagakerjaan" 
@@ -897,7 +892,6 @@ export function Header() {
           </div>
         )}
       </AnimatePresence>
-      </div>
       
       {/* Search Command Palette Overlay */}
       <SearchPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
