@@ -114,9 +114,9 @@ export default function TentangPage() {
             ))}
           </div>
           
-          <div className="bg-white p-5 sm:p-10 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-100 mb-12 sm:mb-20 overflow-hidden">
+          <div className="bg-white p-3.5 sm:p-6 md:p-8 lg:p-10 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-100 mb-12 sm:mb-20 overflow-hidden">
              <SectionHeading title="Struktur Organisasi" subtitle="Bagan struktur kepengurusan UKPBJ" />
-             <div className="mt-6 sm:mt-8 overflow-x-auto">
+             <div className="mt-5 sm:mt-8 overflow-x-auto">
                <OrganizationChart />
              </div>
           </div>
