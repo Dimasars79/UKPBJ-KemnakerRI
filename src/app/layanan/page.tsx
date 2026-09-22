@@ -13,30 +13,42 @@ import {
 } from 'lucide-react';
 
 export default function LayananPage() {
-  const { t } = useLanguage();
+  const { t, trans } = useLanguage();
 
   const services = [
     {
       title: "LPSE",
-      description: "Layanan Pengadaan Secara Elektronik untuk penyelenggaraan tender dan e-purchasing pengadaan barang/jasa.",
+      description: trans(
+        "Layanan Pengadaan Secara Elektronik untuk penyelenggaraan tender dan e-purchasing pengadaan barang/jasa.",
+        "Electronic Procurement Service for managing tenders and e-purchasing for goods/services procurement."
+      ),
       icon: Monitor,
       href: "https://spse.inaproc.id/lkpp"
     },
     {
       title: "SIKaP",
-      description: "Sistem Informasi Kinerja Penyedia untuk mengelola kualifikasi dan rekam jejak data vendor terpusat.",
+      description: trans(
+        "Sistem Informasi Kinerja Penyedia untuk mengelola kualifikasi dan rekam jejak data vendor terpusat.",
+        "Vendor Performance Information System to manage centralized vendor qualifications and track record."
+      ),
       icon: FileText,
       href: "https://sikap.inaproc.id/"
     },
     {
-      title: "Layanan Pengaduan",
-      description: "Sampaikan laporan, kendala teknis, atau pengaduan pengadaan langsung via WhatsApp Helpdesk resmi UKPBJ.",
+      title: trans("Layanan Pengaduan", "Whistleblowing & Complaints"),
+      description: trans(
+        "Sampaikan laporan, kendala teknis, atau pengaduan pengadaan langsung via WhatsApp Helpdesk resmi UKPBJ.",
+        "Submit reports, technical issues, or procurement complaints directly via official UKPBJ WhatsApp Helpdesk."
+      ),
       icon: HelpCircle,
       href: "https://wa.me/628988180009?text=Halo%20Helpdesk%20UKPBJ%20Kemnaker%2C%20saya%20ingin%20menyampaikan%20laporan%20atau%20pengaduan%20terkait%20layanan%20pengadaan."
     },
     {
-      title: "Layanan Berita",
-      description: "Pusat warta terkini, siaran pers, pengumuman pemenang lelang, dan publikasi resmi pengadaan barang/jasa.",
+      title: trans("Layanan Berita", "News Services"),
+      description: trans(
+        "Pusat warta terkini, siaran pers, pengumuman pemenang lelang, dan publikasi resmi pengadaan barang/jasa.",
+        "Latest news center, press releases, tender award announcements, and official procurement publications."
+      ),
       icon: Newspaper,
       href: "/berita"
     }
@@ -59,13 +71,13 @@ export default function LayananPage() {
                 {/* Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
                   <Zap className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Layanan Pengadaan Terpadu Kemnaker</span>
+                  <span>{trans('Layanan Pengadaan Terpadu Kemnaker', 'MoM Integrated Procurement Services')}</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
-                  Pusat Solusi & Akses Layanan <br />
+                  {trans('Pusat Solusi & Akses Layanan', 'Solution Center & Service Access')} <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-amber-200">
-                    Pengadaan Barang/Jasa
+                    {trans('Pengadaan Barang/Jasa', 'Goods & Services Procurement')}
                   </span>
                 </h1>
 
@@ -99,17 +111,20 @@ export default function LayananPage() {
                 {/* Left: Info */}
                 <div className="max-w-2xl">
                   <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-3">
-                    Butuh Bantuan Teknis atau Konsultasi Pengadaan?
+                    {trans('Butuh Bantuan Teknis atau Konsultasi Pengadaan?', 'Need Technical Assistance or Procurement Consultation?')}
                   </h2>
 
                   <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
-                    Tim Helpdesk LPSE dan Pokja UKPBJ Kemnaker RI siap membantu kendala teknis SPSE, aktivasi akun penyedia, hingga pendampingan regulasi pengadaan.
+                    {trans(
+                      'Tim Helpdesk LPSE dan Pokja UKPBJ Kemnaker RI siap membantu kendala teknis SPSE, aktivasi akun penyedia, hingga pendampingan regulasi pengadaan.',
+                      'The MoM LPSE Helpdesk and UKPBJ Pokja team are ready to assist with SPSE technical issues, vendor account activation, and procurement regulatory guidance.'
+                    )}
                   </p>
 
                   <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-300 pt-4 border-t border-white/10">
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-4 h-4 text-accent-gold" />
-                      <span>Senin – Jumat (08:00 – 16:00 WIB)</span>
+                      <span>{trans('Senin – Jumat (08:00 – 16:00 WIB)', 'Monday – Friday (08:00 – 16:00 WIB)')}</span>
                     </div>
                     <span className="text-white/20 hidden sm:inline">•</span>
                     <div className="flex items-center gap-1.5">
@@ -119,7 +134,7 @@ export default function LayananPage() {
                     <span className="text-white/20 hidden sm:inline">•</span>
                     <div className="flex items-center gap-1.5">
                       <Building2 className="w-4 h-4 text-accent-gold" />
-                      <span>Gedung A Lt. 4 Kemnaker</span>
+                      <span>{trans('Gedung A Lt. 4 Kemnaker', 'Building A 4th Floor MoM')}</span>
                     </div>
                   </div>
                 </div>
@@ -133,7 +148,7 @@ export default function LayananPage() {
                     className="inline-flex items-center justify-center gap-2 bg-accent-gold hover:bg-yellow-400 text-primary-navy font-bold text-xs py-3.5 px-6 rounded-xl transition-all shadow-md active:scale-95"
                   >
                     <MessageSquare className="w-4 h-4" />
-                    <span>Chat WhatsApp Helpdesk</span>
+                    <span>{trans('Chat WhatsApp Helpdesk', 'Chat WhatsApp Helpdesk')}</span>
                   </a>
                 </div>
               </div>

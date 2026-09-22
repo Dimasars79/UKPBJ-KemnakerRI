@@ -2,6 +2,8 @@ import React from 'react';
 import { LucideIcon, ArrowRight, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+
 interface ServiceCardProps {
   title: string;
   description: string;
@@ -10,6 +12,7 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ title, description, icon: Icon, href }: ServiceCardProps) {
+  const { trans } = useLanguage();
   const isExternal = href.startsWith('http') || href.startsWith('https://wa.me');
 
   return (
@@ -27,7 +30,7 @@ export function ServiceCard({ title, description, icon: Icon, href }: ServiceCar
           rel="noopener noreferrer" 
           className="inline-flex items-center text-xs sm:text-sm font-bold text-primary-blue group-hover:text-primary-navy transition-colors mt-auto"
         >
-          <span>Akses Layanan</span>
+          <span>{trans('Akses Layanan', 'Access Service')}</span>
           <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </a>
       ) : (
@@ -35,7 +38,7 @@ export function ServiceCard({ title, description, icon: Icon, href }: ServiceCar
           href={href} 
           className="inline-flex items-center text-xs sm:text-sm font-bold text-primary-blue group-hover:text-primary-navy transition-colors mt-auto"
         >
-          <span>Selengkapnya</span>
+          <span>{trans('Selengkapnya', 'Learn More')}</span>
           <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
         </Link>
       )}

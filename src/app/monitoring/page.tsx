@@ -12,12 +12,27 @@ import { DataTable } from '@/components/dashboard/DataTable';
 import { TrendingUp, Clock, PackageCheck, BarChart3 } from 'lucide-react';
 
 export default function MonitoringPage() {
-  const { t } = useLanguage();
+  const { t, trans } = useLanguage();
 
   const performanceStats = [
-    { title: 'Total Paket Selesai', value: '428', icon: <PackageCheck className="w-8 h-8 text-white" />, trend: '+12% dari bulan lalu' },
-    { title: 'Efisiensi Waktu', value: '18%', icon: <Clock className="w-8 h-8 text-white" />, trend: 'Lebih cepat 4 hari/paket' },
-    { title: 'Penghematan Pagu', value: 'Rp 14.500.000.000', icon: <TrendingUp className="w-8 h-8 text-white" />, trend: '12.5% efisiensi anggaran' },
+    { 
+      title: trans('Total Paket Selesai', 'Total Completed Packages'), 
+      value: '428', 
+      icon: <PackageCheck className="w-8 h-8 text-white" />, 
+      trend: trans('+12% dari bulan lalu', '+12% from last month') 
+    },
+    { 
+      title: trans('Efisiensi Waktu', 'Time Efficiency'), 
+      value: '18%', 
+      icon: <Clock className="w-8 h-8 text-white" />, 
+      trend: trans('Lebih cepat 4 hari/paket', '4 days faster per package') 
+    },
+    { 
+      title: trans('Penghematan Pagu', 'Budget Savings'), 
+      value: 'Rp 14.500.000.000', 
+      icon: <TrendingUp className="w-8 h-8 text-white" />, 
+      trend: trans('12.5% efisiensi anggaran', '12.5% budget efficiency') 
+    },
   ];
 
   return (
@@ -37,13 +52,13 @@ export default function MonitoringPage() {
                 {/* Government ITKP Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
                   <BarChart3 className="w-3.5 h-3.5 text-emerald-300" />
-                  <span>Indeks Tata Kelola Pengadaan (ITKP) Resmi</span>
+                  <span>{trans('Indeks Tata Kelola Pengadaan (ITKP) Resmi', 'Official Procurement Governance Index (ITKP)')}</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
-                  Dashboard Monitoring & <br />
+                  {trans('Dashboard Monitoring &', 'Monitoring Dashboard &')} <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 via-cyan-100 to-white">
-                    Evaluasi Kinerja Pengadaan
+                    {trans('Evaluasi Kinerja Pengadaan', 'Procurement Performance Evaluation')}
                   </span>
                 </h1>
 
@@ -79,7 +94,7 @@ export default function MonitoringPage() {
               <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
                 <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                  <span>Tren Penyelesaian Paket</span>
+                  <span>{trans('Tren Penyelesaian Paket', 'Package Completion Trend')}</span>
                 </h3>
                 <PerformanceChart />
               </div>
@@ -88,7 +103,7 @@ export default function MonitoringPage() {
               <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
                 <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span>Paket per Kategori</span>
+                  <span>{trans('Paket per Kategori', 'Packages by Category')}</span>
                 </h3>
                 <EfficiencyChart />
               </div>
@@ -97,7 +112,7 @@ export default function MonitoringPage() {
               <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
                 <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  <span>Target vs Realisasi</span>
+                  <span>{trans('Target vs Realisasi', 'Target vs Realization')}</span>
                 </h3>
                 <CategoryChart />
               </div>

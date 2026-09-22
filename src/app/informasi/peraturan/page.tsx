@@ -13,6 +13,7 @@ import {
   X, ChevronLeft, ZoomIn, ZoomOut
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 type Regulation = {
   id: string;
@@ -41,6 +42,7 @@ const mapCategoryToId = (kategori: string): string => {
 
 export default function PeraturanPage() {
   const { regulasiList } = useData();
+  const { trans } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activePreviewRegulation, setActivePreviewRegulation] = useState<Regulation | null>(null);
@@ -56,24 +58,24 @@ export default function PeraturanPage() {
         category: mapCategoryToId(item.kategori),
         nomor: item.nomor,
         title: item.nomor + ' - ' + item.tentang,
-        date: `Tahun ${item.tahun}`,
+        date: trans(`Tahun ${item.tahun}`, `Year ${item.tahun}`),
         status: 'Berlaku',
         fileSize: item.fileSize || '2.0 MB',
         downloadUrl: item.downloadUrl,
         desc: item.tentang
       }));
-  }, [regulasiList]);
+  }, [regulasiList, trans]);
 
   const categories = useMemo(() => [
-    { id: 'all', label: 'Semua Regulasi', icon: <BookOpen className="w-4 h-4" />, count: dynamicRegulations.length },
-    { id: 'uu', label: 'Undang-Undang', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'uu').length },
-    { id: 'pp', label: 'Peraturan Pemerintah', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'pp').length },
-    { id: 'perpres', label: 'Peraturan Presiden', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'perpres').length },
-    { id: 'permen', label: 'Peraturan Menteri / Lembaga', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'permen').length },
-    { id: 'kepmen', label: 'Keputusan Menteri', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'kepmen').length },
-    { id: 'se', label: 'Surat Edaran', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'se').length },
-    { id: 'lain', label: 'Lain-Lain & Pedoman', icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'lain').length },
-  ], [dynamicRegulations]);
+    { id: 'all', label: trans('Semua Regulasi', 'All Regulations'), icon: <BookOpen className="w-4 h-4" />, count: dynamicRegulations.length },
+    { id: 'uu', label: trans('Undang-Undang', 'Laws & Acts (UU)'), icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'uu').length },
+    { id: 'pp', label: trans('Peraturan Pemerintah', 'Government Regulations (PP)'), icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'pp').length },
+    { id: 'perpres', label: trans('Peraturan Presiden', 'Presidential Regulations (Perpres)'), icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'perpres').length },
+    { id: 'permen', label: trans('Peraturan Menteri / Lembaga', 'Ministerial Regulations (Permen)'), icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'permen').length },
+    { id: 'kepmen', label: trans('Keputusan Menteri', 'Ministerial Decrees (Kepmen)'), icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'kepmen').length },
+    { id: 'se', label: trans('Surat Edaran', 'Circular Letters (SE)'), icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'se').length },
+    { id: 'lain', label: trans('Lain-Lain & Pedoman', 'Other Guidelines & Standards'), icon: <FileText className="w-4 h-4" />, count: dynamicRegulations.filter(r => r.category === 'lain').length },
+  ], [dynamicRegulations, trans]);
 
   const filteredRegulations = useMemo(() => {
     return dynamicRegulations.filter(item => {
@@ -128,26 +130,29 @@ export default function PeraturanPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             {/* Breadcrumbs */}
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-6">
-              <Link href="/" className="hover:text-amber-300 transition-colors">Beranda</Link>
+              <Link href="/" className="hover:text-amber-300 transition-colors">{trans('Beranda', 'Home')}</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <Link href="/informasi" className="hover:text-amber-300 transition-colors">Informasi</Link>
+              <Link href="/informasi" className="hover:text-amber-300 transition-colors">{trans('Informasi', 'Information')}</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-amber-300">Peraturan & Regulasi</span>
+              <span className="text-amber-300">{trans('Peraturan & Regulasi', 'Rules & Regulations')}</span>
             </div>
 
             <div className="max-w-3xl mx-auto text-center">
               <FadeIn direction="up">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
                   <Scale className="w-3.5 h-3.5 text-amber-300" />
-                  <span>JDIH & Regulasi Resmi Pengadaan</span>
+                  <span>{trans('JDIH & Regulasi Resmi Pengadaan', 'JDIH & Official PBJ Regulations')}</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
-                  Peraturan & Dasar Hukum PBJ
+                  {trans('Peraturan & Dasar Hukum PBJ', 'Regulations & Legal Foundations of PBJ')}
                 </h1>
 
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl mx-auto">
-                  Kumpulan produk hukum, undang-undang, peraturan presiden, dan keputusan menteri yang menjadi pedoman resmi pengadaan barang dan jasa.
+                  {trans(
+                    'Kumpulan produk hukum, undang-undang, peraturan presiden, dan keputusan menteri yang menjadi pedoman resmi pengadaan barang dan jasa.',
+                    'Collection of legal acts, statutes, presidential regulations, and ministerial decrees serving as official guidelines for public procurement.'
+                  )}
                 </p>
 
                 {/* Main Search Bar */}
@@ -160,7 +165,7 @@ export default function PeraturanPage() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Cari nomor peraturan, judul, atau kata kunci..."
+                      placeholder={trans('Cari nomor peraturan, judul, atau kata kunci...', 'Search regulation number, title, or keywords...')}
                       className="w-full px-3 py-2 text-sm text-slate-800 placeholder-slate-400 bg-transparent outline-none font-medium"
                     />
                     {searchQuery && (
@@ -168,7 +173,7 @@ export default function PeraturanPage() {
                         onClick={() => setSearchQuery('')}
                         className="px-3 text-xs text-slate-400 hover:text-slate-600 font-semibold"
                       >
-                        Reset
+                        {trans('Reset', 'Reset')}
                       </button>
                     )}
                   </div>
@@ -188,10 +193,10 @@ export default function PeraturanPage() {
                 <div className="p-5 bg-gradient-to-r from-primary-navy to-[#113264] text-white flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <Filter className="w-4 h-4 text-accent-gold" />
-                    <h3 className="font-bold text-sm tracking-wide">Kategori Peraturan</h3>
+                    <h3 className="font-bold text-sm tracking-wide">{trans('Kategori Peraturan', 'Regulation Categories')}</h3>
                   </div>
                   <span className="text-[11px] font-bold text-blue-200 bg-white/10 px-2.5 py-0.5 rounded-full">
-                    {categories.length - 1} Klasifikasi
+                    {categories.length - 1} {trans('Klasifikasi', 'Categories')}
                   </span>
                 </div>
 
@@ -232,9 +237,12 @@ export default function PeraturanPage() {
                     <ShieldCheck className="w-5 h-5 text-amber-700" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-amber-900 mb-1">Integrasi JDIH Kemnaker</h4>
+                    <h4 className="text-xs font-bold text-amber-900 mb-1">{trans('Integrasi JDIH Kemnaker', 'MoM JDIH Legal Integration')}</h4>
                     <p className="text-[11px] text-amber-800/80 leading-relaxed mb-3">
-                      Seluruh dokumen hukum terhubung langsung dengan Jaringan Dokumentasi dan Informasi Hukum Nasional.
+                      {trans(
+                        'Seluruh dokumen hukum terhubung langsung dengan Jaringan Dokumentasi dan Informasi Hukum Nasional.',
+                        'All legal documents are directly connected with the National Legal Documentation and Information Network.'
+                      )}
                     </p>
                     <a 
                       href="https://jdih.kemnaker.go.id" 
@@ -242,7 +250,7 @@ export default function PeraturanPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 hover:text-amber-700 hover:underline"
                     >
-                      <span>Buka Portal JDIH</span>
+                      <span>{trans('Buka Portal JDIH', 'Open JDIH Portal')}</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
@@ -256,7 +264,7 @@ export default function PeraturanPage() {
               <div className="bg-white rounded-2xl p-4 mb-6 shadow-xs border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-primary-navy">
-                    Menampilkan {filteredRegulations.length} Dokumen Regulasi
+                    {trans(`Menampilkan ${filteredRegulations.length} Dokumen Regulasi`, `Showing ${filteredRegulations.length} Regulation Documents`)}
                   </span>
                   {selectedCategory !== 'all' && (
                     <span className="text-[10px] font-bold bg-blue-50 text-primary-blue px-2.5 py-0.5 rounded-full border border-blue-100">
@@ -266,7 +274,7 @@ export default function PeraturanPage() {
                 </div>
 
                 <div className="text-xs text-slate-400 font-medium">
-                  Format: Dokumen PDF Resmi
+                  {trans('Format: Dokumen PDF Resmi', 'Format: Official PDF Document')}
                 </div>
               </div>
 
@@ -296,7 +304,7 @@ export default function PeraturanPage() {
                                   : 'bg-amber-50 text-amber-700 border border-amber-200'
                               }`}>
                                 <CheckCircle2 className="w-3 h-3" />
-                                <span>{item.status}</span>
+                                <span>{item.status === 'Berlaku' ? trans('Berlaku', 'Active') : item.status}</span>
                               </span>
                             </div>
 
@@ -328,10 +336,10 @@ export default function PeraturanPage() {
                             <button 
                               onClick={() => handleDownloadRegulation(item)}
                               className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
-                              title="Unduh Salinan Resmi"
+                              title={trans('Unduh Salinan Resmi', 'Download Official Copy')}
                             >
                               <Download className="w-3.5 h-3.5" />
-                              <span>Unduh PDF</span>
+                              <span>{trans('Unduh PDF', 'Download PDF')}</span>
                             </button>
 
                             <button 
@@ -341,10 +349,10 @@ export default function PeraturanPage() {
                                 setZoomLevel(100);
                               }}
                               className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-primary-navy px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
-                              title="Buka Pratinjau Dokumen"
+                              title={trans('Buka Pratinjau Dokumen', 'Open Document Preview')}
                             >
                               <Eye className="w-3.5 h-3.5 text-slate-500" />
-                              <span>Pratinjau</span>
+                              <span>{trans('Pratinjau', 'Preview')}</span>
                             </button>
                           </div>
                         </div>
@@ -355,15 +363,18 @@ export default function PeraturanPage() {
                       <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-4 text-slate-400">
                         <Search className="w-6 h-6" />
                       </div>
-                      <h4 className="text-base font-bold text-slate-800 mb-1">Tidak Ada Regulasi Ditemukan</h4>
+                      <h4 className="text-base font-bold text-slate-800 mb-1">{trans('Tidak Ada Regulasi Ditemukan', 'No Regulations Found')}</h4>
                       <p className="text-xs text-slate-500 max-w-sm mx-auto mb-4">
-                        Tidak ditemukan peraturan yang cocok dengan kata kunci &quot;{searchQuery}&quot; pada kategori yang dipilih.
+                        {trans(
+                          `Tidak ditemukan peraturan yang cocok dengan kata kunci "${searchQuery}" pada kategori yang dipilih.`,
+                          `No regulations matched the keyword "${searchQuery}" in the selected category.`
+                        )}
                       </p>
                       <button
                         onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
                         className="text-xs font-bold text-primary-blue hover:underline"
                       >
-                        Reset Filter & Pencarian
+                        {trans('Reset Filter & Pencarian', 'Reset Filter & Search')}
                       </button>
                     </div>
                   )}
@@ -373,10 +384,15 @@ export default function PeraturanPage() {
               {/* Load More Button */}
               {filteredRegulations.length > 0 && (
                 <div className="mt-8 text-center">
-                  <button className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-primary-blue hover:text-primary-blue text-slate-700 font-bold text-xs py-3 px-8 rounded-xl transition-all shadow-xs hover:shadow-sm">
-                    <span>Lihat Seluruh Arsip JDIH</span>
+                  <a 
+                    href="https://jdih.kemnaker.go.id" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-primary-blue hover:text-primary-blue text-slate-700 font-bold text-xs py-3 px-8 rounded-xl transition-all shadow-xs hover:shadow-sm"
+                  >
+                    <span>{trans('Lihat Seluruh Arsip JDIH', 'Browse Full JDIH Archives')}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  </a>
                 </div>
               )}
             </div>
@@ -445,16 +461,16 @@ export default function PeraturanPage() {
                   <button
                     onClick={() => handleDownloadRegulation(activePreviewRegulation)}
                     className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer"
-                    title="Unduh Salinan PDF"
+                    title={trans('Unduh Salinan PDF', 'Download PDF Copy')}
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Unduh PDF</span>
+                    <span className="hidden sm:inline">{trans('Unduh PDF', 'Download PDF')}</span>
                   </button>
 
                   <button
                     onClick={() => setActivePreviewRegulation(null)}
                     className="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                    title="Tutup Pratinjau"
+                    title={trans('Tutup Pratinjau', 'Close Preview')}
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -480,10 +496,10 @@ export default function PeraturanPage() {
                         <Scale className="w-7 h-7 text-amber-400" />
                       </div>
                       <h3 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wider">
-                        KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA
+                        {trans('KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA', 'MINISTRY OF MANPOWER OF THE REPUBLIC OF INDONESIA')}
                       </h3>
                       <p className="text-[11px] text-slate-600 font-bold uppercase mt-1">
-                        JARINGAN DOKUMENTASI DAN INFORMASI HUKUM (JDIH) PBJ
+                        {trans('JARINGAN DOKUMENTASI DAN INFORMASI HUKUM (JDIH) PBJ', 'LEGAL DOCUMENTATION AND INFORMATION NETWORK (JDIH) PBJ')}
                       </p>
                     </div>
 
@@ -493,11 +509,11 @@ export default function PeraturanPage() {
                         {activePreviewRegulation.nomor}
                       </span>
                       <h2 className="text-base sm:text-lg font-black text-slate-900 uppercase max-w-xl mx-auto leading-snug">
-                        TENTANG {activePreviewRegulation.desc}
+                        {trans('TENTANG', 'CONCERNING')} {activePreviewRegulation.desc}
                       </h2>
                       <div className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Status: {activePreviewRegulation.status}</span>
+                        <span>{trans('Status: Berlaku', 'Status: Active')}</span>
                       </div>
                     </div>
 
@@ -506,22 +522,32 @@ export default function PeraturanPage() {
                       <div className="space-y-4 text-xs sm:text-[13px] text-slate-700 leading-relaxed pt-4 border-t border-slate-100">
                         <div>
                           <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-2 text-primary-navy">
-                            Menimbang:
+                            {trans('Menimbang:', 'Considering:')}
                           </h5>
                           <ul className="space-y-2 list-disc list-inside text-slate-600 pl-1">
-                            <li>Bahwa untuk melaksanakan tertib administrasi, akuntabilitas, dan transparansi pengadaan barang/jasa pemerintah di lingkungan Kementerian Ketenagakerjaan.</li>
-                            <li>Bahwa berdasarkan ketentuan perundang-undangan nasional, perlu menetapkan dasar hukum pelaksanaan PBJ yang terintegrasi.</li>
+                            <li>
+                              {trans(
+                                'Bahwa untuk melaksanakan tertib administrasi, akuntabilitas, dan transparansi pengadaan barang/jasa pemerintah di lingkungan Kementerian Ketenagakerjaan.',
+                                'That to implement administrative order, accountability, and transparency in government procurement within the Ministry of Manpower.'
+                              )}
+                            </li>
+                            <li>
+                              {trans(
+                                'Bahwa berdasarkan ketentuan perundang-undangan nasional, perlu menetapkan dasar hukum pelaksanaan PBJ yang terintegrasi.',
+                                'That pursuant to national legislation, it is necessary to establish an integrated legal basis for PBJ implementation.'
+                              )}
+                            </li>
                           </ul>
                         </div>
 
                         <div className="pt-2">
                           <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-2 text-primary-navy">
-                            Mengingat:
+                            {trans('Mengingat:', 'In view of:')}
                           </h5>
                           <ul className="space-y-2 list-disc list-inside text-slate-600 pl-1">
-                            <li>Undang-Undang Nomor 13 Tahun 2003 tentang Ketenagakerjaan.</li>
-                            <li>Peraturan Presiden Nomor 12 Tahun 2021 tentang Pengadaan Barang/Jasa Pemerintah.</li>
-                            <li>Peraturan Menteri Ketenagakerjaan tentang Organisasi dan Tata Kerja Kemnaker.</li>
+                            <li>{trans('Undang-Undang Nomor 13 Tahun 2003 tentang Ketenagakerjaan.', 'Law No. 13 of 2003 on Manpower.')}</li>
+                            <li>{trans('Peraturan Presiden Nomor 12 Tahun 2021 tentang Pengadaan Barang/Jasa Pemerintah.', 'Presidential Regulation No. 12 of 2021 on Government Procurement of Goods and Services.')}</li>
+                            <li>{trans('Peraturan Menteri Ketenagakerjaan tentang Organisasi dan Tata Kerja Kemnaker.', 'Ministerial Regulation on Organization and Work Procedures of the Ministry of Manpower.')}</li>
                           </ul>
                         </div>
                       </div>
@@ -531,16 +557,26 @@ export default function PeraturanPage() {
                       <div className="space-y-4 text-xs sm:text-[13px] text-slate-700 leading-relaxed pt-4 border-t border-slate-100">
                         <div>
                           <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-2 text-primary-navy">
-                            MEMUTUSKAN & MENETAPKAN:
+                            {trans('MEMUTUSKAN & MENETAPKAN:', 'HAS DECIDED & ENACTED:')}
                           </h5>
                           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
                             <div>
-                              <span className="font-bold text-slate-900 block text-xs">Pasal 1</span>
-                              <p className="text-[11px] text-slate-600">Seluruh unit kerja dan satuan kerja di lingkungan Kementerian Ketenagakerjaan wajib memedomani petunjuk teknis ini dalam seluruh proses PBJ.</p>
+                              <span className="font-bold text-slate-900 block text-xs">{trans('Pasal 1', 'Article 1')}</span>
+                              <p className="text-[11px] text-slate-600">
+                                {trans(
+                                  'Seluruh unit kerja dan satuan kerja di lingkungan Kementerian Ketenagakerjaan wajib memedomani petunjuk teknis ini dalam seluruh proses PBJ.',
+                                  'All working units within the Ministry of Manpower must adhere to these technical guidelines in all PBJ processes.'
+                                )}
+                              </p>
                             </div>
                             <div>
-                              <span className="font-bold text-slate-900 block text-xs">Pasal 2</span>
-                              <p className="text-[11px] text-slate-600">Pelaksanaan e-purchasing, e-tendering, dan pemilihan penyedia dilaksanakan secara elektronik melalui SPSE Kemnaker.</p>
+                              <span className="font-bold text-slate-900 block text-xs">{trans('Pasal 2', 'Article 2')}</span>
+                              <p className="text-[11px] text-slate-600">
+                                {trans(
+                                  'Pelaksanaan e-purchasing, e-tendering, dan pemilihan penyedia dilaksanakan secara elektronik melalui SPSE Kemnaker.',
+                                  'The implementation of e-purchasing, e-tendering, and vendor selection is conducted electronically via MoM SPSE.'
+                                )}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -549,8 +585,8 @@ export default function PeraturanPage() {
                   </div>
 
                   <div className="pt-6 mt-8 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-400">
-                    <span>JDIH Kementerian Ketenagakerjaan RI</span>
-                    <span className="font-bold text-slate-600">Halaman {previewPage} dari 2</span>
+                    <span>{trans('JDIH Kementerian Ketenagakerjaan RI', 'JDIH Ministry of Manpower of the Republic of Indonesia')}</span>
+                    <span className="font-bold text-slate-600">{trans(`Halaman ${previewPage} dari 2`, `Page ${previewPage} of 2`)}</span>
                   </div>
                 </div>
               </div>
@@ -564,17 +600,17 @@ export default function PeraturanPage() {
                     className="flex items-center gap-1 text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
                   >
                     <ChevronLeft className="w-3.5 h-3.5" />
-                    <span>Sebelumnya</span>
+                    <span>{trans('Sebelumnya', 'Previous')}</span>
                   </button>
                   <span className="text-xs text-slate-400 font-semibold px-2">
-                    Hal <strong className="text-white">{previewPage}</strong> / 2
+                    {trans('Hal', 'Page')} <strong className="text-white">{previewPage}</strong> / 2
                   </span>
                   <button
                     onClick={() => setPreviewPage(prev => Math.min(2, prev + 1))}
                     disabled={previewPage === 2}
                     className="flex items-center gap-1 text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
                   >
-                    <span>Berikutnya</span>
+                    <span>{trans('Berikutnya', 'Next')}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -584,14 +620,14 @@ export default function PeraturanPage() {
                     onClick={() => setActivePreviewRegulation(null)}
                     className="text-xs font-bold text-slate-400 hover:text-white px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
                   >
-                    Tutup
+                    {trans('Tutup', 'Close')}
                   </button>
                   <button
                     onClick={() => handleDownloadRegulation(activePreviewRegulation)}
                     className="flex items-center gap-1.5 bg-primary-blue hover:bg-blue-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-md"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>Unduh PDF</span>
+                    <span>{trans('Unduh PDF', 'Download PDF')}</span>
                   </button>
                 </div>
               </div>

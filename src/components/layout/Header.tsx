@@ -199,22 +199,22 @@ export function Header() {
   };
 
   const infoSubmenu = [
-    { label: 'Peraturan', href: '/informasi/peraturan', icon: <Scale className="w-4 h-4" />, desc: 'Regulasi & dasar hukum PBJ' },
-    { label: 'Panduan', href: '/informasi/panduan', icon: <BookOpen className="w-4 h-4" />, desc: 'Petunjuk teknis pengadaan' },
-    { label: 'Standar Operasional Prosedur', href: '/informasi/sop', icon: <FileCheck className="w-4 h-4" />, desc: 'SOP tata kelola kerja resmi' },
-    { label: 'Sertifikat PBJ', href: '/informasi/sertifikat-pbj', icon: <Award className="w-4 h-4" />, desc: 'Verifikasi kompetensi pengadaan' },
-    { label: 'Pengajuan Sertifikasi TKDN', href: '/informasi/tkdn', icon: <ShieldCheck className="w-4 h-4" />, desc: 'Tingkat Komponen Dalam Negeri' },
-    { label: 'Panduan Perizinan/Usaha', href: '/informasi/perizinan', icon: <FileSpreadsheet className="w-4 h-4" />, desc: 'Legalitas & izin usaha penyedia' },
-    { label: 'Tender/Seleksi Pemilu', href: '/informasi/pemilu', icon: <Vote className="w-4 h-4" />, desc: 'Paket tender & seleksi khusus' },
-    { label: 'Layanan Berita', href: '/berita', icon: <Newspaper className="w-4 h-4" />, desc: 'Warta terkini & siaran pers PBJ' },
+    { label: t('nav.menu_info_regulasi'), href: '/informasi/peraturan', icon: <Scale className="w-4 h-4" />, desc: t('nav.menu_info_regulasi_desc') },
+    { label: t('nav.menu_info_panduan'), href: '/informasi/panduan', icon: <BookOpen className="w-4 h-4" />, desc: t('nav.menu_info_panduan_desc') },
+    { label: t('nav.menu_info_sop'), href: '/informasi/sop', icon: <FileCheck className="w-4 h-4" />, desc: t('nav.menu_info_sop_desc') },
+    { label: t('nav.menu_info_sertifikat'), href: '/informasi/sertifikat-pbj', icon: <Award className="w-4 h-4" />, desc: t('nav.menu_info_sertifikat_desc') },
+    { label: t('nav.menu_info_tkdn'), href: '/informasi/tkdn', icon: <ShieldCheck className="w-4 h-4" />, desc: t('nav.menu_info_tkdn_desc') },
+    { label: t('nav.menu_info_perizinan'), href: '/informasi/perizinan', icon: <FileSpreadsheet className="w-4 h-4" />, desc: t('nav.menu_info_perizinan_desc') },
+    { label: t('nav.menu_info_pemilu'), href: '/informasi/pemilu', icon: <Vote className="w-4 h-4" />, desc: t('nav.menu_info_pemilu_desc') },
+    { label: t('nav.menu_info_berita'), href: '/berita', icon: <Newspaper className="w-4 h-4" />, desc: t('nav.menu_info_berita_desc') },
   ];
 
   const aboutSubmenu = [
-    { label: 'Visi & Misi', href: '/tentang#visi-misi', icon: <Target className="w-4 h-4" />, desc: 'Arah dan komitmen strategis' },
-    { label: 'Maklumat UKPBJ', href: '/tentang#maklumat', icon: <ScrollText className="w-4 h-4" />, desc: 'Janji standar mutu pelayanan' },
-    { label: 'Survey + Monitoring', href: '/monitoring', icon: <BarChart3 className="w-4 h-4" />, desc: 'Indeks kepuasan & evaluasi' },
-    { label: 'Standar Pelayanan Publik', href: '/informasi/sop', icon: <Building2 className="w-4 h-4" />, desc: 'Standar mutu operasional' },
-    { label: 'FAQ', href: '/tentang#faq', icon: <HelpCircle className="w-4 h-4" />, desc: 'Pertanyaan umum & informasi' },
+    { label: t('nav.menu_about_visi'), href: '/tentang#visi-misi', icon: <Target className="w-4 h-4" />, desc: t('nav.menu_about_visi_desc') },
+    { label: t('nav.menu_about_maklumat'), href: '/tentang#maklumat', icon: <ScrollText className="w-4 h-4" />, desc: t('nav.menu_about_maklumat_desc') },
+    { label: t('nav.menu_about_monitoring'), href: '/monitoring', icon: <BarChart3 className="w-4 h-4" />, desc: t('nav.menu_about_monitoring_desc') },
+    { label: t('nav.menu_about_sop'), href: '/informasi/sop', icon: <Building2 className="w-4 h-4" />, desc: t('nav.menu_about_sop_desc') },
+    { label: t('nav.menu_about_faq'), href: '/tentang#faq', icon: <HelpCircle className="w-4 h-4" />, desc: t('nav.menu_about_faq_desc') },
   ];
 
   useEffect(() => {
@@ -249,20 +249,22 @@ export function Header() {
       <div className="bg-primary-navy text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full font-semibold">KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA</span>
+            <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full font-semibold">
+              {t('nav.gov_title')}
+            </span>
           </div>
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Language Dropdown */}
             <div className="relative">
               <button 
                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} 
                 onBlur={() => setTimeout(() => setIsLangMenuOpen(false), 200)}
-                className="hover:text-accent-gold transition-colors flex items-center space-x-1.5 cursor-pointer bg-white/10 px-3 py-1 rounded-full border border-white/20 hover:border-accent-gold hover:shadow-[0_0_10px_rgba(212,175,55,0.4)] relative overflow-hidden group"
+                className="hover:text-accent-gold transition-colors flex items-center space-x-1.5 cursor-pointer bg-white/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20 hover:border-accent-gold hover:shadow-[0_0_10px_rgba(212,175,55,0.4)] relative overflow-hidden group text-[10px] sm:text-xs"
               >
                 <div className="absolute inset-0 bg-accent-gold/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                <Globe className="w-3.5 h-3.5 relative z-10" />
+                <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5 relative z-10" />
                 <span className="relative z-10 font-bold tracking-wider">{language.toUpperCase()}</span>
-                <ChevronDown className={`w-3.5 h-3.5 relative z-10 transition-transform duration-300 ${isLangMenuOpen ? 'rotate-180 text-accent-gold' : ''}`} />
+                <ChevronDown className={`w-3 h-3 sm:w-3.5 sm:h-3.5 relative z-10 transition-transform duration-300 ${isLangMenuOpen ? 'rotate-180 text-accent-gold' : ''}`} />
               </button>
 
               <AnimatePresence>

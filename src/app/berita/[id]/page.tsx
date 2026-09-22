@@ -14,8 +14,11 @@ import {
   MessageCircle, Printer, BookOpen, AlertCircle, Sparkles
 } from 'lucide-react';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+
 export default function BeritaDetailPage() {
   const params = useParams();
+  const { trans } = useLanguage();
   const { newsList, agendaList } = useData();
   const [copied, setCopied] = useState(false);
 
@@ -89,10 +92,13 @@ export default function BeritaDetailPage() {
               <AlertCircle className="w-8 h-8" />
             </div>
             <h1 className="text-xl sm:text-2xl font-black text-primary-navy mb-2">
-              Berita Tidak Ditemukan
+              {trans('Berita Tidak Ditemukan', 'News Article Not Found')}
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mb-6 leading-relaxed">
-              Artikel berita dengan ID &quot;{newsId}&quot; mungkin telah diperbarui, diarsipkan, atau tidak lagi tersedia untuk publik.
+              {trans(
+                `Artikel berita dengan ID "${newsId}" mungkin telah diperbarui, diarsipkan, atau tidak lagi tersedia untuk publik.`,
+                `The news article with ID "${newsId}" may have been updated, archived, or is no longer available to the public.`
+              )}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
@@ -100,14 +106,14 @@ export default function BeritaDetailPage() {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary-navy hover:bg-primary-blue text-white px-6 py-3 rounded-xl text-xs font-bold transition-all shadow-md"
               >
                 <BookOpen className="w-4 h-4" />
-                <span>Lihat Semua Berita</span>
+                <span>{trans('Lihat Semua Berita', 'View All News')}</span>
               </Link>
               <Link
                 href="/"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-3 rounded-xl text-xs font-bold transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Kembali ke Beranda</span>
+                <span>{trans('Kembali ke Beranda', 'Back to Home')}</span>
               </Link>
             </div>
           </div>
@@ -131,9 +137,9 @@ export default function BeritaDetailPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl relative z-10">
             {/* Breadcrumb */}
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-400 mb-6">
-              <Link href="/" className="hover:text-amber-300 transition-colors">Beranda</Link>
+              <Link href="/" className="hover:text-amber-300 transition-colors">{trans('Beranda', 'Home')}</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <Link href="/berita" className="hover:text-amber-300 transition-colors">Berita & Warta</Link>
+              <Link href="/berita" className="hover:text-amber-300 transition-colors">{trans('Berita & Warta', 'News & Articles')}</Link>
               <ChevronRight className="w-3.5 h-3.5" />
               <span className="text-amber-300 truncate max-w-[200px] sm:max-w-xs">{currentNews.category}</span>
             </div>
@@ -158,7 +164,7 @@ export default function BeritaDetailPage() {
                     <div className="w-7 h-7 rounded-full bg-primary-blue/30 border border-blue-400/30 flex items-center justify-center text-blue-300 font-bold text-xs">
                       <User className="w-3.5 h-3.5" />
                     </div>
-                    <span>{currentNews.author || 'Humas UKPBJ Kemnaker'}</span>
+                    <span>{currentNews.author || trans('Humas UKPBJ Kemnaker', 'UKPBJ MoM Public Relations')}</span>
                   </div>
 
                   <div className="flex items-center gap-1.5 text-slate-400">
@@ -169,7 +175,7 @@ export default function BeritaDetailPage() {
                   {currentNews.views > 0 && (
                     <div className="flex items-center gap-1.5 text-slate-400">
                       <Eye className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{currentNews.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} Pembaca</span>
+                      <span>{currentNews.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {trans('Pembaca', 'Reads')}</span>
                     </div>
                   )}
                 </div>
@@ -179,7 +185,7 @@ export default function BeritaDetailPage() {
                   <button
                     onClick={handleShareWhatsApp}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-sm transition-all active:scale-95 cursor-pointer"
-                    title="Bagikan ke WhatsApp"
+                    title={trans("Bagikan ke WhatsApp", "Share to WhatsApp")}
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">WhatsApp</span>
@@ -188,16 +194,16 @@ export default function BeritaDetailPage() {
                   <button
                     onClick={handleCopyLink}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition-all active:scale-95 cursor-pointer"
-                    title="Salin Tautan Artikel"
+                    title={trans("Salin Tautan Artikel", "Copy Article Link")}
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    <span>{copied ? 'Tersalin!' : 'Salin'}</span>
+                    <span>{copied ? trans('Tersalin!', 'Copied!') : trans('Salin', 'Copy')}</span>
                   </button>
 
                   <button
                     onClick={handlePrint}
                     className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition-all active:scale-95 cursor-pointer"
-                    title="Cetak Artikel"
+                    title={trans("Cetak Artikel", "Print Article")}
                   >
                     <Printer className="w-3.5 h-3.5" />
                   </button>
@@ -224,7 +230,7 @@ export default function BeritaDetailPage() {
                 />
                 <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 sm:p-6 text-white">
                   <p className="text-xs sm:text-sm font-medium drop-shadow-sm text-slate-200">
-                    Dokumentasi Resmi Kegiatan Pengadaan Barang & Jasa • Biro UKPBJ Kemnaker RI
+                    {trans('Dokumentasi Resmi Kegiatan Pengadaan Barang & Jasa • Biro UKPBJ Kemnaker RI', 'Official Documentation of Goods & Services Procurement • UKPBJ Bureau MoM RI')}
                   </p>
                 </div>
               </div>
@@ -251,7 +257,10 @@ export default function BeritaDetailPage() {
                   ))
                 ) : (
                   <p>
-                    Kementerian Ketenagakerjaan Republik Indonesia melalui Unit Kerja Pengadaan Barang/Jasa (UKPBJ) terus berkomitmen mewujudkan tata kelola pengadaan yang bersih, transparan, dan akuntabel sesuai amanat Peraturan Presiden tentang Pengadaan Barang dan Jasa Pemerintah.
+                    {trans(
+                      'Kementerian Ketenagakerjaan Republik Indonesia melalui Unit Kerja Pengadaan Barang/Jasa (UKPBJ) terus berkomitmen mewujudkan tata kelola pengadaan yang bersih, transparan, dan akuntabel sesuai amanat Peraturan Presiden tentang Pengadaan Barang dan Jasa Pemerintah.',
+                      'The Ministry of Manpower of the Republic of Indonesia through the Procurement Service Unit (UKPBJ) remains committed to realizing clean, transparent, and accountable procurement governance in accordance with Presidential Regulations.'
+                    )}
                   </p>
                 )}
 
@@ -259,10 +268,13 @@ export default function BeritaDetailPage() {
                 <div className="my-8 p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
                   <h3 className="text-base font-bold text-primary-navy flex items-center gap-2">
                     <Building2 className="w-5 h-5 text-primary-blue" />
-                    <span>{currentNews.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI'}</span>
+                    <span>{currentNews.noticeTitle || trans('Pemberitahuan Resmi UKPBJ Kemnaker RI', 'Official Notice of UKPBJ MoM RI')}</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {currentNews.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.'}
+                    {currentNews.noticeContent || trans(
+                      'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
+                      'All tender, selection, and procurement processes within the Ministry of Manpower are conducted electronically and centrally via the SPSE System and LKPP E-Catalog.'
+                    )}
                   </p>
                   <div className="pt-2 flex flex-wrap gap-2 text-[11px] font-bold">
                     {(currentNews.tags && currentNews.tags.length > 0
@@ -284,22 +296,22 @@ export default function BeritaDetailPage() {
                   className="inline-flex items-center gap-2 text-xs font-bold text-primary-navy hover:text-primary-blue bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-xl transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span>Kembali ke Indeks Berita</span>
+                  <span>{trans('Kembali ke Indeks Berita', 'Back to News Index')}</span>
                 </Link>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-400 mr-1">Bagikan:</span>
+                  <span className="text-xs font-bold text-slate-400 mr-1">{trans('Bagikan:', 'Share:')}</span>
                   <button
                     onClick={handleShareWhatsApp}
                     className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
-                    title="Bagikan ke WhatsApp"
+                    title={trans("Bagikan ke WhatsApp", "Share to WhatsApp")}
                   >
                     <MessageCircle className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleCopyLink}
                     className="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 hover:bg-primary-navy hover:text-white flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
-                    title="Salin Tautan"
+                    title={trans("Salin Tautan", "Copy Link")}
                   >
                     <Copy className="w-4 h-4" />
                   </button>
@@ -316,7 +328,7 @@ export default function BeritaDetailPage() {
                     >
                       <span className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-1 mb-1">
                         <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                        <span>Berita Sebelumnya</span>
+                        <span>{trans('Berita Sebelumnya', 'Previous Article')}</span>
                       </span>
                       <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-primary-blue transition-colors line-clamp-2">
                         {prevNews.title}
@@ -330,7 +342,7 @@ export default function BeritaDetailPage() {
                       className="p-4 rounded-2xl border border-slate-200 hover:border-primary-blue/50 hover:bg-slate-50 transition-all text-right group"
                     >
                       <span className="text-[10px] font-bold uppercase text-slate-400 flex items-center justify-end gap-1 mb-1">
-                        <span>Berita Berikutnya</span>
+                        <span>{trans('Berita Berikutnya', 'Next Article')}</span>
                         <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                       </span>
                       <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-primary-blue transition-colors line-clamp-2">
@@ -349,13 +361,13 @@ export default function BeritaDetailPage() {
                 <div className="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
                   <h3 className="font-bold text-sm text-primary-navy tracking-wide flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-accent-gold" />
-                    <span>Warta Terkini Lainnya</span>
+                    <span>{trans('Warta Terkini Lainnya', 'Other Recent News')}</span>
                   </h3>
                   <Link
                     href="/berita"
                     className="text-[11px] font-bold text-primary-blue hover:underline"
                   >
-                    Lihat Semua
+                    {trans('Lihat Semua', 'View All')}
                   </Link>
                 </div>
 
@@ -397,13 +409,13 @@ export default function BeritaDetailPage() {
                   <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
                     <h3 className="font-bold text-sm text-primary-navy tracking-wide flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-emerald-600" />
-                      <span>Agenda Terdekat PBJ</span>
+                      <span>{trans('Agenda Terdekat PBJ', 'Upcoming PBJ Agenda')}</span>
                     </h3>
                     <Link
                       href="/agenda"
                       className="text-[11px] font-bold text-emerald-700 hover:underline"
                     >
-                      Jadwal
+                      {trans('Jadwal', 'Schedule')}
                     </Link>
                   </div>
 
@@ -435,16 +447,16 @@ export default function BeritaDetailPage() {
                   <Sparkles className="w-5 h-5 text-accent-gold" />
                 </div>
                 <h3 className="font-bold text-sm mb-1.5">
-                  Butuh Klarifikasi Terkait Berita Ini?
+                  {trans('Butuh Klarifikasi Terkait Berita Ini?', 'Need Clarification Regarding This News?')}
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                  Hubungi tim layanan informasi publik dan konsultasi pengadaan barang/jasa Kemnaker RI.
+                  {trans('Hubungi tim layanan informasi publik dan konsultasi pengadaan barang/jasa Kemnaker RI.', 'Contact the public information and procurement consultation team of the Ministry of Manpower RI.')}
                 </p>
                 <Link
                   href="/layanan"
                   className="inline-flex items-center justify-center gap-2 w-full bg-accent-gold hover:bg-amber-400 text-slate-950 font-bold text-xs py-2.5 rounded-xl transition-all shadow-md active:scale-95"
                 >
-                  <span>Pusat Layanan & Konsultasi</span>
+                  <span>{trans('Pusat Layanan & Konsultasi', 'Service & Consultation Center')}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

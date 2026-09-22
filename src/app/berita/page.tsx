@@ -12,18 +12,21 @@ import {
   ChevronRight, BookOpen, AlertCircle
 } from 'lucide-react';
 
-const categories = [
-  { id: 'all', label: 'Semua Berita' },
-  { id: 'Berita PBJ', label: 'Berita PBJ' },
-  { id: 'Pengumuman Lelang', label: 'Pengumuman Lelang' },
-  { id: 'Regulasi', label: 'Regulasi' },
-  { id: 'Siaran Pers', label: 'Siaran Pers' },
-];
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function BeritaIndexPage() {
+  const { trans } = useLanguage();
   const { newsList } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const categories = [
+    { id: 'all', label: trans('Semua Berita', 'All News') },
+    { id: 'Berita PBJ', label: trans('Berita PBJ', 'PBJ News') },
+    { id: 'Pengumuman Lelang', label: trans('Pengumuman Lelang', 'Tender Announcements') },
+    { id: 'Regulasi', label: trans('Regulasi', 'Regulations') },
+    { id: 'Siaran Pers', label: trans('Siaran Pers', 'Press Releases') },
+  ];
 
   const publishedNews = useMemo(() => {
     return newsList.filter((item) => item.status === 'Published');
@@ -74,23 +77,26 @@ export default function BeritaIndexPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-5xl text-center">
             {/* Breadcrumb */}
             <div className="flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 mb-6">
-              <Link href="/" className="hover:text-amber-300 transition-colors">Beranda</Link>
+              <Link href="/" className="hover:text-amber-300 transition-colors">{trans('Beranda', 'Home')}</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-amber-300">Warta & Berita PBJ</span>
+              <span className="text-amber-300">{trans('Warta & Berita PBJ', 'PBJ News & Articles')}</span>
             </div>
 
             <FadeIn direction="up">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
                 <BookOpen className="w-3.5 h-3.5 text-blue-300" />
-                <span>Pusat Publikasi & Informasi Resmi</span>
+                <span>{trans('Pusat Publikasi & Informasi Resmi', 'Official Publication & Information Center')}</span>
               </div>
 
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
-                Warta & Berita Pengadaan
+                {trans('Warta & Berita Pengadaan', 'Procurement News & Updates')}
               </h1>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl mx-auto">
-                Kumpulan siaran pers, pengumuman hasil lelang, update regulasi, dan liputan kegiatan pengadaan barang/jasa Kementerian Ketenagakerjaan.
+                {trans(
+                  'Kumpulan siaran pers, pengumuman hasil lelang, update regulasi, dan liputan kegiatan pengadaan barang/jasa Kementerian Ketenagakerjaan.',
+                  'Collection of press releases, tender results announcements, regulatory updates, and event coverage of procurement at the Ministry of Manpower.'
+                )}
               </p>
 
               {/* Search Bar */}
@@ -103,7 +109,7 @@ export default function BeritaIndexPage() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Cari berita pengadaan, judul, atau kata kunci..."
+                    placeholder={trans("Cari berita pengadaan, judul, atau kata kunci...", "Search procurement news, titles, or keywords...")}
                     className="w-full px-3 py-2 text-sm text-slate-800 placeholder-slate-400 bg-transparent outline-none font-medium"
                   />
                   {searchQuery && (
@@ -152,7 +158,7 @@ export default function BeritaIndexPage() {
             </div>
 
             <span className="text-xs font-medium text-slate-400 px-2 hidden md:inline">
-              Menampilkan {filteredNews.length} Berita
+              {trans(`Menampilkan ${filteredNews.length} Berita`, `Showing ${filteredNews.length} News Articles`)}
             </span>
           </div>
         </section>
@@ -204,7 +210,7 @@ export default function BeritaIndexPage() {
 
                     <div className="flex items-center justify-between pt-4 border-t border-slate-100 text-xs font-bold text-primary-blue group-hover:text-primary-navy">
                       <span className="inline-flex items-center gap-1.5">
-                        <span>Baca Berita Lengkap</span>
+                        <span>{trans('Baca Berita Lengkap', 'Read Full Article')}</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                       </span>
                       {featuredNews.views > 0 && (
@@ -271,10 +277,10 @@ export default function BeritaIndexPage() {
                   {/* Footer */}
                   <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                     <span className="text-[11px] text-slate-400 font-semibold truncate max-w-[140px]">
-                      {item.author || 'Humas Kemnaker'}
+                      {item.author || trans('Humas Kemnaker', 'MoM Public Relations')}
                     </span>
                     <span className="font-bold text-primary-blue group-hover:text-primary-navy inline-flex items-center gap-1">
-                      <span>Baca</span>
+                      <span>{trans('Baca', 'Read')}</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </div>
@@ -286,15 +292,18 @@ export default function BeritaIndexPage() {
               <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-4 text-slate-400">
                 <AlertCircle className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-slate-800 mb-1">Tidak Ada Berita Ditemukan</h3>
+              <h3 className="text-base font-bold text-slate-800 mb-1">{trans('Tidak Ada Berita Ditemukan', 'No News Articles Found')}</h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto mb-4">
-                Tidak ada artikel berita yang cocok dengan kata kunci &quot;{searchQuery}&quot; pada kategori yang dipilih.
+                {trans(
+                  `Tidak ada artikel berita yang cocok dengan kata kunci "${searchQuery}" pada kategori yang dipilih.`,
+                  `No news articles matched the keyword "${searchQuery}" in the selected category.`
+                )}
               </p>
               <button
                 onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
                 className="text-xs font-bold text-primary-blue hover:underline cursor-pointer"
               >
-                Reset Filter & Pencarian
+                {trans('Reset Filter & Pencarian', 'Reset Filters & Search')}
               </button>
             </div>
           )}

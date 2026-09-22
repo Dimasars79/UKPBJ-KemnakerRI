@@ -12,9 +12,11 @@ import {
   CheckCircle2, Clock, ShieldCheck, ArrowRight, Package, Scale
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function InformasiPage() {
   const { newsList, agendaList, regulasiList, packagesList, siteSettings } = useData();
+  const { trans, language } = useLanguage();
   const publishedNews = newsList.filter(n => n.status === 'Published');
   
   const recentUpdates = React.useMemo(() => {
@@ -31,8 +33,8 @@ export default function InformasiPage() {
     if (packagesList && packagesList.length > 0) {
       packagesList.slice(0, 2).forEach((pkg) => {
         list.push({
-          date: pkg.deadline ? pkg.deadline.slice(0, 6) : 'Baru',
-          type: `TENDER ${pkg.category.toUpperCase()}`,
+          date: pkg.deadline ? pkg.deadline.slice(0, 6) : trans('Baru', 'New'),
+          type: trans(`TENDER ${pkg.category.toUpperCase()}`, `TENDER ${pkg.category.toUpperCase()}`),
           title: `${pkg.code}: ${pkg.title}`,
           href: '/#pengadaan',
           icon: <Package className="w-5 h-5 text-indigo-300" />,
@@ -71,8 +73,8 @@ export default function InformasiPage() {
     if (regulasiList && regulasiList.length > 0) {
       regulasiList.slice(0, 1).forEach((reg) => {
         list.push({
-          date: `Thn ${reg.tahun}`,
-          type: 'REGULASI JDIH',
+          date: trans(`Thn ${reg.tahun}`, `Yr ${reg.tahun}`),
+          type: trans('REGULASI JDIH', 'JDIH REGULATION'),
           title: `${reg.nomor} - ${reg.tentang}`,
           href: '/informasi/peraturan',
           icon: <Scale className="w-5 h-5 text-purple-300" />,
@@ -82,15 +84,15 @@ export default function InformasiPage() {
     }
 
     return list.slice(0, 5);
-  }, [packagesList, publishedNews, agendaList, regulasiList]);
+  }, [packagesList, publishedNews, agendaList, regulasiList, trans]);
 
   const serviceStatuses = [
-    { name: 'SPSE Kemnaker', status: siteSettings.serverStatus === 'Maintenance' ? 'MAINTENANCE' : 'NORMAL', icon: <Laptop className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: 'Portal Informasi', status: 'NORMAL', icon: <Globe className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: 'Layanan Konsultasi', status: 'NORMAL', icon: <MessageSquare className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: 'Download Dokumen', status: 'NORMAL', icon: <Download className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: 'Layanan Pengaduan', status: 'NORMAL', icon: <ShieldCheck className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: 'SIRUP Kemnaker', status: 'NORMAL', icon: <BarChart2 className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+    { name: trans('SPSE Kemnaker', 'MoM SPSE Portal'), status: siteSettings.serverStatus === 'Maintenance' ? 'MAINTENANCE' : 'NORMAL', icon: <Laptop className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+    { name: trans('Portal Informasi', 'Information Portal'), status: 'NORMAL', icon: <Globe className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+    { name: trans('Layanan Konsultasi', 'Consultation Desk'), status: 'NORMAL', icon: <MessageSquare className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+    { name: trans('Download Dokumen', 'Document Downloads'), status: 'NORMAL', icon: <Download className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+    { name: trans('Layanan Pengaduan', 'Whistleblowing / Complaints'), status: 'NORMAL', icon: <ShieldCheck className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+    { name: trans('SIRUP Kemnaker', 'SiRUP MoM'), status: 'NORMAL', icon: <BarChart2 className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
   ];
 
   return (
@@ -127,10 +129,13 @@ export default function InformasiPage() {
                     # Kemnaker RI
                   </span>
                   <h1 className="text-3xl md:text-4xl font-extrabold text-primary-navy leading-tight mb-2 drop-shadow-xs">
-                    UKPBJ<br/>UPDATE CENTER
+                    UKPBJ<br/>{trans('PUSAT INFORMASI', 'UPDATE CENTER')}
                   </h1>
                   <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-medium">
-                    Pusat informasi terbaru Unit Kerja Pengadaan Barang/Jasa Kementerian Ketenagakerjaan RI
+                    {trans(
+                      'Pusat informasi terbaru Unit Kerja Pengadaan Barang/Jasa Kementerian Ketenagakerjaan RI',
+                      'Latest official updates from the Procurement Division of the Ministry of Manpower RI'
+                    )}
                   </p>
                 </div>
               </div>
@@ -144,13 +149,15 @@ export default function InformasiPage() {
                     <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
                       <BellRing className="w-5 h-5 text-accent-gold" />
                     </div>
-                    <h2 className="text-lg sm:text-xl font-bold tracking-tight">APA YANG BARU?</h2>
+                    <h2 className="text-lg sm:text-xl font-bold tracking-tight">
+                      {trans('APA YANG BARU?', 'WHAT\'S NEW?')}
+                    </h2>
                     <span className="bg-accent-gold text-slate-950 text-xs font-black px-2.5 py-0.5 rounded-full ml-2">
                       {recentUpdates.length}
                     </span>
                   </div>
                   <Link href="/berita" className="text-xs sm:text-sm text-slate-300 hover:text-accent-gold flex items-center transition-colors font-semibold">
-                    Lihat Semua <ChevronRight className="w-4 h-4 ml-1" />
+                    {trans('Lihat Semua', 'View All')} <ChevronRight className="w-4 h-4 ml-1" />
                   </Link>
                 </div>
 
@@ -174,7 +181,7 @@ export default function InformasiPage() {
                         </div>
                         <div className="flex items-center justify-end w-14">
                           <span className="bg-primary-blue/30 text-blue-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-blue-400/30 group-hover:bg-primary-blue group-hover:text-white transition-colors">
-                            Baru
+                            {trans('Baru', 'New')}
                           </span>
                         </div>
                       </Link>
@@ -184,7 +191,7 @@ export default function InformasiPage() {
 
                 <div className="p-6 pt-2">
                   <Link href="/informasi/pembaruan" className="block text-center w-full py-3 bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl text-xs font-bold text-white transition-all">
-                    Lihat Semua Pembaruan
+                    {trans('Lihat Semua Pembaruan', 'View All Updates')}
                   </Link>
                 </div>
               </div>
@@ -197,8 +204,15 @@ export default function InformasiPage() {
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs sm:text-sm font-bold text-primary-navy">Terakhir diperbarui: 2 September 2026, 13:40 WIB</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">UKPBJ Kementerian Ketenagakerjaan RI berkomitmen menyajikan informasi yang akurat dan transparan.</p>
+                  <p className="text-xs sm:text-sm font-bold text-primary-navy">
+                    {trans('Terakhir diperbarui: 2 September 2026, 13:40 WIB', 'Last updated: Sep 2, 2026, 13:40 WIB')}
+                  </p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {trans(
+                      'UKPBJ Kementerian Ketenagakerjaan RI berkomitmen menyajikan informasi yang akurat dan transparan.',
+                      'UKPBJ Ministry of Manpower RI is committed to presenting accurate and transparent procurement information.'
+                    )}
+                  </p>
                 </div>
               </div>
             </FadeIn>
@@ -214,11 +228,13 @@ export default function InformasiPage() {
               <div className="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/80 shadow-xl shadow-slate-200/70 backdrop-blur-md">
                 <div className="flex justify-between items-center mb-4 sm:mb-6">
                   <div className="flex items-center space-x-2">
-                    <h2 className="text-base sm:text-xl font-bold text-primary-navy tracking-tight">STATUS LAYANAN</h2>
+                    <h2 className="text-base sm:text-xl font-bold text-primary-navy tracking-tight">
+                      {trans('STATUS LAYANAN', 'SERVICE STATUS')}
+                    </h2>
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   </div>
                   <Link href="/layanan" className="text-xs sm:text-sm text-primary-navy hover:text-primary-blue flex items-center font-bold">
-                    Lihat Detail <ChevronRight className="w-4 h-4 ml-1" />
+                    {trans('Lihat Detail', 'View Details')} <ChevronRight className="w-4 h-4 ml-1" />
                   </Link>
                 </div>
 
@@ -240,10 +256,10 @@ export default function InformasiPage() {
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 sm:pt-5 border-t border-slate-100 text-[11px] sm:text-xs text-slate-500 gap-1.5 sm:gap-2">
                   <div className="flex items-center text-emerald-700 font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 shrink-0" /> Semua layanan normal
+                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 shrink-0" /> {trans('Semua layanan normal', 'All services operational')}
                   </div>
                   <div className="flex items-center">
-                    <Clock className="w-3.5 h-3.5 mr-1.5 text-slate-400 shrink-0" /> Update: 2 Sep 2026, 13:40 WIB
+                    <Clock className="w-3.5 h-3.5 mr-1.5 text-slate-400 shrink-0" /> {trans('Update: 2 Sep 2026, 13:40 WIB', 'Updated: Sep 2, 2026, 13:40 WIB')}
                   </div>
                 </div>
               </div>
@@ -258,10 +274,10 @@ export default function InformasiPage() {
                     <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{regulasiList.length}</h3>
-                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Regulasi</p>
-                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">Total Regulasi</p>
+                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">{trans('Regulasi', 'Regulations')}</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">{trans('Total Regulasi', 'Total Regulations')}</p>
                   <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
-                    <span>Lihat Semua</span>
+                    <span>{trans('Lihat Semua', 'View All')}</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </div>
                 </Link>
@@ -272,10 +288,10 @@ export default function InformasiPage() {
                     <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{agendaList.length}</h3>
-                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Agenda</p>
-                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">Jadwal PBJ</p>
+                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">{trans('Agenda', 'Events')}</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">{trans('Jadwal PBJ', 'PBJ Schedule')}</p>
                   <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
-                    <span>Lihat Semua</span>
+                    <span>{trans('Lihat Semua', 'View All')}</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </div>
                 </Link>
@@ -286,24 +302,24 @@ export default function InformasiPage() {
                     <Megaphone className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{packagesList.length}</h3>
-                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Paket PBJ</p>
-                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">Paket Terdaftar</p>
+                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">{trans('Paket PBJ', 'Packages')}</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">{trans('Paket Terdaftar', 'Listed Packages')}</p>
                   <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
-                    <span>Lihat Semua</span>
+                    <span>{trans('Lihat Semua', 'View All')}</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </div>
                 </Link>
 
                 {/* Berita */}
-                <Link href="/informasi" className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
+                <Link href="/berita" className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col h-full hover:-translate-y-1 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
                     <Newspaper className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{publishedNews.length}</h3>
-                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">Berita</p>
-                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">Publikasi Warta</p>
+                  <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">{trans('Berita', 'News')}</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">{trans('Publikasi Warta', 'Articles')}</p>
                   <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
-                    <span>Lihat Semua</span>
+                    <span>{trans('Lihat Semua', 'View All')}</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </div>
                 </Link>
@@ -318,10 +334,10 @@ export default function InformasiPage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
                     <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">Simpan Info</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">Simpan regulasi penting.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">{trans('Simpan Info', 'Save Info')}</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">{trans('Simpan regulasi penting.', 'Bookmark essential regulations.')}</p>
                   <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
-                    Tersimpan
+                    {trans('Tersimpan', 'Saved')}
                   </button>
                 </div>
 
@@ -329,10 +345,10 @@ export default function InformasiPage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
                     <QrCode className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">QR Code</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">Pindai dokumen digital.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">{trans('QR Code', 'QR Code')}</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">{trans('Pindai dokumen digital.', 'Scan digital documents.')}</p>
                   <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
-                    Pindai
+                    {trans('Pindai', 'Scan')}
                   </button>
                 </div>
 
@@ -340,10 +356,10 @@ export default function InformasiPage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
                     <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">Bagikan</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">Bagikan ke rekan kerja.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">{trans('Bagikan', 'Share')}</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">{trans('Bagikan ke rekan kerja.', 'Share with colleagues.')}</p>
                   <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
-                    Bagikan
+                    {trans('Bagikan', 'Share')}
                   </button>
                 </div>
 
@@ -351,10 +367,10 @@ export default function InformasiPage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
                     <Printer className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">Cetak PDF</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">Simpan file lembar cetak.</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">{trans('Cetak PDF', 'Print PDF')}</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">{trans('Simpan file lembar cetak.', 'Save printable sheets.')}</p>
                   <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
-                    Cetak
+                    {trans('Cetak', 'Print')}
                   </button>
                 </div>
 

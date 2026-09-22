@@ -15,7 +15,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useData, NewsItem } from '@/contexts/DataContext';
 
 export function BeritaSection() {
-  const { t } = useLanguage();
+  const { t, trans } = useLanguage();
   const { newsList } = useData();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
@@ -85,7 +85,7 @@ export function BeritaSection() {
               {t('home.news_title')}
             </h2>
             <p className="text-slate-500 text-xs sm:text-sm mt-1 max-w-xl">
-              Informasi terkini, pengumuman pemenang lelang, dan perkembangan regulasi pengadaan barang/jasa.
+              {trans('Informasi terkini, pengumuman pemenang lelang, dan perkembangan regulasi pengadaan barang/jasa.', 'Latest information, auction winner announcements, and procurement regulatory updates.')}
             </p>
           </FadeIn>
 
@@ -149,7 +149,10 @@ export function BeritaSection() {
                 {/* Category Badge */}
                 <div className="absolute top-4 left-4 z-10">
                   <span className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-md border backdrop-blur-xs ${getCategoryBadgeColor(item.category)}`}>
-                    {item.category}
+                    {item.category === 'Pengumuman Lelang' ? trans('Pengumuman Lelang', 'Tender Announcement') :
+                     item.category === 'Regulasi' ? trans('Regulasi', 'Regulation') :
+                     item.category === 'Berita PBJ' ? trans('Berita PBJ', 'PBJ News') :
+                     item.category === 'Siaran Pers' ? trans('Siaran Pers', 'Press Release') : item.category}
                   </span>
                 </div>
 
@@ -191,7 +194,7 @@ export function BeritaSection() {
                     href={`/berita/${item.id}`}
                     className="inline-flex items-center text-xs font-bold text-primary-blue group-hover:text-primary-navy transition-colors gap-1.5"
                   >
-                    <span>Baca Selengkapnya</span>
+                    <span>{trans('Baca Selengkapnya', 'Read More')}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
@@ -209,7 +212,7 @@ export function BeritaSection() {
             />
           </div>
           <span className="text-[11px] font-mono font-bold text-slate-400 shrink-0">
-            {publishedNews.length} Berita Aktif
+            {publishedNews.length} {trans('Berita Aktif', 'Active Articles')}
           </span>
         </div>
 

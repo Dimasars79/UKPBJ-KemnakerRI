@@ -16,7 +16,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function GaleriPage() {
-  const { t } = useLanguage();
+  const { t, trans } = useLanguage();
   const { photosList, videosList } = useData();
   const [activeTab, setActiveTab] = useState<'foto' | 'video'>('foto');
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
@@ -65,13 +65,13 @@ export default function GaleriPage() {
                 {/* Government Media Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
                   <Camera className="w-3.5 h-3.5 text-cyan-300" />
-                  <span>Dokumentasi & Media Resmi UKPBJ Kemnaker</span>
+                  <span>{trans('Dokumentasi & Media Resmi UKPBJ Kemnaker', 'Official Media & Documentation UKPBJ MoM')}</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-4">
-                  Galeri Foto & Video Dokumentasi <br />
+                  {trans('Galeri Foto & Video Dokumentasi', 'Photo & Video Documentation Gallery')} <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-slate-100 to-amber-200">
-                    Kegiatan Kerja Pengadaan
+                    {trans('Kegiatan Kerja Pengadaan', 'Procurement Work Activities')}
                   </span>
                 </h1>
 
@@ -90,7 +90,7 @@ export default function GaleriPage() {
                     }`}
                   >
                     <Camera className="w-4 h-4 text-cyan-300" />
-                    <span>Galeri Foto Kegiatan ({photosList.length})</span>
+                    <span>{trans('Galeri Foto Kegiatan', 'Activity Photo Gallery')} ({photosList.length})</span>
                   </button>
 
                   <button
@@ -102,7 +102,7 @@ export default function GaleriPage() {
                     }`}
                   >
                     <Video className="w-4 h-4 text-slate-950" />
-                    <span>Video Dokumentasi ({videosList.length})</span>
+                    <span>{trans('Video Dokumentasi', 'Video Documentation')} ({videosList.length})</span>
                   </button>
                 </div>
               </FadeIn>
@@ -123,10 +123,10 @@ export default function GaleriPage() {
               <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div className="space-y-1">
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    Foto Liputan & Kegiatan Pengadaan ({filteredPhotos.length})
+                    {trans('Foto Liputan & Kegiatan Pengadaan', 'Procurement Coverage & Activity Photos')} ({filteredPhotos.length})
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500">
-                    Arsip foto agenda kerja resmi, rapat monitoring, pelatihan teknis, dan kunjungan dinas
+                    {trans('Arsip foto agenda kerja resmi, rapat monitoring, pelatihan teknis, dan kunjungan dinas', 'Photo archives of official work agendas, monitoring meetings, technical trainings, and field visits')}
                   </p>
                 </div>
 
@@ -139,7 +139,7 @@ export default function GaleriPage() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Cari dokumentasi foto..."
+                      placeholder={trans("Cari dokumentasi foto...", "Search photo documentation...")}
                       className="w-full pl-10 pr-4 py-2 text-xs border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-cyan-600 focus:outline-none transition-all"
                     />
                     {searchQuery && (
@@ -165,7 +165,7 @@ export default function GaleriPage() {
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                         }`}
                       >
-                        {cat === 'all' ? 'Semua' : cat}
+                        {cat === 'all' ? trans('Semua', 'All') : cat}
                       </button>
                     ))}
                   </div>
@@ -192,7 +192,7 @@ export default function GaleriPage() {
                             />
                           ) : (
                             <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-xs">
-                              (Tidak Ada Gambar)
+                              ({trans('Tidak Ada Gambar', 'No Image')})
                             </div>
                           )}
                           
@@ -224,7 +224,7 @@ export default function GaleriPage() {
                               {img.title}
                             </h3>
                             <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">
-                              {img.desc || 'Dokumentasi resmi pelaksanaan kegiatan kerja pengadaan barang/jasa.'}
+                              {img.desc || trans('Dokumentasi resmi pelaksanaan kegiatan kerja pengadaan barang/jasa.', 'Official documentation of goods/services procurement work activities.')}
                             </p>
                           </div>
 
@@ -232,7 +232,7 @@ export default function GaleriPage() {
                           <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-cyan-700 group-hover:text-primary-blue transition-colors">
                             <span className="flex items-center gap-1.5">
                               <Eye className="w-3.5 h-3.5" />
-                              <span>Lihat Resolusi Penuh</span>
+                              <span>{trans('Lihat Resolusi Penuh', 'View Full Resolution')}</span>
                             </span>
                             <span className="text-[11px] bg-cyan-50 group-hover:bg-cyan-100 px-2 py-0.5 rounded-md border border-cyan-200">
                               HD Photo &rarr;
@@ -246,13 +246,13 @@ export default function GaleriPage() {
               ) : (
                 <div className="p-12 text-center bg-white rounded-3xl border border-slate-200 space-y-3">
                   <Camera className="w-12 h-12 text-slate-300 mx-auto" />
-                  <h3 className="text-base font-bold text-slate-700">Tidak ada foto ditemukan</h3>
-                  <p className="text-xs text-slate-500">Coba ubah kata kunci pencarian atau pilih kategori lain.</p>
+                  <h3 className="text-base font-bold text-slate-700">{trans('Tidak ada foto ditemukan', 'No photos found')}</h3>
+                  <p className="text-xs text-slate-500">{trans('Coba ubah kata kunci pencarian atau pilih kategori lain.', 'Try changing search keywords or selecting another category.')}</p>
                   <button
                     onClick={() => { setPhotoFilter('all'); setSearchQuery(''); }}
                     className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
                   >
-                    Reset Filter
+                    {trans('Reset Filter', 'Reset Filters')}
                   </button>
                 </div>
               )}
@@ -269,14 +269,14 @@ export default function GaleriPage() {
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
                     <span className="text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200">
-                      Multimedia & Video Resmi
+                      {trans('Multimedia & Video Resmi', 'Official Media & Videos')}
                     </span>
                   </div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    Video Kegiatan & Bimbingan Teknis ({filteredVideos.length})
+                    {trans('Video Kegiatan & Bimbingan Teknis', 'Activity & Technical Guidance Videos')} ({filteredVideos.length})
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500">
-                    Tayangan rekaman sosialisasi regulasi, materi bimtek, dan video panduan pengadaan
+                    {trans('Tayangan rekaman sosialisasi regulasi, materi bimtek, dan video panduan pengadaan', 'Recordings of regulatory socialization, technical training materials, and procurement guide videos')}
                   </p>
                 </div>
 
@@ -288,7 +288,7 @@ export default function GaleriPage() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Cari video kegiatan..."
+                      placeholder={trans("Cari video kegiatan...", "Search event videos...")}
                       className="w-full pl-10 pr-4 py-2 text-xs border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-amber-600 focus:outline-none transition-all"
                     />
                     {searchQuery && (
@@ -314,7 +314,7 @@ export default function GaleriPage() {
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                         }`}
                       >
-                        {cat === 'all' ? 'Semua' : cat}
+                        {cat === 'all' ? trans('Semua', 'All') : cat}
                       </button>
                     ))}
                   </div>
@@ -325,7 +325,7 @@ export default function GaleriPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-xl shadow-xs transition-colors"
                   >
-                    <span>Kanal YouTube</span>
+                    <span>{trans('Kanal YouTube', 'YouTube Channel')}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
@@ -394,7 +394,7 @@ export default function GaleriPage() {
                         <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-700 group-hover:text-amber-800">
                           <span className="flex items-center gap-1.5">
                             <Play className="w-3.5 h-3.5 fill-current" />
-                            <span>Putar Video Lengkap</span>
+                            <span>{trans('Putar Video Lengkap', 'Play Full Video')}</span>
                           </span>
                           <span className="text-[11px] bg-amber-50 group-hover:bg-amber-100 px-2.5 py-0.5 rounded-md border border-amber-200">
                             Play &rarr;
@@ -407,8 +407,8 @@ export default function GaleriPage() {
               ) : (
                 <div className="p-12 text-center bg-white rounded-3xl border border-slate-200 space-y-3">
                   <Video className="w-12 h-12 text-slate-300 mx-auto" />
-                  <h3 className="text-base font-bold text-slate-700">Tidak ada video ditemukan</h3>
-                  <p className="text-xs text-slate-500">Coba gunakan kata kunci pencarian yang berbeda.</p>
+                  <h3 className="text-base font-bold text-slate-700">{trans('Tidak ada video ditemukan', 'No videos found')}</h3>
+                  <p className="text-xs text-slate-500">{trans('Coba gunakan kata kunci pencarian yang berbeda.', 'Try using different search keywords.')}</p>
                 </div>
               )}
             </div>
@@ -433,6 +433,7 @@ export default function GaleriPage() {
                   </div>
                   <button
                     onClick={() => setSelectedPhoto(null)}
+                    aria-label={trans("Tutup pratinjau", "Close preview")}
                     className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
                   >
                     <X className="w-4 h-4" />
@@ -449,7 +450,7 @@ export default function GaleriPage() {
                       className="object-contain"
                     />
                   ) : (
-                    <p className="text-slate-400">Gambar tidak tersedia</p>
+                    <p className="text-slate-400">{trans('Gambar tidak tersedia', 'Image not available')}</p>
                   )}
                 </div>
 
@@ -459,14 +460,14 @@ export default function GaleriPage() {
                     {selectedPhoto.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {selectedPhoto.desc || 'Dokumentasi resmi kegiatan UKPBJ Kementerian Ketenagakerjaan RI.'}
+                    {selectedPhoto.desc || trans('Dokumentasi resmi kegiatan UKPBJ Kementerian Ketenagakerjaan RI.', 'Official documentation of UKPBJ Ministry of Manpower activities.')}
                   </p>
                   <div className="flex justify-end pt-3">
                     <button
                       onClick={() => setSelectedPhoto(null)}
                       className="px-4 py-2 bg-primary-navy hover:bg-primary-blue text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
                     >
-                      Tutup Pratinjau
+                      {trans('Tutup Pratinjau', 'Close Preview')}
                     </button>
                   </div>
                 </div>
@@ -489,10 +490,11 @@ export default function GaleriPage() {
                 <div className="p-5 bg-gradient-to-r from-primary-navy to-[#113264] text-white flex items-center justify-between">
                   <div className="flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-wider">
                     <Film className="w-4 h-4 text-amber-300" />
-                    <span>{selectedVideo.category} • Durasi {selectedVideo.duration}</span>
+                    <span>{selectedVideo.category} • {trans('Durasi', 'Duration')} {selectedVideo.duration}</span>
                   </div>
                   <button
                     onClick={() => setSelectedVideo(null)}
+                    aria-label={trans("Tutup modal", "Close modal")}
                     className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
                   >
                     <X className="w-4 h-4" />
@@ -517,10 +519,10 @@ export default function GaleriPage() {
                       <Play className="w-7 h-7 fill-white ml-1" />
                     </a>
                     <p className="text-white font-bold text-sm sm:text-base drop-shadow-md">
-                      Tonton Tayangan Lengkap di YouTube Resmi
+                      {trans('Tonton Tayangan Lengkap di YouTube Resmi', 'Watch Full Video on Official YouTube')}
                     </p>
                     <p className="text-slate-300 text-xs mt-1">
-                      Kementerian Ketenagakerjaan Republik Indonesia
+                      {trans('Kementerian Ketenagakerjaan Republik Indonesia', 'Ministry of Manpower Republic of Indonesia')}
                     </p>
                   </div>
                 </div>
@@ -534,14 +536,14 @@ export default function GaleriPage() {
                     {selectedVideo.desc}
                   </p>
                   <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
-                    <span>Diunggah pada: <strong>{selectedVideo.date}</strong></span>
+                    <span>{trans('Diunggah pada:', 'Uploaded on:')} <strong>{selectedVideo.date}</strong></span>
                     <a
                       href={selectedVideo.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-colors cursor-pointer"
                     >
-                      <span>Buka di YouTube</span>
+                      <span>{trans('Buka di YouTube', 'Open in YouTube')}</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>

@@ -20,8 +20,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { useData, ProcurementPackage } from '@/contexts/DataContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function PengadaanSection() {
+  const { t, trans } = useLanguage();
   const { packagesList } = useData();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
@@ -51,28 +53,28 @@ export function PengadaanSection() {
         return (
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
-            Pendaftaran Dibuka
+            {trans('Pendaftaran Dibuka', 'Registration Open')}
           </span>
         );
       case 'Tahap Evaluasi':
         return (
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200/80">
             <Clock className="w-3 h-3 mr-1 text-amber-600" />
-            Tahap Evaluasi
+            {trans('Tahap Evaluasi', 'Evaluation Stage')}
           </span>
         );
       case 'Pemberian Penjelasan':
         return (
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80">
             <Sparkles className="w-3 h-3 mr-1 text-blue-600" />
-            Aanwijzing / Penjelasan
+            {trans('Aanwijzing / Penjelasan', 'Clarification Stage')}
           </span>
         );
       case 'Selesai':
         return (
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
             <CheckCircle2 className="w-3 h-3 mr-1 text-slate-500" />
-            Selesai
+            {trans('Selesai', 'Completed')}
           </span>
         );
     }
@@ -90,10 +92,10 @@ export function PengadaanSection() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
           <FadeIn direction="left">
             <h2 className="text-3xl md:text-4xl font-extrabold text-primary-navy tracking-tight">
-              Informasi & Paket Pengadaan
+              {t('home.pengadaan_title')}
             </h2>
             <p className="text-slate-600 max-w-2xl mt-2 text-sm sm:text-base leading-relaxed">
-              Transparansi pengadaan barang dan jasa Kementerian Ketenagakerjaan RI yang terintegrasi dengan SPSE LKPP dan INAProc.
+              {t('home.pengadaan_desc')}
             </p>
           </FadeIn>
 
@@ -103,7 +105,7 @@ export function PengadaanSection() {
                 href="/login" 
                 className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-navy to-primary-blue text-white text-xs sm:text-sm font-bold hover:shadow-lg hover:shadow-blue-900/20 hover:-translate-y-0.5 transition-all"
               >
-                <span>Masuk Portal Admin</span>
+                <span>{trans('Masuk Portal Admin', 'Admin Portal Login')}</span>
                 <ArrowRight className="w-4 h-4 text-accent-gold" />
               </Link>
             </div>
@@ -120,7 +122,7 @@ export function PengadaanSection() {
                 <Search className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input 
                   type="text"
-                  placeholder="Cari nama paket, kode tender, atau unit kerja..."
+                  placeholder={trans("Cari nama paket, kode tender, atau unit kerja...", "Search package name, tender code, or unit...")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-all"
@@ -129,19 +131,24 @@ export function PengadaanSection() {
 
               {/* Category Filter Pills */}
               <div className="lg:col-span-4 flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
-                      selectedCategory === cat
-                        ? 'bg-primary-navy text-white shadow-md'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                {categories.map((cat) => {
+                  const label = cat === 'Semua' ? trans('Semua', 'All') :
+                                cat === 'Pengadaan Langsung' ? trans('Pengadaan Langsung', 'Direct Proc.') :
+                                cat === 'Seleksi' ? trans('Seleksi', 'Selection') : cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                        selectedCategory === cat
+                          ? 'bg-primary-navy text-white shadow-md'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Status Filter Dropdown */}
@@ -151,11 +158,17 @@ export function PengadaanSection() {
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-primary-blue cursor-pointer"
                 >
-                  {statuses.map((st) => (
-                    <option key={st} value={st}>
-                      {st === 'Semua' ? 'Semua Status' : st}
-                    </option>
-                  ))}
+                  {statuses.map((st) => {
+                    const label = st === 'Semua' ? trans('Semua Status', 'All Statuses') :
+                                  st === 'Pendaftaran Dibuka' ? trans('Pendaftaran Dibuka', 'Registration Open') :
+                                  st === 'Tahap Evaluasi' ? trans('Tahap Evaluasi', 'Evaluation Stage') :
+                                  st === 'Selesai' ? trans('Selesai', 'Completed') : st;
+                    return (
+                      <option key={st} value={st}>
+                        {label}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -194,7 +207,7 @@ export function PengadaanSection() {
                         </div>
                         <div className="flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                          <span>Batas: <strong className="text-slate-700">{pkg.deadline}</strong></span>
+                          <span>{trans('Batas: ', 'Deadline: ')}<strong className="text-slate-700">{pkg.deadline}</strong></span>
                         </div>
                       </div>
                     </div>
@@ -202,7 +215,9 @@ export function PengadaanSection() {
                     {/* Right: HPS & Action */}
                     <div className="flex flex-row lg:flex-col lg:items-end justify-between items-center pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100 gap-3">
                       <div>
-                        <span className="text-[11px] uppercase tracking-wider text-slate-400 block lg:text-right font-medium">Nilai HPS / Pagu</span>
+                        <span className="text-[11px] uppercase tracking-wider text-slate-400 block lg:text-right font-medium">
+                          {trans('Nilai HPS / Pagu', 'HPS / Budget Ceiling')}
+                        </span>
                         <span className="text-base sm:text-lg font-black text-primary-navy">
                           {pkg.hps}
                         </span>
@@ -214,7 +229,7 @@ export function PengadaanSection() {
                           className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-primary-navy hover:text-white text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
                         >
                           <FileText className="w-3.5 h-3.5" />
-                          <span>Detail Paket</span>
+                          <span>{trans('Detail Paket', 'Package Details')}</span>
                         </button>
 
                         <a
@@ -236,9 +251,11 @@ export function PengadaanSection() {
           ) : (
             <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 p-8">
               <AlertCircle className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-              <h4 className="text-base font-bold text-slate-700">Tidak ada paket yang sesuai</h4>
+              <h4 className="text-base font-bold text-slate-700">
+                {trans('Tidak ada paket yang sesuai', 'No matching packages found')}
+              </h4>
               <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                Coba ubah kata kunci pencarian atau sesuaikan filter kategori dan status pengadaan.
+                {trans('Coba ubah kata kunci pencarian atau sesuaikan filter kategori dan status pengadaan.', 'Try changing search keywords or adjusting the category and status filters.')}
               </p>
               <button
                 onClick={() => {
@@ -248,7 +265,7 @@ export function PengadaanSection() {
                 }}
                 className="mt-4 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all"
               >
-                Reset Pencarian
+                {trans('Reset Pencarian', 'Reset Search')}
               </button>
             </div>
           )}
@@ -272,10 +289,10 @@ export function PengadaanSection() {
                   <ShieldCheck className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6" />
                 </div>
                 <h4 className="font-bold text-sm sm:text-base mb-1 sm:mb-1.5 text-white group-hover:text-amber-300 transition-colors">
-                  Pendaftaran Penyedia Baru
+                  {t('home.pengadaan_card1_title')}
                 </h4>
                 <p className="text-xs text-slate-300 leading-relaxed mb-4 sm:mb-5">
-                  Daftarkan perusahaan Anda dalam sistem SiKAP & LPSE untuk mengikuti tender pengadaan Kemnaker.
+                  {t('home.pengadaan_card1_desc')}
                 </p>
               </div>
 
@@ -283,7 +300,7 @@ export function PengadaanSection() {
                 href="/layanan" 
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-accent-gold hover:text-yellow-300 transition-colors w-fit group/btn"
               >
-                <span>Pelajari Syarat & Alur</span>
+                <span>{trans('Pelajari Syarat & Alur', 'Learn Requirements & Steps')}</span>
                 <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform duration-200" />
               </Link>
             </motion.div>
@@ -303,10 +320,10 @@ export function PengadaanSection() {
                   <FileText className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6" />
                 </div>
                 <h4 className="font-bold text-sm sm:text-base text-primary-navy mb-1 sm:mb-1.5 group-hover:text-primary-blue transition-colors">
-                  Rencana Umum Pengadaan (SiRUP)
+                  {t('home.pengadaan_card2_title')}
                 </h4>
                 <p className="text-xs text-slate-500 leading-relaxed mb-4 sm:mb-5">
-                  Transparansi seluruh rencana paket pengadaan barang dan jasa Kemnaker RI Tahun Anggaran 2026.
+                  {t('home.pengadaan_card2_desc')}
                 </p>
               </div>
 
@@ -316,7 +333,7 @@ export function PengadaanSection() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-blue hover:text-blue-700 transition-colors w-fit group/btn"
               >
-                <span>Buka SiRUP LKPP</span>
+                <span>{trans('Buka SiRUP LKPP', 'Open LKPP SiRUP')}</span>
                 <ExternalLink className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200" />
               </a>
             </motion.div>
@@ -336,19 +353,19 @@ export function PengadaanSection() {
                   <Sparkles className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6" />
                 </div>
                 <h4 className="font-bold text-sm sm:text-base text-primary-navy mb-1 sm:mb-1.5 group-hover:text-amber-600 transition-colors">
-                  Portal Admin & Operator PBJ
+                  {t('home.pengadaan_card3_title')}
                 </h4>
                 <p className="text-xs text-slate-500 leading-relaxed mb-4 sm:mb-5">
-                  Akses dashboard internal UKPBJ untuk pengelolaan paket, verifikasi vendor, dan arsitektur data.
+                  {t('home.pengadaan_card3_desc')}
                 </p>
               </div>
 
               <Link 
                 href="/login" 
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-navy hover:text-primary-blue transition-colors w-fit group/btn"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 transition-colors w-fit group/btn"
               >
-                <span>Masuk Sekarang</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform duration-200" />
+                <span>{trans('Masuk Helpdesk', 'Access Helpdesk')}</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform duration-200" />
               </Link>
             </motion.div>
           </div>
@@ -383,29 +400,29 @@ export function PengadaanSection() {
 
               <div className="grid grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 mb-6 text-xs">
                 <div>
-                  <span className="text-slate-400 block mb-1">Nilai HPS:</span>
+                  <span className="text-slate-400 block mb-1">{trans('Nilai HPS:', 'HPS Value:')}</span>
                   <strong className="text-primary-navy text-sm">{activeModalPackage.hps}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-1">Batas Akhir:</span>
+                  <span className="text-slate-400 block mb-1">{trans('Batas Akhir:', 'Deadline:')}</span>
                   <strong className="text-slate-800 text-sm">{activeModalPackage.deadline}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-1">Metode Pengadaan:</span>
+                  <span className="text-slate-400 block mb-1">{trans('Metode Pengadaan:', 'Procurement Method:')}</span>
                   <span className="font-semibold text-slate-700">{activeModalPackage.method}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-1">Satuan Kerja:</span>
+                  <span className="text-slate-400 block mb-1">{trans('Satuan Kerja:', 'Work Unit:')}</span>
                   <span className="font-semibold text-slate-700">{activeModalPackage.unit}</span>
                 </div>
               </div>
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold text-primary-navy">Dokumen Pengadaan Tersedia:</h4>
+                  <h4 className="text-sm font-bold text-primary-navy">{trans('Dokumen Pengadaan Tersedia:', 'Available Procurement Documents:')}</h4>
                   {activeModalPackage.documents && activeModalPackage.documents.length > 0 && (
                     <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
-                      {activeModalPackage.documents.length} Dokumen
+                      {activeModalPackage.documents.length} {trans('Dokumen', 'Documents')}
                     </span>
                   )}
                 </div>
@@ -428,7 +445,9 @@ export function PengadaanSection() {
                       return (
                         <div className="p-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/50 text-center">
                           <FileText className="w-6 h-6 text-slate-400 mx-auto mb-1.5" />
-                          <p className="text-xs text-slate-500 font-medium">Dokumen pengadaan dapat diakses langsung pada portal SPSE / INAPROC LKPP.</p>
+                          <p className="text-xs text-slate-500 font-medium">
+                            {trans('Dokumen pengadaan dapat diakses langsung pada portal SPSE / INAPROC LKPP.', 'Procurement documents can be accessed directly on the SPSE / INAPROC LKPP portal.')}
+                          </p>
                         </div>
                       );
                     }
@@ -449,7 +468,7 @@ export function PengadaanSection() {
                               {doc.name}
                             </p>
                             <p className="text-[10px] text-slate-500">
-                              {doc.size || 'Ukuran Standar'} • {doc.data ? '✓ Dokumen Resmi Terverifikasi' : 'Versi Resmi'}
+                              {doc.size || 'Ukuran Standar'} • {doc.data ? trans('✓ Dokumen Resmi Terverifikasi', '✓ Verified Official Document') : trans('Versi Resmi', 'Official Version')}
                             </p>
                           </div>
                         </div>
@@ -459,10 +478,10 @@ export function PengadaanSection() {
                             href={doc.data}
                             download={doc.name || `${activeModalPackage.code}-Dokumen-${idx + 1}.pdf`}
                             className="px-3.5 py-1.5 rounded-lg bg-primary-navy hover:bg-primary-blue text-white text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
-                            title="Unduh Dokumen Pengadaan"
+                            title={trans("Unduh Dokumen Pengadaan", "Download Procurement Document")}
                           >
                             <Download className="w-3.5 h-3.5" />
-                            <span>Unduh</span>
+                            <span>{trans('Unduh', 'Download')}</span>
                           </a>
                         ) : doc.url && doc.url !== '#' ? (
                           <a
@@ -470,10 +489,10 @@ export function PengadaanSection() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-3.5 py-1.5 rounded-lg bg-primary-navy hover:bg-primary-blue text-white text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
-                            title="Unduh Dokumen Pengadaan"
+                            title={trans("Unduh Dokumen Pengadaan", "Download Procurement Document")}
                           >
                             <Download className="w-3.5 h-3.5" />
-                            <span>Unduh</span>
+                            <span>{trans('Unduh', 'Download')}</span>
                           </a>
                         ) : (
                           <a
@@ -483,7 +502,7 @@ export function PengadaanSection() {
                             className="px-3 py-1.5 rounded-lg bg-blue-50 text-primary-blue text-xs font-bold hover:bg-primary-blue hover:text-white transition-all flex items-center gap-1 shrink-0"
                           >
                             <Download className="w-3.5 h-3.5" />
-                            <span>Unduh</span>
+                            <span>{trans('Unduh', 'Download')}</span>
                           </a>
                         )}
                       </div>
@@ -497,7 +516,7 @@ export function PengadaanSection() {
                   onClick={() => setActiveModalPackage(null)}
                   className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors"
                 >
-                  Tutup
+                  {trans('Tutup', 'Close')}
                 </button>
                 <a
                   href="https://inaproc.lkpp.go.id"
@@ -505,7 +524,7 @@ export function PengadaanSection() {
                   rel="noopener noreferrer"
                   className="px-5 py-2 rounded-xl bg-primary-navy text-white text-xs font-bold hover:bg-primary-blue transition-colors flex items-center gap-2"
                 >
-                  <span>Ikuti Tender di SPSE</span>
+                  <span>{trans('Ikuti Tender di SPSE', 'Join Tender on SPSE')}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>

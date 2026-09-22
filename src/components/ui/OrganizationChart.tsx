@@ -2,6 +2,8 @@ import React from 'react';
 import { UserCircle2, Users, FileSignature, Briefcase, ChevronDown } from 'lucide-react';
 import { FadeIn } from '@/components/animations/FadeIn';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+
 interface OrgNodeProps {
   title: string;
   subtitle: string;
@@ -35,6 +37,8 @@ const OrgNode = ({ title, subtitle, icon, isMain = false, className = '' }: OrgN
 };
 
 export const OrganizationChart = () => {
+  const { trans } = useLanguage();
+
   return (
     <div className="py-8 sm:py-10 md:py-12 px-3 sm:px-6 md:px-8 flex flex-col items-center relative overflow-hidden bg-slate-50/40 rounded-3xl border border-slate-100/70">
       {/* Background ambient lighting */}
@@ -45,8 +49,8 @@ export const OrganizationChart = () => {
       <FadeIn direction="up" delay={0.1} className="w-full flex justify-center">
         <div className="relative flex flex-col items-center w-full">
           <OrgNode 
-            title="Kepala UKPBJ" 
-            subtitle="Pimpinan Unit Kerja" 
+            title={trans("Kepala UKPBJ", "Head of UKPBJ")} 
+            subtitle={trans("Pimpinan Unit Kerja", "Head of Work Unit")} 
             icon={<UserCircle2 className="w-6 h-6 sm:w-7 sm:h-7 text-accent-gold" />} 
             isMain={true}
           />
@@ -59,8 +63,8 @@ export const OrganizationChart = () => {
       <FadeIn direction="up" delay={0.2} className="w-full flex justify-center">
         <div className="relative flex flex-col items-center w-full">
           <OrgNode 
-            title="Sekretariat / Tata Usaha" 
-            subtitle="Administrasi & Layanan" 
+            title={trans("Sekretariat / Tata Usaha", "Secretariat / Administration")} 
+            subtitle={trans("Administrasi & Layanan", "Administration & Services")} 
             icon={<FileSignature className="w-5 h-5 sm:w-6 sm:h-6 text-primary-blue" />} 
             className="max-w-[240px] sm:max-w-[270px] md:max-w-xs"
           />
@@ -83,8 +87,8 @@ export const OrganizationChart = () => {
               <div className="hidden md:block absolute -top-6 w-[2px] h-6 bg-slate-300 rounded-full" />
               <ChevronDown className="hidden md:block text-slate-400 w-4 h-4 absolute -top-2.5 z-10" />
               <OrgNode 
-                title="Pokja Pemilihan" 
-                subtitle="Pelaksana Pemilihan Penyedia" 
+                title={trans("Pokja Pemilihan", "Procurement Working Group (Pokja)")} 
+                subtitle={trans("Pelaksana Pemilihan Penyedia", "Vendor Selection Executors")} 
                 icon={<Users className="w-5 h-5 sm:w-6 sm:h-6 text-primary-blue" />} 
               />
             </div>
@@ -95,8 +99,8 @@ export const OrganizationChart = () => {
               <div className="hidden md:block absolute -top-6 w-[2px] h-6 bg-slate-300 rounded-full" />
               <ChevronDown className="hidden md:block text-slate-400 w-4 h-4 absolute -top-2.5 z-10" />
               <OrgNode 
-                title="Pejabat Pengadaan" 
-                subtitle="Pengadaan Langsung & E-Purchasing" 
+                title={trans("Pejabat Pengadaan", "Procurement Officers")} 
+                subtitle={trans("Pengadaan Langsung & E-Purchasing", "Direct Procurement & E-Purchasing")} 
                 icon={<Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-primary-blue" />} 
               />
             </div>
@@ -107,8 +111,8 @@ export const OrganizationChart = () => {
               <div className="hidden md:block absolute -top-6 w-[2px] h-6 bg-slate-300 rounded-full" />
               <ChevronDown className="hidden md:block text-slate-400 w-4 h-4 absolute -top-2.5 z-10" />
               <OrgNode 
-                title="Tim Pendukung / Teknis" 
-                subtitle="Dukungan Operasional & IT" 
+                title={trans("Tim Pendukung / Teknis", "Support & Technical Team")} 
+                subtitle={trans("Dukungan Operasional & IT", "Operational & IT Support")} 
                 icon={<UserCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-primary-blue" />} 
               />
             </div>

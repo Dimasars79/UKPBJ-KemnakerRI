@@ -3,12 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, FileText, Calendar, Building, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+
 interface SearchPaletteProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
+  const { trans } = useLanguage();
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,14 +36,39 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
   }, [onClose]);
 
   const popularSearches = [
-    { title: 'Tender Konstruksi Gedung Kemenaker', type: 'Tender', icon: Building, href: '/layanan' },
-    { title: 'Jadwal Ujian Sertifikasi PBJ 2026', type: 'Agenda', icon: Calendar, href: '/agenda' },
-    { title: 'Pedoman E-Katalog Sektoral', type: 'Dokumen', icon: FileText, href: '/informasi' },
+    { 
+      title: trans('Tender Konstruksi Gedung Kemenaker', 'Kemnaker Building Construction Tender'), 
+      type: trans('Tender', 'Tender'), 
+      icon: Building, 
+      href: '/layanan' 
+    },
+    { 
+      title: trans('Jadwal Ujian Sertifikasi PBJ 2026', 'PBJ Certification Exam Schedule 2026'), 
+      type: trans('Agenda', 'Agenda'), 
+      icon: Calendar, 
+      href: '/agenda' 
+    },
+    { 
+      title: trans('Pedoman E-Katalog Sektoral', 'Sectoral E-Catalog Guidelines'), 
+      type: trans('Dokumen', 'Document'), 
+      icon: FileText, 
+      href: '/informasi' 
+    },
   ];
 
   const searchResults = query.length > 2 ? [
-    { title: `Hasil pencarian untuk "${query}" di Berita`, type: 'Berita', icon: FileText, href: '/informasi' },
-    { title: `Pengumuman terkait "${query}"`, type: 'Pengumuman', icon: Calendar, href: '/informasi' },
+    { 
+      title: trans(`Hasil pencarian untuk "${query}" di Berita`, `Search results for "${query}" in News`), 
+      type: trans('Berita', 'News'), 
+      icon: FileText, 
+      href: '/informasi' 
+    },
+    { 
+      title: trans(`Pengumuman terkait "${query}"`, `Announcements regarding "${query}"`), 
+      type: trans('Pengumuman', 'Announcement'), 
+      icon: Calendar, 
+      href: '/informasi' 
+    },
   ] : [];
 
   return (
@@ -73,7 +101,7 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Cari layanan, pengumuman, atau agenda..."
+                  placeholder={trans("Cari layanan, pengumuman, atau agenda...", "Search services, announcements, or agenda...")}
                   className="w-full bg-transparent border-none outline-none px-4 text-lg text-slate-800 placeholder-slate-400 font-medium"
                 />
                 <button
@@ -89,7 +117,9 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                 {query.length > 2 ? (
                   /* Search Results */
                   <div className="space-y-3">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2">Hasil Pencarian</h3>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2">
+                      {trans("Hasil Pencarian", "Search Results")}
+                    </h3>
                     {searchResults.map((item, idx) => (
                       <Link
                         key={idx}
@@ -113,7 +143,9 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                 ) : (
                   /* Popular Searches */
                   <div className="space-y-3">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2">Pencarian Populer</h3>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2">
+                      {trans("Pencarian Populer", "Popular Searches")}
+                    </h3>
                     {popularSearches.map((item, idx) => (
                       <Link
                         key={idx}
@@ -139,9 +171,9 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
 
               {/* Footer Hotkey Hint */}
               <div className="p-3 border-t border-slate-200/50 bg-slate-50/80 text-center flex items-center justify-center space-x-2">
-                <span className="text-xs text-slate-500 font-medium">Navigasi pintas: </span>
+                <span className="text-xs text-slate-500 font-medium">{trans("Navigasi pintas: ", "Shortcut: ")}</span>
                 <kbd className="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono text-slate-600 shadow-sm">ESC</kbd>
-                <span className="text-xs text-slate-500 font-medium"> untuk menutup</span>
+                <span className="text-xs text-slate-500 font-medium">{trans(" untuk menutup", " to close")}</span>
               </div>
             </motion.div>
           </div>

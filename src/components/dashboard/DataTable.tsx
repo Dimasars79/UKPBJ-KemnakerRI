@@ -1,22 +1,27 @@
-"use client"
-
 import React from 'react';
 import { FileText } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 
 export function DataTable() {
   const { packagesList } = useData();
+  const { trans } = useLanguage();
 
   return (
     <div className="w-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mt-8">
       <div className="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-center bg-slate-50/50">
         <div>
-          <h3 className="text-xl font-bold text-primary-navy">Analisis Data Pengadaan</h3>
-          <p className="text-sm text-slate-500 mt-1">Daftar paket pengadaan langsung dari basis data SPSE Kemnaker ({packagesList.length} paket)</p>
+          <h3 className="text-xl font-bold text-primary-navy">{trans('Analisis Data Pengadaan', 'Procurement Data Analysis')}</h3>
+          <p className="text-sm text-slate-500 mt-1">
+            {trans(
+              `Daftar paket pengadaan langsung dari basis data SPSE Kemnaker (${packagesList.length} paket)`,
+              `List of procurement packages directly from MoM SPSE database (${packagesList.length} packages)`
+            )}
+          </p>
         </div>
         <Link href="/#pengadaan" className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors shadow-sm whitespace-nowrap text-center">
-          Lihat di Beranda
+          {trans('Lihat di Beranda', 'View on Homepage')}
         </Link>
       </div>
       
@@ -24,12 +29,12 @@ export function DataTable() {
         <table className="w-full text-left text-sm text-slate-600 whitespace-nowrap">
           <thead className="bg-slate-50 text-slate-500 uppercase text-xs font-semibold border-b border-slate-100">
             <tr>
-              <th className="px-6 py-4">Nama Paket & Kode</th>
-              <th className="px-6 py-4">Kategori</th>
-              <th className="px-6 py-4">Nilai Pagu (HPS)</th>
-              <th className="px-6 py-4">Unit Kerja</th>
-              <th className="px-6 py-4">Status</th>
-              <th className="px-6 py-4 text-right">Batas Akhir</th>
+              <th className="px-6 py-4">{trans('Nama Paket & Kode', 'Package Name & Code')}</th>
+              <th className="px-6 py-4">{trans('Kategori', 'Category')}</th>
+              <th className="px-6 py-4">{trans('Nilai Pagu (HPS)', 'Budget (HPS)')}</th>
+              <th className="px-6 py-4">{trans('Unit Kerja', 'Work Unit')}</th>
+              <th className="px-6 py-4">{trans('Status', 'Status')}</th>
+              <th className="px-6 py-4 text-right">{trans('Batas Akhir', 'Deadline')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -61,7 +66,10 @@ export function DataTable() {
                       pkg.status === 'Pendaftaran Dibuka' ? 'bg-blue-100 text-blue-700' :
                       'bg-slate-100 text-slate-700'
                     }`}>
-                      {pkg.status}
+                      {pkg.status === 'Selesai' ? trans('Selesai', 'Completed') :
+                       pkg.status === 'Tahap Evaluasi' ? trans('Tahap Evaluasi', 'Evaluation Stage') :
+                       pkg.status === 'Pendaftaran Dibuka' ? trans('Pendaftaran Dibuka', 'Registration Open') :
+                       pkg.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right text-xs font-medium text-slate-500">
@@ -72,7 +80,7 @@ export function DataTable() {
             ) : (
               <tr>
                 <td colSpan={6} className="px-6 py-12 text-center text-slate-400">
-                  Tidak ada data paket pengadaan di database.
+                  {trans('Tidak ada data paket pengadaan di database.', 'No procurement package data in the database.')}
                 </td>
               </tr>
             )}
