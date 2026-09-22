@@ -3830,7 +3830,7 @@ export default function AdminPortalPage() {
                         </a>
 
                         <a
-                          href="https://e-katalog.lkpp.go.id"
+                          href="https://katalog.inaproc.id/"
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${

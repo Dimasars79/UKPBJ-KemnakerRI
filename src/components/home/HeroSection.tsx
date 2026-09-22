@@ -51,7 +51,7 @@ export function HeroSection() {
 
   return (
     <section 
-      className="relative min-h-[90vh] lg:min-h-screen bg-[#07172E] text-white flex items-center overflow-hidden pt-28 pb-16 lg:pt-32 lg:pb-20 select-none"
+      className="relative bg-[#07172E] text-white flex items-center overflow-hidden pt-3 pb-12 sm:pt-4 sm:pb-16 lg:pt-6 lg:pb-20 select-none"
       aria-label="Hero Section UKPBJ Pengadaan Barang dan Jasa"
     >
       {/* 1. CLEAN SLEEK DARK NAVY STAGE BACKGROUND (POLOS DENGAN SOFT LIGHTING) */}
@@ -70,7 +70,7 @@ export function HeroSection() {
 
       {/* 2. MAIN CONTAINER */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           
           {/* ================= LEFT COLUMN: HEADLINE & CTAS ================= */}
           <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center text-left">
@@ -80,7 +80,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold backdrop-blur-md mb-6 self-start shadow-sm"
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold backdrop-blur-md mb-4 sm:mb-5 self-start shadow-sm"
             >
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="text-[11px] font-bold text-amber-300 tracking-wider uppercase">
@@ -94,14 +94,14 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12] mb-4">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12] mb-3 sm:mb-4">
                 {trans('Pengadaan Barang/Jasa', 'Goods & Services Procurement')}{' '}
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 drop-shadow-sm">
                   {trans('untuk Indonesia Maju', 'for Advanced Indonesia')}
                 </span>
               </h1>
 
-              <p className="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed mb-8 max-w-lg font-normal">
+              <p className="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed mb-6 sm:mb-8 max-w-lg font-normal">
                 {trans(
                   'Mewujudkan pengadaan yang transparan, akuntabel, profesional dan berintegritas tinggi dengan integrasi SPSE 4.5 & E-Katalog Nasional LKPP.',
                   'Realizing transparent, accountable, professional, and high-integrity procurement integrated with SPSE 4.5 & National E-Catalog.'
@@ -114,7 +114,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap items-center gap-3.5 sm:gap-4 mb-8"
+              className="flex flex-wrap items-center gap-3.5 sm:gap-4 mb-4 sm:mb-6"
             >
               <Link
                 href="/layanan"
@@ -135,10 +135,10 @@ export function HeroSection() {
           </div>
 
           {/* ================= RIGHT COLUMN: PURE AUTOMATED 3D REVOLVING ORBIT (NO BUTTONS) ================= */}
-          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[460px] sm:min-h-[520px] lg:min-h-[580px] relative overflow-visible">
+          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[400px] sm:min-h-[440px] lg:min-h-[480px] relative overflow-visible">
             
             {/* 3D Perspective Stage */}
-            <div className="relative w-full max-w-[500px] h-[460px] sm:h-[500px] flex items-center justify-center [perspective:1400px]">
+            <div className="relative w-full max-w-[500px] h-[400px] sm:h-[440px] flex items-center justify-center [perspective:1400px]">
               
               {/* Glowing Neon Circular Base Ring on the Floor */}
               <div className="absolute bottom-6 sm:bottom-10 w-72 sm:w-96 h-28 sm:h-36 rounded-[100%] border-2 border-cyan-400/40 bg-gradient-to-t from-cyan-500/15 via-blue-500/10 to-transparent shadow-[0_0_50px_rgba(34,211,238,0.3)] [transform:rotateX(75deg)] pointer-events-none" />

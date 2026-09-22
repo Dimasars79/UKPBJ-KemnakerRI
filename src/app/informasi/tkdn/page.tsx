@@ -103,7 +103,7 @@ export default function TKDNPage() {
       title: trans('Katalog Referensi Produk', 'Product Reference Catalog'),
       desc: trans('Daftar produk barang dan jasa dalam negeri yang siap dibeli melalui E-Katalog Nasional & Sektoral.', 'List of domestic goods and services products ready for purchase via National & Sectoral E-Catalog.'),
       icon: <Layers className="w-5 h-5" />,
-      href: 'https://e-katalog.lkpp.go.id',
+      href: 'https://katalog.inaproc.id/',
       tag: trans('E-Katalog LKPP', 'LKPP E-Catalog')
     },
     {

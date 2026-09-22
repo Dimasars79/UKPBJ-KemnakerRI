@@ -328,7 +328,7 @@ export function PengadaanSection() {
               </div>
 
               <a 
-                href="https://sirup.lkpp.go.id" 
+                href="https://sirup.inaproc.id/sirup/loginctr/index" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-blue hover:text-blue-700 transition-colors w-fit group/btn"

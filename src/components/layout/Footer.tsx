@@ -84,7 +84,7 @@ export function Footer() {
                 <li><a href="https://lkpp.go.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group py-0.5"><span>LKPP RI</span><ExternalLink className="w-2.5 h-2.5 ml-1 opacity-60 group-hover:opacity-100 flex-shrink-0" /></a></li>
                 <li><a href="https://inaproc.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group py-0.5"><span>INAPROC</span><ExternalLink className="w-2.5 h-2.5 ml-1 opacity-60 group-hover:opacity-100 flex-shrink-0" /></a></li>
                 <li><a href="https://spse.kemnaker.go.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group py-0.5"><span>SPSE Kemnaker</span><ExternalLink className="w-2.5 h-2.5 ml-1 opacity-60 group-hover:opacity-100 flex-shrink-0" /></a></li>
-                <li><a href="https://e-katalog.lkpp.go.id" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group py-0.5"><span>E-Katalog LKPP</span><ExternalLink className="w-2.5 h-2.5 ml-1 opacity-60 group-hover:opacity-100 flex-shrink-0" /></a></li>
+                <li><a href="https://katalog.inaproc.id/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition-colors flex items-center group py-0.5"><span>E-Katalog LKPP</span><ExternalLink className="w-2.5 h-2.5 ml-1 opacity-60 group-hover:opacity-100 flex-shrink-0" /></a></li>
               </ul>
             </div>
           </div>

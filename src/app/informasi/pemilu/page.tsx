@@ -703,7 +703,7 @@ export default function TenderPemiluPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <a
-              href="https://sirup.lkpp.go.id"
+              href="https://sirup.inaproc.id/sirup/loginctr/index"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white rounded-2xl p-5 border border-slate-200/80 hover:border-slate-300 hover:shadow-md transition-all group flex flex-col justify-between"
@@ -770,7 +770,7 @@ export default function TenderPemiluPage() {
             </a>
 
             <a
-              href="https://e-katalog.lkpp.go.id"
+              href="https://katalog.inaproc.id/"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white rounded-2xl p-5 border border-slate-200/80 hover:border-slate-300 hover:shadow-md transition-all group flex flex-col justify-between"
