@@ -94,7 +94,7 @@ const parseAgendaDate = (dateStr: string): { day: number; month: number; year: n
 };
 
 export default function AgendaPage() {
-  const { t, trans } = useLanguage();
+  const { t, trans, language } = useLanguage();
   const { agendaList } = useData();
   const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 1)); // Default: September 2026
   const [selectedDate, setSelectedDate] = useState<number | null>(15);
@@ -114,7 +114,7 @@ export default function AgendaPage() {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  const monthNames = trans(monthNamesID as any, monthNamesEN as any) as unknown as string[];
+  const monthNames = language === 'en' ? monthNamesEN : monthNamesID;
 
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();

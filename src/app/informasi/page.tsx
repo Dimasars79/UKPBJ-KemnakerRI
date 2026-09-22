@@ -16,7 +16,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function InformasiPage() {
   const { newsList, agendaList, regulasiList, packagesList, siteSettings } = useData();
-  const { trans, language } = useLanguage();
+  const { trans } = useLanguage();
   const publishedNews = newsList.filter(n => n.status === 'Published');
   
   const recentUpdates = React.useMemo(() => {
