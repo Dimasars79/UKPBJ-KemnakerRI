@@ -246,20 +246,20 @@ export function Header() {
   return (
     <header className="w-full flex flex-col z-50 sticky top-0 bg-[#07172E]">
       {/* Top Government Bar */}
-      <div className="bg-[#051122] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <span className="text-[9px] sm:text-xs tracking-normal md:tracking-widest leading-tight text-center md:text-left w-full font-semibold text-slate-200">
+      <div className="bg-[#051122] text-white py-1.5 px-3 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
+        <div className="container mx-auto flex justify-between items-center gap-2">
+          <div className="flex items-center min-w-0 pr-1">
+            <span className="text-[9.5px] sm:text-xs tracking-normal md:tracking-widest font-semibold text-slate-200 truncate">
               {t('nav.gov_title')}
             </span>
           </div>
-          <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
             {/* Language Dropdown */}
             <div className="relative">
               <button 
                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} 
                 onBlur={() => setTimeout(() => setIsLangMenuOpen(false), 200)}
-                className="hover:text-accent-gold transition-colors flex items-center space-x-1.5 cursor-pointer bg-white/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20 hover:border-accent-gold hover:shadow-[0_0_10px_rgba(212,175,55,0.4)] relative overflow-hidden group text-[10px] sm:text-xs text-white"
+                className="hover:text-accent-gold transition-colors flex items-center space-x-1 cursor-pointer bg-white/10 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20 hover:border-accent-gold hover:shadow-[0_0_10px_rgba(212,175,55,0.4)] relative overflow-hidden group text-[10px] sm:text-xs text-white"
               >
                 <div className="absolute inset-0 bg-accent-gold/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5 relative z-10" />
@@ -306,10 +306,10 @@ export function Header() {
             <div className="relative">
               <button 
                 onClick={() => setIsA11yMenuOpen(!isA11yMenuOpen)}
-                className="hover:text-amber-300 transition-colors flex items-center space-x-1 cursor-pointer text-slate-300 hover:text-white"
+                className="hover:text-amber-300 transition-colors flex items-center space-x-1 cursor-pointer text-slate-300 hover:text-white px-1.5 py-0.5 rounded-full hover:bg-white/10 text-[10px] sm:text-xs"
               >
                 <Eye className="w-3 h-3" />
-                <span>{t('nav.accessibility')}</span>
+                <span className="hidden xs:inline sm:inline">{t('nav.accessibility')}</span>
               </button>
 
               <AnimatePresence>

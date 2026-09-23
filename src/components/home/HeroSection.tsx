@@ -1,71 +1,30 @@
-"use client";
-
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { 
-  ArrowRight, BarChart3, Scan, 
-  Sparkles, CheckCircle2
-} from 'lucide-react';
+import { ArrowRight, BarChart3 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { ProcurementVisualComposition } from './ProcurementVisualComposition';
 
 export function HeroSection() {
   const { trans } = useLanguage();
-
-  const visualItems = [
-    {
-      id: 'box',
-      title: trans('Box Kardus Pengadaan Modern', 'Modern Procurement Box'),
-      subtitle: trans('Paket Pengadaan Barang & E-Katalog Nasional', 'National Goods Procurement & E-Catalog Package'),
-      badge: 'SPSE 4.5 VERIFIED',
-      subBadge: 'E-KATALOG LKPP',
-      image: '/hero/procurement-box-3d.jpg',
-      angle: 0,
-      glow: 'from-amber-500/20 via-cyan-500/20 to-blue-500/20',
-      border: 'border-amber-400/40'
-    },
-    {
-      id: 'gedung',
-      title: trans('Gedung Markas Kemnaker RI 🇮🇩', 'MoM RI Headquarters Building 🇮🇩'),
-      subtitle: trans('Pusat Layanan PBJ & Ketenagakerjaan', 'Integrated PBJ & Manpower Center'),
-      badge: 'KEMNAKER RI 🇮🇩',
-      subBadge: 'MARKAS PUSAT',
-      image: '/hero/kemnaker-building-3d.jpg',
-      angle: 120,
-      glow: 'from-cyan-500/20 via-blue-500/20 to-indigo-500/20',
-      border: 'border-cyan-400/40'
-    },
-    {
-      id: 'dokumen',
-      title: trans('Naskah & Berkas Tender Digital', 'Digital Tender Files & Dossier'),
-      subtitle: trans('Dokumen Pengadaan & Arsip SiRUP', 'Procurement Dossier & SiRUP Archive'),
-      badge: 'DOKUMEN TERVERIFIKASI',
-      subBadge: '100% AKUNTABEL',
-      image: '/hero/procurement-folder-3d.jpg',
-      angle: 240,
-      glow: 'from-emerald-500/20 via-teal-500/20 to-blue-500/20',
-      border: 'border-emerald-400/40'
-    }
-  ];
 
   return (
     <section 
       className="relative bg-[#07172E] text-white flex items-center overflow-hidden pt-3 pb-12 sm:pt-4 sm:pb-16 lg:pt-6 lg:pb-20 select-none"
       aria-label="Hero Section UKPBJ Pengadaan Barang dan Jasa"
     >
-      {/* 1. CLEAN SLEEK DARK NAVY STAGE BACKGROUND (POLOS DENGAN SOFT LIGHTING) */}
+      {/* 1. FUTURISTIC BACKGROUND LIGHTING & CYBER GRID */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         {/* Soft Ambient Lights */}
-        <div className="absolute top-1/4 left-1/4 w-[650px] h-[650px] bg-blue-600/10 rounded-full blur-[160px]" />
-        <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[170px]" />
-        <div className="absolute bottom-10 left-1/3 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px]" />
+        <div className="absolute top-1/4 left-1/4 w-[650px] h-[650px] bg-blue-600/15 rounded-full blur-[160px]" />
+        <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-cyan-500/12 rounded-full blur-[170px]" />
+        <div className="absolute bottom-10 left-1/3 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[150px]" />
 
-        {/* Minimalist Grid Floor */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#38bdf80c_1px,transparent_1px),linear-gradient(to_bottom,#38bdf80c_1px,transparent_1px)] bg-[size:44px_44px] [mask-image:radial-gradient(ellipse_75%_55%_at_50%_50%,#000_65%,transparent_100%)] opacity-50" />
+        {/* Minimalist Tech Grid Floor */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#38bdf80e_1px,transparent_1px),linear-gradient(to_bottom,#38bdf80e_1px,transparent_1px)] bg-[size:44px_44px] [mask-image:radial-gradient(ellipse_75%_55%_at_50%_50%,#000_65%,transparent_100%)] opacity-60" />
 
         {/* Cyber Light Beam */}
-        <div className="absolute bottom-20 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/25 to-transparent" />
+        <div className="absolute bottom-20 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent" />
       </div>
 
       {/* 2. MAIN CONTAINER */}
@@ -103,8 +62,8 @@ export function HeroSection() {
 
               <p className="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed mb-6 sm:mb-8 max-w-lg font-normal">
                 {trans(
-                  'Mewujudkan pengadaan yang transparan, akuntabel, profesional dan berintegritas tinggi dengan integrasi SPSE 4.5 & E-Katalog Nasional LKPP.',
-                  'Realizing transparent, accountable, professional, and high-integrity procurement integrated with SPSE 4.5 & National E-Catalog.'
+                  'Mewujudkan tata kelola pengadaan barang dan jasa yang transparan, akuntabel, dan terintegrasi secara nasional.',
+                  'Realizing transparent, accountable, and nationally integrated procurement governance.'
                 )}
               </p>
             </motion.div>
@@ -134,91 +93,9 @@ export function HeroSection() {
             </motion.div>
           </div>
 
-          {/* ================= RIGHT COLUMN: PURE AUTOMATED 3D REVOLVING ORBIT (NO BUTTONS) ================= */}
-          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[400px] sm:min-h-[440px] lg:min-h-[480px] relative overflow-visible">
-            
-            {/* 3D Perspective Stage */}
-            <div className="relative w-full max-w-[500px] h-[400px] sm:h-[440px] flex items-center justify-center [perspective:1400px]">
-              
-              {/* Glowing Neon Circular Base Ring on the Floor */}
-              <div className="absolute bottom-6 sm:bottom-10 w-72 sm:w-96 h-28 sm:h-36 rounded-[100%] border-2 border-cyan-400/40 bg-gradient-to-t from-cyan-500/15 via-blue-500/10 to-transparent shadow-[0_0_50px_rgba(34,211,238,0.3)] [transform:rotateX(75deg)] pointer-events-none" />
-              <div className="absolute bottom-10 sm:bottom-14 w-48 sm:w-64 h-20 sm:h-24 rounded-[100%] border border-amber-400/40 bg-amber-400/10 shadow-[0_0_30px_rgba(251,191,36,0.3)] [transform:rotateX(75deg)] pointer-events-none animate-pulse" />
-
-              {/* Master 3D Carousel Cylinder (Continuously Revolving 360 Degrees) */}
-              <motion.div
-                animate={{ rotateY: [0, -360] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 18,
-                  ease: "linear",
-                }}
-                className="relative w-60 sm:w-72 md:w-80 h-72 sm:h-88 md:h-96 [transform-style:preserve-3d] flex items-center justify-center"
-              >
-                {visualItems.map((item) => (
-                  <div
-                    key={item.id}
-                    style={{
-                      transform: `rotateY(${item.angle}deg) translateZ(230px)`,
-                    }}
-                    className="absolute inset-0 [transform-style:preserve-3d] [backface-visibility:visible]"
-                  >
-                    {/* Visual Card Container */}
-                    <div className={`relative w-full h-full rounded-3xl overflow-hidden border-2 ${item.border} shadow-[0_20px_50px_rgba(0,0,0,0.85)] bg-slate-950/90 backdrop-blur-md`}>
-                      
-                      {/* Ambient Glowing Background */}
-                      <div className={`absolute inset-0 bg-gradient-to-tr ${item.glow} rounded-3xl blur-xl pointer-events-none`} />
-
-                      {/* Image Asset */}
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        priority
-                        className="object-cover object-center scale-105"
-                      />
-
-                      {/* Scanning Laser Beam (on Box) */}
-                      {item.id === 'box' && (
-                        <motion.div
-                          animate={{ y: ['-100%', '300%'] }}
-                          transition={{ repeat: Infinity, duration: 3.2, ease: "linear" }}
-                          className="absolute inset-x-0 h-14 bg-gradient-to-b from-transparent via-cyan-400/30 to-transparent border-b border-cyan-400 pointer-events-none"
-                        />
-                      )}
-
-                      {/* Top Status Header */}
-                      <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/20 text-[9px] sm:text-[10px] font-mono font-bold text-cyan-300 shadow-md">
-                          <Scan className="w-3 h-3 text-cyan-400 animate-spin" style={{ animationDuration: '4s' }} />
-                          <span>{item.badge}</span>
-                        </span>
-
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-[9px] font-bold text-emerald-300 backdrop-blur-md shadow-md">
-                          <CheckCircle2 className="w-2.5 h-2.5" />
-                          <span>{item.subBadge}</span>
-                        </span>
-                      </div>
-
-                      {/* Bottom Info Bar */}
-                      <div className="absolute bottom-3 left-3 right-3 p-3 rounded-2xl bg-slate-950/90 backdrop-blur-md border border-white/20 text-left pointer-events-none shadow-xl">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <p className="text-xs font-extrabold text-white flex items-center gap-1.5 truncate">
-                            <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                            <span className="truncate">{item.title}</span>
-                          </p>
-                        </div>
-                        <p className="text-[10px] text-slate-300 line-clamp-1">
-                          {item.subtitle}
-                        </p>
-                      </div>
-
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-
-            </div>
-
+          {/* ================= RIGHT COLUMN: INTERACTIVE 3D COMPOSITION STAGE ================= */}
+          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[420px] sm:min-h-[480px] lg:min-h-[520px] relative overflow-visible">
+            <ProcurementVisualComposition />
           </div>
 
         </div>
