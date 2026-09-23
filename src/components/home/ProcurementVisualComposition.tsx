@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { motion, useSpring } from 'framer-motion';
 
@@ -9,8 +9,6 @@ interface ProcurementVisualCompositionProps {
 }
 
 export function ProcurementVisualComposition({ className = "" }: ProcurementVisualCompositionProps) {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
   // Smooth spring physics for organic mouse parallax response
   const springX = useSpring(0, { stiffness: 65, damping: 20 });
   const springY = useSpring(0, { stiffness: 65, damping: 20 });
@@ -19,13 +17,11 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMousePos({ x, y });
     springX.set(x * 16);
     springY.set(y * -16);
   };
 
   const handleMouseLeave = () => {
-    setMousePos({ x: 0, y: 0 });
     springX.set(0);
     springY.set(0);
   };

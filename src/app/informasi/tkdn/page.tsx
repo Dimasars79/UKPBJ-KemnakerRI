@@ -9,8 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, HelpCircle, ExternalLink, 
   ChevronRight, ChevronDown, Calculator, 
-  MessageCircle, Sparkles, CheckCircle2, 
-  Headphones, FileText, ArrowRight, Award
+  Sparkles, CheckCircle2, Headphones 
 } from 'lucide-react';
 
 import { useLanguage } from '@/contexts/LanguageContext';
