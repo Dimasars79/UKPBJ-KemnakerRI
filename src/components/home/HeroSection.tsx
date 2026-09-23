@@ -53,9 +53,9 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12] mb-3 sm:mb-4">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] xl:text-[3.1rem] font-extrabold text-white tracking-normal leading-[1.3] sm:leading-[1.24] mb-4 sm:mb-5">
                 {trans('Pengadaan Barang/Jasa', 'Goods & Services Procurement')}{' '}
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 drop-shadow-sm">
+                <span className="block mt-1 sm:mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 drop-shadow-sm whitespace-nowrap">
                   {trans('untuk Indonesia Maju', 'for Advanced Indonesia')}
                 </span>
               </h1>
