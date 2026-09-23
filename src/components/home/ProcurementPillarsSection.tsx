@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { 
   FileText, ShieldCheck, Box, Check, ArrowRight, 
-  Sparkles, CheckCircle2, Award, ExternalLink,
-  ChevronRight, Layers, ArrowUpRight, Scale, Clock, Lock
+  Sparkles, CheckCircle2, Award, Scale, Lock
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
