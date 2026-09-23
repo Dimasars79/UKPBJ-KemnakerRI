@@ -5,10 +5,12 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ShieldCheck, FileText, BarChart3, HelpCircle, 
-  Video, BookOpen, ExternalLink, ChevronRight, 
-  Building2, Calculator, Layers
+  ShieldCheck, HelpCircle, ExternalLink, 
+  ChevronRight, ChevronDown, Calculator, 
+  MessageCircle, Sparkles, CheckCircle2, 
+  Headphones, FileText, ArrowRight, Award
 } from 'lucide-react';
 
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -19,9 +21,85 @@ export default function TKDNPage() {
   const [tenagaKerja, setTenagaKerja] = useState(30);
   const [alatKerja, setAlatKerja] = useState(25);
   const [activeTab, setActiveTab] = useState<'flow' | 'calculator'>('flow');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Simple TKDN weighted score calculation
   const totalTKDN = Math.min(100, Math.round((bahanBaku * 0.5) + (tenagaKerja * 0.3) + (alatKerja * 0.2)));
+
+  const faqCategories = [
+    { id: 'all', label: trans('Semua Pertanyaan', 'All Questions') },
+    { id: 'sertifikasi', label: trans('Sertifikasi & Biaya', 'Certification & Costs') },
+    { id: 'persyaratan', label: trans('Syarat & Prosedur', 'Requirements & Procedures') },
+    { id: 'tender', label: trans('Preferensi Tender PBJ', 'PBJ Tender Preference') },
+  ];
+
+  const faqItems = [
+    {
+      category: 'sertifikasi',
+      q: trans('Berapa biaya yang dikenakan untuk sertifikasi TKDN Industri Kecil (IK)?', 'How much does it cost for Small Industry (IK) TKDN certification?'),
+      a: trans(
+        'Sertifikasi TKDN untuk Industri Kecil (IK) adalah 100% GRATIS (tidak dipungut biaya apapun). Program ini difasilitasi dan disubsidi penuh oleh APBN Kementerian Perindustrian RI untuk mendukung UMKM lokal bersaing di pengadaan barang/jasa pemerintah.',
+        'TKDN Certification for Small Industry (IK) is 100% FREE. This program is fully subsidized by the state budget of the Ministry of Industry to support local MSMEs in competing in public procurement.'
+      ),
+      tag: trans('Gratis / APBN', 'Free / State Budget'),
+      highlight: trans('✓ 100% Bebas Biaya Retribusi & Pendaftaran', '✓ 100% Free of Levy & Registration Fees')
+    },
+    {
+      category: 'sertifikasi',
+      q: trans('Berapa lama masa berlaku Sertifikat TKDN IK dan cara perpanjangannya?', 'How long is the validity period of the IK TKDN Certificate and how to renew it?'),
+      a: trans(
+        'Sertifikat TKDN Industri Kecil berlaku selama 3 (tiga) tahun sejak tanggal diterbitkan. Perpanjangan dapat diajukan secara online melalui akun SIINas sebelum masa berlaku berakhir, sepanjang tidak terjadi perubahan spesifikasi bahan baku dan alur produksi.',
+        'The Small Industry TKDN Certificate is valid for 3 (three) years from issuance. Renewal can be submitted online via SIINas account before expiration, provided there are no changes to raw material specs and production flow.'
+      ),
+      tag: trans('Masa Berlaku: 3 Tahun', 'Validity: 3 Years'),
+      highlight: trans('✓ Perpanjangan mandiri via SIINas online', '✓ Self-renewal via SIINas online')
+    },
+    {
+      category: 'tender',
+      q: trans('Mengapa penyedia wajib memiliki sertifikat TKDN dalam pengadaan Kemnaker?', 'Why do vendors need a TKDN certificate in MoM procurement?'),
+      a: trans(
+        'Sesuai Instruksi Presiden No. 2 Tahun 2022 dan Perpres No. 12 Tahun 2021, seluruh kementerian wajib mengalokasikan minimal 40% anggaran belanja untuk produk dalam negeri (PDN). Selain itu, produk dengan nilai TKDN ≥ 25% berhak memperoleh Preferensi Harga hingga maksimal 25% dalam evaluasi lelang SPSE.',
+        'According to Presidential Instruction No. 2/2022 and Presidential Regulation No. 12/2021, ministries must allocate at least 40% of expenditure to domestic products. Furthermore, products with TKDN ≥ 25% qualify for a Price Preference of up to 25% in SPSE auction evaluations.'
+      ),
+      tag: trans('Preferensi s.d. 25%', 'Preference up to 25%'),
+      highlight: trans('✓ Prioritas belanja APBN & insentif evaluasi tender', '✓ APBN spending priority & tender evaluation incentives')
+    },
+    {
+      category: 'persyaratan',
+      q: trans('Apa saja dokumen dan syarat utama pendaftaran akun SIINas TKDN IK?', 'What are the main documents and requirements for SIINas TKDN IK account registration?'),
+      a: trans(
+        'Syarat utama meliputi: (1) NIB (Nomor Induk Berusaha) berbasis risiko dengan KBLI industri, (2) Akun aktif di portal SIINas Kemenperin, (3) Bukti izin operasional/komersial, serta (4) Foto/video dokumentasi proses produksi dan faktur pembelian bahan baku lokal.',
+        'Main requirements include: (1) Risk-based NIB with industrial KBLI, (2) Active account on the Ministry of Industry SIINas portal, (3) Proof of operational license, and (4) Photo/video documentation of production processes and local material invoices.'
+      ),
+      tag: trans('Syarat Dokumen', 'Document Requirements'),
+      highlight: trans('✓ NIB KBLI Industri & Dokumentasi Fasilitas Produksi', '✓ Industrial KBLI NIB & Production Facility Documentation')
+    },
+    {
+      category: 'persyaratan',
+      q: trans('Berapa lama estimasi waktu verifikasi hingga sertifikat TKDN terbit?', 'What is the estimated verification time until the TKDN certificate is issued?'),
+      a: trans(
+        'Sesuai standar operasional Kemenperin RI, proses verifikasi data dan validasi mandiri oleh Kelompok Kerja Verifikasi P3DN membutuhkan waktu maksimal 5 (lima) hari kerja setelah seluruh berkas persyaratan dinyatakan lengkap dan valid di sistem SIINas.',
+        'According to official standards, data verification and self-validation by the P3DN Verification Working Group takes a maximum of 5 (five) working days once all files are declared complete in the SIINas system.'
+      ),
+      tag: trans('Maks. 5 Hari Kerja', 'Max 5 Working Days'),
+      highlight: trans('✓ Cepat & Terverifikasi Digital Elektronik', '✓ Fast & Digitally Verified')
+    },
+    {
+      category: 'tender',
+      q: trans('Bagaimana cara menghitung Bobot Manfaat Perusahaan (BMP)?', 'How is the Company Benefit Weight (BMP) calculated?'),
+      a: trans(
+        'Bobot Manfaat Perusahaan (BMP) dihitung berdasarkan aspek pemberdayaan tenaga kerja lokal (WNI), kepemilikan sertifikat K3 & manajemen mutu (ISO), fasilitas jaminan sosial ketenagakerjaan (BPJS), serta kemitraan UMKM dengan batas nilai maksimal BMP sebesar 15%.',
+        'Company Benefit Weight (BMP) is calculated based on local manpower empowerment, OHS & ISO quality management certificates, BPJS social security facilities, and MSME partnerships with a maximum BMP value of 15%.'
+      ),
+      tag: trans('BMP Maks. 15%', 'BMP Max 15%'),
+      highlight: trans('✓ K3, BPJS Ketenagakerjaan & Standar Mutu ISO', '✓ OHS, Social Security & ISO Quality Standards')
+    }
+  ];
+
+  const filteredFaqs = activeCategory === 'all' 
+    ? faqItems 
+    : faqItems.filter(item => item.category === activeCategory);
 
   const flowSteps = [
     {
@@ -56,64 +134,7 @@ export default function TKDNPage() {
     }
   ];
 
-  const serviceCards = [
-    {
-      title: trans('Sertifikat Terdaftar', 'Registered Certificates'),
-      desc: trans('Data Sertifikat TKDN dan Bobot Manfaat Perusahaan (BMP) yang telah diterbitkan secara resmi.', 'Official data on issued TKDN and Company Benefit Weight (BMP) certificates.'),
-      icon: <FileText className="w-5 h-5" />,
-      href: 'https://tkdn.kemenperin.go.id/sertifikat.php',
-      tag: trans('Database Resmi', 'Official Database')
-    },
-    {
-      title: trans('Rekapitulasi Produk', 'Product Summary'),
-      desc: trans('Rekapitulasi capaian Sertifikat TKDN berdasarkan kelompok barang, sektor industri, dan sebaran wilayah.', 'Summary of TKDN Certificate achievements by product group, industry sector, and regional distribution.'),
-      icon: <BarChart3 className="w-5 h-5" />,
-      href: 'https://tkdn.kemenperin.go.id/rekap.php',
-      tag: trans('Statistik P3DN', 'P3DN Statistics')
-    },
-    {
-      title: trans('TKDN Industri Kecil (IK)', 'Small Industry (IK) TKDN'),
-      desc: trans('Fasilitas sertifikasi TKDN gratis khusus pelaku usaha mikro dan industri kecil dalam pengadaan pemerintah.', 'Free TKDN certification facility specifically for micro and small industry enterprises in public procurement.'),
-      icon: <ShieldCheck className="w-5 h-5" />,
-      href: 'https://siinas.kemenperin.go.id',
-      tag: trans('Fasilitasi Gratis', 'Free Facility')
-    },
-    {
-      title: trans('FAQ & Tanya Jawab', 'FAQ & Questions'),
-      desc: trans('Informasi komprehensif mengenai kebijakan P3DN, ketentuan minimal 40% TKDN, dan mekanisme sertifikasi.', 'Comprehensive information regarding P3DN policies, the minimum 40% TKDN requirement, and certification mechanisms.'),
-      icon: <HelpCircle className="w-5 h-5" />,
-      href: '#faq',
-      tag: trans('Pusat Bantuan', 'Help Center')
-    },
-    {
-      title: trans('Regulasi P3DN', 'P3DN Regulations'),
-      desc: trans('Kumpulan Undang-Undang, Perpres No. 12/2021, dan Permenperin tentang kewajiban penggunaan produk lokal.', 'Collection of Laws, Presidential Regulation No. 12/2021, and Ministerial Regulations on local product usage obligations.'),
-      icon: <BookOpen className="w-5 h-5" />,
-      href: '/informasi/peraturan',
-      tag: trans('Dasar Hukum', 'Legal Basis')
-    },
-    {
-      title: trans('Video Panduan', 'Video Guides'),
-      desc: trans('Tutorial visual langkah-demi-langkah tata cara pendaftaran akun SIINas dan pengajuan berkas verifikasi.', 'Step-by-step visual tutorials on SIINas account registration and verification document submission procedures.'),
-      icon: <Video className="w-5 h-5" />,
-      href: 'https://www.youtube.com/@kemenperin_ri',
-      tag: trans('Video Tutorial', 'Video Tutorial')
-    },
-    {
-      title: trans('Katalog Referensi Produk', 'Product Reference Catalog'),
-      desc: trans('Daftar produk barang dan jasa dalam negeri yang siap dibeli melalui E-Katalog Nasional & Sektoral.', 'List of domestic goods and services products ready for purchase via National & Sectoral E-Catalog.'),
-      icon: <Layers className="w-5 h-5" />,
-      href: 'https://katalog.inaproc.id/',
-      tag: trans('E-Katalog LKPP', 'LKPP E-Catalog')
-    },
-    {
-      title: trans('Portal SIINas Kemenperin', 'MoI SIINas Portal'),
-      desc: trans('Akses langsung ke portal registrasi dan login Sistem Informasi Industri Nasional Kementerian Perindustrian.', 'Direct access to the National Industrial Information System portal of the Ministry of Industry.'),
-      icon: <Building2 className="w-5 h-5" />,
-      href: 'https://siinas.kemenperin.go.id',
-      tag: trans('Portal Layanan', 'Service Portal')
-    }
-  ];
+
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
@@ -308,91 +329,166 @@ export default function TKDNPage() {
           </div>
         </section>
 
-        {/* 8 PUSAT LAYANAN & NAVIGASI TKDN */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-12 sm:mt-16">
-          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-            <span className="text-[10px] sm:text-xs font-bold text-primary-navy bg-slate-100 px-3 py-1 rounded-full uppercase tracking-wider border border-slate-200">
-              {trans('Pusat Data & Layanan Terpadu', 'Integrated Data & Service Center')}
-            </span>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary-navy mt-2.5 sm:mt-3 tracking-tight">
-              {trans('Akses Cepat Layanan & Database TKDN', 'Quick Access to TKDN Services & Database')}
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1.5 sm:mt-2">
-              {trans('Pilih menu navigasi di bawah untuk mengakses sertifikat, rekapitulasi, regulasi, dan petunjuk teknis.', 'Select navigation options below to access certificates, summaries, regulations, and technical guidelines.')}
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
-            {serviceCards.map((card, idx) => (
-              <a
-                key={idx}
-                href={card.href}
-                target={card.href.startsWith('http') ? '_blank' : '_self'}
-                rel="noopener noreferrer"
-                className="bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-5 lg:p-6 shadow-xs border border-slate-200/80 hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col justify-between group"
-              >
+
+        {/* ================= INTERACTIVE ACCORDION FAQ SECTION ================= */}
+        <section id="faq" className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl mt-14 sm:mt-18 scroll-mt-28">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-9 shadow-sm border border-slate-200/80">
+            
+            {/* Header Title */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+              <div className="flex items-center gap-3.5">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-primary-navy text-accent-gold flex items-center justify-center font-bold shadow-xs shrink-0">
+                  <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
                 <div>
-                  <div className="flex items-center justify-between mb-2.5 sm:mb-3.5">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-primary-navy group-hover:text-white transition-colors shadow-2xs shrink-0">
-                      {card.icon}
-                    </div>
-                    <span className="text-[9px] sm:text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">
-                      {card.tag}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xs sm:text-sm md:text-base font-bold text-slate-900 group-hover:text-primary-blue transition-colors mb-1 sm:mb-1.5">
-                    {card.title}
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-black text-primary-navy tracking-tight">
+                    {trans('Tanya Jawab Seputar TKDN & P3DN', 'Frequently Asked Questions about TKDN & P3DN')}
                   </h3>
-                  <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed">
-                    {card.desc}
+                  <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+                    {trans('Panduan lengkap, regulasi hukum, dan mekanisme sertifikasi komponen dalam negeri.', 'Complete guide, legal regulations, and domestic component certification mechanisms.')}
+                  </p>
+                </div>
+              </div>
+
+              {/* Category Pills Filter */}
+              <div className="flex flex-wrap items-center gap-1.5 self-start sm:self-auto">
+                {faqCategories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => {
+                      setActiveCategory(cat.id);
+                      setOpenFaqIndex(0);
+                    }}
+                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                      activeCategory === cat.id
+                        ? 'bg-primary-navy text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Accordion Questions List */}
+            <div className="space-y-3 mt-6">
+              {filteredFaqs.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div
+                    key={idx}
+                    className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                      isOpen
+                        ? 'bg-blue-50/40 border-primary-blue/40 shadow-xs'
+                        : 'bg-slate-50/60 border-slate-200/80 hover:bg-slate-50 hover:border-slate-300'
+                    }`}
+                  >
+                    <button
+                      onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                      className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-4 select-none focus:outline-none"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5 transition-colors ${
+                          isOpen ? 'bg-primary-navy text-accent-gold' : 'bg-slate-200/80 text-slate-600'
+                        }`}>
+                          {idx + 1}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600">
+                              {faq.tag}
+                            </span>
+                          </div>
+                          <h4 className={`text-xs sm:text-sm md:text-base font-bold transition-colors ${
+                            isOpen ? 'text-primary-navy' : 'text-slate-800'
+                          }`}>
+                            {faq.q}
+                          </h4>
+                        </div>
+                      </div>
+
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
+                        isOpen ? 'bg-primary-blue text-white rotate-180' : 'bg-slate-200 text-slate-500'
+                      }`}>
+                        <ChevronDown className="w-4 h-4" />
+                      </div>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.28, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 pb-4 sm:px-5 sm:pb-5 pt-1 border-t border-blue-100/60 pl-13 sm:pl-14">
+                            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
+                              {faq.a}
+                            </p>
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200/60 text-emerald-800 text-[11px] sm:text-xs font-semibold">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <span>{faq.highlight}</span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* ================= HELPDESK & CONSULTATION BANNER ================= */}
+            <div className="mt-8 pt-6 border-t border-slate-100">
+              <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-7 bg-gradient-to-br from-[#061B30] via-[#0A2645] to-[#071F36] text-white relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md">
+                
+                {/* Background lighting accents */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary-blue/20 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-10 w-48 h-48 bg-accent-gold/15 rounded-full blur-2xl pointer-events-none" />
+
+                <div className="relative z-10 max-w-xl">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-accent-gold text-[11px] font-bold uppercase tracking-wider mb-2.5 backdrop-blur-md">
+                    <Sparkles className="w-3 h-3 text-accent-gold animate-pulse" />
+                    <span>{trans('Layanan Konsultasi & Asistensi PBJ', 'PBJ Consultation & Assistance Service')}</span>
+                  </div>
+                  <h4 className="text-lg sm:text-xl font-bold text-white leading-snug">
+                    {trans('Butuh Bantuan Pendaftaran Akun SIINas & Hitung TKDN?', 'Need Help with SIINas Registration & TKDN Calculation?')}
+                  </h4>
+                  <p className="text-slate-300 text-xs sm:text-sm mt-1.5 leading-relaxed">
+                    {trans(
+                      'Tim Helpdesk P3DN & Advokasi UKPBJ Kemnaker siap memberikan panduan teknis bagi penyedia barang/jasa dalam pengurusan sertifikasi TKDN secara gratis.',
+                      'The MoM UKPBJ P3DN Helpdesk & Advocacy team is ready to provide free technical guidance for vendors in managing TKDN certification.'
+                    )}
                   </p>
                 </div>
 
-                <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
-                  <span>{trans('Akses Menu', 'Access Menu')}</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                <div className="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
+                  <a
+                    href="https://siinas.kemenperin.go.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
+                  >
+                    <span>{trans('Portal SIINas Resmi', 'Official SIINas Portal')}</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+
+                  <Link
+                    href="/informasi/clearing-house"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs sm:text-sm backdrop-blur-md transition-all"
+                  >
+                    <Headphones className="w-3.5 h-3.5 text-accent-gold" />
+                    <span>{trans('Konsultasi Clearing House', 'Clearing House Consultation')}</span>
+                  </Link>
                 </div>
-              </a>
-            ))}
-          </div>
-        </section>
 
-        {/* FAQ ACCORDION SECTION */}
-        <section id="faq" className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl mt-12 sm:mt-16 scroll-mt-28">
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 shadow-sm border border-slate-200/80">
-            <div className="flex items-center gap-3 mb-5 sm:mb-6">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary-navy text-accent-gold flex items-center justify-center font-bold shrink-0">
-                <HelpCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base sm:text-lg md:text-xl font-bold text-primary-navy">{trans('Pertanyaan Umum Seputar TKDN & P3DN', 'Frequently Asked Questions about TKDN & P3DN')}</h3>
-                <p className="text-[11px] sm:text-xs text-slate-500">{trans('Hal-hal yang sering ditanyakan mengenai sertifikasi komponen dalam negeri', 'Common questions regarding domestic component certification')}</p>
               </div>
             </div>
 
-            <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
-              <div className="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <h4 className="font-bold text-slate-900 mb-1 text-xs sm:text-sm">{trans('Berapa biaya yang dikenakan untuk sertifikasi TKDN Industri Kecil (IK)?', 'How much does it cost for Small Industry (IK) TKDN certification?')}</h4>
-                <p className="text-slate-600 leading-relaxed text-[11px] sm:text-xs sm:text-sm">
-                  {trans('Sertifikasi TKDN untuk Industri Kecil (IK) adalah 100% GRATIS dan difasilitasi penuh oleh APBN Kementerian Perindustrian RI.', 'TKDN Certification for Small Industry (IK) is 100% FREE and fully subsidized by the state budget of the Ministry of Industry.')}
-                </p>
-              </div>
-
-              <div className="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <h4 className="font-bold text-slate-900 mb-1 text-xs sm:text-sm">{trans('Berapa lama masa berlaku Sertifikat TKDN IK?', 'How long is the validity period of the IK TKDN Certificate?')}</h4>
-                <p className="text-slate-600 leading-relaxed text-[11px] sm:text-xs sm:text-sm">
-                  {trans('Sertifikat TKDN Industri Kecil berlaku selama 3 (tiga) tahun sejak tanggal diterbitkan, sepanjang tidak terjadi perubahan spesifikasi teknis atau bahan baku.', 'The Small Industry TKDN Certificate is valid for 3 (three) years from issuance date, provided there are no changes to technical specifications or raw materials.')}
-                </p>
-              </div>
-
-              <div className="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <h4 className="font-bold text-slate-900 mb-1 text-xs sm:text-sm">{trans('Mengapa penyedia harus memiliki sertifikat TKDN dalam pengadaan Kemnaker?', 'Why do vendors need a TKDN certificate in MoM procurement?')}</h4>
-                <p className="text-slate-600 leading-relaxed text-[11px] sm:text-xs sm:text-sm">
-                  {trans('Sesuai Instruksi Presiden No. 2 Tahun 2022, instansi pemerintah diwajibkan mengalokasikan minimal 40% anggaran belanja untuk produk dalam negeri ber-TKDN, sehingga produk ber-TKDN mendapatkan preferensi harga dan prioritas pemilihan tender.', 'According to Presidential Instruction No. 2/2022, government institutions must allocate at least 40% of expenditure to domestic products with TKDN, giving TKDN products price preferences and priority.')}
-                </p>
-              </div>
-            </div>
           </div>
         </section>
       </main>
