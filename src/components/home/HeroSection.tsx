@@ -53,9 +53,11 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] xl:text-[3.1rem] font-extrabold text-white tracking-normal leading-[1.3] sm:leading-[1.24] mb-4 sm:mb-5">
-                {trans('Pengadaan Barang/Jasa', 'Goods & Services Procurement')}{' '}
-                <span className="block mt-1 sm:mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 drop-shadow-sm whitespace-nowrap">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[2.9rem] xl:text-[3.45rem] font-extrabold text-white tracking-tight leading-[1.18] sm:leading-[1.14] mb-5 sm:mb-6">
+                <span className="block drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+                  {trans('Pengadaan Barang/Jasa', 'Goods & Services Procurement')}
+                </span>
+                <span className="block mt-1 sm:mt-1.5 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 drop-shadow-[0_4px_20px_rgba(251,191,36,0.35)] whitespace-nowrap">
                   {trans('untuk Indonesia Maju', 'for Advanced Indonesia')}
                 </span>
               </h1>
@@ -93,8 +95,8 @@ export function HeroSection() {
             </motion.div>
           </div>
 
-          {/* ================= RIGHT COLUMN: INTERACTIVE 3D COMPOSITION STAGE ================= */}
-          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[300px] sm:min-h-[420px] lg:min-h-[520px] w-full relative overflow-visible mt-4 lg:mt-0">
+          {/* ================= RIGHT COLUMN: INTERACTIVE 3D VISUAL COMPOSITION (KOP SURAT, GEDUNG KONSTRUKSI, BOX) ================= */}
+          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[320px] sm:min-h-[440px] lg:min-h-[500px] w-full relative overflow-visible mt-6 lg:mt-0">
             <ProcurementVisualComposition />
           </div>
 
