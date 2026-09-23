@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 const data = [
-  { name: 'Barang', count: 180 },
-  { name: 'Konstruksi', count: 85 },
-  { name: 'Jasa Konsultasi', count: 65 },
-  { name: 'Jasa Lainnya', count: 98 },
+  { name: 'Barang', fullName: 'Barang', count: 180 },
+  { name: 'Konstruksi', fullName: 'Pekerjaan Konstruksi', count: 85 },
+  { name: 'Konsultansi', fullName: 'Jasa Konsultansi', count: 65 },
+  { name: 'Jasa Lainnya', fullName: 'Jasa Lainnya', count: 98 },
 ];
 
 const colors = ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'];
@@ -17,6 +17,11 @@ interface TooltipPayloadItem {
   fill?: string;
   name: string;
   value: number | string;
+  payload?: {
+    name: string;
+    fullName?: string;
+    count: number;
+  };
 }
 
 interface CustomTooltipProps {
@@ -25,18 +30,20 @@ interface CustomTooltipProps {
   label?: string;
 }
 
-const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
+    const item = payload[0];
+    const displayName = item.payload?.fullName || item.payload?.name || item.name;
     return (
       <div className="bg-slate-950/95 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-700/80 shadow-2xl text-xs space-y-1.5 z-50 pointer-events-none">
         <p className="font-bold text-slate-200 border-b border-slate-800/80 pb-1 flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-amber-400" />
-          <span>Pengadaan {label}</span>
+          <span>Pengadaan {displayName}</span>
         </p>
         <div className="flex items-center justify-between gap-5 text-[11px] pt-0.5">
           <span className="text-slate-400 font-medium">Total Volume:</span>
           <span className="font-mono font-bold text-white">
-            {payload[0].value} Paket
+            {item.value} Paket
           </span>
         </div>
       </div>
@@ -58,7 +65,13 @@ export function EfficiencyChart() {
             onMouseLeave={() => setActiveIndex(null)}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.5} />
-            <XAxis dataKey="name" tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
+            <XAxis 
+              dataKey="name" 
+              interval={0}
+              tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 600}} 
+              tickLine={false} 
+              axisLine={false} 
+            />
             <YAxis tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 600}} tickLine={false} axisLine={false} />
             <Tooltip 
               content={<CustomTooltip />}

@@ -30,9 +30,21 @@ export function Header() {
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
   const [readNotifCount, setReadNotifCount] = useState<number>(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (typeof window !== 'undefined') {
+        setIsScrolled(window.scrollY > 20);
+      }
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -244,9 +256,15 @@ export function Header() {
   ];
 
   return (
-    <header className="w-full flex flex-col z-50 sticky top-0 bg-[#07172E]">
+    <header className={`w-full flex flex-col z-50 sticky top-0 transition-all duration-300 ${
+      isScrolled ? 'bg-transparent' : 'bg-[#07172E]'
+    }`}>
       {/* Top Government Bar */}
-      <div className="bg-[#051122] text-white py-1.5 px-3 sm:px-6 lg:px-8 text-xs font-medium tracking-wide border-b border-white/10 shadow-xs">
+      <div className={`text-white text-xs font-medium tracking-wide shadow-xs transition-all duration-300 ${
+        isScrolled 
+          ? 'h-0 py-0 opacity-0 overflow-hidden border-none pointer-events-none' 
+          : 'bg-[#051122] py-1.5 px-3 sm:px-6 lg:px-8 border-b border-white/10 opacity-100'
+      }`}>
         <div className="container mx-auto flex justify-between items-center gap-2">
           <div className="flex items-center min-w-0 pr-1">
             <span className="text-[9.5px] sm:text-xs tracking-normal md:tracking-widest font-semibold text-slate-200 truncate">
@@ -399,9 +417,15 @@ export function Header() {
         </div>
       </div>
 
-      {/* Main Navigation (Floating White Island Dock on Blue Background) */}
-      <div className="w-full px-3 sm:px-6 lg:px-8 py-2 md:py-2.5 transition-all duration-300 bg-[#07172E]">
-        <div className="max-w-7xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300">
+      {/* Main Navigation (Floating White Island Dock on Blue Background when Top, Framed Floating Island when Scrolled) */}
+      <div className={`w-full px-3 sm:px-6 lg:px-8 py-2 md:py-2.5 transition-all duration-300 ${
+        isScrolled ? 'bg-transparent pointer-events-none' : 'bg-[#07172E] pointer-events-auto'
+      }`}>
+        <div className={`max-w-7xl mx-auto rounded-2xl md:rounded-full px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300 pointer-events-auto ${
+          isScrolled
+            ? 'bg-white/98 backdrop-blur-xl border-2 border-slate-300 shadow-[0_16px_45px_rgba(0,0,0,0.18)] ring-1 ring-slate-900/10'
+            : 'bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)]'
+        }`}>
           
           {/* Logo Area */}
           <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">

@@ -94,7 +94,7 @@ export function HeroSection() {
           </div>
 
           {/* ================= RIGHT COLUMN: INTERACTIVE 3D COMPOSITION STAGE ================= */}
-          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[420px] sm:min-h-[480px] lg:min-h-[520px] relative overflow-visible">
+          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[300px] sm:min-h-[420px] lg:min-h-[520px] w-full relative overflow-visible mt-4 lg:mt-0">
             <ProcurementVisualComposition />
           </div>
 

@@ -24,7 +24,7 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
 
   return (
     <div 
-      className={`relative w-full max-w-[560px] aspect-square select-none flex items-center justify-center ${className}`}
+      className={`relative w-full max-w-[340px] sm:max-w-[460px] lg:max-w-[560px] aspect-square select-none flex items-center justify-center mx-auto ${className}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ perspective: 1200 }}
