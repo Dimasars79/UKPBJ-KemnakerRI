@@ -297,7 +297,7 @@ const DEFAULT_AGENDAS: AgendaItem[] = [
     location: 'Auditorium Gedung A Kemnaker & Zoom',
     organizer: 'Biro Perencanaan & PBJ',
     capacity: '200 Peserta',
-    imageUrl: '/poster_kegiatan.jpg',
+    imageUrl: '/poster_kegiatan.webp',
     description: 'Bimbingan teknis intensif mengenai implementasi dan optimalisasi Sistem Informasi Kinerja Penyedia (SIKaP) Versi 3.0 guna mempercepat proses kualifikasi penyedia barang dan jasa pemerintah secara terintegrasi.',
     status: 'Terjadwal',
     syncFrontend: true

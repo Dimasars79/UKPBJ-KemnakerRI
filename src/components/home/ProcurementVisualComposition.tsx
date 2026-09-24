@@ -36,10 +36,10 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
       {/* ================= 1. CLEAN SOFT AMBIENT LIGHTING ================= */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
         {/* Core Soft Ambient Glow */}
-        <div className="w-[360px] sm:w-[460px] h-[360px] sm:h-[460px] bg-gradient-to-tr from-blue-600/25 via-cyan-400/20 to-transparent rounded-full blur-[110px]" />
+        <div className="w-[260px] sm:w-[460px] h-[260px] sm:h-[460px] bg-gradient-to-tr from-blue-600/25 via-cyan-400/20 to-transparent rounded-full blur-[60px] sm:blur-[110px]" />
         
         {/* Soft Ground Ambient Shadow / Light */}
-        <div className="absolute bottom-2 sm:bottom-4 w-[300px] sm:w-[400px] h-[70px] sm:h-[90px] bg-cyan-500/15 rounded-[100%] blur-3xl" />
+        <div className="absolute bottom-2 sm:bottom-4 w-[240px] sm:w-[400px] h-[50px] sm:h-[90px] bg-cyan-500/15 rounded-[100%] blur-xl sm:blur-3xl" />
       </div>
 
       {/* ================= 2. MASTER 3D PARALLAX STAGE ================= */}
@@ -78,9 +78,11 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
             className="relative w-full h-full overflow-visible"
           >
             <Image
-              src="/assets/3d-elements/gedung-proyek-konstruksi.png"
+              src="/assets/3d-elements/gedung-proyek-konstruksi.webp"
               alt="3D Gedung Proyek Konstruksi & Tower Crane UKPBJ Kemnaker"
               fill
+              priority
+              quality={85}
               sizes="(max-width: 768px) 60vw, 400px"
               className="object-contain object-center drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
             />
@@ -109,16 +111,18 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
           {/* Volumetric Gold/Amber Aura */}
           <div className="absolute inset-8 bg-amber-500/15 rounded-full blur-3xl pointer-events-none -z-10 group-hover:bg-amber-400/30 transition-colors duration-500" />
 
-          {/* Pure Transparent PNG Cutout - 100% Zero Box */}
+          {/* Pure Transparent Cutout - 100% Zero Box */}
           <motion.div 
             whileHover={{ scale: 1.06, y: -6, rotateZ: 4 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             className="relative w-full h-full overflow-visible"
           >
             <Image
-              src="/assets/3d-elements/kop-surat-dokumen.png"
+              src="/assets/3d-elements/kop-surat-dokumen.webp"
               alt="3D Kop Surat dan Dokumen Resmi Republik Indonesia"
               fill
+              priority
+              quality={85}
               sizes="(max-width: 768px) 45vw, 300px"
               className="object-contain object-center drop-shadow-[0_20px_30px_rgba(0,0,0,0.85)]"
             />
@@ -157,16 +161,18 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
             className="absolute inset-6 bg-cyan-400/30 rounded-full blur-3xl pointer-events-none -z-10 group-hover:bg-cyan-400/50 transition-colors duration-500" 
           />
 
-          {/* Pure Transparent PNG Cutout - 100% Zero Box */}
+          {/* Pure Transparent Cutout - 100% Zero Box */}
           <motion.div 
             whileHover={{ scale: 1.06, y: -4 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             className="relative w-full h-full overflow-visible"
           >
             <Image
-              src="/assets/3d-elements/laptop-ekatalog-spse.png"
+              src="/assets/3d-elements/laptop-ekatalog-spse.webp"
               alt="3D Laptop Portal Pengadaan e-Katalog LKPP dan SPSE UKPBJ Kemnaker"
               fill
+              priority
+              quality={85}
               sizes="(max-width: 768px) 65vw, 440px"
               className="object-contain object-center drop-shadow-[0_30px_45px_rgba(0,0,0,0.95)]"
             />

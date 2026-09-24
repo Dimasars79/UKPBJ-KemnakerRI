@@ -535,11 +535,12 @@ export default function Home() {
 
                 <div className="relative w-full flex items-center justify-center overflow-hidden rounded-2xl bg-slate-950/60 border border-white/10">
                   <Image 
-                    src={latestAgenda?.imageUrl || "/poster_kegiatan.jpg"} 
+                    src={latestAgenda?.imageUrl || "/poster_kegiatan.webp"} 
                     alt={latestAgenda?.title || "Poster Kegiatan Pengadaan Barang dan Jasa Kemnaker"} 
                     width={800} 
                     height={1000} 
-                    unoptimized={true}
+                    loading="lazy"
+                    sizes="(max-width: 768px) 90vw, 500px"
                     className="w-full h-auto max-h-[300px] sm:max-h-[480px] object-contain transform group-hover:scale-[1.02] transition-transform duration-500 rounded-2xl drop-shadow-2xl"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a2342]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 sm:p-6 pointer-events-none">

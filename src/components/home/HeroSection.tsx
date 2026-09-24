@@ -15,10 +15,10 @@ export function HeroSection() {
     >
       {/* 1. FUTURISTIC BACKGROUND LIGHTING & CYBER GRID */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Soft Ambient Lights */}
-        <div className="absolute top-1/4 left-1/4 w-[650px] h-[650px] bg-blue-600/15 rounded-full blur-[160px]" />
-        <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-cyan-500/12 rounded-full blur-[170px]" />
-        <div className="absolute bottom-10 left-1/3 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[150px]" />
+        {/* Soft Ambient Lights - optimized for mobile GPU */}
+        <div className="absolute top-1/4 left-1/4 w-[300px] sm:w-[650px] h-[300px] sm:h-[650px] bg-blue-600/15 rounded-full blur-[70px] sm:blur-[160px]" />
+        <div className="absolute top-1/3 right-1/4 w-[280px] sm:w-[600px] h-[280px] sm:h-[600px] bg-cyan-500/12 rounded-full blur-[70px] sm:blur-[170px]" />
+        <div className="absolute bottom-10 left-1/3 w-[240px] sm:w-[500px] h-[240px] sm:h-[500px] bg-amber-500/10 rounded-full blur-[60px] sm:blur-[150px]" />
 
         {/* Minimalist Tech Grid Floor */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#38bdf80e_1px,transparent_1px),linear-gradient(to_bottom,#38bdf80e_1px,transparent_1px)] bg-[size:44px_44px] [mask-image:radial-gradient(ellipse_75%_55%_at_50%_50%,#000_65%,transparent_100%)] opacity-60" />

@@ -592,29 +592,29 @@ export function Header() {
                     />
 
                     <motion.div
-                      initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                      initial={{ opacity: 0, y: 10, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.96 }}
                       transition={{ duration: 0.2 }}
-                      className="fixed inset-x-3 top-20 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-3 sm:w-96 max-w-md mx-auto sm:max-w-none bg-white border border-slate-100 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.2)] rounded-3xl overflow-hidden z-[100] flex flex-col max-h-[80vh] sm:max-h-[500px]"
+                      className="fixed inset-x-4 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2.5 sm:w-96 max-w-sm sm:max-w-none mx-auto bg-white border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.18)] rounded-2xl sm:rounded-3xl overflow-hidden z-[100] flex flex-col max-h-[60vh] sm:max-h-[480px]"
                     >
                       {/* Header Panel */}
-                      <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-bold text-sm text-primary-navy">Notifikasi & Pembaruan</h3>
+                      <div className="px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/90 shrink-0">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <h3 className="font-bold text-xs sm:text-sm text-primary-navy">Notifikasi & Pembaruan</h3>
                           {unreadPublicCount > 0 && (
-                            <span className="px-2 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-black">
+                            <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[9px] sm:text-[10px] font-black">
                               {unreadPublicCount} baru
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-slate-400 font-semibold hidden sm:inline">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold hidden sm:inline">
                             {cmsNotifications.length} Aktivitas
                           </span>
                           <button
                             onClick={() => setIsNotificationOpen(false)}
-                            className="p-1 -mr-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors cursor-pointer flex items-center justify-center w-7 h-7 text-xs font-bold"
+                            className="p-1 -mr-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors cursor-pointer flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 text-xs font-bold"
                             title="Tutup Notifikasi"
                           >
                             ✕
@@ -630,42 +630,42 @@ export function Header() {
                               key={item.id}
                               href={item.href}
                               onClick={() => setIsNotificationOpen(false)}
-                              className="p-3.5 sm:p-4 hover:bg-slate-50/80 transition-colors flex items-start gap-3 group cursor-pointer block bg-white"
+                              className="p-2.5 sm:p-3.5 hover:bg-slate-50/80 transition-colors flex items-start gap-2.5 sm:gap-3 group cursor-pointer block bg-white"
                             >
-                              <div className={`w-9 h-9 rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform shadow-2xs`}>
+                              <div className={`w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform shadow-2xs [&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4`}>
                                 {item.icon}
                               </div>
-                              <div className="min-w-0 flex-1 space-y-1">
-                                <div className="flex items-center justify-between gap-2">
-                                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border max-w-[170px] truncate bg-slate-100 text-slate-600 border-slate-200`}>
+                              <div className="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
+                                <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+                                  <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold border max-w-[130px] sm:max-w-[170px] truncate bg-slate-100 text-slate-600 border-slate-200">
                                     {item.category}
                                   </span>
-                                  <span className="text-[10px] text-slate-400 font-medium shrink-0">
+                                  <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium shrink-0">
                                     {item.time}
                                   </span>
                                 </div>
-                                <h4 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary-blue transition-colors leading-snug line-clamp-2">
+                                <h4 className="text-[11px] sm:text-sm font-bold text-slate-800 group-hover:text-primary-blue transition-colors leading-snug line-clamp-1 sm:line-clamp-2">
                                   {item.title}
                                 </h4>
-                                <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
+                                <p className="text-[10px] sm:text-[11px] text-slate-500 leading-snug line-clamp-1 sm:line-clamp-2">
                                   {item.desc}
                                 </p>
                               </div>
                             </Link>
                           ))
                         ) : (
-                          <div className="p-8 text-center text-slate-400 text-xs bg-white">
+                          <div className="p-6 sm:p-8 text-center text-slate-400 text-xs bg-white">
                             Belum ada notifikasi atau pembaruan konten baru.
                           </div>
                         )}
                       </div>
                       
                       {/* Bottom Footer Action */}
-                      <div className="p-3.5 bg-slate-50 border-t border-slate-100 shrink-0">
+                      <div className="p-2.5 sm:p-3 bg-slate-50 border-t border-slate-100 shrink-0">
                         <Link 
                           href="/informasi/pembaruan" 
                           onClick={() => setIsNotificationOpen(false)}
-                          className="w-full py-2.5 px-4 text-center text-xs font-bold text-white bg-gradient-to-r from-primary-navy to-primary-blue rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-1.5 active:scale-98"
+                          className="w-full py-2 sm:py-2.5 px-3 sm:px-4 text-center text-[11px] sm:text-xs font-bold text-white bg-gradient-to-r from-primary-navy to-primary-blue rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-1.5 active:scale-98"
                         >
                           <span>Lihat Pusat Informasi & Pembaruan</span>
                           <span className="text-accent-gold">→</span>
