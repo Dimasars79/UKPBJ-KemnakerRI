@@ -38,7 +38,8 @@ export function Header() {
   useEffect(() => {
     const handleScroll = () => {
       if (typeof window !== 'undefined') {
-        setIsScrolled(window.scrollY > 20);
+        const scrolled = window.scrollY > 20;
+        setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
       }
     };
     handleScroll();
@@ -256,15 +257,9 @@ export function Header() {
   ];
 
   return (
-    <header className={`w-full flex flex-col z-50 sticky top-0 transition-all duration-300 ${
-      isScrolled ? 'bg-transparent' : 'bg-[#07172E]'
-    }`}>
-      {/* Top Government Bar */}
-      <div className={`text-white text-xs font-medium tracking-wide shadow-xs transition-all duration-300 ${
-        isScrolled 
-          ? 'h-0 py-0 opacity-0 overflow-hidden border-none pointer-events-none' 
-          : 'bg-[#051122] py-1.5 px-3 sm:px-6 lg:px-8 border-b border-white/10 opacity-100'
-      }`}>
+    <>
+      {/* Top Government Bar (Static Natural Flow - Never collapses height, zero layout shift) */}
+      <div className="w-full bg-[#051122] text-white text-xs font-medium tracking-wide shadow-xs border-b border-white/10 py-1.5 px-3 sm:px-6 lg:px-8 relative z-40">
         <div className="container mx-auto flex justify-between items-center gap-2">
           <div className="flex items-center min-w-0 pr-1">
             <span className="text-[9.5px] sm:text-xs tracking-normal md:tracking-widest font-semibold text-slate-200 truncate">
@@ -417,14 +412,14 @@ export function Header() {
         </div>
       </div>
 
-      {/* Main Navigation (Floating White Island Dock on Blue Background when Top, Framed Floating Island when Scrolled) */}
-      <div className={`w-full px-3 sm:px-6 lg:px-8 py-2 md:py-2.5 transition-all duration-300 ${
-        isScrolled ? 'bg-transparent pointer-events-none' : 'bg-[#07172E] pointer-events-auto'
+      {/* Main Navigation (Sticky Solid White Floating Island) */}
+      <header className={`sticky top-0 z-50 w-full px-3 sm:px-6 lg:px-8 py-2 md:py-2.5 transition-colors duration-200 pointer-events-none ${
+        isScrolled ? 'bg-transparent' : 'bg-[#07172E]'
       }`}>
-        <div className={`max-w-7xl mx-auto rounded-2xl md:rounded-full px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300 pointer-events-auto ${
+        <div className={`max-w-7xl mx-auto rounded-2xl md:rounded-full px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-200 pointer-events-auto bg-white ${
           isScrolled
-            ? 'bg-white/98 backdrop-blur-xl border-2 border-slate-300 shadow-[0_16px_45px_rgba(0,0,0,0.18)] ring-1 ring-slate-900/10'
-            : 'bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)]'
+            ? 'border-2 border-slate-300 shadow-[0_14px_40px_rgba(15,23,42,0.18)] ring-1 ring-slate-900/10'
+            : 'border border-slate-200/90 shadow-[0_10px_32px_rgba(0,0,0,0.16)]'
         }`}>
           
           {/* Logo Area */}
@@ -499,7 +494,7 @@ export function Header() {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.97 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className={`absolute ${isInfo ? 'left-1/2 -translate-x-1/2 w-[540px]' : 'right-0 w-[300px]'} mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-200/80 p-3.5 z-50 overflow-hidden`}
+                          className={`absolute ${isInfo ? 'left-1/2 -translate-x-1/2 w-[540px]' : 'right-0 w-[300px]'} mt-2 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border-2 border-slate-200 p-3.5 z-50 overflow-hidden`}
                         >
                           <div className="px-3 py-2 border-b border-slate-100 mb-2 flex items-center justify-between">
                             <span className="text-xs font-bold text-primary-navy uppercase tracking-wider">
@@ -732,7 +727,7 @@ export function Header() {
             </button>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Mobile Navigation Side Drawer */}
       <AnimatePresence>
@@ -919,6 +914,6 @@ export function Header() {
       
       {/* Search Command Palette Overlay */}
       <SearchPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-    </header>
+    </>
   );
 }

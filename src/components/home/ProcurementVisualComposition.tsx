@@ -33,42 +33,13 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
       onMouseLeave={handleMouseLeave}
       style={{ perspective: 1400 }}
     >
-      {/* ================= 1. DYNAMIC HOLOGRAPHIC ENERGY BASE & CYBER ORBIT ================= */}
+      {/* ================= 1. CLEAN SOFT AMBIENT LIGHTING ================= */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
+        {/* Core Soft Ambient Glow */}
+        <div className="w-[360px] sm:w-[460px] h-[360px] sm:h-[460px] bg-gradient-to-tr from-blue-600/25 via-cyan-400/20 to-transparent rounded-full blur-[110px]" />
         
-        {/* Core Volumetric Pulse */}
-        <motion.div 
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.2, 0.32, 0.2],
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 5,
-            ease: "easeInOut",
-          }}
-          className="w-[360px] sm:w-[460px] h-[360px] sm:h-[460px] bg-gradient-to-tr from-blue-600/30 via-cyan-400/25 to-transparent rounded-full blur-[100px]" 
-        />
-        
-        {/* Hologram Floor Oval Glow */}
-        <div className="absolute bottom-2 sm:bottom-4 w-[320px] sm:w-[420px] h-[80px] sm:h-[100px] bg-cyan-500/25 rounded-[100%] blur-2xl" />
-        
-        {/* Ring 1: Primary Neon Cyan Beam (Clockwise slow spin) */}
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-          className="absolute bottom-6 sm:bottom-8 w-[270px] sm:w-[370px] h-[70px] sm:h-[90px] border border-cyan-400/40 rounded-[100%] scale-y-50 [box-shadow:0_0_30px_rgba(34,211,238,0.35)] border-t-cyan-300 border-r-transparent" 
-        />
-
-        {/* Ring 2: Secondary Dashed Tech Orbit (Counter-clockwise spin) */}
-        <motion.div 
-          animate={{ rotate: -360 }}
-          transition={{ repeat: Infinity, duration: 55, ease: "linear" }}
-          className="absolute bottom-4 sm:bottom-6 w-[340px] sm:w-[440px] h-[85px] sm:h-[110px] border border-blue-400/30 rounded-[100%] scale-y-50 border-dashed" 
-        />
-
-        {/* Ring 3: Outer Atmospheric Horizon */}
-        <div className="absolute bottom-1 sm:bottom-3 w-[400px] sm:w-[500px] h-[100px] sm:h-[125px] border border-cyan-300/15 rounded-[100%] scale-y-50" />
+        {/* Soft Ground Ambient Shadow / Light */}
+        <div className="absolute bottom-2 sm:bottom-4 w-[300px] sm:w-[400px] h-[70px] sm:h-[90px] bg-cyan-500/15 rounded-[100%] blur-3xl" />
       </div>
 
       {/* ================= 2. MASTER 3D PARALLAX STAGE ================= */}
