@@ -43,7 +43,7 @@ export function HeroSection() {
             >
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="text-[11px] font-bold text-amber-300 tracking-wider uppercase">
-                {trans('UKPBJ Kementerian Ketenagakerjaan RI', 'UKPBJ Ministry of Manpower RI')}
+                {trans('UKPBJ Kemnaker RI', 'UKPBJ Kemnaker RI')}
               </span>
             </motion.div>
 
@@ -54,10 +54,10 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <h1 className="font-extrabold text-white tracking-tight mb-5 sm:mb-6">
-                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] xl:text-[2.95rem] leading-[1.2] drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)] sm:whitespace-nowrap">
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] xl:text-[2.95rem] leading-[1.25] pb-1 drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)] sm:whitespace-nowrap">
                   {trans('Pengadaan Barang/Jasa', 'Goods & Services Procurement')}
                 </span>
-                <span className="block mt-1 sm:mt-2 text-xl sm:text-2xl md:text-3xl lg:text-[2.1rem] xl:text-[2.5rem] leading-[1.25] text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 drop-shadow-[0_4px_20px_rgba(251,191,36,0.35)] tracking-tight sm:whitespace-nowrap">
+                <span className="block mt-1 sm:mt-1.5 text-xl sm:text-2xl md:text-3xl lg:text-[2.1rem] xl:text-[2.5rem] leading-[1.35] pb-1.5 sm:pb-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 drop-shadow-[0_4px_20px_rgba(251,191,36,0.35)] tracking-tight sm:whitespace-nowrap">
                   {trans('Kementerian Ketenagakerjaan RI', 'Ministry of Manpower RI')}
                 </span>
               </h1>
