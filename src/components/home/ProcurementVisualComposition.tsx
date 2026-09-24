@@ -81,7 +81,7 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
         className="relative w-full h-full flex items-center justify-center transition-transform duration-200 ease-out"
       >
 
-        {/* ================= ELEMENT 1: GEDUNG KONSTRUKSI (SOLID 3D ANCHOR - MIDGROUND LEFT) ================= */}
+        {/* ================= ELEMENT 1: GEDUNG KONSTRUKSI (TRANSPARENT 3D ANCHOR - MIDGROUND LEFT) ================= */}
         <motion.div
           animate={{
             y: [0, -12, 0],
@@ -100,28 +100,24 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
           {/* Volumetric Backlight Aura */}
           <div className="absolute inset-8 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none -z-10 group-hover:bg-cyan-400/35 transition-colors duration-500" />
           
-          {/* Seamless Feathered 3D Render */}
+          {/* Pure Transparent PNG Cutout - 100% Zero Box */}
           <motion.div 
             whileHover={{ scale: 1.05, y: -4 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             className="relative w-full h-full overflow-visible"
-            style={{
-              WebkitMaskImage: 'radial-gradient(ellipse 72% 72% at 50% 50%, #000 38%, rgba(0,0,0,0.85) 54%, rgba(0,0,0,0.2) 72%, transparent 86%)',
-              maskImage: 'radial-gradient(ellipse 72% 72% at 50% 50%, #000 38%, rgba(0,0,0,0.85) 54%, rgba(0,0,0,0.2) 72%, transparent 86%)',
-            }}
           >
             <Image
-              src="/assets/3d-elements/gedung-proyek-konstruksi.jpg"
+              src="/assets/3d-elements/gedung-proyek-konstruksi.png"
               alt="3D Gedung Proyek Konstruksi & Tower Crane UKPBJ Kemnaker"
               fill
               sizes="(max-width: 768px) 60vw, 400px"
-              className="object-cover object-center drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
+              className="object-contain object-center drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
             />
           </motion.div>
         </motion.div>
 
 
-        {/* ================= ELEMENT 2: KOP SURAT & DOKUMEN (AIR CURRENT HOVER - TOP RIGHT) ================= */}
+        {/* ================= ELEMENT 2: KOP SURAT & DOKUMEN (TRANSPARENT AIR CURRENT HOVER - TOP RIGHT) ================= */}
         <motion.div
           animate={{
             y: [0, -18, 0],
@@ -142,28 +138,24 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
           {/* Volumetric Gold/Amber Aura */}
           <div className="absolute inset-8 bg-amber-500/15 rounded-full blur-3xl pointer-events-none -z-10 group-hover:bg-amber-400/30 transition-colors duration-500" />
 
-          {/* Seamless Feathered 3D Render */}
+          {/* Pure Transparent PNG Cutout - 100% Zero Box */}
           <motion.div 
             whileHover={{ scale: 1.06, y: -6, rotateZ: 4 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             className="relative w-full h-full overflow-visible"
-            style={{
-              WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, #000 40%, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0.2) 70%, transparent 85%)',
-              maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, #000 40%, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0.2) 70%, transparent 85%)',
-            }}
           >
             <Image
-              src="/assets/3d-elements/kop-surat-dokumen.jpg"
+              src="/assets/3d-elements/kop-surat-dokumen.png"
               alt="3D Kop Surat dan Dokumen Resmi Republik Indonesia"
               fill
               sizes="(max-width: 768px) 45vw, 300px"
-              className="object-cover object-center drop-shadow-[0_20px_30px_rgba(0,0,0,0.85)]"
+              className="object-contain object-center drop-shadow-[0_20px_30px_rgba(0,0,0,0.85)]"
             />
           </motion.div>
         </motion.div>
 
 
-        {/* ================= ELEMENT 3: LAPTOP E-KATALOG & SPSE (DIGITAL CORE - FOREGROUND BOTTOM RIGHT) ================= */}
+        {/* ================= ELEMENT 3: LAPTOP E-KATALOG & SPSE (TRANSPARENT DIGITAL CORE - FOREGROUND BOTTOM RIGHT) ================= */}
         <motion.div
           animate={{
             y: [0, 12, 0],
@@ -194,22 +186,18 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
             className="absolute inset-6 bg-cyan-400/30 rounded-full blur-3xl pointer-events-none -z-10 group-hover:bg-cyan-400/50 transition-colors duration-500" 
           />
 
-          {/* Seamless Feathered 3D Render */}
+          {/* Pure Transparent PNG Cutout - 100% Zero Box */}
           <motion.div 
             whileHover={{ scale: 1.06, y: -4 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             className="relative w-full h-full overflow-visible"
-            style={{
-              WebkitMaskImage: 'radial-gradient(ellipse 72% 72% at 50% 50%, #000 40%, rgba(0,0,0,0.9) 56%, rgba(0,0,0,0.25) 72%, transparent 86%)',
-              maskImage: 'radial-gradient(ellipse 72% 72% at 50% 50%, #000 40%, rgba(0,0,0,0.9) 56%, rgba(0,0,0,0.25) 72%, transparent 86%)',
-            }}
           >
             <Image
-              src="/assets/3d-elements/laptop-ekatalog-spse.jpg"
+              src="/assets/3d-elements/laptop-ekatalog-spse.png"
               alt="3D Laptop Portal Pengadaan e-Katalog LKPP dan SPSE UKPBJ Kemnaker"
               fill
               sizes="(max-width: 768px) 65vw, 440px"
-              className="object-cover object-center drop-shadow-[0_30px_45px_rgba(0,0,0,0.95)]"
+              className="object-contain object-center drop-shadow-[0_30px_45px_rgba(0,0,0,0.95)]"
             />
           </motion.div>
         </motion.div>
