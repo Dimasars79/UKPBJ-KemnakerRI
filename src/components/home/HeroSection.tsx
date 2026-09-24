@@ -29,40 +29,40 @@ export function HeroSection() {
 
       {/* 2. MAIN CONTAINER */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
           
           {/* ================= LEFT COLUMN: HEADLINE & CTAS ================= */}
-          <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center text-left">
+          <div className="lg:col-span-7 xl:col-span-7 flex flex-col justify-center text-left">
             
             {/* Header Tag */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold backdrop-blur-md mb-4 sm:mb-5 self-start shadow-sm"
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold backdrop-blur-md mb-4 sm:mb-5 self-start shadow-sm"
             >
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="text-[11px] font-bold text-amber-300 tracking-wider uppercase">
-                {trans('UKPBJ KEMENTERIAN KETENAGAKERJAAN RI', 'UKPBJ MINISTRY OF MANPOWER RI')}
+                {trans('UKPBJ Kementerian Ketenagakerjaan RI', 'UKPBJ Ministry of Manpower RI')}
               </span>
             </motion.div>
 
-            {/* Main Bold Headline */}
+            {/* Main Bold Headline - Precision 2-Line Alignment */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[2.9rem] xl:text-[3.45rem] font-extrabold text-white tracking-tight leading-[1.18] sm:leading-[1.14] mb-5 sm:mb-6">
-                <span className="block drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+              <h1 className="font-extrabold text-white tracking-tight mb-5 sm:mb-6">
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] xl:text-[2.95rem] leading-[1.2] drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)] sm:whitespace-nowrap">
                   {trans('Pengadaan Barang/Jasa', 'Goods & Services Procurement')}
                 </span>
-                <span className="block mt-1 sm:mt-1.5 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 drop-shadow-[0_4px_20px_rgba(251,191,36,0.35)] whitespace-nowrap">
-                  {trans('untuk Indonesia Maju', 'for Advanced Indonesia')}
+                <span className="block mt-1 sm:mt-2 text-xl sm:text-2xl md:text-3xl lg:text-[2.1rem] xl:text-[2.5rem] leading-[1.25] text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 drop-shadow-[0_4px_20px_rgba(251,191,36,0.35)] tracking-tight sm:whitespace-nowrap">
+                  {trans('Kementerian Ketenagakerjaan RI', 'Ministry of Manpower RI')}
                 </span>
               </h1>
 
-              <p className="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed mb-6 sm:mb-8 max-w-lg font-normal">
+              <p className="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl font-normal">
                 {trans(
                   'Mewujudkan tata kelola pengadaan barang dan jasa yang transparan, akuntabel, dan terintegrasi secara nasional.',
                   'Realizing transparent, accountable, and nationally integrated procurement governance.'
@@ -96,7 +96,7 @@ export function HeroSection() {
           </div>
 
           {/* ================= RIGHT COLUMN: INTERACTIVE 3D VISUAL COMPOSITION (KOP SURAT, GEDUNG KONSTRUKSI, BOX) ================= */}
-          <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center min-h-[320px] sm:min-h-[440px] lg:min-h-[500px] w-full relative overflow-visible mt-6 lg:mt-0">
+          <div className="lg:col-span-5 xl:col-span-5 flex items-center justify-center min-h-[300px] sm:min-h-[400px] lg:min-h-[480px] w-full relative overflow-visible mt-6 lg:mt-0">
             <ProcurementVisualComposition />
           </div>
 
