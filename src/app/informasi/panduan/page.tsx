@@ -93,9 +93,9 @@ export default function PanduanPage() {
     <div className="bg-slate-50 min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-grow pb-24">
+      <main className="flex-grow pb-24 -mt-[80px] md:-mt-[88px]">
         {/* HERO BANNER SECTION */}
-        <section className="relative py-16 lg:py-20 overflow-hidden bg-gradient-to-br from-[#061A35] via-[#0D2E57] to-[#081F3E]">
+        <section className="relative pt-28 sm:pt-32 lg:pt-36 pb-16 lg:pb-20 overflow-hidden bg-gradient-to-br from-[#061A35] via-[#0D2E57] to-[#081F3E]">
           {/* Subtle Grid Pattern & Sapphire Glow */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f610_1px,transparent_1px),linear-gradient(to_bottom,#3b82f610_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
           <div className="absolute top-0 right-1/3 w-96 h-96 bg-primary-blue/20 rounded-full blur-[130px] pointer-events-none" />

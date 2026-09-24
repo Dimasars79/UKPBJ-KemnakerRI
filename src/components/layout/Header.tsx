@@ -412,14 +412,12 @@ export function Header() {
         </div>
       </div>
 
-      {/* Main Navigation (Sticky Solid White Floating Island) */}
-      <header className={`sticky top-0 z-50 w-full px-3 sm:px-6 lg:px-8 py-2 md:py-2.5 transition-colors duration-200 pointer-events-none ${
-        isScrolled ? 'bg-transparent' : 'bg-[#07172E]'
-      }`}>
-        <div className={`max-w-7xl mx-auto rounded-2xl md:rounded-full px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-200 pointer-events-auto bg-white ${
+      {/* Main Navigation (Independent Floating Dock Capsule) */}
+      <header className="sticky top-0 z-50 w-full px-3 sm:px-6 lg:px-8 py-2 md:py-2.5 pointer-events-none bg-transparent">
+        <div className={`max-w-7xl mx-auto rounded-2xl md:rounded-full px-4 sm:px-6 py-2 flex justify-between items-center transition-all duration-300 pointer-events-auto bg-white ${
           isScrolled
             ? 'border-2 border-slate-300 shadow-[0_14px_40px_rgba(15,23,42,0.18)] ring-1 ring-slate-900/10'
-            : 'border border-slate-200/90 shadow-[0_10px_32px_rgba(0,0,0,0.16)]'
+            : 'border border-slate-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.22)] ring-1 ring-black/5'
         }`}>
           
           {/* Logo Area */}

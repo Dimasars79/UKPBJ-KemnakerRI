@@ -268,9 +268,9 @@ export default function PerizinanPage() {
 
       <Header />
 
-      <main className="flex-grow pb-24">
+      <main className="flex-grow pb-24 -mt-[80px] md:-mt-[88px]">
         {/* HERO HEADER SECTION */}
-        <section className="relative py-14 lg:py-18 overflow-hidden bg-gradient-to-br from-[#061B30] via-[#0B2A4A] to-[#071F36]">
+        <section className="relative pt-28 sm:pt-32 lg:pt-36 pb-14 lg:pb-18 overflow-hidden bg-gradient-to-br from-[#061B30] via-[#0B2A4A] to-[#071F36]">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#0284c712_1px,transparent_1px),linear-gradient(to_bottom,#0284c712_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-blue/20 rounded-full blur-[130px] pointer-events-none" />
           <div className="absolute -bottom-10 left-10 w-80 h-80 bg-accent-gold/15 rounded-full blur-[100px] pointer-events-none" />

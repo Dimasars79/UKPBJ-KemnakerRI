@@ -127,9 +127,9 @@ export default function BeritaDetailPage() {
     <div className="bg-slate-50 min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-grow pb-24">
+      <main className="flex-grow pb-24 -mt-[80px] md:-mt-[88px]">
         {/* HERO ARTICLE BANNER */}
-        <section className="relative pt-12 pb-16 lg:pb-20 overflow-hidden bg-gradient-to-br from-[#06182E] via-[#0D264A] to-[#081B33]">
+        <section className="relative pt-28 sm:pt-32 lg:pt-36 pb-16 lg:pb-20 overflow-hidden bg-gradient-to-br from-[#06182E] via-[#0D264A] to-[#081B33]">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e3a8a12_1px,transparent_1px),linear-gradient(to_bottom,#1e3a8a12_1px,transparent_1px)] bg-[size:28px_28px] pointer-events-none" />
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-blue/20 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute -bottom-10 left-10 w-80 h-80 bg-accent-gold/10 rounded-full blur-[100px] pointer-events-none" />

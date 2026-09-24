@@ -10,7 +10,7 @@ export function HeroSection() {
 
   return (
     <section 
-      className="relative bg-[#07172E] text-white flex items-center overflow-hidden pt-3 pb-12 sm:pt-4 sm:pb-16 lg:pt-6 lg:pb-20 select-none"
+      className="relative bg-[#07172E] text-white flex items-center overflow-hidden pt-24 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 lg:pb-20 select-none"
       aria-label="Hero Section UKPBJ Pengadaan Barang dan Jasa"
     >
       {/* 1. FUTURISTIC BACKGROUND LIGHTING & CYBER GRID */}

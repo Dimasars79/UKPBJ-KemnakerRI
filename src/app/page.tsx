@@ -101,7 +101,7 @@ export default function Home() {
     <>
       <Header />
       
-      <main className="flex-grow overflow-hidden">
+      <main className="flex-grow overflow-hidden -mt-[80px] md:-mt-[88px]">
         {/* 1. Modern 3D Hero Section with Moving Buildings and Procurement Cardboard Box Visual */}
         <HeroSection />
 

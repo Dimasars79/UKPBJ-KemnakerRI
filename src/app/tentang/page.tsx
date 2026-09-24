@@ -38,9 +38,9 @@ export default function TentangPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20">
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20 -mt-[80px] md:-mt-[88px]">
         {/* HERO SECTION - Institutional Grandeur */}
-        <section className="relative py-20 lg:py-24 overflow-hidden bg-primary-navy">
+        <section className="relative pt-32 sm:pt-36 lg:pt-40 pb-20 lg:pb-24 overflow-hidden bg-primary-navy">
           {/* Architectural Background with Deep Navy Vignette Overlay */}
           <div 
             className="absolute inset-0 bg-[url('/gedung-kemnaker.jpg')] bg-cover bg-center bg-no-repeat opacity-25 mix-blend-luminosity scale-105"

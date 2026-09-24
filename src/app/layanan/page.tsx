@@ -57,9 +57,9 @@ export default function LayananPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20">
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/50 pb-20 -mt-[80px] md:-mt-[88px]">
         {/* HERO SECTION - Modern Government Tech Service Desk */}
-        <section className="relative py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-[#061A35] via-[#0A2540] to-[#041226]">
+        <section className="relative pt-32 sm:pt-36 lg:pt-40 pb-20 lg:pb-24 overflow-hidden bg-gradient-to-br from-[#061A35] via-[#0A2540] to-[#041226]">
           {/* Tech Grid & Spotlight Background */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e3a8a15_1px,transparent_1px),linear-gradient(to_bottom,#1e3a8a15_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
           <div className="absolute -top-24 right-0 w-96 h-96 bg-primary-blue/20 rounded-full blur-[120px] pointer-events-none" />
