@@ -321,6 +321,7 @@ export default function AdminPortalPage() {
   // Header Interactive States
   const [showNotifications, setShowNotifications] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   
   // Persistent Dynamic Notifications System (Hydration Safe)
   const [notificationsList, setNotificationsList] = useState<AdminNotificationItem[]>(DEFAULT_NOTIFICATIONS);
@@ -2142,13 +2143,13 @@ export default function AdminPortalPage() {
         
         {/* Top Header - Spacious & Clean Modern Command Bar */}
         {/* Top Header - Responsive Modern Command Bar with Mobile Drawer Toggle */}
-        <header className={`h-16 md:h-[5.5rem] border-b backdrop-blur-xl px-4 sm:px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 shrink-0 box-border transition-all duration-300 ${
+        <header className={`h-14 sm:h-16 md:h-[5.5rem] border-b backdrop-blur-xl px-3 sm:px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 shrink-0 box-border transition-all duration-300 ${
           isDark 
             ? 'border-slate-800/80 bg-slate-950/90 shadow-sm shadow-black/20' 
             : 'border-slate-200 bg-white/95 shadow-sm shadow-slate-200/50'
         }`}>
           {/* LEFT: Mobile Hamburger, Icon & Clean Page Title */}
-          <div className="flex items-center space-x-2.5 sm:space-x-3 md:space-x-4 min-w-0">
+          <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0">
             {/* Mobile Hamburger Button */}
             <button
               type="button"
@@ -2160,22 +2161,8 @@ export default function AdminPortalPage() {
                   : 'bg-white border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-50 shadow-xs'
               }`}
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
-
-            <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-2xl border flex items-center justify-center shrink-0 shadow-xs ${
-              isDark ? 'bg-slate-900/90 border-slate-800 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
-            }`}>
-              {activeTab === 'dashboard' && <LayoutDashboard className="w-4 h-4 sm:w-5 sm:h-5" />}
-              {activeTab === 'paket' && <Package className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />}
-              {activeTab === 'manage-berita' && <Newspaper className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />}
-              {activeTab === 'manage-agenda' && <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />}
-              {activeTab === 'manage-regulasi' && <ScrollText className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />}
-              {activeTab === 'manage-sop' && <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />}
-              {activeTab === 'manage-galeri' && <Camera className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />}
-              {activeTab === 'log-aktivitas' && <History className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />}
-              {activeTab === 'pengaturan' && <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />}
-            </div>
 
             <div className="space-y-0.5 min-w-0">
               <div className={`hidden sm:flex items-center space-x-2 text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -2187,7 +2174,7 @@ export default function AdminPortalPage() {
                    activeTab.startsWith('manage-') ? 'CMS Publik' : 'Sistem'}
                 </span>
               </div>
-              <h1 className={`text-xs sm:text-base md:text-lg lg:text-xl font-black tracking-tight leading-tight truncate max-w-[120px] xs:max-w-[180px] sm:max-w-none ${
+              <h1 className={`text-xs sm:text-base md:text-lg lg:text-xl font-black tracking-tight leading-tight truncate max-w-[130px] xs:max-w-[190px] sm:max-w-none ${
                 isDark ? 'text-white' : 'text-slate-900'
               }`}>
                 {activeTab === 'dashboard' ? 'Executive Command Center' :
@@ -2203,10 +2190,30 @@ export default function AdminPortalPage() {
           </div>
 
           {/* RIGHT: Spacious Actions (Search, Quick Add, Notif, Theme) */}
-          <div className="flex items-center space-x-2 sm:space-x-3.5 md:space-x-5">
+          <div className="flex items-center space-x-1.5 sm:space-x-3.5 md:space-x-5">
             
-            {/* Search Input */}
-            <div className="relative w-28 xs:w-36 sm:w-56 md:w-80 group">
+            {/* Mobile Search Trigger Icon */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileSearchOpen(!mobileSearchOpen);
+                if (showQuickAdd) setShowQuickAdd(false);
+                if (showNotifications) setShowNotifications(false);
+              }}
+              className={`p-2 rounded-xl border sm:hidden flex items-center justify-center transition-colors cursor-pointer ${
+                mobileSearchOpen
+                  ? 'bg-blue-600 border-blue-500 text-white'
+                  : isDark 
+                    ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' 
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs'
+              }`}
+              title="Buka Pencarian"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+
+            {/* Desktop Search Input (Hidden on mobile to prevent clutter) */}
+            <div className="hidden sm:block relative w-48 sm:w-56 md:w-80 group">
               <Search className={`w-3.5 h-3.5 sm:w-4 sm:h-4 absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
                 isDark ? 'text-slate-400 group-focus-within:text-blue-500' : 'text-slate-600 group-focus-within:text-blue-600'
               }`} />
@@ -2215,17 +2222,12 @@ export default function AdminPortalPage() {
                 placeholder="Cari berita, agenda..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-8 sm:pl-10 pr-3 sm:pr-10 py-1.5 sm:py-2.5 border rounded-xl text-xs transition-all outline-none font-medium ${
+                className={`w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2.5 border rounded-xl text-xs transition-all outline-none font-medium ${
                   isDark 
                     ? 'bg-slate-900/80 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-900' 
                     : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-500 focus:border-blue-600 focus:bg-white shadow-xs'
                 }`}
               />
-              <span className={`hidden md:inline-flex absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border ${
-                isDark ? 'border-slate-700/60 bg-slate-800/60 text-slate-400' : 'border-slate-300 bg-slate-100 text-slate-700'
-              }`}>
-                ⌘K
-              </span>
             </div>
 
             {/* QUICK ACTION BUTTON & DROPDOWN */}
@@ -2234,13 +2236,14 @@ export default function AdminPortalPage() {
                 onClick={() => {
                   setShowQuickAdd(!showQuickAdd);
                   if (showNotifications) setShowNotifications(false);
+                  if (mobileSearchOpen) setMobileSearchOpen(false);
                 }}
-                className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-600/25 transition-all cursor-pointer"
+                className="flex items-center space-x-1.5 p-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-600/25 transition-all cursor-pointer"
                 title="Tambah data baru secara instan"
               >
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Tambah Cepat</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showQuickAdd ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 hidden sm:inline transition-transform ${showQuickAdd ? 'rotate-180' : ''}`} />
               </button>
 
               <AnimatePresence>
@@ -2443,9 +2446,10 @@ export default function AdminPortalPage() {
                 onClick={() => {
                   setShowNotifications(!showNotifications);
                   if (showQuickAdd) setShowQuickAdd(false);
+                  if (mobileSearchOpen) setMobileSearchOpen(false);
                 }}
-                className={`relative p-2.5 rounded-xl border transition-colors cursor-pointer ${
-                  isDark ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
+                className={`relative p-2 sm:p-2.5 rounded-xl border transition-colors cursor-pointer ${
+                  isDark ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800' : 'bg-slate-50 sm:bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
                 }`}
                 title="Pusat Notifikasi & Audit Log"
               >
@@ -2590,50 +2594,112 @@ export default function AdminPortalPage() {
             </div>
 
             {/* THEME TOGGLE (LIGHT / DARK) */}
-            <div className={`flex items-center p-1 rounded-xl border ${
+            {/* Mobile Single Tap Toggle */}
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className={`p-2 rounded-xl border sm:hidden flex items-center justify-center transition-all cursor-pointer ${
+                isDark 
+                  ? 'bg-slate-900 border-slate-800 text-blue-400 hover:text-white' 
+                  : 'bg-slate-50 border-slate-200 text-amber-600 hover:text-slate-900 shadow-xs'
+              }`}
+              title={theme === 'dark' ? 'Ganti ke Mode Terang' : 'Ganti ke Mode Gelap'}
+            >
+              {theme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            </button>
+
+            {/* Desktop Dual-Pill Toggle */}
+            <div className={`hidden sm:flex items-center p-1 rounded-xl border ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-200'
             }`}>
               <button
                 onClick={() => setTheme('light')}
-                className={`p-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`p-1.5 md:p-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   theme === 'light'
                     ? 'bg-white text-amber-600 shadow-sm'
                     : 'text-slate-400 hover:text-slate-600'
                 }`}
                 title="Mode Terang (Light)"
               >
-                <Sun className="w-4 h-4" />
+                <Sun className="w-3.5 h-3.5 md:w-4 md:h-4" />
               </button>
               <button
                 onClick={() => setTheme('dark')}
-                className={`p-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`p-1.5 md:p-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   theme === 'dark'
                     ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
                 title="Mode Gelap (Dark)"
               >
-                <Moon className="w-4 h-4" />
+                <Moon className="w-3.5 h-3.5 md:w-4 md:h-4" />
               </button>
             </div>
 
           </div>
         </header>
 
+        {/* Mobile Search Expandable Bar (Opens below header on mobile) */}
+        <AnimatePresence>
+          {mobileSearchOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className={`sm:hidden border-b px-3.5 py-2.5 flex items-center gap-2 sticky top-14 z-30 ${
+                isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+              }`}
+            >
+              <div className="relative flex-1">
+                <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${
+                  isDark ? 'text-slate-400' : 'text-slate-500'
+                }`} />
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Cari berita, agenda, pengadaan..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={`w-full pl-8 pr-8 py-1.5 border rounded-xl text-xs outline-none ${
+                    isDark 
+                      ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500' 
+                      : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-500 focus:border-blue-600'
+                  }`}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+              <button
+                onClick={() => setMobileSearchOpen(false)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold ${
+                  isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Tutup
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* ========================================================= */}
         {/* TAB 1: DASHBOARD UTAMA (ENTERPRISE 3-COLUMN COMMAND CENTER) */}
         {/* ========================================================= */}
         {activeTab === 'dashboard' && (
-          <div className="p-6 md:p-8">
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+          <div className="p-3.5 sm:p-5 md:p-8">
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-8 items-start">
               
               {/* ========================================================= */}
               {/* LEFT & CENTER COLUMN (MAIN ANALYTICS & CMS COMMAND) */}
               {/* ========================================================= */}
-              <div className="xl:col-span-8 2xl:col-span-8 space-y-8 min-w-0">
+              <div className="xl:col-span-8 2xl:col-span-8 space-y-5 sm:space-y-8 min-w-0">
                 
                 {/* Top Greeting & Operational Telemetry Banner */}
-                <div className={`p-6 sm:p-7 rounded-3xl border relative overflow-hidden transition-all ${
+                <div className={`p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border relative overflow-hidden transition-all ${
                   isDark 
                     ? 'bg-gradient-to-r from-slate-900 via-[#0B1E38] to-slate-900 border-slate-800/80 shadow-2xl shadow-blue-950/40' 
                     : 'bg-gradient-to-r from-white via-blue-50/50 to-slate-50 border-slate-200/90 shadow-lg shadow-slate-200/50'
@@ -2642,23 +2708,19 @@ export default function AdminPortalPage() {
                   <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
                   <div className="absolute -bottom-10 left-1/3 w-60 h-60 bg-accent-gold/10 rounded-full blur-3xl pointer-events-none" />
 
-                  <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                    <div className="space-y-2">
-                      <h2 className={`text-2xl sm:text-3xl font-black tracking-tight flex flex-wrap items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        <span>Selamat Datang, Dimas Ars</span>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
-                          <UserCheck className="w-3.5 h-3.5" />
-                          <span>Super Admin</span>
-                        </span>
+                  <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
+                    <div className="space-y-1.5 sm:space-y-2">
+                      <h2 className={`text-xl sm:text-2xl md:text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        Selamat Datang, Dimas Ars
                       </h2>
                       
-                      <p className={`text-xs max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
+                      <p className={`text-xs sm:text-sm max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                         Sistem kendali terpadu pengelolaan pengadaan barang/jasa, monitoring operasional SPSE, serta manajemen konten publik (CMS) terpusat dan tersinkronisasi real-time.
                       </p>
                     </div>
 
                     {/* Quick Action Buttons */}
-                    <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0">
                       <button
                         onClick={() => {
                           setEditingNews(null);
@@ -2672,7 +2734,7 @@ export default function AdminPortalPage() {
                           });
                           setShowNewsModal(true);
                         }}
-                        className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                        className="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
                       >
                         <PlusCircle className="w-4 h-4" />
                         <span>Posting Cepat</span>
@@ -2682,7 +2744,7 @@ export default function AdminPortalPage() {
                         href="/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`px-3.5 py-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                        className={`px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
                           isDark ? 'bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-700 hover:text-white' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-primary-navy shadow-xs'
                         }`}
                       >
@@ -2699,7 +2761,7 @@ export default function AdminPortalPage() {
                           pushAdminNotification('Sinkronisasi Database Berhasil', 'Seluruh data CMS tersinkronisasi dari Supabase Cloud', 'sistem');
                           showNotification('✓ Seluruh data CMS berhasil disinkronkan dari Supabase PostgreSQL!');
                         }}
-                        className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
+                        className={`p-2 sm:p-2.5 rounded-xl border transition-all cursor-pointer ${
                           isDark ? 'bg-slate-800/80 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-primary-navy shadow-xs'
                         }`}
                         title="Sinkronisasi Ulang Database Supabase"
@@ -2711,26 +2773,26 @@ export default function AdminPortalPage() {
                 </div>
 
                 {/* STRATEGIC ACTIONABLE METRIC CARDS (2x2 BENTO GRID - SPACIOUS & PERFECTIONIST) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 items-stretch">
                   
                   {/* Box 1: Paket Pengadaan PBJ */}
                   <div 
                     onClick={() => setContentFeedFilter('paket')}
-                    className={`p-5 sm:p-6 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'paket'
                         ? isDark ? 'bg-indigo-950/40 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/80 border-indigo-400 ring-1 ring-indigo-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-indigo-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Package className="w-5 h-5" />
+                    <div className="flex items-center justify-between gap-2.5 sm:gap-3">
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Package className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
-                          <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender Aktif</p>
+                          <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
+                          <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender Aktif</p>
                         </div>
                       </div>
                       <button
@@ -2755,7 +2817,7 @@ export default function AdminPortalPage() {
                           });
                           setShowPackageModal(true);
                         }}
-                        className="px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
                         title="Tambah Paket Tender / Non-Tender"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -2764,33 +2826,33 @@ export default function AdminPortalPage() {
                     </div>
 
                     {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between my-4">
-                      <div className="flex items-baseline gap-2.5">
-                        <span className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    <div className="flex items-baseline justify-between my-2.5 sm:my-4">
+                      <div className="flex items-baseline gap-2 sm:gap-2.5">
+                        <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {packagesList.length}
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-tight">
+                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-tight">
                           Paket Terdaftar
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Total Estimasi Pagu
                         </span>
-                        <span className="text-sm sm:text-base font-black text-amber-500 leading-tight">
+                        <span className="text-xs sm:text-sm md:text-base font-black text-amber-500 leading-tight">
                           Rp 48.2 M
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <div className="pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                           <span>{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length} Pendaftaran Dibuka</span>
                         </span>
-                        <span className={`px-2.5 py-1 rounded-lg font-semibold ${
+                        <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-semibold ${
                           isDark ? 'bg-slate-800/80 text-slate-300' : 'bg-slate-100 text-slate-700'
                         }`}>
                           <span>{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length} Evaluasi</span>
@@ -2803,21 +2865,21 @@ export default function AdminPortalPage() {
                   {/* Box 2: Berita & Publikasi CMS */}
                   <div 
                     onClick={() => setContentFeedFilter('berita')}
-                    className={`p-5 sm:p-6 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'berita'
                         ? isDark ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/80 border-amber-400 ring-1 ring-amber-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-amber-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Newspaper className="w-5 h-5" />
+                    <div className="flex items-center justify-between gap-2.5 sm:gap-3">
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Newspaper className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Berita & Publikasi Warta</h4>
-                          <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Informasi & Siaran Pers PBJ</p>
+                          <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Berita & Publikasi Warta</h4>
+                          <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Informasi & Siaran Pers PBJ</p>
                         </div>
                       </div>
                       <button
@@ -2836,7 +2898,7 @@ export default function AdminPortalPage() {
                           });
                           setShowNewsModal(true);
                         }}
-                        className="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
                         title="Tulis Berita Baru"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -2845,33 +2907,33 @@ export default function AdminPortalPage() {
                     </div>
 
                     {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between my-4">
-                      <div className="flex items-baseline gap-2.5">
-                        <span className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    <div className="flex items-baseline justify-between my-2.5 sm:my-4">
+                      <div className="flex items-baseline gap-2 sm:gap-2.5">
+                        <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {newsList.length}
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 leading-tight">
+                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 leading-tight">
                           Artikel Terbit
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Estimasi Pembaca
                         </span>
-                        <span className="text-sm sm:text-base font-black text-blue-500 leading-tight">
+                        <span className="text-xs sm:text-sm md:text-base font-black text-blue-500 leading-tight">
                           14.8K Tayang
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <div className="pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                           <span>{newsList.filter(n => n.status === 'Published').length} Publikasi Aktif</span>
                         </span>
-                        <span className={`px-2.5 py-1 rounded-lg font-semibold ${
+                        <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-semibold ${
                           newsList.filter(n => n.status !== 'Published').length > 0
                             ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold'
                             : isDark ? 'bg-slate-800/80 text-slate-400' : 'bg-slate-100 text-slate-600'
@@ -2886,21 +2948,21 @@ export default function AdminPortalPage() {
                   {/* Box 3: Agenda & Kegiatan PBJ */}
                   <div 
                     onClick={() => setContentFeedFilter('agenda')}
-                    className={`p-5 sm:p-6 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'agenda'
                         ? isDark ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/80 border-emerald-400 ring-1 ring-emerald-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-emerald-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Calendar className="w-5 h-5" />
+                    <div className="flex items-center justify-between gap-2.5 sm:gap-3">
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Agenda & Bimbingan Teknis</h4>
-                          <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Jadwal Pelatihan & Bimtek</p>
+                          <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Agenda & Bimbingan Teknis</h4>
+                          <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Jadwal Pelatihan & Bimtek</p>
                         </div>
                       </div>
                       <button
@@ -2922,7 +2984,7 @@ export default function AdminPortalPage() {
                           });
                           setShowAgendaModal(true);
                         }}
-                        className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/10 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-500/10 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
                         title="Jadwalkan Agenda Baru"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -2931,33 +2993,33 @@ export default function AdminPortalPage() {
                     </div>
 
                     {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between my-4">
-                      <div className="flex items-baseline gap-2.5">
-                        <span className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    <div className="flex items-baseline justify-between my-2.5 sm:my-4">
+                      <div className="flex items-baseline gap-2 sm:gap-2.5">
+                        <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {agendaList.length}
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-tight">
+                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-tight">
                           Jadwal Kegiatan
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Target Partisipasi
                         </span>
-                        <span className="text-sm sm:text-base font-black text-emerald-500 leading-tight">
+                        <span className="text-xs sm:text-sm md:text-base font-black text-emerald-500 leading-tight">
                           850+ Peserta
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+                    <div className="pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                           <span>{agendaList.filter(a => a.status === 'Terjadwal' || a.status === 'Berlangsung').length} Terjadwal</span>
                         </span>
-                        <span className={`px-2.5 py-1 rounded-lg font-semibold ${
+                        <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-semibold ${
                           isDark ? 'bg-slate-800/80 text-slate-300' : 'bg-slate-100 text-slate-700'
                         }`}>
                           <span>{agendaList.filter(a => a.status === 'Selesai').length} Selesai</span>
@@ -2970,21 +3032,21 @@ export default function AdminPortalPage() {
                   {/* Box 4: Regulasi & Dokumen SOP */}
                   <div 
                     onClick={() => setContentFeedFilter('regulasi')}
-                    className={`p-5 sm:p-6 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
                         ? isDark ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/80 border-purple-400 ring-1 ring-purple-400'
                         : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-purple-300'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <ScrollText className="w-5 h-5" />
+                    <div className="flex items-center justify-between gap-2.5 sm:gap-3">
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <ScrollText className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Regulasi & Dokumen SOP</h4>
-                          <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Produk Hukum & Tata Kelola</p>
+                          <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Regulasi & Dokumen SOP</h4>
+                          <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Produk Hukum & Tata Kelola</p>
                         </div>
                       </div>
                       <button
@@ -3005,7 +3067,7 @@ export default function AdminPortalPage() {
                           });
                           setShowRegulasiModal(true);
                         }}
-                        className="px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
                         title="Upload Regulasi Baru"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -3014,32 +3076,32 @@ export default function AdminPortalPage() {
                     </div>
 
                     {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between my-4">
-                      <div className="flex items-baseline gap-2.5">
-                        <span className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    <div className="flex items-baseline justify-between my-2.5 sm:my-4">
+                      <div className="flex items-baseline gap-2 sm:gap-2.5">
+                        <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {regulasiList.length + sopList.length}
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 leading-tight">
+                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 leading-tight">
                           Total Dokumen
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Status Validasi
                         </span>
-                        <span className="text-sm sm:text-base font-black text-emerald-500 leading-tight">
+                        <span className="text-xs sm:text-sm md:text-base font-black text-emerald-500 leading-tight">
                           100% Sah & Aktif
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                    <div className="pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">
                           <span>{regulasiList.length} Regulasi JDIH</span>
                         </span>
-                        <span className="px-2.5 py-1 rounded-lg font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">
                           <span>{sopList.length} Standar SOP</span>
                         </span>
                       </div>
@@ -3052,7 +3114,7 @@ export default function AdminPortalPage() {
 
 
                 {/* LIVE CONTENT & OPERATIONS MONITORING FEED (FILTERABLE) */}
-                <div className={`p-6 rounded-3xl border shadow-sm space-y-4 ${
+                <div className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border shadow-sm space-y-3 sm:space-y-4 ${
                   isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
                 }`}>
                   <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b ${
@@ -4130,19 +4192,19 @@ export default function AdminPortalPage() {
         {/* TAB 2: MANAGE BERITA (FRONTEND <-> BACKEND HANDLER) */}
         {/* ========================================================= */}
         {activeTab === 'manage-berita' && (
-          <div className="p-6 md:p-8 space-y-6">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             
             {/* Header with Backend Sync Status */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-bold uppercase mb-2">
+                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
                   <Newspaper className="w-3.5 h-3.5" />
                   <span>Backend Content Management System (CMS)</span>
                 </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Berita & Pengumuman
                 </h2>
-                <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                <p className={`text-[11px] sm:text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                   Kelola konten berita dari backend untuk otomatis tampil secara real-time pada halaman publik (<Link href="/informasi" className="text-blue-600 hover:underline font-bold">/informasi</Link>).
                 </p>
               </div>
@@ -4165,7 +4227,7 @@ export default function AdminPortalPage() {
                     });
                     setShowNewsModal(true);
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Buat Berita Baru</span>
@@ -4174,33 +4236,33 @@ export default function AdminPortalPage() {
             </div>
 
             {/* News Table */}
-            <div className={`border rounded-2xl overflow-hidden ${
+            <div className={`border rounded-xl sm:rounded-2xl overflow-hidden ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
-              <div className={`p-4 border-b flex justify-between items-center text-xs ${
+              <div className={`p-3.5 sm:p-4 border-b flex justify-between items-center text-xs ${
                 isDark ? 'border-slate-800' : 'border-slate-200'
               }`}>
                 <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
                   Daftar Berita Aktif ({newsList.length})
                 </span>
-                <span className="text-emerald-500 text-[11px] font-semibold flex items-center gap-1.5">
+                <span className="text-emerald-500 text-[10px] sm:text-[11px] font-semibold flex items-center gap-1.5">
                   <RefreshCw className="w-3 h-3 animate-spin" />
                   <span>Auto-Sync to Frontend Active</span>
                 </span>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className={`text-[11px] border-b ${
+                <table className="w-full text-left text-xs min-w-[640px]">
+                  <thead className={`text-[10px] sm:text-[11px] border-b ${
                     isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
                   }`}>
                     <tr>
-                      <th className="p-4 font-bold">Judul Berita</th>
-                      <th className="p-4 font-bold">Kategori</th>
-                      <th className="p-4 font-bold">Penulis / Unit</th>
-                      <th className="p-4 font-bold">Status Publikasi</th>
-                      <th className="p-4 font-bold">Tanggal & Views</th>
-                      <th className="p-4 font-bold text-right">Aksi Manajemen</th>
+                      <th className="p-3 sm:p-4 font-bold">Judul Berita</th>
+                      <th className="p-3 sm:p-4 font-bold">Kategori</th>
+                      <th className="p-3 sm:p-4 font-bold">Penulis / Unit</th>
+                      <th className="p-3 sm:p-4 font-bold">Status Publikasi</th>
+                      <th className="p-3 sm:p-4 font-bold">Tanggal & Views</th>
+                      <th className="p-3 sm:p-4 font-bold text-right">Aksi Manajemen</th>
                     </tr>
                   </thead>
                   <tbody className={`divide-y ${
@@ -4210,9 +4272,9 @@ export default function AdminPortalPage() {
                       <tr key={item.id} className={`transition-colors ${
                         isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
                       }`}>
-                        <td className="p-4">
-                          <div className="flex items-start gap-3">
-                            <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 relative">
+                        <td className="p-3 sm:p-4">
+                          <div className="flex items-start gap-2.5 sm:gap-3">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 relative">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img 
                                 src={item.imageUrl || '/news/news-1.png'} 
@@ -4226,31 +4288,31 @@ export default function AdminPortalPage() {
                             </div>
                           </div>
                         </td>
-                        <td className="p-4">
-                          <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold border ${isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-100 text-blue-800 border-blue-200'}`}>
+                        <td className="p-3 sm:p-4">
+                          <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[10px] font-bold border ${isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-100 text-blue-800 border-blue-200'}`}>
                             {item.category}
                           </span>
                         </td>
-                        <td className={`p-4 text-[11px] font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        <td className={`p-3 sm:p-4 text-[10px] sm:text-[11px] font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                           {item.author}
                         </td>
-                        <td className="p-4">
+                        <td className="p-3 sm:p-4">
                           <button
                             onClick={() => handleToggleNewsStatus(item.id)}
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer ${
+                            className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer ${
                               item.status === 'Published'
                                 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30 hover:bg-emerald-500/20'
                                 : 'bg-amber-500/10 text-amber-500 border-amber-500/30 hover:bg-amber-500/20'
                             }`}
                           >
-                            {item.status === 'Published' ? '✓ Published (Live)' : 'Draft (Hidden)'}
+                            {item.status === 'Published' ? '✓ Published' : 'Draft'}
                           </button>
                         </td>
-                        <td className={`p-4 text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
+                        <td className={`p-3 sm:p-4 text-[10px] sm:text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-semibold'}`}>
                           <div>{item.date}</div>
-                          <div className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} pembaca</div>
+                          <div className={`text-[9px] sm:text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} views</div>
                         </td>
-                        <td className="p-4 text-right">
+                        <td className="p-3 sm:p-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => setPreviewNews(item)}
@@ -4304,19 +4366,19 @@ export default function AdminPortalPage() {
         {/* TAB 3: MANAGE AGENDA (FRONTEND <-> BACKEND HANDLER) */}
         {/* ========================================================= */}
         {activeTab === 'manage-agenda' && (
-          <div className="p-6 md:p-8 space-y-6">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             
             {/* Header with Backend Sync Status */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-bold uppercase mb-2">
+                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
                   <Calendar className="w-3.5 h-3.5" />
                   <span>Backend Schedule & Timeline Handler</span>
                 </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Agenda & Jadwal PBJ
                 </h2>
-                <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                <p className={`text-[11px] sm:text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                   Kelola jadwal tender, bimbingan teknis, dan sertifikasi untuk otomatis tersinkronisasi ke kalender publik (<Link href="/agenda" className="text-blue-600 hover:underline font-bold">/agenda</Link>).
                 </p>
               </div>
@@ -4339,7 +4401,7 @@ export default function AdminPortalPage() {
                     });
                     setShowAgendaModal(true);
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Tambah Agenda Baru</span>
@@ -4348,7 +4410,7 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Agenda List & Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {agendaList.map((item) => (
                 <div key={item.id} className={`p-5 rounded-2xl border transition-all space-y-3 ${
                   isDark ? 'bg-slate-900 border-slate-800 hover:border-emerald-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-emerald-500/40'
@@ -4423,17 +4485,17 @@ export default function AdminPortalPage() {
         {/* TAB 5: PAKET PENGADAAN / TENDER & SELEKSI (LIVE BACKEND CRUD) */}
         {/* ========================================================= */}
         {activeTab === 'paket' && (
-          <div className="p-6 md:p-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-xs font-bold uppercase mb-2">
+                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
                   <Package className="w-3.5 h-3.5" />
                   <span>Tender & Seleksi Procurement Database</span>
                 </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Kelola Tender, Seleksi & Paket Pengadaan
                 </h2>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                <p className={`text-[11px] sm:text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                   Kelola paket tender, seleksi, pengadaan langsung, dan e-purchasing. Perubahan langsung tersinkronisasi ke database Supabase dan beranda publik (<Link href="/#pengadaan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/#pengadaan</Link>).
                 </p>
               </div>
@@ -4459,7 +4521,7 @@ export default function AdminPortalPage() {
                   });
                   setShowPackageModal(true);
                 }}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer shrink-0"
+                className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 <span>Tambah Paket Baru</span>
@@ -4467,39 +4529,39 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Paket</span>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
+                  <span className={`text-xl sm:text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</span>
                   <span className="text-[10px] font-bold text-blue-500">Paket Terdaftar</span>
                 </div>
               </div>
-              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Pendaftaran Dibuka</span>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-2xl font-black text-emerald-500">{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length}</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
+                  <span className="text-xl sm:text-2xl font-black text-emerald-500">{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length}</span>
                   <span className="text-[10px] font-bold text-emerald-600">Sedang Berjalan</span>
                 </div>
               </div>
-              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Evaluasi / Selesai</span>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-2xl font-black text-amber-500">{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length}</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
+                  <span className="text-xl sm:text-2xl font-black text-amber-500">{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length}</span>
                   <span className="text-[10px] font-bold text-amber-600">Tahap Penilaian</span>
                 </div>
               </div>
-              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Tender & Seleksi</span>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-2xl font-black text-indigo-500">{packagesList.filter(p => p.category === 'Tender' || p.category === 'Seleksi').length}</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
+                  <span className="text-xl sm:text-2xl font-black text-indigo-500">{packagesList.filter(p => p.category === 'Tender' || p.category === 'Seleksi').length}</span>
                   <span className="text-[10px] font-bold text-indigo-600">Kompetitif</span>
                 </div>
               </div>
             </div>
 
             {/* Filter & Search Toolbar */}
-            <div className={`p-4 rounded-2xl border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
+            <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
               <div className="flex flex-wrap items-center gap-1.5">
@@ -4553,7 +4615,7 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Packages Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {packagesList
                 .filter((pkg) => {
                   const matchCat = packageCategoryFilter === 'all' || pkg.category === packageCategoryFilter;
@@ -4571,7 +4633,7 @@ export default function AdminPortalPage() {
                   return true;
                 })
                 .map((pkg) => (
-                <div key={pkg.id} className={`p-5 rounded-2xl border transition-all space-y-3 flex flex-col justify-between ${
+                <div key={pkg.id} className={`p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all space-y-3 flex flex-col justify-between ${
                   isDark ? 'bg-slate-900 border-slate-800 hover:border-blue-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-blue-500/40'
                 }`}>
                   <div className="space-y-3">
@@ -4704,17 +4766,17 @@ export default function AdminPortalPage() {
         {/* TAB: MANAGE PANDUAN & JUKNIS (CMS) */}
         {/* ========================================================= */}
         {activeTab === 'manage-panduan' && (
-          <div className="p-6 md:p-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-500 text-xs font-bold uppercase mb-2">
+                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
                   <BookOpen className="w-3.5 h-3.5" />
                   <span>Backend Manual & Technical Guide CMS</span>
                 </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Panduan, Petunjuk Teknis & Modul PBJ
                 </h2>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                <p className={`text-[11px] sm:text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                   Kelola buku panduan, pedoman aplikasi, dan juknis pengadaan. Perubahan langsung tersinkronisasi ke database Supabase dan portal publik (<Link href="/informasi/panduan" className="text-teal-600 dark:text-teal-400 font-bold hover:underline">/informasi/panduan</Link>).
                 </p>
               </div>
@@ -4742,7 +4804,7 @@ export default function AdminPortalPage() {
                     });
                     setShowPanduanModal(true);
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-600/30 transition-all cursor-pointer shrink-0"
+                  className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-600/30 transition-all cursor-pointer shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Tambah Panduan Baru</span>
@@ -4751,39 +4813,39 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Panduan</span>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{panduanList.length}</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
+                  <span className={`text-xl sm:text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{panduanList.length}</span>
                   <span className="text-[10px] font-bold text-teal-500">Modul Terdaftar</span>
                 </div>
               </div>
-              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Status Aktif</span>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-2xl font-black text-emerald-500">{panduanList.filter(p => p.status === 'Published').length}</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
+                  <span className="text-xl sm:text-2xl font-black text-emerald-500">{panduanList.filter(p => p.status === 'Published').length}</span>
                   <span className="text-[10px] font-bold text-emerald-600">Tayang di Publik</span>
                 </div>
               </div>
-              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Kategori Aplikasi</span>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-2xl font-black text-blue-500">{panduanList.filter(p => p.category === 'aplikasi').length}</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
+                  <span className="text-xl sm:text-2xl font-black text-blue-500">{panduanList.filter(p => p.category === 'aplikasi').length}</span>
                   <span className="text-[10px] font-bold text-blue-600">SPSE & Katalog</span>
                 </div>
               </div>
-              <div className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Panduan Penyedia & Pokja</span>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-2xl font-black text-amber-500">{panduanList.filter(p => p.category === 'penyedia' || p.category === 'panitia').length}</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
+                  <span className="text-xl sm:text-2xl font-black text-amber-500">{panduanList.filter(p => p.category === 'penyedia' || p.category === 'panitia').length}</span>
                   <span className="text-[10px] font-bold text-amber-600">Juknis Teknis</span>
                 </div>
               </div>
             </div>
 
             {/* Filter & Search Toolbar */}
-            <div className={`p-4 rounded-2xl border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
+            <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
               <div className="flex flex-wrap items-center gap-1.5">
@@ -4810,7 +4872,7 @@ export default function AdminPortalPage() {
                 ))}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <select
                   value={panduanRoleFilter}
                   onChange={(e) => setPanduanRoleFilter(e.target.value)}
@@ -4855,23 +4917,24 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Panduan Table View */}
-            <div className={`border rounded-2xl overflow-hidden ${
+            <div className={`border rounded-xl sm:rounded-2xl overflow-hidden ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
-              <div className={`p-4 border-b flex justify-between items-center text-xs ${
+              <div className={`p-3.5 sm:p-4 border-b flex justify-between items-center text-xs ${
                 isDark ? 'border-slate-800' : 'border-slate-200'
               }`}>
                 <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
                   Daftar Panduan & Juknis Aktif ({panduanList.length})
                 </span>
-                <span className="text-teal-500 text-[11px] font-bold flex items-center gap-1.5">
+                <span className="text-teal-500 text-[10px] sm:text-[11px] font-bold flex items-center gap-1.5">
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                  <span>Live Dynamic Sync to Frontend</span>
+                  <span className="hidden sm:inline">Live Dynamic Sync to Frontend</span>
+                  <span className="sm:hidden">Live Sync</span>
                 </span>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
+                <table className="w-full min-w-[640px] text-left text-xs">
                   <thead className={`text-[11px] border-b ${
                     isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
                   }`}>
@@ -5036,23 +5099,23 @@ export default function AdminPortalPage() {
         {/* TAB: LOG AKTIVITAS & AUDIT TRAIL */}
         {/* ========================================================= */}
         {activeTab === 'log-aktivitas' && (
-          <div className="p-6 md:p-8 space-y-6">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-bold uppercase mb-2">
+                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
                   <History className="w-3.5 h-3.5" />
                   <span>Audit Trail & Activity Log</span>
                 </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Log Aktivitas & Riwayat Perubahan Sistem
                 </h2>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                <p className={`text-[11px] sm:text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                   Pencatatan rekam jejak operasional administrator, perubahan konten CMS, dan sinkronisasi database Supabase secara real-time.
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <button
                   onClick={() => {
                     const csvRows = [
@@ -5083,7 +5146,7 @@ export default function AdminPortalPage() {
                     document.body.removeChild(link);
                     showNotification(`✓ ${activityLogsList.length} baris log audit berhasil diekspor ke file CSV.`);
                   }}
-                  className={`px-4 py-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                  className={`w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                     isDark 
                       ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white' 
                       : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-xs'
@@ -5102,7 +5165,7 @@ export default function AdminPortalPage() {
                     ]);
                     showNotification('✓ Log aktivitas telah diperbarui secara live.');
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                  className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
                 >
                   <RefreshCw className="w-4 h-4" />
                   <span>Segarkan Log</span>
@@ -5111,22 +5174,22 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Operator Aktif Info Card */}
-            <div className={`p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+            <div className={`p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 transition-all ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
-              <div className="flex items-center space-x-3.5">
-                <div className="w-11 h-11 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
-                  <Users className="w-5 h-5" />
+              <div className="flex items-center space-x-3 sm:space-x-3.5">
+                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div>
                   <span className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                     Operator Sesi Aktif
                   </span>
-                  <div className="flex flex-wrap items-center gap-2 mt-0.5">
-                    <h3 className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-0.5">
+                    <h3 className={`text-sm sm:text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
                       Dimas Ars
                     </h3>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                    <span className="px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
                       Super Administrator PBJ
                     </span>
                   </div>
@@ -5134,7 +5197,7 @@ export default function AdminPortalPage() {
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-bold text-[11px]">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-bold text-[10px] sm:text-[11px]">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>Sesi Otentikasi Aktif & Terverifikasi</span>
                 </span>
@@ -5142,7 +5205,7 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Filter & Search Bar */}
-            <div className={`p-4 rounded-2xl border flex flex-col md:flex-row md:items-center justify-between gap-3 ${
+            <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border flex flex-col md:flex-row md:items-center justify-between gap-3 ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
               <div className="flex flex-wrap items-center gap-1.5">
@@ -5191,11 +5254,11 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Audit Log Table */}
-            <div className={`border rounded-2xl overflow-hidden ${
+            <div className={`border rounded-xl sm:rounded-2xl overflow-hidden ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
+                <table className="w-full min-w-[640px] text-left text-xs">
                   <thead className={`text-[11px] border-b ${
                     isDark ? 'bg-slate-950/60 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
                   }`}>
@@ -5314,17 +5377,17 @@ export default function AdminPortalPage() {
         {/* TAB: MANAGE REGULASI (CMS) */}
         {/* ========================================================= */}
         {activeTab === 'manage-regulasi' && (
-          <div className="p-6 md:p-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-xs font-bold uppercase mb-2">
+                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
                   <ScrollText className="w-3.5 h-3.5" />
                   <span>Backend Regulation & Legal CMS</span>
                 </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Regulasi & Aturan PBJ
                 </h2>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                <p className={`text-[11px] sm:text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                   Kelola dokumen hukum dan peraturan resmi. Perubahan akan langsung disinkronkan ke halaman publik (<Link href="/informasi/peraturan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/informasi/peraturan</Link>).
                 </p>
               </div>
@@ -5343,7 +5406,7 @@ export default function AdminPortalPage() {
                     });
                     setShowRegulasiModal(true);
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                  className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Tambah Regulasi Baru</span>
@@ -5352,23 +5415,24 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Regulasi Table */}
-            <div className={`border rounded-2xl overflow-hidden ${
+            <div className={`border rounded-xl sm:rounded-2xl overflow-hidden ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
-              <div className={`p-4 border-b flex justify-between items-center text-xs ${
+              <div className={`p-3.5 sm:p-4 border-b flex justify-between items-center text-xs ${
                 isDark ? 'border-slate-800' : 'border-slate-200'
               }`}>
                 <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
                   Daftar Regulasi Aktif ({regulasiList.length})
                 </span>
-                <span className="text-emerald-600 dark:text-emerald-500 text-[11px] font-bold flex items-center gap-1.5">
+                <span className="text-emerald-600 dark:text-emerald-500 text-[10px] sm:text-[11px] font-bold flex items-center gap-1.5">
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                  <span>Live Dynamic Sync to Frontend</span>
+                  <span className="hidden sm:inline">Live Dynamic Sync to Frontend</span>
+                  <span className="sm:hidden">Live Sync</span>
                 </span>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
+                <table className="w-full min-w-[640px] text-left text-xs">
                   <thead className={`text-[11px] border-b ${
                     isDark ? 'bg-slate-950/50 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
                   }`}>
@@ -5461,17 +5525,17 @@ export default function AdminPortalPage() {
         {/* TAB: MANAGE SOP (CMS - DOKUMEN & LOCALSTORAGE UPLOAD) */}
         {/* ========================================================= */}
         {activeTab === 'manage-sop' && (
-          <div className="p-6 md:p-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-500 text-xs font-bold uppercase mb-2">
+                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
                   <Layers className="w-3.5 h-3.5" />
                   <span>Backend Standard Operating Procedures CMS</span>
                 </div>
-                <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Standar Operasional Prosedur (SOP)
                 </h2>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+                <p className={`text-[11px] sm:text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                   Kelola dokumen, lampiran file PDF/DOCX (tersimpan di LocalStorage), dan alur tahapan kerja. Tersinkronisasi ke portal publik (<Link href="/informasi/sop" className="text-purple-600 dark:text-purple-400 font-bold hover:underline">/informasi/sop</Link>).
                 </p>
               </div>
@@ -5495,7 +5559,7 @@ export default function AdminPortalPage() {
                     });
                     setShowSopModal(true);
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-purple-600/30 transition-all cursor-pointer"
+                  className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-purple-600/30 transition-all cursor-pointer shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Tambah SOP Baru</span>
@@ -5504,9 +5568,9 @@ export default function AdminPortalPage() {
             </div>
 
             {/* SOP Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {sopList.map((item) => (
-                <div key={item.id} className={`p-5 rounded-2xl border transition-all space-y-3.5 ${
+                <div key={item.id} className={`p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all space-y-3 sm:space-y-3.5 ${
                   isDark ? 'bg-slate-900 border-slate-800 hover:border-purple-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-purple-500/40'
                 }`}>
                   <div className="flex justify-between items-start">
@@ -5620,10 +5684,10 @@ export default function AdminPortalPage() {
         {/* TAB: MANAGE GALERI (FOTO & VIDEO CMS - ENTERPRISE LAYOUT) */}
         {/* ========================================================= */}
         {activeTab === 'manage-galeri' && (
-          <div className="p-6 md:p-8 space-y-7">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             
             {/* 1. TOP HEADER & ACTION BANNER */}
-            <div className={`p-6 sm:p-7 rounded-3xl border relative overflow-hidden transition-all ${
+            <div className={`p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border relative overflow-hidden transition-all ${
               isDark 
                 ? 'bg-gradient-to-r from-slate-900 via-[#09223D] to-slate-900 border-slate-800/80 shadow-2xl shadow-blue-950/30' 
                 : 'bg-gradient-to-r from-white via-cyan-50/40 to-slate-50 border-slate-200/90 shadow-lg shadow-slate-200/50'
@@ -5631,22 +5695,22 @@ export default function AdminPortalPage() {
               <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
               <div className="absolute -bottom-10 left-1/3 w-60 h-60 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div className="space-y-2">
-                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-500 dark:text-cyan-400 text-xs font-bold uppercase">
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-500 dark:text-cyan-400 text-[10px] sm:text-xs font-bold uppercase">
                     <Camera className="w-3.5 h-3.5" />
                     <span>Media & Dokumentasi CMS UKPBJ</span>
                   </div>
-                  <h2 className={`text-2xl sm:text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  <h2 className={`text-lg sm:text-2xl md:text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     Kelola Galeri Foto & Video Dokumentasi
                   </h2>
-                  <p className={`text-xs max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                  <p className={`text-[11px] sm:text-xs max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                     Manajemen arsip visual kegiatan kerja, kunjungan dinas, rapat koordinasi, serta video sosialisasi dan bimbingan teknis PBJ. Tersinkronisasi real-time ke portal publik.
                   </p>
                 </div>
 
                 {/* Top Action Buttons */}
-                <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0">
                   <button
                     onClick={() => {
                       setEditingPhoto(null);
@@ -5660,7 +5724,7 @@ export default function AdminPortalPage() {
                       });
                       setShowPhotoModal(true);
                     }}
-                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-cyan-600/25 transition-all cursor-pointer"
+                    className="flex-1 sm:flex-none justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-cyan-600/25 transition-all cursor-pointer"
                   >
                     <Camera className="w-4 h-4" />
                     <span>+ Upload Foto</span>
@@ -5681,7 +5745,7 @@ export default function AdminPortalPage() {
                       });
                       setShowVideoModal(true);
                     }}
-                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-bold flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all cursor-pointer"
+                    className="flex-1 sm:flex-none justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-bold flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all cursor-pointer"
                   >
                     <Video className="w-4 h-4" />
                     <span>+ Tambah Video</span>
@@ -5690,7 +5754,7 @@ export default function AdminPortalPage() {
                   <Link
                     href="/galeri"
                     target="_blank"
-                    className={`px-3.5 py-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                    className={`w-full sm:w-auto justify-center px-3.5 py-2 sm:py-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                       isDark ? 'bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-700 hover:text-white' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-primary-navy shadow-xs'
                     }`}
                   >
@@ -5703,25 +5767,25 @@ export default function AdminPortalPage() {
             </div>
 
             {/* 2. STRATEGIC SUMMARY WIDGETS (3-COLUMN BENTO GRID) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-5">
               
               {/* Card 1: Foto Dokumentasi */}
               <div 
                 onClick={() => setGaleriTab('foto')}
-                className={`p-5 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between cursor-pointer group ${
+                className={`p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between cursor-pointer group ${
                   galeriTab === 'foto'
                     ? isDark ? 'bg-cyan-950/40 border-cyan-500 ring-1 ring-cyan-500/50' : 'bg-cyan-50/80 border-cyan-400 ring-1 ring-cyan-400'
                     : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-cyan-500/40' : 'bg-white border-slate-200/90 shadow-2xs hover:border-cyan-300'
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                      <Camera className="w-5 h-5" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <Camera className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div>
-                      <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Foto Kegiatan</h4>
-                      <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Dokumentasi & Visual</p>
+                      <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Foto Kegiatan</h4>
+                      <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Dokumentasi & Visual</p>
                     </div>
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-500 border border-cyan-500/20">
@@ -5729,44 +5793,44 @@ export default function AdminPortalPage() {
                   </span>
                 </div>
 
-                <div className="flex items-baseline justify-between my-3">
-                  <div className="flex items-baseline gap-2">
-                    <span className={`text-3xl sm:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <div className="flex items-baseline justify-between my-2.5 sm:my-3">
+                  <div className="flex items-baseline gap-1.5 sm:gap-2">
+                    <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                       {photosList.length}
                     </span>
-                    <span className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Foto Tersimpan</span>
+                    <span className={`text-[11px] sm:text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Foto Tersimpan</span>
                   </div>
-                  <span className="text-xs font-bold text-cyan-500">
+                  <span className="text-[11px] sm:text-xs font-bold text-cyan-500">
                     {Array.from(new Set(photosList.map(p => p.category))).length} Kategori
                   </span>
                 </div>
 
                 <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                  <span className="text-[11px] font-medium text-emerald-500 flex items-center gap-1">
+                  <span className="text-[10px] sm:text-[11px] font-medium text-emerald-500 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                     <span>Tersinkron di /galeri</span>
                   </span>
-                  <span className="text-[11px] text-cyan-500 font-bold group-hover:underline">Filter Foto &rarr;</span>
+                  <span className="text-[10px] sm:text-[11px] text-cyan-500 font-bold group-hover:underline">Filter Foto &rarr;</span>
                 </div>
               </div>
 
               {/* Card 2: Video Sosialisasi & Edukasi */}
               <div 
                 onClick={() => setGaleriTab('video')}
-                className={`p-5 rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between cursor-pointer group ${
+                className={`p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between cursor-pointer group ${
                   galeriTab === 'video'
                     ? isDark ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/80 border-amber-400 ring-1 ring-amber-400'
                     : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/40' : 'bg-white border-slate-200/90 shadow-2xs hover:border-amber-300'
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                      <Video className="w-5 h-5" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <Video className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div>
-                      <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Video Edukasi</h4>
-                      <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Sosialisasi & Bimtek</p>
+                      <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Video Edukasi</h4>
+                      <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Sosialisasi & Bimtek</p>
                     </div>
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20">
@@ -5774,39 +5838,39 @@ export default function AdminPortalPage() {
                   </span>
                 </div>
 
-                <div className="flex items-baseline justify-between my-3">
-                  <div className="flex items-baseline gap-2">
-                    <span className={`text-3xl sm:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <div className="flex items-baseline justify-between my-2.5 sm:my-3">
+                  <div className="flex items-baseline gap-1.5 sm:gap-2">
+                    <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                       {videosList.length}
                     </span>
-                    <span className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Tayangan Video</span>
+                    <span className={`text-[11px] sm:text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Tayangan Video</span>
                   </div>
-                  <span className="text-xs font-bold text-amber-500">
+                  <span className="text-[11px] sm:text-xs font-bold text-amber-500">
                     Kanal YouTube
                   </span>
                 </div>
 
                 <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                  <span className="text-[11px] font-medium text-amber-500 flex items-center gap-1">
+                  <span className="text-[10px] sm:text-[11px] font-medium text-amber-500 flex items-center gap-1">
                     <Play className="w-3 h-3" />
                     <span>Embedded Player Ready</span>
                   </span>
-                  <span className="text-[11px] text-amber-500 font-bold group-hover:underline">Filter Video &rarr;</span>
+                  <span className="text-[10px] sm:text-[11px] text-amber-500 font-bold group-hover:underline">Filter Video &rarr;</span>
                 </div>
               </div>
 
               {/* Card 3: Storage & Cloud CDN */}
-              <div className={`p-5 rounded-3xl border flex flex-col justify-between ${
+              <div className={`p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border flex flex-col justify-between ${
                 isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-2xs'
               }`}>
                 <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                      <Database className="w-5 h-5" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                      <Database className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div>
-                      <h4 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Supabase Storage</h4>
-                      <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Cloud Media CDN</p>
+                      <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Supabase Storage</h4>
+                      <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Cloud Media CDN</p>
                     </div>
                   </div>
                   <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
@@ -5815,21 +5879,21 @@ export default function AdminPortalPage() {
                   </span>
                 </div>
 
-                <div className="flex items-baseline justify-between my-3">
-                  <div className="flex items-baseline gap-2">
-                    <span className={`text-3xl sm:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <div className="flex items-baseline justify-between my-2.5 sm:my-3">
+                  <div className="flex items-baseline gap-1.5 sm:gap-2">
+                    <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                       {photosList.length + videosList.length}
                     </span>
-                    <span className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Total Aset Media</span>
+                    <span className={`text-[11px] sm:text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Total Aset Media</span>
                   </div>
-                  <span className="text-xs font-mono text-emerald-500 font-bold">100% Valid</span>
+                  <span className="text-[11px] sm:text-xs font-mono text-emerald-500 font-bold">100% Valid</span>
                 </div>
 
                 <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                  <span className={`text-[11px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Bucket: /gallery & /thumbnails</span>
+                  <span className={`text-[10px] sm:text-[11px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Bucket: /gallery & /thumbnails</span>
                   <button 
                     onClick={() => showNotification('✓ Seluruh berkas aset multimedia terhubung ke CDN Supabase.')}
-                    className="text-[11px] text-emerald-500 font-bold hover:underline cursor-pointer"
+                    className="text-[10px] sm:text-[11px] text-emerald-500 font-bold hover:underline cursor-pointer"
                   >
                     Periksa &rarr;
                   </button>
@@ -5839,7 +5903,7 @@ export default function AdminPortalPage() {
             </div>
 
             {/* 3. CONTROL, SEARCH & FILTER TOOLBAR */}
-            <div className={`p-4 sm:p-5 rounded-3xl border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 ${
+            <div className={`p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4 ${
               isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-2xs'
             }`}>
               
@@ -6313,28 +6377,28 @@ export default function AdminPortalPage() {
         {/* TAB 9: PENGATURAN BACKEND & KONTROL DATABASE */}
         {/* ========================================================= */}
         {activeTab === 'pengaturan' && (
-          <div className="p-6 md:p-8 space-y-6 max-w-4xl">
+          <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 max-w-4xl">
             <div>
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-xs font-bold uppercase mb-2">
+              <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
                 <Settings className="w-3.5 h-3.5" />
                 <span>Global Site & Database Settings</span>
               </div>
-              <h2 className={`text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 Pengaturan Sistem & Database
               </h2>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
+              <p className={`text-[11px] sm:text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
                 Atur status server operasional pengadaan dan kelola database sinkronisasi.
               </p>
             </div>
 
             {/* Section 2: Server Status */}
-            <div className={`p-6 rounded-2xl border space-y-4 ${
+            <div className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl border space-y-3 sm:space-y-4 ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
             }`}>
-              <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              <h3 className={`text-xs sm:text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 Status Operasional Layanan SPSE / Server Backend
               </h3>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {(['Normal', 'Maintenance', 'High Traffic'] as const).map((status) => (
                   <button
                     key={status}
@@ -6343,7 +6407,7 @@ export default function AdminPortalPage() {
                       updateSiteSettings({ serverStatus: status });
                       showNotification(`Status backend diatur ke: ${status}`);
                     }}
-                    className={`p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                    className={`p-2.5 sm:p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                       siteSettings.serverStatus === status
                         ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/30'
                         : isDark ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white' : 'bg-slate-50 border-slate-300 text-slate-800 hover:text-blue-900 hover:bg-slate-100'
@@ -6356,14 +6420,14 @@ export default function AdminPortalPage() {
             </div>
 
             {/* Section 3: Factory Reset Database */}
-            <div className={`p-6 rounded-2xl border border-red-500/20 space-y-3 ${
+            <div className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-red-500/20 space-y-3 ${
               isDark ? 'bg-red-950/10' : 'bg-red-50/50'
             }`}>
-              <h3 className="text-sm font-bold text-red-600 dark:text-red-500 flex items-center gap-2">
-                <Database className="w-4 h-4" />
+              <h3 className="text-xs sm:text-sm font-bold text-red-600 dark:text-red-500 flex items-center gap-2">
+                <Database className="w-4 h-4 shrink-0" />
                 <span>Reset Database ke Pengaturan Awal (Factory Reset)</span>
               </h3>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+              <p className={`text-[11px] sm:text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                 Mengembalikan seluruh data Berita, Agenda, dan Paket Pengadaan ke data bawaan resmi Kementerian Ketenagakerjaan.
               </p>
               <button
@@ -6374,7 +6438,7 @@ export default function AdminPortalPage() {
                     showNotification('✓ Database berhasil di-reset ke kondisi awal!');
                   }
                 }}
-                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-md shadow-red-600/30 transition-all cursor-pointer"
+                className="w-full sm:w-auto justify-center px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-md shadow-red-600/30 transition-all cursor-pointer"
               >
                 Reset Database Sekarang
               </button>
@@ -6431,18 +6495,26 @@ export default function AdminPortalPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori *</label>
-                    <select
-                      value={newsFormData.category || 'Berita PBJ'}
-                      onChange={(e) => setNewsFormData({ ...newsFormData, category: e.target.value as NewsItem['category'] })}
+                    <input
+                      type="text"
+                      required
+                      list="news-category-suggestions"
+                      placeholder="Ketik atau pilih kategori berita..."
+                      value={newsFormData.category || ''}
+                      onChange={(e) => setNewsFormData({ ...newsFormData, category: e.target.value })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
+                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
                       }`}
-                    >
-                      <option value="Berita PBJ">Berita PBJ</option>
-                      <option value="Pengumuman Lelang">Pengumuman Lelang</option>
-                      <option value="Regulasi">Regulasi</option>
-                      <option value="Siaran Pers">Siaran Pers</option>
-                    </select>
+                    />
+                    <datalist id="news-category-suggestions">
+                      <option value="Regulasi" />
+                      <option value="Berita PBJ" />
+                      <option value="Pengumuman Lelang" />
+                      <option value="Siaran Pers" />
+                      <option value="Kegiatan & Bimtek" />
+                      <option value="Pengadaan Barang" />
+                      <option value="Pengadaan Jasa" />
+                    </datalist>
                   </div>
 
                   <div>

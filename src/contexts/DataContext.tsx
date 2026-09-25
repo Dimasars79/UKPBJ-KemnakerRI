@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 export interface NewsItem {
   id: string;
   title: string;
-  category: 'Berita PBJ' | 'Pengumuman Lelang' | 'Regulasi' | 'Siaran Pers';
+  category: string;
   author: string;
   date: string;
   views: number;

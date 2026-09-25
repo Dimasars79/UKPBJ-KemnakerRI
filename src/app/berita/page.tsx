@@ -20,13 +20,26 @@ export default function BeritaIndexPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const categories = [
-    { id: 'all', label: trans('Semua Berita', 'All News') },
-    { id: 'Berita PBJ', label: trans('Berita PBJ', 'PBJ News') },
-    { id: 'Pengumuman Lelang', label: trans('Pengumuman Lelang', 'Tender Announcements') },
-    { id: 'Regulasi', label: trans('Regulasi', 'Regulations') },
-    { id: 'Siaran Pers', label: trans('Siaran Pers', 'Press Releases') },
-  ];
+  const categories = useMemo(() => {
+    const baseCategories = [
+      { id: 'all', label: trans('Semua Berita', 'All News') },
+      { id: 'Berita PBJ', label: trans('Berita PBJ', 'PBJ News') },
+      { id: 'Pengumuman Lelang', label: trans('Pengumuman Lelang', 'Tender Announcements') },
+      { id: 'Regulasi', label: trans('Regulasi', 'Regulations') },
+      { id: 'Siaran Pers', label: trans('Siaran Pers', 'Press Releases') },
+    ];
+    const customCats = Array.from(
+      new Set(
+        newsList
+          .map((n) => n.category)
+          .filter((cat) => cat && !baseCategories.some((b) => b.id === cat))
+      )
+    );
+    return [
+      ...baseCategories,
+      ...customCats.map((cat) => ({ id: cat, label: cat }))
+    ];
+  }, [newsList, trans]);
 
   const publishedNews = useMemo(() => {
     return newsList.filter((item) => item.status === 'Published');
