@@ -34,6 +34,10 @@ import {
   Sun,
   Moon,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   ScrollText,
   Layers,
   Camera,
@@ -770,9 +774,11 @@ export default function AdminPortalPage() {
   const [previewNews, setPreviewNews] = useState<NewsItem | null>(null);
   const [notificationMsg, setNotificationMsg] = useState<string | null>(null);
 
-  // Activity / Audit Log Filter States
+  // Activity / Audit Log Filter & Pagination States
   const [logCategoryFilter, setLogCategoryFilter] = useState<'all' | 'pengadaan' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'panduan' | 'galeri' | 'sistem'>('all');
   const [logSearchText, setLogSearchText] = useState('');
+  const [logCurrentPage, setLogCurrentPage] = useState(1);
+  const [logPageSize, setLogPageSize] = useState(8);
 
   // Dashboard Content Feed Filter State
   const [contentFeedFilter, setContentFeedFilter] = useState<'all' | 'paket' | 'berita' | 'agenda' | 'regulasi' | 'sop' | 'panduan'>('all');
@@ -5221,7 +5227,10 @@ export default function AdminPortalPage() {
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setLogCategoryFilter(tab.id as typeof logCategoryFilter)}
+                    onClick={() => {
+                      setLogCategoryFilter(tab.id as typeof logCategoryFilter);
+                      setLogCurrentPage(1);
+                    }}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       logCategoryFilter === tab.id
                         ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
@@ -5243,7 +5252,10 @@ export default function AdminPortalPage() {
                   type="text"
                   placeholder="Cari log peristiwa / ID..."
                   value={logSearchText}
-                  onChange={(e) => setLogSearchText(e.target.value)}
+                  onChange={(e) => {
+                    setLogSearchText(e.target.value);
+                    setLogCurrentPage(1);
+                  }}
                   className={`w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border outline-none font-medium transition-all ${
                     isDark
                       ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500'
@@ -5253,123 +5265,251 @@ export default function AdminPortalPage() {
               </div>
             </div>
 
-            {/* Audit Log Table */}
-            <div className={`border rounded-xl sm:rounded-2xl overflow-hidden ${
-              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-            }`}>
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[640px] text-left text-xs">
-                  <thead className={`text-[11px] border-b ${
-                    isDark ? 'bg-slate-950/60 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
-                  }`}>
-                    <tr>
-                      <th className="p-4 font-bold">Waktu & Timestamp</th>
-                      <th className="p-4 font-bold">Administrator / Actor</th>
-                      <th className="p-4 font-bold">Entitas</th>
-                      <th className="p-4 font-bold">Aksi</th>
-                      <th className="p-4 font-bold">Rincian Perubahan & Objek</th>
-                      <th className="p-4 font-bold text-right">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className={`divide-y ${
-                    isDark ? 'divide-slate-800/60' : 'divide-slate-100'
-                  }`}>
-                    {activityLogsList
-                      .filter(item => {
-                        if (logCategoryFilter !== 'all' && item.category !== logCategoryFilter) return false;
-                        if (logSearchText) {
-                          const query = logSearchText.toLowerCase();
-                          return (
-                            item.desc.toLowerCase().includes(query) ||
-                            item.actor.toLowerCase().includes(query) ||
-                            item.target.toLowerCase().includes(query) ||
-                            item.id.toLowerCase().includes(query) ||
-                            item.entity.toLowerCase().includes(query) ||
-                            item.action.toLowerCase().includes(query)
-                          );
-                        }
-                        return true;
-                      })
-                      .map((log) => (
-                        <tr key={log.id} className={`transition-colors ${
-                          isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
-                        }`}>
-                          <td className="p-4">
-                            <div>
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{log.time}</span>
-                                <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.2 rounded-md">
-                                  {formatLogTime(log.timestamp, log.time)}
-                                </span>
-                              </div>
-                              <p className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'} font-mono mt-0.5`}>{log.date}</p>
-                            </div>
-                          </td>
-                          <td className="p-4">
-                            <div className="flex items-center gap-2">
-                              <div className="w-7 h-7 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center font-bold text-[10px]">
-                                {log.actor.slice(0, 2).toUpperCase()}
-                              </div>
-                              <div>
-                                <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{log.actor}</p>
-                                <p className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{log.role}</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="p-4">
-                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
-                              isDark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'
-                            }`}>
-                              {log.entity}
-                            </span>
-                          </td>
-                          <td className="p-4">
-                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${log.actionColor}`}>
-                              {log.action}
-                            </span>
-                          </td>
-                          <td className="p-4">
-                            <div className="max-w-md">
-                              <p className={`font-medium ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>{log.desc}</p>
-                              <p className="text-[10px] text-blue-500 dark:text-blue-400 font-mono mt-0.5 flex items-center gap-1">
-                                <span>ID Target:</span>
-                                <span className="font-bold">{log.target}</span>
-                              </p>
-                            </div>
-                          </td>
-                          <td className="p-4 text-right">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                              <Check className="w-3 h-3" />
-                              <span>{log.status}</span>
-                            </span>
-                          </td>
+            {/* Audit Log Table with Pagination */}
+            {(() => {
+              const filteredLogs = activityLogsList.filter(item => {
+                if (logCategoryFilter !== 'all' && item.category !== logCategoryFilter) return false;
+                if (logSearchText) {
+                  const query = logSearchText.toLowerCase();
+                  return (
+                    item.desc.toLowerCase().includes(query) ||
+                    item.actor.toLowerCase().includes(query) ||
+                    item.target.toLowerCase().includes(query) ||
+                    item.id.toLowerCase().includes(query) ||
+                    item.entity.toLowerCase().includes(query) ||
+                    item.action.toLowerCase().includes(query)
+                  );
+                }
+                return true;
+              });
+
+              const totalLogPages = Math.max(1, Math.ceil(filteredLogs.length / logPageSize));
+              const safeLogCurrentPage = Math.min(Math.max(1, logCurrentPage), totalLogPages);
+              const startIdx = (safeLogCurrentPage - 1) * logPageSize;
+              const paginatedLogs = filteredLogs.slice(startIdx, startIdx + logPageSize);
+
+              return (
+                <div className={`border rounded-xl sm:rounded-2xl overflow-hidden ${
+                  isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+                }`}>
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[640px] text-left text-xs">
+                      <thead className={`text-[11px] border-b ${
+                        isDark ? 'bg-slate-950/60 text-slate-400 border-slate-800' : 'bg-slate-50 text-slate-700 font-bold border-slate-200'
+                      }`}>
+                        <tr>
+                          <th className="p-4 font-bold">Waktu & Timestamp</th>
+                          <th className="p-4 font-bold">Administrator / Actor</th>
+                          <th className="p-4 font-bold">Entitas</th>
+                          <th className="p-4 font-bold">Aksi</th>
+                          <th className="p-4 font-bold">Rincian Perubahan & Objek</th>
+                          <th className="p-4 font-bold text-right">Status</th>
                         </tr>
-                      ))}
-                    {activityLogsList.filter(item => {
-                      if (logCategoryFilter !== 'all' && item.category !== logCategoryFilter) return false;
-                      if (logSearchText) {
-                        const query = logSearchText.toLowerCase();
-                        return (
-                          item.desc.toLowerCase().includes(query) ||
-                          item.actor.toLowerCase().includes(query) ||
-                          item.target.toLowerCase().includes(query) ||
-                          item.id.toLowerCase().includes(query) ||
-                          item.entity.toLowerCase().includes(query) ||
-                          item.action.toLowerCase().includes(query)
-                        );
-                      }
-                      return true;
-                    }).length === 0 && (
-                      <tr>
-                        <td colSpan={6} className="p-8 text-center text-xs text-slate-500">
-                          Tidak ada log aktivitas yang cocok dengan filter atau pencarian Anda.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                      </thead>
+                      <tbody className={`divide-y ${
+                        isDark ? 'divide-slate-800/60' : 'divide-slate-100'
+                      }`}>
+                        {paginatedLogs.map((log) => (
+                          <tr key={log.id} className={`transition-colors ${
+                            isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
+                          }`}>
+                            <td className="p-4">
+                              <div>
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{log.time}</span>
+                                  <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.2 rounded-md">
+                                    {formatLogTime(log.timestamp, log.time)}
+                                  </span>
+                                </div>
+                                <p className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'} font-mono mt-0.5`}>{log.date}</p>
+                              </div>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center font-bold text-[10px]">
+                                  {log.actor.slice(0, 2).toUpperCase()}
+                                </div>
+                                <div>
+                                  <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{log.actor}</p>
+                                  <p className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{log.role}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="p-4">
+                              <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                                isDark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'
+                              }`}>
+                                {log.entity}
+                              </span>
+                            </td>
+                            <td className="p-4">
+                              <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${log.actionColor}`}>
+                                {log.action}
+                              </span>
+                            </td>
+                            <td className="p-4">
+                              <div className="max-w-md">
+                                <p className={`font-medium ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>{log.desc}</p>
+                                <p className="text-[10px] text-blue-500 dark:text-blue-400 font-mono mt-0.5 flex items-center gap-1">
+                                  <span>ID Target:</span>
+                                  <span className="font-bold">{log.target}</span>
+                                </p>
+                              </div>
+                            </td>
+                            <td className="p-4 text-right">
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                                <Check className="w-3 h-3" />
+                                <span>{log.status}</span>
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                        {filteredLogs.length === 0 && (
+                          <tr>
+                            <td colSpan={6} className="p-8 text-center text-xs text-slate-500">
+                              Tidak ada log aktivitas yang cocok dengan filter atau pencarian Anda.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Pagination Control Bar */}
+                  {filteredLogs.length > 0 && (
+                    <div className={`p-3.5 sm:p-4 border-t flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs ${
+                      isDark ? 'border-slate-800 bg-slate-950/40' : 'border-slate-100 bg-slate-50/70'
+                    }`}>
+                      {/* Left: Rows per page & range */}
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className={isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}>
+                          Menampilkan <strong className={isDark ? 'text-white' : 'text-slate-900'}>{startIdx + 1}</strong> - <strong className={isDark ? 'text-white' : 'text-slate-900'}>{Math.min(startIdx + logPageSize, filteredLogs.length)}</strong> dari <strong className={isDark ? 'text-white' : 'text-slate-900'}>{filteredLogs.length}</strong> log
+                        </span>
+
+                        <div className="flex items-center gap-1.5 text-[11px]">
+                          <span className={isDark ? 'text-slate-500' : 'text-slate-400'}>Baris:</span>
+                          <select
+                            value={logPageSize}
+                            onChange={(e) => {
+                              setLogPageSize(Number(e.target.value));
+                              setLogCurrentPage(1);
+                            }}
+                            className={`px-2 py-1 rounded-lg border text-xs font-semibold outline-none cursor-pointer ${
+                              isDark ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-white border-slate-300 text-slate-800'
+                            }`}
+                          >
+                            <option value={5}>5 / hal</option>
+                            <option value={8}>8 / hal</option>
+                            <option value={10}>10 / hal</option>
+                            <option value={20}>20 / hal</option>
+                            <option value={50}>50 / hal</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Right: Page Navigation Buttons */}
+                      {totalLogPages > 1 && (
+                        <div className="flex items-center gap-1 self-center sm:self-auto">
+                          <button
+                            onClick={() => setLogCurrentPage(1)}
+                            disabled={safeLogCurrentPage === 1}
+                            title="Halaman Pertama"
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              safeLogCurrentPage === 1
+                                ? 'opacity-40 cursor-not-allowed border-transparent'
+                                : isDark
+                                ? 'border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer'
+                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100 cursor-pointer shadow-2xs'
+                            }`}
+                          >
+                            <ChevronsLeft className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            onClick={() => setLogCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={safeLogCurrentPage === 1}
+                            title="Halaman Sebelumnya"
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              safeLogCurrentPage === 1
+                                ? 'opacity-40 cursor-not-allowed border-transparent'
+                                : isDark
+                                ? 'border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer'
+                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100 cursor-pointer shadow-2xs'
+                            }`}
+                          >
+                            <ChevronLeft className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Page Number Pills */}
+                          <div className="flex items-center gap-1 px-1">
+                            {Array.from({ length: totalLogPages }, (_, i) => i + 1)
+                              .filter(p => {
+                                if (totalLogPages <= 6) return true;
+                                if (p === 1 || p === totalLogPages) return true;
+                                return Math.abs(p - safeLogCurrentPage) <= 1;
+                              })
+                              .map((page, index, array) => {
+                                const prevPage = array[index - 1];
+                                const showEllipsis = prevPage && page - prevPage > 1;
+
+                                return (
+                                  <React.Fragment key={page}>
+                                    {showEllipsis && (
+                                      <span className={`px-1 text-xs ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>...</span>
+                                    )}
+                                    <button
+                                      onClick={() => setLogCurrentPage(page)}
+                                      className={`min-w-[28px] h-7 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                        safeLogCurrentPage === page
+                                          ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
+                                          : isDark
+                                          ? 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
+                                          : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-2xs'
+                                      }`}
+                                    >
+                                      {page}
+                                    </button>
+                                  </React.Fragment>
+                                );
+                              })}
+                          </div>
+
+                          <button
+                            onClick={() => setLogCurrentPage(prev => Math.min(totalLogPages, prev + 1))}
+                            disabled={safeLogCurrentPage === totalLogPages}
+                            title="Halaman Selanjutnya"
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              safeLogCurrentPage === totalLogPages
+                                ? 'opacity-40 cursor-not-allowed border-transparent'
+                                : isDark
+                                ? 'border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer'
+                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100 cursor-pointer shadow-2xs'
+                            }`}
+                          >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            onClick={() => setLogCurrentPage(totalLogPages)}
+                            disabled={safeLogCurrentPage === totalLogPages}
+                            title="Halaman Terakhir"
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              safeLogCurrentPage === totalLogPages
+                                ? 'opacity-40 cursor-not-allowed border-transparent'
+                                : isDark
+                                ? 'border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer'
+                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100 cursor-pointer shadow-2xs'
+                            }`}
+                          >
+                            <ChevronsRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
           </div>
         )}
 
