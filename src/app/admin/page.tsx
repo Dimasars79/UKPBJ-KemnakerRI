@@ -48,7 +48,6 @@ import {
   Building2,
   ArrowUpRight,
   PlusCircle,
-  UserCheck,
   Bell,
   Upload,
   Image as ImageIcon,
