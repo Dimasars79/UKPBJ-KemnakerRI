@@ -578,7 +578,7 @@ const DEFAULT_VIDEOS: VideoMediaItem[] = [
     date: '28 Agu 2026',
     views: '1.4K x ditonton',
     thumbnailUrl: '/gallery/gallery-1.jpg',
-    url: 'https://www.youtube.com/@kemenperin_ri',
+    url: 'https://www.youtube.com/watch?v=M7lc1UVf-VE',
     syncFrontend: true
   },
   {
@@ -590,7 +590,7 @@ const DEFAULT_VIDEOS: VideoMediaItem[] = [
     date: '15 Agu 2026',
     views: '2.8K x ditonton',
     thumbnailUrl: '/gallery/gallery-2.jpg',
-    url: 'https://www.youtube.com/@kemenperin_ri',
+    url: 'https://www.youtube.com/watch?v=L_LUpnjgPso',
     syncFrontend: true
   },
   {
@@ -602,7 +602,7 @@ const DEFAULT_VIDEOS: VideoMediaItem[] = [
     date: '05 Agu 2026',
     views: '3.1K x ditonton',
     thumbnailUrl: '/gallery/gallery-3.jpg',
-    url: 'https://www.youtube.com/@kemenperin_ri',
+    url: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
     syncFrontend: true
   }
 ];

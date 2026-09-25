@@ -1,12 +1,19 @@
 "use client";
 
 import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, MessageCircle, X } from 'lucide-react';
 
 export const FloatingContact = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  // Sembunyikan widget Contact Us jika sedang berada di admin portal
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   const toggleMenu = () => setIsOpen(!isOpen);
 

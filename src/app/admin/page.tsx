@@ -2715,7 +2715,7 @@ export default function AdminPortalPage() {
                       </h2>
                       
                       <p className={`text-xs sm:text-sm max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                        Sistem kendali terpadu pengelolaan pengadaan barang/jasa, monitoring operasional SPSE, serta manajemen konten publik (CMS) terpusat dan tersinkronisasi real-time.
+                        Pusat kendali dan monitoring terpadu pengadaan barang/jasa, integrasi SPSE, serta publikasi informasi resmi UKPBJ Kemnaker RI.
                       </p>
                     </div>
 
@@ -6307,21 +6307,45 @@ export default function AdminPortalPage() {
                           className="w-full h-full object-contain"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center relative">
-                          <img 
-                            src={mediaLightbox.src} 
-                            alt={mediaLightbox.title} 
-                            className="w-full h-full object-cover opacity-60"
-                          />
-                          <a
-                            href={mediaLightbox.url || '#'}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-6 py-3 rounded-2xl bg-red-600 hover:bg-red-500 text-white text-sm font-bold flex items-center gap-2 shadow-2xl transition-transform hover:scale-105"
-                          >
-                            <Play className="w-5 h-5 fill-white" />
-                            <span>Buka & Putar di YouTube</span>
-                          </a>
+                        <div className="w-full h-full flex items-center justify-center bg-black overflow-hidden">
+                          {(() => {
+                            const trimmedUrl = (mediaLightbox.url || '').trim();
+                            const match = trimmedUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/i);
+                            const ytId = match ? match[1] : null;
+
+                            if (ytId) {
+                              return (
+                                <iframe
+                                  src={`https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0`}
+                                  title={mediaLightbox.title}
+                                  className="w-full h-full border-0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                />
+                              );
+                            }
+
+                            if (trimmedUrl.endsWith('.mp4') || trimmedUrl.endsWith('.webm')) {
+                              return (
+                                <video
+                                  src={trimmedUrl}
+                                  controls
+                                  autoPlay
+                                  className="w-full h-full object-contain"
+                                />
+                              );
+                            }
+
+                            return (
+                              <iframe
+                                src="https://www.youtube-nocookie.com/embed/37zWn2v39_E?autoplay=1&rel=0"
+                                title={mediaLightbox.title}
+                                className="w-full h-full border-0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              />
+                            );
+                          })()}
                         </div>
                       )}
                       
@@ -6494,27 +6518,73 @@ export default function AdminPortalPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kategori *</label>
-                    <input
-                      type="text"
-                      required
-                      list="news-category-suggestions"
-                      placeholder="Ketik atau pilih kategori berita..."
-                      value={newsFormData.category || ''}
-                      onChange={(e) => setNewsFormData({ ...newsFormData, category: e.target.value })}
-                      className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                      }`}
-                    />
-                    <datalist id="news-category-suggestions">
-                      <option value="Regulasi" />
-                      <option value="Berita PBJ" />
-                      <option value="Pengumuman Lelang" />
-                      <option value="Siaran Pers" />
-                      <option value="Kegiatan & Bimtek" />
-                      <option value="Pengadaan Barang" />
-                      <option value="Pengadaan Jasa" />
-                    </datalist>
+                    <label className={`font-bold block mb-1.5 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+                      Kategori Berita <span className="text-red-500">*</span>
+                    </label>
+
+                    {/* Google Form Style: Dropdown Select + Conditional Manual Input */}
+                    <div className="space-y-2">
+                      <div className="relative">
+                        <select
+                          value={
+                            ['Berita PBJ', 'Regulasi', 'Pengumuman Lelang', 'Siaran Pers', 'Kegiatan & Bimtek', 'Pengadaan Barang', 'Pengadaan Jasa'].includes(newsFormData.category || '')
+                              ? newsFormData.category
+                              : 'Lainnya'
+                          }
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === 'Lainnya') {
+                              if (['Berita PBJ', 'Regulasi', 'Pengumuman Lelang', 'Siaran Pers', 'Kegiatan & Bimtek', 'Pengadaan Barang', 'Pengadaan Jasa'].includes(newsFormData.category || '')) {
+                                setNewsFormData({ ...newsFormData, category: '' });
+                              }
+                            } else {
+                              setNewsFormData({ ...newsFormData, category: val });
+                            }
+                          }}
+                          className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none cursor-pointer transition-all appearance-none pr-8 ${
+                            isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
+                          }`}
+                        >
+                          <option value="Berita PBJ">Berita PBJ</option>
+                          <option value="Regulasi">Regulasi</option>
+                          <option value="Pengumuman Lelang">Pengumuman Lelang</option>
+                          <option value="Siaran Pers">Siaran Pers</option>
+                          <option value="Kegiatan & Bimtek">Kegiatan & Bimtek</option>
+                          <option value="Pengadaan Barang">Pengadaan Barang</option>
+                          <option value="Pengadaan Jasa">Pengadaan Jasa</option>
+                          <option value="Lainnya">✍️ Lainnya (Ketik Manual / Kustom)...</option>
+                        </select>
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+
+                      {/* Manual input box when "Lainnya" / Custom is active */}
+                      {(!['Berita PBJ', 'Regulasi', 'Pengumuman Lelang', 'Siaran Pers', 'Kegiatan & Bimtek', 'Pengadaan Barang', 'Pengadaan Jasa'].includes(newsFormData.category || '') || newsFormData.category === '') && (
+                        <div className="space-y-1 pt-0.5">
+                          <label className={`text-[11px] font-semibold flex items-center gap-1.5 ${isDark ? 'text-amber-400' : 'text-amber-600'}`}>
+                            <span>✍️ Masukkan Kategori Kustom (Lainnya):</span>
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            autoFocus
+                            placeholder="Ketik nama kategori baru di sini..."
+                            value={
+                              ['Berita PBJ', 'Regulasi', 'Pengumuman Lelang', 'Siaran Pers', 'Kegiatan & Bimtek', 'Pengadaan Barang', 'Pengadaan Jasa'].includes(newsFormData.category || '')
+                                ? ''
+                                : (newsFormData.category || '')
+                            }
+                            onChange={(e) => setNewsFormData({ ...newsFormData, category: e.target.value })}
+                            className={`w-full px-3 py-2 border rounded-xl text-xs outline-none transition-all ${
+                              isDark
+                                ? 'bg-slate-900 border-amber-500/70 text-white focus:border-amber-400 ring-1 ring-amber-500/30'
+                                : 'bg-amber-50/50 border-amber-400 text-slate-900 focus:border-amber-600 ring-1 ring-amber-400/30'
+                            }`}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div>

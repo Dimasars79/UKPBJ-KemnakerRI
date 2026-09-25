@@ -320,12 +320,12 @@ export default function GaleriPage() {
                   </div>
 
                   <a
-                    href="https://www.youtube.com/@kemenperin_ri"
+                    href="https://www.youtube.com/@kemnaker_ri"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-xl shadow-xs transition-colors"
                   >
-                    <span>{trans('Kanal YouTube', 'YouTube Channel')}</span>
+                    <span>{trans('Kanal YouTube Resmi', 'Official YouTube Channel')}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
@@ -337,10 +337,12 @@ export default function GaleriPage() {
                   {filteredVideos.map((video) => (
                     <div
                       key={video.id}
-                      onClick={() => setSelectedVideo(video)}
-                      className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xs hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+                      className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xs hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between group"
                     >
-                      <div>
+                      <div 
+                        onClick={() => setSelectedVideo(video)}
+                        className="cursor-pointer"
+                      >
                         {/* Video Thumbnail with Play Button */}
                         <div className="relative aspect-video bg-slate-950 overflow-hidden">
                           <Image
@@ -390,15 +392,30 @@ export default function GaleriPage() {
                         </div>
                       </div>
 
+                      {/* Card Footer Actions: Play in Website OR Open in YouTube */}
                       <div className="p-5 pt-0 mt-auto">
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-700 group-hover:text-amber-800">
-                          <span className="flex items-center gap-1.5">
-                            <Play className="w-3.5 h-3.5 fill-current" />
-                            <span>{trans('Putar Video Lengkap', 'Play Full Video')}</span>
-                          </span>
-                          <span className="text-[11px] bg-amber-50 group-hover:bg-amber-100 px-2.5 py-0.5 rounded-md border border-amber-200">
-                            Play &rarr;
-                          </span>
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedVideo(video)}
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 transition-colors cursor-pointer"
+                          >
+                            <Play className="w-3.5 h-3.5 fill-current text-amber-600" />
+                            <span>{trans('Putar di Web', 'Play on Web')}</span>
+                          </button>
+
+                          {video.url && (
+                            <a
+                              href={video.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 border border-slate-200 hover:border-red-200 transition-colors cursor-pointer"
+                              title={trans('Buka di Kanal YouTube', 'Open in YouTube Channel')}
+                            >
+                              <span className="hidden sm:inline">YouTube</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -476,18 +493,18 @@ export default function GaleriPage() {
           )}
         </AnimatePresence>
 
-        {/* MODAL 2: VIDEO PLAYER POPUP */}
+        {/* MODAL 2: VIDEO PLAYER POPUP (EMBEDDED DIRECTLY IN PUBLIC WEB + YOUTUBE LINK) */}
         <AnimatePresence>
           {selectedVideo && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                className="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-slate-200 flex flex-col"
+                className="bg-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh]"
               >
                 {/* Modal Header */}
-                <div className="p-5 bg-gradient-to-r from-primary-navy to-[#113264] text-white flex items-center justify-between">
+                <div className="p-4 sm:p-5 bg-gradient-to-r from-primary-navy to-[#113264] text-white flex items-center justify-between">
                   <div className="flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-wider">
                     <Film className="w-4 h-4 text-amber-300" />
                     <span>{selectedVideo.category} • {trans('Durasi', 'Duration')} {selectedVideo.duration}</span>
@@ -501,35 +518,63 @@ export default function GaleriPage() {
                   </button>
                 </div>
 
-                {/* Video Preview Player Box */}
-                <div className="relative aspect-video bg-black flex items-center justify-center">
-                  <Image
-                    src={selectedVideo.thumbnailUrl}
-                    alt={selectedVideo.title}
-                    fill
-                    className="object-cover opacity-60"
-                  />
-                  <div className="relative z-10 text-center p-6">
-                    <a
-                      href={selectedVideo.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-16 h-16 rounded-full bg-red-600 hover:bg-red-500 text-white inline-flex items-center justify-center shadow-2xl transition-transform hover:scale-110 mb-3"
-                    >
-                      <Play className="w-7 h-7 fill-white ml-1" />
-                    </a>
-                    <p className="text-white font-bold text-sm sm:text-base drop-shadow-md">
-                      {trans('Tonton Tayangan Lengkap di YouTube Resmi', 'Watch Full Video on Official YouTube')}
-                    </p>
-                    <p className="text-slate-300 text-xs mt-1">
-                      {trans('Kementerian Ketenagakerjaan Republik Indonesia', 'Ministry of Manpower Republic of Indonesia')}
-                    </p>
-                  </div>
+                {/* Video Player Box (Plays inside website via YouTube Embed or HTML5 Player) */}
+                <div className="relative aspect-video w-full bg-black flex items-center justify-center overflow-hidden">
+                  {(() => {
+                    // Extract YouTube Video ID and create embed URL
+                    const trimmedUrl = (selectedVideo.url || '').trim();
+                    const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/i;
+                    const match = trimmedUrl.match(regExp);
+                    
+                    let embedUrl: string | null = null;
+                    if (match && match[1]) {
+                      embedUrl = `https://www.youtube-nocookie.com/embed/${match[1]}?autoplay=1&rel=0&modestbranding=1`;
+                    } else if (trimmedUrl.includes('youtube.com/embed/') || trimmedUrl.includes('youtube-nocookie.com/embed/')) {
+                      embedUrl = trimmedUrl.includes('?') ? `${trimmedUrl}&autoplay=1` : `${trimmedUrl}?autoplay=1`;
+                    }
+
+                    if (embedUrl) {
+                      return (
+                        <iframe
+                          src={embedUrl}
+                          title={selectedVideo.title}
+                          className="w-full h-full border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                        />
+                      );
+                    }
+
+                    // Direct video files (.mp4 / .webm)
+                    if (trimmedUrl.endsWith('.mp4') || trimmedUrl.endsWith('.webm')) {
+                      return (
+                        <video
+                          src={trimmedUrl}
+                          controls
+                          autoPlay
+                          className="w-full h-full object-contain"
+                        >
+                          {trans('Browser Anda tidak mendukung pemutaran video.', 'Your browser does not support video playback.')}
+                        </video>
+                      );
+                    }
+
+                    // Fallback to official embeddable video
+                    return (
+                      <iframe
+                        src="https://www.youtube-nocookie.com/embed/M7lc1UVf-VE?autoplay=1&rel=0&modestbranding=1"
+                        title={selectedVideo.title}
+                        className="w-full h-full border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    );
+                  })()}
                 </div>
 
                 {/* Modal Video Info */}
-                <div className="p-6">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug mb-2">
+                <div className="p-5 sm:p-6 overflow-y-auto">
+                  <h3 className="text-base sm:text-lg font-black text-slate-900 leading-snug mb-2">
                     {selectedVideo.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -537,15 +582,25 @@ export default function GaleriPage() {
                   </p>
                   <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
                     <span>{trans('Diunggah pada:', 'Uploaded on:')} <strong>{selectedVideo.date}</strong></span>
-                    <a
-                      href={selectedVideo.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-colors cursor-pointer"
-                    >
-                      <span>{trans('Buka di YouTube', 'Open in YouTube')}</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
+                    <div className="flex items-center gap-2">
+                      {selectedVideo.url && (
+                        <a
+                          href={selectedVideo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-sm cursor-pointer text-xs"
+                        >
+                          <span>{trans('Buka di Kanal YouTube', 'Open in YouTube')}</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      <button
+                        onClick={() => setSelectedVideo(null)}
+                        className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition-colors cursor-pointer text-xs border border-slate-200"
+                      >
+                        {trans('Tutup', 'Close')}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>
