@@ -258,8 +258,8 @@ export function Header() {
 
   return (
     <>
-      {/* Top Government Bar (Static Natural Flow - Never collapses height, zero layout shift) */}
-      <div className="w-full bg-[#051122] text-white text-xs font-medium tracking-wide shadow-xs border-b border-white/10 py-1.5 px-3 sm:px-6 lg:px-8 relative z-40">
+      {/* Top Government Bar (High Z-Index Stacking Context - Never overlapped by floating navbar) */}
+      <div className="w-full bg-[#051122] text-white text-xs font-medium tracking-wide shadow-xs border-b border-white/10 py-1.5 px-3 sm:px-6 lg:px-8 relative z-[60]">
         <div className="container mx-auto flex justify-between items-center gap-2">
           <div className="flex items-center min-w-0 pr-1">
             <span className="text-[9.5px] sm:text-xs tracking-normal md:tracking-widest font-semibold text-slate-200 truncate">
@@ -287,7 +287,7 @@ export function Header() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2, type: 'spring', stiffness: 300, damping: 25 }}
-                    className="absolute right-0 mt-2 w-36 bg-[#0A2246] rounded-xl shadow-2xl overflow-hidden border border-white/15 z-50 text-white"
+                    className="absolute right-0 mt-2 w-36 bg-[#0A2246] rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden border border-white/20 z-[70] text-white"
                   >
                     <div className="p-1">
                       <button 
@@ -332,7 +332,7 @@ export function Header() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-3 w-72 bg-[#0A2246] rounded-xl shadow-2xl overflow-hidden border border-white/15 z-50 text-white"
+                    className="absolute right-0 mt-3 w-72 bg-[#0A2246] rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden border border-white/20 z-[70] text-white"
                   >
                     <div className="p-4 border-b border-white/10 bg-[#07172E]">
                       <h3 className="font-bold text-white">Mode Aksesibilitas</h3>

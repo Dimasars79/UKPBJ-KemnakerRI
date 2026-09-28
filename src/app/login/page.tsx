@@ -130,15 +130,15 @@ export default function LoginPage() {
                   alt="Logo Kemnaker" 
                   width={50} 
                   height={50} 
-                  className="object-contain h-10 sm:h-12 w-auto drop-shadow-md" 
+                  className="object-contain h-10 sm:h-12 w-auto brightness-0 invert drop-shadow-md" 
                 />
                 <div className="h-8 sm:h-10 border-l border-white/20" />
                 <Image 
                   src="/logo.png" 
                   alt="Logo UKPBJ" 
-                  width={140} 
+                  width={50} 
                   height={50} 
-                  className="object-contain h-10 sm:h-12 w-auto mix-blend-screen drop-shadow-md" 
+                  className="object-contain h-10 sm:h-12 w-auto drop-shadow-md" 
                 />
               </div>
             </div>

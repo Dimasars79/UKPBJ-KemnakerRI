@@ -31,7 +31,15 @@ export function Footer() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-xs sm:text-sm text-slate-300 pt-1">
               <div className="flex items-start space-x-2.5 sm:col-span-2 lg:col-span-1">
                 <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent-gold flex-shrink-0 mt-0.5" />
-                <span className="leading-snug text-xs sm:text-[13px]">Gedung B Lantai 3, Jl. Jenderal Gatot Subroto Kav. 51, Jakarta Selatan.</span>
+                <a 
+                  href="https://www.google.com/maps?q=-6.237979865344115,106.82988816160317" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-accent-gold transition-colors leading-snug text-xs sm:text-[13px]"
+                  title="Buka Lokasi di Google Maps"
+                >
+                  Gedung B Lantai 3, Jl. Jenderal Gatot Subroto Kav. 51, Jakarta Selatan.
+                </a>
               </div>
               <div className="flex items-center space-x-2.5">
                 <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent-gold flex-shrink-0" />
@@ -127,7 +135,14 @@ export function Footer() {
           <div className="flex flex-wrap justify-center gap-x-4 sm:gap-x-6 gap-y-1">
             <Link href="#" className="hover:text-accent-gold transition-colors">Kebijakan Privasi</Link>
             <Link href="#" className="hover:text-accent-gold transition-colors">Syarat & Ketentuan</Link>
-            <Link href="#" className="hover:text-accent-gold transition-colors">Peta Situs</Link>
+            <a 
+              href="https://www.google.com/maps?q=-6.237979865344115,106.82988816160317" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-accent-gold transition-colors"
+            >
+              Peta Situs
+            </a>
           </div>
         </div>
       </div>
