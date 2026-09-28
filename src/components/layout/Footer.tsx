@@ -60,17 +60,45 @@ export function Footer() {
               </ul>
             </div>
 
-            {/* Column 3: Informasi */}
+            {/* Column 3: Media Sosial */}
             <div>
               <h3 className="font-bold text-xs sm:text-sm mb-2.5 sm:mb-3 text-white tracking-wide border-b border-slate-700/80 pb-1.5 inline-block">
                 {t('footer.socials')}
               </h3>
               <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-[13px] text-slate-300">
-                <li><Link href="/tentang" className="hover:text-accent-gold transition-colors block py-0.5">Profil UKPBJ</Link></li>
-                <li><Link href="/informasi" className="hover:text-accent-gold transition-colors block py-0.5">Berita & Informasi</Link></li>
-                <li><Link href="/agenda" className="hover:text-accent-gold transition-colors block py-0.5">Kalender Agenda</Link></li>
-                <li><Link href="/galeri" className="hover:text-accent-gold transition-colors block py-0.5">Galeri Dokumentasi</Link></li>
-                <li><Link href="/monitoring" className="hover:text-accent-gold transition-colors block py-0.5">Dashboard Monitoring</Link></li>
+                <li>
+                  <a 
+                    href="https://instagram.com/kemnaker" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="hover:text-accent-gold transition-colors flex items-center group py-0.5"
+                  >
+                    <span>Instagram</span>
+                    <ExternalLink className="w-2.5 h-2.5 ml-1 opacity-60 group-hover:opacity-100 flex-shrink-0" />
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="https://x.com/KemnakerRI" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="hover:text-accent-gold transition-colors flex items-center group py-0.5"
+                  >
+                    <span>Twitter / X</span>
+                    <ExternalLink className="w-2.5 h-2.5 ml-1 opacity-60 group-hover:opacity-100 flex-shrink-0" />
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="https://youtube.com/@kemnaker" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="hover:text-accent-gold transition-colors flex items-center group py-0.5"
+                  >
+                    <span>YouTube</span>
+                    <ExternalLink className="w-2.5 h-2.5 ml-1 opacity-60 group-hover:opacity-100 flex-shrink-0" />
+                  </a>
+                </li>
               </ul>
             </div>
 

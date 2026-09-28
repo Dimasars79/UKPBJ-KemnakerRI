@@ -2707,7 +2707,7 @@ export default function AdminPortalPage() {
                 <div className={`p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border relative overflow-hidden transition-all ${
                   isDark 
                     ? 'bg-gradient-to-r from-slate-900 via-[#0B1E38] to-slate-900 border-slate-800/80 shadow-2xl shadow-blue-950/40' 
-                    : 'bg-gradient-to-r from-white via-blue-50/50 to-slate-50 border-slate-200/90 shadow-lg shadow-slate-200/50'
+                    : 'bg-gradient-to-r from-white via-blue-50/40 to-slate-50/80 border-slate-200/90 shadow-md shadow-slate-300/40 ring-1 ring-slate-900/5'
                 }`}>
                   {/* Background ambient accents */}
                   <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -2783,10 +2783,10 @@ export default function AdminPortalPage() {
                   {/* Box 1: Paket Pengadaan PBJ */}
                   <div 
                     onClick={() => setContentFeedFilter('paket')}
-                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'paket'
-                        ? isDark ? 'bg-indigo-950/40 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/80 border-indigo-400 ring-1 ring-indigo-400'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-indigo-300'
+                        ? isDark ? 'bg-indigo-950/40 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/90 border-indigo-400 ring-2 ring-indigo-400/40 shadow-md shadow-indigo-100'
+                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50 hover:shadow-xl' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 hover:shadow-xl hover:shadow-slate-300/50 hover:border-indigo-300 ring-1 ring-slate-900/5'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
@@ -2870,10 +2870,10 @@ export default function AdminPortalPage() {
                   {/* Box 2: Berita & Publikasi CMS */}
                   <div 
                     onClick={() => setContentFeedFilter('berita')}
-                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'berita'
-                        ? isDark ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/80 border-amber-400 ring-1 ring-amber-400'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-amber-300'
+                        ? isDark ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/90 border-amber-400 ring-2 ring-amber-400/40 shadow-md shadow-amber-100'
+                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50 hover:shadow-xl' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 hover:shadow-xl hover:shadow-slate-300/50 hover:border-amber-300 ring-1 ring-slate-900/5'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
@@ -2953,10 +2953,10 @@ export default function AdminPortalPage() {
                   {/* Box 3: Agenda & Kegiatan PBJ */}
                   <div 
                     onClick={() => setContentFeedFilter('agenda')}
-                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'agenda'
-                        ? isDark ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/80 border-emerald-400 ring-1 ring-emerald-400'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-emerald-300'
+                        ? isDark ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-400/40 shadow-md shadow-emerald-100'
+                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50 hover:shadow-xl' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 hover:shadow-xl hover:shadow-slate-300/50 hover:border-emerald-300 ring-1 ring-slate-900/5'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
@@ -3037,10 +3037,10 @@ export default function AdminPortalPage() {
                   {/* Box 4: Regulasi & Dokumen SOP */}
                   <div 
                     onClick={() => setContentFeedFilter('regulasi')}
-                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 hover:shadow-xl flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
-                        ? isDark ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/80 border-purple-400 ring-1 ring-purple-400'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50' : 'bg-white border-slate-200/90 shadow-2xs hover:border-purple-300'
+                        ? isDark ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/90 border-purple-400 ring-2 ring-purple-400/40 shadow-md shadow-purple-100'
+                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50 hover:shadow-xl' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 hover:shadow-xl hover:shadow-slate-300/50 hover:border-purple-300 ring-1 ring-slate-900/5'
                     }`}
                   >
                     {/* Top Header: Icon + Category + Quick Action */}
@@ -3119,8 +3119,8 @@ export default function AdminPortalPage() {
 
 
                 {/* LIVE CONTENT & OPERATIONS MONITORING FEED (FILTERABLE) */}
-                <div className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border shadow-sm space-y-3 sm:space-y-4 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+                <div className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border space-y-3 sm:space-y-4 ${
+                  isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
                 }`}>
                   <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b ${
                     isDark ? 'border-slate-800/60' : 'border-slate-200'
@@ -3226,7 +3226,7 @@ export default function AdminPortalPage() {
                         {/* 1. Paket Tender */}
                         {packagesList[0] && (
                           <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-indigo-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-indigo-300'
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-indigo-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-indigo-300 hover:shadow-sm hover:bg-white'
                           }`}>
                             <div className="flex items-start gap-3 min-w-0">
                               <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0 mt-0.5">
@@ -3276,7 +3276,7 @@ export default function AdminPortalPage() {
                         {/* 2. Berita */}
                         {newsList[0] && (
                           <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-amber-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-amber-300'
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-amber-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-amber-300 hover:shadow-sm hover:bg-white'
                           }`}>
                             <div className="flex items-start gap-3 min-w-0">
                               <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 mt-0.5">
@@ -3339,7 +3339,7 @@ export default function AdminPortalPage() {
                         {/* 3. Agenda */}
                         {agendaList[0] && (
                           <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-emerald-300'
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-emerald-300 hover:shadow-sm hover:bg-white'
                           }`}>
                             <div className="flex items-start gap-3 min-w-0">
                               <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 mt-0.5">
@@ -3402,7 +3402,7 @@ export default function AdminPortalPage() {
                         {/* 4. Regulasi */}
                         {regulasiList[0] && (
                           <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-blue-300'
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-300 hover:shadow-sm hover:bg-white'
                           }`}>
                             <div className="flex items-start gap-3 min-w-0">
                               <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 mt-0.5">
@@ -3465,7 +3465,7 @@ export default function AdminPortalPage() {
                         {/* 5. SOP */}
                         {sopList[0] && (
                           <div className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-purple-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-purple-300'
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-purple-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-purple-300 hover:shadow-sm hover:bg-white'
                           }`}>
                             <div className="flex items-start gap-3 min-w-0">
                               <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
@@ -3532,7 +3532,7 @@ export default function AdminPortalPage() {
                       <div
                         key={pkg.id}
                         className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-indigo-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-indigo-300'
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-indigo-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-indigo-300 hover:shadow-sm hover:bg-white'
                         }`}
                       >
                         <div className="flex items-start gap-3 min-w-0">
@@ -3584,7 +3584,7 @@ export default function AdminPortalPage() {
                       <div
                         key={item.id}
                         className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-amber-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-amber-300'
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-amber-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-amber-300 hover:shadow-sm hover:bg-white'
                         }`}
                       >
                         <div className="flex items-start gap-3 min-w-0">
@@ -3646,7 +3646,7 @@ export default function AdminPortalPage() {
                       <div
                         key={item.id}
                         className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-emerald-300'
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-emerald-300 hover:shadow-sm hover:bg-white'
                         }`}
                       >
                         <div className="flex items-start gap-3 min-w-0">
@@ -3700,7 +3700,7 @@ export default function AdminPortalPage() {
                       <div
                         key={item.id}
                         className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-blue-300'
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-300 hover:shadow-sm hover:bg-white'
                         }`}
                       >
                         <div className="flex items-start gap-3 min-w-0">
@@ -3754,7 +3754,7 @@ export default function AdminPortalPage() {
                       <div
                         key={item.id}
                         className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-purple-500/50' : 'bg-slate-50/80 border-slate-200/90 hover:border-purple-300'
+                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-purple-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-purple-300 hover:shadow-sm hover:bg-white'
                         }`}
                       >
                         <div className="flex items-start gap-3 min-w-0">
@@ -3815,8 +3815,8 @@ export default function AdminPortalPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                   
                   {/* BOX 1: GOVERNMENT ECOSYSTEM INTEGRATION STATUS */}
-                  <div className={`p-6 rounded-3xl border shadow-sm flex flex-col justify-between h-full space-y-4 transition-all ${
-                    isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+                  <div className={`p-6 rounded-3xl border flex flex-col justify-between h-full space-y-4 transition-all ${
+                    isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
                   }`}>
                     <div>
                       <div className={`flex justify-between items-center pb-3 border-b ${
@@ -3847,7 +3847,7 @@ export default function AdminPortalPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${
-                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-white hover:shadow-xs'
+                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-500/40 hover:bg-white hover:shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-2 min-w-0">
@@ -3865,7 +3865,7 @@ export default function AdminPortalPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${
-                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-white hover:shadow-xs'
+                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-500/40 hover:bg-white hover:shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-2 min-w-0">
@@ -3883,7 +3883,7 @@ export default function AdminPortalPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${
-                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-white hover:shadow-xs'
+                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-500/40 hover:bg-white hover:shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-2 min-w-0">
@@ -3901,7 +3901,7 @@ export default function AdminPortalPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`p-3 rounded-2xl border flex items-center justify-between transition-all group ${
-                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50 border-slate-200 hover:border-blue-500/40 hover:bg-white hover:shadow-xs'
+                            isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-500/40 hover:bg-white hover:shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-2 min-w-0">
@@ -3925,8 +3925,8 @@ export default function AdminPortalPage() {
                   </div>
 
                   {/* BOX 2: QUICK EXPORT & DATA BACKUP UTILITIES */}
-                  <div className={`p-6 rounded-3xl border shadow-sm flex flex-col justify-between h-full space-y-4 transition-all ${
-                    isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+                  <div className={`p-6 rounded-3xl border flex flex-col justify-between h-full space-y-4 transition-all ${
+                    isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
                   }`}>
                     <div>
                       <div className={`flex justify-between items-center pb-3 border-b ${
@@ -3955,7 +3955,7 @@ export default function AdminPortalPage() {
                           type="button"
                           onClick={() => showNotification('✓ Laporan Rekap PBJ (.xlsx) berhasil diekspor.')}
                           className={`p-3 rounded-2xl border font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer group ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/40 text-emerald-400 hover:bg-slate-950' : 'bg-emerald-50/60 border-emerald-200 text-emerald-700 hover:bg-emerald-100 hover:shadow-xs'
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/40 text-emerald-400 hover:bg-slate-950' : 'bg-emerald-50/70 border-emerald-200/90 text-emerald-700 hover:bg-emerald-100/80 shadow-xs hover:shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-1.5">
@@ -3978,7 +3978,7 @@ export default function AdminPortalPage() {
                             showNotification('✓ Cadangan Database JSON berhasil diunduh.');
                           }}
                           className={`p-3 rounded-2xl border font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer group ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/40 text-blue-400 hover:bg-slate-950' : 'bg-blue-50/60 border-blue-200 text-blue-700 hover:bg-blue-100 hover:shadow-xs'
+                            isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/40 text-blue-400 hover:bg-slate-950' : 'bg-blue-50/70 border-blue-200/90 text-blue-700 hover:bg-blue-100/80 shadow-xs hover:shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-1.5">
@@ -4008,8 +4008,8 @@ export default function AdminPortalPage() {
               <div className="xl:col-span-4 2xl:col-span-4 space-y-6 min-w-0">
                 
                 {/* WIDGET 1: LIVE AUDIT FEED & SYSTEM ACTIVITY */}
-                <div className={`p-5 rounded-3xl border shadow-sm space-y-4 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+                <div className={`p-5 rounded-3xl border space-y-4 ${
+                  isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
                 }`}>
                   <div className={`flex justify-between items-center pb-3 border-b ${
                     isDark ? 'border-slate-800/60' : 'border-slate-200'
@@ -4116,8 +4116,8 @@ export default function AdminPortalPage() {
                 </div>
 
                 {/* WIDGET 2: DEADLINE TENDER & AGENDA MENDATANG */}
-                <div className={`p-5 rounded-3xl border shadow-sm space-y-4 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+                <div className={`p-5 rounded-3xl border space-y-4 ${
+                  isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
                 }`}>
                   <div className={`flex justify-between items-center pb-3 border-b ${
                     isDark ? 'border-slate-800/60' : 'border-slate-200'
@@ -4136,7 +4136,7 @@ export default function AdminPortalPage() {
                   <div className="space-y-3">
                     {/* Tender Deadline Card */}
                     <div className={`p-3.5 rounded-2xl border space-y-1.5 ${
-                      isDark ? 'bg-slate-950/60 border-amber-500/30' : 'bg-amber-50/60 border-amber-200'
+                      isDark ? 'bg-slate-950/60 border-amber-500/30' : 'bg-amber-50/80 border-amber-200 shadow-xs'
                     }`}>
                       <div className="flex justify-between items-center">
                         <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500 text-slate-950">
@@ -4158,7 +4158,7 @@ export default function AdminPortalPage() {
                     {/* Upcoming Agenda 1 */}
                     {agendaList.slice(0, 2).map((agenda) => (
                       <div key={agenda.id} className={`p-3 rounded-2xl border flex items-center justify-between ${
-                        isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-slate-50 border-slate-200'
+                        isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:bg-white hover:shadow-sm'
                       }`}>
                         <div className="min-w-0 pr-2">
                           <p className={`font-bold text-xs truncate ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
@@ -4180,7 +4180,7 @@ export default function AdminPortalPage() {
 
                   <button
                     onClick={() => setActiveTab('manage-agenda')}
-                    className="w-full py-2 rounded-xl bg-accent-gold/10 hover:bg-accent-gold text-accent-gold hover:text-slate-950 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full py-2 rounded-xl bg-accent-gold/10 hover:bg-accent-gold text-accent-gold hover:text-slate-950 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                   >
                     <PlusCircle className="w-3.5 h-3.5" />
                     <span>Jadwalkan Agenda Baru</span>

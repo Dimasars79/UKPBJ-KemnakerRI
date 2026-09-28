@@ -8,8 +8,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { 
   BellRing, ChevronRight, FileText, Calendar, Megaphone, 
   Newspaper, Laptop, Globe, MessageSquare, Download, 
-  BarChart2, Bookmark, QrCode, Share2, Printer, 
-  CheckCircle2, Clock, ShieldCheck, ArrowRight, Package, Scale
+  BarChart2, CheckCircle2, Clock, ShieldCheck, ArrowRight, Package, Scale
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -197,26 +196,6 @@ export default function InformasiPage() {
               </div>
             </FadeIn>
 
-            {/* BOTTOM INFO WIDGET */}
-            <FadeIn direction="up" delay={0.2}>
-              <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex items-center space-x-4">
-                <div className="w-11 h-11 bg-slate-100 rounded-2xl flex items-center justify-center flex-shrink-0 text-primary-navy">
-                  <Clock className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-bold text-primary-navy">
-                    {trans('Terakhir diperbarui: 2 September 2026, 13:40 WIB', 'Last updated: Sep 2, 2026, 13:40 WIB')}
-                  </p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
-                    {trans(
-                      'UKPBJ Kementerian Ketenagakerjaan RI berkomitmen menyajikan informasi yang akurat dan transparan.',
-                      'UKPBJ Ministry of Manpower RI is committed to presenting accurate and transparent procurement information.'
-                    )}
-                  </p>
-                </div>
-              </div>
-            </FadeIn>
-
           </div>
 
 
@@ -326,56 +305,27 @@ export default function InformasiPage() {
               </div>
             </FadeIn>
 
-            {/* QUICK ACTIONS ROW */}
+            {/* BOTTOM INFO WIDGET */}
             <FadeIn direction="up" delay={0.2}>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 mt-auto">
-                
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
-                    <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">{trans('Simpan Info', 'Save Info')}</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">{trans('Simpan regulasi penting.', 'Bookmark essential regulations.')}</p>
-                  <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
-                    {trans('Tersimpan', 'Saved')}
-                  </button>
+              <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex items-center space-x-4 mt-auto">
+                <div className="w-11 h-11 bg-slate-100 rounded-2xl flex items-center justify-center flex-shrink-0 text-primary-navy">
+                  <Clock className="w-5 h-5" />
                 </div>
-
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
-                    <QrCode className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">{trans('QR Code', 'QR Code')}</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">{trans('Pindai dokumen digital.', 'Scan digital documents.')}</p>
-                  <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
-                    {trans('Pindai', 'Scan')}
-                  </button>
+                <div>
+                  <p className="text-xs sm:text-sm font-bold text-primary-navy">
+                    {trans('Terakhir diperbarui: 2 September 2026, 13:40 WIB', 'Last updated: Sep 2, 2026, 13:40 WIB')}
+                  </p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {trans(
+                      'UKPBJ Kementerian Ketenagakerjaan RI berkomitmen menyajikan informasi yang akurat dan transparan.',
+                      'UKPBJ Ministry of Manpower RI is committed to presenting accurate and transparent procurement information.'
+                    )}
+                  </p>
                 </div>
-
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
-                    <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">{trans('Bagikan', 'Share')}</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">{trans('Bagikan ke rekan kerja.', 'Share with colleagues.')}</p>
-                  <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
-                    {trans('Bagikan', 'Share')}
-                  </button>
-                </div>
-
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md text-center flex flex-col items-center hover:border-blue-300 hover:shadow-xl transition-all cursor-pointer group">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors shadow-2xs">
-                    <Printer className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-primary-navy mb-0.5 sm:mb-1">{trans('Cetak PDF', 'Print PDF')}</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2 sm:mb-3 line-clamp-2">{trans('Simpan file lembar cetak.', 'Save printable sheets.')}</p>
-                  <button className="mt-auto w-full py-1.5 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 group-hover:bg-primary-navy group-hover:text-white group-hover:border-transparent transition-colors">
-                    {trans('Cetak', 'Print')}
-                  </button>
-                </div>
-
               </div>
             </FadeIn>
+
+
 
           </div>
         </div>
