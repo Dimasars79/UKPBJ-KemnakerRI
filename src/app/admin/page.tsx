@@ -2714,8 +2714,8 @@ export default function AdminPortalPage() {
                   <div className="absolute -bottom-10 left-1/3 w-60 h-60 bg-accent-gold/10 rounded-full blur-3xl pointer-events-none" />
 
                   <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
-                    <div className="space-y-1.5 sm:space-y-2">
-                      <h2 className={`text-xl sm:text-2xl md:text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    <div className="space-y-2.5 sm:space-y-3">
+                      <h2 className={`text-xl sm:text-2xl md:text-3xl font-black font-jakarta tracking-normal not-italic ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         Selamat Datang, Dimas Ars
                       </h2>
                       

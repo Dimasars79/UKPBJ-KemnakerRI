@@ -27,6 +27,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
+        jakarta: ["var(--font-plus-jakarta)", "sans-serif"],
       },
       container: {
         center: true,
