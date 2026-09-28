@@ -133,13 +133,15 @@ export default function LoginPage() {
                   className="object-contain h-10 sm:h-12 w-auto brightness-0 invert drop-shadow-md" 
                 />
                 <div className="h-8 sm:h-10 border-l border-white/20" />
-                <Image 
-                  src="/logo.png" 
-                  alt="Logo UKPBJ" 
-                  width={50} 
-                  height={50} 
-                  className="object-contain h-10 sm:h-12 w-auto drop-shadow-md" 
-                />
+                <div className="flex items-center justify-center h-10 sm:h-12 w-10 sm:w-12 overflow-visible">
+                  <Image 
+                    src="/logo.png" 
+                    alt="Logo UKPBJ" 
+                    width={80} 
+                    height={80} 
+                    className="object-contain scale-[1.45] w-full h-full drop-shadow-md" 
+                  />
+                </div>
               </div>
             </div>
 
