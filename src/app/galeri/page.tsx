@@ -533,6 +533,14 @@ export default function GaleriPage() {
                       embedUrl = trimmedUrl.includes('?') ? `${trimmedUrl}&autoplay=1` : `${trimmedUrl}?autoplay=1`;
                     }
 
+                    // Google Drive Video Embed
+                    if (trimmedUrl.includes('drive.google.com')) {
+                      const driveMatch = trimmedUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || trimmedUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/) || trimmedUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                      if (driveMatch && driveMatch[1]) {
+                        embedUrl = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+                      }
+                    }
+
                     if (embedUrl) {
                       return (
                         <iframe

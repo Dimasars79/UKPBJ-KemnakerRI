@@ -35,22 +35,59 @@ export default function PanduanPage() {
   const [previewPage, setPreviewPage] = useState<number>(1);
   const [zoomLevel, setZoomLevel] = useState<number>(100);
 
+  // Filter published guides (resilient for both status and syncFrontend)
   const publishedGuides = useMemo(() => {
-    return panduanList.filter(item => item.status === 'Published' || item.syncFrontend);
+    return panduanList.filter(item => item.status !== 'Draft' && item.status !== 'Archived');
   }, [panduanList]);
+
+  // Resilient category matcher helper
+  const matchCategory = (item: PanduanItem, targetCatId: string) => {
+    if (targetCatId === 'all') return true;
+    const cat = (item.category || '').toLowerCase().trim();
+    const role = (item.role || '').toLowerCase().trim();
+    const title = (item.title || '').toLowerCase().trim();
+
+    if (cat === targetCatId) return true;
+
+    if (targetCatId === 'pa-kpa') {
+      return cat === 'pa-kpa' || cat === 'pa/kpa' || role.includes('pa') || role.includes('kpa') || title.includes('pa / kpa') || title.includes('kpa');
+    }
+    if (targetCatId === 'ppk') {
+      return cat === 'ppk' || role.includes('ppk') || title.includes('ppk');
+    }
+    if (targetCatId === 'pp') {
+      return cat === 'pp' || cat === 'pejabat pengadaan' || role.includes('pejabat pengadaan') || role === 'pp' || title.includes('pejabat pengadaan');
+    }
+    if (targetCatId === 'pokja') {
+      return cat === 'pokja' || cat === 'panitia' || role.includes('pokja') || role.includes('panitia') || title.includes('pokja');
+    }
+    if (targetCatId === 'penyedia') {
+      return cat === 'penyedia' || role.includes('penyedia') || role.includes('pelaku usaha') || title.includes('penyedia') || title.includes('pelaku usaha');
+    }
+    if (targetCatId === 'mdp') {
+      return cat === 'mdp' || role.includes('mdp') || role.includes('model dokumen') || cat.includes('model dokumen') || title.includes('model dokumen');
+    }
+    if (targetCatId === 'bimtek') {
+      return cat === 'bimtek' || role.includes('bimtek') || role.includes('sosialisasi') || cat.includes('bimtek') || title.includes('bimtek') || title.includes('sosialisasi');
+    }
+    if (targetCatId === 'lain') {
+      return cat === 'lain' || cat === 'lain-lain' || cat === 'regulasi' || cat === 'aplikasi' || role.includes('lain') || role.includes('standar') || role.includes('umum');
+    }
+    return false;
+  };
 
   const guideCategories = useMemo(() => {
     return guideCategoryMeta.map(cat => {
       const count = cat.id === 'all' 
         ? publishedGuides.length 
-        : publishedGuides.filter(g => g.category === cat.id).length;
+        : publishedGuides.filter(g => matchCategory(g, cat.id)).length;
       return { ...cat, count };
     });
   }, [publishedGuides]);
 
   const filteredGuides = useMemo(() => {
     return publishedGuides.filter(item => {
-      const matchCat = selectedCategory === 'all' || item.category === selectedCategory;
+      const matchCat = matchCategory(item, selectedCategory);
       const matchSearch = searchQuery.trim() === '' || 
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -60,10 +97,21 @@ export default function PanduanPage() {
   }, [publishedGuides, selectedCategory, searchQuery]);
 
   const handleDownloadFile = (guide: PanduanItem) => {
-    if (guide.downloadUrl) {
+    if (guide.fileData) {
+      const a = document.createElement('a');
+      a.href = guide.fileData;
+      a.download = guide.fileName || `${guide.title.replace(/[\/\s:,]/g, '_')}.${guide.format === 'DOCX' ? 'docx' : 'pdf'}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
+
+    if (guide.downloadUrl && guide.downloadUrl !== '#') {
       window.open(guide.downloadUrl, '_blank');
       return;
     }
+
     const content = `PANDUAN RESMI PENGADAAN BARANG DAN JASA (PBJ)\n` +
       `KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA\n` +
       `============================================================\n\n` +
@@ -142,7 +190,7 @@ export default function PanduanPage() {
                     {searchQuery && (
                       <button 
                         onClick={() => setSearchQuery('')}
-                        className="px-3 text-xs text-slate-400 hover:text-slate-600 font-semibold"
+                        className="px-3 text-xs text-slate-400 hover:text-slate-600 font-semibold cursor-pointer"
                       >
                         Reset
                       </button>
@@ -178,7 +226,7 @@ export default function PanduanPage() {
                       <button
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
-                        className={`w-full flex items-center justify-between p-3 rounded-xl text-xs font-semibold transition-all text-left ${
+                        className={`w-full flex items-center justify-between p-3 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer ${
                           isActive
                             ? 'bg-gradient-to-r from-primary-navy to-primary-blue text-white shadow-md font-bold'
                             : 'text-slate-700 hover:bg-slate-50 hover:text-primary-navy'
@@ -330,7 +378,7 @@ export default function PanduanPage() {
                       </p>
                       <button
                         onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
-                        className="text-xs font-bold text-primary-blue hover:underline"
+                        className="text-xs font-bold text-primary-blue hover:underline cursor-pointer"
                       >
                         Reset Filter & Pencarian
                       </button>
@@ -342,7 +390,7 @@ export default function PanduanPage() {
               {/* Load More Button */}
               {filteredGuides.length > 0 && (
                 <div className="mt-8 text-center">
-                  <button className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-primary-blue hover:text-primary-blue text-slate-700 font-bold text-xs py-3 px-8 rounded-xl transition-all shadow-xs hover:shadow-sm">
+                  <button className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-primary-blue hover:text-primary-blue text-slate-700 font-bold text-xs py-3 px-8 rounded-xl transition-all shadow-xs hover:shadow-sm cursor-pointer">
                     <span>Lihat Seluruh Arsip Panduan</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
@@ -400,7 +448,7 @@ export default function PanduanPage() {
                   <div className="hidden sm:flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700 text-slate-300 text-xs">
                     <button 
                       onClick={() => setZoomLevel(prev => Math.max(75, prev - 15))}
-                      className="p-1 hover:text-white transition-colors"
+                      className="p-1 hover:text-white transition-colors cursor-pointer"
                       title="Perkecil"
                     >
                       <ZoomOut className="w-3.5 h-3.5" />
@@ -408,7 +456,7 @@ export default function PanduanPage() {
                     <span className="px-2 font-mono text-[11px]">{zoomLevel}%</span>
                     <button 
                       onClick={() => setZoomLevel(prev => Math.min(150, prev + 15))}
-                      className="p-1 hover:text-white transition-colors"
+                      className="p-1 hover:text-white transition-colors cursor-pointer"
                       title="Perbesar"
                     >
                       <ZoomIn className="w-3.5 h-3.5" />

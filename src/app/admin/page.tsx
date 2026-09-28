@@ -57,6 +57,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, RegulasiItem, SopItem, PanduanItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
 import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
 import { supabase } from '@/lib/supabase/client';
+import { parseGoogleDriveImage, parseGoogleDriveVideo, extractGoogleDriveFileId } from '@/lib/driveHelper';
+
 
 export interface AdminNotificationItem {
   id: string;
@@ -733,8 +735,8 @@ export default function AdminPortalPage() {
   const [panduanFormData, setPanduanFormData] = useState<Partial<PanduanItem>>({
     title: '',
     desc: '',
-    category: 'aplikasi',
-    role: 'Semua Pengguna',
+    category: 'pa-kpa',
+    role: 'PA / KPA',
     version: 'v2026.1',
     updatedDate: '15 Sep 2026',
     format: 'PDF',
@@ -748,6 +750,8 @@ export default function AdminPortalPage() {
   // PHOTO & VIDEO MODAL STATES
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [editingPhoto, setEditingPhoto] = useState<PhotoItem | null>(null);
+  const [photoInputMode, setPhotoInputMode] = useState<'drive' | 'upload' | 'preset'>('drive');
+  const [drivePhotoUrlInput, setDrivePhotoUrlInput] = useState('');
   const [photoFormData, setPhotoFormData] = useState<Partial<PhotoItem>>({
     title: '',
     desc: '',
@@ -6146,6 +6150,8 @@ export default function AdminPortalPage() {
                     <button
                       onClick={() => {
                         setEditingPhoto(null);
+                        setPhotoInputMode('drive');
+                        setDrivePhotoUrlInput('');
                         setPhotoFormData({
                           title: '',
                           desc: '',
@@ -6159,7 +6165,7 @@ export default function AdminPortalPage() {
                       className="text-xs font-bold text-cyan-500 hover:underline flex items-center gap-1 cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
-                      <span>Upload Foto Baru</span>
+                      <span>Tambah Foto Baru</span>
                     </button>
                   </div>
 
@@ -6241,6 +6247,16 @@ export default function AdminPortalPage() {
                                   onClick={() => {
                                     setEditingPhoto(item);
                                     setPhotoFormData(item);
+                                    if (item.src.includes('googleusercontent.com') || item.src.includes('drive.google.com')) {
+                                      setPhotoInputMode('drive');
+                                      setDrivePhotoUrlInput(item.src);
+                                    } else if (item.src.startsWith('data:') || item.src.includes('supabase.co')) {
+                                      setPhotoInputMode('upload');
+                                      setDrivePhotoUrlInput('');
+                                    } else {
+                                      setPhotoInputMode('preset');
+                                      setDrivePhotoUrlInput('');
+                                    }
                                     setShowPhotoModal(true);
                                   }}
                                   className={`p-1.5 rounded-xl border transition-all cursor-pointer ${
@@ -6452,6 +6468,20 @@ export default function AdminPortalPage() {
                                   title={mediaLightbox.title}
                                   className="w-full h-full border-0"
                                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                />
+                              );
+                            }
+
+                            // Google Drive Video Embed
+                            const driveRes = parseGoogleDriveVideo(trimmedUrl);
+                            if (driveRes.isDrive && driveRes.embedUrl) {
+                              return (
+                                <iframe
+                                  src={driveRes.embedUrl}
+                                  title={mediaLightbox.title}
+                                  className="w-full h-full border-0"
+                                  allow="autoplay; encrypted-media; picture-in-picture"
                                   allowFullScreen
                                 />
                               );
@@ -8561,43 +8591,162 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                {/* FILE UPLOAD & PREVIEW SECTION */}
-                <div className={`p-4 rounded-2xl border space-y-3 ${
+                {/* PHOTO SOURCE TABS & PREVIEW SECTION */}
+                <div className={`p-4 rounded-2xl border space-y-4 ${
                   isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
                   <div className="flex items-center justify-between">
-                    <label className="font-bold flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400">
+                    <label className="font-bold flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 text-xs">
                       <ImageIcon className="w-4 h-4" />
-                      <span>Upload Foto dari Komputer (Local Storage)</span>
+                      <span>Sumber Gambar Foto</span>
                     </label>
-                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>PNG, JPG, WEBP (Max 4MB)</span>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>Pilih Metode Input</span>
                   </div>
 
-                  {/* Upload Dropzone */}
-                  <label 
-                    htmlFor="photo-file-upload" 
-                    className={`border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all ${
-                      isDark 
-                        ? 'border-slate-700 hover:border-cyan-500 hover:bg-cyan-500/5' 
-                        : 'border-slate-300 hover:border-cyan-600 hover:bg-cyan-50'
-                    }`}
-                  >
-                    <Upload className="w-6 h-6 text-cyan-600 dark:text-cyan-500 mb-1.5 animate-bounce" />
-                    <span className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>Pilih File Foto dari Perangkat / Komputer</span>
-                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>File otomatis dikonversi & disimpan ke database browser</span>
-                    <input 
-                      id="photo-file-upload"
-                      type="file" 
-                      accept="image/*" 
-                      onChange={(e) => handleImageFileUpload(e, 'photo')}
-                      className="hidden" 
-                    />
-                  </label>
+                  {/* Mode Tabs */}
+                  <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300/50 dark:border-slate-800 text-[11px] font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setPhotoInputMode('drive')}
+                      className={`py-1.5 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        photoInputMode === 'drive'
+                          ? 'bg-cyan-600 text-white shadow-xs'
+                          : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <span>☁️</span>
+                      <span className="truncate">Google Drive</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPhotoInputMode('upload')}
+                      className={`py-1.5 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        photoInputMode === 'upload'
+                          ? 'bg-cyan-600 text-white shadow-xs'
+                          : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <span>💻</span>
+                      <span className="truncate">Upload Lokal</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPhotoInputMode('preset')}
+                      className={`py-1.5 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        photoInputMode === 'preset'
+                          ? 'bg-cyan-600 text-white shadow-xs'
+                          : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <span>🖼️</span>
+                      <span className="truncate">Preset Bawaan</span>
+                    </button>
+                  </div>
 
-                  {/* Live Image Preview */}
+                  {/* TAB 1: GOOGLE DRIVE / CLOUD LINK */}
+                  {photoInputMode === 'drive' && (
+                    <div className="space-y-2.5">
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <label className={`font-bold text-[11px] ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+                            Tautan Google Drive / URL Gambar *
+                          </label>
+                          {photoFormData.src && photoFormData.src.includes('googleusercontent.com') && (
+                            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                              <Check className="w-3 h-3" /> Drive CDN Terhubung
+                            </span>
+                          )}
+                        </div>
+                        <input
+                          type="text"
+                          value={drivePhotoUrlInput || photoFormData.src || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setDrivePhotoUrlInput(val);
+                            const parsed = parseGoogleDriveImage(val);
+                            if (parsed.isDrive) {
+                              setPhotoFormData((prev) => ({ ...prev, src: parsed.directUrl }));
+                            } else if (val.trim()) {
+                              setPhotoFormData((prev) => ({ ...prev, src: val.trim() }));
+                            }
+                          }}
+                          placeholder="https://drive.google.com/file/d/1A2B3C.../view?usp=sharing"
+                          className={`w-full px-3 py-2 border rounded-xl outline-none font-mono text-[11px] ${
+                            isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-cyan-500' : 'bg-white border-slate-300 text-slate-900 focus:border-cyan-600'
+                          }`}
+                        />
+                      </div>
+
+                      {/* Google Drive Guide Box */}
+                      <div className={`p-2.5 rounded-xl border text-[10.5px] leading-relaxed ${
+                        isDark ? 'bg-cyan-950/30 border-cyan-900/50 text-cyan-200' : 'bg-cyan-50 border-cyan-200 text-cyan-900'
+                      }`}>
+                        <p className="font-bold flex items-center gap-1 mb-1">
+                          <span>💡 Petunjuk Penggunaan Google Drive:</span>
+                        </p>
+                        <ol className="list-decimal list-inside space-y-0.5 opacity-90 pl-1">
+                          <li>Buka foto di Google Drive Anda & klik <strong>Bagikan (Share)</strong>.</li>
+                          <li>Ubah Akses Umum menjadi <strong>&quot;Siapa saja yang memiliki link&quot;</strong>.</li>
+                          <li>Salin link dan tempelkan pada kolom di atas. Sistem otomatis mengonversi ke link tayang super cepat.</li>
+                        </ol>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB 2: LOCAL FILE UPLOAD */}
+                  {photoInputMode === 'upload' && (
+                    <div className="space-y-2">
+                      <label 
+                        htmlFor="photo-file-upload" 
+                        className={`border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all ${
+                          isDark 
+                            ? 'border-slate-700 hover:border-cyan-500 hover:bg-cyan-500/5' 
+                            : 'border-slate-300 hover:border-cyan-600 hover:bg-cyan-50'
+                        }`}
+                      >
+                        <Upload className="w-6 h-6 text-cyan-600 dark:text-cyan-500 mb-1.5 animate-bounce" />
+                        <span className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>Pilih File Foto dari Perangkat</span>
+                        <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>PNG, JPG, WEBP (Maksimal 8MB)</span>
+                        <input 
+                          id="photo-file-upload"
+                          type="file" 
+                          accept="image/*" 
+                          onChange={(e) => handleImageFileUpload(e, 'photo')}
+                          className="hidden" 
+                        />
+                      </label>
+                    </div>
+                  )}
+
+                  {/* TAB 3: PRESET COLLECTIONS */}
+                  {photoInputMode === 'preset' && (
+                    <div className="space-y-1.5">
+                      <label className={`font-bold text-[11px] block ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+                        Pilih Koleksi Foto Bawaan:
+                      </label>
+                      <select
+                        value={photoFormData.src || '/gallery/gallery-1.jpg'}
+                        onChange={(e) => setPhotoFormData({ ...photoFormData, src: e.target.value })}
+                        className={`w-full px-3 py-2 border rounded-xl outline-none text-[11px] ${
+                          isDark ? 'bg-slate-900 border-slate-700 text-slate-300' : 'bg-white border-slate-300 text-slate-800'
+                        }`}
+                      >
+                        <option value="/gallery/gallery-1.jpg">Gallery Foto 1 (Kunjungan Kerja)</option>
+                        <option value="/gallery/gallery-2.jpg">Gallery Foto 2 (Rakornas Pengadaan)</option>
+                        <option value="/gallery/gallery-3.jpg">Gallery Foto 3 (Sosialisasi Regulasi)</option>
+                        <option value="/gallery/gallery-4.jpg">Gallery Foto 4 (Bimtek PBJ)</option>
+                        <option value="/gallery/gallery-5.jpg">Gallery Foto 5 (Penandatanganan Kontrak)</option>
+                        <option value="/gallery/gallery-6.jpg">Gallery Foto 6 (Monitoring Evaluasi)</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Live Image Preview (Shared across all modes) */}
                   {photoFormData.src && (
-                    <div className="flex items-center gap-3 pt-2">
-                      <div className="relative w-20 h-14 rounded-xl overflow-hidden border border-slate-700 bg-slate-800 shrink-0">
+                    <div className={`p-2.5 rounded-xl border flex items-center gap-3 ${
+                      isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+                    }`}>
+                      <div className="relative w-20 h-14 rounded-lg overflow-hidden border border-slate-700 bg-slate-800 shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                           src={photoFormData.src} 
@@ -8606,35 +8755,20 @@ export default function AdminPortalPage() {
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-bold text-xs text-emerald-600 dark:text-emerald-500 flex items-center gap-1">
+                        <p className="font-bold text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                           <Check className="w-3.5 h-3.5" />
                           <span>Foto Siap Ditayangkan</span>
                         </p>
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} truncate mt-0.5`}>
-                          {photoFormData.src.startsWith('data:') ? '✓ Format: Base64 Data URL (Local)' : photoFormData.src}
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} truncate mt-0.5 font-mono`}>
+                          {photoFormData.src.includes('googleusercontent.com')
+                            ? '☁️ Google Drive Direct CDN'
+                            : photoFormData.src.startsWith('data:') 
+                              ? '💻 Base64 Local Storage' 
+                              : photoFormData.src}
                         </p>
                       </div>
                     </div>
                   )}
-
-                  {/* Or select preset images */}
-                  <div className={`pt-2 border-t ${isDark ? 'border-slate-800/60' : 'border-slate-200'}`}>
-                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-bold'} block mb-1`}>Atau pilih dari koleksi bawaan:</span>
-                    <select
-                      value={photoFormData.src || '/gallery/gallery-1.jpg'}
-                      onChange={(e) => setPhotoFormData({ ...photoFormData, src: e.target.value })}
-                      className={`w-full px-3 py-1.5 border rounded-lg outline-none text-[11px] ${
-                        isDark ? 'bg-slate-900 border-slate-700 text-slate-300' : 'bg-white border-slate-300 text-slate-800'
-                      }`}
-                    >
-                      <option value="/gallery/gallery-1.jpg">Gallery Foto 1 (Kunjungan Kerja)</option>
-                      <option value="/gallery/gallery-2.jpg">Gallery Foto 2 (Rakornas Pengadaan)</option>
-                      <option value="/gallery/gallery-3.jpg">Gallery Foto 3 (Sosialisasi Regulasi)</option>
-                      <option value="/gallery/gallery-4.jpg">Gallery Foto 4 (Bimtek PBJ)</option>
-                      <option value="/gallery/gallery-5.jpg">Gallery Foto 5 (Penandatanganan Kontrak)</option>
-                      <option value="/gallery/gallery-6.jpg">Gallery Foto 6 (Monitoring Evaluasi)</option>
-                    </select>
-                  </div>
                 </div>
 
                 <div className={`flex justify-end gap-3 pt-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
@@ -8752,26 +8886,36 @@ export default function AdminPortalPage() {
 
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Link URL YouTube / Video *</label>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (videoFormData.url) {
-                          const ytThumb = getYouTubeThumbnail(videoFormData.url);
-                          if (ytThumb) {
-                            setVideoFormData((prev) => ({ ...prev, thumbnailUrl: ytThumb }));
-                            showNotification('✓ Thumbnail YouTube berhasil diambil secara otomatis!');
+                    <label className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+                      Link URL Video (Google Drive / YouTube / MP4) *
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (videoFormData.url) {
+                            const driveRes = parseGoogleDriveVideo(videoFormData.url);
+                            if (driveRes.isDrive && driveRes.thumbnailUrl) {
+                              setVideoFormData((prev) => ({ ...prev, thumbnailUrl: driveRes.thumbnailUrl || prev.thumbnailUrl }));
+                              showNotification('✓ Thumbnail Google Drive berhasil dihubungkan!');
+                            } else {
+                              const ytThumb = getYouTubeThumbnail(videoFormData.url);
+                              if (ytThumb) {
+                                setVideoFormData((prev) => ({ ...prev, thumbnailUrl: ytThumb }));
+                                showNotification('✓ Thumbnail YouTube berhasil diambil secara otomatis!');
+                              } else {
+                                showNotification('⚠️ Masukkan link Google Drive atau YouTube yang valid.');
+                              }
+                            }
                           } else {
-                            showNotification('⚠️ URL YouTube tidak valid untuk ekstraksi otomatis.');
+                            showNotification('⚠️ Masukkan link URL video terlebih dahulu.');
                           }
-                        } else {
-                          showNotification('⚠️ Masukkan link URL YouTube terlebih dahulu.');
-                        }
-                      }}
-                      className="text-[10px] text-amber-600 dark:text-amber-500 hover:underline font-bold cursor-pointer"
-                    >
-                      ⚡ Ambil Thumbnail dari YouTube
-                    </button>
+                        }}
+                        className="text-[10px] text-amber-600 dark:text-amber-400 hover:underline font-bold cursor-pointer"
+                      >
+                        ⚡ Ambil Thumbnail Otomatis
+                      </button>
+                    </div>
                   </div>
                   <input
                     type="text"
@@ -8780,16 +8924,40 @@ export default function AdminPortalPage() {
                     onChange={(e) => {
                       const newUrl = e.target.value;
                       setVideoFormData({ ...videoFormData, url: newUrl });
-                      const autoThumb = getYouTubeThumbnail(newUrl);
-                      if (autoThumb && (!videoFormData.thumbnailUrl || videoFormData.thumbnailUrl === '/gallery/gallery-1.jpg')) {
-                        setVideoFormData((prev) => ({ ...prev, url: newUrl, thumbnailUrl: autoThumb }));
+
+                      // Auto-detect Google Drive Video
+                      const driveRes = parseGoogleDriveVideo(newUrl);
+                      if (driveRes.isDrive && driveRes.thumbnailUrl) {
+                        if (!videoFormData.thumbnailUrl || videoFormData.thumbnailUrl === '/gallery/gallery-1.jpg') {
+                          setVideoFormData((prev) => ({ ...prev, url: newUrl, thumbnailUrl: driveRes.thumbnailUrl || prev.thumbnailUrl }));
+                        }
+                      } else {
+                        // Auto-detect YouTube
+                        const autoThumb = getYouTubeThumbnail(newUrl);
+                        if (autoThumb && (!videoFormData.thumbnailUrl || videoFormData.thumbnailUrl === '/gallery/gallery-1.jpg')) {
+                          setVideoFormData((prev) => ({ ...prev, url: newUrl, thumbnailUrl: autoThumb }));
+                        }
                       }
                     }}
-                    placeholder="https://www.youtube.com/watch?v=..."
-                    className={`w-full px-3 py-2 border rounded-xl outline-none font-mono ${
+                    placeholder="https://drive.google.com/file/d/... atau https://www.youtube.com/watch?v=..."
+                    className={`w-full px-3 py-2 border rounded-xl outline-none font-mono text-[11px] ${
                       isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-amber-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-amber-600'
                     }`}
                   />
+
+                  {/* Dynamic Status / Tips Badge */}
+                  {videoFormData.url && videoFormData.url.includes('drive.google.com') && (
+                    <div className={`mt-2 p-2.5 rounded-xl border text-[10.5px] leading-relaxed ${
+                      isDark ? 'bg-amber-950/30 border-amber-800/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900'
+                    }`}>
+                      <p className="font-bold flex items-center gap-1">
+                        <span>☁️ Link Video Google Drive Terdeteksi:</span>
+                      </p>
+                      <p className="mt-0.5 opacity-90">
+                        Pastikan akses file di Google Drive diatur ke <strong>&quot;Siapa saja yang memiliki link&quot;</strong> agar video dapat langsung diputar di website tanpa perlu login.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* THUMBNAIL UPLOAD & PREVIEW SECTION */}
@@ -8799,9 +8967,9 @@ export default function AdminPortalPage() {
                   <div className="flex items-center justify-between">
                     <label className="font-bold flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
                       <ImageIcon className="w-4 h-4" />
-                      <span>Upload Thumbnail Kustom (Local Storage)</span>
+                      <span>Thumbnail Video</span>
                     </label>
-                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>PNG, JPG, WEBP</span>
+                    <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>Otomatis / Upload Kustom</span>
                   </div>
 
                   <label 
@@ -8813,7 +8981,7 @@ export default function AdminPortalPage() {
                     }`}
                   >
                     <Upload className="w-5 h-5 text-amber-600 dark:text-amber-500 mb-1" />
-                    <span className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>Pilih Gambar Thumbnail dari Komputer</span>
+                    <span className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>Upload Gambar Thumbnail Kustom dari Komputer</span>
                     <input 
                       id="video-thumb-upload"
                       type="file" 
@@ -8825,8 +8993,10 @@ export default function AdminPortalPage() {
 
                   {/* Thumbnail Preview */}
                   {videoFormData.thumbnailUrl && (
-                    <div className="flex items-center gap-3 pt-1">
-                      <div className="relative w-20 h-14 rounded-xl overflow-hidden border border-slate-700 bg-slate-800 shrink-0">
+                    <div className={`p-2.5 rounded-xl border flex items-center gap-3 ${
+                      isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+                    }`}>
+                      <div className="relative w-20 h-14 rounded-lg overflow-hidden border border-slate-700 bg-slate-800 shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                           src={videoFormData.thumbnailUrl} 
@@ -8835,12 +9005,18 @@ export default function AdminPortalPage() {
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-bold text-xs text-emerald-600 dark:text-emerald-500 flex items-center gap-1">
+                        <p className="font-bold text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                           <Check className="w-3.5 h-3.5" />
-                          <span>Thumbnail Terpasang</span>
+                          <span>Thumbnail Siap Digunakan</span>
                         </p>
-                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} truncate mt-0.5`}>
-                          {videoFormData.thumbnailUrl.startsWith('data:') ? '✓ Format: Base64 (Local File)' : videoFormData.thumbnailUrl}
+                        <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} truncate mt-0.5 font-mono`}>
+                          {videoFormData.thumbnailUrl.includes('googleusercontent.com')
+                            ? '☁️ Thumbnail Google Drive'
+                            : videoFormData.thumbnailUrl.includes('img.youtube.com')
+                              ? '⚡ Thumbnail YouTube'
+                              : videoFormData.thumbnailUrl.startsWith('data:')
+                                ? '💻 Base64 Local File'
+                                : videoFormData.thumbnailUrl}
                         </p>
                       </div>
                     </div>

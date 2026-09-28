@@ -666,8 +666,22 @@ export const DEFAULT_PANDUAN: PanduanItem[] = [
   },
   {
     id: 'GUI-005',
+    category: 'pp',
+    role: 'Pejabat Pengadaan',
+    title: 'Panduan Pelaksanaan Pengadaan Langsung & E-Purchasing Pejabat Pengadaan',
+    date: '20 Des 2023',
+    format: 'PDF',
+    fileSize: '2.1 MB',
+    fileName: 'Juknis-Pejabat-Pengadaan.pdf',
+    desc: 'Petunjuk operasional pelaksanaan pengadaan langsung barang/pekerjaan konstruksi/jasa lainnya dan transaksi e-purchasing.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-006',
     category: 'penyedia',
-    role: 'Penyedia',
+    role: 'Pelaku Usaha / Penyedia',
     title: 'Panduan Registrasi & Verifikasi Dokumen Kualifikasi SIKaP bagi Pelaku Usaha',
     date: '08 Jan 2024',
     format: 'PDF',
@@ -679,7 +693,7 @@ export const DEFAULT_PANDUAN: PanduanItem[] = [
     syncFrontend: true
   },
   {
-    id: 'GUI-006',
+    id: 'GUI-007',
     category: 'pokja',
     role: 'Pokja Pemilihan',
     title: 'Tata Cara Evaluasi Dokumen Penawaran & Pembuktian Kualifikasi E-Tendering',
@@ -693,9 +707,9 @@ export const DEFAULT_PANDUAN: PanduanItem[] = [
     syncFrontend: true
   },
   {
-    id: 'GUI-007',
+    id: 'GUI-008',
     category: 'mdp',
-    role: 'Standar Dokumen',
+    role: 'Model Dokumen Pengadaan (MDP)',
     title: 'Model Dokumen Pengadaan (MDP) Pekerjaan Konstruksi & Jasa Konsultansi 2026',
     date: '19 Feb 2024',
     format: 'DOCX',
@@ -707,15 +721,29 @@ export const DEFAULT_PANDUAN: PanduanItem[] = [
     syncFrontend: true
   },
   {
-    id: 'GUI-008',
+    id: 'GUI-009',
     category: 'bimtek',
-    role: 'Materi Pelatihan',
+    role: 'Materi Bimtek & Sosialisasi',
     title: 'Slide Presentasi Sosialisasi E-Katalog Sektoral Ketenagakerjaan',
     date: '06 Mar 2024',
     format: 'SLIDE',
     fileSize: '8.4 MB',
     fileName: 'Slide-E-Katalog-Kemnaker.pdf',
     desc: 'Materi komprehensif tata cara e-purchasing produk barang dan jasa pelatihan vokasi melalui katalog elektronik sektor Kemnaker.',
+    downloadUrl: '#',
+    status: 'Published',
+    syncFrontend: true
+  },
+  {
+    id: 'GUI-010',
+    category: 'lain',
+    role: 'Lain-Lain & Standar Teknis',
+    title: 'Standar Format Berita Acara & Checklist Dokumen PBJ Kemnaker 2026',
+    date: '15 Apr 2024',
+    format: 'DOCX',
+    fileSize: '1.5 MB',
+    fileName: 'Standar-Format-BA-PBJ.docx',
+    desc: 'Kompilasi form standar Berita Acara Rapat Penjelasan, Evaluasi, BAST, dan lembar kerja pengadaan barang/jasa.',
     downloadUrl: '#',
     status: 'Published',
     syncFrontend: true
