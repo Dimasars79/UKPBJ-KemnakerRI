@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
@@ -9,7 +10,7 @@ import { useData } from '@/contexts/DataContext';
 import { 
   BellRing, ChevronRight, ChevronLeft, Search, Filter, Newspaper, Package, 
   Scale, Calendar, Layers, Clock, ArrowRight,
-  Globe, MessageSquare
+  Globe, MessageSquare, RotateCcw, CheckCircle2
 } from 'lucide-react';
 
 type UpdateType = 'all' | 'berita' | 'paket' | 'regulasi' | 'agenda' | 'sop';
@@ -35,11 +36,32 @@ interface UnifiedUpdateItem {
 const ITEMS_PER_PAGE = 6;
 
 export default function PusatPembaruanPage() {
-  const { newsList, packagesList, regulasiList, agendaList, sopList } = useData();
+  const { newsList, packagesList, regulasiList, agendaList, sopList, refreshFromSupabase } = useData();
   const [selectedType, setSelectedType] = useState<UpdateType>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'terbaru' | 'terlama'>('terbaru');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      if (refreshFromSupabase) {
+        await refreshFromSupabase();
+      }
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setTimeout(() => {
+        setIsRefreshing(false);
+      }, 500);
+    }
+  };
 
   // Unified list mapping
   const allUpdates: UnifiedUpdateItem[] = useMemo(() => {
@@ -323,57 +345,72 @@ export default function PusatPembaruanPage() {
                 )}
               </div>
 
-              {/* Sort Order Selector */}
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-[11px] sm:text-xs font-bold text-slate-500 hidden sm:inline">Urutkan:</span>
-                <select
-                  value={sortOrder}
-                  onChange={(e) => {
-                    setSortOrder(e.target.value as 'terbaru' | 'terlama');
-                    setCurrentPage(1);
-                  }}
-                  className="w-full sm:w-auto px-2.5 py-2 sm:px-3 sm:py-2.5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200 text-[11px] sm:text-xs font-bold text-slate-700 outline-none focus:border-primary-blue cursor-pointer"
+              {/* Controls: Sort Order & Compact Refresh Icon Button */}
+              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl px-2.5 py-1 sm:px-3 sm:py-1.5 focus-within:border-primary-blue transition-colors h-[38px] sm:h-[42px]">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-500 hidden sm:inline">Urutkan:</span>
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => {
+                      setSortOrder(e.target.value as 'terbaru' | 'terlama');
+                      setCurrentPage(1);
+                    }}
+                    className="bg-transparent text-[11px] sm:text-xs font-bold text-slate-700 outline-none cursor-pointer py-1"
+                  >
+                    <option value="terbaru">Pembaruan Terbaru</option>
+                    <option value="terlama">Pembaruan Terlama</option>
+                  </select>
+                </div>
+
+                {/* Tombol Icon Refresh Minimalis & Proporsional */}
+                <button
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                  title="Segarkan data pembaruan"
+                  aria-label="Segarkan Data"
+                  className="w-[38px] h-[38px] sm:w-[42px] sm:h-[42px] flex items-center justify-center rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200/80 active:bg-slate-300 text-slate-700 hover:text-primary-navy border border-slate-200/80 shadow-xs active:scale-95 transition-all cursor-pointer disabled:opacity-60 shrink-0 group"
                 >
-                  <option value="terbaru">Pembaruan Terbaru</option>
-                  <option value="terlama">Pembaruan Terlama</option>
-                </select>
+                  <RotateCcw className={`w-4 h-4 text-slate-600 group-hover:text-primary-navy transition-transform duration-500 group-hover:rotate-180 ${isRefreshing ? 'animate-spin !text-primary-blue' : ''}`} />
+                </button>
               </div>
             </div>
 
-            {/* Filter Buttons Horizontal List */}
-            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 pt-0.5 scrollbar-none">
-              {[
-                { type: 'all' as UpdateType, label: 'Semua Pembaruan', count: countStats.all, icon: <Filter className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
-                { type: 'berita' as UpdateType, label: 'Berita & Warta', count: countStats.berita, icon: <Newspaper className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
-                { type: 'paket' as UpdateType, label: 'Paket Pengadaan', count: countStats.paket, icon: <Package className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
-                { type: 'regulasi' as UpdateType, label: 'Regulasi & SK', count: countStats.regulasi, icon: <Scale className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
-                { type: 'agenda' as UpdateType, label: 'Agenda PBJ', count: countStats.agenda, icon: <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
-                { type: 'sop' as UpdateType, label: 'Standar SOP', count: countStats.sop, icon: <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
-              ].map((btn) => {
-                const isActive = selectedType === btn.type;
-                return (
-                  <button
-                    key={btn.type}
-                    onClick={() => {
-                      setSelectedType(btn.type);
-                      setCurrentPage(1);
-                    }}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-primary-blue text-white shadow-md shadow-blue-500/20'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                    }`}
-                  >
-                    {btn.icon}
-                    <span>{btn.label}</span>
-                    <span className={`px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-700'
-                    }`}>
-                      {btn.count}
-                    </span>
-                  </button>
-                );
-              })}
+            {/* Filter Buttons Horizontal List with Generous Spacing & Hidden Scrollbar */}
+            <div className="pt-2.5 sm:pt-3 border-t border-slate-100">
+              <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pt-1 pb-2 sm:pb-2.5 no-scrollbar scroll-smooth">
+                {[
+                  { type: 'all' as UpdateType, label: 'Semua Pembaruan', count: countStats.all, icon: <Filter className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
+                  { type: 'berita' as UpdateType, label: 'Berita & Warta', count: countStats.berita, icon: <Newspaper className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
+                  { type: 'paket' as UpdateType, label: 'Paket Pengadaan', count: countStats.paket, icon: <Package className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
+                  { type: 'regulasi' as UpdateType, label: 'Regulasi & SK', count: countStats.regulasi, icon: <Scale className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
+                  { type: 'agenda' as UpdateType, label: 'Agenda PBJ', count: countStats.agenda, icon: <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
+                  { type: 'sop' as UpdateType, label: 'Standar SOP', count: countStats.sop, icon: <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> },
+                ].map((btn) => {
+                  const isActive = selectedType === btn.type;
+                  return (
+                    <button
+                      key={btn.type}
+                      onClick={() => {
+                        setSelectedType(btn.type);
+                        setCurrentPage(1);
+                      }}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                        isActive
+                          ? 'bg-primary-blue text-white shadow-md shadow-blue-500/20'
+                          : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
+                      }`}
+                    >
+                      {btn.icon}
+                      <span>{btn.label}</span>
+                      <span className={`px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-700'
+                      }`}>
+                        {btn.count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
@@ -382,7 +419,7 @@ export default function PusatPembaruanPage() {
             
             {/* LEFT / MAIN UPDATES GRID (8 cols) */}
             <div className="lg:col-span-8 space-y-4 sm:space-y-6">
-              <div className="flex items-center justify-between px-1">
+              <div className="flex flex-wrap items-center justify-between gap-2 px-1">
                 <p className="text-[11px] sm:text-xs font-bold text-slate-500">
                   Menampilkan <strong className="text-primary-navy">{Math.min(filteredUpdates.length, (currentPage - 1) * ITEMS_PER_PAGE + 1)}-{Math.min(currentPage * ITEMS_PER_PAGE, filteredUpdates.length)}</strong> dari <strong className="text-primary-navy">{filteredUpdates.length}</strong> pembaruan
                 </p>
@@ -605,6 +642,24 @@ export default function PusatPembaruanPage() {
       </main>
 
       <Footer />
+
+      {/* Floating Bottom-Center Toast Notification (Pixel-Perfect Center Across All Devices) */}
+      <div className="fixed bottom-6 inset-x-0 z-50 flex justify-center items-center pointer-events-none px-4">
+        <AnimatePresence>
+          {showToast && (
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-full bg-[#06182E]/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-xs sm:text-sm font-medium tracking-wide shadow-black/40 pointer-events-auto max-w-max"
+            >
+              <CheckCircle2 className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-400 shrink-0" />
+              <span>Data pembaruan berhasil diperbarui</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
