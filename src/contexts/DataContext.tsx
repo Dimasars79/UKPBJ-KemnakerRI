@@ -110,6 +110,11 @@ export interface PanduanItem {
   downloadUrl?: string;
   status: 'Published' | 'Draft' | 'Archived';
   syncFrontend: boolean;
+  // Konten Pratinjau Dokumen yang dapat diedit di CMS
+  dasarHukum?: string;
+  persyaratan?: string;
+  langkahKerja?: string;
+  layananKontak?: string;
 }
 
 export interface PhotoItem {
@@ -777,7 +782,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // Local storage save helper
   const saveToLocal = (data: Record<string, unknown>) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (typeof window === 'undefined') return;
+      const existing = localStorage.getItem(STORAGE_KEY);
+      const parsed = existing ? JSON.parse(existing) : {};
+      const updated = { ...parsed, ...data, updatedAt: new Date().toISOString() };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     } catch (e) {
       console.warn('LocalStorage save failed:', e);
     }
@@ -971,7 +980,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           setSopList(mappedSop);
         }
 
-        if (Array.isArray(panduan)) {
+        if (Array.isArray(panduan) && panduan.length > 0) {
           const mappedPanduan: PanduanItem[] = panduan.map((p: {
             id: string;
             title: string;
@@ -991,6 +1000,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             desc?: string;
             status?: 'Published' | 'Draft' | 'Archived';
             sync_frontend?: boolean;
+            dasar_hukum?: string;
+            dasarHukum?: string;
+            persyaratan?: string;
+            langkah_kerja?: string;
+            langkahKerja?: string;
+            layanan_kontak?: string;
+            layananKontak?: string;
           }) => ({
             id: p.id,
             title: p.title,
@@ -1006,9 +1022,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             desc: p.description || p.desc || '',
             downloadUrl: p.file_url || p.download_url || '#',
             status: p.status || 'Published',
-            syncFrontend: p.sync_frontend ?? true
+            syncFrontend: p.sync_frontend ?? true,
+            dasarHukum: p.dasar_hukum || p.dasarHukum || '',
+            persyaratan: p.persyaratan || '',
+            langkahKerja: p.langkah_kerja || p.langkahKerja || '',
+            layananKontak: p.layanan_kontak || p.layananKontak || ''
           }));
-          setPanduanList(mappedPanduan);
+          setPanduanList((prev) => {
+            const localUnsynced = prev.filter(l => !mappedPanduan.some(c => c.id === l.id || (c.title && c.title === l.title)));
+            return [...mappedPanduan, ...localUnsynced];
+          });
         }
 
         if (Array.isArray(gallery_photos)) {
@@ -1683,31 +1706,48 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const newEntry: PanduanItem = {
       ...panduan,
       id: tempId,
-      syncFrontend: panduan.status === 'Published'
+      status: panduan.status || 'Published',
+      syncFrontend: (panduan.status || 'Published') === 'Published'
     };
-    const updated = [newEntry, ...panduanList];
-    setPanduanList(updated);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, updated, photosList, videosList);
 
-    const res = await syncAdminData('panduan', 'insert', {
-      data: {
-        title: panduan.title,
-        category: panduan.category,
-        role: panduan.role,
-        date: panduan.date,
-        format: panduan.format,
-        file_size: panduan.fileSize,
-        file_name: panduan.fileName,
-        file_url: panduan.downloadUrl,
-        download_url: panduan.downloadUrl,
-        description: panduan.desc,
-        status: panduan.status,
-        sync_frontend: panduan.status === 'Published'
-      }
+    setPanduanList((prev) => {
+      const updated = [newEntry, ...prev.filter(p => p.id !== tempId)];
+      persist(newsList, agendaList, packagesList, regulasiList, sopList, updated, photosList, videosList);
+      return updated;
     });
 
-    if (res?.success && res.data) {
-      setPanduanList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
+    try {
+      const res = await syncAdminData('panduan', 'insert', {
+        data: {
+          title: panduan.title,
+          category: panduan.category,
+          role: panduan.role,
+          date: panduan.date,
+          version: panduan.version || 'v2026.1',
+          format: panduan.format,
+          file_size: panduan.fileSize,
+          file_name: panduan.fileName,
+          file_url: panduan.downloadUrl,
+          download_url: panduan.downloadUrl,
+          description: panduan.desc,
+          status: panduan.status || 'Published',
+          sync_frontend: (panduan.status || 'Published') === 'Published',
+          dasar_hukum: panduan.dasarHukum || '',
+          persyaratan: panduan.persyaratan || '',
+          langkah_kerja: panduan.langkahKerja || '',
+          layanan_kontak: panduan.layananKontak || ''
+        }
+      });
+
+      if (res?.success && res.data?.id) {
+        setPanduanList((prev) => {
+          const next = prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item));
+          persist(newsList, agendaList, packagesList, regulasiList, sopList, next, photosList, videosList);
+          return next;
+        });
+      }
+    } catch (e) {
+      console.warn('Sync panduan insert failed:', e);
     }
   };
 
@@ -1737,7 +1777,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         download_url: updated.downloadUrl,
         description: updated.desc,
         status: updated.status,
-        sync_frontend: updated.status === 'Published'
+        sync_frontend: updated.status === 'Published',
+        dasar_hukum: updated.dasarHukum,
+        persyaratan: updated.persyaratan,
+        langkah_kerja: updated.langkahKerja,
+        layanan_kontak: updated.layananKontak
       }
     });
   };

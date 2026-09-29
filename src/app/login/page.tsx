@@ -23,48 +23,85 @@ export default function LoginPage() {
     setSuccessMsg(null);
 
     try {
-      // 1. Supabase Auth attempt
+      // 1. Otentikasi Kredensial via Supabase Auth
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password: password
       });
 
-      if (error) {
-        // If Supabase credentials don't match, check if this is an admin bypass demo/fallback
-        if ((email === 'admin@kemnaker.go.id' || email === 'admin' || email.includes('admin')) && (password === 'admin123' || password === 'kemnaker2026' || password.length >= 4)) {
-          setSuccessMsg('Kredensial valid. Membuka sesi Portal Admin...');
-          setTimeout(() => {
-            router.push('/admin');
-          }, 600);
-          return;
-        }
-
-        setErrorMsg(error.message === 'Invalid login credentials' 
-          ? 'Email atau kata sandi tidak sesuai. Silakan periksa kembali akun Supabase Anda.' 
-          : error.message);
+      if (error || !data.user) {
+        setErrorMsg(
+          error?.message === 'Invalid login credentials'
+            ? 'Email atau kata sandi tidak sesuai. Pastikan akun telah terdaftar di Supabase Auth.'
+            : (error?.message || 'Gagal melakukan autentikasi dengan server Supabase.')
+        );
         setIsLoading(false);
         return;
       }
 
-      if (data?.session) {
-        setSuccessMsg('Autentikasi Supabase berhasil! Mengarahkan ke Portal Admin...');
-        setTimeout(() => {
-          router.push('/admin');
-        }, 500);
+      // 2. Verifikasi Hak Akses pada Tabel public.admin_users
+      const { data: adminProfile, error: profileErr } = await supabase
+        .from('admin_users')
+        .select('*')
+        .eq('id', data.user.id)
+        .maybeSingle();
+
+      if (profileErr && profileErr.code !== 'PGRST116') {
+        console.warn('Gagal membaca profil admin:', profileErr);
+      }
+
+      if (adminProfile) {
+        // Cek status keaktifan akun
+        if (adminProfile.status === 'nonaktif') {
+          await supabase.auth.signOut();
+          setErrorMsg('Akses ditolak: Akun admin Anda sedang dinonaktifkan.');
+          setIsLoading(false);
+          return;
+        }
+
+        // Perbarui timestamp last_login di database
+        await supabase
+          .from('admin_users')
+          .update({ last_login: new Date().toISOString() })
+          .eq('id', data.user.id);
+
+        // Simpan sesi profil aktif ke localStorage untuk kelancaran UI CMS
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('ukpbj_admin_profile', JSON.stringify(adminProfile));
+        }
       } else {
+        // Jika tabel admin_users belum memiliki baris untuk user ini,
+        // buat profil default otomatis agar admin yang dibuat di dashboard Supabase langsung aktif
+        const defaultProfile = {
+          id: data.user.id,
+          nip: 'NIP-' + data.user.id.slice(0, 8).toUpperCase(),
+          nama_lengkap: data.user.email?.split('@')[0].toUpperCase() || 'ADMINISTRATOR',
+          email: data.user.email || email.trim(),
+          unit_kerja: 'Biro UKPBJ Kemnaker RI',
+          jabatan: 'Administrator Portal',
+          role: 'admin',
+          status: 'aktif',
+          last_login: new Date().toISOString()
+        };
+
+        const { error: insertErr } = await supabase
+          .from('admin_users')
+          .insert(defaultProfile);
+
+        if (!insertErr && typeof window !== 'undefined') {
+          localStorage.setItem('ukpbj_admin_profile', JSON.stringify(defaultProfile));
+        }
+      }
+
+      setSuccessMsg('Autentikasi Supabase berhasil! Mengarahkan ke Portal Admin...');
+      setTimeout(() => {
         router.push('/admin');
-      }
-    } catch {
-      // Fallback transition
-      if (email.length > 0 && password.length > 0) {
-        setSuccessMsg('Membuka sesi Portal Admin...');
-        setTimeout(() => {
-          router.push('/admin');
-        }, 600);
-      } else {
-        setErrorMsg('Terjadi kesalahan saat otentikasi. Silakan coba lagi.');
-        setIsLoading(false);
-      }
+      }, 500);
+
+    } catch (err: any) {
+      console.error('Error saat login:', err);
+      setErrorMsg('Terjadi kendala saat menghubungkan ke Supabase. Silakan coba kembali.');
+      setIsLoading(false);
     }
   };
 

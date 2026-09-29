@@ -50,28 +50,29 @@ export default function PanduanPage() {
     if (cat === targetCatId) return true;
 
     if (targetCatId === 'pa-kpa') {
-      return cat === 'pa-kpa' || cat === 'pa/kpa' || role.includes('pa') || role.includes('kpa') || title.includes('pa / kpa') || title.includes('kpa');
+      return cat === 'pa-kpa' || cat === 'pa/kpa' || cat.includes('kpa') || cat.includes('pa') ||
+             role.includes('pa') || role.includes('kpa') || title.includes('pa / kpa') || title.includes('kpa');
     }
     if (targetCatId === 'ppk') {
-      return cat === 'ppk' || role.includes('ppk') || title.includes('ppk');
+      return cat === 'ppk' || role.includes('ppk') || title.includes('ppk') || title.includes('pembuat komitmen');
     }
     if (targetCatId === 'pp') {
-      return cat === 'pp' || cat === 'pejabat pengadaan' || role.includes('pejabat pengadaan') || role === 'pp' || title.includes('pejabat pengadaan');
+      return cat === 'pp' || cat.includes('pejabat pengadaan') || role.includes('pejabat pengadaan') || role === 'pp' || title.includes('pejabat pengadaan');
     }
     if (targetCatId === 'pokja') {
-      return cat === 'pokja' || cat === 'panitia' || role.includes('pokja') || role.includes('panitia') || title.includes('pokja');
+      return cat === 'pokja' || cat.includes('pokja') || cat.includes('panitia') || role.includes('pokja') || role.includes('panitia') || title.includes('pokja');
     }
     if (targetCatId === 'penyedia') {
-      return cat === 'penyedia' || role.includes('penyedia') || role.includes('pelaku usaha') || title.includes('penyedia') || title.includes('pelaku usaha');
+      return cat === 'penyedia' || cat.includes('penyedia') || cat.includes('pelaku usaha') || role.includes('penyedia') || role.includes('pelaku usaha') || title.includes('penyedia') || title.includes('pelaku usaha');
     }
     if (targetCatId === 'mdp') {
-      return cat === 'mdp' || role.includes('mdp') || role.includes('model dokumen') || cat.includes('model dokumen') || title.includes('model dokumen');
+      return cat === 'mdp' || cat.includes('mdp') || cat.includes('model dokumen') || role.includes('mdp') || role.includes('model dokumen') || title.includes('model dokumen');
     }
     if (targetCatId === 'bimtek') {
-      return cat === 'bimtek' || role.includes('bimtek') || role.includes('sosialisasi') || cat.includes('bimtek') || title.includes('bimtek') || title.includes('sosialisasi');
+      return cat === 'bimtek' || cat.includes('bimtek') || cat.includes('sosialisasi') || role.includes('bimtek') || role.includes('sosialisasi') || title.includes('bimtek') || title.includes('sosialisasi');
     }
     if (targetCatId === 'lain') {
-      return cat === 'lain' || cat === 'lain-lain' || cat === 'regulasi' || cat === 'aplikasi' || role.includes('lain') || role.includes('standar') || role.includes('umum');
+      return cat === 'lain' || cat.includes('lain') || cat.includes('regulasi') || cat.includes('aplikasi') || role.includes('lain') || role.includes('standar') || role.includes('umum');
     }
     return false;
   };
@@ -541,8 +542,8 @@ export default function PanduanPage() {
                           <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-1.5 flex items-center gap-1.5 text-primary-navy">
                             <span>I. Ringkasan & Ruang Lingkup Dokumen</span>
                           </h5>
-                          <p className="p-3 bg-blue-50/50 rounded-xl border border-blue-100 text-slate-700 leading-relaxed">
-                            {activePreviewGuide.desc}
+                          <p className="p-3 bg-blue-50/50 rounded-xl border border-blue-100 text-slate-700 leading-relaxed whitespace-pre-line">
+                            {activePreviewGuide.desc || 'Petunjuk teknis dan standar operasional pelaksanaan pengadaan barang dan jasa di lingkungan Kementerian Ketenagakerjaan.'}
                           </p>
                         </div>
 
@@ -551,9 +552,17 @@ export default function PanduanPage() {
                             <span>II. Dasar Hukum & Standar Pelaksanaan</span>
                           </h5>
                           <ul className="space-y-2 list-disc list-inside text-slate-600 pl-1">
-                            <li>Peraturan Presiden No. 12 Tahun 2021 tentang Perubahan atas Perpres No. 16 Tahun 2018 tentang PBJ Pemerintah.</li>
-                            <li>Peraturan LKPP terkait Pedoman Pelaksanaan Pengadaan Barang/Jasa Secara Elektronik.</li>
-                            <li>Keputusan Menteri Ketenagakerjaan RI tentang Tata Kelola UKPBJ Kemnaker.</li>
+                            {activePreviewGuide.dasarHukum && activePreviewGuide.dasarHukum.trim() ? (
+                              activePreviewGuide.dasarHukum.split('\n').filter(Boolean).map((hukum, idx) => (
+                                <li key={idx}>{hukum.replace(/^[-*•\d.]\s*/, '')}</li>
+                              ))
+                            ) : (
+                              <>
+                                <li>Peraturan Presiden No. 12 Tahun 2021 tentang Perubahan atas Perpres No. 16 Tahun 2018 tentang PBJ Pemerintah.</li>
+                                <li>Peraturan LKPP terkait Pedoman Pelaksanaan Pengadaan Barang/Jasa Secara Elektronik.</li>
+                                <li>Keputusan Menteri Ketenagakerjaan RI tentang Tata Kelola UKPBJ Kemnaker.</li>
+                              </>
+                            )}
                           </ul>
                         </div>
 
@@ -561,16 +570,32 @@ export default function PanduanPage() {
                           <h5 className="font-bold text-slate-900 uppercase text-xs tracking-wider mb-2 text-primary-navy">
                             <span>III. Ketentuan & Persyaratan Pengguna ({activePreviewGuide.role})</span>
                           </h5>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                              <span className="font-bold text-slate-800 text-[11px] block mb-1">1. Hak Akses & Akun</span>
-                              <p className="text-[11px] text-slate-500">Telah memiliki akun terverifikasi pada portal SPSE / SiRUP / SIKaP Kemnaker.</p>
+                          {activePreviewGuide.persyaratan && activePreviewGuide.persyaratan.trim() ? (
+                            <div className="space-y-2.5">
+                              {activePreviewGuide.persyaratan.split('\n').filter(Boolean).map((syarat, idx) => {
+                                const parts = syarat.split(':');
+                                const title = parts.length > 1 ? parts[0].replace(/^[\d.]\s*/, '').trim() : `Ketentuan ${idx + 1}`;
+                                const desc = parts.length > 1 ? parts.slice(1).join(':').trim() : syarat;
+                                return (
+                                  <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                    <span className="font-bold text-slate-800 text-[11px] block mb-1">{title}</span>
+                                    <p className="text-[11px] text-slate-500">{desc}</p>
+                                  </div>
+                                );
+                              })}
                             </div>
-                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                              <span className="font-bold text-slate-800 text-[11px] block mb-1">2. Kelengkapan Berkas</span>
-                              <p className="text-[11px] text-slate-500">Menyiapkan dokumen perencanaan, HPS, KAK, atau kualifikasi badan usaha.</p>
+                          ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                <span className="font-bold text-slate-800 text-[11px] block mb-1">1. Hak Akses & Akun</span>
+                                <p className="text-[11px] text-slate-500">Telah memiliki akun terverifikasi pada portal SPSE / SiRUP / SIKaP Kemnaker.</p>
+                              </div>
+                              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                <span className="font-bold text-slate-800 text-[11px] block mb-1">2. Kelengkapan Berkas</span>
+                                <p className="text-[11px] text-slate-500">Menyiapkan dokumen perencanaan, HPS, KAK, atau kualifikasi badan usaha.</p>
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                       </div>
                     )}
@@ -582,22 +607,41 @@ export default function PanduanPage() {
                             <span>IV. Alur Langkah-Langkah Operasional</span>
                           </h5>
                           <div className="space-y-2.5">
-                            {[
-                              { no: '1', title: 'Autentikasi & Masuk ke Portal PBJ', desc: 'Akses sistem menggunakan username dan kata sandi resmi yang telah terdaftar pada database UKPBJ.' },
-                              { no: '2', title: 'Pemilihan Menu & Penginputan Data Paket', desc: 'Isi seluruh parameter paket belanja meliputi kode satker, pagu anggaran, serta spesifikasi teknis.' },
-                              { no: '3', title: 'Validasi & Pemeriksaan Kelayakan', desc: 'Lakukan validasi silang data sebelum dilakukan pengesahan atau pengumuman ke publik.' },
-                              { no: '4', title: 'Penerbitan Bukti & Arsip Digital', desc: 'Unduh tanda terima digital dan simpan nomor registrasi pengadaan untuk pelaporan berkala.' }
-                            ].map((step) => (
-                              <div key={step.no} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                                <span className="w-6 h-6 rounded-lg bg-primary-navy text-accent-gold font-bold text-xs flex items-center justify-center shrink-0">
-                                  {step.no}
-                                </span>
-                                <div>
-                                  <span className="font-bold text-slate-800 block text-xs">{step.title}</span>
-                                  <span className="text-[11px] text-slate-500">{step.desc}</span>
+                            {activePreviewGuide.langkahKerja && activePreviewGuide.langkahKerja.trim() ? (
+                              activePreviewGuide.langkahKerja.split('\n').filter(Boolean).map((stepLine, idx) => {
+                                const parts = stepLine.split(':');
+                                const title = parts.length > 1 ? parts[0].replace(/^[\d.]\s*/, '').trim() : `Langkah ${idx + 1}`;
+                                const desc = parts.length > 1 ? parts.slice(1).join(':').trim() : stepLine;
+                                return (
+                                  <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                    <span className="w-6 h-6 rounded-lg bg-primary-navy text-accent-gold font-bold text-xs flex items-center justify-center shrink-0">
+                                      {idx + 1}
+                                    </span>
+                                    <div>
+                                      <span className="font-bold text-slate-800 block text-xs">{title}</span>
+                                      <span className="text-[11px] text-slate-500">{desc}</span>
+                                    </div>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              [
+                                { no: '1', title: 'Autentikasi & Masuk ke Portal PBJ', desc: 'Akses sistem menggunakan username dan kata sandi resmi yang telah terdaftar pada database UKPBJ.' },
+                                { no: '2', title: 'Pemilihan Menu & Penginputan Data Paket', desc: 'Isi seluruh parameter paket belanja meliputi kode satker, pagu anggaran, serta spesifikasi teknis.' },
+                                { no: '3', title: 'Validasi & Pemeriksaan Kelayakan', desc: 'Lakukan validasi silang data sebelum dilakukan pengesahan atau pengumuman ke publik.' },
+                                { no: '4', title: 'Penerbitan Bukti & Arsip Digital', desc: 'Unduh tanda terima digital dan simpan nomor registrasi pengadaan untuk pelaporan berkala.' }
+                              ].map((step) => (
+                                <div key={step.no} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                  <span className="w-6 h-6 rounded-lg bg-primary-navy text-accent-gold font-bold text-xs flex items-center justify-center shrink-0">
+                                    {step.no}
+                                  </span>
+                                  <div>
+                                    <span className="font-bold text-slate-800 block text-xs">{step.title}</span>
+                                    <span className="text-[11px] text-slate-500">{step.desc}</span>
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))
+                            )}
                           </div>
                         </div>
                       </div>
@@ -620,8 +664,10 @@ export default function PanduanPage() {
                             <p className="text-xs text-emerald-800 mb-2">
                               Layanan pendampingan teknis tatap muka dan daring (Senin - Jumat, 08.00 - 16.00 WIB).
                             </p>
-                            <span className="text-[11px] font-semibold text-emerald-700 block">
-                              Email: helpdesk.ukpbj@kemnaker.go.id • WhatsApp: +62 898-8180-009
+                            <span className="text-[11px] font-semibold text-emerald-700 block whitespace-pre-line">
+                              {activePreviewGuide.layananKontak && activePreviewGuide.layananKontak.trim()
+                                ? activePreviewGuide.layananKontak
+                                : 'Email: helpdesk.ukpbj@kemnaker.go.id • WhatsApp: +62 898-8180-009'}
                             </span>
                           </div>
                         </div>
