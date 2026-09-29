@@ -57,7 +57,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, RegulasiItem, SopItem, PanduanItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
 import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
 import { supabase } from '@/lib/supabase/client';
-import { parseGoogleDriveImage, parseGoogleDriveVideo, extractGoogleDriveFileId } from '@/lib/driveHelper';
+import { parseGoogleDriveImage, parseGoogleDriveVideo } from '@/lib/driveHelper';
 
 
 export interface AdminNotificationItem {
@@ -365,7 +365,7 @@ export default function AdminPortalPage() {
         }
 
         // Query admin profile from public.admin_users
-        const { data: profile, error: pErr } = await supabase
+        const { data: profile } = await supabase
           .from('admin_users')
           .select('*')
           .eq('id', session.user.id)

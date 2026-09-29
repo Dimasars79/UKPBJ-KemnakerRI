@@ -98,7 +98,7 @@ export default function LoginPage() {
         router.push('/admin');
       }, 500);
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error saat login:', err);
       setErrorMsg('Terjadi kendala saat menghubungkan ke Supabase. Silakan coba kembali.');
       setIsLoading(false);
