@@ -39,9 +39,8 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold backdrop-blur-md mb-4 sm:mb-5 self-start shadow-sm"
+              className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold backdrop-blur-md mb-4 sm:mb-5 self-start shadow-sm"
             >
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="text-[11px] font-bold text-amber-300 tracking-wider uppercase">
                 {trans('UKPBJ Kemnaker RI', 'UKPBJ Kemnaker RI')}
               </span>

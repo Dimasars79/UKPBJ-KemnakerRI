@@ -52,7 +52,6 @@ export function PengadaanSection() {
       case 'Pendaftaran Dibuka':
         return (
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
             {trans('Pendaftaran Dibuka', 'Registration Open')}
           </span>
         );
