@@ -93,7 +93,7 @@ export default function LoginPage() {
         }
       }
 
-      setSuccessMsg('Autentikasi Supabase berhasil! Mengarahkan ke Portal Admin...');
+      setSuccessMsg('Autentikasi berhasil! Mengarahkan ke Portal Admin...');
       setTimeout(() => {
         router.push('/admin');
       }, 500);
@@ -231,38 +231,38 @@ export default function LoginPage() {
                 Masuk Akun Admin
               </h2>
               <p className="text-slate-500 text-xs sm:text-sm">
-                Autentikasi terenkripsi terhubung ke Supabase Cloud
+                Sistem Autentikasi Pengelola Layanan Terintegrasi
               </p>
             </motion.div>
 
-            {/* Notification Alerts */}
+            {/* Notification Alerts (Ultra Compact & Minimalist) */}
             <AnimatePresence>
               {errorMsg && (
                 <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  className="mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5"
+                  initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                  className="mb-3 py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-md bg-rose-50/90 border border-rose-200/70 text-rose-800 text-[10px] sm:text-[11px] flex items-start gap-1.5 sm:gap-2 shadow-xs"
                 >
-                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-bold">Gagal Masuk</p>
-                    <p className="mt-0.5 leading-relaxed">{errorMsg}</p>
+                  <AlertCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-600 shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <p className="font-bold text-[9.5px] sm:text-[10.5px] leading-tight">Gagal Masuk</p>
+                    <p className="mt-0.5 text-[9px] sm:text-[10px] leading-tight text-rose-700">{errorMsg}</p>
                   </div>
                 </motion.div>
               )}
 
               {successMsg && (
                 <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  className="mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-start gap-2.5"
+                  initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                  className="mb-3 py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-md bg-emerald-50/90 border border-emerald-200/70 text-emerald-800 text-[10px] sm:text-[11px] flex items-start gap-1.5 sm:gap-2 shadow-xs"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-bold">Berhasil</p>
-                    <p className="mt-0.5 leading-relaxed">{successMsg}</p>
+                  <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <p className="font-bold text-[9.5px] sm:text-[10.5px] leading-tight">Berhasil</p>
+                    <p className="mt-0.5 text-[9px] sm:text-[10px] leading-tight text-emerald-700">{successMsg}</p>
                   </div>
                 </motion.div>
               )}
