@@ -643,19 +643,19 @@ export default function PusatPembaruanPage() {
 
       <Footer />
 
-      {/* Floating Bottom-Center Toast Notification (Pixel-Perfect Center Across All Devices) */}
-      <div className="fixed bottom-6 inset-x-0 z-50 flex justify-center items-center pointer-events-none px-4">
+      {/* Floating Top-Center Notification (Micro-size on Mobile, Proportional on Desktop) */}
+      <div className="fixed top-[72px] sm:top-24 inset-x-0 z-50 flex justify-center items-center pointer-events-none px-3">
         <AnimatePresence>
           {showToast && (
             <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              initial={{ opacity: 0, y: -15, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-full bg-[#06182E]/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-xs sm:text-sm font-medium tracking-wide shadow-black/40 pointer-events-auto max-w-max"
+              exit={{ opacity: 0, y: -10, scale: 0.9 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-4 sm:py-2 rounded-full bg-[#06182E]/95 text-white shadow-lg border border-white/20 backdrop-blur-md text-[9.5px] sm:text-xs font-medium tracking-wide shadow-black/20 pointer-events-auto max-w-max"
             >
-              <CheckCircle2 className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-400 shrink-0" />
-              <span>Data pembaruan berhasil diperbarui</span>
+              <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+              <span className="leading-tight">Data pembaruan berhasil diperbarui</span>
             </motion.div>
           )}
         </AnimatePresence>
