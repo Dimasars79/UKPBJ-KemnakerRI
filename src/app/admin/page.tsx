@@ -3918,10 +3918,6 @@ export default function AdminPortalPage() {
                         Live Activity & Audit Feed
                       </h3>
                     </div>
-                    <span className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                      <span>Live Record</span>
-                    </span>
                   </div>
 
                   <div className="space-y-3">
