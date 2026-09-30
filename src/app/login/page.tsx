@@ -32,8 +32,8 @@ export default function LoginPage() {
       if (error || !data.user) {
         setErrorMsg(
           error?.message === 'Invalid login credentials'
-            ? 'Email atau kata sandi tidak sesuai. Pastikan akun telah terdaftar di Supabase Auth.'
-            : (error?.message || 'Gagal melakukan autentikasi dengan server Supabase.')
+            ? 'Kombinasi email dan kata sandi tidak sesuai. Pastikan akun Anda telah terdaftar sebagai pengelola layanan.'
+            : (error?.message || 'Gagal melakukan autentikasi dengan server.')
         );
         setIsLoading(false);
         return;
@@ -100,7 +100,7 @@ export default function LoginPage() {
 
     } catch (err: unknown) {
       console.error('Error saat login:', err);
-      setErrorMsg('Terjadi kendala saat menghubungkan ke Supabase. Silakan coba kembali.');
+      setErrorMsg('Terjadi kendala saat menghubungkan ke server sistem. Silakan coba kembali.');
       setIsLoading(false);
     }
   };
