@@ -131,36 +131,40 @@ export default function LoginPage() {
         </Link>
       </motion.div>
 
-      {/* CENTERED FLOATING BENTO BOX CARD WITH 3D PAPER/BOOK OPENING ANIMATION */}
-      <div className="w-full max-w-5xl relative z-10 [perspective:1800px] flex justify-center items-center">
+      {/* CENTERED FLOATING BENTO BOX CARD WITH SMOOTH LEFT-TO-RIGHT SWIPE ANIMATION */}
+      <div className="w-full max-w-5xl relative z-10 flex justify-center items-center">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.92, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full rounded-3xl shadow-[0_30px_90px_-20px_rgba(0,0,0,0.85)] border border-slate-700/60 flex flex-col md:flex-row bg-[#081E36] relative overflow-hidden [transform-style:preserve-3d]"
+          initial={{ opacity: 0, x: -90 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full rounded-3xl shadow-[0_30px_90px_-20px_rgba(0,0,0,0.85)] border border-slate-700/60 flex flex-col md:flex-row bg-[#081E36] relative overflow-hidden"
         >
-          {/* Left Side: Branding & Welcome (Left Cover of Folder) */}
+          {/* Global Light Sheen Sweep Effect from Left to Right */}
+          <motion.div
+            initial={{ x: '-100%', opacity: 0 }}
+            animate={{ x: '250%', opacity: [0, 0.7, 0] }}
+            transition={{ duration: 1.5, ease: 'easeInOut', delay: 0.25 }}
+            className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none z-30 transform -skew-x-12"
+          />
+
+          {/* Left Side: Branding & Welcome (Left Panel Swipe In) */}
           <motion.div 
-            initial={{ opacity: 0, rotateY: -28, x: -10 }}
-            animate={{ opacity: 1, rotateY: 0, x: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            style={{ transformOrigin: 'right center' }}
+            initial={{ opacity: 0, x: -60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             className="relative w-full md:w-1/2 lg:w-7/12 bg-gradient-to-br from-[#06182B] via-[#0A223D] to-[#041220] flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 text-white border-b md:border-b-0 md:border-r border-slate-800/90 shadow-[inset_-10px_0_20px_-10px_rgba(0,0,0,0.5)]"
           >
-            {/* Paper Sheet Light Sheen Sweep Effect */}
-            <motion.div
-              initial={{ x: '-100%', opacity: 0.6 }}
-              animate={{ x: '200%', opacity: 0 }}
-              transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none z-20"
-            />
-
             {/* Internal ambient highlight */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-gold/10 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Top Emblem Logo */}
-            <div className="relative z-10 mb-8 sm:mb-12">
+            {/* Top Emblem Logo with Left Swipe */}
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="relative z-10 mb-8 sm:mb-12"
+            >
               <div className="flex items-center space-x-4 bg-white/5 backdrop-blur-xl w-fit p-3.5 sm:p-4 rounded-2xl border border-white/10 shadow-lg">
                 <Image 
                   src="/logo-kemnaker.png" 
@@ -180,10 +184,15 @@ export default function LoginPage() {
                   />
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Center Main Text */}
-            <div className="relative z-10 flex-grow flex flex-col justify-center my-4 sm:my-6">
+            {/* Center Main Text with Left Swipe */}
+            <motion.div 
+              initial={{ opacity: 0, x: -35 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.75, delay: 0.28 }}
+              className="relative z-10 flex-grow flex flex-col justify-center my-4 sm:my-6"
+            >
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-black leading-tight tracking-tight mb-4">
                 Selamat Datang di <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold via-amber-200 to-yellow-400">
@@ -194,7 +203,7 @@ export default function LoginPage() {
               <p className="text-xs sm:text-sm text-blue-100/75 leading-relaxed font-normal max-w-lg">
                 Gerbang utama menuju ekosistem layanan pengadaan barang dan jasa Kementerian Ketenagakerjaan Republik Indonesia yang berintegritas, transparan, dan profesional.
               </p>
-            </div>
+            </motion.div>
 
             {/* Bottom Copyright */}
             <div className="relative z-10 mt-6 sm:mt-8 pt-4 border-t border-white/10 text-[11px] text-blue-200/50">
@@ -202,32 +211,29 @@ export default function LoginPage() {
             </div>
           </motion.div>
 
-          {/* Right Side: Clean Login Form (Unfolding White Paper Page) */}
+          {/* Right Side: Clean Login Form (Right Panel Swipe In) */}
           <motion.div 
-            initial={{ opacity: 0, rotateY: 55, x: 15 }}
-            animate={{ opacity: 1, rotateY: 0, x: 0 }}
-            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            style={{ transformOrigin: 'left center' }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="w-full md:w-1/2 lg:w-5/12 bg-white flex flex-col justify-center p-6 sm:p-8 md:p-10 lg:p-12 relative z-20 shadow-[inset_15px_0_25px_-12px_rgba(0,0,0,0.18)]"
           >
-            {/* Paper Turning Glare Sweep */}
-            <motion.div
-              initial={{ x: '-100%', opacity: 0.8 }}
-              animate={{ x: '200%', opacity: 0 }}
-              transition={{ duration: 1.3, ease: 'easeOut', delay: 0.35 }}
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent pointer-events-none z-30"
-            />
-          <div className="w-full max-w-md mx-auto">
+            <div className="w-full max-w-md mx-auto">
             
-            {/* Form Header */}
-            <div className="text-center mb-6 sm:mb-8">
+            {/* Form Header with Staggered Left Swipe */}
+            <motion.div 
+              initial={{ opacity: 0, x: -25 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.65, delay: 0.3 }}
+              className="text-center mb-6 sm:mb-8"
+            >
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-1.5">
                 Masuk Akun Admin
               </h2>
               <p className="text-slate-500 text-xs sm:text-sm">
                 Autentikasi terenkripsi terhubung ke Supabase Cloud
               </p>
-            </div>
+            </motion.div>
 
             {/* Notification Alerts */}
             <AnimatePresence>
@@ -262,11 +268,16 @@ export default function LoginPage() {
               )}
             </AnimatePresence>
 
-            {/* Form Fields */}
+            {/* Form Fields with Staggered Left Swipe */}
             <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
               
               {/* Field 1: Email / Username */}
-              <div className="space-y-1.5">
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.35 }}
+                className="space-y-1.5"
+              >
                 <label className="text-xs font-bold text-slate-800 ml-0.5">
                   Email / Username Akun *
                 </label>
@@ -283,10 +294,15 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-              </div>
+              </motion.div>
 
               {/* Field 2: Password */}
-              <div className="space-y-1.5">
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.42 }}
+                className="space-y-1.5"
+              >
                 <div className="flex justify-between items-center ml-0.5">
                   <label className="text-xs font-bold text-slate-800">
                     Kata Sandi *
@@ -308,10 +324,13 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-              </div>
+              </motion.div>
 
               {/* Submit Button */}
-              <button
+              <motion.button
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.48 }}
                 type="submit"
                 disabled={isLoading}
                 className="w-full flex justify-center items-center space-x-2 bg-gradient-to-r from-[#0B2341] to-[#123868] hover:from-[#123868] hover:to-[#1E4D8C] text-white font-bold py-3 sm:py-3.5 px-6 rounded-xl shadow-md shadow-blue-950/20 hover:shadow-lg hover:shadow-blue-950/30 hover:-translate-y-0.5 transition-all duration-200 mt-5 disabled:opacity-70 cursor-pointer text-xs sm:text-sm"
@@ -327,11 +346,16 @@ export default function LoginPage() {
                     <LogIn className="w-4 h-4 ml-1" />
                   </>
                 )}
-              </button>
+              </motion.button>
             </form>
 
             {/* Bottom Helpdesk Hint & Desktop Back to Home */}
-            <div className="mt-6 sm:mt-8 text-center space-y-3">
+            <motion.div 
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.54 }}
+              className="mt-6 sm:mt-8 text-center space-y-3"
+            >
               <p className="text-xs text-slate-500">
                 Butuh bantuan akses atau reset akun?{' '}
                 <Link href="/layanan" className="font-bold text-[#0B2341] hover:text-blue-600 transition-colors">
@@ -349,7 +373,7 @@ export default function LoginPage() {
                   <span>Kembali ke Beranda</span>
                 </Link>
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </motion.div>
