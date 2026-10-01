@@ -200,13 +200,13 @@ export const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:justify-end sm:p-6 pointer-events-none">
-          {/* Backdrop on mobile */}
+          {/* Backdrop on mobile with frosted blur */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs sm:hidden pointer-events-auto"
+            className="fixed inset-0 bg-slate-950/45 backdrop-blur-md sm:hidden pointer-events-auto transition-all"
           />
 
           {/* Modal Container (Extra Compact on Mobile, Spacious & Full on Desktop) */}

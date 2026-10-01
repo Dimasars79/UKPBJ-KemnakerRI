@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -31,9 +31,15 @@ export default function PanduanPage() {
   const { panduanList } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [visibleCount, setVisibleCount] = useState<number>(10);
   const [activePreviewGuide, setActivePreviewGuide] = useState<PanduanItem | null>(null);
   const [previewPage, setPreviewPage] = useState<number>(1);
   const [zoomLevel, setZoomLevel] = useState<number>(100);
+
+  // Reset tampilan ke 10 item saat filter atau kata kunci pencarian berubah
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [selectedCategory, searchQuery]);
 
   // Filter published guides (resilient for both status and syncFrontend)
   const publishedGuides = useMemo(() => {
@@ -96,6 +102,11 @@ export default function PanduanPage() {
       return matchCat && matchSearch;
     });
   }, [publishedGuides, selectedCategory, searchQuery]);
+
+  // Batasi daftar tampilan awal hingga maksimal 10 baris
+  const displayedGuides = useMemo(() => {
+    return filteredGuides.slice(0, visibleCount);
+  }, [filteredGuides, visibleCount]);
 
   const handleDownloadFile = (guide: PanduanItem) => {
     if (guide.fileData) {
@@ -279,7 +290,7 @@ export default function PanduanPage() {
               <div className="bg-white rounded-2xl p-4 mb-6 shadow-xs border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-primary-navy">
-                    Menampilkan {filteredGuides.length} Modul Panduan
+                    Menampilkan {displayedGuides.length} {filteredGuides.length > displayedGuides.length ? `dari ${filteredGuides.length}` : ''} Modul Panduan
                   </span>
                   {selectedCategory !== 'all' && (
                     <span className="text-[10px] font-bold bg-blue-50 text-primary-blue px-2.5 py-0.5 rounded-full border border-blue-100">
@@ -293,11 +304,11 @@ export default function PanduanPage() {
                 </div>
               </div>
 
-              {/* Guide Cards Grid */}
+              {/* Guide Cards Grid (Dibatasi 10 baris) */}
               <div className="space-y-4">
                 <AnimatePresence mode="popLayout">
-                  {filteredGuides.length > 0 ? (
-                    filteredGuides.map((item, idx) => (
+                  {displayedGuides.length > 0 ? (
+                    displayedGuides.map((item, idx) => (
                       <motion.div
                         key={item.id}
                         initial={{ opacity: 0, y: 15 }}
@@ -388,11 +399,15 @@ export default function PanduanPage() {
                 </AnimatePresence>
               </div>
 
-              {/* Load More Button */}
-              {filteredGuides.length > 0 && (
+              {/* Load More Button (Hanya muncul jika terdapat sisa modul melebihi 10 baris) */}
+              {filteredGuides.length > visibleCount && (
                 <div className="mt-8 text-center">
-                  <button className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-primary-blue hover:text-primary-blue text-slate-700 font-bold text-xs py-3 px-8 rounded-xl transition-all shadow-xs hover:shadow-sm cursor-pointer">
-                    <span>Lihat Seluruh Arsip Panduan</span>
+                  <button 
+                    type="button"
+                    onClick={() => setVisibleCount(prev => prev + 10)}
+                    className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-primary-blue hover:text-primary-blue text-slate-700 font-bold text-xs py-3 px-8 rounded-xl transition-all shadow-xs hover:shadow-sm cursor-pointer"
+                  >
+                    <span>Lihat Seluruh Arsip Panduan ({filteredGuides.length - visibleCount} Modul Lainnya)</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
