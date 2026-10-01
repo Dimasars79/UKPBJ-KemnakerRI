@@ -63,56 +63,14 @@ const parseItemDate = (dateStr?: string): Date | null => {
 };
 
 export default function InformasiPage() {
-  const { newsList, agendaList, regulasiList, packagesList, siteSettings } = useData();
+  const { newsList, agendaList, regulasiList, packagesList, siteSettings, lastUpdated } = useData();
   const { trans } = useLanguage();
   const publishedNews = newsList.filter(n => n.status === 'Published');
 
-  // Compute dynamically the latest updated date from all published content & admin sync
+  // Format tanggal & jam terakhir diperbarui secara dinamis mengikuti timestamp CMS
   const lastUpdatedFormatted = React.useMemo(() => {
-    let latestTimestamp = 0;
-
-    // Check localStorage updatedAt (when admin edits/adds any data)
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem('ukpbj_backend_db_v1');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (parsed.updatedAt) {
-            const t = new Date(parsed.updatedAt).getTime();
-            if (!isNaN(t) && t > latestTimestamp) {
-              latestTimestamp = t;
-            }
-          }
-        }
-      } catch {}
-    }
-
-    // Check latest published news
-    newsList.forEach((item) => {
-      const d = parseItemDate(item.date);
-      if (d && d.getTime() > latestTimestamp) {
-        latestTimestamp = d.getTime();
-      }
-    });
-
-    // Check latest active agenda
-    agendaList.forEach((item) => {
-      const d = parseItemDate(item.date);
-      if (d && d.getTime() > latestTimestamp) {
-        latestTimestamp = d.getTime();
-      }
-    });
-
-    // Check procurement packages
-    packagesList.forEach((item) => {
-      const d = parseItemDate(item.deadline);
-      if (d && d.getTime() > latestTimestamp) {
-        latestTimestamp = d.getTime();
-      }
-    });
-
-    // Default fallback if no timestamp found
-    const targetDate = latestTimestamp > 0 ? new Date(latestTimestamp) : new Date();
+    const targetDate = lastUpdated ? new Date(lastUpdated) : new Date();
+    const validDate = isNaN(targetDate.getTime()) ? new Date() : targetDate;
 
     const indonesianMonths = [
       'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -123,18 +81,18 @@ export default function InformasiPage() {
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
 
-    const day = targetDate.getDate();
-    const monthId = indonesianMonths[targetDate.getMonth()];
-    const monthEn = englishMonths[targetDate.getMonth()];
-    const year = targetDate.getFullYear();
-    const hours = String(targetDate.getHours()).padStart(2, '0');
-    const minutes = String(targetDate.getMinutes()).padStart(2, '0');
+    const day = validDate.getDate();
+    const monthId = indonesianMonths[validDate.getMonth()];
+    const monthEn = englishMonths[validDate.getMonth()];
+    const year = validDate.getFullYear();
+    const hours = String(validDate.getHours()).padStart(2, '0');
+    const minutes = String(validDate.getMinutes()).padStart(2, '0');
 
     return {
       id: `Terakhir diperbarui: ${day} ${monthId} ${year}, ${hours}:${minutes} WIB`,
       en: `Last updated: ${monthEn} ${day}, ${year}, ${hours}:${minutes} WIB`
     };
-  }, [newsList, agendaList, packagesList]);
+  }, [lastUpdated]);
   
   const recentUpdates = React.useMemo(() => {
     const list: Array<{
@@ -362,7 +320,7 @@ export default function InformasiPage() {
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 mb-4 sm:mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
                   {serviceStatuses.map((service, idx) => (
                     <div key={idx} className="flex items-center space-x-3 p-2.5 sm:p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 hover:bg-white hover:border-blue-200 transition-colors">
                       <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${service.color} shadow-2xs`}>
@@ -376,15 +334,6 @@ export default function InformasiPage() {
                       </div>
                     </div>
                   ))}
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 sm:pt-5 border-t border-slate-100 text-[11px] sm:text-xs text-slate-500 gap-1.5 sm:gap-2">
-                  <div className="flex items-center text-emerald-700 font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 shrink-0" /> {trans('Semua layanan normal', 'All services operational')}
-                  </div>
-                  <div className="flex items-center">
-                    <Clock className="w-3.5 h-3.5 mr-1.5 text-slate-400 shrink-0" /> {trans('Update: 2 Sep 2026, 13:40 WIB', 'Updated: Sep 2, 2026, 13:40 WIB')}
-                  </div>
                 </div>
               </div>
             </FadeIn>

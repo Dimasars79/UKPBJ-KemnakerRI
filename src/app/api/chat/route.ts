@@ -98,17 +98,19 @@ export async function POST(req: Request) {
 
     // ================= 1. JALUR UTAMA: GOOGLE AI STUDIO (MULTI-ACCOUNT ROTATION & FAILOVER) =================
     if (geminiKeys.length > 0) {
+      // Model ultra-cepat (flash-lite) diutamakan untuk respons instan < 1.5 detik
       const geminiCandidateModels = [
-        process.env.GEMINI_MODEL || 'gemini-3.5-flash',
-        'gemini-3.5-flash',
-        'gemini-3.8-flash',
-        'gemini-3.6-flash',
+        process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
+        'gemini-3.5-flash-lite',
+        'gemini-3.1-flash-lite-preview',
         'gemini-3.1-flash-lite',
+        'gemini-3.6-flash',
         'gemini-flash-latest',
       ];
 
-      // Format messages untuk Google Gemini API
-      const geminiContents = messages.map((m: { role: string; text?: string; content?: string }) => ({
+      // Format & pangkas history ke 4 pesan terakhir agar payload ringan & proses lebih cepat
+      const trimmedMessages = messages.slice(-4);
+      const geminiContents = trimmedMessages.map((m: { role: string; text?: string; content?: string }) => ({
         role: m.role === 'assistant' || m.role === 'model' ? 'model' : 'user',
         parts: [{ text: m.text || m.content || '' }],
       }));
@@ -129,19 +131,23 @@ export async function POST(req: Request) {
 
         for (const model of Array.from(new Set(geminiCandidateModels))) {
           try {
+            // Timeout cepat 5 detik per percobaan agar tidak menunggu lama jika server sibuk
             const response = await fetch(
               `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
               {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                signal: AbortSignal.timeout(5000),
                 body: JSON.stringify({
                   systemInstruction: {
-                    parts: [{ text: SYSTEM_PROMPT }],
+                    parts: [{ 
+                      text: `${SYSTEM_PROMPT}\n\nPANDUAN FORMAT CEPAT:\n- Berikan jawaban yang padat, akurat, ringkas, dan to-the-point (maksimal 2-3 paragraf singkat atau poin-poin penting).` 
+                    }],
                   },
                   contents: geminiContents,
                   generationConfig: {
-                    temperature: 0.6,
-                    maxOutputTokens: 2048,
+                    temperature: 0.2,
+                    maxOutputTokens: 600,
                   },
                 }),
               }

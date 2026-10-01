@@ -209,6 +209,7 @@ interface DataContextType {
   resetToDefaults: () => void;
   isLoaded: boolean;
   isSupabaseConnected: boolean;
+  lastUpdated: string;
 }
 
 const DEFAULT_NEWS: NewsItem[] = [
@@ -775,6 +776,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [panduanList, setPanduanList] = useState<PanduanItem[]>(DEFAULT_PANDUAN);
   const [photosList, setPhotosList] = useState<PhotoItem[]>(DEFAULT_PHOTOS);
   const [videosList, setVideosList] = useState<VideoMediaItem[]>(DEFAULT_VIDEOS);
+  const [lastUpdated, setLastUpdated] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.lastUpdated || parsed.updatedAt) return parsed.lastUpdated || parsed.updatedAt;
+        }
+      } catch {}
+    }
+    return new Date().toISOString();
+  });
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
@@ -783,9 +796,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const saveToLocal = (data: Record<string, unknown>) => {
     try {
       if (typeof window === 'undefined') return;
+      const nowIso = new Date().toISOString();
+      setLastUpdated(nowIso);
       const existing = localStorage.getItem(STORAGE_KEY);
       const parsed = existing ? JSON.parse(existing) : {};
-      const updated = { ...parsed, ...data, updatedAt: new Date().toISOString() };
+      const updated = { ...parsed, ...data, updatedAt: nowIso, lastUpdated: nowIso };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     } catch (e) {
       console.warn('LocalStorage save failed:', e);
@@ -1108,6 +1123,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
+        if (parsed.lastUpdated || parsed.updatedAt) setLastUpdated(parsed.lastUpdated || parsed.updatedAt);
         if (Array.isArray(parsed.newsList)) setNewsList(parsed.newsList);
         if (Array.isArray(parsed.agendaList)) setAgendaList(parsed.agendaList);
         if (Array.isArray(parsed.packagesList)) setPackagesList(parsed.packagesList);
@@ -1122,7 +1138,29 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       console.error('Failed to load LocalStorage fallback', e);
     }
 
+    // Listener sync perubahan antar-tab browser
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          if (parsed.lastUpdated || parsed.updatedAt) setLastUpdated(parsed.lastUpdated || parsed.updatedAt);
+          if (Array.isArray(parsed.newsList)) setNewsList(parsed.newsList);
+          if (Array.isArray(parsed.agendaList)) setAgendaList(parsed.agendaList);
+          if (Array.isArray(parsed.packagesList)) setPackagesList(parsed.packagesList);
+          if (Array.isArray(parsed.regulasiList)) setRegulasiList(parsed.regulasiList);
+          if (Array.isArray(parsed.sopList)) setSopList(parsed.sopList);
+          if (Array.isArray(parsed.panduanList)) setPanduanList(parsed.panduanList);
+          if (Array.isArray(parsed.photosList)) setPhotosList(parsed.photosList);
+          if (Array.isArray(parsed.videosList)) setVideosList(parsed.videosList);
+          if (parsed.siteSettings) setSiteSettings(parsed.siteSettings);
+        } catch {}
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+
     refreshFromSupabase();
+
+    return () => window.removeEventListener('storage', handleStorage);
   }, [refreshFromSupabase]);
 
   // Persist snapshot to LocalStorage
@@ -1893,7 +1931,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         refreshFromSupabase,
         resetToDefaults,
         isLoaded,
-        isSupabaseConnected
+        isSupabaseConnected,
+        lastUpdated
       }}
     >
       {children}
