@@ -3,12 +3,26 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
-const data = [
-  { name: 'Barang', fullName: 'Barang', count: 180 },
-  { name: 'Konstruksi', fullName: 'Pekerjaan Konstruksi', count: 85 },
-  { name: 'Konsultansi', fullName: 'Jasa Konsultansi', count: 65 },
-  { name: 'Jasa Lainnya', fullName: 'Jasa Lainnya', count: 98 },
-];
+const yearlyData: Record<string, { name: string; fullName: string; count: number }[]> = {
+  '2026': [
+    { name: 'Barang', fullName: 'Barang', count: 180 },
+    { name: 'Konstruksi', fullName: 'Pekerjaan Konstruksi', count: 85 },
+    { name: 'Konsultansi', fullName: 'Jasa Konsultansi', count: 65 },
+    { name: 'Jasa Lainnya', fullName: 'Jasa Lainnya', count: 98 },
+  ],
+  '2025': [
+    { name: 'Barang', fullName: 'Barang', count: 155 },
+    { name: 'Konstruksi', fullName: 'Pekerjaan Konstruksi', count: 72 },
+    { name: 'Konsultansi', fullName: 'Jasa Konsultansi', count: 54 },
+    { name: 'Jasa Lainnya', fullName: 'Jasa Lainnya', count: 86 },
+  ],
+  '2024': [
+    { name: 'Barang', fullName: 'Barang', count: 130 },
+    { name: 'Konstruksi', fullName: 'Pekerjaan Konstruksi', count: 60 },
+    { name: 'Konsultansi', fullName: 'Jasa Konsultansi', count: 45 },
+    { name: 'Jasa Lainnya', fullName: 'Jasa Lainnya', count: 70 },
+  ],
+};
 
 const colors = ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'];
 
@@ -52,15 +66,20 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   return null;
 };
 
-export function EfficiencyChart() {
+interface EfficiencyChartProps {
+  year?: string;
+}
+
+export function EfficiencyChart({ year = '2026' }: EfficiencyChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const chartData = yearlyData[year] || yearlyData['2026'];
 
   return (
     <div className="h-[280px] w-full flex flex-col">
       <div className="flex-1 w-full min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={data}
+            data={chartData}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
             onMouseLeave={() => setActiveIndex(null)}
           >
@@ -83,7 +102,7 @@ export function EfficiencyChart() {
               maxBarSize={48}
               onMouseEnter={(_, index) => setActiveIndex(index)}
             >
-              {data.map((entry, index) => {
+              {chartData.map((entry, index) => {
                 const isHovered = activeIndex === index;
                 const isAnyHovered = activeIndex !== null;
                 return (

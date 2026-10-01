@@ -13,10 +13,128 @@ import {
 import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+// Helper function to parse dates accurately from news, agenda, packages, etc.
+const parseItemDate = (dateStr?: string): Date | null => {
+  if (!dateStr) return null;
+  const cleaned = dateStr.trim();
+
+  // 1. ISO format e.g. "2026-09-02T13:40:00.000Z" or "2026-09-02"
+  if (/^\d{4}-\d{1,2}-\d{1,2}/.test(cleaned)) {
+    const d = new Date(cleaned);
+    if (!isNaN(d.getTime())) return d;
+  }
+
+  // 2. Format "DD/MM/YYYY" or "DD-MM-YYYY"
+  if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}/.test(cleaned)) {
+    const parts = cleaned.split(/[\/\-]/);
+    return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+  }
+
+  // 3. Textual Indonesian/English date e.g. "09 Sep 2026", "2 September 2026"
+  const monthMap: Record<string, number> = {
+    jan: 0, januari: 0, january: 0,
+    feb: 1, februari: 1, february: 1,
+    mar: 2, maret: 2, march: 2,
+    apr: 3, april: 3,
+    mei: 4, may: 4,
+    jun: 5, juni: 5, june: 5,
+    jul: 6, juli: 6, july: 6,
+    agu: 7, ags: 7, agustus: 7, aug: 7, august: 7,
+    sep: 8, september: 8,
+    okt: 9, oktober: 9, oct: 9, october: 9,
+    nov: 10, november: 10,
+    des: 11, desember: 11, dec: 11, december: 11
+  };
+
+  const tokens = cleaned.split(/\s+/);
+  if (tokens.length >= 3) {
+    const day = parseInt(tokens[0], 10);
+    const monthKey = tokens[1].toLowerCase().replace(/[^a-z]/g, '');
+    const month = monthMap[monthKey] !== undefined ? monthMap[monthKey] : -1;
+    const year = parseInt(tokens[2], 10);
+
+    if (!isNaN(day) && month !== -1 && !isNaN(year)) {
+      return new Date(year, month, day, 12, 0);
+    }
+  }
+
+  const parsed = new Date(cleaned);
+  return isNaN(parsed.getTime()) ? null : parsed;
+};
+
 export default function InformasiPage() {
   const { newsList, agendaList, regulasiList, packagesList, siteSettings } = useData();
   const { trans } = useLanguage();
   const publishedNews = newsList.filter(n => n.status === 'Published');
+
+  // Compute dynamically the latest updated date from all published content & admin sync
+  const lastUpdatedFormatted = React.useMemo(() => {
+    let latestTimestamp = 0;
+
+    // Check localStorage updatedAt (when admin edits/adds any data)
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('ukpbj_backend_db_v1');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.updatedAt) {
+            const t = new Date(parsed.updatedAt).getTime();
+            if (!isNaN(t) && t > latestTimestamp) {
+              latestTimestamp = t;
+            }
+          }
+        }
+      } catch {}
+    }
+
+    // Check latest published news
+    newsList.forEach((item) => {
+      const d = parseItemDate(item.date);
+      if (d && d.getTime() > latestTimestamp) {
+        latestTimestamp = d.getTime();
+      }
+    });
+
+    // Check latest active agenda
+    agendaList.forEach((item) => {
+      const d = parseItemDate(item.date);
+      if (d && d.getTime() > latestTimestamp) {
+        latestTimestamp = d.getTime();
+      }
+    });
+
+    // Check procurement packages
+    packagesList.forEach((item) => {
+      const d = parseItemDate(item.deadline);
+      if (d && d.getTime() > latestTimestamp) {
+        latestTimestamp = d.getTime();
+      }
+    });
+
+    // Default fallback if no timestamp found
+    const targetDate = latestTimestamp > 0 ? new Date(latestTimestamp) : new Date();
+
+    const indonesianMonths = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    const englishMonths = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+
+    const day = targetDate.getDate();
+    const monthId = indonesianMonths[targetDate.getMonth()];
+    const monthEn = englishMonths[targetDate.getMonth()];
+    const year = targetDate.getFullYear();
+    const hours = String(targetDate.getHours()).padStart(2, '0');
+    const minutes = String(targetDate.getMinutes()).padStart(2, '0');
+
+    return {
+      id: `Terakhir diperbarui: ${day} ${monthId} ${year}, ${hours}:${minutes} WIB`,
+      en: `Last updated: ${monthEn} ${day}, ${year}, ${hours}:${minutes} WIB`
+    };
+  }, [newsList, agendaList, packagesList]);
   
   const recentUpdates = React.useMemo(() => {
     const list: Array<{
@@ -26,63 +144,77 @@ export default function InformasiPage() {
       href?: string;
       icon: React.ReactNode;
       color: string;
+      timestamp: number;
     }> = [];
 
     // Packages
     if (packagesList && packagesList.length > 0) {
-      packagesList.slice(0, 2).forEach((pkg) => {
+      packagesList.forEach((pkg) => {
+        const parsed = parseItemDate(pkg.deadline);
+        const categoryLabel = pkg.category.toLowerCase().includes('tender')
+          ? pkg.category.toUpperCase()
+          : `TENDER ${pkg.category.toUpperCase()}`;
+
         list.push({
-          date: pkg.deadline ? pkg.deadline.slice(0, 6) : trans('Baru', 'New'),
-          type: trans(`TENDER ${pkg.category.toUpperCase()}`, `TENDER ${pkg.category.toUpperCase()}`),
+          date: pkg.deadline || trans('Tender Baru', 'New Tender'),
+          type: categoryLabel,
           title: `${pkg.code}: ${pkg.title}`,
           href: '/#pengadaan',
           icon: <Package className="w-5 h-5 text-indigo-300" />,
-          color: 'bg-indigo-500/20'
+          color: 'bg-indigo-500/20',
+          timestamp: parsed ? parsed.getTime() : 0
         });
       });
     }
 
     // Published News
-    publishedNews.slice(0, 2).forEach((news) => {
+    publishedNews.forEach((news) => {
+      const parsed = parseItemDate(news.date);
       list.push({
         date: news.date,
         type: news.category.toUpperCase(),
         title: news.title,
         href: `/berita/${news.id}`,
         icon: <Newspaper className="w-5 h-5 text-blue-300" />,
-        color: 'bg-blue-500/20'
+        color: 'bg-blue-500/20',
+        timestamp: parsed ? parsed.getTime() : 0
       });
     });
 
     // Agenda
     if (agendaList && agendaList.length > 0) {
-      agendaList.slice(0, 1).forEach((agenda) => {
+      agendaList.forEach((agenda) => {
+        const parsed = parseItemDate(agenda.date);
         list.push({
           date: agenda.date,
           type: `AGENDA ${agenda.category.toUpperCase()}`,
           title: agenda.title,
           href: '/agenda',
           icon: <Calendar className="w-5 h-5 text-emerald-300" />,
-          color: 'bg-emerald-500/20'
+          color: 'bg-emerald-500/20',
+          timestamp: parsed ? parsed.getTime() : 0
         });
       });
     }
 
     // Regulasi
     if (regulasiList && regulasiList.length > 0) {
-      regulasiList.slice(0, 1).forEach((reg) => {
+      regulasiList.forEach((reg) => {
+        const parsed = parseItemDate(`01 Jan ${reg.tahun}`);
         list.push({
-          date: trans(`Thn ${reg.tahun}`, `Yr ${reg.tahun}`),
+          date: trans(`Tahun ${reg.tahun}`, `Year ${reg.tahun}`),
           type: trans('REGULASI JDIH', 'JDIH REGULATION'),
           title: `${reg.nomor} - ${reg.tentang}`,
           href: '/informasi/peraturan',
           icon: <Scale className="w-5 h-5 text-purple-300" />,
-          color: 'bg-purple-500/20'
+          color: 'bg-purple-500/20',
+          timestamp: parsed ? parsed.getTime() : 0
         });
       });
     }
 
-    return list.slice(0, 5);
+    // Urutkan secara kronologis menurun: update terbaru selalu di paling atas
+    return list.sort((a, b) => b.timestamp - a.timestamp).slice(0, 5);
   }, [packagesList, publishedNews, agendaList, regulasiList, trans]);
 
   const serviceStatuses = [
@@ -161,27 +293,40 @@ export default function InformasiPage() {
                 </div>
 
                 <div className="flex-grow flex flex-col justify-center">
-                  <div className="px-6 md:px-8 py-2">
+                  <div className="px-5 sm:px-7 py-3 space-y-1">
                     {recentUpdates.map((item, idx) => (
                       <Link 
                         key={idx} 
                         href={item.href || '/berita'}
-                        className="flex items-center py-4 border-b border-white/5 last:border-0 group cursor-pointer hover:bg-white/5 rounded-xl px-2 -mx-2 transition-colors"
+                        className="flex items-center py-3 px-3 rounded-2xl border border-transparent hover:border-white/10 hover:bg-white/5 group cursor-pointer transition-all duration-200 gap-3 sm:gap-4"
                       >
-                        <div className="w-12 text-center text-[11px] font-bold text-slate-400 whitespace-pre-line leading-tight">
-                          {item.date}
-                        </div>
-                        <div className={`w-9 h-9 rounded-lg flex items-center justify-center mx-3 flex-shrink-0 ${item.color}`}>
+                        {/* Icon Box */}
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${item.color} border border-white/10 shadow-inner group-hover:scale-105 transition-transform`}>
                           {item.icon}
                         </div>
-                        <div className="flex-grow min-w-0 pr-3">
-                          <p className="text-[10px] font-bold text-amber-300 tracking-wider mb-0.5">{item.type}</p>
-                          <p className="text-xs sm:text-sm text-white font-medium truncate group-hover:text-amber-200 transition-colors">{item.title}</p>
+
+                        {/* Middle Content */}
+                        <div className="flex-grow min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-[10px] font-bold text-amber-300 tracking-wider uppercase">
+                              {item.type}
+                            </span>
+                            <span className="w-1 h-1 rounded-full bg-slate-500" />
+                            <span className="text-[11px] font-medium text-slate-400 truncate">
+                              {item.date}
+                            </span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-white font-medium truncate group-hover:text-amber-200 transition-colors">
+                            {item.title}
+                          </p>
                         </div>
-                        <div className="flex items-center justify-end w-14">
-                          <span className="bg-primary-blue/30 text-blue-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-blue-400/30 group-hover:bg-primary-blue group-hover:text-white transition-colors">
+
+                        {/* Right: Action / Status */}
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className="hidden sm:inline-block bg-primary-blue/30 text-blue-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-blue-400/30 group-hover:bg-primary-blue group-hover:text-white transition-colors">
                             {trans('Baru', 'New')}
                           </span>
+                          <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-accent-gold group-hover:translate-x-0.5 transition-all" />
                         </div>
                       </Link>
                     ))}
@@ -313,13 +458,7 @@ export default function InformasiPage() {
                 </div>
                 <div>
                   <p className="text-xs sm:text-sm font-bold text-primary-navy">
-                    {trans('Terakhir diperbarui: 2 September 2026, 13:40 WIB', 'Last updated: Sep 2, 2026, 13:40 WIB')}
-                  </p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
-                    {trans(
-                      'UKPBJ Kementerian Ketenagakerjaan RI berkomitmen menyajikan informasi yang akurat dan transparan.',
-                      'UKPBJ Ministry of Manpower RI is committed to presenting accurate and transparent procurement information.'
-                    )}
+                    {trans(lastUpdatedFormatted.id, lastUpdatedFormatted.en)}
                   </p>
                 </div>
               </div>
