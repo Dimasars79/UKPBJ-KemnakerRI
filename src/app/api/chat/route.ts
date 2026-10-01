@@ -1,29 +1,8 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-
-const SYSTEM_PROMPT = `
-Anda adalah "Asisten Virtual PBJ Kemnaker", asisten kecerdasan buatan resmi dari Unit Kerja Pengadaan Barang/Jasa (UKPBJ) Kementerian Ketenagakerjaan Republik Indonesia.
-
-PERAN & TUGAS UTAMA:
-1. Membantu ASN, PPK (Pejabat Pembuat Komitmen), Pokja Pemilihan, Pejabat Pengadaan, Penyedia/Vendor, Auditor, dan Masyarakat terkait layanan PBJ Kemnaker.
-2. Memberikan penjelasan mengenai regulasi pengadaan barang dan jasa pemerintah (termasuk Perpres No. 16 Tahun 2018 jo Perpres No. 12 Tahun 2021 beserta aturan turunannya dari LKPP).
-3. Memberikan panduan penggunaan aplikasi ekosistem SPSE (Sistem Pengadaan Secara Elektronik), SiRUP, E-Katalog LKPP, dan SIKaP.
-4. Memberikan informasi tentang layanan internal UKPBJ Kemnaker:
-   - Clearing House PBJ (forum penyelesaian permasalahan & advokasi PBJ).
-   - Pembinaan SDM PBJ & Sertifikasi Keahlian Pengadaan Barang/Jasa.
-   - Verifikasi Tingkat Komponen Dalam Negeri (TKDN).
-   - Informasi Paket Pengadaan & Berita Pengadaan Kemnaker.
-
-PANDUAN MENJAWAB:
-- Gunakan bahasa Indonesia yang ramah, sopan, profesional, dan mudah dipahami.
-- Buat jawaban yang terstruktur rapi (gunakan format poin, tabel, atau nomor untuk panduan langkah demi langkah).
-- Jika pengguna membutuhkan verifikasi akun SPSE, berkas resmi, atau kendala teknis mendesak yang butuh penanganan manusia, arahkan untuk menghubungi Helpdesk Resmi:
-  • WhatsApp Helpdesk: +62 898-8180-009
-  • Email Resmi: ukpbj@kemnaker.go.id
-  • Jam Layanan: Senin - Jumat (08:00 - 16:00 WIB)
-- Jangan memberikan saran hukum di luar koridor aturan PBJ yang berlaku.
-`;
+import { SYSTEM_PROMPT } from './systemPrompt';
+import { retrieveKnowledge } from '@/lib/knowledgeRetriever';
 
 // Helper untuk membaca daftar key secara dinamis dari file .env.local maupun process.env
 function getGeminiKeys(): string[] {
@@ -96,6 +75,11 @@ export async function POST(req: Request) {
     let reply = '';
     let lastError = '';
 
+    // ================= 0. RETRIEVAL AUGMENTED GENERATION (RAG) =================
+    const userMessage = messages[messages.length - 1]?.text || messages[messages.length - 1]?.content || '';
+    const retrievedData = await retrieveKnowledge(userMessage);
+    const RAG_PROMPT = `${SYSTEM_PROMPT}\n\n=== DATA KONTEKS PENCARIAN (RETRIEVAL) ===\n${retrievedData ? retrievedData : 'Tidak ada data spesifik yang ditemukan di database untuk pertanyaan ini.'}\n==========================================\n\nBerdasarkan data konteks di atas, tolong jawab pertanyaan pengguna. PANDUAN FORMAT CEPAT:\n- Berikan jawaban yang padat, akurat, ringkas, dan to-the-point (maksimal 2-3 paragraf singkat atau poin-poin penting).`;
+
     // ================= 1. JALUR UTAMA: GOOGLE AI STUDIO (MULTI-ACCOUNT ROTATION & FAILOVER) =================
     if (geminiKeys.length > 0) {
       // Model ultra-cepat (flash-lite) diutamakan untuk respons instan < 1.5 detik
@@ -140,9 +124,7 @@ export async function POST(req: Request) {
                 signal: AbortSignal.timeout(5000),
                 body: JSON.stringify({
                   systemInstruction: {
-                    parts: [{ 
-                      text: `${SYSTEM_PROMPT}\n\nPANDUAN FORMAT CEPAT:\n- Berikan jawaban yang padat, akurat, ringkas, dan to-the-point (maksimal 2-3 paragraf singkat atau poin-poin penting).` 
-                    }],
+                    parts: [{ text: RAG_PROMPT }],
                   },
                   contents: geminiContents,
                   generationConfig: {
@@ -192,7 +174,7 @@ export async function POST(req: Request) {
     // ================= 2. JALUR CADANGAN: GROQ CLOUD =================
     if (!reply && groqKey) {
       const formattedMessages = [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: RAG_PROMPT },
         ...messages.map((m: { role: string; text?: string; content?: string }) => ({
           role: m.role === 'assistant' || m.role === 'model' ? 'assistant' : 'user',
           content: m.text || m.content || '',
