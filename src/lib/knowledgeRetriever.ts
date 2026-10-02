@@ -13,9 +13,94 @@ function getSupabaseAdmin() {
   });
 }
 
+// Basis pengetahuan statis untuk Menu Layanan & Fitur Portal UKPBJ Kemnaker
+const UKPBJ_SERVICES_KNOWLEDGE = [
+  {
+    id: 'layanan-lpse',
+    keywords: ['lpse', 'spse', 'inaproc', 'tender', 'seleksi', 'e-purchasing', 'katalog', 'lelang', 'akun spse'],
+    dokumen: `<dokumen_sumber jenis="Menu Layanan Portal" judul="LPSE (Layanan Pengadaan Secara Elektronik)">
+Deskripsi: Portal resmi penyelenggaraan tender dan e-purchasing pengadaan barang/jasa pemerintah secara elektronik terintegrasi LKPP.
+Fungsi & Cakupan: Pendaftaran penyedia, akses lelang tender terbuka, evaluasi dokumen penawaran, sanggah, dan katalog elektronik.
+Tautan Resmi: https://spse.inaproc.id/lkpp
+Lokasi Menu Portal: Navigasi Layanan -> LPSE
+Helpdesk: Gedung A Lt. 4 Kemnaker RI | Email: lpse@kemnaker.go.id | WA: +62 898-8180-009
+</dokumen_sumber>`
+  },
+  {
+    id: 'layanan-sikap',
+    keywords: ['sikap', 'kinerja', 'penyedia', 'vendor', 'kualifikasi', 'rekam jejak', 'data vendor'],
+    dokumen: `<dokumen_sumber jenis="Menu Layanan Portal" judul="SIKaP (Sistem Informasi Kinerja Penyedia)">
+Deskripsi: Sistem informasi terpusat LKPP untuk mengelola kualifikasi, izin usaha (NIB), pengalaman kerja, dan rekam jejak penilaian kinerja pelaku usaha/penyedia.
+Fungsi: Memudahkan proses kualifikasi otomatis dalam tender SPSE tanpa perlu berulang kali mengunggah dokumen fisik.
+Tautan Resmi: https://sikap.inaproc.id/
+Lokasi Menu Portal: Navigasi Layanan -> SIKaP
+</dokumen_sumber>`
+  },
+  {
+    id: 'layanan-clearing-house',
+    keywords: ['clearing', 'house', 'sengketa', 'konsultasi', 'advokasi', 'mediasi', 'pendapat hukum', 'telaah', 'kontrak'],
+    dokumen: `<dokumen_sumber jenis="Menu Layanan Portal" judul="Clearing House Pengadaan Barang/Jasa Kemnaker">
+Deskripsi: Forum konsultasi dan penyelesaian masalah hukum, sengketa pelaksanaan kontrak, serta mitigasi risiko PBJ bagi PPK, Pokja Pemilihan, dan Penyedia.
+Layanan yang Disediakan:
+1. Konsultasi & Telaah Hukum Klausul Kontrak (Multi-Years, Eskalasi Harga).
+2. Mediasi Keterlambatan Serah Terima (PHO/FHO) & Keadaan Kahar.
+3. Pendampingan Mitigasi Risiko Pengadaan bersama Inspektorat Jenderal.
+Alur Pengajuan: Masuk ke halaman Clearing House Portal (/informasi/clearing-house) -> Buat Tiket Konsultasi Baru -> Telaah oleh Tim Advokasi -> Terbit Rekomendasi/Jadwal Mediasi.
+Lokasi Menu Portal: /informasi/clearing-house
+</dokumen_sumber>`
+  },
+  {
+    id: 'layanan-sertifikasi-pbj',
+    keywords: ['sertifikat', 'sertifikasi', 'keahlian', 'tingkat dasar', 'ujian', 'ppk', 'pokja', 'sdm', 'lulus'],
+    dokumen: `<dokumen_sumber jenis="Menu Layanan Portal" judul="Layanan Sertifikasi PBJ Kemnaker">
+Deskripsi: Layanan verifikasi dan penerbitan informasi kelulusan Sertifikasi Keahlian Pengadaan Barang/Jasa Tingkat Dasar terstandarisasi LKPP.
+Peserta: Aparatur Sipil Negara (ASN), PPK, Pejabat Pengadaan, Pokja, serta Pengelola Pengadaan di lingkungan Kementerian Ketenagakerjaan RI.
+Fitur Portal: Cek keaslian nomor sertifikat, unduh e-sertifikat, dan melihat jadwal ujian batch terbaru.
+Lokasi Menu Portal: /informasi/sertifikat-pbj
+Jadwal Ujian Terdekat: Dapat dilihat pada menu Agenda (/agenda).
+</dokumen_sumber>`
+  },
+  {
+    id: 'layanan-tkdn',
+    keywords: ['tkdn', 'tingkat komponen', 'dalam negeri', 'p3dn', 'bmp', 'bobot manfaat', 'verifikasi tkdn'],
+    dokumen: `<dokumen_sumber jenis="Menu Layanan Portal" judul="Verifikasi & Konsultasi TKDN (Tingkat Komponen Dalam Negeri)">
+Deskripsi: Layanan panduan dan verifikasi kepatuhan penggunaan produk dalam negeri (P3DN) serta perhitungan Bobot Manfaat Perusahaan (BMP) dalam setiap paket pengadaan Kemnaker.
+Dasar Aturan: Kewajiban pengutamaan produk bersertifikat TKDN minimal 40% (atau 25% untuk kategori tertentu) sesuai instruksi Presiden dan Permenperin.
+Lokasi Menu Portal: /informasi/tkdn
+</dokumen_sumber>`
+  },
+  {
+    id: 'layanan-perizinan-oss',
+    keywords: ['perizinan', 'izin usaha', 'oss', 'nib', 'kbli', 'legalitas', 'administrasi'],
+    dokumen: `<dokumen_sumber jenis="Menu Layanan Portal" judul="Layanan Perizinan Berusaha & Legalitas Rekanan (OSS-RBA)">
+Deskripsi: Informasi sinkronisasi Nomor Induk Berusaha (NIB) berbasis risiko (OSS-RBA), kesesuaian KBLI bidang pekerjaan pengadaan, dan pemenuhan syarat legalitas vendor.
+Lokasi Menu Portal: /informasi/perizinan
+</dokumen_sumber>`
+  },
+  {
+    id: 'layanan-monitoring-realisasi',
+    keywords: ['monitoring', 'evaluasi', 'realisasi', 'rup', 'sirup', 'statistik', 'serapan', 'kinerja pengadaan'],
+    dokumen: `<dokumen_sumber jenis="Menu Layanan Portal" judul="Monitoring & Realisasi Pengadaan UKPBJ">
+Deskripsi: Dashboard transparansi publik yang menampilkan rekapitulasi realisasi anggaran pengadaan Kemnaker, perbandingan metode tender vs e-purchasing, dan progres pencapaian RUP.
+Lokasi Menu Portal: /monitoring
+</dokumen_sumber>`
+  },
+  {
+    id: 'layanan-pengaduan-helpdesk',
+    keywords: ['pengaduan', 'lapor', 'aduan', 'helpdesk', 'whatsapp', 'kontak', 'layanan', 'bantuan', 'call center', 'email', 'alamat', 'jam layanan'],
+    dokumen: `<dokumen_sumber jenis="Menu Layanan Portal" judul="Pusat Bantuan & Pengaduan Resmi UKPBJ Kemnaker">
+Saluran Resmi Konsultasi & Pengaduan:
+- WhatsApp Helpdesk: +62 898-8180-009
+- Email Resmi: ukpbj@kemnaker.go.id / lpse@kemnaker.go.id
+- Jam Layanan: Senin - Jumat, 08:00 - 16:00 WIB
+- Lokasi Kantor: Gedung A Lantai 4, Kementerian Ketenagakerjaan RI, Jakarta
+Fungsi: Membantu kendala teknis login SPSE/SIKaP, konsultasi penyusunan HPS/spek teknis, serta pelaporan pengaduan pengadaan secara transparan.
+</dokumen_sumber>`
+  }
+];
+
 /**
- * Mencari informasi relevan dari database Supabase berdasarkan query pengguna.
- * Menghubungkan secara mendalam ke tabel agendas, regulasi, sop, news, procurement_packages, dll.
+ * Mencari informasi relevan dari database CMS Supabase dan menu layanan UKPBJ berdasarkan query pengguna.
  */
 export async function retrieveKnowledge(query: string): Promise<string> {
   const supabaseAdmin = getSupabaseAdmin();
@@ -26,7 +111,7 @@ export async function retrieveKnowledge(query: string): Promise<string> {
     'yang', 'untuk', 'pada', 'adalah', 'dari', 'ke', 'di', 'dan', 'atau', 'ini', 'itu',
     'apakah', 'bagaimana', 'kapan', 'dimana', 'siapa', 'kenapa', 'mengapa', 'saya', 'kamu',
     'anda', 'bisa', 'tolong', 'info', 'tentang', 'mengenai', 'terkait', 'seputar', 'ada',
-    'apa', 'saja', 'ingin', 'tahu', 'kasih', 'terima'
+    'apa', 'saja', 'ingin', 'tahu', 'kasih', 'terima', 'dengan', 'dalam', 'oleh'
   ]);
 
   const rawWords = lowerQuery
@@ -34,15 +119,16 @@ export async function retrieveKnowledge(query: string): Promise<string> {
     .split(/\s+/)
     .filter(w => w.length >= 3 && !stopWords.has(w));
 
-  const words = Array.from(new Set(rawWords)).slice(0, 4);
+  const words = Array.from(new Set(rawWords)).slice(0, 5);
 
-  // Deteksi intensi khusus terkait agenda/jadwal kegiatan
+  // Deteksi intensi khusus
   const isAgendaQuery = /agenda|jadwal|acara|kegiatan|event|kapan|waktu|pelaksanaan|kalender|bimtek|sosialisasi|sertifikasi|rapat|aanwijzing|ujian|upacara/i.test(lowerQuery);
+  const isServiceMenuQuery = /layanan|menu|fitur|website|portal|clearing|house|lpse|spse|sikap|tkdn|sertifikat|pengaduan|helpdesk|monitoring|perizinan/i.test(lowerQuery);
 
   try {
     const results: string[] = [];
 
-    // 1. Informasi Kontak & Status Sistem Resmi (site_settings)
+    // 1. Informasi Kontak & Status Sistem Resmi (site_settings dari Supabase CMS)
     try {
       const { data: settings } = await supabaseAdmin
         .from('site_settings')
@@ -57,8 +143,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
           `Status Server: ${settings.server_status || 'Normal'}\n` +
           `Pemberitahuan Khusus: ${settings.emergency_notice || '-'}\n` +
           `Layanan WhatsApp Helpdesk: +62 898-8180-009\n` +
-          `Email Resmi: ukpbj@kemnaker.go.id\n` +
+          `Email Resmi: ukpbj@kemnaker.go.id | lpse@kemnaker.go.id\n` +
           `Jam Layanan: Senin - Jumat (08:00 - 16:00 WIB)\n` +
+          `Lokasi: Gedung A Lantai 4, Kementerian Ketenagakerjaan RI\n` +
           `</dokumen_sumber>`
         );
       }
@@ -66,7 +153,15 @@ export async function retrieveKnowledge(query: string): Promise<string> {
       console.warn('Failed to fetch site_settings:', e);
     }
 
-    // 2. Jika ada query terkait agenda atau jadwal secara eksplisit, ambil seluruh agenda aktif
+    // 2. Hubungkan Menu Layanan UKPBJ yang relevan
+    UKPBJ_SERVICES_KNOWLEDGE.forEach(serv => {
+      const match = serv.keywords.some(kw => lowerQuery.includes(kw));
+      if (match || isServiceMenuQuery) {
+        results.push(serv.dokumen);
+      }
+    });
+
+    // 3. Jika ada query terkait agenda atau jadwal secara eksplisit, ambil seluruh agenda aktif dari Supabase CMS
     if (isAgendaQuery) {
       try {
         const { data: allAgendas } = await supabaseAdmin
@@ -95,7 +190,7 @@ export async function retrieveKnowledge(query: string): Promise<string> {
       }
     }
 
-    // 3. Pencarian Berdasarkan Kata Kunci Spesifik (Regulasi, SOP, News, Packages, Agendas)
+    // 4. Pencarian Berdasarkan Kata Kunci Spesifik di Database CMS Supabase
     if (words.length > 0) {
       for (const kw of words) {
         const pattern = `%${kw}%`;
@@ -208,7 +303,7 @@ export async function retrieveKnowledge(query: string): Promise<string> {
       }
     }
 
-    // 4. Fallback Default jika hasil pencarian masih sangat sedikit
+    // 5. Fallback Default jika hasil pencarian masih minim
     if (results.length <= 1) {
       const searches = await Promise.allSettled([
         supabaseAdmin.from('news').select('*').order('created_at', { ascending: false }).limit(2),

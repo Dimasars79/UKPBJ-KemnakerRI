@@ -46,7 +46,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,7 +56,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     if (isOpen) {
       scrollToBottom();
       setTimeout(() => {
-        inputRef.current?.focus();
+        textareaRef.current?.focus();
       }, 300);
     }
   }, [isOpen, messages]);
@@ -75,6 +75,9 @@ export const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInput('');
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
     setIsLoading(true);
 
     try {
@@ -118,8 +121,8 @@ export const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
@@ -345,23 +348,28 @@ export const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
 
             {/* Input Bar */}
             <div className="p-2 sm:p-4 bg-white border-t border-slate-100 shrink-0">
-              <div className="flex items-center gap-1 sm:gap-2 bg-slate-100/80 rounded-lg sm:rounded-2xl px-2 py-0.5 sm:px-3 sm:py-1.5 border border-slate-200/80 focus-within:border-primary-blue focus-within:bg-white focus-within:ring-1 sm:focus-within:ring-2 focus-within:ring-blue-100 transition-all">
-                <input
-                  ref={inputRef}
-                  type="text"
+              <div className="flex items-end gap-1.5 sm:gap-2 bg-slate-100/80 rounded-xl sm:rounded-2xl px-2.5 py-1 sm:px-3.5 sm:py-2 border border-slate-200/80 focus-within:border-primary-blue focus-within:bg-white focus-within:ring-1 sm:focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+                <textarea
+                  ref={textareaRef}
+                  rows={1}
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                    e.target.style.height = 'auto';
+                    e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+                  }}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ketik pertanyaan terkait PBJ..."
+                  placeholder="Ketik pertanyaan terkait PBJ... (Shift+Enter untuk baris baru)"
                   disabled={isLoading}
-                  className="flex-1 bg-transparent text-[10px] sm:text-sm text-slate-800 placeholder-slate-400 outline-none focus:outline-none focus:ring-0 border-none disabled:opacity-50 py-0.5 sm:py-1.5"
+                  className="flex-1 bg-transparent text-[11px] sm:text-sm text-slate-800 placeholder-slate-400 outline-none focus:outline-none focus:ring-0 border-none disabled:opacity-50 resize-none max-h-[120px] leading-relaxed py-1 custom-scrollbar overflow-y-auto"
                 />
                 <button
                   onClick={() => handleSend()}
                   disabled={!input.trim() || isLoading}
-                  className="p-1 sm:p-2 rounded-md sm:rounded-xl bg-primary-blue hover:bg-blue-600 disabled:bg-slate-300 text-white transition-all shadow-xs active:scale-95 disabled:active:scale-100 shrink-0 cursor-pointer disabled:cursor-not-allowed"
+                  className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-primary-blue hover:bg-blue-600 disabled:bg-slate-300 text-white transition-all shadow-xs active:scale-95 disabled:active:scale-100 shrink-0 cursor-pointer disabled:cursor-not-allowed mb-0.5"
+                  title="Kirim Pesan"
                 >
-                  <Send className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
               </div>
             </div>
