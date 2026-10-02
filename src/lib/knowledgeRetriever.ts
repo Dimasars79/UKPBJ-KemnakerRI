@@ -1,5 +1,64 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Tipe Data Skema Database Supabase
+interface AgendaRecord {
+  title?: string;
+  category?: string;
+  date?: string;
+  event_date?: string;
+  time?: string;
+  location?: string;
+  organizer?: string;
+  capacity?: string;
+  status?: string;
+}
+
+interface RegulasiRecord {
+  nomor?: string;
+  tentang?: string;
+  tahun?: string;
+  kategori?: string;
+  status?: string;
+  file_size?: string;
+}
+
+interface SopRecord {
+  judul?: string;
+  kode?: string;
+  unit?: string;
+  revisi?: string;
+  kategori?: string;
+  tahapan_count?: number | string;
+  status?: string;
+}
+
+interface NewsRecord {
+  title?: string;
+  category?: string;
+  author?: string;
+  date?: string;
+  excerpt?: string;
+  content?: string;
+}
+
+interface PackageRecord {
+  title?: string;
+  code?: string;
+  category?: string;
+  unit?: string;
+  hps?: string;
+  method?: string;
+  deadline?: string;
+  status?: string;
+  description?: string;
+}
+
+interface SettingsRecord {
+  announcement_banner?: string;
+  server_status?: string;
+  emergency_notice?: string;
+}
+
 // Setup Supabase admin client untuk akses server-side
 function getSupabaseAdmin() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qxmdhemplqaldswspuwd.supabase.co';
@@ -134,7 +193,7 @@ export async function retrieveKnowledge(query: string): Promise<string> {
         .from('site_settings')
         .select('*')
         .eq('id', 'global_config')
-        .maybeSingle();
+        .maybeSingle<SettingsRecord>();
 
       if (settings) {
         results.push(
@@ -171,9 +230,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
           .limit(10);
 
         if (allAgendas && allAgendas.length > 0) {
-          allAgendas.forEach((item: any) => {
+          (allAgendas as AgendaRecord[]).forEach((item) => {
             results.push(
-              `<dokumen_sumber jenis="Agenda Kegiatan" judul="${item.title}">\n` +
+              `<dokumen_sumber jenis="Agenda Kegiatan" judul="${item.title || '-'}">\n` +
               `Kategori: ${item.category || '-'}\n` +
               `Tanggal: ${item.date || item.event_date || '-'}\n` +
               `Waktu: ${item.time || '-'}\n` +
@@ -226,9 +285,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
         const [regulasi, sop, news, agendas, packages] = searches;
 
         if (regulasi.status === 'fulfilled' && regulasi.value.data) {
-          regulasi.value.data.forEach((item: any) => {
+          (regulasi.value.data as RegulasiRecord[]).forEach((item) => {
             results.push(
-              `<dokumen_sumber jenis="Regulasi" judul="${item.tentang || item.nomor}">\n` +
+              `<dokumen_sumber jenis="Regulasi" judul="${item.tentang || item.nomor || '-'}">\n` +
               `Nomor / Tahun: ${item.nomor || '-'} / ${item.tahun || '-'}\n` +
               `Tentang: ${item.tentang || '-'}\n` +
               `Kategori: ${item.kategori || '-'}\n` +
@@ -240,9 +299,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
         }
 
         if (sop.status === 'fulfilled' && sop.value.data) {
-          sop.value.data.forEach((item: any) => {
+          (sop.value.data as SopRecord[]).forEach((item) => {
             results.push(
-              `<dokumen_sumber jenis="SOP" judul="${item.judul}">\n` +
+              `<dokumen_sumber jenis="SOP" judul="${item.judul || '-'}">\n` +
               `Kode SOP: ${item.kode || '-'}\n` +
               `Unit Kerja: ${item.unit || '-'}\n` +
               `Revisi: ${item.revisi || '-'}\n` +
@@ -255,9 +314,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
         }
 
         if (news.status === 'fulfilled' && news.value.data) {
-          news.value.data.forEach((item: any) => {
+          (news.value.data as NewsRecord[]).forEach((item) => {
             results.push(
-              `<dokumen_sumber jenis="Berita" judul="${item.title}">\n` +
+              `<dokumen_sumber jenis="Berita" judul="${item.title || '-'}">\n` +
               `Kategori: ${item.category || '-'}\n` +
               `Penulis: ${item.author || '-'}\n` +
               `Tanggal: ${item.date || '-'}\n` +
@@ -269,9 +328,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
         }
 
         if (agendas.status === 'fulfilled' && agendas.value.data) {
-          agendas.value.data.forEach((item: any) => {
+          (agendas.value.data as AgendaRecord[]).forEach((item) => {
             results.push(
-              `<dokumen_sumber jenis="Agenda Kegiatan" judul="${item.title}">\n` +
+              `<dokumen_sumber jenis="Agenda Kegiatan" judul="${item.title || '-'}">\n` +
               `Kategori: ${item.category || '-'}\n` +
               `Tanggal: ${item.date || item.event_date || '-'}\n` +
               `Waktu: ${item.time || '-'}\n` +
@@ -285,9 +344,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
         }
 
         if (packages.status === 'fulfilled' && packages.value.data) {
-          packages.value.data.forEach((item: any) => {
+          (packages.value.data as PackageRecord[]).forEach((item) => {
             results.push(
-              `<dokumen_sumber jenis="Paket Pengadaan" judul="${item.title}">\n` +
+              `<dokumen_sumber jenis="Paket Pengadaan" judul="${item.title || '-'}">\n` +
               `Kode Paket: ${item.code || '-'}\n` +
               `Kategori: ${item.category || '-'}\n` +
               `Satuan Kerja: ${item.unit || '-'}\n` +
@@ -314,9 +373,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
       const [news, agendasFallback, packages] = searches;
 
       if (news.status === 'fulfilled' && news.value.data) {
-        news.value.data.forEach((item: any) => {
+        (news.value.data as NewsRecord[]).forEach((item) => {
           results.push(
-            `<dokumen_sumber jenis="Berita Terbaru" judul="${item.title}">\n` +
+            `<dokumen_sumber jenis="Berita Terbaru" judul="${item.title || '-'}">\n` +
             `Ringkasan: ${item.excerpt || item.content || '-'}\n` +
             `</dokumen_sumber>`
           );
@@ -324,9 +383,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
       }
 
       if (agendasFallback.status === 'fulfilled' && agendasFallback.value.data) {
-        agendasFallback.value.data.forEach((item: any) => {
+        (agendasFallback.value.data as AgendaRecord[]).forEach((item) => {
           results.push(
-            `<dokumen_sumber jenis="Agenda Mendatang" judul="${item.title}">\n` +
+            `<dokumen_sumber jenis="Agenda Mendatang" judul="${item.title || '-'}">\n` +
             `Tanggal: ${item.date || item.event_date || '-'}\n` +
             `Waktu: ${item.time || '-'}\n` +
             `Lokasi: ${item.location || '-'}\n` +
@@ -338,9 +397,9 @@ export async function retrieveKnowledge(query: string): Promise<string> {
       }
 
       if (packages.status === 'fulfilled' && packages.value.data) {
-        packages.value.data.forEach((item: any) => {
+        (packages.value.data as PackageRecord[]).forEach((item) => {
           results.push(
-            `<dokumen_sumber jenis="Paket Pengadaan Terbaru" judul="${item.title}">\n` +
+            `<dokumen_sumber jenis="Paket Pengadaan Terbaru" judul="${item.title || '-'}">\n` +
             `Kategori: ${item.category || '-'}\n` +
             `HPS: ${item.hps || '-'}\n` +
             `Status: ${item.status || '-'}\n` +
