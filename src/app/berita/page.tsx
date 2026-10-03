@@ -262,22 +262,23 @@ export default function BeritaIndexPage() {
                           {item.category}
                         </span>
                       </div>
-                      <div className="absolute bottom-2.5 left-3.5 right-3.5 z-10 flex items-center justify-between text-white/90 text-xs font-medium drop-shadow-sm">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3 text-amber-400" />
-                          <span>{item.date}</span>
+                    </div>
+
+                    {/* Body */}
+                    <div className="p-5 sm:p-6 space-y-2.5">
+                      <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-amber-500" />
+                          <span className="font-semibold text-slate-600">{item.date}</span>
                         </span>
                         {item.views > 0 && (
-                          <span className="flex items-center gap-1 text-[11px] font-mono">
-                            <Eye className="w-3 h-3" />
+                          <span className="flex items-center gap-1 text-[11px] text-slate-400 font-mono">
+                            <Eye className="w-3.5 h-3.5 text-slate-400" />
                             <span>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                           </span>
                         )}
                       </div>
-                    </div>
 
-                    {/* Body */}
-                    <div className="p-5 sm:p-6 space-y-2">
                       <h3 className="font-bold text-base text-primary-navy leading-snug line-clamp-2 group-hover:text-primary-blue transition-colors">
                         {item.title}
                       </h3>

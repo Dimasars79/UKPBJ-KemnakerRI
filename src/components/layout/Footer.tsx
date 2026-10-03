@@ -98,7 +98,7 @@ export function Footer() {
                 </li>
                 <li>
                   <a 
-                    href="https://youtube.com/@kemnaker" 
+                    href="https://www.youtube.com/@KemnakerRI" 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="hover:text-accent-gold transition-colors flex items-center group py-0.5"

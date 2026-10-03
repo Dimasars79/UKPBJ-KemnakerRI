@@ -849,7 +849,7 @@ export default function AdminPortalPage() {
     date: '28 Agu 2026',
     views: '1.2K x ditonton',
     thumbnailUrl: '/gallery/gallery-1.jpg',
-    url: 'https://www.youtube.com/@kemenperin_ri'
+    url: 'https://www.youtube.com/@KemnakerRI'
   });
 
   const [previewNews, setPreviewNews] = useState<NewsItem | null>(null);
@@ -1403,7 +1403,7 @@ export default function AdminPortalPage() {
         date: videoFormData.date || new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
         views: '1.0K x ditonton',
         thumbnailUrl: videoFormData.thumbnailUrl || '/gallery/gallery-1.jpg',
-        url: videoFormData.url || 'https://www.youtube.com/@kemenperin_ri'
+        url: videoFormData.url || 'https://www.youtube.com/@KemnakerRI'
       });
       showNotification('✓ Video baru berhasil ditambahkan ke Galeri Video (/galeri)!');
       pushAdminNotification('Video Media Baru Ditambahkan', videoFormData.title || 'Video sosialisasi PBJ', 'galeri');
@@ -5974,7 +5974,7 @@ export default function AdminPortalPage() {
                         date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
                         views: '1.0K x ditonton',
                         thumbnailUrl: '/gallery/gallery-1.jpg',
-                        url: 'https://www.youtube.com/@kemenperin_ri'
+                        url: 'https://www.youtube.com/@KemnakerRI'
                       });
                       setShowVideoModal(true);
                     }}
@@ -6409,7 +6409,7 @@ export default function AdminPortalPage() {
                           date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
                           views: '1.0K x ditonton',
                           thumbnailUrl: '/gallery/gallery-1.jpg',
-                          url: 'https://www.youtube.com/@kemenperin_ri'
+                          url: 'https://www.youtube.com/@KemnakerRI'
                         });
                         setShowVideoModal(true);
                       }}

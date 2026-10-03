@@ -155,25 +155,25 @@ export function BeritaSection() {
                      item.category === 'Siaran Pers' ? trans('Siaran Pers', 'Press Release') : item.category}
                   </span>
                 </div>
-
-                {/* Date Tag */}
-                <div className="absolute bottom-3 left-4 right-4 z-10 flex items-center justify-between text-white/90 text-xs">
-                  <div className="flex items-center gap-1.5 font-medium drop-shadow-sm">
-                    <Calendar className="w-3.5 h-3.5 text-accent-gold" />
-                    <span>{item.date}</span>
-                  </div>
-                  {item.views > 0 && (
-                    <div className="flex items-center gap-1 text-[11px] text-white/80 font-mono drop-shadow-sm">
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
-                    </div>
-                  )}
-                </div>
               </Link>
 
               {/* Card Content Body */}
               <div className="p-5 sm:p-6 flex flex-col flex-grow justify-between space-y-4">
-                <div className="space-y-2">
+                <div className="space-y-2.5">
+                  {/* Tanggal & Jumlah Dilihat (Dipindah ke bawah gambar agar kontras jelas) */}
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-amber-500" />
+                      <span className="font-semibold text-slate-600">{item.date}</span>
+                    </div>
+                    {item.views > 0 && (
+                      <div className="flex items-center gap-1 text-[11px] text-slate-400 font-mono">
+                        <Eye className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
+                      </div>
+                    )}
+                  </div>
+
                   <Link href={`/berita/${item.id}`} className="block">
                     <h3 className="font-bold text-base sm:text-lg text-primary-navy leading-snug line-clamp-2 group-hover:text-primary-blue transition-colors">
                       {item.title}

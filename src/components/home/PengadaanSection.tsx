@@ -15,7 +15,8 @@ import {
   AlertCircle,
   Download,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Headset
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FadeIn } from '@/components/animations/FadeIn';
@@ -349,7 +350,7 @@ export function PengadaanSection() {
 
               <div>
                 <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl sm:rounded-2xl bg-amber-50 border border-amber-200/70 flex items-center justify-center mb-3 sm:mb-4 text-amber-600 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-gradient-to-tr group-hover:from-amber-500 group-hover:to-yellow-400 group-hover:text-white transition-all duration-300 shadow-inner shrink-0">
-                  <Sparkles className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6" />
+                  <Headset className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6" />
                 </div>
                 <h4 className="font-bold text-sm sm:text-base text-primary-navy mb-1 sm:mb-1.5 group-hover:text-amber-600 transition-colors">
                   {t('home.pengadaan_card3_title')}
