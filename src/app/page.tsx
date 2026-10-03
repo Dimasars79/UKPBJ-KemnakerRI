@@ -124,6 +124,10 @@ export default function Home() {
 
     const listToProcess = activeAgendas.length > 0 ? activeAgendas : agendaList;
 
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayTime = todayStart.getTime();
+
     const withParsed = listToProcess.map((item) => {
       const d = parseAgendaDate(item.date);
       return {
@@ -132,8 +136,12 @@ export default function Home() {
       };
     });
 
+    // Agendas that are today or in the future
+    const futureAgendas = withParsed.filter((item) => item.parsedTime >= todayTime);
+    const listToSort = futureAgendas.length > 0 ? futureAgendas : withParsed;
+
     // Sort ascending chronologically (closest upcoming date first)
-    return withParsed.sort((a, b) => a.parsedTime - b.parsedTime);
+    return listToSort.sort((a, b) => a.parsedTime - b.parsedTime);
   }, [agendaList]);
 
   // Pick the closest upcoming active agenda

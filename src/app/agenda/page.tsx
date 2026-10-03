@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -8,7 +8,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { AgendaCard } from '@/components/cards/AgendaCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, Building2, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, Building2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '@/contexts/DataContext';
 
@@ -96,8 +96,24 @@ const parseAgendaDate = (dateStr: string): { day: number; month: number; year: n
 export default function AgendaPage() {
   const { t, trans, language } = useLanguage();
   const { agendaList } = useData();
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 1)); // Default: September 2026
-  const [selectedDate, setSelectedDate] = useState<number | null>(15);
+
+  // Real-world dynamic date state (auto-updates every minute if day changes)
+  const [now, setNow] = useState<Date>(() => new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(new Date());
+    }, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  const todayDate = now.getDate();
+  const todayMonth = now.getMonth();
+  const todayYear = now.getFullYear();
+
+  // Active calendar view (defaults to real-world current month and year)
+  const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
+  const [selectedDate, setSelectedDate] = useState<number | null>(() => new Date().getDate());
   const [selectedAgendaModal, setSelectedAgendaModal] = useState<SelectedAgendaModalData | null>(null);
   
   // Category & Period Filters for Upcoming Activities
@@ -118,6 +134,10 @@ export default function AgendaPage() {
 
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
+
+  // Real-world next month computation
+  const nextRealMonth = (todayMonth + 1) % 12;
+  const nextRealYear = todayMonth === 11 ? todayYear + 1 : todayYear;
 
   // Build activities dynamically ONLY for the current active month and year
   const activities: Record<number, SelectedAgendaModalData[]> = {};
@@ -157,6 +177,12 @@ export default function AgendaPage() {
     setSelectedDate(null);
   };
 
+  const goToToday = () => {
+    const liveNow = new Date();
+    setCurrentDate(new Date(liveNow.getFullYear(), liveNow.getMonth(), 1));
+    setSelectedDate(liveNow.getDate());
+  };
+
   // Map dummyAgendas with parsed dates for chronological sorting & filtering
   const dummyAgendas = agendaList.map((ag) => {
     const parsed = parseAgendaDate(ag.date);
@@ -176,21 +202,22 @@ export default function AgendaPage() {
       capacity: ag.capacity,
       status: ag.status,
       description: ag.description,
-      parsedMonth: parsed ? parsed.month : 8,
-      parsedYear: parsed ? parsed.year : 2026,
+      parsedDay: parsed ? parsed.day : 1,
+      parsedMonth: parsed ? parsed.month : todayMonth,
+      parsedYear: parsed ? parsed.year : todayYear,
       parsedTimestamp: timestamp
     };
   });
 
-  // Filtered upcoming agendas sorted chronologically from nearest/closest date
+  // Filtered upcoming agendas sorted chronologically relative to real-world time
   const filteredAgendas = dummyAgendas
     .filter((agenda) => {
       const matchCategory = categoryFilter === 'Semua Kategori' || agenda.category === categoryFilter;
       let matchPeriod = true;
       if (periodFilter === 'Bulan Ini') {
-        matchPeriod = agenda.parsedMonth === 8 && agenda.parsedYear === 2026; // September 2026
+        matchPeriod = agenda.parsedMonth === todayMonth && agenda.parsedYear === todayYear;
       } else if (periodFilter === 'Bulan Depan') {
-        matchPeriod = agenda.parsedMonth === 9 && agenda.parsedYear === 2026; // Oktober 2026
+        matchPeriod = agenda.parsedMonth === nextRealMonth && agenda.parsedYear === nextRealYear;
       }
       return matchCategory && matchPeriod;
     })
@@ -256,7 +283,14 @@ export default function AgendaPage() {
             <div className="w-full lg:w-1/2 p-4 sm:p-6 md:p-8 border-b lg:border-b-0 lg:border-r border-slate-100 bg-slate-50/50">
               <div className="flex justify-between items-center mb-3 sm:mb-6">
                 <h3 className="text-base sm:text-xl font-bold text-primary-navy">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h3>
-                <div className="flex space-x-1.5 sm:space-x-2">
+                <div className="flex items-center space-x-1.5 sm:space-x-2">
+                  <button 
+                    onClick={goToToday}
+                    title={trans("Kembali ke hari ini", "Back to today")}
+                    className="px-2.5 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-primary-blue hover:border-primary-blue/30 transition-all shadow-xs"
+                  >
+                    {trans('Hari Ini', 'Today')}
+                  </button>
                   <button onClick={prevMonth} aria-label={trans("Bulan sebelumnya", "Previous month")} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-xs">
                     <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
                   </button>
@@ -288,6 +322,8 @@ export default function AgendaPage() {
                   const day = i + 1;
                   const hasActivity = activities[day] && activities[day].length > 0;
                   const isSelected = selectedDate === day;
+                  const isToday = currentYear === todayYear && currentMonth === todayMonth && day === todayDate;
+
                   return (
                     <button
                       key={day}
@@ -295,12 +331,19 @@ export default function AgendaPage() {
                       className={`h-8 sm:h-10 md:h-12 rounded-lg sm:rounded-xl flex flex-col items-center justify-center relative transition-all duration-300 text-xs sm:text-sm ${
                         isSelected 
                           ? 'bg-primary-blue text-white shadow-lg shadow-blue-500/30 font-bold scale-105 sm:scale-110 z-10' 
+                          : isToday
+                          ? 'bg-blue-50 text-primary-blue font-bold border-2 border-primary-blue/40 hover:bg-blue-100/50'
                           : 'bg-white hover:bg-slate-100 text-slate-700 font-medium border border-transparent hover:border-slate-200'
                       }`}
                     >
-                      <span>{day}</span>
+                      <span className="relative">
+                        {day}
+                        {isToday && !isSelected && (
+                          <span className="absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-primary-blue animate-ping" />
+                        )}
+                      </span>
                       {hasActivity && (
-                        <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full absolute bottom-1 sm:bottom-1.5 ${isSelected ? 'bg-white' : 'bg-accent-gold'}`} />
+                        <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full absolute bottom-1 sm:bottom-1.5 ${isSelected ? 'bg-white' : isToday ? 'bg-primary-blue' : 'bg-accent-gold'}`} />
                       )}
                     </button>
                   );
@@ -412,8 +455,8 @@ export default function AgendaPage() {
                 className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-xl shadow-xs outline-none focus:border-primary-blue text-sm cursor-pointer"
               >
                 <option value="Semua">{trans('Semua Jadwal', 'All Schedules')}</option>
-                <option value="Bulan Ini">{trans('Bulan Ini (September)', 'This Month (September)')}</option>
-                <option value="Bulan Depan">{trans('Bulan Depan (Oktober)', 'Next Month (October)')}</option>
+                <option value="Bulan Ini">{trans(`Bulan Ini (${monthNames[todayMonth]})`, `This Month (${monthNames[todayMonth]})`)}</option>
+                <option value="Bulan Depan">{trans(`Bulan Depan (${monthNames[nextRealMonth]})`, `Next Month (${monthNames[nextRealMonth]})`)}</option>
               </select>
             </div>
           </div>
@@ -607,7 +650,6 @@ export default function AgendaPage() {
                   {/* Ringkasan Singkat / Deskripsi */}
                   <div className="p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200/70">
                     <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 text-primary-navy font-bold text-xs sm:text-sm">
-                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-900" />
                       <span>{trans('Keterangan & Informasi Kegiatan', 'Description & Event Information')}</span>
                     </div>
                     <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">

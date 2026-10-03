@@ -293,74 +293,103 @@ const DEFAULT_NEWS: NewsItem[] = [
   }
 ];
 
-const DEFAULT_AGENDAS: AgendaItem[] = [
-  {
-    id: 'AGD-001',
-    title: 'Bimbingan Teknis Penerapan SIKaP V.3 bagi Penyedia Barang & Jasa',
-    category: 'Bimtek',
-    date: '15 Sep 2026',
-    time: '10:00 - 12:00 WIB',
-    location: 'Auditorium Gedung A Kemnaker & Zoom',
-    organizer: 'Biro Perencanaan & PBJ',
-    capacity: '200 Peserta',
-    imageUrl: '/poster_kegiatan.webp',
-    description: 'Bimbingan teknis intensif mengenai implementasi dan optimalisasi Sistem Informasi Kinerja Penyedia (SIKaP) Versi 3.0 guna mempercepat proses kualifikasi penyedia barang dan jasa pemerintah secara terintegrasi.',
-    status: 'Terjadwal',
-    syncFrontend: true
-  },
-  {
-    id: 'AGD-002',
-    title: 'Pemberian Penjelasan (Aanwijzing) Tender Pengadaan IT Server',
-    category: 'Tender',
-    date: '18 Sep 2026',
-    time: '09:00 - 11:30 WIB',
-    location: 'Ruang Rapat UKPBJ Lt. 4',
-    organizer: 'Pokja Pemilihan II',
-    capacity: 'Khusus Rekanan Terdaftar',
-    description: 'Pemberian penjelasan teknis, spesifikasi server, dan syarat administrasi penawaran untuk paket Pengadaan Infrastruktur Server IT UKPBJ Kemnaker Tahun Anggaran 2026.',
-    status: 'Terjadwal',
-    syncFrontend: true
-  },
-  {
-    id: 'AGD-003',
-    title: 'Ujian Sertifikasi PBJ Tingkat Dasar Batch IV',
-    category: 'Sertifikasi',
-    date: '22 Sep 2026',
-    time: '08:00 - 16:00 WIB',
-    location: 'Pusdiklat Kemnaker RI',
-    organizer: 'Pusat Pengembangan SDM PBJ',
-    capacity: '50 Peserta',
-    description: 'Pelaksanaan ujian sertifikasi keahlian Pengadaan Barang/Jasa Tingkat Dasar sesuai standar LKPP bagi para aparatur sipil negara dan pengelola pengadaan.',
-    status: 'Terjadwal',
-    syncFrontend: true
-  },
-  {
-    id: 'AGD-004',
-    title: 'Rapat Koordinasi Evaluasi Realisasi Anggaran PBJ Kuartal III',
-    category: 'Rapat',
-    date: '28 Sep 2026',
-    time: '13:30 - 16:30 WIB',
-    location: 'Ruang Rapat Utama Menteri',
-    organizer: 'Sekretariat Jenderal Kemnaker',
-    capacity: 'Internal PPK & KPA',
-    description: 'Rapat evaluasi progres serapan anggaran pengadaan barang/jasa kuartal III tahun 2026 serta pemetaan langkah strategis percepatan penyelesaian paket pekerjaan.',
-    status: 'Terjadwal',
-    syncFrontend: true
-  },
-  {
-    id: 'AGD-005',
-    title: 'Sosialisasi Tata Cara Pengajuan Clearing House PBJ',
-    category: 'Sosialisasi',
-    date: '02 Okt 2026',
-    time: '09:00 - 12:00 WIB',
-    location: 'Hybrid (Ruang Komisi & Live Stream)',
-    organizer: 'Inspektorat Jenderal & UKPBJ',
-    capacity: '300 Peserta',
-    description: 'Sosialisasi alur mekanisme dan konsultasi penyelesaian permasalahan pengadaan barang/jasa melalui forum Clearing House PBJ Kementerian Ketenagakerjaan.',
-    status: 'Terjadwal',
-    syncFrontend: true
-  }
-];
+export const getDynamicDefaultAgendas = (): AgendaItem[] => {
+  const now = new Date();
+  const monthNamesID = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  
+  const formatDateOffset = (offsetDays: number) => {
+    const target = new Date(now);
+    target.setDate(now.getDate() + offsetDays);
+    const d = String(target.getDate()).padStart(2, '0');
+    const m = monthNamesID[target.getMonth()];
+    const y = target.getFullYear();
+    return `${d} ${m} ${y}`;
+  };
+
+  return [
+    {
+      id: 'AGD-001',
+      title: 'Bimbingan Teknis Penerapan SIKaP V.3 bagi Penyedia Barang & Jasa',
+      category: 'Bimtek',
+      date: formatDateOffset(2),
+      time: '10:00 - 12:00 WIB',
+      location: 'Auditorium Gedung A Kemnaker & Zoom',
+      organizer: 'Biro Perencanaan & PBJ',
+      capacity: '200 Peserta',
+      imageUrl: '/poster_kegiatan.webp',
+      description: 'Bimbingan teknis intensif mengenai implementasi dan optimalisasi Sistem Informasi Kinerja Penyedia (SIKaP) Versi 3.0 guna mempercepat proses kualifikasi penyedia barang dan jasa pemerintah secara terintegrasi.',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-002',
+      title: 'Pemberian Penjelasan (Aanwijzing) Tender Pengadaan IT Server',
+      category: 'Tender',
+      date: formatDateOffset(5),
+      time: '09:00 - 11:30 WIB',
+      location: 'Ruang Rapat UKPBJ Lt. 4',
+      organizer: 'Pokja Pemilihan II',
+      capacity: 'Khusus Rekanan Terdaftar',
+      description: 'Pemberian penjelasan teknis, spesifikasi server, dan syarat administrasi penawaran untuk paket Pengadaan Infrastruktur Server IT UKPBJ Kemnaker Tahun Anggaran berjalan.',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-003',
+      title: 'Ujian Sertifikasi PBJ Tingkat Dasar Batch Terpadu',
+      category: 'Sertifikasi',
+      date: formatDateOffset(9),
+      time: '08:00 - 16:00 WIB',
+      location: 'Pusdiklat Kemnaker RI',
+      organizer: 'Pusat Pengembangan SDM PBJ',
+      capacity: '50 Peserta',
+      description: 'Pelaksanaan ujian sertifikasi keahlian Pengadaan Barang/Jasa Tingkat Dasar sesuai standar LKPP bagi para aparatur sipil negara dan pengelola pengadaan.',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-004',
+      title: 'Rapat Koordinasi Evaluasi Realisasi Anggaran PBJ Terkini',
+      category: 'Rapat',
+      date: formatDateOffset(14),
+      time: '13:30 - 16:30 WIB',
+      location: 'Ruang Rapat Utama Menteri',
+      organizer: 'Sekretariat Jenderal Kemnaker',
+      capacity: 'Internal PPK & KPA',
+      description: 'Rapat evaluasi progres serapan anggaran pengadaan barang/jasa tahun anggaran berjalan serta pemetaan langkah strategis percepatan penyelesaian paket pekerjaan.',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-005',
+      title: 'Sosialisasi Tata Cara Pengajuan Clearing House PBJ',
+      category: 'Sosialisasi',
+      date: formatDateOffset(20),
+      time: '09:00 - 12:00 WIB',
+      location: 'Hybrid (Ruang Komisi & Live Stream)',
+      organizer: 'Inspektorat Jenderal & UKPBJ',
+      capacity: '300 Peserta',
+      description: 'Sosialisasi alur mekanisme dan konsultasi penyelesaian permasalahan pengadaan barang/jasa melalui forum Clearing House PBJ Kementerian Ketenagakerjaan.',
+      status: 'Terjadwal',
+      syncFrontend: true
+    },
+    {
+      id: 'AGD-006',
+      title: 'Sosialisasi & Workshop Penggunaan E-Katalog Sektoral',
+      category: 'Sosialisasi',
+      date: formatDateOffset(27),
+      time: '08:30 - 15:30 WIB',
+      location: 'Ballroom Tridharma Kemnaker',
+      organizer: 'Biro Umum & UKPBJ Kemnaker',
+      capacity: '250 Peserta',
+      description: 'Workshop pendampingan teknis tata cara transaksi pengadaan langsung dan mini kompetisi melalui katalog elektronik versi terbaru.',
+      status: 'Terjadwal',
+      syncFrontend: true
+    }
+  ];
+};
+
+const DEFAULT_AGENDAS: AgendaItem[] = getDynamicDefaultAgendas();
 
 const DEFAULT_PACKAGES: ProcurementPackage[] = [
   {

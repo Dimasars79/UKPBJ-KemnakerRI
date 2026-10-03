@@ -8306,34 +8306,19 @@ export default function AdminPortalPage() {
                   </label>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div>
-                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Keterangan Ukuran File</label>
-                    <input
-                      type="text"
-                      value={regulasiFormData.fileSize || '2.5 MB'}
-                      onChange={(e) => setRegulasiFormData({ ...regulasiFormData, fileSize: e.target.value })}
-                      placeholder="e.g. 2.5 MB"
-                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-700 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                      }`}
-                    />
-                  </div>
-
-                  <div>
-                    <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Status Dokumen</label>
-                    <select
-                      value={regulasiFormData.status || 'Aktif'}
-                      onChange={(e) => setRegulasiFormData({ ...regulasiFormData, status: e.target.value as RegulasiItem['status'] })}
-                      className={`w-full px-3 py-2 border rounded-xl outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
-                      }`}
-                    >
-                      <option value="Aktif">Aktif (Live di Portal Publik)</option>
-                      <option value="Draft">Draft (Disembunyikan)</option>
-                      <option value="Dicabut">Dicabut (Tidak Berlaku)</option>
-                    </select>
-                  </div>
+                <div className="pt-2">
+                  <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Status Dokumen</label>
+                  <select
+                    value={regulasiFormData.status || 'Aktif'}
+                    onChange={(e) => setRegulasiFormData({ ...regulasiFormData, status: e.target.value as RegulasiItem['status'] })}
+                    className={`w-full px-3 py-2 border rounded-xl outline-none ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-slate-200 focus:border-blue-500' : 'bg-slate-50 border-slate-300 text-slate-800 focus:border-blue-600'
+                    }`}
+                  >
+                    <option value="Aktif">Aktif (Live di Portal Publik)</option>
+                    <option value="Draft">Draft (Disembunyikan)</option>
+                    <option value="Dicabut">Dicabut (Tidak Berlaku)</option>
+                  </select>
                 </div>
 
                 <div className={`flex justify-end gap-3 pt-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
