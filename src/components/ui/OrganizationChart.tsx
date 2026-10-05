@@ -1,93 +1,500 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Building2, 
   FileText, 
   Users, 
   Handshake, 
   Settings, 
-  Shield, 
-  Landmark 
+  ShieldCheck, 
+  GraduationCap, 
+  Landmark, 
+  CheckCircle2, 
+  Sparkles,
+  Info
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+interface NodeItem {
+  id: string;
+  titleId: string;
+  titleEn: string;
+  subtitleId: string;
+  subtitleEn: string;
+  roleBadgeId: string;
+  roleBadgeEn: string;
+  descId: string;
+  descEn: string;
+  tugasId: string[];
+  tugasEn: string[];
+  icon: React.ReactNode;
+  accent: {
+    borderLeft: string;
+    badgeBg: string;
+    badgeText: string;
+    iconBg: string;
+    iconColor: string;
+    ringColor: string;
+    connector: string;
+  };
+}
 
 export const OrganizationChart = () => {
   const { trans } = useLanguage();
+  const [selectedNode, setSelectedNode] = useState<NodeItem | null>(null);
+
+  const nodes: Record<string, NodeItem> = {
+    kepalaUkpbj: {
+      id: 'kepalaUkpbj',
+      titleId: 'Kepala UKPBJ',
+      titleEn: 'Head of UKPBJ',
+      subtitleId: 'Pimpinan Unit Kerja & Pengarah Kebijakan',
+      subtitleEn: 'Head of Unit & Policy Director',
+      roleBadgeId: 'Pimpinan Utama',
+      roleBadgeEn: 'Executive Leadership',
+      descId: 'Pimpinan tertinggi Unit Kerja Pengadaan Barang/Jasa Kemnaker RI yang memegang mandat perumusan kebijakan, pengawasan strategis, dan tata kelola pengadaan kementerian.',
+      descEn: 'Highest executive leader of UKPBJ Kemnaker holding the strategic mandate for policy formulation, supervision, and ministry-wide procurement governance.',
+      tugasId: [
+        'Menetapkan arah kebijakan dan strategi pengadaan tahunan.',
+        'Mengoordinasikan pelaksanaan tata kelola pengadaan yang transparan dan akuntabel.',
+        'Membina hubungan kelembagaan dengan instansi pembina (LKPP) dan pengawas.'
+      ],
+      tugasEn: [
+        'Establish strategic procurement policies and annual operational milestones.',
+        'Coordinate transparent and accountable procurement implementation.',
+        'Foster institutional partnerships with LKPP and supervisory bodies.'
+      ],
+      icon: <Landmark className="w-6 h-6 text-amber-300" />,
+      accent: {
+        borderLeft: 'border-l-amber-400',
+        badgeBg: 'bg-amber-400/20 text-amber-300 border border-amber-400/30',
+        badgeText: 'text-amber-300',
+        iconBg: 'bg-white/10 ring-1 ring-amber-300/30',
+        iconColor: 'text-amber-300',
+        ringColor: 'hover:border-amber-400',
+        connector: 'bg-blue-800'
+      }
+    },
+    kepalaBagian: {
+      id: 'kepalaBagian',
+      titleId: 'Kepala Bagian Layanan Pengadaan',
+      titleEn: 'Head of Procurement Services',
+      subtitleId: 'Koordinator Operasional & Manajemen Layanan',
+      subtitleEn: 'Operational & Service Management Coordinator',
+      roleBadgeId: 'Koordinator Layanan',
+      roleBadgeEn: 'Service Coordinator',
+      descId: 'Pejabat struktural yang mengoordinasikan kelancaran pelaksanaan tugas Tim Pengelolaan PBJ, Kelembagaan & SDM, Layanan SPSE, serta Sekretariat.',
+      descEn: 'Structural coordinator overseeing operational synergies between Procurement, Institutional/HR, SPSE Systems, and Secretariat teams.',
+      tugasId: [
+        'Mengendalikan operasionalisasi harian seluruh divisi pengadaan.',
+        'Memantau kepatuhan prosedur regulasi pengadaan barang/jasa.',
+        'Menyusun laporan kinerja pengadaan kepada Kepala UKPBJ.'
+      ],
+      tugasEn: [
+        'Direct and coordinate daily operational procurement workflows.',
+        'Monitor procedural compliance with government regulations.',
+        'Compile periodic performance reports for the Head of UKPBJ.'
+      ],
+      icon: <FileText className="w-5 h-5 text-blue-600" />,
+      accent: {
+        borderLeft: 'border-l-blue-600',
+        badgeBg: 'bg-blue-50 text-blue-700 border border-blue-200',
+        badgeText: 'text-blue-700',
+        iconBg: 'bg-blue-50 ring-1 ring-blue-200',
+        iconColor: 'text-blue-600',
+        ringColor: 'hover:border-blue-400',
+        connector: 'bg-blue-600'
+      }
+    },
+    sekretariat: {
+      id: 'sekretariat',
+      titleId: 'Sekretariat Tata Usaha',
+      titleEn: 'Administrative Secretariat',
+      subtitleId: 'Dukungan Administrasi, Persuratan & Logistik',
+      subtitleEn: 'Administrative, Correspondence & Logistics Support',
+      roleBadgeId: 'Dukungan Tata Usaha',
+      roleBadgeEn: 'Administrative Support',
+      descId: 'Unit penunjang operasional yang mengelola ketatausahaan, arsip dokumen pengadaan, sarana prasarana kerja, dan administrasi kepegawaian internal UKPBJ.',
+      descEn: 'Operational support unit managing administration, procurement contract archives, office facilities, and internal staffing.',
+      tugasId: [
+        'Pengelolaan tata naskah dinas dan arsip pengadaan.',
+        'Fasilitasi sarana prasarana operasional unit.',
+        'Penyusunan laporan akuntabilitas kinerja internal.'
+      ],
+      tugasEn: [
+        'Manage official correspondence and procurement filing.',
+        'Facilitate operational facilities and office logistics.',
+        'Compile internal organizational accountability reports.'
+      ],
+      icon: <Users className="w-5 h-5 text-purple-600" />,
+      accent: {
+        borderLeft: 'border-l-purple-500',
+        badgeBg: 'bg-purple-50 text-purple-700 border border-purple-200',
+        badgeText: 'text-purple-700',
+        iconBg: 'bg-purple-50 ring-1 ring-purple-200',
+        iconColor: 'text-purple-600',
+        ringColor: 'hover:border-purple-400',
+        connector: 'bg-purple-500'
+      }
+    },
+    pengelolaanPbj: {
+      id: 'pengelolaanPbj',
+      titleId: 'Tim Pengelolaan PBJ',
+      titleEn: 'Procurement Management Team',
+      subtitleId: 'Pelaksanaan & Manajemen Paket Pengadaan',
+      subtitleEn: 'Execution & Procurement Package Management',
+      roleBadgeId: 'Pelaksana Pengadaan',
+      roleBadgeEn: 'Procurement Execution',
+      descId: 'Divisi pengelola siklus pemilihan penyedia, penjadwalan paket, serta koordinasi teknis pelaksanaan tender/seleksi di lingkungan kementerian.',
+      descEn: 'Division managing vendor selection cycles, package scheduling, and technical tender/selection coordination.',
+      tugasId: [
+        'Perencanaan dan pengelolaan paket pengadaan berkala.',
+        'Mengoordinasikan penugasan Pokja Pemilihan.',
+        'Memantau progres pemilihan penyedia barang/jasa.'
+      ],
+      tugasEn: [
+        'Plan and manage regular procurement packages.',
+        'Coordinate assignments of Working Groups (Pokja).',
+        'Monitor vendor selection progress.'
+      ],
+      icon: <Handshake className="w-5 h-5 text-emerald-600" />,
+      accent: {
+        borderLeft: 'border-l-emerald-500',
+        badgeBg: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+        badgeText: 'text-emerald-700',
+        iconBg: 'bg-emerald-50 ring-1 ring-emerald-200',
+        iconColor: 'text-emerald-600',
+        ringColor: 'hover:border-emerald-400',
+        connector: 'bg-emerald-500'
+      }
+    },
+    pokja1: {
+      id: 'pokja1',
+      titleId: 'Tim POKJA',
+      titleEn: 'POKJA Team (Working Group)',
+      subtitleId: 'Kelompok Kerja Pemilihan Penyedia (Tender)',
+      subtitleEn: 'Vendor Selection Working Group (Tender)',
+      roleBadgeId: 'Kelompok Kerja',
+      roleBadgeEn: 'Working Group',
+      descId: 'Kelompok kerja fungsional yang menyusun dokumen pemilihan, kualifikasi, evaluasi penawaran, dan penetapan pemenang tender.',
+      descEn: 'Functional working group drafting selection documents, evaluating bids, and determining winning tenderers.',
+      tugasId: [
+        'Menyusun dan menetapkan dokumen pemilihan.',
+        'Melakukan evaluasi administrasi, teknis, dan harga.',
+        'Menetapkan pemenang tender sesuai ketentuan LKPP.'
+      ],
+      tugasEn: [
+        'Draft and issue tender documentation.',
+        'Evaluate administrative, technical, and financial bids.',
+        'Determine winning bidders in compliance with LKPP rules.'
+      ],
+      icon: <FileText className="w-4.5 h-4.5 text-emerald-600" />,
+      accent: {
+        borderLeft: 'border-l-emerald-500',
+        badgeBg: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+        badgeText: 'text-emerald-700',
+        iconBg: 'bg-emerald-50 ring-1 ring-emerald-200',
+        iconColor: 'text-emerald-600',
+        ringColor: 'hover:border-emerald-400',
+        connector: 'bg-emerald-500'
+      }
+    },
+    pokja2: {
+      id: 'pokja2',
+      titleId: 'Tim POKJA',
+      titleEn: 'POKJA Team (Technical Execution)',
+      subtitleId: 'Pelaksana Teknis, Klarifikasi & Evaluasi',
+      subtitleEn: 'Technical Execution, Clarification & Review',
+      roleBadgeId: 'Kelompok Kerja',
+      roleBadgeEn: 'Working Group',
+      descId: 'Tim Pokja fungsional pelaksana verifikasi faktual lapangan, klarifikasi penawaran penyedia, dan penanganan sanggahan.',
+      descEn: 'Functional Pokja team executing on-site verification, bidder clarifications, and formal objection reviews.',
+      tugasId: [
+        'Verifikasi faktual kualifikasi calon rekanan.',
+        'Klarifikasi teknis dan penelaahan kewajaran harga.',
+        'Penyusunan Berita Acara Hasil Pemilihan (BAHP).'
+      ],
+      tugasEn: [
+        'Execute on-site qualification verifications.',
+        'Perform technical and price reasonableness clarifications.',
+        'Compile formal Selection Minutes (BAHP).'
+      ],
+      icon: <FileText className="w-4.5 h-4.5 text-emerald-600" />,
+      accent: {
+        borderLeft: 'border-l-emerald-500',
+        badgeBg: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+        badgeText: 'text-emerald-700',
+        iconBg: 'bg-emerald-50 ring-1 ring-emerald-200',
+        iconColor: 'text-emerald-600',
+        ringColor: 'hover:border-emerald-400',
+        connector: 'bg-emerald-500'
+      }
+    },
+    kelembagaanSdm: {
+      id: 'kelembagaanSdm',
+      titleId: 'Tim Kelembagaan dan SDM PBJ',
+      titleEn: 'Institutional & HR PBJ Team',
+      subtitleId: 'Pembinaan Kelembagaan, Tata Kelola & SDM',
+      subtitleEn: 'Institutional Governance, SOP & HR Fostering',
+      roleBadgeId: 'Tata Kelola & SDM',
+      roleBadgeEn: 'Governance & HR',
+      descId: 'Divisi penguatan tata kelola kelembagaan pengadaan, standarisasi SOP, pencapaian maturitas UKPBJ, serta pembinaan dan sertifikasi kompetensi SDM pengadaan.',
+      descEn: 'Division fostering institutional governance, SOP standardization, UKPBJ maturity advancement, and HR competency certifications.',
+      tugasId: [
+        'Pengembangan struktur dan maturitas kelembagaan UKPBJ.',
+        'Penyusunan dan pemutakhiran SOP pengadaan terstandarisasi.',
+        'Fasilitasi bimtek, pelatihan, dan uji sertifikasi keahlian PBJ.'
+      ],
+      tugasEn: [
+        'Advance UKPBJ organizational capability and maturity.',
+        'Draft and update standardized procurement SOPs.',
+        'Facilitate competency workshops and certification exams.'
+      ],
+      icon: <Settings className="w-5 h-5 text-orange-600" />,
+      accent: {
+        borderLeft: 'border-l-orange-500',
+        badgeBg: 'bg-orange-50 text-orange-700 border border-orange-200',
+        badgeText: 'text-orange-700',
+        iconBg: 'bg-orange-50 ring-1 ring-orange-200',
+        iconColor: 'text-orange-600',
+        ringColor: 'hover:border-orange-400',
+        connector: 'bg-orange-500'
+      }
+    },
+    sdm: {
+      id: 'sdm',
+      titleId: 'SDM',
+      titleEn: 'HR Capacity (SDM)',
+      subtitleId: 'Pengembangan Kompetensi & Sertifikasi',
+      subtitleEn: 'Competency & Certification Development',
+      roleBadgeId: 'Sub-Unit SDM',
+      roleBadgeEn: 'HR Sub-Unit',
+      descId: 'Sub-unit fokus pembinaan aparatur pengadaan, pemenuhan formasi Pejabat Fungsional PBJ, dan sertifikasi keahlian pengadaan pemerintah.',
+      descEn: 'Sub-unit focusing on personnel capacity building, functional procurement career paths, and competency certifications.',
+      tugasId: [
+        'Pemetaan kompetensi aparatur pengadaan kementerian.',
+        'Penyelenggaraan pelatihan dan uji kompetensi PBJ.',
+        'Monitoring jenjang karier fungsional pengadaan.'
+      ],
+      tugasEn: [
+        'Map procurement competencies across the ministry.',
+        'Organize training and competency examinations.',
+        'Monitor functional procurement career advancement.'
+      ],
+      icon: <GraduationCap className="w-4 h-4 text-amber-600" />,
+      accent: {
+        borderLeft: 'border-l-amber-500',
+        badgeBg: 'bg-amber-50 text-amber-700 border border-amber-200',
+        badgeText: 'text-amber-700',
+        iconBg: 'bg-amber-50 ring-1 ring-amber-200',
+        iconColor: 'text-amber-600',
+        ringColor: 'hover:border-amber-400',
+        connector: 'bg-amber-500'
+      }
+    },
+    kelembagaan: {
+      id: 'kelembagaan',
+      titleId: 'Kelembagaan',
+      titleEn: 'Institutional Governance',
+      subtitleId: 'Tata Kelola Organisasi & SOP',
+      subtitleEn: 'Governance & SOP Standardization',
+      roleBadgeId: 'Sub-Unit Kelembagaan',
+      roleBadgeEn: 'Governance Sub-Unit',
+      descId: 'Sub-unit perumusan instrumen kelembagaan, pemenuhan standar LPSE, SOP kerja terintegrasi, dan evaluasi efektivitas organisasi.',
+      descEn: 'Sub-unit formulating organizational governance instruments, LPSE standard compliance, and integrated SOPs.',
+      tugasId: [
+        'Penyusunan standar operasional prosedur (SOP) pengadaan.',
+        'Pemenuhan standar kematangan kelembagaan LKPP.',
+        'Evaluasi efektivitas tata kelola antar unit kerja.'
+      ],
+      tugasEn: [
+        'Formulate standard operating procedures (SOPs).',
+        'Fulfill LKPP institutional maturity standards.',
+        'Evaluate governance effectiveness across work units.'
+      ],
+      icon: <Building2 className="w-4 h-4 text-amber-600" />,
+      accent: {
+        borderLeft: 'border-l-amber-500',
+        badgeBg: 'bg-amber-50 text-amber-700 border border-amber-200',
+        badgeText: 'text-amber-700',
+        iconBg: 'bg-amber-50 ring-1 ring-amber-200',
+        iconColor: 'text-amber-600',
+        ringColor: 'hover:border-amber-400',
+        connector: 'bg-amber-500'
+      }
+    },
+    spse: {
+      id: 'spse',
+      titleId: 'Tim Layanan SPSE',
+      titleEn: 'SPSE Service Team',
+      subtitleId: 'Sistem Elektronik LPSE, Server & Helpdesk',
+      subtitleEn: 'LPSE Digital System, Server & Helpdesk',
+      roleBadgeId: 'Layanan Sistem & LPSE',
+      roleBadgeEn: 'Systems & LPSE Services',
+      descId: 'Divisi pengelola infrastruktur Sistem Pengadaan Secara Elektronik (SPSE), verifikasi berkas penyedia rekanan, dan layanan konsultasi bantuan pengadaan.',
+      descEn: 'Division managing the Electronic Procurement System (SPSE) infrastructure, vendor verification, and helpdesk consultancy.',
+      tugasId: [
+        'Pengelolaan dan pemeliharaan keandalan server SPSE.',
+        'Verifikasi berkas dan aktivasi akun penyedia.',
+        'Layanan konsultasi pengadaan (Helpdesk / Klinik PBJ).'
+      ],
+      tugasEn: [
+        'Maintain stability and security of SPSE servers.',
+        'Verify vendor legal files and activate accounts.',
+        'Provide procurement helpdesk and advisory services.'
+      ],
+      icon: <ShieldCheck className="w-5 h-5 text-sky-600" />,
+      accent: {
+        borderLeft: 'border-l-sky-500',
+        badgeBg: 'bg-sky-50 text-sky-700 border border-sky-200',
+        badgeText: 'text-sky-700',
+        iconBg: 'bg-sky-50 ring-1 ring-sky-200',
+        iconColor: 'text-sky-600',
+        ringColor: 'hover:border-sky-400',
+        connector: 'bg-sky-500'
+      }
+    }
+  };
+
+  const renderCard = (node: NodeItem, isCompact = false) => {
+    return (
+      <motion.div
+        whileHover={{ y: -3, scale: 1.015 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => setSelectedNode(node)}
+        className={`cursor-pointer rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md transition-all duration-300 relative group overflow-hidden border-l-[5px] ${node.accent.borderLeft} ${node.accent.ringColor} ${isCompact ? 'p-3' : 'p-3.5 sm:p-4'}`}
+      >
+        <div className="flex items-start gap-3">
+          {/* Icon Badge */}
+          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${node.accent.iconBg}`}>
+            {node.icon}
+          </div>
+
+          {/* Texts */}
+          <div className="flex-1 min-w-0 pr-1">
+            <div className="flex items-center justify-between gap-1 mb-0.5">
+              <span className={`px-1.5 py-0.2 text-[9px] sm:text-[10px] font-bold rounded-md ${node.accent.badgeBg}`}>
+                {trans(node.roleBadgeId, node.roleBadgeEn)}
+              </span>
+            </div>
+            <h4 className="font-black text-xs sm:text-sm text-primary-navy leading-snug group-hover:text-primary-blue transition-colors">
+              {trans(node.titleId, node.titleEn)}
+            </h4>
+            <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight mt-1 line-clamp-2">
+              {trans(node.subtitleId, node.subtitleEn)}
+            </p>
+          </div>
+
+          {/* Info hint */}
+          <div className="shrink-0 text-slate-300 group-hover:text-primary-blue transition-colors">
+            <Info className="w-3.5 h-3.5" />
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
 
   return (
     <div className="w-full flex flex-col items-center">
-      {/* Scrollable Container for Mobile/Tablet */}
-      <div className="w-full overflow-x-auto pb-6 pt-2">
-        <div className="min-w-[860px] max-w-5xl mx-auto flex flex-col items-center px-4">
+      {/* Top Helper Banner */}
+      <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2.5 mb-6 bg-slate-50 border border-slate-200/80 rounded-2xl p-3 px-4 shadow-2xs">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-700 font-medium">
+          <Sparkles className="w-4 h-4 text-accent-gold shrink-0" />
+          <span>{trans('Struktur Tata Kelola Resmi UKPBJ Kementerian Ketenagakerjaan RI', 'Official UKPBJ Ministry of Manpower Organizational Structure')}</span>
+        </div>
+        <span className="text-[11px] text-slate-500 font-semibold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full shadow-2xs">
+          {trans('Klik kotak untuk melihat Tupoksi', 'Click any box to view details')}
+        </span>
+      </div>
+
+      {/* Main Flowchart Canvas */}
+      <div className="w-full overflow-x-auto pb-6 pt-1">
+        <div className="min-w-[880px] max-w-5xl mx-auto flex flex-col items-center px-4">
           
           {/* ============================================================ */}
-          {/* LEVEL 1: KEPALA UKPBJ                                        */}
+          {/* LEVEL 1: KEPALA UKPBJ (Executive Leadership)                */}
           {/* ============================================================ */}
-          <motion.div 
-            whileHover={{ scale: 1.02 }}
-            className="w-72 bg-[#1E3A8A] text-white rounded-2xl p-4 shadow-lg shadow-blue-950/20 border border-blue-600 flex items-center justify-center gap-3.5 z-10 transition-all duration-300"
-          >
-            <div className="w-11 h-11 rounded-full bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
-              <Landmark className="w-6 h-6 text-white" />
-            </div>
-            <h3 className="font-extrabold text-base tracking-tight text-white">
-              {trans('Kepala UKPBJ', 'Head of UKPBJ')}
-            </h3>
-          </motion.div>
+          <div className="w-full max-w-[420px] z-20">
+            <motion.div
+              whileHover={{ y: -3, scale: 1.015 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setSelectedNode(nodes.kepalaUkpbj)}
+              className="cursor-pointer rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-primary-navy via-[#1E3A8A] to-[#172554] text-white shadow-lg shadow-blue-950/20 border-2 border-blue-500/40 hover:border-amber-400 transition-all duration-300 relative group overflow-hidden"
+            >
+              {/* Gold Top Accent Bar */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500" />
+
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-2xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                  {nodes.kepalaUkpbj.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider mb-1 bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    <span>{trans(nodes.kepalaUkpbj.roleBadgeId, nodes.kepalaUkpbj.roleBadgeEn)}</span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-black tracking-tight text-white leading-tight">
+                    {trans(nodes.kepalaUkpbj.titleId, nodes.kepalaUkpbj.titleEn)}
+                  </h3>
+                  <p className="text-xs text-blue-100/80 font-medium truncate mt-0.5">
+                    {trans(nodes.kepalaUkpbj.subtitleId, nodes.kepalaUkpbj.subtitleEn)}
+                  </p>
+                </div>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors">
+                  <Info className="w-4 h-4" />
+                </div>
+              </div>
+            </motion.div>
+          </div>
 
           {/* CONNECTOR: Level 1 -> Level 2 */}
-          <div className="flex flex-col items-center">
-            <div className="w-[2px] h-6 bg-[#1E3A8A]" />
-            <div className="w-0 h-0 border-l-[4.5px] border-l-transparent border-r-[4.5px] border-r-transparent border-t-[6px] border-t-[#1E3A8A]" />
+          <div className="flex flex-col items-center my-0.5 z-10">
+            <div className="w-[2.5px] h-6 bg-primary-navy" />
+            <div className="w-0 h-0 border-l-[4.5px] border-l-transparent border-r-[4.5px] border-r-transparent border-t-[6.5px] border-t-primary-navy" />
           </div>
 
           {/* ============================================================ */}
-          {/* LEVEL 2: KEPALA BAGIAN LAYANAN PENGADAAN                     */}
+          {/* LEVEL 2: KEPALA BAGIAN LAYANAN PENGADAAN (Coordinator)       */}
           {/* ============================================================ */}
-          <motion.div 
-            whileHover={{ scale: 1.02 }}
-            className="w-80 bg-blue-50/90 border-2 border-blue-400 rounded-2xl p-3.5 shadow-md shadow-blue-500/10 flex items-center gap-3.5 z-10 transition-all duration-300"
-          >
-            <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-blue-600/30">
-              <FileText className="w-5 h-5 text-white" />
-            </div>
-            <h3 className="font-extrabold text-sm sm:text-base text-primary-navy leading-snug">
-              {trans('Kepala Bagian Layanan Pengadaan', 'Head of Procurement Services')}
-            </h3>
-          </motion.div>
+          <div className="w-full max-w-[430px] z-20">
+            {renderCard(nodes.kepalaBagian)}
+          </div>
 
           {/* ============================================================ */}
           {/* CONNECTOR TREE: Level 2 -> Level 3 (4 Columns)               */}
           {/* ============================================================ */}
-          <div className="w-full relative mt-0 mb-3">
-            {/* Center stem down from Kepala Bagian */}
-            <div className="w-[2px] h-6 bg-slate-400 mx-auto" />
+          <div className="w-full relative mt-1 mb-3">
+            {/* Center stem down */}
+            <div className="w-[2.5px] h-5 bg-slate-400 mx-auto" />
             
-            {/* Horizontal Branch Bar */}
-            <div className="h-[2px] bg-slate-400 rounded-full mx-[11.5%] relative">
-              {/* Branch 1 Dropper -> Sekretariat (0%) */}
+            {/* Horizontal branch bar across 4 columns */}
+            <div className="h-[2.5px] bg-slate-400 rounded-full mx-[12.5%] relative">
+              {/* Branch 1 -> Sekretariat (0%) */}
               <div className="absolute left-0 top-0 flex flex-col items-center">
-                <div className="w-[2px] h-6 bg-slate-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-purple-600 -translate-y-1/2 ring-2 ring-white" />
+                <div className="w-[2.5px] h-6 bg-slate-400" />
                 <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-slate-500" />
               </div>
 
-              {/* Branch 2 Dropper -> Tim Pengelolaan PBJ (33.33%) */}
+              {/* Branch 2 -> Tim Pengelolaan PBJ (33.33%) */}
               <div className="absolute left-[33.33%] -translate-x-1/2 top-0 flex flex-col items-center">
-                <div className="w-[2px] h-6 bg-slate-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 -translate-y-1/2 ring-2 ring-white" />
+                <div className="w-[2.5px] h-6 bg-slate-400" />
                 <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-slate-500" />
               </div>
 
-              {/* Branch 3 Dropper -> Tim Kelembagaan & SDM (66.66%) */}
+              {/* Branch 3 -> Tim Kelembagaan & SDM (66.66%) */}
               <div className="absolute left-[66.66%] -translate-x-1/2 top-0 flex flex-col items-center">
-                <div className="w-[2px] h-6 bg-slate-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-orange-600 -translate-y-1/2 ring-2 ring-white" />
+                <div className="w-[2.5px] h-6 bg-slate-400" />
                 <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-slate-500" />
               </div>
 
-              {/* Branch 4 Dropper -> Tim Layanan SPSE (100%) */}
+              {/* Branch 4 -> Tim Layanan SPSE (100%) */}
               <div className="absolute right-0 top-0 flex flex-col items-center">
-                <div className="w-[2px] h-6 bg-slate-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-sky-600 -translate-y-1/2 ring-2 ring-white" />
+                <div className="w-[2.5px] h-6 bg-slate-400" />
                 <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-slate-500" />
               </div>
             </div>
@@ -96,23 +503,15 @@ export const OrganizationChart = () => {
           {/* ============================================================ */}
           {/* LEVEL 3 & 4: 4 COLUMNS                                       */}
           {/* ============================================================ */}
-          <div className="grid grid-cols-4 gap-4 sm:gap-5 w-full mt-2">
+          <div className="grid grid-cols-4 gap-4 sm:gap-4.5 w-full mt-2 z-10">
             
             {/* ------------------------------------------------------------ */}
-            {/* COLUMN 1: Sekretariat Tata Usaha (Purple Theme)             */}
+            {/* COLUMN 1: Sekretariat Tata Usaha                             */}
             {/* ------------------------------------------------------------ */}
-            <div className="flex flex-col items-center">
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="w-full bg-purple-50/80 border-2 border-purple-400 rounded-2xl p-3.5 shadow-sm flex items-center gap-3 transition-all duration-300"
-              >
-                <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-purple-600/30">
-                  <Users className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug">
-                  {trans('Sekretariat Tata Usaha', 'Administrative Secretariat')}
-                </h4>
-              </motion.div>
+            <div className="flex flex-col">
+              <div className="w-full">
+                {renderCard(nodes.sekretariat)}
+              </div>
             </div>
 
             {/* ------------------------------------------------------------ */}
@@ -120,76 +519,44 @@ export const OrganizationChart = () => {
             {/* ------------------------------------------------------------ */}
             <div className="flex flex-col items-center w-full">
               {/* Top: Tim Pengelolaan PBJ */}
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="w-full bg-emerald-50/80 border-2 border-emerald-500 rounded-2xl p-3.5 shadow-sm flex items-center gap-3 transition-all duration-300"
-              >
-                <div className="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 shadow-sm shadow-emerald-700/30">
-                  <Handshake className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug">
-                  {trans('Tim Pengelolaan PBJ', 'Procurement Management Team')}
-                </h4>
-              </motion.div>
+              <div className="w-full">
+                {renderCard(nodes.pengelolaanPbj)}
+              </div>
 
-              {/* Stem down to first Tim POKJA */}
-              <div className="flex flex-col items-center my-0.5">
-                <div className="w-[2px] h-5 bg-emerald-600" />
+              {/* Arrow to Tim POKJA 1 */}
+              <div className="flex flex-col items-center my-1">
+                <div className="w-[2px] h-5 bg-emerald-500" />
                 <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5px] border-t-emerald-600" />
               </div>
 
               {/* Middle: Tim POKJA 1 */}
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="w-full bg-emerald-50/70 border-2 border-emerald-400 rounded-2xl p-3.5 shadow-sm flex items-center gap-3 transition-all duration-300"
-              >
-                <div className="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 shadow-sm shadow-emerald-700/30">
-                  <FileText className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug">
-                  {trans('Tim POKJA', 'POKJA Team')}
-                </h4>
-              </motion.div>
+              <div className="w-full">
+                {renderCard(nodes.pokja1, true)}
+              </div>
 
-              {/* Stem down to second Tim POKJA */}
-              <div className="flex flex-col items-center my-0.5">
-                <div className="w-[2px] h-5 bg-emerald-600" />
+              {/* Arrow to Tim POKJA 2 */}
+              <div className="flex flex-col items-center my-1">
+                <div className="w-[2px] h-5 bg-emerald-500" />
                 <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5px] border-t-emerald-600" />
               </div>
 
               {/* Bottom: Tim POKJA 2 */}
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="w-full bg-emerald-50/70 border-2 border-emerald-400 rounded-2xl p-3.5 shadow-sm flex items-center gap-3 transition-all duration-300"
-              >
-                <div className="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 shadow-sm shadow-emerald-700/30">
-                  <FileText className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug">
-                  {trans('Tim POKJA', 'POKJA Team')}
-                </h4>
-              </motion.div>
+              <div className="w-full">
+                {renderCard(nodes.pokja2, true)}
+              </div>
             </div>
 
             {/* ------------------------------------------------------------ */}
-            {/* COLUMN 3: Tim Kelembagaan dan SDM PBJ -> SDM & Kelembagaan */}
+            {/* COLUMN 3: Tim Kelembagaan & SDM -> SDM & Kelembagaan        */}
             {/* ------------------------------------------------------------ */}
             <div className="flex flex-col items-center w-full">
               {/* Top: Tim Kelembagaan dan SDM PBJ */}
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="w-full bg-orange-50/80 border-2 border-orange-400 rounded-2xl p-3.5 shadow-sm flex items-center gap-3 transition-all duration-300"
-              >
-                <div className="w-10 h-10 rounded-full bg-orange-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-orange-600/30">
-                  <Settings className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug">
-                  {trans('Tim Kelembagaan dan SDM PBJ', 'Institutional & HR PBJ Team')}
-                </h4>
-              </motion.div>
+              <div className="w-full">
+                {renderCard(nodes.kelembagaanSdm)}
+              </div>
 
-              {/* Fork branch down to SDM and Kelembagaan */}
-              <div className="w-full relative mt-0 mb-1">
+              {/* Fork branch to SDM and Kelembagaan */}
+              <div className="w-full relative mt-0.5 mb-1.5">
                 <div className="w-[2px] h-4 bg-orange-400 mx-auto" />
                 {/* Horizontal branch */}
                 <div className="h-[2px] bg-orange-400 rounded-full mx-[25%] relative">
@@ -207,56 +574,108 @@ export const OrganizationChart = () => {
               </div>
 
               {/* Sub-cards: SDM & Kelembagaan */}
-              <div className="grid grid-cols-2 gap-2 w-full mt-1">
-                {/* SDM */}
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-amber-50/80 border-2 border-amber-400 rounded-2xl p-3 shadow-2xs flex flex-col items-center justify-center text-center gap-2 transition-all duration-300"
-                >
-                  <div className="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-sm">
-                    <Users className="w-4 h-4 text-white" />
-                  </div>
-                  <h5 className="font-bold text-xs text-slate-800">
-                    {trans('SDM', 'HR (SDM)')}
-                  </h5>
-                </motion.div>
-
-                {/* Kelembagaan */}
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-amber-50/80 border-2 border-amber-400 rounded-2xl p-3 shadow-2xs flex flex-col items-center justify-center text-center gap-2 transition-all duration-300"
-                >
-                  <div className="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-sm">
-                    <Building2 className="w-4 h-4 text-white" />
-                  </div>
-                  <h5 className="font-bold text-xs text-slate-800">
-                    {trans('Kelembagaan', 'Institutional')}
-                  </h5>
-                </motion.div>
+              <div className="grid grid-cols-2 gap-2 w-full mt-0.5">
+                <div className="w-full">
+                  {renderCard(nodes.sdm, true)}
+                </div>
+                <div className="w-full">
+                  {renderCard(nodes.kelembagaan, true)}
+                </div>
               </div>
             </div>
 
             {/* ------------------------------------------------------------ */}
-            {/* COLUMN 4: Tim Layanan SPSE (Blue Theme)                     */}
+            {/* COLUMN 4: Tim Layanan SPSE                                  */}
             {/* ------------------------------------------------------------ */}
-            <div className="flex flex-col items-center">
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="w-full bg-sky-50/80 border-2 border-sky-400 rounded-2xl p-3.5 shadow-sm flex items-center gap-3 transition-all duration-300"
-              >
-                <div className="w-10 h-10 rounded-full bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-sky-600/30">
-                  <Shield className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug">
-                  {trans('Tim Layanan SPSE', 'SPSE Service Team')}
-                </h4>
-              </motion.div>
+            <div className="flex flex-col">
+              <div className="w-full">
+                {renderCard(nodes.spse)}
+              </div>
             </div>
 
           </div>
 
         </div>
       </div>
+
+      {/* ============================================================ */}
+      {/* DETAIL MODAL (ON NODE CLICK)                                 */}
+      {/* ============================================================ */}
+      <AnimatePresence>
+        {selectedNode && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-primary-navy/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 15 }}
+              transition={{ duration: 0.2 }}
+              className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200 flex flex-col"
+            >
+              {/* Header */}
+              <div className="p-5 sm:p-6 bg-gradient-to-r from-primary-navy via-[#1E3A8A] to-[#172554] text-white relative">
+                <div className="flex items-center gap-3.5 pr-8">
+                  <div className="w-12 h-12 rounded-2xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center shrink-0">
+                    {selectedNode.icon}
+                  </div>
+                  <div>
+                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider mb-1 bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                      {trans(selectedNode.roleBadgeId, selectedNode.roleBadgeEn)}
+                    </span>
+                    <h3 className="text-lg font-black leading-tight text-white">
+                      {trans(selectedNode.titleId, selectedNode.titleEn)}
+                    </h3>
+                    <p className="text-xs text-blue-100/80 font-medium mt-0.5">
+                      {trans(selectedNode.subtitleId, selectedNode.subtitleEn)}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedNode(null)}
+                  className="absolute top-4 right-4 text-white/80 hover:text-white bg-black/20 hover:bg-black/40 rounded-full w-8 h-8 flex items-center justify-center transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="p-5 sm:p-6 overflow-y-auto space-y-4">
+                <div>
+                  <h5 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                    {trans('Deskripsi Tugas & Fungsi', 'Role & Responsibilities')}
+                  </h5>
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    {trans(selectedNode.descId, selectedNode.descEn)}
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    {trans('Tugas Pokok Utama (Tupoksi)', 'Key Duties')}
+                  </h5>
+                  <ul className="space-y-2">
+                    {selectedNode.tugasId.map((tugas, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>{trans(tugas, selectedNode.tugasEn[idx])}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button
+                  onClick={() => setSelectedNode(null)}
+                  className="px-5 py-2 text-xs sm:text-sm font-bold bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl transition-colors"
+                >
+                  {trans('Tutup', 'Close')}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
