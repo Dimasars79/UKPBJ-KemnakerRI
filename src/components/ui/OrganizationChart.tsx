@@ -21,8 +21,8 @@ interface NodeItem {
   id: string;
   titleId: string;
   titleEn: string;
-  subtitleId: string;
-  subtitleEn: string;
+  subtitleId?: string;
+  subtitleEn?: string;
   roleBadgeId: string;
   roleBadgeEn: string;
   descId: string;
@@ -30,14 +30,15 @@ interface NodeItem {
   tugasId: string[];
   tugasEn: string[];
   icon: React.ReactNode;
-  accent: {
-    borderLeft: string;
-    badgeBg: string;
-    badgeText: string;
+  theme: {
+    cardBg: string;
+    border: string;
+    accentBar: string;
     iconBg: string;
     iconColor: string;
-    ringColor: string;
-    connector: string;
+    badgeBg: string;
+    badgeText: string;
+    hoverShadow: string;
   };
 }
 
@@ -67,24 +68,25 @@ export const OrganizationChart = () => {
         'Foster institutional partnerships with LKPP and supervisory bodies.'
       ],
       icon: <Landmark className="w-6 h-6 text-amber-300" />,
-      accent: {
-        borderLeft: 'border-l-amber-400',
-        badgeBg: 'bg-amber-400/20 text-amber-300 border border-amber-400/30',
-        badgeText: 'text-amber-300',
-        iconBg: 'bg-white/10 ring-1 ring-amber-300/30',
+      theme: {
+        cardBg: 'bg-gradient-to-r from-primary-navy via-[#1E3A8A] to-[#172554] text-white',
+        border: 'border-blue-500/50',
+        accentBar: 'bg-gradient-to-r from-amber-300 to-yellow-400',
+        iconBg: 'bg-white/10 ring-1 ring-white/20',
         iconColor: 'text-amber-300',
-        ringColor: 'hover:border-amber-400',
-        connector: 'bg-blue-800'
+        badgeBg: 'bg-amber-400/20',
+        badgeText: 'text-amber-300 border border-amber-400/30',
+        hoverShadow: 'hover:shadow-xl hover:shadow-blue-950/30 hover:border-amber-400'
       }
     },
     kepalaBagian: {
       id: 'kepalaBagian',
       titleId: 'Kepala Bagian Layanan Pengadaan',
       titleEn: 'Head of Procurement Services',
-      subtitleId: 'Koordinator Operasional & Manajemen Layanan',
-      subtitleEn: 'Operational & Service Management Coordinator',
-      roleBadgeId: 'Koordinator Layanan',
-      roleBadgeEn: 'Service Coordinator',
+      subtitleId: 'Koordinator Operasional Layanan',
+      subtitleEn: 'Operational Service Coordinator',
+      roleBadgeId: 'Koordinator',
+      roleBadgeEn: 'Coordinator',
       descId: 'Pejabat struktural yang mengoordinasikan kelancaran pelaksanaan tugas Tim Pengelolaan PBJ, Kelembagaan & SDM, Layanan SPSE, serta Sekretariat.',
       descEn: 'Structural coordinator overseeing operational synergies between Procurement, Institutional/HR, SPSE Systems, and Secretariat teams.',
       tugasId: [
@@ -98,24 +100,25 @@ export const OrganizationChart = () => {
         'Compile periodic performance reports for the Head of UKPBJ.'
       ],
       icon: <FileText className="w-5 h-5 text-blue-600" />,
-      accent: {
-        borderLeft: 'border-l-blue-600',
-        badgeBg: 'bg-blue-50 text-blue-700 border border-blue-200',
-        badgeText: 'text-blue-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-blue-200 hover:border-blue-400',
+        accentBar: 'bg-blue-600',
         iconBg: 'bg-blue-50 ring-1 ring-blue-200',
         iconColor: 'text-blue-600',
-        ringColor: 'hover:border-blue-400',
-        connector: 'bg-blue-600'
+        badgeBg: 'bg-blue-50',
+        badgeText: 'text-blue-700 border border-blue-200',
+        hoverShadow: 'hover:shadow-lg hover:shadow-blue-500/10'
       }
     },
     sekretariat: {
       id: 'sekretariat',
       titleId: 'Sekretariat Tata Usaha',
       titleEn: 'Administrative Secretariat',
-      subtitleId: 'Dukungan Administrasi, Persuratan & Logistik',
-      subtitleEn: 'Administrative, Correspondence & Logistics Support',
-      roleBadgeId: 'Dukungan Tata Usaha',
-      roleBadgeEn: 'Administrative Support',
+      subtitleId: 'Dukungan Administrasi & Persuratan',
+      subtitleEn: 'Administration & Correspondence Support',
+      roleBadgeId: 'Tata Usaha',
+      roleBadgeEn: 'Administration',
       descId: 'Unit penunjang operasional yang mengelola ketatausahaan, arsip dokumen pengadaan, sarana prasarana kerja, dan administrasi kepegawaian internal UKPBJ.',
       descEn: 'Operational support unit managing administration, procurement contract archives, office facilities, and internal staffing.',
       tugasId: [
@@ -129,24 +132,25 @@ export const OrganizationChart = () => {
         'Compile internal organizational accountability reports.'
       ],
       icon: <Users className="w-5 h-5 text-purple-600" />,
-      accent: {
-        borderLeft: 'border-l-purple-500',
-        badgeBg: 'bg-purple-50 text-purple-700 border border-purple-200',
-        badgeText: 'text-purple-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-purple-200 hover:border-purple-400',
+        accentBar: 'bg-purple-600',
         iconBg: 'bg-purple-50 ring-1 ring-purple-200',
         iconColor: 'text-purple-600',
-        ringColor: 'hover:border-purple-400',
-        connector: 'bg-purple-500'
+        badgeBg: 'bg-purple-50',
+        badgeText: 'text-purple-700 border border-purple-200',
+        hoverShadow: 'hover:shadow-lg hover:shadow-purple-500/10'
       }
     },
     pengelolaanPbj: {
       id: 'pengelolaanPbj',
       titleId: 'Tim Pengelolaan PBJ',
       titleEn: 'Procurement Management Team',
-      subtitleId: 'Pelaksanaan & Manajemen Paket Pengadaan',
-      subtitleEn: 'Execution & Procurement Package Management',
-      roleBadgeId: 'Pelaksana Pengadaan',
-      roleBadgeEn: 'Procurement Execution',
+      subtitleId: 'Manajemen & Pelaksanaan Pemilihan',
+      subtitleEn: 'Selection Management & Execution',
+      roleBadgeId: 'Pelaksana PBJ',
+      roleBadgeEn: 'Procurement',
       descId: 'Divisi pengelola siklus pemilihan penyedia, penjadwalan paket, serta koordinasi teknis pelaksanaan tender/seleksi di lingkungan kementerian.',
       descEn: 'Division managing vendor selection cycles, package scheduling, and technical tender/selection coordination.',
       tugasId: [
@@ -160,24 +164,25 @@ export const OrganizationChart = () => {
         'Monitor vendor selection progress.'
       ],
       icon: <Handshake className="w-5 h-5 text-emerald-600" />,
-      accent: {
-        borderLeft: 'border-l-emerald-500',
-        badgeBg: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-        badgeText: 'text-emerald-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-emerald-200 hover:border-emerald-400',
+        accentBar: 'bg-emerald-600',
         iconBg: 'bg-emerald-50 ring-1 ring-emerald-200',
         iconColor: 'text-emerald-600',
-        ringColor: 'hover:border-emerald-400',
-        connector: 'bg-emerald-500'
+        badgeBg: 'bg-emerald-50',
+        badgeText: 'text-emerald-700 border border-emerald-200',
+        hoverShadow: 'hover:shadow-lg hover:shadow-emerald-500/10'
       }
     },
     pokja1: {
       id: 'pokja1',
       titleId: 'Tim POKJA',
-      titleEn: 'POKJA Team (Working Group)',
-      subtitleId: 'Kelompok Kerja Pemilihan Penyedia (Tender)',
-      subtitleEn: 'Vendor Selection Working Group (Tender)',
-      roleBadgeId: 'Kelompok Kerja',
-      roleBadgeEn: 'Working Group',
+      titleEn: 'POKJA Team',
+      subtitleId: 'Kelompok Kerja Pemilihan (Tender)',
+      subtitleEn: 'Selection Working Group (Tender)',
+      roleBadgeId: 'POKJA',
+      roleBadgeEn: 'POKJA',
       descId: 'Kelompok kerja fungsional yang menyusun dokumen pemilihan, kualifikasi, evaluasi penawaran, dan penetapan pemenang tender.',
       descEn: 'Functional working group drafting selection documents, evaluating bids, and determining winning tenderers.',
       tugasId: [
@@ -191,24 +196,25 @@ export const OrganizationChart = () => {
         'Determine winning bidders in compliance with LKPP rules.'
       ],
       icon: <FileText className="w-4.5 h-4.5 text-emerald-600" />,
-      accent: {
-        borderLeft: 'border-l-emerald-500',
-        badgeBg: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-        badgeText: 'text-emerald-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-emerald-200 hover:border-emerald-400',
+        accentBar: 'bg-emerald-600',
         iconBg: 'bg-emerald-50 ring-1 ring-emerald-200',
         iconColor: 'text-emerald-600',
-        ringColor: 'hover:border-emerald-400',
-        connector: 'bg-emerald-500'
+        badgeBg: 'bg-emerald-50',
+        badgeText: 'text-emerald-700 border border-emerald-200',
+        hoverShadow: 'hover:shadow-lg hover:shadow-emerald-500/10'
       }
     },
     pokja2: {
       id: 'pokja2',
       titleId: 'Tim POKJA',
-      titleEn: 'POKJA Team (Technical Execution)',
-      subtitleId: 'Pelaksana Teknis, Klarifikasi & Evaluasi',
-      subtitleEn: 'Technical Execution, Clarification & Review',
-      roleBadgeId: 'Kelompok Kerja',
-      roleBadgeEn: 'Working Group',
+      titleEn: 'POKJA Team',
+      subtitleId: 'Pelaksana Teknis & Evaluasi',
+      subtitleEn: 'Technical Review & Verification',
+      roleBadgeId: 'POKJA',
+      roleBadgeEn: 'POKJA',
       descId: 'Tim Pokja fungsional pelaksana verifikasi faktual lapangan, klarifikasi penawaran penyedia, dan penanganan sanggahan.',
       descEn: 'Functional Pokja team executing on-site verification, bidder clarifications, and formal objection reviews.',
       tugasId: [
@@ -222,23 +228,24 @@ export const OrganizationChart = () => {
         'Compile formal Selection Minutes (BAHP).'
       ],
       icon: <FileText className="w-4.5 h-4.5 text-emerald-600" />,
-      accent: {
-        borderLeft: 'border-l-emerald-500',
-        badgeBg: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-        badgeText: 'text-emerald-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-emerald-200 hover:border-emerald-400',
+        accentBar: 'bg-emerald-600',
         iconBg: 'bg-emerald-50 ring-1 ring-emerald-200',
         iconColor: 'text-emerald-600',
-        ringColor: 'hover:border-emerald-400',
-        connector: 'bg-emerald-500'
+        badgeBg: 'bg-emerald-50',
+        badgeText: 'text-emerald-700 border border-emerald-200',
+        hoverShadow: 'hover:shadow-lg hover:shadow-emerald-500/10'
       }
     },
     kelembagaanSdm: {
       id: 'kelembagaanSdm',
-      titleId: 'Tim Kelembagaan dan SDM PBJ',
-      titleEn: 'Institutional & HR PBJ Team',
-      subtitleId: 'Pembinaan Kelembagaan, Tata Kelola & SDM',
-      subtitleEn: 'Institutional Governance, SOP & HR Fostering',
-      roleBadgeId: 'Tata Kelola & SDM',
+      titleId: 'Tim Kelembagaan & SDM PBJ',
+      titleEn: 'Institutional & HR Team',
+      subtitleId: 'Tata Kelola, SOP & Pembinaan SDM',
+      subtitleEn: 'Governance, SOP & HR Fostering',
+      roleBadgeId: 'Kelembagaan & SDM',
       roleBadgeEn: 'Governance & HR',
       descId: 'Divisi penguatan tata kelola kelembagaan pengadaan, standarisasi SOP, pencapaian maturitas UKPBJ, serta pembinaan dan sertifikasi kompetensi SDM pengadaan.',
       descEn: 'Division fostering institutional governance, SOP standardization, UKPBJ maturity advancement, and HR competency certifications.',
@@ -253,24 +260,25 @@ export const OrganizationChart = () => {
         'Facilitate competency workshops and certification exams.'
       ],
       icon: <Settings className="w-5 h-5 text-orange-600" />,
-      accent: {
-        borderLeft: 'border-l-orange-500',
-        badgeBg: 'bg-orange-50 text-orange-700 border border-orange-200',
-        badgeText: 'text-orange-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-orange-200 hover:border-orange-400',
+        accentBar: 'bg-orange-600',
         iconBg: 'bg-orange-50 ring-1 ring-orange-200',
         iconColor: 'text-orange-600',
-        ringColor: 'hover:border-orange-400',
-        connector: 'bg-orange-500'
+        badgeBg: 'bg-orange-50',
+        badgeText: 'text-orange-700 border border-orange-200',
+        hoverShadow: 'hover:shadow-lg hover:shadow-orange-500/10'
       }
     },
     sdm: {
       id: 'sdm',
       titleId: 'SDM',
-      titleEn: 'HR Capacity (SDM)',
-      subtitleId: 'Pengembangan Kompetensi & Sertifikasi',
-      subtitleEn: 'Competency & Certification Development',
-      roleBadgeId: 'Sub-Unit SDM',
-      roleBadgeEn: 'HR Sub-Unit',
+      titleEn: 'SDM (HR)',
+      subtitleId: 'Kompetensi & Sertifikasi',
+      subtitleEn: 'Competency & Training',
+      roleBadgeId: 'Sub-Unit',
+      roleBadgeEn: 'Sub-Unit',
       descId: 'Sub-unit fokus pembinaan aparatur pengadaan, pemenuhan formasi Pejabat Fungsional PBJ, dan sertifikasi keahlian pengadaan pemerintah.',
       descEn: 'Sub-unit focusing on personnel capacity building, functional procurement career paths, and competency certifications.',
       tugasId: [
@@ -284,24 +292,25 @@ export const OrganizationChart = () => {
         'Monitor functional procurement career advancement.'
       ],
       icon: <GraduationCap className="w-4 h-4 text-amber-600" />,
-      accent: {
-        borderLeft: 'border-l-amber-500',
-        badgeBg: 'bg-amber-50 text-amber-700 border border-amber-200',
-        badgeText: 'text-amber-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-amber-200 hover:border-amber-400',
+        accentBar: 'bg-amber-500',
         iconBg: 'bg-amber-50 ring-1 ring-amber-200',
         iconColor: 'text-amber-600',
-        ringColor: 'hover:border-amber-400',
-        connector: 'bg-amber-500'
+        badgeBg: 'bg-amber-50',
+        badgeText: 'text-amber-700 border border-amber-200',
+        hoverShadow: 'hover:shadow-md hover:shadow-amber-500/10'
       }
     },
     kelembagaan: {
       id: 'kelembagaan',
       titleId: 'Kelembagaan',
-      titleEn: 'Institutional Governance',
-      subtitleId: 'Tata Kelola Organisasi & SOP',
-      subtitleEn: 'Governance & SOP Standardization',
-      roleBadgeId: 'Sub-Unit Kelembagaan',
-      roleBadgeEn: 'Governance Sub-Unit',
+      titleEn: 'Kelembagaan',
+      subtitleId: 'Tata Kelola & SOP',
+      subtitleEn: 'Governance & SOP',
+      roleBadgeId: 'Sub-Unit',
+      roleBadgeEn: 'Sub-Unit',
       descId: 'Sub-unit perumusan instrumen kelembagaan, pemenuhan standar LPSE, SOP kerja terintegrasi, dan evaluasi efektivitas organisasi.',
       descEn: 'Sub-unit formulating organizational governance instruments, LPSE standard compliance, and integrated SOPs.',
       tugasId: [
@@ -315,24 +324,25 @@ export const OrganizationChart = () => {
         'Evaluate governance effectiveness across work units.'
       ],
       icon: <Building2 className="w-4 h-4 text-amber-600" />,
-      accent: {
-        borderLeft: 'border-l-amber-500',
-        badgeBg: 'bg-amber-50 text-amber-700 border border-amber-200',
-        badgeText: 'text-amber-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-amber-200 hover:border-amber-400',
+        accentBar: 'bg-amber-500',
         iconBg: 'bg-amber-50 ring-1 ring-amber-200',
         iconColor: 'text-amber-600',
-        ringColor: 'hover:border-amber-400',
-        connector: 'bg-amber-500'
+        badgeBg: 'bg-amber-50',
+        badgeText: 'text-amber-700 border border-amber-200',
+        hoverShadow: 'hover:shadow-md hover:shadow-amber-500/10'
       }
     },
     spse: {
       id: 'spse',
       titleId: 'Tim Layanan SPSE',
       titleEn: 'SPSE Service Team',
-      subtitleId: 'Sistem Elektronik LPSE, Server & Helpdesk',
-      subtitleEn: 'LPSE Digital System, Server & Helpdesk',
-      roleBadgeId: 'Layanan Sistem & LPSE',
-      roleBadgeEn: 'Systems & LPSE Services',
+      subtitleId: 'Sistem LPSE, Server & Helpdesk',
+      subtitleEn: 'LPSE System, Server & Helpdesk',
+      roleBadgeId: 'Layanan SPSE',
+      roleBadgeEn: 'SPSE Services',
       descId: 'Divisi pengelola infrastruktur Sistem Pengadaan Secara Elektronik (SPSE), verifikasi berkas penyedia rekanan, dan layanan konsultasi bantuan pengadaan.',
       descEn: 'Division managing the Electronic Procurement System (SPSE) infrastructure, vendor verification, and helpdesk consultancy.',
       tugasId: [
@@ -346,48 +356,49 @@ export const OrganizationChart = () => {
         'Provide procurement helpdesk and advisory services.'
       ],
       icon: <ShieldCheck className="w-5 h-5 text-sky-600" />,
-      accent: {
-        borderLeft: 'border-l-sky-500',
-        badgeBg: 'bg-sky-50 text-sky-700 border border-sky-200',
-        badgeText: 'text-sky-700',
+      theme: {
+        cardBg: 'bg-white text-slate-800',
+        border: 'border-sky-200 hover:border-sky-400',
+        accentBar: 'bg-sky-600',
         iconBg: 'bg-sky-50 ring-1 ring-sky-200',
         iconColor: 'text-sky-600',
-        ringColor: 'hover:border-sky-400',
-        connector: 'bg-sky-500'
+        badgeBg: 'bg-sky-50',
+        badgeText: 'text-sky-700 border border-sky-200',
+        hoverShadow: 'hover:shadow-lg hover:shadow-sky-500/10'
       }
     }
   };
 
-  const renderCard = (node: NodeItem, isCompact = false) => {
+  const renderCard = (node: NodeItem, isMini = false) => {
     return (
       <motion.div
-        whileHover={{ y: -3, scale: 1.015 }}
+        whileHover={{ y: -2 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => setSelectedNode(node)}
-        className={`cursor-pointer rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md transition-all duration-300 relative group overflow-hidden border-l-[5px] ${node.accent.borderLeft} ${node.accent.ringColor} ${isCompact ? 'p-3' : 'p-3.5 sm:p-4'}`}
+        className={`cursor-pointer rounded-2xl ${node.theme.cardBg} border ${node.theme.border} ${node.theme.hoverShadow} shadow-2xs transition-all duration-200 relative group overflow-hidden flex flex-col justify-between w-full ${isMini ? 'p-3' : 'p-3.5 sm:p-4'}`}
       >
-        <div className="flex items-start gap-3">
-          {/* Icon Badge */}
-          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${node.accent.iconBg}`}>
+        {/* Top Accent Strip */}
+        <div className={`absolute top-0 left-0 right-0 h-1 ${node.theme.accentBar}`} />
+
+        <div className="flex items-center gap-3 pt-1">
+          {/* Icon */}
+          <div className={`rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105 ${isMini ? 'w-8 h-8' : 'w-10 h-10'} ${node.theme.iconBg}`}>
             {node.icon}
           </div>
 
           {/* Texts */}
-          <div className="flex-1 min-w-0 pr-1">
-            <div className="flex items-center justify-between gap-1 mb-0.5">
-              <span className={`px-1.5 py-0.2 text-[9px] sm:text-[10px] font-bold rounded-md ${node.accent.badgeBg}`}>
-                {trans(node.roleBadgeId, node.roleBadgeEn)}
-              </span>
-            </div>
-            <h4 className="font-black text-xs sm:text-sm text-primary-navy leading-snug group-hover:text-primary-blue transition-colors">
+          <div className="flex-1 min-w-0">
+            <h4 className={`font-bold text-slate-800 leading-tight group-hover:text-primary-blue transition-colors truncate ${isMini ? 'text-xs' : 'text-xs sm:text-sm'}`}>
               {trans(node.titleId, node.titleEn)}
             </h4>
-            <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight mt-1 line-clamp-2">
-              {trans(node.subtitleId, node.subtitleEn)}
-            </p>
+            {node.subtitleId && (
+              <p className={`text-slate-500 font-normal leading-snug mt-0.5 truncate ${isMini ? 'text-[10px]' : 'text-[11px]'}`}>
+                {trans(node.subtitleId, node.subtitleEn)}
+              </p>
+            )}
           </div>
 
-          {/* Info hint */}
+          {/* Info icon */}
           <div className="shrink-0 text-slate-300 group-hover:text-primary-blue transition-colors">
             <Info className="w-3.5 h-3.5" />
           </div>
@@ -409,36 +420,33 @@ export const OrganizationChart = () => {
         </span>
       </div>
 
-      {/* Main Flowchart Canvas */}
+      {/* Flowchart Tree Canvas with ample horizontal breathing room */}
       <div className="w-full overflow-x-auto pb-6 pt-1">
-        <div className="min-w-[880px] max-w-5xl mx-auto flex flex-col items-center px-4">
+        <div className="min-w-[960px] max-w-5xl mx-auto flex flex-col items-center px-4">
           
           {/* ============================================================ */}
-          {/* LEVEL 1: KEPALA UKPBJ (Executive Leadership)                */}
+          {/* LEVEL 1: KEPALA UKPBJ                                        */}
           {/* ============================================================ */}
-          <div className="w-full max-w-[420px] z-20">
+          <div className="w-full max-w-[400px] z-20">
             <motion.div
-              whileHover={{ y: -3, scale: 1.015 }}
+              whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedNode(nodes.kepalaUkpbj)}
-              className="cursor-pointer rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-primary-navy via-[#1E3A8A] to-[#172554] text-white shadow-lg shadow-blue-950/20 border-2 border-blue-500/40 hover:border-amber-400 transition-all duration-300 relative group overflow-hidden"
+              className="cursor-pointer rounded-2xl p-4 bg-gradient-to-r from-primary-navy via-[#1E3A8A] to-[#172554] text-white shadow-lg shadow-blue-950/20 border-2 border-blue-500/40 hover:border-amber-400 transition-all duration-200 relative group overflow-hidden"
             >
-              {/* Gold Top Accent Bar */}
+              {/* Gold Top Strip */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500" />
 
-              <div className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+              <div className="flex items-center gap-3.5 pt-0.5">
+                <div className="w-11 h-11 rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
                   {nodes.kepalaUkpbj.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider mb-1 bg-amber-400/20 text-amber-300 border border-amber-400/30">
-                    <span>{trans(nodes.kepalaUkpbj.roleBadgeId, nodes.kepalaUkpbj.roleBadgeEn)}</span>
-                  </div>
-                  <h3 className="text-base sm:text-lg font-black tracking-tight text-white leading-tight">
+                  <h3 className="text-base font-black tracking-tight text-white leading-tight">
                     {trans(nodes.kepalaUkpbj.titleId, nodes.kepalaUkpbj.titleEn)}
                   </h3>
                   <p className="text-xs text-blue-100/80 font-medium truncate mt-0.5">
-                    {trans(nodes.kepalaUkpbj.subtitleId, nodes.kepalaUkpbj.subtitleEn)}
+                    {trans(nodes.kepalaUkpbj.subtitleId || '', nodes.kepalaUkpbj.subtitleEn || '')}
                   </p>
                 </div>
                 <div className="shrink-0 w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors">
@@ -450,14 +458,14 @@ export const OrganizationChart = () => {
 
           {/* CONNECTOR: Level 1 -> Level 2 */}
           <div className="flex flex-col items-center my-0.5 z-10">
-            <div className="w-[2.5px] h-6 bg-primary-navy" />
-            <div className="w-0 h-0 border-l-[4.5px] border-l-transparent border-r-[4.5px] border-r-transparent border-t-[6.5px] border-t-primary-navy" />
+            <div className="w-[2px] h-6 bg-primary-navy" />
+            <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-primary-navy" />
           </div>
 
           {/* ============================================================ */}
-          {/* LEVEL 2: KEPALA BAGIAN LAYANAN PENGADAAN (Coordinator)       */}
+          {/* LEVEL 2: KEPALA BAGIAN LAYANAN PENGADAAN                     */}
           {/* ============================================================ */}
-          <div className="w-full max-w-[430px] z-20">
+          <div className="w-full max-w-[420px] z-20">
             {renderCard(nodes.kepalaBagian)}
           </div>
 
@@ -466,36 +474,36 @@ export const OrganizationChart = () => {
           {/* ============================================================ */}
           <div className="w-full relative mt-1 mb-3">
             {/* Center stem down */}
-            <div className="w-[2.5px] h-5 bg-slate-400 mx-auto" />
+            <div className="w-[2px] h-5 bg-slate-400 mx-auto" />
             
             {/* Horizontal branch bar across 4 columns */}
-            <div className="h-[2.5px] bg-slate-400 rounded-full mx-[12.5%] relative">
+            <div className="h-[2px] bg-slate-400 rounded-full mx-[12.5%] relative">
               {/* Branch 1 -> Sekretariat (0%) */}
               <div className="absolute left-0 top-0 flex flex-col items-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-purple-600 -translate-y-1/2 ring-2 ring-white" />
-                <div className="w-[2.5px] h-6 bg-slate-400" />
-                <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-slate-500" />
+                <div className="w-2 h-2 rounded-full bg-purple-600 -translate-y-1/2 ring-2 ring-white" />
+                <div className="w-[2px] h-6 bg-slate-400" />
+                <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5.5px] border-t-slate-500" />
               </div>
 
               {/* Branch 2 -> Tim Pengelolaan PBJ (33.33%) */}
               <div className="absolute left-[33.33%] -translate-x-1/2 top-0 flex flex-col items-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 -translate-y-1/2 ring-2 ring-white" />
-                <div className="w-[2.5px] h-6 bg-slate-400" />
-                <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-slate-500" />
+                <div className="w-2 h-2 rounded-full bg-emerald-600 -translate-y-1/2 ring-2 ring-white" />
+                <div className="w-[2px] h-6 bg-slate-400" />
+                <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5.5px] border-t-slate-500" />
               </div>
 
               {/* Branch 3 -> Tim Kelembagaan & SDM (66.66%) */}
               <div className="absolute left-[66.66%] -translate-x-1/2 top-0 flex flex-col items-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-orange-600 -translate-y-1/2 ring-2 ring-white" />
-                <div className="w-[2.5px] h-6 bg-slate-400" />
-                <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-slate-500" />
+                <div className="w-2 h-2 rounded-full bg-orange-600 -translate-y-1/2 ring-2 ring-white" />
+                <div className="w-[2px] h-6 bg-slate-400" />
+                <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5.5px] border-t-slate-500" />
               </div>
 
               {/* Branch 4 -> Tim Layanan SPSE (100%) */}
               <div className="absolute right-0 top-0 flex flex-col items-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-sky-600 -translate-y-1/2 ring-2 ring-white" />
-                <div className="w-[2.5px] h-6 bg-slate-400" />
-                <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-slate-500" />
+                <div className="w-2 h-2 rounded-full bg-sky-600 -translate-y-1/2 ring-2 ring-white" />
+                <div className="w-[2px] h-6 bg-slate-400" />
+                <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5.5px] border-t-slate-500" />
               </div>
             </div>
           </div>
@@ -503,7 +511,7 @@ export const OrganizationChart = () => {
           {/* ============================================================ */}
           {/* LEVEL 3 & 4: 4 COLUMNS                                       */}
           {/* ============================================================ */}
-          <div className="grid grid-cols-4 gap-4 sm:gap-4.5 w-full mt-2 z-10">
+          <div className="grid grid-cols-4 gap-4 w-full mt-2 z-10">
             
             {/* ------------------------------------------------------------ */}
             {/* COLUMN 1: Sekretariat Tata Usaha                             */}
@@ -525,24 +533,24 @@ export const OrganizationChart = () => {
 
               {/* Arrow to Tim POKJA 1 */}
               <div className="flex flex-col items-center my-1">
-                <div className="w-[2px] h-5 bg-emerald-500" />
-                <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5px] border-t-emerald-600" />
+                <div className="w-[2px] h-4 bg-emerald-500" />
+                <div className="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-t-[4.5px] border-t-emerald-600" />
               </div>
 
               {/* Middle: Tim POKJA 1 */}
               <div className="w-full">
-                {renderCard(nodes.pokja1, true)}
+                {renderCard(nodes.pokja1)}
               </div>
 
               {/* Arrow to Tim POKJA 2 */}
               <div className="flex flex-col items-center my-1">
-                <div className="w-[2px] h-5 bg-emerald-500" />
-                <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5px] border-t-emerald-600" />
+                <div className="w-[2px] h-4 bg-emerald-500" />
+                <div className="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-t-[4.5px] border-t-emerald-600" />
               </div>
 
               {/* Bottom: Tim POKJA 2 */}
               <div className="w-full">
-                {renderCard(nodes.pokja2, true)}
+                {renderCard(nodes.pokja2)}
               </div>
             </div>
 
@@ -556,24 +564,24 @@ export const OrganizationChart = () => {
               </div>
 
               {/* Fork branch to SDM and Kelembagaan */}
-              <div className="w-full relative mt-0.5 mb-1.5">
-                <div className="w-[2px] h-4 bg-orange-400 mx-auto" />
+              <div className="w-full relative mt-0.5 mb-1">
+                <div className="w-[2px] h-3.5 bg-orange-400 mx-auto" />
                 {/* Horizontal branch */}
                 <div className="h-[2px] bg-orange-400 rounded-full mx-[25%] relative">
                   {/* Left branch -> SDM */}
                   <div className="absolute left-0 top-0 flex flex-col items-center">
                     <div className="w-[2px] h-3.5 bg-orange-400" />
-                    <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5px] border-t-orange-500" />
+                    <div className="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-t-[4.5px] border-t-orange-500" />
                   </div>
                   {/* Right branch -> Kelembagaan */}
                   <div className="absolute right-0 top-0 flex flex-col items-center">
                     <div className="w-[2px] h-3.5 bg-orange-400" />
-                    <div className="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-t-[5px] border-t-orange-500" />
+                    <div className="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-t-[4.5px] border-t-orange-500" />
                   </div>
                 </div>
               </div>
 
-              {/* Sub-cards: SDM & Kelembagaan */}
+              {/* Sub-cards: SDM & Kelembagaan (Stacked or compact horizontal) */}
               <div className="grid grid-cols-2 gap-2 w-full mt-0.5">
                 <div className="w-full">
                   {renderCard(nodes.sdm, true)}
@@ -624,9 +632,11 @@ export const OrganizationChart = () => {
                     <h3 className="text-lg font-black leading-tight text-white">
                       {trans(selectedNode.titleId, selectedNode.titleEn)}
                     </h3>
-                    <p className="text-xs text-blue-100/80 font-medium mt-0.5">
-                      {trans(selectedNode.subtitleId, selectedNode.subtitleEn)}
-                    </p>
+                    {selectedNode.subtitleId && (
+                      <p className="text-xs text-blue-100/80 font-medium mt-0.5">
+                        {trans(selectedNode.subtitleId, selectedNode.subtitleEn || '')}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <button
