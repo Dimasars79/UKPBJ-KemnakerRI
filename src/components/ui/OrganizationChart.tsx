@@ -450,14 +450,16 @@ export const OrganizationChart = () => {
               {/* Gold Top Strip */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500" />
 
-              <div className="flex items-center justify-center gap-3.5 pt-0.5 relative">
+              <div className="flex items-center gap-3.5 pt-0.5">
                 <div className="w-11 h-11 rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
                   {nodes.kepalaUkpbj.icon}
                 </div>
-                <h3 className="text-base font-black tracking-tight text-white leading-tight">
-                  {trans(nodes.kepalaUkpbj.titleId, nodes.kepalaUkpbj.titleEn)}
-                </h3>
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-black tracking-tight text-white leading-tight">
+                    {trans(nodes.kepalaUkpbj.titleId, nodes.kepalaUkpbj.titleEn)}
+                  </h3>
+                </div>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors">
                   <Info className="w-4 h-4" />
                 </div>
               </div>
