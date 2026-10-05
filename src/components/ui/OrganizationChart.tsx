@@ -631,9 +631,6 @@ export const OrganizationChart = () => {
                     {selectedNode.icon}
                   </div>
                   <div>
-                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider mb-1 bg-amber-400/20 text-amber-300 border border-amber-400/30">
-                      {trans(selectedNode.roleBadgeId, selectedNode.roleBadgeEn)}
-                    </span>
                     <h3 className="text-lg font-black leading-tight text-white">
                       {trans(selectedNode.titleId, selectedNode.titleEn)}
                     </h3>
