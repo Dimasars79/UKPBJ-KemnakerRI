@@ -655,15 +655,6 @@ export const OrganizationChart = () => {
               {/* Body */}
               <div className="p-5 sm:p-6 overflow-y-auto space-y-4">
                 <div>
-                  <h5 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-                    {trans('Deskripsi Tugas & Fungsi', 'Role & Responsibilities')}
-                  </h5>
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                    {trans(selectedNode.descId, selectedNode.descEn)}
-                  </p>
-                </div>
-
-                <div>
                   <h5 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
                     {trans('Tugas Pokok Utama (Tupoksi)', 'Key Duties')}
                   </h5>
