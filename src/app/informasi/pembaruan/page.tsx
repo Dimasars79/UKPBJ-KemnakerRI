@@ -13,8 +13,6 @@ import {
   Globe, MessageSquare, RotateCcw, CheckCircle2
 } from 'lucide-react';
 
-import { parseAgendaDate } from '@/lib/agendaUtils';
-
 type UpdateType = 'all' | 'berita' | 'paket' | 'regulasi' | 'agenda' | 'sop';
 
 interface UnifiedUpdateItem {

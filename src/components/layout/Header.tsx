@@ -17,7 +17,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
 import { SearchPalette } from '@/components/ui/SearchPalette';
 import { useData } from '@/contexts/DataContext';
-import { parseAgendaDate } from '@/lib/agendaUtils';
 
 export function Header() {
   const { newsList, agendaList, packagesList, regulasiList, sopList, siteSettings } = useData();
