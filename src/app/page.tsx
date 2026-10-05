@@ -20,54 +20,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { useData } from '@/contexts/DataContext';
 
-// Helper function to parse agenda dates accurately for chronological sorting
-const parseAgendaDate = (dateStr: string): Date | null => {
-  if (!dateStr) return null;
-  const cleaned = dateStr.trim();
-
-  // 1. ISO format "YYYY-MM-DD"
-  if (/^\d{4}-\d{1,2}-\d{1,2}/.test(cleaned)) {
-    const parts = cleaned.split('-');
-    return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-  }
-
-  // 2. Format "DD/MM/YYYY" or "DD-MM-YYYY"
-  if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}/.test(cleaned)) {
-    const parts = cleaned.split(/[\/\-]/);
-    return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
-  }
-
-  // 3. Textual Indonesian & English format e.g. "15 Sep 2026", "02 Oktober 2026"
-  const monthMap: Record<string, number> = {
-    jan: 0, januari: 0, january: 0,
-    feb: 1, februari: 1, february: 1,
-    mar: 2, maret: 2, march: 2,
-    apr: 3, april: 3,
-    mei: 4, may: 4,
-    jun: 5, juni: 5, june: 5,
-    jul: 6, juli: 6, july: 6,
-    agu: 7, ags: 7, agustus: 7, aug: 7, august: 7,
-    sep: 8, september: 8,
-    okt: 9, oktober: 9, oct: 9, october: 9,
-    nov: 10, november: 10,
-    des: 11, desember: 11, dec: 11, december: 11
-  };
-
-  const tokens = cleaned.split(/\s+/);
-  if (tokens.length >= 3) {
-    const day = parseInt(tokens[0], 10);
-    const monthKey = tokens[1].toLowerCase().replace(/[^a-z]/g, '');
-    const month = monthMap[monthKey] !== undefined ? monthMap[monthKey] : -1;
-    const year = parseInt(tokens[2], 10);
-
-    if (!isNaN(day) && month !== -1 && !isNaN(year)) {
-      return new Date(year, month, day);
-    }
-  }
-
-  const parsed = new Date(cleaned);
-  return isNaN(parsed.getTime()) ? null : parsed;
-};
+import { parseAgendaDateObject, isAgendaExpired } from '@/lib/agendaUtils';
 
 const yearStats: Record<string, {
   waktu: string;
@@ -119,29 +72,19 @@ export default function Home() {
   // Dynamically sort and find the closest upcoming agenda (Jadwal Terdekat)
   const sortedUpcomingAgendas = React.useMemo(() => {
     const activeAgendas = agendaList.filter(
-      (a) => a.status !== 'Dibatalkan'
+      (a) => a.status !== 'Dibatalkan' && !isAgendaExpired(a)
     );
 
-    const listToProcess = activeAgendas.length > 0 ? activeAgendas : agendaList;
-
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-    const todayTime = todayStart.getTime();
-
-    const withParsed = listToProcess.map((item) => {
-      const d = parseAgendaDate(item.date);
+    const withParsed = activeAgendas.map((item) => {
+      const d = parseAgendaDateObject(item.date);
       return {
         ...item,
         parsedTime: d ? d.getTime() : Number.MAX_SAFE_INTEGER
       };
     });
 
-    // Agendas that are today or in the future
-    const futureAgendas = withParsed.filter((item) => item.parsedTime >= todayTime);
-    const listToSort = futureAgendas.length > 0 ? futureAgendas : withParsed;
-
     // Sort ascending chronologically (closest upcoming date first)
-    return listToSort.sort((a, b) => a.parsedTime - b.parsedTime);
+    return withParsed.sort((a, b) => a.parsedTime - b.parsedTime);
   }, [agendaList]);
 
   // Pick the closest upcoming active agenda

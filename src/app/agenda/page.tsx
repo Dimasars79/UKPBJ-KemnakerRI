@@ -25,73 +25,7 @@ interface SelectedAgendaModalData {
   description?: string;
 }
 
-// Robust helper to parse Indonesian / ISO / Standard date strings
-const parseAgendaDate = (dateStr: string): { day: number; month: number; year: number } | null => {
-  if (!dateStr) return null;
-  const cleaned = dateStr.trim();
-
-  // 1. ISO or standard format "YYYY-MM-DD"
-  if (/^\d{4}-\d{1,2}-\d{1,2}/.test(cleaned)) {
-    const parts = cleaned.split('-');
-    const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1; // 0-indexed
-    const day = parseInt(parts[2], 10);
-    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-      return { day, month, year };
-    }
-  }
-
-  // 2. Format "DD/MM/YYYY" or "DD-MM-YYYY"
-  if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}/.test(cleaned)) {
-    const parts = cleaned.split(/[\/\-]/);
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-      return { day, month, year };
-    }
-  }
-
-  // 3. Textual Indonesian & English format e.g. "15 Sep 2026", "02 Oktober 2026"
-  const monthMap: Record<string, number> = {
-    jan: 0, januari: 0, january: 0,
-    feb: 1, februari: 1, february: 1,
-    mar: 2, maret: 2, march: 2,
-    apr: 3, april: 3,
-    mei: 4, may: 4,
-    jun: 5, juni: 5, june: 5,
-    jul: 6, juli: 6, july: 6,
-    agu: 7, ags: 7, agustus: 7, aug: 7, august: 7,
-    sep: 8, september: 8,
-    okt: 9, oktober: 9, oct: 9, october: 9,
-    nov: 10, november: 10,
-    des: 11, desember: 11, dec: 11, december: 11
-  };
-
-  const tokens = cleaned.split(/\s+/);
-  if (tokens.length >= 3) {
-    const day = parseInt(tokens[0], 10);
-    const monthKey = tokens[1].toLowerCase().replace(/[^a-z]/g, '');
-    const month = monthMap[monthKey] !== undefined ? monthMap[monthKey] : -1;
-    const year = parseInt(tokens[2], 10);
-
-    if (!isNaN(day) && month !== -1 && !isNaN(year)) {
-      return { day, month, year };
-    }
-  }
-
-  // 4. Native Date fallback
-  const parsed = new Date(cleaned);
-  if (!isNaN(parsed.getTime())) {
-    return {
-      day: parsed.getDate(),
-      month: parsed.getMonth(),
-      year: parsed.getFullYear()
-    };
-  }
-
-  return null;
-};
+import { parseAgendaDate, isAgendaExpired } from '@/lib/agendaUtils';
 
 export default function AgendaPage() {
   const { t, trans, language } = useLanguage();
@@ -139,9 +73,10 @@ export default function AgendaPage() {
   const nextRealMonth = (todayMonth + 1) % 12;
   const nextRealYear = todayMonth === 11 ? todayYear + 1 : todayYear;
 
-  // Build activities dynamically ONLY for the current active month and year
+  // Build activities dynamically ONLY for the current active month and year (excluding expired)
   const activities: Record<number, SelectedAgendaModalData[]> = {};
   agendaList.forEach((ag, idx) => {
+    if (isAgendaExpired(ag, now)) return;
     const parsed = parseAgendaDate(ag.date);
     if (parsed && parsed.year === currentYear && parsed.month === currentMonth) {
       if (!activities[parsed.day]) {
@@ -183,31 +118,33 @@ export default function AgendaPage() {
     setSelectedDate(liveNow.getDate());
   };
 
-  // Map dummyAgendas with parsed dates for chronological sorting & filtering
-  const dummyAgendas = agendaList.map((ag) => {
-    const parsed = parseAgendaDate(ag.date);
-    const dayStr = parsed ? String(parsed.day).padStart(2, '0') : (ag.date.split(' ')[0] || '15');
-    const monthStr = parsed ? monthNames[parsed.month].slice(0, 3) : (ag.date.split(' ')[1] || 'Sep');
-    const timestamp = parsed ? new Date(parsed.year, parsed.month, parsed.day).getTime() : Number.MAX_SAFE_INTEGER;
-    return {
-      id: ag.id,
-      title: ag.title,
-      date: dayStr,
-      month: monthStr,
-      fullDate: ag.date,
-      time: ag.time,
-      location: ag.location,
-      category: ag.category,
-      organizer: ag.organizer,
-      capacity: ag.capacity,
-      status: ag.status,
-      description: ag.description,
-      parsedDay: parsed ? parsed.day : 1,
-      parsedMonth: parsed ? parsed.month : todayMonth,
-      parsedYear: parsed ? parsed.year : todayYear,
-      parsedTimestamp: timestamp
-    };
-  });
+  // Map dummyAgendas with parsed dates for chronological sorting & filtering (excluding expired)
+  const dummyAgendas = agendaList
+    .filter((ag) => !isAgendaExpired(ag, now))
+    .map((ag) => {
+      const parsed = parseAgendaDate(ag.date);
+      const dayStr = parsed ? String(parsed.day).padStart(2, '0') : (ag.date.split(' ')[0] || '15');
+      const monthStr = parsed ? monthNames[parsed.month].slice(0, 3) : (ag.date.split(' ')[1] || 'Sep');
+      const timestamp = parsed ? new Date(parsed.year, parsed.month, parsed.day).getTime() : Number.MAX_SAFE_INTEGER;
+      return {
+        id: ag.id,
+        title: ag.title,
+        date: dayStr,
+        month: monthStr,
+        fullDate: ag.date,
+        time: ag.time,
+        location: ag.location,
+        category: ag.category,
+        organizer: ag.organizer,
+        capacity: ag.capacity,
+        status: ag.status,
+        description: ag.description,
+        parsedDay: parsed ? parsed.day : 1,
+        parsedMonth: parsed ? parsed.month : todayMonth,
+        parsedYear: parsed ? parsed.year : todayYear,
+        parsedTimestamp: timestamp
+      };
+    });
 
   // Filtered upcoming agendas sorted chronologically relative to real-world time
   const filteredAgendas = dummyAgendas
@@ -336,11 +273,8 @@ export default function AgendaPage() {
                           : 'bg-white hover:bg-slate-100 text-slate-700 font-medium border border-transparent hover:border-slate-200'
                       }`}
                     >
-                      <span className="relative">
+                      <span>
                         {day}
-                        {isToday && !isSelected && (
-                          <span className="absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-primary-blue animate-ping" />
-                        )}
                       </span>
                       {hasActivity && (
                         <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full absolute bottom-1 sm:bottom-1.5 ${isSelected ? 'bg-white' : isToday ? 'bg-primary-blue' : 'bg-accent-gold'}`} />

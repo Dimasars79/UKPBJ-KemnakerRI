@@ -50,6 +50,8 @@ async function executeWithColumnFallback<T>(
   return null;
 }
 
+import { filterActiveAgendas } from '@/lib/agendaUtils';
+
 export async function GET(req: NextRequest) {
   try {
     const supabaseAdmin = getSupabaseAdmin();
@@ -63,6 +65,20 @@ export async function GET(req: NextRequest) {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
+
+      if (table === 'agendas') {
+        const { active, expired } = filterActiveAgendas(data || []);
+        if (expired.length > 0) {
+          const expiredIds = expired.map((a: { id: string }) => a.id).filter(Boolean);
+          if (expiredIds.length > 0) {
+            supabaseAdmin.from('agendas').delete().in('id', expiredIds).then(({ error: delErr }) => {
+              if (delErr) console.error('Failed to auto-delete expired agendas:', delErr);
+            });
+          }
+        }
+        return NextResponse.json({ success: true, data: active });
+      }
+
       return NextResponse.json({ success: true, data });
     }
 
@@ -91,11 +107,23 @@ export async function GET(req: NextRequest) {
       supabaseAdmin.from('activity_logs').select('*').order('created_at', { ascending: false }).limit(100)
     ]);
 
+    // Automatically purge past/expired agendas from Supabase
+    const { active: activeAgendas, expired: expiredAgendas } = filterActiveAgendas(agendasRes.data || []);
+    if (expiredAgendas.length > 0) {
+      const expiredIds = expiredAgendas.map((a: { id: string }) => a.id).filter(Boolean);
+      if (expiredIds.length > 0) {
+        supabaseAdmin.from('agendas').delete().in('id', expiredIds).then(({ error: delErr }) => {
+          if (delErr) console.error('Failed to auto-delete expired agendas:', delErr);
+          else console.log(`[Auto-Cleanup] Deleted ${expiredIds.length} expired agendas from database:`, expiredIds);
+        });
+      }
+    }
+
     return NextResponse.json({
       success: true,
       data: {
         news: newsRes.data || [],
-        agendas: agendasRes.data || [],
+        agendas: activeAgendas,
         procurement_packages: packagesRes.data || [],
         regulasi: regulasiRes.data || [],
         sop: sopRes.data || [],
@@ -214,6 +242,18 @@ export async function POST(req: NextRequest) {
               .single(),
           data || {}
         );
+        break;
+      }
+
+      case 'cleanup_expired_agendas': {
+        const { data: allAgendas } = await supabaseAdmin.from('agendas').select('*');
+        const { expired } = filterActiveAgendas(allAgendas || []);
+        const expiredIds = expired.map((a: { id: string }) => a.id).filter(Boolean);
+        if (expiredIds.length > 0) {
+          const { error: delErr } = await supabaseAdmin.from('agendas').delete().in('id', expiredIds);
+          if (delErr) throw delErr;
+        }
+        result = { deletedCount: expiredIds.length, deletedIds: expiredIds };
         break;
       }
 

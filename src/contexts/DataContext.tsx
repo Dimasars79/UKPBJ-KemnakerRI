@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { filterActiveAgendas, isAgendaExpired } from '@/lib/agendaUtils';
 
 export interface NewsItem {
   id: string;
@@ -206,6 +207,7 @@ interface DataContextType {
 
   // Database actions
   refreshFromSupabase: () => Promise<void>;
+  cleanupExpiredAgendas: () => Promise<void>;
   resetToDefaults: () => void;
   isLoaded: boolean;
   isSupabaseConnected: boolean;
@@ -798,7 +800,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [newsList, setNewsList] = useState<NewsItem[]>(DEFAULT_NEWS);
-  const [agendaList, setAgendaList] = useState<AgendaItem[]>(DEFAULT_AGENDAS);
+  const [agendaList, setAgendaList] = useState<AgendaItem[]>(() => filterActiveAgendas(DEFAULT_AGENDAS).active);
   const [packagesList, setPackagesList] = useState<ProcurementPackage[]>(DEFAULT_PACKAGES);
   const [regulasiList, setRegulasiList] = useState<RegulasiItem[]>(DEFAULT_REGULASI);
   const [sopList, setSopList] = useState<SopItem[]>(DEFAULT_SOP);
@@ -895,7 +897,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
         if (Array.isArray(agendas)) {
           setAgendaList((prevList) => {
-            return agendas.map((a: {
+            const mappedAgendas = agendas.map((a: {
               id: string;
               title: string;
               category: AgendaItem['category'];
@@ -928,6 +930,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 syncFrontend: a.sync_frontend ?? true
               };
             });
+
+            const { active, expired } = filterActiveAgendas(mappedAgendas);
+            if (expired.length > 0) {
+              expired.forEach((exp) => {
+                fetch('/api/admin/data', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ table: 'agendas', action: 'delete', id: exp.id })
+                }).catch((err) => console.warn('Auto-delete expired agenda failed:', exp.id, err));
+              });
+            }
+            return active;
           });
         }
 
@@ -1154,7 +1168,19 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const parsed = JSON.parse(stored);
         if (parsed.lastUpdated || parsed.updatedAt) setLastUpdated(parsed.lastUpdated || parsed.updatedAt);
         if (Array.isArray(parsed.newsList)) setNewsList(parsed.newsList);
-        if (Array.isArray(parsed.agendaList)) setAgendaList(parsed.agendaList);
+        if (Array.isArray(parsed.agendaList)) {
+          const { active, expired } = filterActiveAgendas<AgendaItem>(parsed.agendaList as AgendaItem[]);
+          setAgendaList(active);
+          if (expired.length > 0) {
+            expired.forEach((exp) => {
+              fetch('/api/admin/data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ table: 'agendas', action: 'delete', id: exp.id })
+              }).catch(() => {});
+            });
+          }
+        }
         if (Array.isArray(parsed.packagesList)) setPackagesList(parsed.packagesList);
         if (Array.isArray(parsed.regulasiList)) setRegulasiList(parsed.regulasiList);
         if (Array.isArray(parsed.sopList)) setSopList(parsed.sopList);
@@ -1174,7 +1200,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           const parsed = JSON.parse(e.newValue);
           if (parsed.lastUpdated || parsed.updatedAt) setLastUpdated(parsed.lastUpdated || parsed.updatedAt);
           if (Array.isArray(parsed.newsList)) setNewsList(parsed.newsList);
-          if (Array.isArray(parsed.agendaList)) setAgendaList(parsed.agendaList);
+          if (Array.isArray(parsed.agendaList)) {
+            const { active } = filterActiveAgendas<AgendaItem>(parsed.agendaList as AgendaItem[]);
+            setAgendaList(active);
+          }
           if (Array.isArray(parsed.packagesList)) setPackagesList(parsed.packagesList);
           if (Array.isArray(parsed.regulasiList)) setRegulasiList(parsed.regulasiList);
           if (Array.isArray(parsed.sopList)) setSopList(parsed.sopList);
@@ -1191,6 +1220,29 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     return () => window.removeEventListener('storage', handleStorage);
   }, [refreshFromSupabase]);
+
+  // Periodic automatic purge of expired agendas (runs every 30 seconds)
+  useEffect(() => {
+    const purgeTimer = setInterval(() => {
+      setAgendaList((prevList) => {
+        const { active, expired } = filterActiveAgendas(prevList);
+        if (expired.length > 0) {
+          console.log(`[Auto-Purge] ${expired.length} agenda kegiatan yang terlewati dihapus otomatis.`);
+          expired.forEach((exp) => {
+            fetch('/api/admin/data', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ table: 'agendas', action: 'delete', id: exp.id })
+            }).catch((err) => console.warn('Auto-purge deletion failed:', exp.id, err));
+          });
+          return active;
+        }
+        return prevList;
+      });
+    }, 30000);
+
+    return () => clearInterval(purgeTimer);
+  }, []);
 
   // Persist snapshot to LocalStorage
   const persist = (
@@ -1221,7 +1273,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // Helper to sync changes with server-side admin API (bypasses RLS)
   const syncAdminData = async (
     table: string,
-    action: 'insert' | 'update' | 'delete' | 'upsert',
+    action: 'insert' | 'update' | 'delete' | 'upsert' | 'cleanup_expired_agendas',
     payload?: { id?: string; data?: Record<string, unknown> }
   ) => {
     try {
@@ -1344,6 +1396,25 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // ==========================================
   // AGENDA CRUD & SUPABASE SYNC
   // ==========================================
+  const cleanupExpiredAgendas = useCallback(async () => {
+    setAgendaList((prevList) => {
+      const { active, expired } = filterActiveAgendas(prevList);
+      if (expired.length > 0) {
+        expired.forEach((item) => {
+          syncAdminData('agendas', 'delete', { id: item.id }).catch((err) => {
+            console.warn('Failed to delete expired agenda from DB:', item.id, err);
+          });
+        });
+        persist(newsList, active);
+        return active;
+      }
+      return prevList;
+    });
+
+    // Also trigger server-side batch cleanup
+    await syncAdminData('agendas', 'cleanup_expired_agendas');
+  }, [newsList]);
+
   const addAgenda = async (agenda: Omit<AgendaItem, 'id' | 'syncFrontend'>) => {
     const tempId = `AGD-${Date.now().toString().slice(-4)}`;
     const newEntry: AgendaItem = {
@@ -1351,9 +1422,17 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       id: tempId,
       syncFrontend: true
     };
+    
+    // Check if agenda is already expired before saving
+    if (isAgendaExpired(newEntry)) {
+      console.warn('Agenda yang ditambahkan sudah terlewati dan tidak akan ditampilkan.');
+      return;
+    }
+
     const updated = [newEntry, ...agendaList];
-    setAgendaList(updated);
-    persist(newsList, updated);
+    const { active } = filterActiveAgendas(updated);
+    setAgendaList(active);
+    persist(newsList, active);
 
     const res = await syncAdminData('agendas', 'insert', {
       data: {
@@ -1380,10 +1459,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const updatedList = agendaList.map((item) =>
       item.id === id ? { ...item, ...updated } : item
     );
-    setAgendaList(updatedList);
-    persist(newsList, updatedList);
 
-    const target = updatedList.find((item) => item.id === id);
+    const { active, expired } = filterActiveAgendas(updatedList);
+    setAgendaList(active);
+    persist(newsList, active);
+
+    // If updated agenda has now expired/passed, remove from database
+    if (expired.some((e) => e.id === id)) {
+      await syncAdminData('agendas', 'delete', { id });
+      return;
+    }
+
+    const target = active.find((item) => item.id === id);
 
     await syncAdminData('agendas', 'update', {
       id,
@@ -1958,6 +2045,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         siteSettings,
         updateSiteSettings,
         refreshFromSupabase,
+        cleanupExpiredAgendas,
         resetToDefaults,
         isLoaded,
         isSupabaseConnected,
