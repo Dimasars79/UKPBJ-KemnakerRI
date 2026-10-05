@@ -457,9 +457,6 @@ export const OrganizationChart = () => {
                 <h3 className="font-black text-base tracking-tight text-white leading-tight">
                   {trans(nodes.kepalaUkpbj.titleId, nodes.kepalaUkpbj.titleEn)}
                 </h3>
-                <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors">
-                  <Info className="w-4 h-4" />
-                </div>
               </div>
             </motion.div>
           </div>
