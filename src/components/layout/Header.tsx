@@ -214,7 +214,11 @@ export function Header() {
   const unreadPublicCount = Math.max(0, cmsNotifications.length - readNotifCount);
 
   const handleOpenNotifications = () => {
-    setIsNotificationOpen(!isNotificationOpen);
+    const nextState = !isNotificationOpen;
+    setIsNotificationOpen(nextState);
+    if (nextState) {
+      setIsMobileMenuOpen(false);
+    }
     setReadNotifCount(cmsNotifications.length);
     if (typeof window !== 'undefined') {
       try {
@@ -602,7 +606,7 @@ export function Header() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       onClick={() => setIsNotificationOpen(false)}
-                      className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 sm:hidden"
+                      className="fixed inset-0 bg-black/40 backdrop-blur-xs z-[1050] sm:hidden"
                     />
 
                     <motion.div
@@ -610,7 +614,7 @@ export function Header() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.96 }}
                       transition={{ duration: 0.2 }}
-                      className="fixed inset-x-4 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2.5 sm:w-96 max-w-sm sm:max-w-none mx-auto bg-white border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.18)] rounded-2xl sm:rounded-3xl overflow-hidden z-[100] flex flex-col max-h-[60vh] sm:max-h-[480px]"
+                      className="fixed inset-x-4 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2.5 sm:w-96 max-w-sm sm:max-w-none mx-auto bg-white border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.18)] rounded-2xl sm:rounded-3xl overflow-hidden z-[1051] flex flex-col max-h-[60vh] sm:max-h-[480px]"
                     >
                       {/* Header Panel */}
                       <div className="px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/90 shrink-0">
@@ -709,14 +713,21 @@ export function Header() {
               <span className="relative z-10">{t('nav.login')}</span>
             </Link>
 
-            {/* Mobile Navbar Toggler */}
+            {/* Mobile Navbar Toggler (Hidden when notification modal is active) */}
             <button 
-              className={`lg:hidden flex items-center justify-center w-10 h-10 rounded-2xl transition-all duration-300 border shadow-xs relative z-[1001] cursor-pointer ${
+              className={`lg:hidden flex items-center justify-center w-10 h-10 rounded-2xl transition-all duration-300 border shadow-xs relative cursor-pointer ${
+                isNotificationOpen ? 'hidden' : ''
+              } ${
                 isMobileMenuOpen 
-                  ? 'bg-primary-navy text-white border-primary-navy shadow-lg' 
-                  : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                  ? 'bg-primary-navy text-white border-primary-navy shadow-lg z-[1001]' 
+                  : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 z-10'
               }`}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => {
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+                if (!isMobileMenuOpen) {
+                  setIsNotificationOpen(false);
+                }
+              }}
               aria-label={isMobileMenuOpen ? "Tutup Menu" : "Buka Menu"}
             >
               <div className="w-5 h-4 flex flex-col justify-between items-center relative pointer-events-none">
