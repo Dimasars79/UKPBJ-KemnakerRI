@@ -392,7 +392,7 @@ export const OrganizationChart = () => {
             </h4>
             {node.subtitleId && (
               <p className="text-[11px] text-slate-500 font-normal leading-tight mt-1">
-                {trans(node.subtitleId, node.subtitleEn)}
+                {trans(node.subtitleId, node.subtitleEn || '')}
               </p>
             )}
           </div>
