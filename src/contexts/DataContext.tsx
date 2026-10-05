@@ -33,6 +33,7 @@ export interface AgendaItem {
   imageUrl?: string;
   description?: string;
   syncFrontend: boolean;
+  zoomUrl?: string;
 }
 
 export interface PackageDocument {
@@ -321,7 +322,8 @@ export const getDynamicDefaultAgendas = (): AgendaItem[] => {
       imageUrl: '/poster_kegiatan.webp',
       description: 'Bimbingan teknis intensif mengenai implementasi dan optimalisasi Sistem Informasi Kinerja Penyedia (SIKaP) Versi 3.0 guna mempercepat proses kualifikasi penyedia barang dan jasa pemerintah secara terintegrasi.',
       status: 'Terjadwal',
-      syncFrontend: true
+      syncFrontend: true,
+      zoomUrl: 'https://kemnaker.zoom.us/j/84930219842'
     },
     {
       id: 'AGD-002',
@@ -368,12 +370,13 @@ export const getDynamicDefaultAgendas = (): AgendaItem[] => {
       category: 'Sosialisasi',
       date: formatDateOffset(20),
       time: '09:00 - 12:00 WIB',
-      location: 'Hybrid (Ruang Komisi & Live Stream)',
+      location: 'Hybrid (Ruang Komisi & Live Stream Zoom)',
       organizer: 'Inspektorat Jenderal & UKPBJ',
       capacity: '300 Peserta',
       description: 'Sosialisasi alur mekanisme dan konsultasi penyelesaian permasalahan pengadaan barang/jasa melalui forum Clearing House PBJ Kementerian Ketenagakerjaan.',
       status: 'Terjadwal',
-      syncFrontend: true
+      syncFrontend: true,
+      zoomUrl: 'https://kemnaker.zoom.us/j/91283746501'
     },
     {
       id: 'AGD-006',
@@ -912,6 +915,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
               image_url?: string;
               imageUrl?: string;
               sync_frontend?: boolean;
+              zoom_url?: string;
+              zoomUrl?: string;
             }) => {
               const localExisting = prevList.find((item) => item.id === a.id);
               const defaultExisting = DEFAULT_AGENDAS.find((item) => item.id === a.id);
@@ -927,7 +932,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 status: a.status,
                 description: a.description || a.deskripsi || localExisting?.description || defaultExisting?.description || '',
                 imageUrl: a.image_url || a.imageUrl || localExisting?.imageUrl || defaultExisting?.imageUrl || '',
-                syncFrontend: a.sync_frontend ?? true
+                syncFrontend: a.sync_frontend ?? true,
+                zoomUrl: a.zoom_url || a.zoomUrl || localExisting?.zoomUrl || defaultExisting?.zoomUrl || ''
               };
             });
 
@@ -1446,7 +1452,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         status: agenda.status,
         description: agenda.description || '',
         image_url: agenda.imageUrl,
-        sync_frontend: true
+        sync_frontend: true,
+        zoom_url: agenda.zoomUrl || ''
       }
     });
 
@@ -1484,7 +1491,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         capacity: updated.capacity ?? target?.capacity,
         status: updated.status ?? target?.status,
         description: updated.description !== undefined ? updated.description : target?.description,
-        image_url: updated.imageUrl !== undefined ? updated.imageUrl : target?.imageUrl
+        image_url: updated.imageUrl !== undefined ? updated.imageUrl : target?.imageUrl,
+        zoom_url: updated.zoomUrl !== undefined ? updated.zoomUrl : target?.zoomUrl
       }
     });
   };

@@ -90,7 +90,7 @@ export default function GaleriPage() {
                     }`}
                   >
                     <Camera className="w-4 h-4 text-cyan-300" />
-                    <span>{trans('Galeri Foto Kegiatan', 'Activity Photo Gallery')} ({photosList.length})</span>
+                    <span>{trans('Galeri Foto Kegiatan', 'Activity Photo Gallery')}</span>
                   </button>
 
                   <button
@@ -102,7 +102,7 @@ export default function GaleriPage() {
                     }`}
                   >
                     <Video className="w-4 h-4 text-slate-950" />
-                    <span>{trans('Video Dokumentasi', 'Video Documentation')} ({videosList.length})</span>
+                    <span>{trans('Video Dokumentasi', 'Video Documentation')}</span>
                   </button>
                 </div>
               </FadeIn>
@@ -123,7 +123,7 @@ export default function GaleriPage() {
               <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div className="space-y-1">
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    {trans('Foto Liputan & Kegiatan Pengadaan', 'Procurement Coverage & Activity Photos')} ({filteredPhotos.length})
+                    {trans('Foto Liputan & Kegiatan Pengadaan', 'Procurement Coverage & Activity Photos')}
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500">
                     {trans('Arsip foto agenda kerja resmi, rapat monitoring, pelatihan teknis, dan kunjungan dinas', 'Photo archives of official work agendas, monitoring meetings, technical trainings, and field visits')}
@@ -181,14 +181,14 @@ export default function GaleriPage() {
                         onClick={() => setSelectedPhoto(img)}
                         className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xs hover:shadow-xl hover:border-cyan-300 transition-all duration-300 flex flex-col justify-between h-full group cursor-pointer"
                       >
-                        {/* Photo Image Banner with Hover Zoom & Badge Overlays */}
+                        {/* Photo Image Banner with Clean Hover Zoom */}
                         <div className="relative aspect-[16/10] bg-slate-950 overflow-hidden">
                           {img.src ? (
                             <Image 
                               src={img.src} 
                               alt={img.title} 
                               fill
-                              className="object-cover transform group-hover:scale-106 transition-transform duration-700" 
+                              className="object-cover transform group-hover:scale-105 transition-transform duration-500" 
                             />
                           ) : (
                             <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-xs">
@@ -196,45 +196,46 @@ export default function GaleriPage() {
                             </div>
                           )}
                           
-                          {/* Ambient Dark Gradient */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-black/30 opacity-60 group-hover:opacity-80 transition-opacity" />
-                          
-                          {/* Top Badges */}
-                          <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-10">
-                            <span className="px-3 py-1 rounded-xl text-[11px] font-bold bg-primary-navy/90 text-cyan-300 border border-cyan-500/30 backdrop-blur-md shadow-xs">
-                              {img.category}
-                            </span>
-                            <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-black/60 text-white border border-white/15 backdrop-blur-md">
-                              {img.date || '2026'}
-                            </span>
-                          </div>
-
-                          {/* Hover Zoom Icon */}
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                            <div className="w-12 h-12 rounded-full bg-cyan-500/90 text-white flex items-center justify-center shadow-xl transform scale-90 group-hover:scale-100 transition-transform">
+                          {/* Hover Zoom Icon & Subtle Overlay */}
+                          <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+                            <div className="w-12 h-12 rounded-full bg-cyan-500/95 text-white flex items-center justify-center shadow-xl transform scale-90 group-hover:scale-100 transition-transform">
                               <ZoomIn className="w-6 h-6" />
                             </div>
                           </div>
                         </div>
 
-                        {/* Card Body Information (Cleanly Visible at All Times) */}
-                        <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                          <div className="space-y-1.5">
-                            <h3 className="text-slate-900 font-black text-sm sm:text-base leading-snug group-hover:text-primary-blue transition-colors line-clamp-2">
+                        {/* Card Body Information - Meta, Tanggal, Judul & Penjelasan Foto */}
+                        <div className="p-5 flex-1 flex flex-col justify-between space-y-3.5">
+                          <div>
+                            {/* Kategori & Tanggal Foto */}
+                            <div className="flex items-center justify-between gap-2 mb-2.5">
+                              <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-blue-50 text-primary-blue border border-blue-200/70">
+                                {img.category}
+                              </span>
+                              <div className="flex items-center gap-1.5 text-slate-500 font-medium text-xs">
+                                <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                <span>{img.date || '2026'}</span>
+                              </div>
+                            </div>
+
+                            {/* Judul Foto */}
+                            <h3 className="text-slate-900 font-black text-sm sm:text-base leading-snug group-hover:text-primary-blue transition-colors line-clamp-2 mb-2">
                               {img.title}
                             </h3>
-                            <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">
+
+                            {/* Penjelasan / Deskripsi Foto */}
+                            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
                               {img.desc || trans('Dokumentasi resmi pelaksanaan kegiatan kerja pengadaan barang/jasa.', 'Official documentation of goods/services procurement work activities.')}
                             </p>
                           </div>
 
                           {/* Card Footer Action */}
-                          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-cyan-700 group-hover:text-primary-blue transition-colors">
+                          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-primary-blue group-hover:text-cyan-600 transition-colors">
                             <span className="flex items-center gap-1.5">
                               <Eye className="w-3.5 h-3.5" />
                               <span>{trans('Lihat Resolusi Penuh', 'View Full Resolution')}</span>
                             </span>
-                            <span className="text-[11px] bg-cyan-50 group-hover:bg-cyan-100 px-2 py-0.5 rounded-md border border-cyan-200">
+                            <span className="text-[11px] bg-blue-50 group-hover:bg-cyan-50 text-primary-blue group-hover:text-cyan-700 px-2.5 py-1 rounded-lg border border-blue-200/60 group-hover:border-cyan-200 transition-colors">
                               HD Photo &rarr;
                             </span>
                           </div>
@@ -266,14 +267,8 @@ export default function GaleriPage() {
               {/* Header & Filter Control Bar */}
               <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
-                    <span className="text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200">
-                      {trans('Multimedia & Video Resmi', 'Official Media & Videos')}
-                    </span>
-                  </div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    {trans('Video Kegiatan & Bimbingan Teknis', 'Activity & Technical Guidance Videos')} ({filteredVideos.length})
+                    {trans('Video Kegiatan & Bimbingan Teknis', 'Activity & Technical Guidance Videos')}
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500">
                     {trans('Tayangan rekaman sosialisasi regulasi, materi bimtek, dan video panduan pengadaan', 'Recordings of regulatory socialization, technical training materials, and procurement guide videos')}
@@ -341,64 +336,74 @@ export default function GaleriPage() {
                     >
                       <div 
                         onClick={() => setSelectedVideo(video)}
-                        className="cursor-pointer"
+                        className="cursor-pointer flex-1 flex flex-col"
                       >
-                        {/* Video Thumbnail with Play Button */}
+                        {/* Video Thumbnail with Clean Play Button Overlay */}
                         <div className="relative aspect-video bg-slate-950 overflow-hidden">
                           <Image
                             src={video.thumbnailUrl}
                             alt={video.title}
                             fill
-                            className="object-cover opacity-85 group-hover:opacity-95 group-hover:scale-106 transition-all duration-700"
+                            className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-black/20 to-transparent pointer-events-none" />
                           
-                          {/* Play Icon */}
-                          <div className="absolute inset-0 flex items-center justify-center z-10">
-                            <div className="w-14 h-14 rounded-full bg-red-600 group-hover:bg-red-500 text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-                              <Play className="w-6 h-6 fill-white ml-0.5" />
+                          {/* Play Icon Overlay */}
+                          <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/40 flex items-center justify-center z-10 transition-colors">
+                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl transform scale-95 group-hover:scale-110 transition-transform">
+                              <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-white ml-0.5" />
                             </div>
                           </div>
 
                           {/* Duration Badge */}
-                          <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-black/80 text-white text-[10px] font-mono font-bold border border-white/10 z-10">
-                            {video.duration}
-                          </span>
-
-                          {/* Category Badge */}
-                          <span className="absolute top-3.5 left-3.5 px-3 py-1 rounded-xl bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider border border-white/20 shadow-xs z-10">
-                            {video.category}
-                          </span>
+                          {video.duration && (
+                            <span className="absolute bottom-3 right-3 px-2 py-0.5 rounded-md bg-black/80 text-white text-[10px] font-mono font-bold border border-white/10 z-10">
+                              {video.duration}
+                            </span>
+                          )}
                         </div>
 
-                        {/* Content */}
-                        <div className="p-5 space-y-2">
-                          <div className="flex items-center gap-2 text-[11px] text-slate-400 font-medium">
-                            <span className="flex items-center gap-1 font-semibold text-slate-600">
-                              <Calendar className="w-3.5 h-3.5 text-amber-500" />
-                              {video.date}
-                            </span>
-                            <span>•</span>
-                            <span>{video.views}</span>
+                        {/* Card Body Information - Kategori, Tanggal, Judul & Penjelasan Video */}
+                        <div className="p-5 flex-1 flex flex-col justify-between space-y-3.5">
+                          <div>
+                            {/* Kategori & Tanggal Video */}
+                            <div className="flex items-center justify-between gap-2 mb-2.5">
+                              <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/70">
+                                {video.category}
+                              </span>
+                              <div className="flex items-center gap-2 text-slate-500 font-medium text-xs">
+                                <div className="flex items-center gap-1.5">
+                                  <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                  <span>{video.date}</span>
+                                </div>
+                                {video.views && (
+                                  <>
+                                    <span>•</span>
+                                    <span>{video.views}</span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Judul Video */}
+                            <h3 className="text-slate-900 font-black text-sm sm:text-base leading-snug group-hover:text-amber-700 transition-colors line-clamp-2 mb-2">
+                              {video.title}
+                            </h3>
+
+                            {/* Penjelasan / Deskripsi Video */}
+                            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
+                              {video.desc}
+                            </p>
                           </div>
-
-                          <h3 className="text-sm sm:text-base font-black text-slate-900 group-hover:text-amber-700 transition-colors leading-snug line-clamp-2">
-                            {video.title}
-                          </h3>
-
-                          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                            {video.desc}
-                          </p>
                         </div>
                       </div>
 
                       {/* Card Footer Actions: Play in Website OR Open in YouTube */}
                       <div className="p-5 pt-0 mt-auto">
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
                           <button
                             type="button"
                             onClick={() => setSelectedVideo(video)}
-                            className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 transition-colors cursor-pointer"
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200/80 transition-colors cursor-pointer"
                           >
                             <Play className="w-3.5 h-3.5 fill-current text-amber-600" />
                             <span>{trans('Putar di Web', 'Play on Web')}</span>

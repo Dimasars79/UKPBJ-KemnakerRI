@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Clock } from 'lucide-react';
+import { MapPin, Clock, Video } from 'lucide-react';
 
 interface AgendaCardProps {
   date: string;
@@ -8,10 +8,11 @@ interface AgendaCardProps {
   location: string;
   time: string;
   category?: string;
+  zoomUrl?: string;
   onClick?: () => void;
 }
 
-export function AgendaCard({ date, month, title, location, time, category, onClick }: AgendaCardProps) {
+export function AgendaCard({ date, month, title, location, time, category, zoomUrl, onClick }: AgendaCardProps) {
   return (
     <div 
       onClick={onClick}
@@ -28,11 +29,19 @@ export function AgendaCard({ date, month, title, location, time, category, onCli
       {/* Content wrapper */}
       <div className="ml-3.5 sm:ml-5 flex flex-col justify-between flex-grow min-w-0 h-full">
         <div>
-          {category && (
-            <div className="text-[10px] sm:text-[11px] font-bold text-primary-blue mb-1 uppercase tracking-wider">
-              {category}
-            </div>
-          )}
+          <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+            {category && (
+              <span className="text-[10px] sm:text-[11px] font-bold text-primary-blue uppercase tracking-wider">
+                {category}
+              </span>
+            )}
+            {zoomUrl && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.2 rounded-md bg-blue-50 text-blue-600 border border-blue-200 text-[10px] font-bold">
+                <Video className="w-3 h-3" />
+                <span>Zoom</span>
+              </span>
+            )}
+          </div>
           <h3 
             className="text-sm sm:text-base font-bold text-primary-navy group-hover:text-primary-blue transition-colors line-clamp-2 leading-snug min-h-[38px] sm:min-h-[44px]"
             title={title}

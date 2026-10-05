@@ -765,7 +765,8 @@ export default function AdminPortalPage() {
     capacity: '100 Peserta',
     description: '',
     imageUrl: '',
-    status: 'Terjadwal'
+    status: 'Terjadwal',
+    zoomUrl: ''
   });
 
   // REGULASI & SOP MODAL STATES
@@ -991,7 +992,8 @@ export default function AdminPortalPage() {
       updateAgenda(editingAgenda.id, {
         ...agendaFormData,
         description: agendaFormData.description || '',
-        imageUrl: agendaFormData.imageUrl || ''
+        imageUrl: agendaFormData.imageUrl || '',
+        zoomUrl: agendaFormData.zoomUrl || ''
       });
       showNotification('✓ Agenda berhasil diperbarui dan tersinkronisasi ke Frontend (/agenda)!');
       pushAdminNotification('Agenda Bimtek Diperbarui', `"${agendaFormData.title || 'Agenda PBJ'}" berhasil diperbarui`, 'agenda');
@@ -1007,7 +1009,8 @@ export default function AdminPortalPage() {
         capacity: agendaFormData.capacity || '100 Peserta',
         description: agendaFormData.description || '',
         imageUrl: agendaFormData.imageUrl || '',
-        status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal'
+        status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal',
+        zoomUrl: agendaFormData.zoomUrl || ''
       });
       showNotification('✓ Agenda baru berhasil ditambahkan ke kalender publik (/agenda)!');
       pushAdminNotification('Agenda PBJ Baru Dijadwalkan', `"${agendaFormData.title || 'Agenda Baru'}" pada ${agendaFormData.date || 'jadwal kegiatan'}`, 'agenda');
@@ -4480,7 +4483,8 @@ export default function AdminPortalPage() {
                       capacity: '100 Peserta',
                       description: '',
                       imageUrl: '',
-                      status: 'Terjadwal'
+                      status: 'Terjadwal',
+                      zoomUrl: ''
                     });
                     setShowAgendaModal(true);
                   }}
@@ -4499,9 +4503,17 @@ export default function AdminPortalPage() {
                   isDark ? 'bg-slate-900 border-slate-800 hover:border-emerald-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-emerald-500/40'
                 }`}>
                   <div className="flex justify-between items-start">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${isDark ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-100 text-emerald-800 border-emerald-200'}`}>
-                      {item.category}
-                    </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${isDark ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-100 text-emerald-800 border-emerald-200'}`}>
+                        {item.category}
+                      </span>
+                      {item.zoomUrl && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 flex items-center gap-1">
+                          <Video className="w-3 h-3" />
+                          <span>Zoom Link Aktif</span>
+                        </span>
+                      )}
+                    </div>
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
                       {item.status}
                     </span>
@@ -4518,6 +4530,12 @@ export default function AdminPortalPage() {
                       <MapPin className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                       <span className="truncate">{item.location}</span>
                     </div>
+                    {item.zoomUrl && (
+                      <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                        <Video className="w-3.5 h-3.5 shrink-0" />
+                        <span className="truncate font-mono text-[11px]">{item.zoomUrl}</span>
+                      </div>
+                    )}
                     <div className="flex items-center gap-2">
                       <Users className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                       <span>{item.organizer} ({item.capacity})</span>
@@ -7266,6 +7284,33 @@ export default function AdminPortalPage() {
                       }`}
                     />
                   </div>
+                </div>
+
+                {/* Tautan Link Zoom / Video Conference */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className={`font-bold block flex items-center gap-1.5 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+                      <Video className="w-3.5 h-3.5 text-blue-500" />
+                      <span>Link / Tautan Zoom Meeting (Opsional)</span>
+                    </label>
+                    <span className="text-[10px] font-bold text-blue-500">
+                      Live Video Link
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="url"
+                      placeholder="https://kemnaker.zoom.us/j/... atau https://meet.google.com/..."
+                      value={agendaFormData.zoomUrl || ''}
+                      onChange={(e) => setAgendaFormData({ ...agendaFormData, zoomUrl: e.target.value })}
+                      className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none font-mono ${
+                        isDark ? 'bg-slate-950 border-slate-800 text-blue-400 focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-blue-800 focus:border-emerald-600'
+                      }`}
+                    />
+                  </div>
+                  <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'} mt-1`}>
+                    Jika tautan diisi, tombol langsung <strong>&quot;Gabung Zoom Meeting&quot;</strong> akan otomatis tampil pada pop-up rincian agenda web publik (<Link href="/agenda" className="text-blue-500 underline font-semibold">/agenda</Link>).
+                  </p>
                 </div>
 
                 {/* Deskripsi & Informasi Detail Kegiatan */}
