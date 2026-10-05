@@ -27,6 +27,7 @@ interface SelectedAgendaModalData {
 }
 
 import { parseAgendaDate, isAgendaExpired } from '@/lib/agendaUtils';
+import { getNationalHoliday, isSunday } from '@/lib/nationalHolidays';
 
 export default function AgendaPage() {
   const { t, trans, language } = useLanguage();
@@ -217,177 +218,227 @@ export default function AgendaPage() {
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-12 mb-12 sm:mb-16">
           <SectionHeading title={trans("Kalender Kegiatan Interaktif", "Interactive Events Calendar")} subtitle={trans("Pilih tanggal untuk melihat jadwal khusus pada hari tersebut", "Select a date to view special schedules for that day")} />
           
-          {/* Single Fully Seamless Blue & White Gradient Calendar Widget Container */}
-          <div className="mt-6 sm:mt-8 rounded-2xl sm:rounded-3xl shadow-xl shadow-blue-900/5 border border-blue-200/70 bg-gradient-to-r from-blue-50 via-sky-50/60 to-white relative overflow-hidden flex flex-col lg:flex-row ring-1 ring-blue-500/10 backdrop-blur-xl">
-            {/* Unified Smooth Ambient Gradients flowing across whole card */}
-            <div className="absolute -top-32 -left-32 w-[30rem] h-[30rem] bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-32 -right-32 w-[30rem] h-[30rem] bg-sky-400/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-br from-blue-400/10 via-transparent to-sky-300/10 rounded-full blur-2xl pointer-events-none" />
-
-            {/* Left: Calendar Grid */}
-            <div className="w-full lg:w-1/2 p-5 sm:p-7 md:p-9 relative z-10">
-              <div>
-                <div className="flex justify-between items-center mb-4 sm:mb-6">
-                  <h3 className="text-base sm:text-xl font-black text-primary-navy tracking-tight">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h3>
-                  <div className="flex items-center space-x-1.5 sm:space-x-2">
-                    <button 
-                      onClick={goToToday}
-                      title={trans("Kembali ke hari ini", "Back to today")}
-                      className="px-2.5 py-1 text-[11px] sm:text-xs font-bold rounded-lg bg-white/80 hover:bg-white border border-blue-200/70 text-primary-blue hover:border-blue-400 transition-all shadow-xs cursor-pointer backdrop-blur-xs"
-                    >
-                      {trans('Hari Ini', 'Today')}
-                    </button>
-                    <button onClick={prevMonth} aria-label={trans("Bulan sebelumnya", "Previous month")} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/80 border border-blue-100 flex items-center justify-center hover:bg-white hover:text-primary-blue hover:border-blue-300 transition-all shadow-xs cursor-pointer">
-                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
-                    </button>
-                    <button onClick={nextMonth} aria-label={trans("Bulan berikutnya", "Next month")} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/80 border border-blue-100 flex items-center justify-center hover:bg-white hover:text-primary-blue hover:border-blue-300 transition-all shadow-xs cursor-pointer">
-                      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
-                    </button>
+          {/* Elegant Gold & Black Frame Border Calendar Widget Container */}
+          <div className="mt-6 sm:mt-8 p-[2px] rounded-2xl sm:rounded-3xl bg-gradient-to-r from-slate-950 via-amber-400 to-slate-950 shadow-xl shadow-slate-950/10">
+            <div className="rounded-[calc(1rem-1px)] sm:rounded-[calc(1.5rem-2px)] bg-white relative overflow-hidden flex flex-col lg:flex-row">
+              {/* Left: Calendar Grid */}
+              <div className="w-full lg:w-1/2 p-5 sm:p-7 md:p-9 relative z-10 bg-white">
+                <div>
+                  <div className="flex justify-between items-center mb-4 sm:mb-6">
+                    <h3 className="text-base sm:text-xl font-black text-slate-950 tracking-tight">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h3>
+                    <div className="flex items-center space-x-1.5 sm:space-x-2">
+                      <button 
+                        onClick={goToToday}
+                        title={trans("Kembali ke hari ini", "Back to today")}
+                        className="px-2.5 py-1 text-[11px] sm:text-xs font-bold rounded-lg bg-slate-950 hover:bg-slate-900 text-amber-300 hover:text-amber-200 border border-amber-400/50 transition-all shadow-xs cursor-pointer"
+                      >
+                        {trans('Hari Ini', 'Today')}
+                      </button>
+                      <button onClick={prevMonth} aria-label={trans("Bulan sebelumnya", "Previous month")} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center hover:bg-slate-950 hover:text-white hover:border-slate-950 transition-all shadow-xs cursor-pointer">
+                        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
+                      </button>
+                      <button onClick={nextMonth} aria-label={trans("Bulan berikutnya", "Next month")} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center hover:bg-slate-950 hover:text-white hover:border-slate-950 transition-all shadow-xs cursor-pointer">
+                        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <div className="grid grid-cols-7 gap-1.5 sm:gap-2 text-center mb-2">
-                  {[
-                    trans('Min', 'Sun'),
-                    trans('Sen', 'Mon'),
-                    trans('Sel', 'Tue'),
-                    trans('Rab', 'Wed'),
-                    trans('Kam', 'Thu'),
-                    trans('Jum', 'Fri'),
-                    trans('Sab', 'Sat')
-                  ].map((day, idx) => (
-                    <div key={idx} className="text-[10px] sm:text-xs font-bold text-blue-900/60 py-1 sm:py-2 uppercase tracking-wider">{day}</div>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
-                  {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                    <div key={`empty-${i}`} className="h-8 sm:h-10 md:h-12" />
-                  ))}
-                  {Array.from({ length: daysInMonth }).map((_, i) => {
-                    const day = i + 1;
-                    const hasActivity = activities[day] && activities[day].length > 0;
-                    const isSelected = selectedDate === day;
-                    const isToday = currentYear === todayYear && currentMonth === todayMonth && day === todayDate;
-
-                    return (
-                      <button
-                        key={day}
-                        onClick={() => setSelectedDate(day)}
-                        className={`h-8 sm:h-10 md:h-12 rounded-lg sm:rounded-xl flex flex-col items-center justify-center relative transition-all duration-300 text-xs sm:text-sm cursor-pointer ${
-                          isSelected 
-                            ? 'bg-gradient-to-r from-primary-blue via-blue-600 to-[#0A326E] text-white shadow-lg shadow-blue-600/35 font-bold scale-105 sm:scale-110 z-10 ring-2 ring-blue-300' 
-                            : isToday
-                            ? 'bg-blue-100/90 text-primary-blue font-black border-2 border-primary-blue hover:bg-blue-200/60 shadow-xs'
-                            : 'bg-white/60 hover:bg-white text-slate-800 font-semibold border border-blue-100/60 hover:border-blue-300 hover:text-primary-blue hover:shadow-xs backdrop-blur-xs'
+                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2 text-center mb-2">
+                    {[
+                      trans('Min', 'Sun'),
+                      trans('Sen', 'Mon'),
+                      trans('Sel', 'Tue'),
+                      trans('Rab', 'Wed'),
+                      trans('Kam', 'Thu'),
+                      trans('Jum', 'Fri'),
+                      trans('Sab', 'Sat')
+                    ].map((day, idx) => (
+                      <div 
+                        key={idx} 
+                        className={`text-[10px] sm:text-xs font-bold py-1 sm:py-2 uppercase tracking-wider ${
+                          idx === 0 ? 'text-rose-600 font-black' : 'text-slate-400'
                         }`}
                       >
-                        <span>
-                          {day}
-                        </span>
-                        {hasActivity && (
-                          <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full absolute bottom-1 sm:bottom-1.5 ${isSelected ? 'bg-white' : isToday ? 'bg-primary-blue' : 'bg-cyan-500'}`} />
-                        )}
-                      </button>
-                    );
-                  })}
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+                    {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+                      <div key={`empty-${i}`} className="h-8 sm:h-10 md:h-12" />
+                    ))}
+                    {Array.from({ length: daysInMonth }).map((_, i) => {
+                      const day = i + 1;
+                      const hasActivity = activities[day] && activities[day].length > 0;
+                      const isSelected = selectedDate === day;
+                      const isToday = currentYear === todayYear && currentMonth === todayMonth && day === todayDate;
+                      const holiday = getNationalHoliday(currentYear, currentMonth, day);
+                      const isSun = isSunday(currentYear, currentMonth, day);
+                      const isRedDay = isSun || Boolean(holiday);
+
+                      return (
+                        <button
+                          key={day}
+                          onClick={() => setSelectedDate(day)}
+                          title={holiday ? (language === 'en' ? holiday.nameEn : holiday.name) : undefined}
+                          className={`h-8 sm:h-10 md:h-12 rounded-lg sm:rounded-xl flex flex-col items-center justify-center relative transition-all duration-300 text-xs sm:text-sm cursor-pointer ${
+                            isSelected 
+                              ? 'bg-slate-950 text-amber-300 shadow-lg shadow-slate-950/25 font-black scale-105 sm:scale-110 z-10 ring-2 ring-amber-400 border border-amber-400' 
+                              : isToday
+                              ? `bg-amber-50 ${isRedDay ? 'text-rose-600' : 'text-slate-950'} font-black border-2 border-amber-500 hover:bg-amber-100 shadow-xs`
+                              : isRedDay
+                              ? 'bg-rose-50/60 hover:bg-rose-50 text-rose-600 font-bold border border-rose-200/80 hover:border-rose-400 hover:shadow-xs'
+                              : 'bg-slate-50/80 hover:bg-white text-slate-800 font-semibold border border-slate-200/80 hover:border-slate-400 hover:text-slate-950 hover:shadow-xs'
+                          }`}
+                        >
+                          <span>
+                            {day}
+                          </span>
+                          <div className="flex items-center gap-0.5 sm:gap-1 absolute bottom-1 sm:bottom-1.5">
+                            {holiday && (
+                              <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isSelected ? 'bg-rose-400 ring-1 ring-white' : 'bg-rose-500'}`} />
+                            )}
+                            {hasActivity && (
+                              <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isSelected ? 'bg-amber-300 ring-1 ring-white' : isToday ? 'bg-amber-600' : 'bg-amber-500'}`} />
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Calendar Legend Bar */}
+                  <div className="mt-4 pt-3.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 font-medium">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-rose-500 inline-block shrink-0" />
+                      <span>{trans('Libur Nasional / Min', 'National Holiday / Sun')}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-500 inline-block shrink-0" />
+                      <span>{trans('Agenda PBJ', 'PBJ Event')}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-xs border border-slate-300 bg-slate-100 inline-block shrink-0" />
+                      <span>{trans('Hari Kerja', 'Workday')}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Seamless Soft Divider (Fades at top and bottom, no hard borders) */}
-            <div className="hidden lg:flex items-center justify-center relative z-10">
-              <div className="w-[1px] h-4/5 bg-gradient-to-b from-transparent via-blue-300/40 to-transparent" />
-            </div>
-            <div className="block lg:hidden px-6 relative z-10">
-              <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-blue-300/40 to-transparent" />
-            </div>
+              {/* Clean Vertical Divider */}
+              <div className="hidden lg:flex items-center justify-center relative z-10">
+                <div className="w-[1px] h-4/5 bg-slate-200" />
+              </div>
+              <div className="block lg:hidden px-6 relative z-10">
+                <div className="h-[1px] w-full bg-slate-200" />
+              </div>
 
-            {/* Right: Activity Details */}
-            <div className="w-full lg:w-1/2 p-5 sm:p-7 md:p-9 relative z-10 flex flex-col justify-between">
-              <div className="flex-1 flex flex-col">
-                <div className="flex items-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 to-primary-blue flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-500/20 text-white">
-                    <CalendarIcon className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
+              {/* Right: Activity Details */}
+              <div className="w-full lg:w-1/2 p-5 sm:p-7 md:p-9 relative z-10 flex flex-col justify-between bg-slate-50/30">
+                <div className="flex-1 flex flex-col">
+                  <div className="flex items-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-slate-950 text-amber-400 border border-amber-400/30 flex items-center justify-center flex-shrink-0 shadow-md shadow-slate-950/20">
+                      <CalendarIcon className="w-5 h-5 sm:w-7 sm:h-7 text-amber-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs sm:text-sm text-slate-400 font-bold uppercase tracking-wider">{trans('Jadwal pada tanggal', 'Schedule on date')}</p>
+                      <h3 className="text-lg sm:text-2xl font-black text-slate-950 tracking-tight">
+                        {selectedDate ? `${selectedDate} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}` : trans('Pilih Tanggal', 'Select Date')}
+                      </h3>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs sm:text-sm text-blue-900/60 font-bold uppercase tracking-wider">{trans('Jadwal pada tanggal', 'Schedule on date')}</p>
-                    <h3 className="text-lg sm:text-2xl font-black text-primary-navy tracking-tight">
-                      {selectedDate ? `${selectedDate} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}` : trans('Pilih Tanggal', 'Select Date')}
-                    </h3>
-                  </div>
-                </div>
 
-                <div className="relative min-h-[200px] sm:min-h-[250px] flex-1">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={`${currentDate.getFullYear()}-${currentDate.getMonth()}-${selectedDate}`}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.3 }}
-                      className="space-y-3 sm:space-y-4"
-                    >
-                      {selectedDate && activities[selectedDate] && activities[selectedDate].length > 0 ? (
-                        activities[selectedDate].map(activity => (
-                          <div 
-                            key={activity.id} 
-                            onClick={() => setSelectedAgendaModal(activity)}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedAgendaModal(activity); }}
-                            className="p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-blue-100/70 bg-white/75 hover:bg-white hover:shadow-lg hover:border-primary-blue/40 transition-all group border-l-4 border-l-primary-blue cursor-pointer text-left backdrop-blur-sm shadow-xs"
-                          >
-                            <div className="flex items-start justify-between gap-2 mb-1.5 sm:mb-2">
-                              <h4 className="font-bold text-primary-navy group-hover:text-primary-blue transition-colors text-sm sm:text-lg leading-snug">{activity.title}</h4>
-                              <div className="flex items-center gap-1.5 shrink-0">
-                                {activity.category && (
-                                  <span className="shrink-0 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full bg-blue-50 text-primary-blue border border-blue-200/60 text-[10px] sm:text-xs font-bold">
-                                    {activity.category}
-                                  </span>
-                                )}
-                                {activity.zoomUrl && (
-                                  <span className="shrink-0 px-2 py-0.5 rounded-full bg-blue-100/90 text-blue-700 border border-blue-300/60 text-[10px] sm:text-xs font-bold flex items-center gap-1">
-                                    <Video className="w-3 h-3" />
-                                    <span>Zoom</span>
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-6 text-xs sm:text-sm text-slate-500 font-medium mt-2 sm:mt-3">
-                              <div className="flex items-center">
-                                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary-blue/60 shrink-0" />
-                                {activity.time}
-                              </div>
-                              <div className="flex items-center">
-                                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary-blue/60 shrink-0" />
-                                <span className="truncate">{activity.location}</span>
-                              </div>
-                            </div>
-                            <div className="mt-2.5 pt-2.5 sm:mt-3 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs font-bold text-primary-blue">
-                              <span>{trans('Klik untuk detail kegiatan', 'Click for activity details')}</span>
-                              <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-                            </div>
+                  {/* Selected Date National Holiday Banner */}
+                  {selectedDate && (() => {
+                    const selectedHoliday = getNationalHoliday(currentYear, currentMonth, selectedDate);
+                    if (!selectedHoliday) return null;
+                    return (
+                      <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-rose-50 to-amber-50/40 border border-rose-200/90 text-rose-900 shadow-xs flex items-start gap-3 mb-4">
+                        <span className="text-xl sm:text-2xl select-none leading-none mt-0.5">🇮🇩</span>
+                        <div className="flex-1">
+                          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                            <span>{trans('Hari Libur Nasional', 'National Holiday')}</span>
                           </div>
-                        ))
-                      ) : (
-                        <div className="h-full py-8 sm:py-12 flex flex-col items-center justify-center text-slate-400 space-y-3 sm:space-y-4 bg-white/60 rounded-2xl border border-dashed border-blue-200/70 p-4">
-                          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-blue-50/80 border border-blue-100 flex items-center justify-center">
-                            <CalendarIcon className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue/50" />
-                          </div>
-                          <p className="font-medium text-xs sm:text-sm text-center px-4 text-slate-500">
-                            {selectedDate 
-                              ? trans(
-                                  `Tidak ada kegiatan pada ${selectedDate} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}.`,
-                                  `No activities scheduled on ${selectedDate} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}.`
-                                )
-                              : trans('Pilih tanggal pada kalender untuk melihat rincian kegiatan.', 'Select a date on the calendar to view activity details.')
-                            }
-                          </p>
+                          <h4 className="font-bold text-rose-950 text-sm sm:text-base mt-1">
+                            {language === 'en' ? selectedHoliday.nameEn : selectedHoliday.name}
+                          </h4>
                         </div>
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
+                      </div>
+                    );
+                  })()}
+
+                  <div className="relative min-h-[200px] sm:min-h-[250px] flex-1">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${currentDate.getFullYear()}-${currentDate.getMonth()}-${selectedDate}`}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="space-y-3 sm:space-y-4"
+                      >
+                        {selectedDate && activities[selectedDate] && activities[selectedDate].length > 0 ? (
+                          activities[selectedDate].map(activity => (
+                            <div 
+                              key={activity.id} 
+                              onClick={() => setSelectedAgendaModal(activity)}
+                              role="button"
+                              tabIndex={0}
+                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedAgendaModal(activity); }}
+                              className="p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200/90 bg-white hover:bg-white hover:shadow-lg hover:border-amber-400 transition-all group border-l-4 border-l-slate-950 cursor-pointer text-left shadow-xs"
+                            >
+                              <div className="flex items-start justify-between gap-2 mb-1.5 sm:mb-2">
+                                <h4 className="font-bold text-slate-950 group-hover:text-primary-blue transition-colors text-sm sm:text-lg leading-snug">{activity.title}</h4>
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                  {activity.category && (
+                                    <span className="shrink-0 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200 text-[10px] sm:text-xs font-bold">
+                                      {activity.category}
+                                    </span>
+                                  )}
+                                  {activity.zoomUrl && (
+                                    <span className="shrink-0 px-2 py-0.5 rounded-full bg-blue-100/90 text-blue-700 border border-blue-300/60 text-[10px] sm:text-xs font-bold flex items-center gap-1">
+                                      <Video className="w-3 h-3" />
+                                      <span>Zoom</span>
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-6 text-xs sm:text-sm text-slate-500 font-medium mt-2 sm:mt-3">
+                                <div className="flex items-center">
+                                  <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-slate-400 shrink-0" />
+                                  {activity.time}
+                                </div>
+                                <div className="flex items-center">
+                                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-slate-400 shrink-0" />
+                                  <span className="truncate">{activity.location}</span>
+                                </div>
+                              </div>
+                              <div className="mt-2.5 pt-2.5 sm:mt-3 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs font-bold text-slate-900 group-hover:text-primary-blue">
+                                <span>{trans('Klik untuk detail kegiatan', 'Click for activity details')}</span>
+                                <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="h-full py-8 sm:py-12 flex flex-col items-center justify-center text-slate-400 space-y-3 sm:space-y-4 bg-white rounded-2xl border border-dashed border-slate-200 p-4">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center">
+                              <CalendarIcon className="w-6 h-6 sm:w-8 sm:h-8 text-slate-400" />
+                            </div>
+                            <p className="font-medium text-xs sm:text-sm text-center px-4 text-slate-500">
+                              {selectedDate 
+                                ? trans(
+                                    `Tidak ada kegiatan PBJ internal pada ${selectedDate} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}.`,
+                                    `No internal PBJ activities scheduled on ${selectedDate} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}.`
+                                  )
+                                : trans('Pilih tanggal pada kalender untuk melihat rincian kegiatan.', 'Select a date on the calendar to view activity details.')
+                              }
+                            </p>
+                          </div>
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
             </div>
