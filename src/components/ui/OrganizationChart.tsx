@@ -291,7 +291,7 @@ export const OrganizationChart = () => {
         'Organize training and competency examinations.',
         'Monitor functional procurement career advancement.'
       ],
-      icon: <GraduationCap className="w-4 h-4 text-amber-600" />,
+      icon: <GraduationCap className="w-4.5 h-4.5 text-amber-600" />,
       theme: {
         cardBg: 'bg-white text-slate-800',
         border: 'border-amber-200 hover:border-amber-400',
@@ -300,7 +300,7 @@ export const OrganizationChart = () => {
         iconColor: 'text-amber-600',
         badgeBg: 'bg-amber-50',
         badgeText: 'text-amber-700 border border-amber-200',
-        hoverShadow: 'hover:shadow-md hover:shadow-amber-500/10'
+        hoverShadow: 'hover:shadow-md hover:shadow-amber-500/15'
       }
     },
     kelembagaan: {
@@ -323,7 +323,7 @@ export const OrganizationChart = () => {
         'Fulfill LKPP institutional maturity standards.',
         'Evaluate governance effectiveness across work units.'
       ],
-      icon: <Building2 className="w-4 h-4 text-amber-600" />,
+      icon: <Building2 className="w-4.5 h-4.5 text-amber-600" />,
       theme: {
         cardBg: 'bg-white text-slate-800',
         border: 'border-amber-200 hover:border-amber-400',
@@ -332,7 +332,7 @@ export const OrganizationChart = () => {
         iconColor: 'text-amber-600',
         badgeBg: 'bg-amber-50',
         badgeText: 'text-amber-700 border border-amber-200',
-        hoverShadow: 'hover:shadow-md hover:shadow-amber-500/10'
+        hoverShadow: 'hover:shadow-md hover:shadow-amber-500/15'
       }
     },
     spse: {
@@ -369,30 +369,30 @@ export const OrganizationChart = () => {
     }
   };
 
-  const renderCard = (node: NodeItem, isMini = false) => {
+  const renderCard = (node: NodeItem) => {
     return (
       <motion.div
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => setSelectedNode(node)}
-        className={`cursor-pointer rounded-2xl ${node.theme.cardBg} border ${node.theme.border} ${node.theme.hoverShadow} shadow-2xs transition-all duration-200 relative group overflow-hidden flex flex-col justify-between w-full ${isMini ? 'p-3' : 'p-3.5 sm:p-4'}`}
+        className={`cursor-pointer rounded-2xl ${node.theme.cardBg} border ${node.theme.border} ${node.theme.hoverShadow} shadow-2xs transition-all duration-200 relative group overflow-hidden flex flex-col justify-between w-full p-3.5 sm:p-4`}
       >
         {/* Top Accent Strip */}
         <div className={`absolute top-0 left-0 right-0 h-1 ${node.theme.accentBar}`} />
 
         <div className="flex items-center gap-3 pt-1">
           {/* Icon */}
-          <div className={`rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105 ${isMini ? 'w-8 h-8' : 'w-10 h-10'} ${node.theme.iconBg}`}>
+          <div className={`rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105 w-10 h-10 ${node.theme.iconBg}`}>
             {node.icon}
           </div>
 
           {/* Texts */}
           <div className="flex-1 min-w-0">
-            <h4 className={`font-bold text-slate-800 leading-tight group-hover:text-primary-blue transition-colors truncate ${isMini ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+            <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug group-hover:text-primary-blue transition-colors">
               {trans(node.titleId, node.titleEn)}
             </h4>
             {node.subtitleId && (
-              <p className={`text-slate-500 font-normal leading-snug mt-0.5 truncate ${isMini ? 'text-[10px]' : 'text-[11px]'}`}>
+              <p className="text-[11px] text-slate-500 font-normal leading-tight mt-0.5">
                 {trans(node.subtitleId, node.subtitleEn)}
               </p>
             )}
@@ -403,6 +403,31 @@ export const OrganizationChart = () => {
             <Info className="w-3.5 h-3.5" />
           </div>
         </div>
+      </motion.div>
+    );
+  };
+
+  // Saran 1: Centered Vertical Minimalist Stack for SDM & Kelembagaan Sub-Cards
+  const renderSubCard = (node: NodeItem) => {
+    return (
+      <motion.div
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => setSelectedNode(node)}
+        className={`cursor-pointer rounded-2xl ${node.theme.cardBg} border ${node.theme.border} ${node.theme.hoverShadow} shadow-2xs transition-all duration-200 relative group overflow-hidden flex flex-col items-center justify-center text-center p-3 sm:py-3.5 w-full`}
+      >
+        {/* Top Accent Strip */}
+        <div className={`absolute top-0 left-0 right-0 h-1 ${node.theme.accentBar}`} />
+
+        {/* Centered Icon */}
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-1.5 transition-transform duration-200 group-hover:scale-105 ${node.theme.iconBg}`}>
+          {node.icon}
+        </div>
+
+        {/* Centered Title (100% visible, fully spelled out, no ellipsis) */}
+        <h5 className="font-bold text-xs text-slate-800 leading-tight group-hover:text-primary-blue transition-colors">
+          {trans(node.titleId, node.titleEn)}
+        </h5>
       </motion.div>
     );
   };
@@ -422,7 +447,7 @@ export const OrganizationChart = () => {
 
       {/* Flowchart Tree Canvas with ample horizontal breathing room */}
       <div className="w-full overflow-x-auto pb-6 pt-1">
-        <div className="min-w-[960px] max-w-5xl mx-auto flex flex-col items-center px-4">
+        <div className="min-w-[980px] max-w-5xl mx-auto flex flex-col items-center px-4">
           
           {/* ============================================================ */}
           {/* LEVEL 1: KEPALA UKPBJ                                        */}
@@ -581,13 +606,13 @@ export const OrganizationChart = () => {
                 </div>
               </div>
 
-              {/* Sub-cards: SDM & Kelembagaan (Stacked or compact horizontal) */}
+              {/* Sub-cards: SDM & Kelembagaan (Centered Vertical Minimalist Stack - 100% visible text) */}
               <div className="grid grid-cols-2 gap-2 w-full mt-0.5">
                 <div className="w-full">
-                  {renderCard(nodes.sdm, true)}
+                  {renderSubCard(nodes.sdm)}
                 </div>
                 <div className="w-full">
-                  {renderCard(nodes.kelembagaan, true)}
+                  {renderSubCard(nodes.kelembagaan)}
                 </div>
               </div>
             </div>
