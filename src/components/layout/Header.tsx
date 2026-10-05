@@ -17,6 +17,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
 import { SearchPalette } from '@/components/ui/SearchPalette';
 import { useData } from '@/contexts/DataContext';
+import { parseAgendaDate } from '@/lib/agendaUtils';
 
 export function Header() {
   const { newsList, agendaList, packagesList, regulasiList, sopList, siteSettings } = useData();
@@ -58,7 +59,16 @@ export function Header() {
     }
   }, []);
 
-  // Top Dynamic CMS Notifications: Paket Pengadaan PBJ, Berita/Pengumuman, Agenda/Jadwal, Regulasi/Aturan, dan Standar SOP
+  // Helper to calculate numeric timestamp for sorting updates (prioritizing updatedAt)
+  const getUpdateTimestamp = (updatedAt?: number, listIndex: number = 0): number => {
+    if (updatedAt && typeof updatedAt === 'number') {
+      return updatedAt;
+    }
+    // Fallback based on array position (earlier elements are newer)
+    return Date.now() - 1000000000 - listIndex * 3600000;
+  };
+
+  // Top Dynamic CMS Notifications: Sorted by Newest Update First
   const cmsNotifications = React.useMemo(() => {
     const list: Array<{
       id: string;
@@ -71,6 +81,7 @@ export function Header() {
       iconBg: string;
       iconColor: string;
       icon: React.ReactNode;
+      timestamp: number;
     }> = [];
 
     // 1. Pengumuman Resmi (Banner Aktif)
@@ -85,36 +96,16 @@ export function Header() {
         badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
         iconBg: 'bg-amber-100',
         iconColor: 'text-amber-600',
-        icon: <AlertTriangle className="w-4 h-4" />
+        icon: <AlertTriangle className="w-4 h-4" />,
+        timestamp: siteSettings.updatedAt || Date.now()
       });
     }
 
-    // 2. Paket Pengadaan PBJ Terbaru (Tender, Seleksi, E-Purchasing)
-    if (packagesList && packagesList.length > 0) {
-      packagesList
-        .slice(0, 3)
-        .forEach((pkg) => {
-          list.push({
-            id: `pkg-${pkg.id}`,
-            category: pkg.category === 'Tender' ? 'Tender PBJ' : `${pkg.category}`,
-            title: `${pkg.code}: ${pkg.title}`,
-            desc: `Nilai HPS: ${pkg.hps} • ${pkg.unit}`,
-            time: `Batas: ${pkg.deadline}`,
-            href: '/#pengadaan',
-            badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-            iconBg: 'bg-indigo-100',
-            iconColor: 'text-indigo-600',
-            icon: <Package className="w-4 h-4" />
-          });
-        });
-    }
-
-    // 3. Berita & Warta Terbit
+    // 2. Berita & Warta Terbit
     if (newsList && newsList.length > 0) {
       newsList
         .filter((n) => n.status === 'Published')
-        .slice(0, 2)
-        .forEach((news) => {
+        .forEach((news, idx) => {
           list.push({
             id: `news-${news.id}`,
             category: news.category || 'Berita & Pengumuman',
@@ -125,7 +116,28 @@ export function Header() {
             badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
             iconBg: 'bg-blue-100',
             iconColor: 'text-blue-600',
-            icon: <FileText className="w-4 h-4" />
+            icon: <FileText className="w-4 h-4" />,
+            timestamp: getUpdateTimestamp(news.updatedAt, idx)
+          });
+        });
+    }
+
+    // 3. Paket Pengadaan PBJ Terbaru (Tender, Seleksi, E-Purchasing)
+    if (packagesList && packagesList.length > 0) {
+      packagesList
+        .forEach((pkg, idx) => {
+          list.push({
+            id: `pkg-${pkg.id}`,
+            category: pkg.category === 'Tender' ? 'Tender PBJ' : `${pkg.category}`,
+            title: `${pkg.code}: ${pkg.title}`,
+            desc: `Nilai HPS: ${pkg.hps} • ${pkg.unit}`,
+            time: `Batas: ${pkg.deadline}`,
+            href: '/#pengadaan',
+            badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+            iconBg: 'bg-indigo-100',
+            iconColor: 'text-indigo-600',
+            icon: <Package className="w-4 h-4" />,
+            timestamp: getUpdateTimestamp(pkg.updatedAt, idx)
           });
         });
     }
@@ -134,8 +146,7 @@ export function Header() {
     if (agendaList && agendaList.length > 0) {
       agendaList
         .filter((a) => a.status !== 'Dibatalkan')
-        .slice(0, 2)
-        .forEach((agenda) => {
+        .forEach((agenda, idx) => {
           list.push({
             id: `agenda-${agenda.id}`,
             category: `Agenda ${agenda.category}`,
@@ -146,7 +157,8 @@ export function Header() {
             badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
             iconBg: 'bg-emerald-100',
             iconColor: 'text-emerald-600',
-            icon: <Calendar className="w-4 h-4" />
+            icon: <Calendar className="w-4 h-4" />,
+            timestamp: getUpdateTimestamp(agenda.updatedAt, idx)
           });
         });
     }
@@ -155,8 +167,7 @@ export function Header() {
     if (regulasiList && regulasiList.length > 0) {
       regulasiList
         .filter((r) => r.status === 'Aktif')
-        .slice(0, 2)
-        .forEach((reg) => {
+        .forEach((reg, idx) => {
           list.push({
             id: `reg-${reg.id}`,
             category: reg.kategori || 'Regulasi JDIH',
@@ -167,7 +178,8 @@ export function Header() {
             badgeClass: 'bg-purple-50 text-purple-700 border-purple-200',
             iconBg: 'bg-purple-100',
             iconColor: 'text-purple-600',
-            icon: <Scale className="w-4 h-4" />
+            icon: <Scale className="w-4 h-4" />,
+            timestamp: getUpdateTimestamp(reg.updatedAt, idx)
           });
         });
     }
@@ -176,8 +188,7 @@ export function Header() {
     if (sopList && sopList.length > 0) {
       sopList
         .filter((s) => s.status === 'Berlaku')
-        .slice(0, 1)
-        .forEach((sop) => {
+        .forEach((sop, idx) => {
           list.push({
             id: `sop-${sop.id}`,
             category: 'Standar SOP',
@@ -188,12 +199,16 @@ export function Header() {
             badgeClass: 'bg-teal-50 text-teal-700 border-teal-200',
             iconBg: 'bg-teal-100',
             iconColor: 'text-teal-600',
-            icon: <FileCheck className="w-4 h-4" />
+            icon: <FileCheck className="w-4 h-4" />,
+            timestamp: getUpdateTimestamp(sop.updatedAt, idx)
           });
         });
     }
 
-    // Ambil data CMS teratas
+    // Sort strictly descending by timestamp so newest updates appear at the very top
+    list.sort((a, b) => b.timestamp - a.timestamp);
+
+    // Ambil data CMS teratas (7 terupdate)
     return list.slice(0, 7);
   }, [packagesList, newsList, agendaList, regulasiList, sopList, siteSettings]);
 

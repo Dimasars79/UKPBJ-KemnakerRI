@@ -65,10 +65,21 @@ const parseItemDate = (dateStr?: string): Date | null => {
 export default function InformasiPage() {
   const { newsList, agendaList, regulasiList, packagesList, siteSettings, lastUpdated } = useData();
   const { trans } = useLanguage();
+  const [isMounted, setIsMounted] = React.useState(false);
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const publishedNews = newsList.filter(n => n.status === 'Published');
 
   // Format tanggal & jam terakhir diperbarui secara dinamis mengikuti timestamp CMS
   const lastUpdatedFormatted = React.useMemo(() => {
+    if (!isMounted) {
+      return {
+        id: 'Terakhir diperbarui: Sinkronisasi data...',
+        en: 'Last updated: Syncing data...'
+      };
+    }
     const targetDate = lastUpdated ? new Date(lastUpdated) : new Date();
     const validDate = isNaN(targetDate.getTime()) ? new Date() : targetDate;
 
@@ -92,7 +103,7 @@ export default function InformasiPage() {
       id: `Terakhir diperbarui: ${day} ${monthId} ${year}, ${hours}:${minutes} WIB`,
       en: `Last updated: ${monthEn} ${day}, ${year}, ${hours}:${minutes} WIB`
     };
-  }, [lastUpdated]);
+  }, [lastUpdated, isMounted]);
   
   const recentUpdates = React.useMemo(() => {
     const list: Array<{
@@ -245,9 +256,6 @@ export default function InformasiPage() {
                       {recentUpdates.length}
                     </span>
                   </div>
-                  <Link href="/berita" className="text-xs sm:text-sm text-slate-300 hover:text-accent-gold flex items-center transition-colors font-semibold">
-                    {trans('Lihat Semua', 'View All')} <ChevronRight className="w-4 h-4 ml-1" />
-                  </Link>
                 </div>
 
                 <div className="flex-grow flex flex-col justify-center">
@@ -406,7 +414,7 @@ export default function InformasiPage() {
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs sm:text-sm font-bold text-primary-navy">
+                  <p className="text-xs sm:text-sm font-bold text-primary-navy" suppressHydrationWarning>
                     {trans(lastUpdatedFormatted.id, lastUpdatedFormatted.en)}
                   </p>
                 </div>

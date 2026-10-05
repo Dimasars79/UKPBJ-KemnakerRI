@@ -18,6 +18,7 @@ export interface NewsItem {
   noticeTitle?: string;
   noticeContent?: string;
   tags?: string[];
+  updatedAt?: number;
 }
 
 export interface AgendaItem {
@@ -34,6 +35,7 @@ export interface AgendaItem {
   description?: string;
   syncFrontend: boolean;
   zoomUrl?: string;
+  updatedAt?: number;
 }
 
 export interface PackageDocument {
@@ -62,6 +64,7 @@ export interface ProcurementPackage {
   fileData?: string;
   downloadUrl?: string;
   documents?: PackageDocument[];
+  updatedAt?: number;
 }
 
 export interface RegulasiItem {
@@ -76,6 +79,7 @@ export interface RegulasiItem {
   downloadUrl?: string;
   status: 'Aktif' | 'Draft' | 'Dicabut';
   syncFrontend: boolean;
+  updatedAt?: number;
 }
 
 export interface SopItem {
@@ -93,6 +97,7 @@ export interface SopItem {
   deskripsi?: string;
   status: 'Berlaku' | 'Dalam Revisi' | 'Draft';
   syncFrontend: boolean;
+  updatedAt?: number;
 }
 
 export interface PanduanItem {
@@ -117,6 +122,7 @@ export interface PanduanItem {
   persyaratan?: string;
   langkahKerja?: string;
   layananKontak?: string;
+  updatedAt?: number;
 }
 
 export interface PhotoItem {
@@ -128,6 +134,7 @@ export interface PhotoItem {
   date: string;
   size?: 'large' | 'small';
   syncFrontend: boolean;
+  updatedAt?: number;
 }
 
 export interface VideoMediaItem {
@@ -141,6 +148,7 @@ export interface VideoMediaItem {
   thumbnailUrl: string;
   url: string;
   syncFrontend: boolean;
+  updatedAt?: number;
 }
 
 export interface SiteSettings {
@@ -148,6 +156,7 @@ export interface SiteSettings {
   announcementActive: boolean;
   serverStatus: 'Normal' | 'Maintenance' | 'High Traffic';
   emergencyNotice: string;
+  updatedAt?: number;
 }
 
 interface DataContextType {
@@ -1313,10 +1322,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       syncFrontend: news.status === 'Published',
       noticeTitle: news.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI',
       noticeContent: news.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
-      tags: news.tags || ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker']
+      tags: news.tags || ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker'],
+      updatedAt: Date.now()
     };
 
-    const updated = [newEntry, ...newsList];
+    const updated = [newEntry, ...newsList.filter((n) => n.id !== tempId)];
     setNewsList(updated);
     persist(updated);
 
@@ -1342,14 +1352,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateNews = async (id: string, updated: Partial<NewsItem>) => {
-    const updatedList = newsList.map((item) => {
-      if (item.id === id) {
-        const next = { ...item, ...updated };
-        next.syncFrontend = next.status === 'Published';
-        return next;
-      }
-      return item;
-    });
+    const target = newsList.find((item) => item.id === id);
+    const next: NewsItem = {
+      ...(target || ({} as NewsItem)),
+      ...updated,
+      updatedAt: Date.now()
+    };
+    next.syncFrontend = next.status === 'Published';
+    
+    // Put updated item at the top of the list
+    const updatedList = [next, ...newsList.filter((item) => item.id !== id)];
     setNewsList(updatedList);
     persist(updatedList);
 
@@ -1383,10 +1395,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const target = newsList.find((n) => n.id === id);
     if (!target) return;
     const nextStatus: NewsItem['status'] = target.status === 'Published' ? 'Draft' : 'Published';
+    const next: NewsItem = {
+      ...target,
+      status: nextStatus,
+      syncFrontend: nextStatus === 'Published',
+      updatedAt: Date.now()
+    };
 
-    const updatedList = newsList.map((item) =>
-      item.id === id ? { ...item, status: nextStatus, syncFrontend: nextStatus === 'Published' } : item
-    );
+    const updatedList = [next, ...newsList.filter((item) => item.id !== id)];
     setNewsList(updatedList);
     persist(updatedList);
 
@@ -1426,7 +1442,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const newEntry: AgendaItem = {
       ...agenda,
       id: tempId,
-      syncFrontend: true
+      syncFrontend: true,
+      updatedAt: Date.now()
     };
     
     // Check if agenda is already expired before saving
@@ -1435,7 +1452,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    const updated = [newEntry, ...agendaList];
+    const updated = [newEntry, ...agendaList.filter((a) => a.id !== tempId)];
     const { active } = filterActiveAgendas(updated);
     setAgendaList(active);
     persist(newsList, active);
@@ -1463,9 +1480,15 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateAgenda = async (id: string, updated: Partial<AgendaItem>) => {
-    const updatedList = agendaList.map((item) =>
-      item.id === id ? { ...item, ...updated } : item
-    );
+    const target = agendaList.find((item) => item.id === id);
+    const next: AgendaItem = {
+      ...(target || ({} as AgendaItem)),
+      ...updated,
+      updatedAt: Date.now()
+    };
+
+    // Put updated agenda at the top
+    const updatedList = [next, ...agendaList.filter((item) => item.id !== id)];
 
     const { active, expired } = filterActiveAgendas(updatedList);
     setAgendaList(active);
@@ -1476,8 +1499,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       await syncAdminData('agendas', 'delete', { id });
       return;
     }
-
-    const target = active.find((item) => item.id === id);
 
     await syncAdminData('agendas', 'update', {
       id,
@@ -1512,9 +1533,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const tempId = `PKG-${Date.now().toString().slice(-4)}`;
     const newEntry: ProcurementPackage = {
       ...pkg,
-      id: tempId
+      id: tempId,
+      updatedAt: Date.now()
     };
-    const updated = [newEntry, ...packagesList];
+    const updated = [newEntry, ...packagesList.filter((p) => p.id !== tempId)];
     setPackagesList(updated);
     persist(newsList, agendaList, updated);
 
@@ -1542,9 +1564,15 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updatePackage = async (id: string, updated: Partial<ProcurementPackage>) => {
-    const updatedList = packagesList.map((item) =>
-      item.id === id ? { ...item, ...updated } : item
-    );
+    const target = packagesList.find((item) => item.id === id);
+    const next: ProcurementPackage = {
+      ...(target || ({} as ProcurementPackage)),
+      ...updated,
+      updatedAt: Date.now()
+    };
+
+    // Put updated package at the top
+    const updatedList = [next, ...packagesList.filter((item) => item.id !== id)];
     setPackagesList(updatedList);
     persist(newsList, agendaList, updatedList);
 
@@ -1584,9 +1612,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const newEntry: RegulasiItem = {
       ...reg,
       id: tempId,
-      syncFrontend: reg.status === 'Aktif'
+      syncFrontend: reg.status === 'Aktif',
+      updatedAt: Date.now()
     };
-    const updated = [newEntry, ...regulasiList];
+    const updated = [newEntry, ...regulasiList.filter((r) => r.id !== tempId)];
     setRegulasiList(updated);
     persist(newsList, agendaList, packagesList, updated);
 
@@ -1609,14 +1638,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateRegulasi = async (id: string, updated: Partial<RegulasiItem>) => {
-    const updatedList = regulasiList.map((item) => {
-      if (item.id === id) {
-        const next = { ...item, ...updated };
-        next.syncFrontend = next.status === 'Aktif';
-        return next;
-      }
-      return item;
-    });
+    const target = regulasiList.find((item) => item.id === id);
+    const next: RegulasiItem = {
+      ...(target || ({} as RegulasiItem)),
+      ...updated,
+      updatedAt: Date.now()
+    };
+    next.syncFrontend = next.status === 'Aktif';
+
+    // Put updated regulation at the top
+    const updatedList = [next, ...regulasiList.filter((item) => item.id !== id)];
     setRegulasiList(updatedList);
     persist(newsList, agendaList, packagesList, updatedList);
 
@@ -1647,10 +1678,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const target = regulasiList.find((r) => r.id === id);
     if (!target) return;
     const nextStatus: RegulasiItem['status'] = target.status === 'Aktif' ? 'Draft' : 'Aktif';
+    const next: RegulasiItem = {
+      ...target,
+      status: nextStatus,
+      syncFrontend: nextStatus === 'Aktif',
+      updatedAt: Date.now()
+    };
 
-    const updatedList = regulasiList.map((item) =>
-      item.id === id ? { ...item, status: nextStatus, syncFrontend: nextStatus === 'Aktif' } : item
-    );
+    const updatedList = [next, ...regulasiList.filter((item) => item.id !== id)];
     setRegulasiList(updatedList);
     persist(newsList, agendaList, packagesList, updatedList);
 
@@ -1671,9 +1706,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const newEntry: SopItem = {
       ...sop,
       id: tempId,
-      syncFrontend: sop.status === 'Berlaku'
+      syncFrontend: sop.status === 'Berlaku',
+      updatedAt: Date.now()
     };
-    const updated = [newEntry, ...sopList];
+    const updated = [newEntry, ...sopList.filter((s) => s.id !== tempId)];
     setSopList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, updated);
 
@@ -1700,14 +1736,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateSop = async (id: string, updated: Partial<SopItem>) => {
-    const updatedList = sopList.map((item) => {
-      if (item.id === id) {
-        const next = { ...item, ...updated };
-        next.syncFrontend = next.status === 'Berlaku';
-        return next;
-      }
-      return item;
-    });
+    const target = sopList.find((item) => item.id === id);
+    const next: SopItem = {
+      ...(target || ({} as SopItem)),
+      ...updated,
+      updatedAt: Date.now()
+    };
+    next.syncFrontend = next.status === 'Berlaku';
+
+    // Put updated SOP at the top
+    const updatedList = [next, ...sopList.filter((item) => item.id !== id)];
     setSopList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, updatedList);
 
@@ -1746,9 +1784,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const newEntry: PhotoItem = {
       ...photo,
       id: tempId,
-      syncFrontend: true
+      syncFrontend: true,
+      updatedAt: Date.now()
     };
-    const updated = [newEntry, ...photosList];
+    const updated = [newEntry, ...photosList.filter((p) => p.id !== tempId)];
     setPhotosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, updated);
 
@@ -1770,9 +1809,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updatePhoto = async (id: string, updated: Partial<PhotoItem>) => {
-    const updatedList = photosList.map((item) =>
-      item.id === id ? { ...item, ...updated } : item
-    );
+    const target = photosList.find((item) => item.id === id);
+    const next: PhotoItem = {
+      ...(target || ({} as PhotoItem)),
+      ...updated,
+      updatedAt: Date.now()
+    };
+    const updatedList = [next, ...photosList.filter((item) => item.id !== id)];
     setPhotosList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, updatedList);
 
@@ -1805,9 +1848,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const newEntry: VideoMediaItem = {
       ...video,
       id: tempId,
-      syncFrontend: true
+      syncFrontend: true,
+      updatedAt: Date.now()
     };
-    const updated = [newEntry, ...videosList];
+    const updated = [newEntry, ...videosList.filter((v) => v.id !== tempId)];
     setVideosList(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, photosList, updated);
 
@@ -1831,9 +1875,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateVideo = async (id: string, updated: Partial<VideoMediaItem>) => {
-    const updatedList = videosList.map((item) =>
-      item.id === id ? { ...item, ...updated } : item
-    );
+    const target = videosList.find((item) => item.id === id);
+    const next: VideoMediaItem = {
+      ...(target || ({} as VideoMediaItem)),
+      ...updated,
+      updatedAt: Date.now()
+    };
+    const updatedList = [next, ...videosList.filter((item) => item.id !== id)];
     setVideosList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, photosList, updatedList);
 
@@ -1869,7 +1917,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       ...panduan,
       id: tempId,
       status: panduan.status || 'Published',
-      syncFrontend: (panduan.status || 'Published') === 'Published'
+      syncFrontend: (panduan.status || 'Published') === 'Published',
+      updatedAt: Date.now()
     };
 
     setPanduanList((prev) => {
@@ -1914,16 +1963,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updatePanduan = async (id: string, updated: Partial<PanduanItem>) => {
-    const updatedList = panduanList.map((item) => {
-      if (item.id === id) {
-        const next = { ...item, ...updated };
-        next.syncFrontend = next.status === 'Published';
-        return next;
-      }
-      return item;
+    setPanduanList((prev) => {
+      const target = prev.find((item) => item.id === id);
+      const next: PanduanItem = {
+        ...(target || ({} as PanduanItem)),
+        ...updated,
+        updatedAt: Date.now()
+      };
+      next.syncFrontend = next.status === 'Published';
+      const updatedList = [next, ...prev.filter((item) => item.id !== id)];
+      persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList, photosList, videosList);
+      return updatedList;
     });
-    setPanduanList(updatedList);
-    persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList, photosList, videosList);
 
     await syncAdminData('panduan', 'update', {
       id,
@@ -1960,10 +2011,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const target = panduanList.find((p) => p.id === id);
     if (!target) return;
     const nextStatus: PanduanItem['status'] = target.status === 'Published' ? 'Draft' : 'Published';
+    const next: PanduanItem = {
+      ...target,
+      status: nextStatus,
+      syncFrontend: nextStatus === 'Published',
+      updatedAt: Date.now()
+    };
 
-    const updatedList = panduanList.map((item) =>
-      item.id === id ? { ...item, status: nextStatus, syncFrontend: nextStatus === 'Published' } : item
-    );
+    const updatedList = [next, ...panduanList.filter((item) => item.id !== id)];
     setPanduanList(updatedList);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, updatedList, photosList, videosList);
 
@@ -1980,7 +2035,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // SITE SETTINGS & SUPABASE SYNC
   // ==========================================
   const updateSiteSettings = async (settings: Partial<SiteSettings>) => {
-    const updated = { ...siteSettings, ...settings };
+    const updated: SiteSettings = {
+      ...siteSettings,
+      ...settings,
+      updatedAt: Date.now()
+    };
     setSiteSettings(updated);
     persist(newsList, agendaList, packagesList, regulasiList, sopList, panduanList, photosList, videosList, updated);
 

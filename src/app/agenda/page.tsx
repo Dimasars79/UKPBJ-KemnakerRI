@@ -149,7 +149,7 @@ export default function AgendaPage() {
       };
     });
 
-  // Filtered upcoming agendas sorted chronologically relative to real-world time
+  // Filtered upcoming agendas (preserves CMS update/insert order with newest first)
   const filteredAgendas = dummyAgendas
     .filter((agenda) => {
       const matchCategory = categoryFilter === 'Semua Kategori' || agenda.category === categoryFilter;
@@ -160,8 +160,7 @@ export default function AgendaPage() {
         matchPeriod = agenda.parsedMonth === nextRealMonth && agenda.parsedYear === nextRealYear;
       }
       return matchCategory && matchPeriod;
-    })
-    .sort((a, b) => a.parsedTimestamp - b.parsedTimestamp);
+    });
 
   // Pagination calculation (6 items per page)
   const totalPages = Math.ceil(filteredAgendas.length / ITEMS_PER_PAGE) || 1;

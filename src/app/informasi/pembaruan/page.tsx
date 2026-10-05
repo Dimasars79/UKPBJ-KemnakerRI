@@ -13,6 +13,8 @@ import {
   Globe, MessageSquare, RotateCcw, CheckCircle2
 } from 'lucide-react';
 
+import { parseAgendaDate } from '@/lib/agendaUtils';
+
 type UpdateType = 'all' | 'berita' | 'paket' | 'regulasi' | 'agenda' | 'sop';
 
 interface UnifiedUpdateItem {
@@ -29,6 +31,7 @@ interface UnifiedUpdateItem {
   href: string;
   actionLabel: string;
   icon: React.ReactNode;
+  timestamp: number;
   tags?: string[];
   extraInfo?: string;
 }
@@ -63,6 +66,14 @@ export default function PusatPembaruanPage() {
     }
   };
 
+  // Helper to calculate numeric timestamp for sorting updates (prioritizing updatedAt)
+  const getUpdateTimestamp = (updatedAt?: number, listIndex: number = 0): number => {
+    if (updatedAt && typeof updatedAt === 'number') {
+      return updatedAt;
+    }
+    return Date.now() - 1000000000 - listIndex * 3600000;
+  };
+
   // Unified list mapping
   const allUpdates: UnifiedUpdateItem[] = useMemo(() => {
     const list: UnifiedUpdateItem[] = [];
@@ -70,7 +81,7 @@ export default function PusatPembaruanPage() {
     // 1. Berita (Published only)
     newsList
       .filter((n) => n.status === 'Published')
-      .forEach((item) => {
+      .forEach((item, idx) => {
         list.push({
           id: `news-${item.id}`,
           type: 'berita',
@@ -85,12 +96,13 @@ export default function PusatPembaruanPage() {
           href: `/berita/${item.id}`,
           actionLabel: 'Baca Berita',
           icon: <Newspaper className="w-4 h-4 text-slate-950 dark:text-white" />,
+          timestamp: getUpdateTimestamp(item.updatedAt, idx),
           tags: item.tags && item.tags.length > 0 ? item.tags : ['#BeritaPBJ', '#UKPBJKemnaker']
         });
       });
 
     // 2. Paket Pengadaan
-    packagesList.forEach((pkg) => {
+    packagesList.forEach((pkg, idx) => {
       list.push({
         id: `pkg-${pkg.id}`,
         type: 'paket',
@@ -105,6 +117,7 @@ export default function PusatPembaruanPage() {
         href: '/#pengadaan',
         actionLabel: 'Lihat Paket Tender',
         icon: <Package className="w-4 h-4 text-slate-950 dark:text-white" />,
+        timestamp: getUpdateTimestamp(pkg.updatedAt, idx),
         extraInfo: pkg.status
       });
     });
@@ -112,7 +125,7 @@ export default function PusatPembaruanPage() {
     // 3. Regulasi
     regulasiList
       .filter((r) => r.status === 'Aktif')
-      .forEach((reg) => {
+      .forEach((reg, idx) => {
         list.push({
           id: `reg-${reg.id}`,
           type: 'regulasi',
@@ -126,14 +139,15 @@ export default function PusatPembaruanPage() {
           meta: `JDIH Kemnaker • Status: ${reg.status}`,
           href: '/informasi/peraturan',
           actionLabel: 'Buka Regulasi',
-          icon: <Scale className="w-4 h-4 text-slate-950 dark:text-white" />
+          icon: <Scale className="w-4 h-4 text-slate-950 dark:text-white" />,
+          timestamp: getUpdateTimestamp(reg.updatedAt, idx)
         });
       });
 
     // 4. Agenda
     agendaList
       .filter((a) => a.status !== 'Dibatalkan')
-      .forEach((agd) => {
+      .forEach((agd, idx) => {
         list.push({
           id: `agd-${agd.id}`,
           type: 'agenda',
@@ -148,6 +162,7 @@ export default function PusatPembaruanPage() {
           href: '/agenda',
           actionLabel: 'Lihat Jadwal Agenda',
           icon: <Calendar className="w-4 h-4 text-slate-950 dark:text-white" />,
+          timestamp: getUpdateTimestamp(agd.updatedAt, idx),
           extraInfo: agd.status
         });
       });
@@ -155,7 +170,7 @@ export default function PusatPembaruanPage() {
     // 5. SOP
     sopList
       .filter((s) => s.status === 'Berlaku')
-      .forEach((sop) => {
+      .forEach((sop, idx) => {
         list.push({
           id: `sop-${sop.id}`,
           type: 'sop',
@@ -169,7 +184,8 @@ export default function PusatPembaruanPage() {
           meta: `Unit: ${sop.unit} • ${sop.tahapanCount} Tahapan • ${sop.status}`,
           href: '/informasi/sop',
           actionLabel: 'Buka Dokumen SOP',
-          icon: <Layers className="w-4 h-4 text-slate-950 dark:text-white" />
+          icon: <Layers className="w-4 h-4 text-slate-950 dark:text-white" />,
+          timestamp: getUpdateTimestamp(sop.updatedAt, idx)
         });
       });
 
@@ -203,9 +219,9 @@ export default function PusatPembaruanPage() {
       })
       .sort((a, b) => {
         if (sortOrder === 'terlama') {
-          return a.id.localeCompare(b.id);
+          return a.timestamp - b.timestamp;
         }
-        return b.id.localeCompare(a.id);
+        return b.timestamp - a.timestamp;
       });
   }, [allUpdates, selectedType, searchQuery, sortOrder]);
 
