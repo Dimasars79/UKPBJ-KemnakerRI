@@ -11,7 +11,6 @@ import {
   GraduationCap, 
   Landmark, 
   CheckCircle2, 
-  Sparkles,
   Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -434,17 +433,6 @@ export const OrganizationChart = () => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      {/* Top Helper Banner */}
-      <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2.5 mb-6 bg-slate-50 border border-slate-200/80 rounded-2xl p-3 px-4 shadow-2xs">
-        <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-700 font-medium">
-          <Sparkles className="w-4 h-4 text-accent-gold shrink-0" />
-          <span>{trans('Struktur Tata Kelola Resmi UKPBJ Kementerian Ketenagakerjaan RI', 'Official UKPBJ Ministry of Manpower Organizational Structure')}</span>
-        </div>
-        <span className="text-[11px] text-slate-500 font-semibold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full shadow-2xs">
-          {trans('Klik kotak untuk melihat Tupoksi', 'Click any box to view details')}
-        </span>
-      </div>
-
       {/* Flowchart Tree Canvas with ample horizontal breathing room */}
       <div className="w-full overflow-x-auto pb-6 pt-1">
         <div className="min-w-[980px] max-w-5xl mx-auto flex flex-col items-center px-4">
