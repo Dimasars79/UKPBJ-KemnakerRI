@@ -458,9 +458,6 @@ export const OrganizationChart = () => {
                   <h3 className="text-base font-black tracking-tight text-white leading-tight">
                     {trans(nodes.kepalaUkpbj.titleId, nodes.kepalaUkpbj.titleEn)}
                   </h3>
-                  <p className="text-xs text-blue-100/80 font-medium truncate mt-0.5">
-                    {trans(nodes.kepalaUkpbj.subtitleId || '', nodes.kepalaUkpbj.subtitleEn || '')}
-                  </p>
                 </div>
                 <div className="shrink-0 w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors">
                   <Info className="w-4 h-4" />
