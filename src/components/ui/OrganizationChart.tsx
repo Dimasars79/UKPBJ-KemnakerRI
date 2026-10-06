@@ -10,7 +10,7 @@ import {
   ShieldCheck, 
   GraduationCap, 
   Landmark, 
-  CheckCircle2, 
+  CheckCircle2,
   Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,6 +29,7 @@ interface NodeItem {
   tugasId: string[];
   tugasEn: string[];
   icon: React.ReactNode;
+  clickable?: boolean;
   theme: {
     cardBg: string;
     border: string;
@@ -114,21 +115,25 @@ export const OrganizationChart = () => {
       id: 'sekretariat',
       titleId: 'Sekretariat Tata Usaha',
       titleEn: 'Administrative Secretariat',
-      subtitleId: 'Dukungan Administrasi & Persuratan',
-      subtitleEn: 'Administration & Correspondence Support',
+      subtitleId: 'Dukungan Administrasi, Keuangan & Tata Kelola',
+      subtitleEn: 'Administrative, Financial & Governance Support',
       roleBadgeId: 'Tata Usaha',
       roleBadgeEn: 'Administration',
-      descId: 'Unit penunjang operasional yang mengelola ketatausahaan, arsip dokumen pengadaan, sarana prasarana kerja, dan administrasi kepegawaian internal UKPBJ.',
-      descEn: 'Operational support unit managing administration, procurement contract archives, office facilities, and internal staffing.',
+      descId: 'Unit pendukung strategis yang mengoordinasikan ketatausahaan, pengelolaan perbendaharaan & anggaran, tata kelola aset BMN, serta kearsipan resmi dokumen pengadaan UKPBJ.',
+      descEn: 'Strategic support unit coordinating secretariat affairs, treasury and budget management, state asset (BMN) governance, and official procurement archiving.',
       tugasId: [
-        'Pengelolaan tata naskah dinas dan arsip pengadaan.',
-        'Fasilitasi sarana prasarana operasional unit.',
-        'Penyusunan laporan akuntabilitas kinerja internal.'
+        'Dukungan administrasi dan tata kelola keuangan UKPBJ.',
+        'Pengelolaan persuratan dan kearsipan dokumen pengadaan.',
+        'Pengelolaan dan pertanggungjawaban anggaran operasional.',
+        'Pengelolaan persediaan, sarana prasarana, dan aset BMN.',
+        'Penyusunan laporan kinerja dan administrasi kegiatan.'
       ],
       tugasEn: [
-        'Manage official correspondence and procurement filing.',
-        'Facilitate operational facilities and office logistics.',
-        'Compile internal organizational accountability reports.'
+        'Administrative support and UKPBJ financial governance.',
+        'Correspondence and procurement document archiving.',
+        'Operational budget management and accountability.',
+        'Supplies, office facilities, and BMN asset management.',
+        'Performance and administrative activity reporting.'
       ],
       icon: <Users className="w-5 h-5 text-purple-600" />,
       theme: {
@@ -153,14 +158,18 @@ export const OrganizationChart = () => {
       descId: 'Divisi pengelola siklus pemilihan penyedia, penjadwalan paket, serta koordinasi teknis pelaksanaan tender/seleksi di lingkungan kementerian.',
       descEn: 'Division managing vendor selection cycles, package scheduling, and technical tender/selection coordination.',
       tugasId: [
-        'Perencanaan dan pengelolaan paket pengadaan berkala.',
-        'Mengoordinasikan penugasan Pokja Pemilihan.',
-        'Memantau progres pemilihan penyedia barang/jasa.'
+        'Penerimaan dan verifikasi berkas permohonan pengadaan.',
+        'Pengelolaan dan koordinasi penugasan Pokja Pemilihan.',
+        'Pengendalian mutu dan kelancaran pelaksanaan proses pemilihan.',
+        'Penjaminan kepatuhan terhadap regulasi dan standar tata kelola pengadaan.',
+        'Monitoring dan evaluasi kepatuhan timeline tahapan pemilihan.'
       ],
       tugasEn: [
-        'Plan and manage regular procurement packages.',
-        'Coordinate assignments of Working Groups (Pokja).',
-        'Monitor vendor selection progress.'
+        'Receiving and verifying procurement package applications.',
+        'Managing and coordinating Selection Pokja assignments.',
+        'Quality control and supervision of selection process execution.',
+        'Ensuring compliance with procurement regulations and governance standards.',
+        'Monitoring and evaluating selection timeline milestone compliance.'
       ],
       icon: <Handshake className="w-5 h-5 text-emerald-600" />,
       theme: {
@@ -178,64 +187,50 @@ export const OrganizationChart = () => {
       id: 'pokja1',
       titleId: 'Tim POKJA',
       titleEn: 'POKJA Team',
-      subtitleId: 'Kelompok Kerja Pemilihan (Tender)',
-      subtitleEn: 'Selection Working Group (Tender)',
+      subtitleId: 'LOAN',
+      subtitleEn: 'LOAN',
       roleBadgeId: 'POKJA',
       roleBadgeEn: 'POKJA',
-      descId: 'Kelompok kerja fungsional yang menyusun dokumen pemilihan, kualifikasi, evaluasi penawaran, dan penetapan pemenang tender.',
-      descEn: 'Functional working group drafting selection documents, evaluating bids, and determining winning tenderers.',
-      tugasId: [
-        'Menyusun dan menetapkan dokumen pemilihan.',
-        'Melakukan evaluasi administrasi, teknis, dan harga.',
-        'Menetapkan pemenang tender sesuai ketentuan LKPP.'
-      ],
-      tugasEn: [
-        'Draft and issue tender documentation.',
-        'Evaluate administrative, technical, and financial bids.',
-        'Determine winning bidders in compliance with LKPP rules.'
-      ],
+      descId: '',
+      descEn: '',
+      tugasId: [],
+      tugasEn: [],
+      clickable: false,
       icon: <FileText className="w-4.5 h-4.5 text-emerald-600" />,
       theme: {
         cardBg: 'bg-white text-slate-800',
-        border: 'border-emerald-200 hover:border-emerald-400',
+        border: 'border-emerald-200',
         accentBar: 'bg-emerald-600',
         iconBg: 'bg-emerald-50 ring-1 ring-emerald-200',
         iconColor: 'text-emerald-600',
         badgeBg: 'bg-emerald-50',
         badgeText: 'text-emerald-700 border border-emerald-200',
-        hoverShadow: 'hover:shadow-lg hover:shadow-emerald-500/10'
+        hoverShadow: ''
       }
     },
     pokja2: {
       id: 'pokja2',
       titleId: 'Tim POKJA',
       titleEn: 'POKJA Team',
-      subtitleId: 'Pelaksana Teknis & Evaluasi',
-      subtitleEn: 'Technical Review & Verification',
+      subtitleId: 'APBN',
+      subtitleEn: 'APBN',
       roleBadgeId: 'POKJA',
       roleBadgeEn: 'POKJA',
-      descId: 'Tim Pokja fungsional pelaksana verifikasi faktual lapangan, klarifikasi penawaran penyedia, dan penanganan sanggahan.',
-      descEn: 'Functional Pokja team executing on-site verification, bidder clarifications, and formal objection reviews.',
-      tugasId: [
-        'Verifikasi faktual kualifikasi calon rekanan.',
-        'Klarifikasi teknis dan penelaahan kewajaran harga.',
-        'Penyusunan Berita Acara Hasil Pemilihan (BAHP).'
-      ],
-      tugasEn: [
-        'Execute on-site qualification verifications.',
-        'Perform technical and price reasonableness clarifications.',
-        'Compile formal Selection Minutes (BAHP).'
-      ],
+      descId: '',
+      descEn: '',
+      tugasId: [],
+      tugasEn: [],
+      clickable: false,
       icon: <FileText className="w-4.5 h-4.5 text-emerald-600" />,
       theme: {
         cardBg: 'bg-white text-slate-800',
-        border: 'border-emerald-200 hover:border-emerald-400',
+        border: 'border-emerald-200',
         accentBar: 'bg-emerald-600',
         iconBg: 'bg-emerald-50 ring-1 ring-emerald-200',
         iconColor: 'text-emerald-600',
         badgeBg: 'bg-emerald-50',
         badgeText: 'text-emerald-700 border border-emerald-200',
-        hoverShadow: 'hover:shadow-lg hover:shadow-emerald-500/10'
+        hoverShadow: ''
       }
     },
     kelembagaanSdm: {
@@ -249,14 +244,12 @@ export const OrganizationChart = () => {
       descId: 'Divisi penguatan tata kelola kelembagaan pengadaan, standarisasi SOP, pencapaian maturitas UKPBJ, serta pembinaan dan sertifikasi kompetensi SDM pengadaan.',
       descEn: 'Division fostering institutional governance, SOP standardization, UKPBJ maturity advancement, and HR competency certifications.',
       tugasId: [
-        'Pengembangan struktur dan maturitas kelembagaan UKPBJ.',
-        'Penyusunan dan pemutakhiran SOP pengadaan terstandarisasi.',
-        'Fasilitasi bimtek, pelatihan, dan uji sertifikasi keahlian PBJ.'
+        'Penguatan kelembagaan UKPBJ.',
+        'Pengembangan kapasitas SDM PBJ.'
       ],
       tugasEn: [
-        'Advance UKPBJ organizational capability and maturity.',
-        'Draft and update standardized procurement SOPs.',
-        'Facilitate competency workshops and certification exams.'
+        'Strengthening UKPBJ institutional capacity and governance.',
+        'Developing PBJ human resource capacity and competence.'
       ],
       icon: <Settings className="w-5 h-5 text-orange-600" />,
       theme: {
@@ -281,14 +274,18 @@ export const OrganizationChart = () => {
       descId: 'Sub-unit fokus pembinaan aparatur pengadaan, pemenuhan formasi Pejabat Fungsional PBJ, dan sertifikasi keahlian pengadaan pemerintah.',
       descEn: 'Sub-unit focusing on personnel capacity building, functional procurement career paths, and competency certifications.',
       tugasId: [
-        'Pemetaan kompetensi aparatur pengadaan kementerian.',
-        'Penyelenggaraan pelatihan dan uji kompetensi PBJ.',
-        'Monitoring jenjang karier fungsional pengadaan.'
+        'Pengelolaan database dan profil SDM PBJ.',
+        'Pengelolaan administrasi dan pembinaan Jabatan Fungsional (JF) PPBJ.',
+        'Pemetaan dan analisis kebutuhan formasi SDM pengadaan.',
+        'Monitoring dan evaluasi penugasan JF PPBJ.',
+        'Perencanaan program pelatihan, bimtek, dan sertifikasi kompetensi.'
       ],
       tugasEn: [
-        'Map procurement competencies across the ministry.',
-        'Organize training and competency examinations.',
-        'Monitor functional procurement career advancement.'
+        'Managing PBJ human resource database and profiles.',
+        'Managing administration and career fostering of functional procurement officers (JF PPBJ).',
+        'Mapping and analyzing procurement personnel requirements.',
+        'Monitoring and evaluating JF PPBJ operational assignments.',
+        'Planning training programs, workshops, and competency certifications.'
       ],
       icon: <GraduationCap className="w-4.5 h-4.5 text-amber-600" />,
       theme: {
@@ -313,14 +310,22 @@ export const OrganizationChart = () => {
       descId: 'Sub-unit perumusan instrumen kelembagaan, pemenuhan standar LPSE, SOP kerja terintegrasi, dan evaluasi efektivitas organisasi.',
       descEn: 'Sub-unit formulating organizational governance instruments, LPSE standard compliance, and integrated SOPs.',
       tugasId: [
-        'Penyusunan standar operasional prosedur (SOP) pengadaan.',
-        'Pemenuhan standar kematangan kelembagaan LKPP.',
-        'Evaluasi efektivitas tata kelola antar unit kerja.'
+        'Penyusunan dan pembaruan regulasi serta SOP internal.',
+        'Pengelolaan data Indeks Tata Kelola Pengadaan (ITKP).',
+        'Fasilitasi penyelenggaraan bimtek, workshop, dan sosialisasi.',
+        'Penyusunan bahan monitoring dan evaluasi (Monev) berkala.',
+        'Pengelolaan komunikasi publik dan media sosial resmi UKPBJ.',
+        'Koordinasi audit PBJ, program P3DN, SMAP, dan Clearing House.',
+        'Penyusunan laporan kegiatan periodik (bulanan, triwulanan, tahunan).'
       ],
       tugasEn: [
-        'Formulate standard operating procedures (SOPs).',
-        'Fulfill LKPP institutional maturity standards.',
-        'Evaluate governance effectiveness across work units.'
+        'Formulating and updating internal regulations and SOPs.',
+        'Managing Procurement Governance Index (ITKP) data.',
+        'Facilitating technical guidance, workshops, and socialization.',
+        'Preparing periodic monitoring and evaluation (Monev) materials.',
+        'Managing public communications and official UKPBJ social media.',
+        'Coordinating PBJ audits, P3DN programs, SMAP, and Clearing House.',
+        'Compiling periodic activity reports (monthly, quarterly, annually).'
       ],
       icon: <Building2 className="w-4.5 h-4.5 text-amber-600" />,
       theme: {
@@ -345,14 +350,14 @@ export const OrganizationChart = () => {
       descId: 'Divisi pengelola infrastruktur Sistem Pengadaan Secara Elektronik (SPSE), verifikasi berkas penyedia rekanan, dan layanan konsultasi bantuan pengadaan.',
       descEn: 'Division managing the Electronic Procurement System (SPSE) infrastructure, vendor verification, and helpdesk consultancy.',
       tugasId: [
-        'Pengelolaan dan pemeliharaan keandalan server SPSE.',
-        'Verifikasi berkas dan aktivasi akun penyedia.',
-        'Layanan konsultasi pengadaan (Helpdesk / Klinik PBJ).'
+        'Penjaminan keandalan, keamanan, dan integrasi sistem SPSE dengan aplikasi pendukung.',
+        'Penyelenggaraan digitalisasi end-to-end dalam seluruh tahapan proses PBJ.',
+        'Pemberian layanan bantuan teknis (helpdesk) dan konsultasi bagi seluruh pengguna sistem pengadaan.'
       ],
       tugasEn: [
-        'Maintain stability and security of SPSE servers.',
-        'Verify vendor legal files and activate accounts.',
-        'Provide procurement helpdesk and advisory services.'
+        'Ensuring reliability, security, and integration of the SPSE system with supporting applications.',
+        'Advancing end-to-end digitalization across all procurement process stages.',
+        'Providing technical helpdesk and advisory services for all procurement system users.'
       ],
       icon: <ShieldCheck className="w-5 h-5 text-sky-600" />,
       theme: {
@@ -369,25 +374,27 @@ export const OrganizationChart = () => {
   };
 
   const renderCard = (node: NodeItem) => {
+    const isClickable = node.clickable !== false;
+
     return (
       <motion.div
-        whileHover={{ y: -2 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={() => setSelectedNode(node)}
-        className={`cursor-pointer rounded-2xl ${node.theme.cardBg} border ${node.theme.border} ${node.theme.hoverShadow} shadow-2xs transition-all duration-200 relative group overflow-hidden flex flex-col justify-between w-full p-4 sm:p-4.5 min-h-[82px]`}
+        whileHover={isClickable ? { y: -2 } : undefined}
+        whileTap={isClickable ? { scale: 0.98 } : undefined}
+        onClick={isClickable ? () => setSelectedNode(node) : undefined}
+        className={`${isClickable ? 'cursor-pointer' : 'cursor-default'} rounded-2xl ${node.theme.cardBg} border ${node.theme.border} ${isClickable ? node.theme.hoverShadow : ''} shadow-2xs transition-all duration-200 relative group overflow-hidden flex flex-col justify-between w-full p-4 sm:p-4.5 min-h-[82px]`}
       >
         {/* Top Accent Strip */}
         <div className={`absolute top-0 left-0 right-0 h-1 ${node.theme.accentBar}`} />
 
         <div className="flex items-center gap-3.5 pt-0.5">
           {/* Icon */}
-          <div className={`rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105 w-10 h-10 ${node.theme.iconBg}`}>
+          <div className={`rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 ${isClickable ? 'group-hover:scale-105' : ''} w-10 h-10 ${node.theme.iconBg}`}>
             {node.icon}
           </div>
 
           {/* Texts */}
           <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug group-hover:text-primary-blue transition-colors">
+            <h4 className={`font-bold text-xs sm:text-sm text-slate-800 leading-snug ${isClickable ? 'group-hover:text-primary-blue' : ''} transition-colors`}>
               {trans(node.titleId, node.titleEn)}
             </h4>
             {node.subtitleId && (
@@ -397,10 +404,12 @@ export const OrganizationChart = () => {
             )}
           </div>
 
-          {/* Info icon */}
-          <div className="shrink-0 text-slate-300 group-hover:text-primary-blue transition-colors">
-            <Info className="w-3.5 h-3.5" />
-          </div>
+          {/* Detail / Info button - only for clickable cards */}
+          {isClickable && (
+            <div className="shrink-0 text-slate-300 group-hover:text-primary-blue transition-colors">
+              <Info className="w-3.5 h-3.5" />
+            </div>
+          )}
         </div>
       </motion.div>
     );
@@ -408,25 +417,34 @@ export const OrganizationChart = () => {
 
   // Saran 1: Centered Vertical Minimalist Stack for SDM & Kelembagaan Sub-Cards
   const renderSubCard = (node: NodeItem) => {
+    const isClickable = node.clickable !== false;
+
     return (
       <motion.div
-        whileHover={{ y: -2 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={() => setSelectedNode(node)}
-        className={`cursor-pointer rounded-2xl ${node.theme.cardBg} border ${node.theme.border} ${node.theme.hoverShadow} shadow-2xs transition-all duration-200 relative group overflow-hidden flex flex-col items-center justify-center text-center p-3.5 sm:py-4 min-h-[82px] w-full`}
+        whileHover={isClickable ? { y: -2 } : undefined}
+        whileTap={isClickable ? { scale: 0.98 } : undefined}
+        onClick={isClickable ? () => setSelectedNode(node) : undefined}
+        className={`${isClickable ? 'cursor-pointer' : 'cursor-default'} rounded-2xl ${node.theme.cardBg} border ${node.theme.border} ${isClickable ? node.theme.hoverShadow : ''} shadow-2xs transition-all duration-200 relative group overflow-hidden flex flex-col items-center justify-center text-center p-3.5 sm:py-4 min-h-[82px] w-full`}
       >
         {/* Top Accent Strip */}
         <div className={`absolute top-0 left-0 right-0 h-1 ${node.theme.accentBar}`} />
 
         {/* Centered Icon */}
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-2 transition-transform duration-200 group-hover:scale-105 ${node.theme.iconBg}`}>
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-2 transition-transform duration-200 ${isClickable ? 'group-hover:scale-105' : ''} ${node.theme.iconBg}`}>
           {node.icon}
         </div>
 
         {/* Centered Title (100% visible, fully spelled out, no ellipsis) */}
-        <h5 className="font-bold text-xs text-slate-800 leading-tight group-hover:text-primary-blue transition-colors">
+        <h5 className={`font-bold text-xs text-slate-800 leading-tight ${isClickable ? 'group-hover:text-primary-blue' : ''} transition-colors`}>
           {trans(node.titleId, node.titleEn)}
         </h5>
+
+        {/* Detail / Info button - only for clickable cards */}
+        {isClickable && (
+          <div className="absolute top-2.5 right-2.5 text-slate-300 group-hover:text-primary-blue transition-colors">
+            <Info className="w-3 h-3" />
+          </div>
+        )}
       </motion.div>
     );
   };
@@ -440,7 +458,7 @@ export const OrganizationChart = () => {
           {/* ============================================================ */}
           {/* LEVEL 1: KEPALA UKPBJ                                        */}
           {/* ============================================================ */}
-          <div className="w-full max-w-[360px] sm:max-w-[380px] z-20">
+          <div className="w-full max-w-[380px] sm:max-w-[400px] z-20">
             <motion.div
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
@@ -450,13 +468,27 @@ export const OrganizationChart = () => {
               {/* Gold Top Strip */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500" />
 
-              <div className="flex items-center justify-center gap-3.5 pt-0.5">
-                <div className="w-11 h-11 rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-                  {nodes.kepalaUkpbj.icon}
+              <div className="flex items-center justify-between gap-3.5 pt-0.5">
+                <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                  <div className="w-11 h-11 rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                    {nodes.kepalaUkpbj.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-black text-base tracking-tight text-white leading-tight">
+                      {trans(nodes.kepalaUkpbj.titleId, nodes.kepalaUkpbj.titleEn)}
+                    </h3>
+                    {nodes.kepalaUkpbj.subtitleId && (
+                      <p className="text-[11px] text-blue-200/90 font-medium leading-tight mt-1 truncate">
+                        {trans(nodes.kepalaUkpbj.subtitleId, nodes.kepalaUkpbj.subtitleEn || '')}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <h3 className="font-black text-base tracking-tight text-white leading-tight">
-                  {trans(nodes.kepalaUkpbj.titleId, nodes.kepalaUkpbj.titleEn)}
-                </h3>
+
+                {/* Detail / Info icon */}
+                <div className="shrink-0 text-amber-300/70 group-hover:text-amber-300 transition-colors">
+                  <Info className="w-4 h-4" />
+                </div>
               </div>
             </motion.div>
           </div>

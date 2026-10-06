@@ -134,7 +134,7 @@ export default function TentangPage() {
           </div>
           
           {/* STRUKTUR ORGANISASI SECTION - Elegant Dark Blue & Black Frame */}
-          <div className="relative rounded-2xl sm:rounded-3xl p-[2px] bg-gradient-to-br from-[#0F2C59] via-[#020617] to-[#1E3A8A] shadow-xl shadow-slate-950/10 mb-12 sm:mb-20 overflow-hidden">
+          <div id="struktur-organisasi" className="scroll-mt-32 relative rounded-2xl sm:rounded-3xl p-[2px] bg-gradient-to-br from-[#0F2C59] via-[#020617] to-[#1E3A8A] shadow-xl shadow-slate-950/10 mb-12 sm:mb-20 overflow-hidden">
             <div className="bg-white p-4 sm:p-6 md:p-8 lg:p-10 rounded-[calc(1rem-2px)] sm:rounded-[calc(1.5rem-2px)] relative overflow-hidden">
               {/* Top Accent Gradient Bar */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0F2C59] via-[#1E3A8A] to-[#020617]" />

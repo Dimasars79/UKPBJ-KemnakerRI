@@ -9,7 +9,7 @@ import {
   Home, Briefcase, Calendar, Image as ImageIcon, BarChart3, 
   Building2, Scale, BookOpen, FileCheck, Award, ShieldCheck, 
   FileSpreadsheet, Vote, Target, ScrollText, HelpCircle,
-  Newspaper
+  Newspaper, Users
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -245,6 +245,7 @@ export function Header() {
     { label: t('nav.menu_about_maklumat'), href: '/tentang#maklumat', icon: <ScrollText className="w-4 h-4" />, desc: t('nav.menu_about_maklumat_desc') },
     { label: t('nav.menu_about_monitoring'), href: '/monitoring', icon: <BarChart3 className="w-4 h-4" />, desc: t('nav.menu_about_monitoring_desc') },
     { label: t('nav.menu_about_sop'), href: '/informasi/sop', icon: <Building2 className="w-4 h-4" />, desc: t('nav.menu_about_sop_desc') },
+    { label: t('nav.menu_about_struktur'), href: '/tentang#struktur-organisasi', icon: <Users className="w-4 h-4" />, desc: t('nav.menu_about_struktur_desc') },
     { label: t('nav.menu_about_faq'), href: '/tentang#faq', icon: <HelpCircle className="w-4 h-4" />, desc: t('nav.menu_about_faq_desc') },
   ];
 
@@ -512,12 +513,9 @@ export function Header() {
                           transition={{ duration: 0.2, ease: "easeOut" }}
                           className={`absolute ${isInfo ? 'left-1/2 -translate-x-1/2 w-[540px]' : 'right-0 w-[300px]'} mt-2 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border-2 border-slate-200 p-3.5 z-50 overflow-hidden`}
                         >
-                          <div className="px-3 py-2 border-b border-slate-100 mb-2 flex items-center justify-between">
+                          <div className="px-3 py-2 border-b border-slate-100 mb-2">
                             <span className="text-xs font-bold text-primary-navy uppercase tracking-wider">
                               {isInfo ? 'Kanal Informasi & Dokumen' : 'Profil & Tata Kelola'}
-                            </span>
-                            <span className="text-[10px] font-bold text-primary-blue bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
-                              {submenuList.length} Pilihan
                             </span>
                           </div>
 
