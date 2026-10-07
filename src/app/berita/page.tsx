@@ -8,7 +8,7 @@ import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { useData, NewsItem } from '@/contexts/DataContext';
 import { 
-  Search, Calendar, Eye, ArrowRight, 
+  Search, Calendar, ArrowRight, 
   ChevronRight, BookOpen, AlertCircle
 } from 'lucide-react';
 
@@ -221,17 +221,11 @@ export default function BeritaIndexPage() {
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 text-xs font-bold text-primary-blue group-hover:text-primary-navy">
+                    <div className="flex items-center pt-4 border-t border-slate-100 text-xs font-bold text-primary-blue group-hover:text-primary-navy">
                       <span className="inline-flex items-center gap-1.5">
                         <span>{trans('Baca Berita Lengkap', 'Read Full Article')}</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                       </span>
-                      {featuredNews.views > 0 && (
-                        <span className="text-slate-400 font-mono font-medium text-[11px] flex items-center gap-1">
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>{featuredNews.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
-                        </span>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -266,17 +260,11 @@ export default function BeritaIndexPage() {
 
                     {/* Body */}
                     <div className="p-5 sm:p-6 space-y-2.5">
-                      <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                      <div className="flex items-center text-xs text-slate-500 font-medium">
                         <span className="flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5 text-amber-500" />
                           <span className="font-semibold text-slate-600">{item.date}</span>
                         </span>
-                        {item.views > 0 && (
-                          <span className="flex items-center gap-1 text-[11px] text-slate-400 font-mono">
-                            <Eye className="w-3.5 h-3.5 text-slate-400" />
-                            <span>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
-                          </span>
-                        )}
                       </div>
 
                       <h3 className="font-bold text-base text-primary-navy leading-snug line-clamp-2 group-hover:text-primary-blue transition-colors">

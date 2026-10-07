@@ -9,7 +9,7 @@ import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { useData, NewsItem } from '@/contexts/DataContext';
 import { 
-  Calendar, Eye, User, ArrowLeft, ArrowRight, 
+  Calendar, User, ArrowLeft, ArrowRight, 
   ChevronRight, Building2, Copy, 
   MessageCircle, Printer, BookOpen, AlertCircle, Sparkles
 } from 'lucide-react';
@@ -171,13 +171,6 @@ export default function BeritaDetailPage() {
                     <Calendar className="w-3.5 h-3.5 text-amber-400" />
                     <span>{currentNews.date}</span>
                   </div>
-
-                  {currentNews.views > 0 && (
-                    <div className="flex items-center gap-1.5 text-slate-400">
-                      <Eye className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{currentNews.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {trans('Pembaca', 'Reads')}</span>
-                    </div>
-                  )}
                 </div>
 
                 {/* Quick Share Actions */}

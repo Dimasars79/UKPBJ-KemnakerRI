@@ -7,8 +7,7 @@ import {
   Calendar, 
   ArrowRight, 
   ChevronLeft, 
-  ChevronRight, 
-  Eye
+  ChevronRight
 } from 'lucide-react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -160,18 +159,12 @@ export function BeritaSection() {
               {/* Card Content Body */}
               <div className="p-5 sm:p-6 flex flex-col flex-grow justify-between space-y-4">
                 <div className="space-y-2.5">
-                  {/* Tanggal & Jumlah Dilihat (Dipindah ke bawah gambar agar kontras jelas) */}
-                  <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                  {/* Tanggal Berita */}
+                  <div className="flex items-center text-xs text-slate-500 font-medium">
                     <div className="flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5 text-amber-500" />
                       <span className="font-semibold text-slate-600">{item.date}</span>
                     </div>
-                    {item.views > 0 && (
-                      <div className="flex items-center gap-1 text-[11px] text-slate-400 font-mono">
-                        <Eye className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
-                      </div>
-                    )}
                   </div>
 
                   <Link href={`/berita/${item.id}`} className="block">
