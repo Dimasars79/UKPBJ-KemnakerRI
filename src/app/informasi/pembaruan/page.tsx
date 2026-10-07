@@ -90,7 +90,7 @@ export default function PusatPembaruanPage() {
           date: item.date,
           rawDate: item.date,
           excerpt: item.excerpt || item.content?.slice(0, 140) + '...',
-          meta: `Oleh ${item.author} • ${item.views || 0} Pembaca`,
+          meta: `Oleh ${item.author}`,
           href: `/berita/${item.id}`,
           actionLabel: 'Baca Berita',
           icon: <Newspaper className="w-4 h-4 text-slate-950 dark:text-white" />,

@@ -174,7 +174,10 @@ export default function GaleriPage() {
 
               {/* Photos Grid - Balanced 3-Column Studio Cards */}
               {filteredPhotos.length > 0 ? (
-                <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <StaggerContainer 
+                  key={`photos-${photoFilter}-${searchQuery}`}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
                   {filteredPhotos.map((img) => (
                     <StaggerItem key={img.id}>
                       <div 
@@ -370,17 +373,9 @@ export default function GaleriPage() {
                               <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/70">
                                 {video.category}
                               </span>
-                              <div className="flex items-center gap-2 text-slate-500 font-medium text-xs">
-                                <div className="flex items-center gap-1.5">
-                                  <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                  <span>{video.date}</span>
-                                </div>
-                                {video.views && (
-                                  <>
-                                    <span>•</span>
-                                    <span>{video.views}</span>
-                                  </>
-                                )}
+                              <div className="flex items-center gap-1.5 text-slate-500 font-medium text-xs">
+                                <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                <span>{video.date}</span>
                               </div>
                             </div>
 
