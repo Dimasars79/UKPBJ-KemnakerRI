@@ -7,7 +7,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { AgendaCard } from '@/components/cards/AgendaCard';
-import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, Building2, Video, ExternalLink, Filter } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '@/contexts/DataContext';
