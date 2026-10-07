@@ -338,7 +338,7 @@ export default function LoginPage() {
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin text-accent-gold" />
-                    <span>Memverifikasi Sesi Supabase...</span>
+                    <span>Memeriksa Autentikasi...</span>
                   </>
                 ) : (
                   <>
