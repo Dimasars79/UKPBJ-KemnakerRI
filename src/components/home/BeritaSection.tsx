@@ -175,6 +175,26 @@ export function BeritaSection() {
                   <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-3">
                     {item.excerpt}
                   </p>
+
+                  {/* Tag Chips */}
+                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                    {(item.tags && item.tags.length > 0 ? item.tags : ['#UKPBJKemnaker', '#Pengadaan']).slice(0, 3).map((tag, tIdx) => {
+                      const norm = tag.startsWith('#') ? tag : `#${tag}`;
+                      return (
+                        <span
+                          key={tIdx}
+                          className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 border border-slate-200/80 group-hover:border-primary-blue/30 transition-colors"
+                        >
+                          {norm}
+                        </span>
+                      );
+                    })}
+                    {(item.tags && item.tags.length > 3) && (
+                      <span className="text-[10px] font-semibold text-slate-400">
+                        +{item.tags.length - 3}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Footer Link */}

@@ -11,9 +11,12 @@ interface NewsCardProps {
   imageUrl: string;
   href: string;
   featured?: boolean;
+  tags?: string[];
 }
 
-export function NewsCard({ title, summary, date, category, imageUrl, href, featured = false }: NewsCardProps) {
+export function NewsCard({ title, summary, date, category, imageUrl, href, featured = false, tags }: NewsCardProps) {
+  const itemTags = (tags && tags.length > 0) ? tags : ['#UKPBJKemnaker', '#Pengadaan'];
+
   return (
     <Link href={href} className={`group flex flex-col bg-white/90 backdrop-blur-md rounded-xl border border-white/60 overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(30,58,138,0.15)] hover:-translate-y-1 transition-all duration-500 ${featured ? 'md:flex-row md:col-span-2 lg:col-span-2' : ''}`}>
       <div className={`relative ${featured ? 'md:w-1/2' : 'h-48'} overflow-hidden bg-slate-200 flex-shrink-0`}>
@@ -41,9 +44,17 @@ export function NewsCard({ title, summary, date, category, imageUrl, href, featu
         <h3 className={`font-bold text-primary-navy mb-3 group-hover:text-primary-blue transition-colors ${featured ? 'text-2xl' : 'text-lg leading-tight'}`}>
           {title}
         </h3>
-        <p className="text-slate-600 text-sm mb-4 line-clamp-3">
+        <p className="text-slate-600 text-sm mb-3 line-clamp-3">
           {summary}
         </p>
+        {/* Tag chips */}
+        <div className="flex flex-wrap items-center gap-1.5 mb-4">
+          {itemTags.slice(0, 3).map((tag, idx) => (
+            <span key={idx} className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
+              {tag.startsWith('#') ? tag : `#${tag}`}
+            </span>
+          ))}
+        </div>
         <div className="mt-auto flex items-center text-sm font-bold text-primary-blue">
           <span>Baca Selengkapnya</span>
           <ArrowRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
