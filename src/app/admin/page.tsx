@@ -52,8 +52,7 @@ import {
   Upload,
   Image as ImageIcon,
   BookOpen,
-  Hash,
-  Tag
+  Hash
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, RegulasiItem, SopItem, PanduanItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';

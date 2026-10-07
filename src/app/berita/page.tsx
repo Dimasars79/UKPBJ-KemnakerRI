@@ -11,7 +11,7 @@ import { useData, NewsItem } from '@/contexts/DataContext';
 import { 
   Search, Calendar, ArrowRight, 
   ChevronRight, BookOpen, AlertCircle,
-  Tag, Check, X, SlidersHorizontal, RotateCcw
+  Tag
 } from 'lucide-react';
 
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -91,10 +91,6 @@ function BeritaContent() {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
-  };
-
-  const clearAllTags = () => {
-    setSelectedTags([]);
   };
 
   const filteredNews = useMemo(() => {
