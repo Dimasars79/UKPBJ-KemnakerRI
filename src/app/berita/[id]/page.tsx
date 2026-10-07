@@ -273,11 +273,19 @@ export default function BeritaDetailPage() {
                     {(currentNews.tags && currentNews.tags.length > 0
                       ? currentNews.tags
                       : ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker']
-                    ).map((tag, i) => (
-                      <span key={i} className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700">
-                        {tag.startsWith('#') ? tag : `#${tag}`}
-                      </span>
-                    ))}
+                    ).map((tag, i) => {
+                      const tagClean = tag.startsWith('#') ? tag : `#${tag}`;
+                      return (
+                        <Link 
+                          key={i} 
+                          href={`/berita?tag=${encodeURIComponent(tagClean)}`}
+                          className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 hover:text-primary-blue hover:border-primary-blue/50 hover:bg-blue-50/50 transition-colors inline-flex items-center gap-1 shadow-2xs"
+                        >
+                          <span className="text-primary-blue font-bold">#</span>
+                          <span>{tagClean.slice(1)}</span>
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

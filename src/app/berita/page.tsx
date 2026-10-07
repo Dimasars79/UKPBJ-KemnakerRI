@@ -1,24 +1,37 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { useData, NewsItem } from '@/contexts/DataContext';
 import { 
   Search, Calendar, ArrowRight, 
-  ChevronRight, BookOpen, AlertCircle
+  ChevronRight, BookOpen, AlertCircle,
+  Tag, Check, X, SlidersHorizontal, RotateCcw
 } from 'lucide-react';
 
 import { useLanguage } from '@/contexts/LanguageContext';
 
-export default function BeritaIndexPage() {
+function BeritaContent() {
   const { trans } = useLanguage();
   const { newsList } = useData();
+  const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // Sync initial tag from URL params if present (e.g. /berita?tag=UKPBJKemnaker)
+  useEffect(() => {
+    const tagParam = searchParams.get('tag');
+    if (tagParam) {
+      const formattedTag = tagParam.startsWith('#') ? tagParam : `#${tagParam}`;
+      setSelectedTags((prev) => (prev.includes(formattedTag) ? prev : [...prev, formattedTag]));
+    }
+  }, [searchParams]);
 
   const categories = useMemo(() => {
     const baseCategories = [
@@ -45,6 +58,45 @@ export default function BeritaIndexPage() {
     return newsList.filter((item) => item.status === 'Published');
   }, [newsList]);
 
+  // Aggregate all unique tags from published news with count
+  const availableTagsWithCount = useMemo(() => {
+    const defaultTagPresets = ['#UKPBJKemnaker', '#SPSEKemnaker', '#TransparansiPBJ', '#PengadaanBarangJasa', '#RegulasiPBJ'];
+    const tagCountMap: Record<string, number> = {};
+
+    publishedNews.forEach((item) => {
+      const itemTags = item.tags && item.tags.length > 0 
+        ? item.tags 
+        : ['#UKPBJKemnaker', '#TransparansiPBJ'];
+      
+      itemTags.forEach((t) => {
+        const norm = t.startsWith('#') ? t : `#${t}`;
+        tagCountMap[norm] = (tagCountMap[norm] || 0) + 1;
+      });
+    });
+
+    // Ensure common presets exist in list
+    defaultTagPresets.forEach((p) => {
+      if (!tagCountMap[p]) {
+        tagCountMap[p] = 0;
+      }
+    });
+
+    return Object.entries(tagCountMap)
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+  }, [publishedNews]);
+
+  // Toggle multi-select tag
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const clearAllTags = () => {
+    setSelectedTags([]);
+  };
+
   const filteredNews = useMemo(() => {
     return publishedNews.filter((item) => {
       const matchCat = selectedCategory === 'all' || item.category === selectedCategory;
@@ -53,9 +105,18 @@ export default function BeritaIndexPage() {
         item.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (item.author && item.author.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (item.content && item.content.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchCat && matchSearch;
+      
+      const itemTags = (item.tags && item.tags.length > 0 
+        ? item.tags 
+        : ['#UKPBJKemnaker', '#TransparansiPBJ']).map((t) => t.startsWith('#') ? t : `#${t}`);
+
+      const matchTags = selectedTags.length === 0 || selectedTags.some((selectedTag) => 
+        itemTags.includes(selectedTag)
+      );
+
+      return matchCat && matchSearch && matchTags;
     });
-  }, [publishedNews, selectedCategory, searchQuery]);
+  }, [publishedNews, selectedCategory, searchQuery, selectedTags]);
 
   const getCategoryBadgeColor = (category: NewsItem['category'] | string) => {
     switch (category) {
@@ -72,8 +133,9 @@ export default function BeritaIndexPage() {
     }
   };
 
-  // First news as featured headline (if no search filter)
-  const featuredNews = selectedCategory === 'all' && searchQuery.trim() === '' && filteredNews.length > 0 ? filteredNews[0] : null;
+  // First news as featured headline (if no filters active)
+  const isFiltered = selectedCategory !== 'all' || searchQuery.trim() !== '' || selectedTags.length > 0;
+  const featuredNews = !isFiltered && filteredNews.length > 0 ? filteredNews[0] : null;
   const gridNews = featuredNews ? filteredNews.slice(1) : filteredNews;
 
   return (
@@ -140,7 +202,8 @@ export default function BeritaIndexPage() {
         </section>
 
         {/* CATEGORY TABS SECTION */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl -mt-6 relative z-20">
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl -mt-6 relative z-20 space-y-3">
+          {/* Main Category Bar */}
           <div className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-sm border border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               {categories.map((cat) => {
@@ -174,6 +237,48 @@ export default function BeritaIndexPage() {
               {trans(`Menampilkan ${filteredNews.length} Berita`, `Showing ${filteredNews.length} News Articles`)}
             </span>
           </div>
+
+          {/* MULTI-SELECT TAGS FILTER BAR */}
+          {availableTagsWithCount.length > 0 && (
+            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 shadow-2xs border border-slate-200/90 flex flex-wrap items-center justify-between gap-2.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 px-1.5">
+                  <Tag className="w-3.5 h-3.5 text-primary-blue" />
+                  <span>{trans('Filter Tag:', 'Filter Tags:')}</span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {availableTagsWithCount.map(({ tag, count }) => {
+                    const isSelected = selectedTags.includes(tag);
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => toggleTag(tag)}
+                        className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer border select-none ${
+                          isSelected
+                            ? 'bg-primary-navy border-primary-navy text-white shadow-sm ring-2 ring-primary-blue/30 scale-102'
+                            : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 shadow-2xs hover:border-slate-400'
+                        }`}
+                      >
+                        <span>{tag}</span>
+                        {count > 0 && (
+                          <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                            isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                          }`}>
+                            {count}
+                          </span>
+                        )}
+                        <span className={`text-xs font-bold transition-transform ${isSelected ? 'text-amber-300' : 'text-slate-400'}`}>
+                          {isSelected ? '✓' : '+'}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* CONTENT AREA: FEATURED + GRID */}
@@ -216,9 +321,38 @@ export default function BeritaIndexPage() {
                         {featuredNews.title}
                       </h2>
 
-                      <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-4 mb-6">
+                      <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-4 mb-5">
                         {featuredNews.excerpt}
                       </p>
+
+                      {/* Card Tags */}
+                      <div className="flex flex-wrap items-center gap-1.5 mb-4">
+                        {(featuredNews.tags && featuredNews.tags.length > 0 
+                          ? featuredNews.tags 
+                          : ['#UKPBJKemnaker', '#TransparansiPBJ']
+                        ).map((tag, tIdx) => {
+                          const norm = tag.startsWith('#') ? tag : `#${tag}`;
+                          const isTagActive = selectedTags.includes(norm);
+                          return (
+                            <button
+                              key={tIdx}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                toggleTag(norm);
+                              }}
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-md border transition-colors cursor-pointer ${
+                                isTagActive 
+                                  ? 'bg-primary-blue text-white border-primary-blue'
+                                  : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                              }`}
+                            >
+                              {norm}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     <div className="flex items-center pt-4 border-t border-slate-100 text-xs font-bold text-primary-blue group-hover:text-primary-navy">
@@ -236,58 +370,95 @@ export default function BeritaIndexPage() {
           {/* Grid of Other Articles */}
           {gridNews.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {gridNews.map((item, idx) => (
-                <Link
-                  key={item.id}
-                  href={`/berita/${item.id}`}
-                  className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-primary-blue/30 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
-                >
-                  <div>
-                    {/* Thumbnail Cover */}
-                    <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
-                      <Image
-                        src={item.imageUrl || `/news/news-${(idx % 3) + 1}.png`}
-                        alt={item.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-3.5 left-3.5 z-10">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm ${getCategoryBadgeColor(item.category)}`}>
-                          {item.category}
-                        </span>
+              {gridNews.map((item, idx) => {
+                const itemTags = item.tags && item.tags.length > 0 
+                  ? item.tags 
+                  : ['#UKPBJKemnaker', '#TransparansiPBJ'];
+
+                return (
+                  <Link
+                    key={item.id}
+                    href={`/berita/${item.id}`}
+                    className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-primary-blue/30 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
+                  >
+                    <div>
+                      {/* Thumbnail Cover */}
+                      <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
+                        <Image
+                          src={item.imageUrl || `/news/news-${(idx % 3) + 1}.png`}
+                          alt={item.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3.5 left-3.5 z-10">
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm ${getCategoryBadgeColor(item.category)}`}>
+                            {item.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Body */}
+                      <div className="p-5 sm:p-6 space-y-2.5">
+                        <div className="flex items-center text-xs text-slate-500 font-medium">
+                          <span className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5 text-amber-500" />
+                            <span className="font-semibold text-slate-600">{item.date}</span>
+                          </span>
+                        </div>
+
+                        <h3 className="font-bold text-base text-primary-navy leading-snug line-clamp-2 group-hover:text-primary-blue transition-colors">
+                          {item.title}
+                        </h3>
+                        <p className="text-slate-500 text-xs leading-relaxed line-clamp-3">
+                          {item.excerpt}
+                        </p>
+
+                        {/* Tag Chips */}
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
+                          {itemTags.slice(0, 3).map((tag, tIdx) => {
+                            const norm = tag.startsWith('#') ? tag : `#${tag}`;
+                            const isTagActive = selectedTags.includes(norm);
+                            return (
+                              <button
+                                key={tIdx}
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  toggleTag(norm);
+                                }}
+                                className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border transition-colors cursor-pointer ${
+                                  isTagActive 
+                                    ? 'bg-primary-blue text-white border-primary-blue'
+                                    : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                                }`}
+                              >
+                                {norm}
+                              </button>
+                            );
+                          })}
+                          {itemTags.length > 3 && (
+                            <span className="text-[10px] font-semibold text-slate-400">
+                              +{itemTags.length - 3}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Body */}
-                    <div className="p-5 sm:p-6 space-y-2.5">
-                      <div className="flex items-center text-xs text-slate-500 font-medium">
-                        <span className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-amber-500" />
-                          <span className="font-semibold text-slate-600">{item.date}</span>
-                        </span>
-                      </div>
-
-                      <h3 className="font-bold text-base text-primary-navy leading-snug line-clamp-2 group-hover:text-primary-blue transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-slate-500 text-xs leading-relaxed line-clamp-3">
-                        {item.excerpt}
-                      </p>
+                    {/* Footer */}
+                    <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <span className="text-[11px] text-slate-400 font-semibold truncate max-w-[140px]">
+                        {item.author || trans('Humas Kemnaker', 'MoM Public Relations')}
+                      </span>
+                      <span className="font-bold text-primary-blue group-hover:text-primary-navy inline-flex items-center gap-1">
+                        <span>{trans('Baca', 'Read')}</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </span>
                     </div>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-[11px] text-slate-400 font-semibold truncate max-w-[140px]">
-                      {item.author || trans('Humas Kemnaker', 'MoM Public Relations')}
-                    </span>
-                    <span className="font-bold text-primary-blue group-hover:text-primary-navy inline-flex items-center gap-1">
-                      <span>{trans('Baca', 'Read')}</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <div className="bg-white rounded-3xl p-12 text-center border border-slate-200">
@@ -297,15 +468,15 @@ export default function BeritaIndexPage() {
               <h3 className="text-base font-bold text-slate-800 mb-1">{trans('Tidak Ada Berita Ditemukan', 'No News Articles Found')}</h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto mb-4">
                 {trans(
-                  `Tidak ada artikel berita yang cocok dengan kata kunci "${searchQuery}" pada kategori yang dipilih.`,
-                  `No news articles matched the keyword "${searchQuery}" in the selected category.`
+                  `Tidak ada artikel berita yang cocok dengan kriteria pencarian atau tag yang dipilih.`,
+                  `No news articles matched the search criteria or selected tags.`
                 )}
               </p>
               <button
-                onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
+                onClick={() => { setSearchQuery(''); setSelectedCategory('all'); setSelectedTags([]); }}
                 className="text-xs font-bold text-primary-blue hover:underline cursor-pointer"
               >
-                {trans('Reset Filter & Pencarian', 'Reset Filters & Search')}
+                {trans('Reset Semua Filter & Tag', 'Reset All Filters & Tags')}
               </button>
             </div>
           )}
@@ -314,5 +485,13 @@ export default function BeritaIndexPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function BeritaIndexPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-xs font-semibold text-slate-400">Memuat warta berita...</div>}>
+      <BeritaContent />
+    </Suspense>
   );
 }
