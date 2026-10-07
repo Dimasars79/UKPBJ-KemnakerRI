@@ -305,6 +305,24 @@ const DEFAULT_NOTIFICATIONS: AdminNotificationItem[] = [
 export default function AdminPortalPage() {
   const router = useRouter();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  // Load saved theme preference on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('ukpbj_admin_theme') as 'dark' | 'light' | null;
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        setTheme(savedTheme);
+      }
+    }
+  }, []);
+
+  const handleToggleTheme = (newTheme: 'dark' | 'light') => {
+    setTheme(newTheme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ukpbj_admin_theme', newTheme);
+    }
+  };
+
   const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'manage-berita' | 'manage-agenda' | 'manage-panduan' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'log-aktivitas' | 'pengaturan'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCmsOpen, setIsCmsOpen] = useState(true);
@@ -1649,7 +1667,7 @@ export default function AdminPortalPage() {
   const isDark = theme === 'dark';
 
   return (
-    <div className={`min-h-screen flex flex-col md:flex-row font-sans transition-colors duration-300 ${
+    <div className={`min-h-screen flex flex-col md:flex-row font-sans admin-theme-smooth ${
       isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-100 text-slate-800'
     }`}>
       
@@ -2750,45 +2768,104 @@ export default function AdminPortalPage() {
               </AnimatePresence>
             </div>
 
-            {/* THEME TOGGLE (LIGHT / DARK) */}
-            {/* Mobile Single Tap Toggle */}
+            {/* THEME TOGGLE (LIGHT / DARK) - ELEGANT ANIMATED SWITCHER */}
+            {/* Mobile Single Tap Interactive Toggle */}
             <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className={`p-2 rounded-xl border sm:hidden flex items-center justify-center transition-all cursor-pointer ${
+              type="button"
+              onClick={() => handleToggleTheme(theme === 'dark' ? 'light' : 'dark')}
+              className={`relative p-2 rounded-xl border sm:hidden flex items-center justify-center transition-all duration-300 cursor-pointer overflow-hidden ${
                 isDark 
-                  ? 'bg-slate-900 border-slate-800 text-blue-400 hover:text-white' 
-                  : 'bg-slate-50 border-slate-200 text-amber-600 hover:text-slate-900 shadow-xs'
+                  ? 'bg-slate-900 border-slate-700 text-blue-400 hover:text-white shadow-inner shadow-black/40' 
+                  : 'bg-white border-slate-300 text-amber-600 hover:text-amber-700 shadow-sm'
               }`}
               title={theme === 'dark' ? 'Ganti ke Mode Terang' : 'Ganti ke Mode Gelap'}
             >
-              {theme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+              <motion.div
+                key={theme}
+                initial={{ rotate: -90, scale: 0.7, opacity: 0 }}
+                animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                exit={{ rotate: 90, scale: 0.7, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              >
+                {theme === 'dark' ? (
+                  <Moon className="w-4 h-4 text-blue-300 fill-blue-400/20" />
+                ) : (
+                  <Sun className="w-4 h-4 text-amber-500 fill-amber-400/30" />
+                )}
+              </motion.div>
             </button>
 
-            {/* Desktop Dual-Pill Toggle */}
-            <div className={`hidden sm:flex items-center p-1 rounded-xl border ${
-              isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-200'
-            }`}>
-              <button
-                onClick={() => setTheme('light')}
-                className={`p-1.5 md:p-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            {/* Desktop Dual-Capsule Smooth Sliding Toggle */}
+            <div 
+              className={`hidden sm:flex items-center relative p-1 rounded-full border transition-all duration-300 select-none ${
+                isDark 
+                  ? 'bg-slate-900/90 border-slate-700/80 shadow-inner shadow-black/40' 
+                  : 'bg-slate-200/90 border-slate-300/90 shadow-inner shadow-slate-300/50'
+              }`}
+            >
+              {/* Sliding Background Capsule */}
+              <motion.div
+                className={`pointer-events-none absolute top-1 bottom-1 rounded-full shadow-md ${
                   theme === 'light'
-                    ? 'bg-white text-amber-600 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-600'
+                    ? 'left-1 w-[calc(50%-4px)] bg-white border border-amber-200/80 shadow-amber-500/10'
+                    : 'left-[50%] w-[calc(50%-4px)] bg-gradient-to-r from-blue-600 to-indigo-600 border border-blue-400/30 shadow-blue-500/25'
                 }`}
-                title="Mode Terang (Light)"
-              >
-                <Sun className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              </button>
+                layout
+                transition={{ type: "spring", stiffness: 450, damping: 32 }}
+              />
+
+              {/* Light Mode Button */}
               <button
-                onClick={() => setTheme('dark')}
-                className={`p-1.5 md:p-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  theme === 'dark'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                type="button"
+                onClick={() => handleToggleTheme('light')}
+                className={`relative z-10 flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors duration-200 cursor-pointer ${
+                  theme === 'light'
+                    ? 'text-amber-700 font-extrabold'
+                    : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-800'
                 }`}
-                title="Mode Gelap (Dark)"
+                title="Beralih ke Mode Terang (Light Mode)"
               >
-                <Moon className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                <motion.div
+                  animate={{ 
+                    rotate: theme === 'light' ? [0, 15, 0] : 0, 
+                    scale: theme === 'light' ? 1.15 : 0.9 
+                  }}
+                  transition={{ duration: 0.35 }}
+                >
+                  <Sun className={`w-3.5 h-3.5 transition-colors ${
+                    theme === 'light' 
+                      ? 'text-amber-500 fill-amber-400/40 drop-shadow-[0_0_6px_rgba(245,158,11,0.6)]' 
+                      : 'text-slate-400'
+                  }`} />
+                </motion.div>
+                <span className="text-[11px] tracking-tight">Light</span>
+              </button>
+
+              {/* Dark Mode Button */}
+              <button
+                type="button"
+                onClick={() => handleToggleTheme('dark')}
+                className={`relative z-10 flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors duration-200 cursor-pointer ${
+                  theme === 'dark'
+                    ? 'text-white font-extrabold'
+                    : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-800'
+                }`}
+                title="Beralih ke Mode Gelap (Dark Mode)"
+              >
+                <motion.div
+                  animate={{ 
+                    rotate: theme === 'dark' ? [0, -15, 0] : 0, 
+                    scale: theme === 'dark' ? 1.15 : 0.9 
+                  }}
+                  transition={{ duration: 0.35 }}
+                >
+                  <Moon className={`w-3.5 h-3.5 transition-colors ${
+                    theme === 'dark' 
+                      ? 'text-blue-200 fill-blue-300/30 drop-shadow-[0_0_8px_rgba(59,130,246,0.7)]' 
+                      : 'text-slate-400'
+                  }`} />
+                </motion.div>
+                <span className="text-[11px] tracking-tight">Dark</span>
               </button>
             </div>
 
