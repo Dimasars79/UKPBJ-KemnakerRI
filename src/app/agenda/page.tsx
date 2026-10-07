@@ -8,7 +8,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { AgendaCard } from '@/components/cards/AgendaCard';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, Building2, Video, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin, X, Building2, Video, ExternalLink, Filter } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '@/contexts/DataContext';
 
@@ -218,32 +218,49 @@ export default function AgendaPage() {
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-12 mb-12 sm:mb-16">
           <SectionHeading title={trans("Kalender Kegiatan Interaktif", "Interactive Events Calendar")} subtitle={trans("Pilih tanggal untuk melihat jadwal khusus pada hari tersebut", "Select a date to view special schedules for that day")} />
           
-          {/* Elegant Gold & Black Frame Border Calendar Widget Container */}
-          <div className="mt-6 sm:mt-8 p-[2px] rounded-2xl sm:rounded-3xl bg-gradient-to-r from-slate-950 via-amber-400 to-slate-950 shadow-xl shadow-slate-950/10">
-            <div className="rounded-[calc(1rem-1px)] sm:rounded-[calc(1.5rem-2px)] bg-white relative overflow-hidden flex flex-col lg:flex-row">
+          {/* Elegant Gold & Blue Frame Border Calendar Widget Container */}
+          <div className="mt-6 sm:mt-8 rounded-2xl sm:rounded-3xl border border-slate-200/90 bg-white shadow-xl shadow-blue-950/5 relative overflow-hidden">
+            {/* Top Royal Blue & Gold Decorative Accent Strip */}
+            <div className="h-1.5 w-full bg-gradient-to-r from-[#06182E] via-[#0D3B75] to-amber-400" />
+            
+            <div className="flex flex-col lg:flex-row">
               {/* Left: Calendar Grid */}
               <div className="w-full lg:w-1/2 p-5 sm:p-7 md:p-9 relative z-10 bg-white">
                 <div>
                   <div className="flex justify-between items-center mb-4 sm:mb-6">
-                    <h3 className="text-base sm:text-xl font-black text-slate-950 tracking-tight">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h3>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-2 h-5 sm:h-6 rounded-full bg-gradient-to-b from-[#0D3B75] to-amber-400" />
+                      <h3 className="text-base sm:text-xl font-black text-slate-900 tracking-tight">
+                        {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+                      </h3>
+                    </div>
                     <div className="flex items-center space-x-1.5 sm:space-x-2">
                       <button 
                         onClick={goToToday}
                         title={trans("Kembali ke hari ini", "Back to today")}
-                        className="px-2.5 py-1 text-[11px] sm:text-xs font-bold rounded-lg bg-slate-950 hover:bg-slate-900 text-amber-300 hover:text-amber-200 border border-amber-400/50 transition-all shadow-xs cursor-pointer"
+                        className="px-2.5 py-1 text-[11px] sm:text-xs font-bold rounded-lg bg-gradient-to-r from-[#06182E] via-[#0D3B75] to-[#1E56A0] hover:brightness-110 text-amber-300 border border-amber-400/60 transition-all shadow-xs cursor-pointer"
                       >
                         {trans('Hari Ini', 'Today')}
                       </button>
-                      <button onClick={prevMonth} aria-label={trans("Bulan sebelumnya", "Previous month")} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center hover:bg-slate-950 hover:text-white hover:border-slate-950 transition-all shadow-xs cursor-pointer">
-                        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
+                      <button 
+                        onClick={prevMonth} 
+                        aria-label={trans("Bulan sebelumnya", "Previous month")} 
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center hover:bg-[#0D3B75] hover:text-amber-300 hover:border-[#0D3B75] transition-all shadow-xs cursor-pointer"
+                      >
+                        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 hover:text-inherit" />
                       </button>
-                      <button onClick={nextMonth} aria-label={trans("Bulan berikutnya", "Next month")} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center hover:bg-slate-950 hover:text-white hover:border-slate-950 transition-all shadow-xs cursor-pointer">
-                        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
+                      <button 
+                        onClick={nextMonth} 
+                        aria-label={trans("Bulan berikutnya", "Next month")} 
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center hover:bg-[#0D3B75] hover:text-amber-300 hover:border-[#0D3B75] transition-all shadow-xs cursor-pointer"
+                      >
+                        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 hover:text-inherit" />
                       </button>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2 text-center mb-2">
+                  {/* Weekday Row with soft background container */}
+                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2 text-center mb-2.5 p-1 rounded-xl bg-slate-50/80 border border-slate-100">
                     {[
                       trans('Min', 'Sun'),
                       trans('Sen', 'Mon'),
@@ -255,8 +272,8 @@ export default function AgendaPage() {
                     ].map((day, idx) => (
                       <div 
                         key={idx} 
-                        className={`text-[10px] sm:text-xs font-bold py-1 sm:py-2 uppercase tracking-wider ${
-                          idx === 0 ? 'text-rose-600 font-black' : 'text-slate-400'
+                        className={`text-[10px] sm:text-xs font-bold py-1 uppercase tracking-wider ${
+                          idx === 0 ? 'text-rose-600 font-black' : 'text-slate-500'
                         }`}
                       >
                         {day}
@@ -284,12 +301,12 @@ export default function AgendaPage() {
                           title={holiday ? (language === 'en' ? holiday.nameEn : holiday.name) : undefined}
                           className={`h-8 sm:h-10 md:h-12 rounded-lg sm:rounded-xl flex flex-col items-center justify-center relative transition-all duration-300 text-xs sm:text-sm cursor-pointer ${
                             isSelected 
-                              ? 'bg-slate-950 text-amber-300 shadow-lg shadow-slate-950/25 font-black scale-105 sm:scale-110 z-10 ring-2 ring-amber-400 border border-amber-400' 
+                              ? 'bg-gradient-to-br from-[#06182E] via-[#0D3B75] to-[#1E56A0] text-amber-300 shadow-lg shadow-blue-900/40 font-black scale-105 sm:scale-110 z-10 ring-2 ring-amber-400 border border-amber-400' 
                               : isToday
-                              ? `bg-amber-50 ${isRedDay ? 'text-rose-600' : 'text-slate-950'} font-black border-2 border-amber-500 hover:bg-amber-100 shadow-xs`
+                              ? `bg-blue-50/90 ${isRedDay ? 'text-rose-600' : 'text-primary-navy'} font-black border-2 border-primary-blue hover:bg-blue-100/90 shadow-xs`
                               : isRedDay
                               ? 'bg-rose-50/60 hover:bg-rose-50 text-rose-600 font-bold border border-rose-200/80 hover:border-rose-400 hover:shadow-xs'
-                              : 'bg-slate-50/80 hover:bg-white text-slate-800 font-semibold border border-slate-200/80 hover:border-slate-400 hover:text-slate-950 hover:shadow-xs'
+                              : 'bg-white hover:bg-blue-50/60 text-slate-700 hover:text-primary-navy font-semibold border border-slate-200/80 hover:border-primary-blue/50 hover:shadow-xs'
                           }`}
                         >
                           <span>
@@ -300,7 +317,7 @@ export default function AgendaPage() {
                               <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isSelected ? 'bg-rose-400 ring-1 ring-white' : 'bg-rose-500'}`} />
                             )}
                             {hasActivity && (
-                              <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isSelected ? 'bg-amber-300 ring-1 ring-white' : isToday ? 'bg-amber-600' : 'bg-amber-500'}`} />
+                              <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isSelected ? 'bg-amber-300 ring-1 ring-white' : isToday ? 'bg-blue-600' : 'bg-amber-500'}`} />
                             )}
                           </div>
                         </button>
@@ -327,18 +344,16 @@ export default function AgendaPage() {
               </div>
 
               {/* Clean Vertical Divider */}
-              <div className="hidden lg:flex items-center justify-center relative z-10">
-                <div className="w-[1px] h-4/5 bg-slate-200" />
-              </div>
-              <div className="block lg:hidden px-6 relative z-10">
-                <div className="h-[1px] w-full bg-slate-200" />
+              <div className="hidden lg:block w-[1px] bg-slate-200/80 my-6" />
+              <div className="block lg:hidden px-6">
+                <div className="h-[1px] w-full bg-slate-200/80" />
               </div>
 
               {/* Right: Activity Details */}
-              <div className="w-full lg:w-1/2 p-5 sm:p-7 md:p-9 relative z-10 flex flex-col justify-between bg-slate-50/30">
+              <div className="w-full lg:w-1/2 p-5 sm:p-7 md:p-9 relative z-10 flex flex-col justify-between bg-gradient-to-br from-slate-50/40 via-white to-blue-50/20">
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
-                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-slate-950 text-amber-400 border border-amber-400/30 flex items-center justify-center flex-shrink-0 shadow-md shadow-slate-950/20">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#06182E] via-[#0D3B75] to-[#1E56A0] text-amber-300 border border-amber-400/40 flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-950/20">
                       <CalendarIcon className="w-5 h-5 sm:w-7 sm:h-7 text-amber-400" />
                     </div>
                     <div>
@@ -386,7 +401,7 @@ export default function AgendaPage() {
                               role="button"
                               tabIndex={0}
                               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedAgendaModal(activity); }}
-                              className="p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200/90 bg-white hover:bg-white hover:shadow-lg hover:border-amber-400 transition-all group border-l-4 border-l-slate-950 cursor-pointer text-left shadow-xs"
+                              className="p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200/90 bg-white hover:bg-white hover:shadow-lg hover:border-amber-400 transition-all group border-l-4 border-l-[#0D3B75] hover:border-l-amber-500 cursor-pointer text-left shadow-xs"
                             >
                               <div className="flex items-start justify-between gap-2 mb-1.5 sm:mb-2">
                                 <h4 className="font-bold text-slate-950 group-hover:text-primary-blue transition-colors text-sm sm:text-lg leading-snug">{activity.title}</h4>
@@ -445,37 +460,61 @@ export default function AgendaPage() {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
-            <SectionHeading title={trans("Kegiatan Mendatang", "Upcoming Activities")} subtitle={trans("Agenda resmi yang akan diselenggarakan dalam waktu dekat", "Official agenda to be held in the near future")} />
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-14 md:mt-16">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 gap-3 sm:gap-4 border-b border-slate-200/80 pb-4 sm:pb-6">
+            <div>
+              <SectionHeading 
+                title={trans("Kegiatan Mendatang", "Upcoming Activities")} 
+                subtitle={trans("Agenda resmi yang akan diselenggarakan dalam waktu dekat", "Official agenda to be held in the near future")} 
+                className="!mb-0"
+              />
+            </div>
             
-            <div className="mt-4 md:mt-0 flex flex-wrap gap-2">
-              <select 
-                value={categoryFilter}
-                onChange={(e) => handleCategoryChange(e.target.value)}
-                className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-xl shadow-xs outline-none focus:border-primary-blue text-sm cursor-pointer"
-              >
-                <option value="Semua Kategori">{trans('Semua Kategori', 'All Categories')}</option>
-                <option value="Tender">{trans('Tender', 'Tender')}</option>
-                <option value="Bimtek">{trans('Bimtek', 'Technical Guidance')}</option>
-                <option value="Sosialisasi">{trans('Sosialisasi', 'Socialization')}</option>
-                <option value="Sertifikasi">{trans('Sertifikasi', 'Certification')}</option>
-                <option value="Rapat">{trans('Rapat', 'Meeting')}</option>
-              </select>
-              <select 
-                value={periodFilter}
-                onChange={(e) => handlePeriodChange(e.target.value)}
-                className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-xl shadow-xs outline-none focus:border-primary-blue text-sm cursor-pointer"
-              >
-                <option value="Semua">{trans('Semua Jadwal', 'All Schedules')}</option>
-                <option value="Bulan Ini">{trans(`Bulan Ini (${monthNames[todayMonth]})`, `This Month (${monthNames[todayMonth]})`)}</option>
-                <option value="Bulan Depan">{trans(`Bulan Depan (${monthNames[nextRealMonth]})`, `Next Month (${monthNames[nextRealMonth]})`)}</option>
-              </select>
+            <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+              {/* Category Filter Pill */}
+              <div className="relative flex items-center bg-white border border-slate-200/90 rounded-2xl p-1 shadow-2xs hover:border-amber-400/80 focus-within:border-primary-blue focus-within:ring-2 focus-within:ring-primary-blue/15 transition-all">
+                <div className="pl-3 pr-1 text-slate-400">
+                  <Filter className="w-3.5 h-3.5 text-amber-500" />
+                </div>
+                <select 
+                  value={categoryFilter}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
+                  className="bg-transparent text-slate-800 py-1.5 pr-4 pl-1 text-xs font-bold outline-none cursor-pointer"
+                >
+                  <option value="Semua Kategori">{trans('Semua Kategori', 'All Categories')}</option>
+                  <option value="Tender">{trans('Tender', 'Tender')}</option>
+                  <option value="Bimtek">{trans('Bimtek', 'Technical Guidance')}</option>
+                  <option value="Sosialisasi">{trans('Sosialisasi', 'Socialization')}</option>
+                  <option value="Sertifikasi">{trans('Sertifikasi', 'Certification')}</option>
+                  <option value="Rapat">{trans('Rapat', 'Meeting')}</option>
+                </select>
+              </div>
+
+              {/* Period Filter Pill */}
+              <div className="relative flex items-center bg-white border border-slate-200/90 rounded-2xl p-1 shadow-2xs hover:border-amber-400/80 focus-within:border-primary-blue focus-within:ring-2 focus-within:ring-primary-blue/15 transition-all">
+                <div className="pl-3 pr-1 text-slate-400">
+                  <CalendarIcon className="w-3.5 h-3.5 text-blue-500" />
+                </div>
+                <select 
+                  value={periodFilter}
+                  onChange={(e) => handlePeriodChange(e.target.value)}
+                  className="bg-transparent text-slate-800 py-1.5 pr-4 pl-1 text-xs font-bold outline-none cursor-pointer"
+                >
+                  <option value="Semua">{trans('Semua Jadwal', 'All Schedules')}</option>
+                  <option value="Bulan Ini">{trans(`Bulan Ini (${monthNames[todayMonth]})`, `This Month (${monthNames[todayMonth]})`)}</option>
+                  <option value="Bulan Depan">{trans(`Bulan Depan (${monthNames[nextRealMonth]})`, `Next Month (${monthNames[nextRealMonth]})`)}</option>
+                </select>
+              </div>
+
+              {/* Active Counter Badge */}
+              <span className="hidden lg:inline-flex text-[11px] font-bold text-slate-700 bg-slate-100 border border-slate-200/80 px-3 py-2 rounded-2xl">
+                {filteredAgendas.length} {trans('Agenda', 'Events')}
+              </span>
             </div>
           </div>
 
           {/* 6 Cards Grid (2 Rows x 3 Columns) */}
-          <StaggerContainer key={currentPage} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          <StaggerContainer key={currentPage} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 md:gap-5 items-stretch">
             {paginatedAgendas.map((agenda, idx) => (
               <StaggerItem key={agenda.id || idx} className="h-full flex">
                 <AgendaCard 
@@ -584,36 +623,40 @@ export default function AgendaPage() {
                 className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
               />
 
-              {/* Modal Dialog Card */}
+              {/* Modal Dialog Card with Refined Dark Blue to Gold Frame Border */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 overflow-hidden z-10 my-auto"
+                className="relative w-full max-w-2xl max-h-[92vh] flex flex-col p-[1.5px] rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#06182E] via-[#0D3B75] to-amber-400 shadow-2xl shadow-blue-950/25 z-10 my-auto overflow-hidden"
               >
-                {/* Modal Header */}
-                <div className="bg-gradient-to-r from-primary-navy to-[#152a54] p-4 sm:p-6 text-white relative shrink-0">
-                  <div className="flex items-center justify-between gap-3 mb-2 sm:mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/15 border border-white/20 text-[10px] sm:text-xs font-bold text-amber-300 uppercase tracking-wider">
-                        {selectedAgendaModal.category || trans('Agenda PBJ', 'PBJ Agenda')}
-                      </span>
+                <div className="relative w-full h-full flex flex-col bg-white rounded-[calc(1rem-1px)] sm:rounded-[calc(1.5rem-2px)] overflow-hidden">
+                  {/* Top Subtle Blue to Gold Decorative Trim */}
+                  <div className="h-1.5 w-full bg-gradient-to-r from-[#06182E] via-[#0D3B75] to-amber-400 shrink-0" />
+
+                  {/* Modal Header with Dominant Dark Blue to Emphasized Gold Gradient */}
+                  <div className="bg-gradient-to-r from-[#06182E] from-0% via-[#0D3B75] via-50% to-[#C68A1E] to-100% p-4 sm:p-6 text-white relative shrink-0">
+                    <div className="flex items-center justify-between gap-3 mb-2 sm:mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-slate-950/40 border border-amber-300/60 text-[10px] sm:text-xs font-bold text-amber-200 uppercase tracking-wider shadow-xs backdrop-blur-xs">
+                          {selectedAgendaModal.category || trans('Agenda PBJ', 'PBJ Agenda')}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() => setSelectedAgendaModal(null)}
+                        aria-label={trans("Tutup modal", "Close modal")}
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-950/30 hover:bg-slate-950/60 border border-white/20 text-white flex items-center justify-center transition-colors cursor-pointer shadow-xs"
+                      >
+                        <X className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </button>
                     </div>
 
-                    <button
-                      onClick={() => setSelectedAgendaModal(null)}
-                      aria-label={trans("Tutup modal", "Close modal")}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-                    >
-                      <X className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </button>
+                    <h3 className="text-base sm:text-2xl font-black text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)] leading-snug">
+                      {selectedAgendaModal.title}
+                    </h3>
                   </div>
-
-                  <h3 className="text-base sm:text-2xl font-bold sm:font-black text-white leading-snug">
-                    {selectedAgendaModal.title}
-                  </h3>
-                </div>
 
                 {/* Modal Body (Scrollable if content overflows on tiny screens) */}
                 <div className="p-4 sm:p-6 space-y-3.5 sm:space-y-5 overflow-y-auto">
@@ -712,7 +755,8 @@ export default function AgendaPage() {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
+            </motion.div>
             </div>
           )}
         </AnimatePresence>
