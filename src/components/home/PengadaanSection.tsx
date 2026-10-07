@@ -52,28 +52,28 @@ export function PengadaanSection() {
     switch (status) {
       case 'Pendaftaran Dibuka':
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+          <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
             {trans('Pendaftaran Dibuka', 'Registration Open')}
           </span>
         );
       case 'Tahap Evaluasi':
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200/80">
-            <Clock className="w-3 h-3 mr-1 text-amber-600" />
+          <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200/80">
+            <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 text-amber-600" />
             {trans('Tahap Evaluasi', 'Evaluation Stage')}
           </span>
         );
       case 'Pemberian Penjelasan':
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80">
-            <Sparkles className="w-3 h-3 mr-1 text-blue-600" />
+          <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80">
+            <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 text-blue-600" />
             {trans('Aanwijzing / Penjelasan', 'Clarification Stage')}
           </span>
         );
       case 'Selesai':
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
-            <CheckCircle2 className="w-3 h-3 mr-1 text-slate-500" />
+          <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+            <CheckCircle2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 text-slate-500" />
             {trans('Selesai', 'Completed')}
           </span>
         );
@@ -81,7 +81,7 @@ export function PengadaanSection() {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-50 via-white to-slate-50 border-t border-slate-200 relative overflow-hidden" id="pengadaan">
+    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-slate-50 via-white to-slate-50 border-t border-slate-200 relative overflow-hidden" id="pengadaan">
       {/* Subtle background glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-blue/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent-gold/5 rounded-full blur-[140px] pointer-events-none" />
@@ -89,12 +89,12 @@ export function PengadaanSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 sm:gap-6">
           <FadeIn direction="left">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary-navy tracking-tight">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-primary-navy tracking-tight">
               {t('home.pengadaan_title')}
             </h2>
-            <p className="text-slate-600 max-w-2xl mt-2 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-600 max-w-2xl mt-1.5 sm:mt-2 text-xs sm:text-sm md:text-base leading-relaxed">
               {t('home.pengadaan_desc')}
             </p>
           </FadeIn>
@@ -103,10 +103,10 @@ export function PengadaanSection() {
             <div className="flex items-center gap-3">
               <Link 
                 href="/login" 
-                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-navy to-primary-blue text-white text-xs sm:text-sm font-bold hover:shadow-lg hover:shadow-blue-900/20 hover:-translate-y-0.5 transition-all"
+                className="inline-flex items-center space-x-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-primary-navy to-primary-blue text-white text-xs sm:text-sm font-bold hover:shadow-lg hover:shadow-blue-900/20 hover:-translate-y-0.5 transition-all"
               >
                 <span>{trans('Masuk Portal Admin', 'Admin Portal Login')}</span>
-                <ArrowRight className="w-4 h-4 text-accent-gold" />
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent-gold" />
               </Link>
             </div>
           </FadeIn>
@@ -114,23 +114,23 @@ export function PengadaanSection() {
 
         {/* Search & Filter Card */}
         <FadeIn direction="up">
-          <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xl shadow-slate-200/50 mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+          <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 border border-slate-200 shadow-xl shadow-slate-200/50 mb-5 sm:mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 sm:gap-4 items-center">
               
               {/* Search Bar */}
               <div className="lg:col-span-6 relative">
-                <Search className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Search className="w-4 h-4 sm:w-5 sm:h-5 absolute left-3 sm:left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input 
                   type="text"
                   placeholder={trans("Cari nama paket, kode tender, atau unit kerja...", "Search package name, tender code, or unit...")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-all"
+                  className="w-full pl-9 sm:pl-11 pr-3 sm:pr-4 py-2 sm:py-2.5 md:py-3 bg-slate-50 border border-slate-200 rounded-lg sm:rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-all"
                 />
               </div>
 
               {/* Category Filter Pills */}
-              <div className="lg:col-span-4 flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+              <div className="lg:col-span-4 flex items-center gap-1.5 sm:gap-2 overflow-x-auto pt-1 pb-2.5 sm:pb-3 scroll-smooth [scrollbar-width:thin] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-200 hover:[&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:bg-transparent">
                 {categories.map((cat) => {
                   const label = cat === 'Semua' ? trans('Semua', 'All') :
                                 cat === 'Pengadaan Langsung' ? trans('Pengadaan Langsung', 'Direct Proc.') :
@@ -139,7 +139,7 @@ export function PengadaanSection() {
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
-                      className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                      className={`px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all ${
                         selectedCategory === cat
                           ? 'bg-primary-navy text-white shadow-md'
                           : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -156,7 +156,7 @@ export function PengadaanSection() {
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-primary-blue cursor-pointer"
+                  className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold text-slate-700 focus:outline-none focus:border-primary-blue cursor-pointer"
                 >
                   {statuses.map((st) => {
                     const label = st === 'Semua' ? trans('Semua Status', 'All Statuses') :
@@ -177,58 +177,58 @@ export function PengadaanSection() {
         </FadeIn>
 
         {/* Package Grid / List */}
-        <div className="space-y-4 mb-10">
+        <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
           {filteredPackages.length > 0 ? (
             filteredPackages.map((pkg, idx) => (
               <FadeIn key={pkg.id} delay={idx * 0.05} direction="up">
-                <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-primary-blue/40 transition-all duration-300 group">
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-5 md:p-6 border border-slate-200/90 shadow-xs hover:shadow-md hover:border-primary-blue/40 transition-all duration-300 group">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
                     
                     {/* Left: Info */}
-                    <div className="flex-1 space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-mono font-bold">
+                    <div className="flex-1 space-y-1.5 sm:space-y-2">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] sm:text-xs font-mono font-bold">
                           {pkg.code}
                         </span>
-                        <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-primary-navy text-xs font-semibold">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-md bg-blue-50 text-primary-navy text-[10px] sm:text-xs font-semibold">
                           {pkg.category}
                         </span>
                         {getStatusBadge(pkg.status)}
                       </div>
 
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-primary-blue transition-colors">
+                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 group-hover:text-primary-blue transition-colors">
                         {pkg.title}
                       </h3>
 
-                      <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-slate-500">
+                      <div className="flex flex-wrap items-center gap-y-1 gap-x-3 sm:gap-x-4 text-[11px] sm:text-xs text-slate-500">
                         <div className="flex items-center gap-1.5">
-                          <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                          <Building2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400" />
                           <span>{pkg.unit}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                          <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400" />
                           <span>{trans('Batas: ', 'Deadline: ')}<strong className="text-slate-700">{pkg.deadline}</strong></span>
                         </div>
                       </div>
                     </div>
 
                     {/* Right: HPS & Action */}
-                    <div className="flex flex-row lg:flex-col lg:items-end justify-between items-center pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100 gap-3">
+                    <div className="flex flex-row lg:flex-col lg:items-end justify-between items-center pt-3 sm:pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100 gap-2 sm:gap-3">
                       <div>
-                        <span className="text-[11px] uppercase tracking-wider text-slate-400 block lg:text-right font-medium">
+                        <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400 block lg:text-right font-medium">
                           {trans('Nilai HPS / Pagu', 'HPS / Budget Ceiling')}
                         </span>
-                        <span className="text-base sm:text-lg font-black text-primary-navy">
+                        <span className="text-sm sm:text-base md:text-lg font-black text-primary-navy">
                           {pkg.hps}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         <button
                           onClick={() => setActiveModalPackage(pkg)}
-                          className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-primary-navy hover:text-white text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+                          className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-slate-100 hover:bg-primary-navy hover:text-white text-slate-700 text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
                         >
-                          <FileText className="w-3.5 h-3.5" />
+                          <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                           <span>{trans('Detail Paket', 'Package Details')}</span>
                         </button>
 
@@ -236,10 +236,10 @@ export function PengadaanSection() {
                           href="https://inaproc.lkpp.go.id"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 hover:text-primary-blue hover:bg-blue-50 hover:border-blue-200 transition-all"
+                          className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-500 hover:text-primary-blue hover:bg-blue-50 hover:border-blue-200 transition-all"
                           title="Buka di SPSE LKPP"
                         >
-                          <ExternalLink className="w-4 h-4" />
+                          <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </a>
                       </div>
                     </div>

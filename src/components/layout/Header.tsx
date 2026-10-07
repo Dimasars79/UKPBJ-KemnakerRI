@@ -31,6 +31,7 @@ export function Header() {
   const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
   const [readNotifCount, setReadNotifCount] = useState<number>(0);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const a11y = useAccessibility();
@@ -461,28 +462,40 @@ export function Header() {
           </div>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center space-x-1">
+          <nav 
+            className="hidden lg:flex items-center space-x-1 relative"
+            onMouseLeave={() => setHoveredNav(null)}
+          >
             {navLinks.map((item) => {
+              const isCurrentActive = item.hasDropdown
+                ? (item.dropdownType === 'info' ? pathname.startsWith('/informasi') : pathname.startsWith('/tentang'))
+                : (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href));
+              const isHighlighted = hoveredNav !== null ? hoveredNav === item.href : isCurrentActive;
+
               if (item.hasDropdown) {
                 const isInfo = item.dropdownType === 'info';
                 const isDropdownOpen = isInfo ? isInfoDropdownOpen : isAboutDropdownOpen;
                 const setDropdownOpen = isInfo ? setIsInfoDropdownOpen : setIsAboutDropdownOpen;
-                const isCurrentActive = isInfo ? pathname.startsWith('/informasi') : pathname.startsWith('/tentang');
                 const submenuList = isInfo ? infoSubmenu : aboutSubmenu;
 
                 return (
                   <div 
                     key={item.label}
                     className="relative"
-                    onMouseEnter={() => setDropdownOpen(true)}
-                    onMouseLeave={() => setDropdownOpen(false)}
+                    onMouseEnter={() => {
+                      setDropdownOpen(true);
+                      setHoveredNav(item.href);
+                    }}
+                    onMouseLeave={() => {
+                      setDropdownOpen(false);
+                    }}
                   >
                     <Link
                       href={item.href}
                       className="relative px-3.5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 group flex items-center gap-1.5"
                     >
                       <span className={`relative z-10 transition-colors duration-200 ${
-                        isCurrentActive
+                        isHighlighted
                           ? 'text-primary-navy font-bold'
                           : 'text-slate-600 group-hover:text-primary-navy'
                       }`}>
@@ -490,17 +503,14 @@ export function Header() {
                       </span>
                       <ChevronDown className={`w-3.5 h-3.5 relative z-10 text-slate-500 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-primary-navy' : ''}`} />
                       
-                      {/* Floating active pill highlight */}
-                      {isCurrentActive && (
+                      {/* Sliding active / hover capsule pill */}
+                      {isHighlighted && (
                         <motion.span 
                           layoutId="activeNavPill"
-                          className="absolute inset-0 bg-slate-100 border border-slate-200/80 rounded-full -z-0 shadow-xs"
-                          transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                          className="absolute inset-0 bg-slate-100 border border-slate-300/90 rounded-full -z-0 shadow-2xs pointer-events-none"
+                          transition={{ type: "spring", stiffness: 450, damping: 32, mass: 0.7 }}
                         />
                       )}
-                      
-                      {/* Subtle Hover Background */}
-                      <span className="absolute inset-0 bg-slate-100/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none -z-0" />
                     </Link>
 
                     {/* Dropdown Menu */}
@@ -552,27 +562,25 @@ export function Header() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  onMouseEnter={() => setHoveredNav(item.href)}
                   className="relative px-3.5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 group"
                 >
                   <span className={`relative z-10 transition-colors duration-200 ${
-                    pathname === item.href
+                    isHighlighted
                       ? 'text-primary-navy font-bold'
                       : 'text-slate-600 group-hover:text-primary-navy'
                   }`}>
                     {item.label}
                   </span>
                   
-                  {/* Floating active pill highlight */}
-                  {pathname === item.href && (
+                  {/* Sliding active / hover capsule pill */}
+                  {isHighlighted && (
                     <motion.span 
                       layoutId="activeNavPill"
-                      className="absolute inset-0 bg-slate-100 border border-slate-200/80 rounded-full -z-0 shadow-xs"
-                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      className="absolute inset-0 bg-slate-100 border border-slate-300/90 rounded-full -z-0 shadow-2xs pointer-events-none"
+                      transition={{ type: "spring", stiffness: 450, damping: 32, mass: 0.7 }}
                     />
                   )}
-                  
-                  {/* Subtle Hover Background */}
-                  <span className="absolute inset-0 bg-slate-100/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none -z-0" />
                 </Link>
               );
             })}

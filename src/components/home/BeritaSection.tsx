@@ -80,7 +80,7 @@ export function BeritaSection() {
         {/* Section Header with Carousel Navigation Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <FadeIn direction="left">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-primary-navy tracking-tight">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-primary-navy tracking-tight">
               {t('home.news_title')}
             </h2>
             <p className="text-slate-500 text-xs sm:text-sm mt-1 max-w-xl">
@@ -198,14 +198,17 @@ export function BeritaSection() {
                 </div>
 
                 {/* Footer Link */}
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-semibold truncate max-w-[160px]">
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3 min-w-0">
+                  <span 
+                    className="text-[11px] text-slate-400 font-semibold truncate min-w-0 flex-1"
+                    title={item.author || 'Humas Kemnaker'}
+                  >
                     {item.author || 'Humas Kemnaker'}
                   </span>
 
                   <Link 
                     href={`/berita/${item.id}`}
-                    className="inline-flex items-center text-xs font-bold text-primary-blue group-hover:text-primary-navy transition-colors gap-1.5"
+                    className="inline-flex items-center text-xs font-bold text-primary-blue group-hover:text-primary-navy transition-colors gap-1.5 shrink-0 whitespace-nowrap ml-auto"
                   >
                     <span>{trans('Baca Selengkapnya', 'Read More')}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

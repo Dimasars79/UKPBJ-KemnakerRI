@@ -252,8 +252,8 @@ export default function Home() {
               
               <div className="w-full lg:w-2/3 text-left">
                 <FadeIn direction="left">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 md:mb-6 text-primary-navy tracking-tight">{t('home.about_title')}</h2>
-                  <div className="w-12 sm:w-16 h-1 bg-accent-gold mb-5 sm:mb-6 md:mb-8 rounded-full" />
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-5 text-primary-navy tracking-tight">{t('home.about_title')}</h2>
+                  <div className="w-10 sm:w-12 md:w-16 h-0.5 sm:h-1 bg-accent-gold mb-4 sm:mb-6 md:mb-8 rounded-full" />
                   
                   <div className="relative p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white/80 backdrop-blur-md border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-6 sm:mb-8 md:mb-10 group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
                     <Quote className="absolute top-3 left-3 sm:top-5 sm:left-5 w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 text-accent-gold/15 transform -scale-x-100 group-hover:scale-110 group-hover:-scale-x-110 transition-transform duration-500" />

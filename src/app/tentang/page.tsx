@@ -152,28 +152,28 @@ export default function TentangPage() {
           {/* FAQ SECTION */}
           <div id="faq" className="scroll-mt-32 mb-10">
             <SectionHeading title={trans('Pertanyaan Umum (FAQ)', 'Frequently Asked Questions (FAQ)')} subtitle={trans('Informasi seputar pertanyaan yang sering diajukan terkait UKPBJ', 'Information on frequently asked questions about UKPBJ')} />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-              <FadeIn direction="up" delay={0.1} className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80">
-                <h4 className="text-base font-bold text-primary-navy mb-2">{trans('Bagaimana cara mendaftar sebagai penyedia di SPSE Kemnaker?', 'How to register as a vendor in MoM SPSE?')}</h4>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-6 mt-5 sm:mt-10">
+              <FadeIn direction="up" delay={0.1} className="bg-white p-3.5 sm:p-6 rounded-xl sm:rounded-2xl shadow-xs border border-slate-200/80">
+                <h4 className="text-xs sm:text-base font-bold text-primary-navy mb-1 sm:mb-2">{trans('Bagaimana cara mendaftar sebagai penyedia di SPSE Kemnaker?', 'How to register as a vendor in MoM SPSE?')}</h4>
+                <p className="text-[11px] sm:text-sm text-slate-500 leading-relaxed">
                   {trans('Penyedia dapat mendaftar secara online melalui portal SPSE Kemnaker, kemudian membawa dokumen asli verifikasi ke kantor LPSE/UKPBJ Kemnaker untuk aktivasi akun.', 'Vendors can register online through the MoM SPSE portal, then bring original verification documents to the LPSE/UKPBJ office for account activation.')}
                 </p>
               </FadeIn>
-              <FadeIn direction="up" delay={0.2} className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80">
-                <h4 className="text-base font-bold text-primary-navy mb-2">{trans('Di mana melihat jadwal pengumuman tender aktif?', 'Where to view active tender announcement schedules?')}</h4>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+              <FadeIn direction="up" delay={0.2} className="bg-white p-3.5 sm:p-6 rounded-xl sm:rounded-2xl shadow-xs border border-slate-200/80">
+                <h4 className="text-xs sm:text-base font-bold text-primary-navy mb-1 sm:mb-2">{trans('Di mana melihat jadwal pengumuman tender aktif?', 'Where to view active tender announcement schedules?')}</h4>
+                <p className="text-[11px] sm:text-sm text-slate-500 leading-relaxed">
                   {trans('Seluruh jadwal tender aktif dapat dipantau langsung melalui menu Agenda dan portal SPSE resmi Kemnaker RI secara transparan dan real-time.', 'All active tender schedules can be monitored directly through the Agenda menu and official SPSE portal transparently and in real-time.')}
                 </p>
               </FadeIn>
-              <FadeIn direction="up" delay={0.3} className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80">
-                <h4 className="text-base font-bold text-primary-navy mb-2">{trans('Apakah ada biaya dalam proses pengadaan barang dan jasa?', 'Are there any fees in the procurement process?')}</h4>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+              <FadeIn direction="up" delay={0.3} className="bg-white p-3.5 sm:p-6 rounded-xl sm:rounded-2xl shadow-xs border border-slate-200/80">
+                <h4 className="text-xs sm:text-base font-bold text-primary-navy mb-1 sm:mb-2">{trans('Apakah ada biaya dalam proses pengadaan barang dan jasa?', 'Are there any fees in the procurement process?')}</h4>
+                <p className="text-[11px] sm:text-sm text-slate-500 leading-relaxed">
                   {trans('Seluruh layanan pengadaan barang dan jasa serta verifikasi di UKPBJ Kemnaker adalah 100% GRATIS dan bebas dari segala bentuk pungutan liar.', 'All procurement and verification services at UKPBJ Kemnaker are 100% FREE and free from any illegal levies.')}
                 </p>
               </FadeIn>
-              <FadeIn direction="up" delay={0.4} className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80">
-                <h4 className="text-base font-bold text-primary-navy mb-2">{trans('Bagaimana mengajukan konsultasi pengadaan barang dan jasa?', 'How to request procurement consultation?')}</h4>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+              <FadeIn direction="up" delay={0.4} className="bg-white p-3.5 sm:p-6 rounded-xl sm:rounded-2xl shadow-xs border border-slate-200/80">
+                <h4 className="text-xs sm:text-base font-bold text-primary-navy mb-1 sm:mb-2">{trans('Bagaimana mengajukan konsultasi pengadaan barang dan jasa?', 'How to request procurement consultation?')}</h4>
+                <p className="text-[11px] sm:text-sm text-slate-500 leading-relaxed">
                   {trans('Anda dapat menggunakan menu Layanan > Klinik Pengadaan atau menghubungi Helpdesk UKPBJ melalui tombol kontak WhatsApp yang tersedia.', 'You can use the Services > Procurement Clinic menu or contact the UKPBJ Helpdesk via the available WhatsApp button.')}
                 </p>
               </FadeIn>
