@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Model Arsitektur Sistem UKPBJ Kemnaker RI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #0d1527;
+      color: #1e293b;
+      padding: 30px;
+      width: 2200px;
+      min-height: 1450px;
+    }
+
+    .canvas {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 36px 40px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+      border: 1px solid #e2e8f0;
+      position: relative;
+    }
+
+    /* HEADER */
+    .header-bar {
+      text-align: center;
+      margin-bottom: 28px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 20px;
+      position: relative;
+    }
+
+    .header-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      background: linear-gradient(135deg, #0f766e, #047857);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 30px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+    }
+
+    .main-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .sub-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* MAIN THREE COLUMN GRID */
+    .top-section {
+      display: grid;
+      grid-template-columns: 460px 1fr 480px;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sec-layanan-title { color: #0284c7; }
+    .sec-portal-title { color: #0f766e; }
+    .sec-bisnis-title { color: #d97706; }
+    .sec-data-title { color: #2563eb; }
+    .sec-infra-title { color: #4f46e5; }
+    .sec-sec-title { color: #dc2626; }
+
+    /* CARDS */
+    .box-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .box-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .card-header {
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-body {
+      padding: 10px 14px;
+    }
+
+    .card-body ul {
+      list-style: none;
+    }
+
+    .card-body li {
+      font-size: 11.5px;
+      color: #334155;
+      margin-bottom: 5px;
+      position: relative;
+      padding-left: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .card-body li::before {
+      content: "•";
+      color: #0284c7;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* THEME COLORS FOR CARDS */
+    .bg-blue-hdr { background: linear-gradient(135deg, #0369a1, #0284c7); }
+    .bg-teal-hdr { background: linear-gradient(135deg, #0f766e, #14b8a6); }
+    .bg-emerald-hdr { background: linear-gradient(135deg, #047857, #10b981); }
+    .bg-amber-hdr { background: linear-gradient(135deg, #b45309, #f59e0b); }
+    .bg-indigo-hdr { background: linear-gradient(135deg, #4338ca, #6366f1); }
+    .bg-purple-hdr { background: linear-gradient(135deg, #6d28d9, #8b5cf6); }
+    .bg-navy-hdr { background: linear-gradient(135deg, #0f172a, #1e293b); }
+    .bg-red-hdr { background: linear-gradient(135deg, #b91c1c, #ef4444); }
+
+    /* MIDDLE COLUMN: PORTALS & WEB SERVICE */
+    .portals-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .portals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .webservice-bar {
+      background: linear-gradient(90deg, #047857, #0284c7, #4f46e5);
+      border-radius: 12px;
+      padding: 12px 18px;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+    }
+
+    .webservice-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 8px;
+      opacity: 0.95;
+    }
+
+    .webservice-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* RIGHT COLUMN: PROSES BISNIS (FLOWCHART) */
+    .flowchart-container {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 16px 14px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .flow-box {
+      flex: 1;
+      background: #ffffff;
+      border: 1.5px solid #94a3b8;
+      border-radius: 8px;
+      padding: 8px 6px;
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #1e293b;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .flow-box.highlight {
+      border-color: #047857;
+      background: #f0fdf4;
+      color: #065f46;
+    }
+
+    .flow-box.ai-box {
+      border-color: #0284c7;
+      background: #f0f9ff;
+      color: #0369a1;
+    }
+
+    .flow-box.output-box {
+      border-color: #16a34a;
+      background: #dcfce7;
+      color: #14532d;
+      font-weight: 800;
+    }
+
+    .arrow-right {
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .arrow-down-center {
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 900;
+      margin: -4px 0 6px 0;
+    }
+
+    /* LOWER SECTION: DATA, INFRA, SECURITY */
+    .bottom-section {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr 360px;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+
+    .data-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .infra-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .audit-bar {
+      margin-top: 10px;
+      background: #f1f5f9;
+      border: 1px dashed #94a3b8;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 11px;
+      color: #334155;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .audit-bar strong {
+      color: #0f172a;
+      text-transform: uppercase;
+      font-size: 10.5px;
+      letter-spacing: 0.5px;
+    }
+
+    /* FOOTER: AKTOR STAKEHOLDER */
+    .actors-section {
+      border-top: 2px dashed #cbd5e1;
+      padding-top: 18px;
+    }
+
+    .actors-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    .actors-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 12px;
+    }
+
+    .actor-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .actor-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e293b, #334155);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .actor-name {
+      font-size: 11px;
+      font-weight: 800;
+      color: #0f172a;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .actor-desc {
+      font-size: 9.5px;
+      color: #64748b;
+      line-height: 1.25;
+      font-weight: 500;
+    }
+
+    .actor-card:nth-child(1) .actor-icon { background: linear-gradient(135deg, #0284c7, #0369a1); }
+    .actor-card:nth-child(2) .actor-icon { background: linear-gradient(135deg, #0f766e, #047857); }
+    .actor-card:nth-child(3) .actor-icon { background: linear-gradient(135deg, #4338ca, #3730a3); }
+    .actor-card:nth-child(4) .actor-icon { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+    .actor-card:nth-child(5) .actor-icon { background: linear-gradient(135deg, #b45309, #d97706); }
+    .actor-card:nth-child(6) .actor-icon { background: linear-gradient(135deg, #059669, #10b981); }
+    .actor-card:nth-child(7) .actor-icon { background: linear-gradient(135deg, #0f172a, #334155); }
+    .actor-card:nth-child(8) .actor-icon { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+
+  </style>
+</head>
+<body>
+
+  <div class="canvas">
+
+    <!-- HEADER TITLE -->
+    <div class="header-bar">
+      <div class="header-badge">Cetaktir Biru Arsitektur &middot; UKPBJ Kemnaker RI</div>
+      <h1 class="main-title">Model Arsitektur Sistem Informasi &amp; Portal Layanan Digital UKPBJ</h1>
+      <p class="sub-title">Biro Perencanaan dan Pengadaan Barang/Jasa &middot; Sekretariat Jenderal Kementerian Ketenagakerjaan RI</p>
+    </div>
+
+    <!-- TOP SECTION: LAYANAN | PORTAL & API | PROSES BISNIS -->
+    <div class="top-section">
+
+      <!-- 1. LAYANAN & FITUR UKPBJ -->
+      <div>
+        <div class="section-title sec-layanan-title">
+          <span>❖ LAYANAN &amp; FITUR TERPADU</span>
+        </div>
+        <div class="box-grid-2">
+
+          <div class="card">
+            <div class="card-header bg-blue-hdr">INFORMASI PUBLIK PBJ</div>
+            <div class="card-body">
+              <ul>
+                <li>Profil &amp; Tupoksi UKPBJ</li>
+                <li>Visi, Misi &amp; Maklumat</li>
+                <li>Struktur &amp; Tim Pokja</li>
+                <li>Berita &amp; Siaran Pers</li>
+                <li>Pengumuman Pengadaan</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-teal-hdr">REPOSITORI REGULASI</div>
+            <div class="card-body">
+              <ul>
+                <li>Perpres PBJ &amp; LKPP</li>
+                <li>Permenaker / Kepmenaker</li>
+                <li>Standar Dokumen (SDP)</li>
+                <li>SOP Pengadaan Barang/Jasa</li>
+                <li>Unduh Format &amp; Template</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-emerald-hdr">BIMTEK &amp; AGENDA</div>
+            <div class="card-body">
+              <ul>
+                <li>Kalender Agenda PBJ</li>
+                <li>Bimtek PPK &amp; Pokja</li>
+                <li>Sosialisasi Regulasi Baru</li>
+                <li>Integrasi Link Zoom/Teams</li>
+                <li>Materi &amp; Silabus Kegiatan</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-amber-hdr">KONSULTASI &amp; WBS</div>
+            <div class="card-body">
+              <ul>
+                <li>Klinik Konsultasi PBJ Daring</li>
+                <li>Whistleblowing System (WBS)</li>
+                <li>Form Pengaduan Rekanan</li>
+                <li>Integrasi WhatsApp Helpdesk</li>
+                <li>Tracking Penanganan Aduan</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-indigo-hdr">AI VIRTUAL CONSULTANT</div>
+            <div class="card-body">
+              <ul>
+                <li>Chatbot Cerdas 24/7</li>
+                <li>Knowledge Base PBJ LKPP</li>
+                <li>Rekomendasi Alur Tender</li>
+                <li>Tanya Jawab Regulasi</li>
+                <li>Dukungan Dwibahasa (ID/EN)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-purple-hdr">AKSESIBILITAS INKLUSIF</div>
+            <div class="card-body">
+              <ul>
+                <li>Text-to-Speech (Voice Reader)</li>
+                <li>Font Zoom (A+ / A-)</li>
+                <li>Mode Gelap &amp; Terang</li>
+                <li>High Contrast Display</li>
+                <li>Bilingual (Indonesia &amp; English)</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 2. PORTAL & WEB SERVICE -->
+      <div class="portals-container">
+        <div>
+          <div class="section-title sec-portal-title">
+            <span>⚙ PORTAL APLIKASI &amp; MODUL SISTEM</span>
+          </div>
+          <div class="portals-grid">
+
+            <div class="card">
+              <div class="card-header bg-teal-hdr">PORTAL PUBLIK (WEB)</div>
+              <div class="card-body">
+                <ul>
+                  <li>Beranda &amp; Stat PBJ</li>
+                  <li>Profil &amp; Struktur Organisasi</li>
+                  <li>Pusat Berita &amp; Artikel</li>
+                  <li>Pusat Regulasi &amp; Unduhan</li>
+                  <li>Agenda Kegiatan Bimtek</li>
+                  <li>Galeri Dokumentasi</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header bg-indigo-hdr">AI ASSISTANT CHATBOT</div>
+              <div class="card-body">
+                <ul>
+                  <li>Interface Chat Interaktif</li>
+                  <li>Gemini AI Multi-turn LLM</li>
+                  <li>Context Knowledge Retriever</li>
+                  <li>Pencarian Regulasi Otomatis</li>
+                  <li>Mode Suara &amp; Text-to-Speech</li>
+                  <li>Bilingual Toggle (ID &amp; EN)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header bg-navy-hdr">PORTAL ADMIN CMS</div>
+              <div class="card-body">
+                <ul>
+                  <li>Dashboard Statistik Konten</li>
+                  <li>Manajemen Berita &amp; Banner</li>
+                  <li>Manajemen Agenda &amp; Bimtek</li>
+                  <li>Manajemen Regulasi &amp; PDF</li>
+                  <li>Manajemen Galeri Kegiatan</li>
+                  <li>Manajemen Pengguna &amp; Role</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header bg-blue-hdr">PORTAL PPK &amp; POKJA</div>
+              <div class="card-body">
+                <ul>
+                  <li>Repositori Template SDP</li>
+                  <li>Jadwal Pendampingan PBJ</li>
+                  <li>Pengajuan Konsultasi Pokja</li>
+                  <li>Pemberitahuan Agenda Bimtek</li>
+                  <li>Dokumentasi Pengadaan Satker</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header bg-amber-hdr">PORTAL VERIFIKATOR</div>
+              <div class="card-body">
+                <ul>
+                  <li>Monitoring Masuk Aduan</li>
+                  <li>Verifikasi Berkas Konsultasi</li>
+                  <li>Penyusunan Tanggapan Resmi</li>
+                  <li>Disposisi ke Pokja / APIP</li>
+                  <li>Log Penanganan Pengaduan</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header bg-emerald-hdr">PORTAL PIMPINAN</div>
+              <div class="card-body">
+                <ul>
+                  <li>Executive Dashboard</li>
+                  <li>Statistik Keterbukaan PBJ</li>
+                  <li>Tren Kueri AI &amp; FAQ</li>
+                  <li>Monitoring Respon Aduan</li>
+                  <li>Laporan Kinerja Bulanan</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- WEB SERVICE / API BAR -->
+        <div class="webservice-bar">
+          <div class="webservice-title">INTEGRASI WEB SERVICE &amp; APPLICATION PROGRAMMING INTERFACE (API)</div>
+          <div class="webservice-pills">
+            <span class="pill">🔗 Integrasi SPSE / LPSE Kemnaker</span>
+            <span class="pill">🔗 Integrasi SiRUP LKPP</span>
+            <span class="pill">🔗 Integrasi E-Katalog &amp; Toko Daring</span>
+            <span class="pill">🔗 Integrasi Google Gemini AI API</span>
+            <span class="pill">🔗 Integrasi WhatsApp Helpdesk API</span>
+            <span class="pill">🔗 Integrasi SSO SIAPKerja</span>
+            <span class="pill">🔗 RESTful Next.js API Routes</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3. PROSES BISNIS (FLOWCHART) -->
+      <div>
+        <div class="section-title sec-bisnis-title">
+          <span>⚡ ALUR PROSES BISNIS &amp; TATA KELOLA</span>
+        </div>
+        <div class="flowchart-container">
+
+          <!-- Row 1 -->
+          <div class="flow-row">
+            <div class="flow-box">Pengguna Mengakses Portal UKPBJ</div>
+            <div class="arrow-right">→</div>
+            <div class="flow-box">Pilih Menu / Layanan Dibutuhkan</div>
+          </div>
+          <div class="arrow-down-center">↓</div>
+
+          <!-- Row 2: Percabangan Layanan -->
+          <div class="flow-row">
+            <div class="flow-box">Cari Berita &amp; Unduh Regulasi</div>
+            <div class="flow-box ai-box">Tanya AI Assistant (Chatbot PBJ)</div>
+            <div class="flow-box highlight">Ajukan Aduan / Konsultasi Daring</div>
+          </div>
+          <div class="arrow-down-center">↓</div>
+
+          <!-- Row 3: Pemrosesan -->
+          <div class="flow-row">
+            <div class="flow-box">Download Dokumen PDF / Template</div>
+            <div class="flow-box ai-box">AI Analisis Knowledge Base LKPP</div>
+            <div class="flow-box highlight">Sistem Enkripsi &amp; Input Tiket</div>
+          </div>
+          <div class="arrow-down-center">↓</div>
+
+          <!-- Row 4: Verifikasi & Aksi -->
+          <div class="flow-row">
+            <div class="flow-box">User Mendapatkan Referensi Resmi</div>
+            <div class="flow-box ai-box">Respon Instan 24/7 Dwibahasa</div>
+            <div class="flow-box highlight">Verifikator &amp; Pokja Menindaklanjuti</div>
+          </div>
+          <div class="arrow-down-center">↓</div>
+
+          <!-- Row 5: Admin & Output Akhir -->
+          <div class="flow-row">
+            <div class="flow-box output-box">Informasi Publik Transparan</div>
+            <div class="flow-box output-box">Edukasi Regulasi Efektif</div>
+            <div class="flow-box output-box">Solusi Pengadaan Akuntabel</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM SECTION: DATA | INFRASTRUKTUR | KEAMANAN -->
+    <div class="bottom-section">
+
+      <!-- 1. DATA MANAGEMENT -->
+      <div>
+        <div class="section-title sec-data-title">
+          <span>🗄 MANAJEMEN DATA &amp; REPOSITORI</span>
+        </div>
+        <div class="data-cards-grid">
+
+          <div class="card">
+            <div class="card-header bg-navy-hdr">MASTER DATA</div>
+            <div class="card-body">
+              <ul>
+                <li>Data Satker Kemnaker</li>
+                <li>Data Tim Pokja Pemilihan</li>
+                <li>Data Rekanan / Rekanan</li>
+                <li>Kategori &amp; Tag Konten</li>
+                <li>Data User &amp; Peran (Role)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-blue-hdr">DATA PUBLIKASI</div>
+            <div class="card-body">
+              <ul>
+                <li>Berita &amp; Siaran Pers</li>
+                <li>Pengumuman Pengadaan</li>
+                <li>Jadwal Agenda &amp; Lokasi</li>
+                <li>Galeri Foto &amp; Video</li>
+                <li>Statistik &amp; Capaian PBJ</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-teal-hdr">DOKUMEN &amp; REGULASI</div>
+            <div class="card-body">
+              <ul>
+                <li>Perpres &amp; Aturan LKPP</li>
+                <li>Permenaker / Kepmenaker</li>
+                <li>Standar Dokumen Pemilihan</li>
+                <li>SOP &amp; Maklumat Pelayanan</li>
+                <li>File PDF &amp; Arsip Digital</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-amber-hdr">DATA KONSULTASI &amp; WBS</div>
+            <div class="card-body">
+              <ul>
+                <li>Tiket Konsultasi Daring</li>
+                <li>Laporan Aduan / WBS</li>
+                <li>Riwayat Penanganan Tiket</li>
+                <li>Disposisi &amp; Catatan Tindak</li>
+                <li>Feedback Kepuasan Layanan</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-indigo-hdr">KNOWLEDGE BASE AI</div>
+            <div class="card-body">
+              <ul>
+                <li>Korpus Regulasi PBJ</li>
+                <li>Vector Embeddings DB</li>
+                <li>FAQ &amp; Skenario Tanya-Jawab</li>
+                <li>Log Dialog &amp; Kueri Populer</li>
+                <li>Parameter Akurasi Respon</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-emerald-hdr">DATA STATISTIK &amp; LOG</div>
+            <div class="card-body">
+              <ul>
+                <li>Metrik Pengunjung Portal</li>
+                <li>Statistik Unduhan Regulasi</li>
+                <li>Sebaran Kategori Agenda</li>
+                <li>Log Transaksi Sinkronisasi</li>
+                <li>Laporan Kinerja Sistem</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="audit-bar">
+          <strong>LOG &amp; AUDIT TRAIL:</strong>
+          <span>• Log Aktivitas CMS Admin</span>
+          <span>• Log Akses &amp; Autentikasi</span>
+          <span>• Log Riwayat Perubahan Konten</span>
+          <span>• Log Transaksi API &amp; AI</span>
+        </div>
+      </div>
+
+      <!-- 2. INFRASTRUKTUR TEKNOLOGI -->
+      <div>
+        <div class="section-title sec-infra-title">
+          <span>💻 INFRASTRUKTUR &amp; TECH STACK</span>
+        </div>
+        <div class="infra-cards-grid">
+
+          <div class="card">
+            <div class="card-header bg-indigo-hdr">FRONTEND ENGINE</div>
+            <div class="card-body">
+              <ul>
+                <li>Next.js 14 (App Router)</li>
+                <li>React 18 &amp; TypeScript</li>
+                <li>Tailwind CSS &amp; Framer</li>
+                <li>Lucide React Icons</li>
+                <li>Responsive UI System</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-blue-hdr">BACKEND &amp; API</div>
+            <div class="card-body">
+              <ul>
+                <li>Next.js Server Actions</li>
+                <li>RESTful API Endpoints</li>
+                <li>Node.js Runtime Engine</li>
+                <li>Server-Side Rendering</li>
+                <li>Middleware Auth</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-teal-hdr">DATABASE SERVER</div>
+            <div class="card-body">
+              <ul>
+                <li>PostgreSQL Relational DB</li>
+                <li>Supabase Database Cloud</li>
+                <li>Connection Pooling</li>
+                <li>Local Storage Cache</li>
+                <li>Automated Data Sync</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-emerald-hdr">STORAGE SERVER</div>
+            <div class="card-body">
+              <ul>
+                <li>Object Storage (S3 / Cloud)</li>
+                <li>Dokumen PDF Regulasi</li>
+                <li>File Cover &amp; Banner</li>
+                <li>Galeri Foto Resolusi Tinggi</li>
+                <li>Secure File Delivery</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-purple-hdr">AI COGNITIVE ENGINE</div>
+            <div class="card-body">
+              <ul>
+                <li>Google Gemini Pro / Flash</li>
+                <li>Semantic Context Search</li>
+                <li>Custom System Prompt PBJ</li>
+                <li>Fast Token Streaming</li>
+                <li>Bilingual NLP Engine</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-navy-hdr">CLOUD &amp; DATA CENTER</div>
+            <div class="card-body">
+              <ul>
+                <li>Pusdatik Kemnaker Cloud</li>
+                <li>Cloudflare / CDN Caching</li>
+                <li>Load Balancer High Traffic</li>
+                <li>SSL / TLS Termination</li>
+                <li>Hybrid Cloud Ready</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 3. KEAMANAN & GOVERNANCE -->
+      <div>
+        <div class="section-title sec-sec-title">
+          <span>🛡 KEAMANAN &amp; GOVERNANCE</span>
+        </div>
+        <div class="card" style="height: calc(100% - 30px);">
+          <div class="card-header bg-red-hdr">SECURITY ARCHITECTURE</div>
+          <div class="card-body" style="padding: 14px 16px;">
+            <ul style="display: flex; flex-direction: column; gap: 7px;">
+              <li><strong>HTTPS / TLS 1.3:</strong> Enkripsi data lalu lintas end-to-end</li>
+              <li><strong>Role-Based Access Control:</strong> Hak akses ketat Admin &amp; Editor</li>
+              <li><strong>JWT &amp; Secure Session:</strong> Autentikasi aman berbasis token</li>
+              <li><strong>Anti-XSS &amp; CSRF:</strong> Sanitasi data input dan proteksi formulir</li>
+              <li><strong>WAF &amp; DDoS Shield:</strong> Filter lalu lintas berbahaya &amp; botnet</li>
+              <li><strong>Content Security Policy:</strong> Pengamanan eksekusi skrip pihak ke-3</li>
+              <li><strong>Audit Trail Komprehensif:</strong> Pencatatan seluruh aksi pengubahan data</li>
+              <li><strong>Backup Terjadwal:</strong> Snapshot basis data harian otomatis</li>
+              <li><strong>Disaster Recovery Plan:</strong> Kesiapan pemulihan bencana sistem</li>
+              <li><strong>Standar SPBE Kemnaker:</strong> Kepatuhan regulasi keamanan siber BSSN</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER: KETERANGAN AKTOR -->
+    <div class="actors-section">
+      <div class="actors-title">KETERANGAN AKTOR &amp; PEMANGKU KEPENTINGAN SISTEM (STAKEHOLDERS)</div>
+      <div class="actors-grid">
+
+        <div class="actor-card">
+          <div class="actor-icon">👥</div>
+          <div class="actor-name">Publik / Rekanan</div>
+          <div class="actor-desc">Masyarakat &amp; calon penyedia melihat tender, regulasi, dan aduan.</div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-icon">🏢</div>
+          <div class="actor-name">PPK &amp; Satker</div>
+          <div class="actor-desc">Pejabat Pembuat Komitmen mengunduh template &amp; konsultasi.</div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-icon">⚖️</div>
+          <div class="actor-name">Pokja Pemilihan</div>
+          <div class="actor-desc">Kelompok kerja pemilihan pengadaan &amp; jadwal pendampingan.</div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-icon">🤖</div>
+          <div class="actor-name">AI Assistant</div>
+          <div class="actor-desc">Asisten virtual cerdas melayani konsultasi &amp; FAQ 24/7.</div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-icon">🛠</div>
+          <div class="actor-name">Admin UKPBJ</div>
+          <div class="actor-desc">Pengelola konten CMS, berita, agenda, dan regulasi web.</div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-icon">🔍</div>
+          <div class="actor-name">Verifikator</div>
+          <div class="actor-desc">Memverifikasi &amp; mendisposisi tiket konsultasi &amp; aduan.</div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-icon">👔</div>
+          <div class="actor-name">Pimpinan Kemnaker</div>
+          <div class="actor-desc">Memantau kinerja PBJ, statistik web, &amp; eksekutif summary.</div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-icon">🛡</div>
+          <div class="actor-name">Itjen / APIP</div>
+          <div class="actor-desc">Aparat pengawas internal menindaklanjuti pengaduan WBS.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

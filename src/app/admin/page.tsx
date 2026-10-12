@@ -4691,7 +4691,7 @@ export default function AdminPortalPage() {
                     )}
                     <div className="flex items-center gap-2">
                       <Users className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                      <span>{item.organizer} ({item.capacity})</span>
+                      <span>{item.organizer}</span>
                     </div>
                   </div>
 
