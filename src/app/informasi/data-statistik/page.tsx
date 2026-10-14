@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { FadeIn } from '@/components/animations/FadeIn';
 import { 
   BarChart3, FileSpreadsheet, Download, Search, Filter, 
   Plus, CheckCircle2, ChevronRight, Eye, Copy, Check, 
-  Printer, ArrowUpDown, Database, Shield, Layers, 
-  ExternalLink, Info, X, Sparkles, Building2
+  Printer, Database, Shield, Layers, 
+  Info, X
 } from 'lucide-react';
+
+type PeriodeType = 'Bulanan' | 'Triwulanan' | 'Tahunan' | 'Real-time';
 
 interface StatistikDataItem {
   id: number;
@@ -20,7 +21,7 @@ interface StatistikDataItem {
   definisi: string;
   caraPemerolehan: string;
   tingkatKedetailan: string;
-  periode: 'Bulanan' | 'Triwulanan' | 'Tahunan' | 'Real-time';
+  periode: PeriodeType;
   relasiKodeStandar: string;
   taggingSPBE: string;
   kodeSDS: string;
@@ -357,7 +358,7 @@ export default function DataStatistikPage() {
       definisi: formData.definisi || '',
       caraPemerolehan: formData.caraPemerolehan || '-',
       tingkatKedetailan: formData.tingkatKedetailan || '-',
-      periode: (formData.periode as any) || 'Bulanan',
+      periode: (formData.periode as PeriodeType) || 'Bulanan',
       relasiKodeStandar: formData.relasiKodeStandar || '-',
       taggingSPBE: formData.taggingSPBE || 'RAL.02.04',
       kodeSDS: formData.kodeSDS || `SDS 10210${120 + dataList.length + 1}`,
@@ -913,7 +914,7 @@ export default function DataStatistikPage() {
                   </label>
                   <select
                     value={formData.periode}
-                    onChange={(e) => setFormData({ ...formData, periode: e.target.value as any })}
+                    onChange={(e) => setFormData({ ...formData, periode: e.target.value as PeriodeType })}
                     className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-xs sm:text-sm"
                   >
                     <option value="Real-time">Real-time</option>
