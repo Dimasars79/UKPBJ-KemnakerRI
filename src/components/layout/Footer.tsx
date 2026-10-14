@@ -128,22 +128,10 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-4 sm:pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row justify-between items-center text-[11px] sm:text-xs text-slate-400 gap-2.5 sm:gap-4">
-          <p className="text-center sm:text-left">
+        <div className="pt-4 sm:pt-6 border-t border-slate-800/80 flex justify-center items-center text-[11px] sm:text-xs text-slate-400">
+          <p className="text-center">
             {t('footer.rights')}
           </p>
-          <div className="flex flex-wrap justify-center gap-x-4 sm:gap-x-6 gap-y-1">
-            <Link href="#" className="hover:text-accent-gold transition-colors">Kebijakan Privasi</Link>
-            <Link href="#" className="hover:text-accent-gold transition-colors">Syarat & Ketentuan</Link>
-            <a 
-              href="https://www.google.com/maps?q=-6.237979865344115,106.82988816160317" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-accent-gold transition-colors"
-            >
-              Peta Situs
-            </a>
-          </div>
         </div>
       </div>
     </footer>
