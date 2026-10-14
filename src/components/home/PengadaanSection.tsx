@@ -156,7 +156,7 @@ export function PengadaanSection() {
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold text-slate-700 focus:outline-none focus:border-primary-blue cursor-pointer"
+                  className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2.5 bg-blue-50/75 border border-blue-200/90 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold text-blue-950 hover:bg-blue-100/60 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue transition-all cursor-pointer"
                 >
                   {statuses.map((st) => {
                     const label = st === 'Semua' ? trans('Semua Status', 'All Statuses') :
