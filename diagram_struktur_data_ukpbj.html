@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Struktur Data Website UKPBJ Kemnaker RI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      width: 1600px;
+    }
+
+    .container {
+      background: #ffffff;
+      border: 2px dashed #93c5fd;
+      border-radius: 20px;
+      padding: 36px 36px 28px 36px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      width: 100%;
+    }
+
+    /* HEADER */
+    .section-header {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+
+    .main-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0369a1;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .sub-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* 5 COLUMNS GRID */
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      border: 2px solid #0284c7;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      text-align: center;
+      padding: 12px 8px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #0284c7;
+    }
+
+    .card-body {
+      padding: 16px 14px;
+      flex: 1;
+      background: #ffffff;
+    }
+
+    .card-body ul {
+      list-style: none;
+    }
+
+    .card-body li {
+      font-size: 12.5px;
+      color: #1e293b;
+      margin-bottom: 11px;
+      position: relative;
+      padding-left: 18px;
+      line-height: 1.35;
+      font-weight: 600;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .card-body li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 7px;
+      height: 7px;
+      border: 2px solid #0284c7;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    .badge-sub {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      color: #64748b;
+      margin-top: 1px;
+    }
+
+    /* BOTTOM LOG & AUDIT TRAIL BAR */
+    .audit-bar {
+      border: 2px solid #0284c7;
+      border-radius: 12px;
+      padding: 12px 24px;
+      background: #f0f9ff;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.05);
+    }
+
+    .audit-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .audit-items {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .audit-item {
+      font-size: 12px;
+      color: #0f172a;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .audit-bullet {
+      width: 7px;
+      height: 7px;
+      border: 2px solid #0284c7;
+      border-radius: 50%;
+      background: #ffffff;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <div class="section-header">
+      <div class="main-title">DATA</div>
+      <div class="sub-title">Arsitektur Manajemen Data &amp; Repositori Portal UKPBJ Kementerian Ketenagakerjaan RI</div>
+    </div>
+
+    <!-- 5 COLUMNS -->
+    <div class="grid-5">
+
+      <!-- 1. MASTER DATA -->
+      <div class="card">
+        <div class="card-header">MASTER DATA</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <div>
+                Satker Kemnaker
+                <span class="badge-sub">Unit Pusat, Ditjen, &amp; UPTP Daerah</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Tim Pokja Pemilihan
+                <span class="badge-sub">Pokja I s/d Pokja Khusus</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Rekanan / Vendor
+                <span class="badge-sub">Profil SIKaP, NIB, &amp; NPWP</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Pengguna &amp; Role
+                <span class="badge-sub">Super Admin, PPK, &amp; Pokja</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Kategori Pengadaan
+                <span class="badge-sub">Barang, Konstruksi, Konsultansi</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Pejabat Pengadaan
+                <span class="badge-sub">Data SK Penetapan KPA</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2. DATA TRANSAKSI PBJ -->
+      <div class="card">
+        <div class="card-header">DATA TRANSAKSI PBJ</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <div>
+                Paket RUP SiRUP
+                <span class="badge-sub">Rencana Umum Pengadaan Satker</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Tender &amp; Seleksi
+                <span class="badge-sub">Paket Lelang Terbuka SPSE</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Pengadaan Langsung
+                <span class="badge-sub">Paket Non-Tender (s.d. 200 Juta)</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                E-Purchasing
+                <span class="badge-sub">Transaksi E-Katalog &amp; Toko Daring</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Kontrak &amp; SPK
+                <span class="badge-sub">Nomor Kontrak, Nilai, &amp; Jadwal</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Pagu &amp; Nilai HPS
+                <span class="badge-sub">Alokasi Anggaran &amp; Harga Pasar</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 3. DOKUMEN & REGULASI -->
+      <div class="card">
+        <div class="card-header">DOKUMEN &amp; REGULASI</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <div>
+                Peraturan Perpres
+                <span class="badge-sub">Perpres No. 12/2021 &amp; UU</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Peraturan LKPP
+                <span class="badge-sub">Perka LKPP &amp; Surat Edaran</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Permenaker / Kepmen
+                <span class="badge-sub">Regulasi Internal Ketenagakerjaan</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Standar Dokumen (SDP)
+                <span class="badge-sub">Template Dokumen Pemilihan</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                SOP Pengadaan
+                <span class="badge-sub">SOP Tata Kelola PBJ Kemnaker</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Panduan &amp; Manual PDF
+                <span class="badge-sub">Tutorial SPSE, SIKaP, &amp; E-Katalog</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 4. DATA KONSULTASI & WBS -->
+      <div class="card">
+        <div class="card-header">DATA KONSULTASI &amp; WBS</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <div>
+                Tiket Clearing House
+                <span class="badge-sub">Telaah Hukum &amp; Mediasi Kontrak</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Aduan Whistleblowing
+                <span class="badge-sub">Laporan WBS Terenkripsi &amp; Rahasia</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Sanggah Tender
+                <span class="badge-sub">Keberatan Evaluasi Hasil Lelang</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Log Helpdesk WhatsApp
+                <span class="badge-sub">Konsultasi Cepat Operator 24/7</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Rekomendasi Mediasi
+                <span class="badge-sub">Berita Acara Telaah Bersama APIP</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Knowledge Base AI
+                <span class="badge-sub">Korpus Regulasi &amp; Riwayat Chatbot</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 5. DATA STATISTIK & LAPORAN -->
+      <div class="card">
+        <div class="card-header">DATA STATISTIK &amp; LAPORAN</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <div>
+                Indeks ITKP LKPP
+                <span class="badge-sub">Skor Tata Kelola Pengadaan Tahunan</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                20 SMData Pusdatik
+                <span class="badge-sub">Metadata Statistik Kode SDS SPBE</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Realisasi Anggaran
+                <span class="badge-sub">Capaian Keuangan Belanja PBJ</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                P3DN &amp; Nilai TKDN
+                <span class="badge-sub">Persentase Belanja Produk Dalam Negeri</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Porsi Belanja UMKK
+                <span class="badge-sub">Alokasi Usaha Mikro, Kecil, &amp; Koperasi</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                Efisiensi Waktu &amp; Pagu
+                <span class="badge-sub">Penghematan Anggaran DIPA</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM BAR: LOG & AUDIT TRAIL -->
+    <div class="audit-bar">
+      <div class="audit-title">LOG &amp; AUDIT TRAIL</div>
+      <div class="audit-items">
+        <div class="audit-item">
+          <span class="audit-bullet"></span>
+          <span>Log Aktivitas CMS Admin</span>
+        </div>
+        <div class="audit-item">
+          <span class="audit-bullet"></span>
+          <span>Log Akses &amp; Autentikasi Login</span>
+        </div>
+        <div class="audit-item">
+          <span class="audit-bullet"></span>
+          <span>Log Perubahan Data &amp; Riwayat</span>
+        </div>
+        <div class="audit-item">
+          <span class="audit-bullet"></span>
+          <span>Log Transaksi API Gateway &amp; AI</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

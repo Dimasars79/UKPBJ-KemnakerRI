@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Infrastruktur Website UKPBJ Kemnaker RI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      width: 1200px;
+    }
+
+    .container {
+      background: #ffffff;
+      border: 2px dashed #93c5fd;
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      width: 100%;
+    }
+
+    /* HEADER */
+    .section-header {
+      margin-bottom: 26px;
+      text-align: center;
+    }
+
+    .main-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0369a1;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .sub-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* 6 BOXES GRID (2 Rows x 3 Cols) */
+    .grid-infra {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 24px;
+      row-gap: 36px;
+      position: relative;
+    }
+
+    .card {
+      border: 2px solid #0284c7;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+      min-height: 200px;
+      position: relative;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      text-align: center;
+      padding: 11px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #0284c7;
+    }
+
+    .card-body {
+      padding: 18px 18px;
+      flex: 1;
+      background: #ffffff;
+    }
+
+    .card-body ul {
+      list-style: none;
+    }
+
+    .card-body li {
+      font-size: 13px;
+      color: #1e293b;
+      margin-bottom: 12px;
+      position: relative;
+      padding-left: 20px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .card-body li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 7px;
+      height: 7px;
+      border: 2px solid #0284c7;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    .badge-sub {
+      display: block;
+      font-size: 10.5px;
+      font-weight: 500;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* CONNECTOR ARROW (Middle Column: Top to Bottom) */
+    .connector-arrow {
+      position: absolute;
+      top: 200px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .arrow-line {
+      width: 2px;
+      height: 22px;
+      background: #0284c7;
+    }
+
+    .arrow-head {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid #0284c7;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <div class="section-header">
+      <div class="main-title">INFRASTRUKTUR</div>
+      <div class="sub-title">Arsitektur Teknologi &amp; Ekosistem Infrastruktur Server Website UKPBJ Kemnaker RI</div>
+    </div>
+
+    <!-- 6 CARDS (2 ROWS X 3 COLS) -->
+    <div class="grid-infra">
+
+      <!-- ROW 1, COL 1: WEB SERVER -->
+      <div class="card">
+        <div class="card-header">WEB SERVER</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              Next.js 14 Server Engine
+              <span class="badge-sub">App Router &amp; Server-Side Rendering (SSR)</span>
+            </li>
+            <li>
+              Nginx Reverse Proxy
+              <span class="badge-sub">High-Performance Traffic Router &amp; Load Balancer</span>
+            </li>
+            <li>
+              Node.js Runtime (v20 LTS)
+              <span class="badge-sub">Asynchronous Event-Driven Web Server</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 1, COL 2: APPLICATION SERVER -->
+      <div class="card">
+        <div class="card-header">APPLICATION SERVER</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              React 18 &amp; TypeScript
+              <span class="badge-sub">Komponen Frontend Dinamis &amp; Type-Safe</span>
+            </li>
+            <li>
+              Next.js Server Actions
+              <span class="badge-sub">Back-Office CMS &amp; Data Mutations</span>
+            </li>
+            <li>
+              Tailwind CSS &amp; Framer
+              <span class="badge-sub">Design System Responsif &amp; Animasi Interaktif</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CONNECTOR ARROW BETWEEN CARD 2 AND CARD 5 -->
+      <div class="connector-arrow">
+        <div class="arrow-line"></div>
+        <div class="arrow-head"></div>
+      </div>
+
+      <!-- ROW 1, COL 3: DATABASE SERVER -->
+      <div class="card">
+        <div class="card-header">DATABASE SERVER</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              PostgreSQL
+              <span class="badge-sub">Relational DBMS Andal &amp; Skalabel</span>
+            </li>
+            <li>
+              Supabase Database
+              <span class="badge-sub">Cloud Database Engine &amp; Real-time Sync</span>
+            </li>
+            <li>
+              Client Storage Cache
+              <span class="badge-sub">State Persistence &amp; LocalStorage Backup</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 2, COL 1: STORAGE SERVER -->
+      <div class="card">
+        <div class="card-header">STORAGE SERVER</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              Dokumen Regulasi &amp; SOP
+              <span class="badge-sub">Arsip Digital PDF Resmi Perpres, Permen, &amp; SDP</span>
+            </li>
+            <li>
+              Arsip Data Statistik (Excel)
+              <span class="badge-sub">File SMData Pusdatik &amp; Format .xlsx</span>
+            </li>
+            <li>
+              Media Storage &amp; Galeri
+              <span class="badge-sub">Foto Dokumentasi HD, Cover Berita, &amp; Backup</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 2, COL 2: API & COGNITIVE ENGINE -->
+      <div class="card">
+        <div class="card-header">API &amp; AI ENGINE (GATEWAY)</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              RESTful API &amp; JSON
+              <span class="badge-sub">Next.js API Routes untuk Pertukaran Data</span>
+            </li>
+            <li>
+              Google Gemini AI Engine
+              <span class="badge-sub">AI Virtual Assistant 24/7 Knowledge Base PBJ</span>
+            </li>
+            <li>
+              Gateway SPSE &amp; WhatsApp
+              <span class="badge-sub">Integrasi SiRUP, E-Katalog, &amp; Helpdesk Resmi</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 2, COL 3: CLOUD / ON PREMISE -->
+      <div class="card">
+        <div class="card-header">CLOUD / ON PREMISE</div>
+        <div class="card-body">
+          <ul>
+            <li>
+              Cloud Platform (Vercel)
+              <span class="badge-sub">Global Edge Network &amp; Fast CDN Delivery</span>
+            </li>
+            <li>
+              Data Center Pusdatik Kemnaker
+              <span class="badge-sub">Infrastruktur Server Resmi Kementerian</span>
+            </li>
+            <li>
+              Hybrid Cloud Architecture
+              <span class="badge-sub">Kombinasi Cloud Computing &amp; Server On-Premise</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -10,7 +10,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { useData, NewsItem } from '@/contexts/DataContext';
 import { 
   Calendar, User, ArrowLeft, ArrowRight, 
-  ChevronRight, Building2, Copy, 
+  ChevronRight, Building2, Copy, Share2, Check,
   MessageCircle, Printer, BookOpen, AlertCircle, Sparkles
 } from 'lucide-react';
 
@@ -65,6 +65,24 @@ export default function BeritaDetailPage() {
       navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleShare = async () => {
+    if (typeof window !== 'undefined') {
+      if (navigator.share && currentNews) {
+        try {
+          await navigator.share({
+            title: currentNews.title,
+            text: currentNews.excerpt || currentNews.title,
+            url: window.location.href,
+          });
+          return;
+        } catch {
+          // Fallback to clipboard if share was cancelled or failed
+        }
+      }
+      handleCopyLink();
     }
   };
 
@@ -303,18 +321,11 @@ export default function BeritaDetailPage() {
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-slate-400 mr-1">{trans('Bagikan:', 'Share:')}</span>
                   <button
-                    onClick={handleShareWhatsApp}
-                    className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
-                    title={trans("Bagikan ke WhatsApp", "Share to WhatsApp")}
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={handleCopyLink}
+                    onClick={handleShare}
                     className="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 hover:bg-primary-navy hover:text-white flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
-                    title={trans("Salin Tautan", "Copy Link")}
+                    title={copied ? trans("Tautan Tersalin!", "Link Copied!") : trans("Bagikan Berita", "Share News")}
                   >
-                    <Copy className="w-4 h-4" />
+                    {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
