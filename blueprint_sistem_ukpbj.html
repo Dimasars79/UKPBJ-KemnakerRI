@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Model Arsitektur Sistem Website UKPBJ Kemnaker RI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #0a1128;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 1960px;
+      min-height: 100vh;
+    }
+
+    .main-canvas {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 34px 40px 36px 40px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      width: 1912px;
+      border: 1px solid #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* HEADER BANNER */
+    .top-header {
+      text-align: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 18px;
+      position: relative;
+    }
+
+    .header-badge {
+      display: inline-block;
+      padding: 5px 18px;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+
+    .main-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .main-subtitle {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* SECTION FRAME WRAPPERS */
+    .frame-box {
+      border: 2px solid #cbd5e1;
+      border-radius: 18px;
+      background: #f8fafc;
+      padding: 22px 22px 18px 22px;
+      position: relative;
+    }
+
+    .frame-label {
+      position: absolute;
+      top: -13px;
+      left: 26px;
+      background: #ffffff;
+      padding: 2px 14px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #0284c7;
+      border: 2px solid #93c5fd;
+      border-radius: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    /* ROW 1: TWO EQUAL COLUMNS (LAYANAN & PROSES BISNIS) */
+    .row-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* CARD STYLING */
+    .card-item {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+    }
+
+    .card-header-blue {
+      background: #0284c7;
+      color: #ffffff;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-header-blue::before {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: #ffffff;
+      border-radius: 2px;
+    }
+
+    .card-body-content {
+      padding: 10px 14px 12px 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-body-content ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .card-body-content li {
+      font-size: 11px;
+      color: #1e293b;
+      font-weight: 600;
+      line-height: 1.55;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .card-body-content li::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border: 1.5px solid #0284c7;
+      border-radius: 50%;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    /* LAYANAN GRID (2 COLS X 3 ROWS) */
+    .layanan-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    /* FLOWCHART SECTION */
+    .flowchart-board {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .node-oval {
+      padding: 6px 28px;
+      border-radius: 24px;
+      background: #eff6ff;
+      border: 2px solid #2563eb;
+      font-size: 11.5px;
+      font-weight: 900;
+      color: #1e40af;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .node-rect {
+      background: #ffffff;
+      border: 2px solid #2563eb;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #1e293b;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      min-width: 180px;
+    }
+
+    .node-diamond-svg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2px 0;
+    }
+
+    .node-pill-green {
+      background: #dcfce7;
+      border: 1.5px solid #16a34a;
+      border-radius: 16px;
+      padding: 5px 12px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #14532d;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(22, 163, 74, 0.1);
+    }
+
+    .node-pill-amber {
+      background: #fef3c7;
+      border: 1.5px solid #d97706;
+      border-radius: 16px;
+      padding: 5px 12px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #92400e;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(217, 119, 6, 0.1);
+    }
+
+    .node-rect-white {
+      background: #ffffff;
+      border: 1.5px solid #3b82f6;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #1e293b;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      width: 100%;
+    }
+
+    .fc-line-down {
+      width: 2px;
+      height: 14px;
+      background: #2563eb;
+      position: relative;
+    }
+
+    .fc-line-down::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: -4px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #2563eb;
+    }
+
+    /* 3-WAY BUS CONNECTOR */
+    .bus-connector-container {
+      width: 100%;
+      height: 24px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .bus-line-center-down {
+      width: 2px;
+      height: 10px;
+      background: #2563eb;
+    }
+
+    .bus-horizontal-bar {
+      position: absolute;
+      top: 10px;
+      left: 14%;
+      right: 14%;
+      height: 2px;
+      background: #2563eb;
+    }
+
+    .bus-drop-left {
+      position: absolute;
+      top: 10px;
+      left: 14%;
+      width: 2px;
+      height: 14px;
+      background: #2563eb;
+    }
+    .bus-drop-left::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: -4px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #2563eb;
+    }
+
+    .bus-drop-mid {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 14px;
+      background: #2563eb;
+    }
+    .bus-drop-mid::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: -4px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #2563eb;
+    }
+
+    .bus-drop-right {
+      position: absolute;
+      top: 10px;
+      right: 14%;
+      width: 2px;
+      height: 14px;
+      background: #2563eb;
+    }
+    .bus-drop-right::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: -4px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #2563eb;
+    }
+
+    .branch-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .branch-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+    }
+
+    /* DATA GRID (5 COLS) */
+    .data-grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    /* AUDIT TRAIL BAR */
+    .audit-trail-card {
+      margin-top: 12px;
+      background: #ffffff;
+      border: 1.5px solid #94a3b8;
+      border-radius: 10px;
+      padding: 9px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .audit-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .audit-title::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: #0284c7;
+      border-radius: 2px;
+    }
+
+    .audit-items {
+      display: flex;
+      gap: 22px;
+    }
+
+    .audit-item {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .audit-item::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      background: #0284c7;
+      border-radius: 50%;
+    }
+
+    /* INFRASTRUKTUR GRID (3 COLS X 2 ROWS) */
+    .infra-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    /* DASHED CONNECTOR BETWEEN SECTIONS */
+    .flow-connector-vertical {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 12px;
+      position: relative;
+    }
+
+    .flow-connector-vertical::before {
+      content: "";
+      position: absolute;
+      top: -4px;
+      bottom: -4px;
+      width: 2px;
+      border-left: 2px dashed #94a3b8;
+    }
+
+    /* FOOTER BAR */
+    .footer-bar {
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-canvas">
+
+    <!-- 1. TOP HEADER -->
+    <div class="top-header">
+      <div class="header-badge">Cetak Biru Arsitektur &amp; Tata Kelola Sistem</div>
+      <h1 class="main-title">MODEL ARSITEKTUR SISTEM WEBSITE UKPBJ</h1>
+      <p class="main-subtitle">Biro Perencanaan dan Pengadaan Barang/Jasa &middot; Sekretariat Jenderal Kementerian Ketenagakerjaan RI</p>
+    </div>
+
+    <!-- 2. ROW TOP: LAYANAN & PROSES BISNIS -->
+    <div class="row-top">
+
+      <!-- ================= LEFT: LAYANAN ================= -->
+      <div class="frame-box">
+        <div class="frame-label">Layanan</div>
+        <div class="layanan-grid">
+
+          <!-- Card 1 -->
+          <div class="card-item">
+            <div class="card-header-blue">Transaksi SPSE</div>
+            <div class="card-body-content">
+              <ul>
+                <li>Tender &amp; Seleksi Pokja</li>
+                <li>Non-Tender PBJ</li>
+                <li>E-Catalog / Toko Daring</li>
+                <li>Vendor SIKaP</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="card-item">
+            <div class="card-header-blue">Monitoring Data</div>
+            <div class="card-body-content">
+              <ul>
+                <li>Dashboard ITKP</li>
+                <li>Evaluasi Realisasi</li>
+                <li>SMData Pusdatik</li>
+                <li>Statistik Paket</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card-item">
+            <div class="card-header-blue">REGULASI &amp; SOP</div>
+            <div class="card-body-content">
+              <ul>
+                <li>Perpres &amp; LKPP</li>
+                <li>SOP Tata Kelola</li>
+                <li>Standar Dokumen</li>
+                <li>Kebijakan TKDN</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="card-item">
+            <div class="card-header-blue">Konsultasi &amp; WBS (AI)</div>
+            <div class="card-body-content">
+              <ul>
+                <li>Helpdesk Whatsapp Consultant (24/7)</li>
+                <li>WBS Voice Reader</li>
+                <li>Sanggah Tender Otomatis</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="card-item">
+            <div class="card-header-blue">Pembinaan &amp; Agenda</div>
+            <div class="card-body-content">
+              <ul>
+                <li>Bimtek PPK &amp; POKJA</li>
+                <li>Sertifikasi</li>
+                <li>Dokumentasi</li>
+                <li>Kalender Agenda</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="card-item">
+            <div class="card-header-blue">Asisten Intelligence</div>
+            <div class="card-body-content">
+              <ul>
+                <li>AI Virtual</li>
+                <li>Aksesibilitas</li>
+                <li>Tampilan</li>
+                <li>FAQ Otomatis</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ================= RIGHT: PROSES BISNIS ================= -->
+      <div class="frame-box">
+        <div class="frame-label">Proses Bisnis</div>
+        
+        <div class="flowchart-board">
+
+          <!-- START OVAL -->
+          <div class="node-oval">MULAI</div>
+          <div class="fc-line-down"></div>
+
+          <!-- RECT 1 -->
+          <div class="node-rect">Pengguna Membuka Website UKPBJ</div>
+          <div class="fc-line-down"></div>
+
+          <!-- DECISION 1 (SVG DIAMOND) -->
+          <div class="node-diamond-svg">
+            <svg width="170" height="48" viewBox="0 0 170 48">
+              <polygon points="85,2 166,24 85,46 4,24" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+              <text x="85" y="28" text-anchor="middle" font-size="11" font-weight="800" fill="#1e40af">Pilih Kebutuhan?</text>
+            </svg>
+          </div>
+
+          <!-- BUS CONNECTOR TO 3 BRANCHES -->
+          <div class="bus-connector-container">
+            <div class="bus-horizontal-bar"></div>
+            <div class="bus-drop-left"></div>
+            <div class="bus-drop-mid"></div>
+            <div class="bus-drop-right"></div>
+          </div>
+
+          <!-- 3 BRANCHES -->
+          <div class="branch-row">
+
+            <!-- BRANCH 1: PROFIL & INFO -->
+            <div class="branch-col">
+              <div class="node-rect-white">Profil dan Informasi UKPBJ</div>
+              <div class="fc-line-down"></div>
+              <div class="node-rect-white">Membaca Informasi UKPBJ</div>
+              <div class="fc-line-down"></div>
+              <div class="node-pill-green">Informasi Dipahami</div>
+            </div>
+
+            <!-- BRANCH 2: INFORMASI PENGADAAN -->
+            <div class="branch-col">
+              <div class="node-rect-white">Informasi Pengadaan</div>
+              <div class="fc-line-down"></div>
+              <div class="node-rect-white">Pilih Pengumuman / Dokumen</div>
+              <div class="fc-line-down"></div>
+              
+              <!-- DIAMOND: Dokumen Tersedia? -->
+              <div class="node-diamond-svg">
+                <svg width="150" height="42" viewBox="0 0 150 42">
+                  <polygon points="75,2 146,21 75,40 4,21" fill="#eff6ff" stroke="#2563eb" stroke-width="1.8"/>
+                  <text x="75" y="25" text-anchor="middle" font-size="9.5" font-weight="800" fill="#1e40af">Dokumen Tersedia?</text>
+                </svg>
+              </div>
+
+              <!-- SUB-BRANCHES YA / TIDAK -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                  <span style="font-size: 9.5px; font-weight: 900; color: #16a34a;">YA</span>
+                  <div class="node-rect-white" style="font-size: 9px; padding: 5px;">Buka / Unduh Dokumen</div>
+                  <div class="node-pill-green" style="font-size: 9px; padding: 4px 6px;">Informasi Pengadaan Diperoleh</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                  <span style="font-size: 9.5px; font-weight: 900; color: #dc2626;">TIDAK</span>
+                  <div class="node-rect-white" style="font-size: 9px; padding: 5px;">Hubungi UKPBJ</div>
+                  <div class="node-pill-amber" style="font-size: 9px; padding: 4px 6px;">Tindak Lanjut Luar Web</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BRANCH 3: KONTAK / PERMOHONAN -->
+            <div class="branch-col">
+              <div class="node-rect-white">Kontak / Permohonan Informasi</div>
+              <div class="fc-line-down"></div>
+              
+              <!-- DIAMOND: Formulir Tersedia? -->
+              <div class="node-diamond-svg">
+                <svg width="150" height="42" viewBox="0 0 150 42">
+                  <polygon points="75,2 146,21 75,40 4,21" fill="#eff6ff" stroke="#2563eb" stroke-width="1.8"/>
+                  <text x="75" y="25" text-anchor="middle" font-size="9.5" font-weight="800" fill="#1e40af">Formulir Tersedia?</text>
+                </svg>
+              </div>
+
+              <!-- SUB-BRANCHES YA / TIDAK -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                  <span style="font-size: 9.5px; font-weight: 900; color: #16a34a;">YA</span>
+                  <div class="node-rect-white" style="font-size: 9px; padding: 4px;">Isi dan Kirim Permohonan</div>
+                  <div class="node-rect-white" style="font-size: 8.5px; padding: 4px; background: #f8fafc;">UKPBJ Menindaklanjuti</div>
+                  <div class="node-pill-green" style="font-size: 9px; padding: 4px 6px;">Permohonan Ditindaklanjuti</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                  <span style="font-size: 9.5px; font-weight: 900; color: #dc2626;">TIDAK</span>
+                  <div class="node-rect-white" style="font-size: 9px; padding: 4px;">Gunakan Kontak Tercantum</div>
+                  <div style="height: 22px;"></div>
+                  <div class="node-pill-green" style="font-size: 9px; padding: 4px 6px;">Kontak Diperoleh</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CONNECTOR -->
+    <div class="flow-connector-vertical"></div>
+
+    <!-- 3. ROW MIDDLE: DATA -->
+    <div class="frame-box">
+      <div class="frame-label">Data</div>
+
+      <div class="data-grid-5">
+
+        <!-- Data Card 1 -->
+        <div class="card-item">
+          <div class="card-header-blue">MASTER DATA</div>
+          <div class="card-body-content">
+            <ul>
+              <li>Satker Kemnaker</li>
+              <li>Tim POKJA Pemilihan</li>
+              <li>Rekanan / Vendor</li>
+              <li>Pengguna &amp; Role</li>
+              <li>Kategori Pengadaan</li>
+              <li>Pejabat Pengadaan</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Data Card 2 -->
+        <div class="card-item">
+          <div class="card-header-blue">DATA TRANSAKSI PBJ</div>
+          <div class="card-body-content">
+            <ul>
+              <li>Paket RUP SIRUP</li>
+              <li>Tender &amp; Seleksi</li>
+              <li>Pengadaan Langsung</li>
+              <li>E-Purchasing</li>
+              <li>Kontrak &amp; SPK</li>
+              <li>Pagu &amp; Nilai HPS</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Data Card 3 -->
+        <div class="card-item">
+          <div class="card-header-blue">DOKUMEN &amp; REGULASI</div>
+          <div class="card-body-content">
+            <ul>
+              <li>Peraturan Perpres</li>
+              <li>Peraturan LKPP</li>
+              <li>Permenaker / Kepmen</li>
+              <li>Standar Dokumen (SDP)</li>
+              <li>SOP Pengadaan</li>
+              <li>Panduan &amp; Manual PDF</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Data Card 4 -->
+        <div class="card-item">
+          <div class="card-header-blue">DATA KONSULTASI &amp; WBS</div>
+          <div class="card-body-content">
+            <ul>
+              <li>Aduan Whistleblowing</li>
+              <li>Sanggah Tender</li>
+              <li>Log Helpdesk WhatsApp</li>
+              <li>Rekomendasi Mediasi</li>
+              <li>Knowledge Base AI</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Data Card 5 -->
+        <div class="card-item">
+          <div class="card-header-blue">DATA STATISTIK &amp; LAPORAN</div>
+          <div class="card-body-content">
+            <ul>
+              <li>Indeks ITKP LKPP</li>
+              <li>Realisasi Anggaran</li>
+              <li>P3DN &amp; Nilai TKDN</li>
+              <li>Porsi Belanja UMKK</li>
+              <li>Efisiensi Waktu &amp; Pagu</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AUDIT TRAIL ROW -->
+      <div class="audit-trail-card">
+        <div class="audit-title">LOG &amp; AUDIT TRAIL :</div>
+        <div class="audit-items">
+          <div class="audit-item">Log Aktivitas CMS Admin</div>
+          <div class="audit-item">Log Akses &amp; Autentikasi Login</div>
+          <div class="audit-item">Log Perubahan Data &amp; Riwayat</div>
+          <div class="audit-item">Log Transaksi API Gateway &amp; AI</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CONNECTOR -->
+    <div class="flow-connector-vertical"></div>
+
+    <!-- 4. ROW BOTTOM: INFRASTRUKTUR -->
+    <div class="frame-box">
+      <div class="frame-label">Infrastruktur</div>
+
+      <div class="infra-grid">
+
+        <!-- Infra 1 -->
+        <div class="card-item">
+          <div class="card-header-blue">WEB SERVER</div>
+          <div class="card-body-content">
+            <ul>
+              <li>Next.js (App Router SSR)</li>
+              <li>Node.js Runtime</li>
+              <li>Nginx Reverse Proxy</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Infra 2 -->
+        <div class="card-item">
+          <div class="card-header-blue">APPLICATION SERVER</div>
+          <div class="card-body-content">
+            <ul>
+              <li>React 19 Framework</li>
+              <li>TypeScript Typing</li>
+              <li>Tailwind CSS Design System</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Infra 3 -->
+        <div class="card-item">
+          <div class="card-header-blue">DATABASE SERVER</div>
+          <div class="card-body-content">
+            <ul>
+              <li>PostgreSQL RDBMS</li>
+              <li>Supabase BaaS / Client</li>
+              <li>Local Storage Cache</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Infra 4 -->
+        <div class="card-item">
+          <div class="card-header-blue">STORAGE SERVER</div>
+          <div class="card-body-content">
+            <ul>
+              <li>Dokumen PDF (SDP &amp; KAK)</li>
+              <li>Arsip Excel &amp; Rekapitulasi</li>
+              <li>Media &amp; Galeri Foto Berita</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Infra 5 -->
+        <div class="card-item">
+          <div class="card-header-blue">API &amp; AI ENGINE (GATEWAY)</div>
+          <div class="card-body-content">
+            <ul>
+              <li>REST API Integrasi</li>
+              <li>Format Data Standar JSON</li>
+              <li>Gemini AI &amp; LLM Service</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Infra 6 -->
+        <div class="card-item">
+          <div class="card-header-blue">CLOUD / ON PREMISE</div>
+          <div class="card-body-content">
+            <ul>
+              <li>Cloud Hosting Vercel / Edge</li>
+              <li>Data Center Pusdatik Kemnaker</li>
+              <li>Hybrid Server Architecture</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 5. FOOTER -->
+    <div class="footer-bar">
+      &copy; 2026 UKPBJ Kementerian Ketenagakerjaan RI &middot; Model Blueprint Arsitektur Sistem Informasi Pengadaan Barang/Jasa
+    </div>
+
+  </div>
+
+</body>
+</html>
