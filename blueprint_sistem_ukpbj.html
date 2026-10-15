@@ -261,12 +261,31 @@
 
     .fc-line-down {
       width: 2px;
-      height: 14px;
+      height: 12px;
       background: #2563eb;
       position: relative;
+      margin: 2px 0;
     }
 
     .fc-line-down::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: -4px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #2563eb;
+    }
+
+    .fc-line-down-long {
+      width: 2px;
+      height: 48px;
+      background: #2563eb;
+      position: relative;
+      margin: 2px 0;
+    }
+
+    .fc-line-down-long::after {
       content: "";
       position: absolute;
       bottom: -1px;
@@ -625,16 +644,32 @@
                 </svg>
               </div>
 
+              <!-- CONNECTOR FROM DIAMOND TO YA & TIDAK -->
+              <div style="width: 100%; height: 20px; position: relative; margin-top: -2px; margin-bottom: 2px;">
+                <svg width="100%" height="20" viewBox="0 0 100 20" preserveAspectRatio="none" style="overflow: visible;">
+                  <line x1="50" y1="0" x2="50" y2="7" stroke="#2563eb" stroke-width="1.8"/>
+                  <line x1="25" y1="7" x2="75" y2="7" stroke="#2563eb" stroke-width="1.8"/>
+                  <line x1="25" y1="7" x2="25" y2="19" stroke="#2563eb" stroke-width="1.8"/>
+                  <polygon points="22.5,14 27.5,14 25,20" fill="#2563eb"/>
+                  <line x1="75" y1="7" x2="75" y2="19" stroke="#2563eb" stroke-width="1.8"/>
+                  <polygon points="72.5,14 77.5,14 75,20" fill="#2563eb"/>
+                </svg>
+              </div>
+
               <!-- SUB-BRANCHES YA / TIDAK -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                  <span style="font-size: 9.5px; font-weight: 900; color: #16a34a;">YA</span>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                  <span style="font-size: 10px; font-weight: 900; color: #16a34a; line-height: 1;">YA</span>
+                  <div class="fc-line-down" style="height: 9px;"></div>
                   <div class="node-rect-white" style="font-size: 9px; padding: 5px;">Buka / Unduh Dokumen</div>
+                  <div class="fc-line-down" style="height: 11px;"></div>
                   <div class="node-pill-green" style="font-size: 9px; padding: 4px 6px;">Informasi Pengadaan Diperoleh</div>
                 </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                  <span style="font-size: 9.5px; font-weight: 900; color: #dc2626;">TIDAK</span>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                  <span style="font-size: 10px; font-weight: 900; color: #dc2626; line-height: 1;">TIDAK</span>
+                  <div class="fc-line-down" style="height: 9px;"></div>
                   <div class="node-rect-white" style="font-size: 9px; padding: 5px;">Hubungi UKPBJ</div>
+                  <div class="fc-line-down" style="height: 11px;"></div>
                   <div class="node-pill-amber" style="font-size: 9px; padding: 4px 6px;">Tindak Lanjut Luar Web</div>
                 </div>
               </div>
@@ -653,18 +688,34 @@
                 </svg>
               </div>
 
+              <!-- CONNECTOR FROM DIAMOND TO YA & TIDAK -->
+              <div style="width: 100%; height: 20px; position: relative; margin-top: -2px; margin-bottom: 2px;">
+                <svg width="100%" height="20" viewBox="0 0 100 20" preserveAspectRatio="none" style="overflow: visible;">
+                  <line x1="50" y1="0" x2="50" y2="7" stroke="#2563eb" stroke-width="1.8"/>
+                  <line x1="25" y1="7" x2="75" y2="7" stroke="#2563eb" stroke-width="1.8"/>
+                  <line x1="25" y1="7" x2="25" y2="19" stroke="#2563eb" stroke-width="1.8"/>
+                  <polygon points="22.5,14 27.5,14 25,20" fill="#2563eb"/>
+                  <line x1="75" y1="7" x2="75" y2="19" stroke="#2563eb" stroke-width="1.8"/>
+                  <polygon points="72.5,14 77.5,14 75,20" fill="#2563eb"/>
+                </svg>
+              </div>
+
               <!-- SUB-BRANCHES YA / TIDAK -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
-                  <span style="font-size: 9.5px; font-weight: 900; color: #16a34a;">YA</span>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                  <span style="font-size: 10px; font-weight: 900; color: #16a34a; line-height: 1;">YA</span>
+                  <div class="fc-line-down" style="height: 9px;"></div>
                   <div class="node-rect-white" style="font-size: 9px; padding: 4px;">Isi dan Kirim Permohonan</div>
+                  <div class="fc-line-down" style="height: 9px;"></div>
                   <div class="node-rect-white" style="font-size: 8.5px; padding: 4px; background: #f8fafc;">UKPBJ Menindaklanjuti</div>
+                  <div class="fc-line-down" style="height: 9px;"></div>
                   <div class="node-pill-green" style="font-size: 9px; padding: 4px 6px;">Permohonan Ditindaklanjuti</div>
                 </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
-                  <span style="font-size: 9.5px; font-weight: 900; color: #dc2626;">TIDAK</span>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                  <span style="font-size: 10px; font-weight: 900; color: #dc2626; line-height: 1;">TIDAK</span>
+                  <div class="fc-line-down" style="height: 9px;"></div>
                   <div class="node-rect-white" style="font-size: 9px; padding: 4px;">Gunakan Kontak Tercantum</div>
-                  <div style="height: 22px;"></div>
+                  <div class="fc-line-down-long"></div>
                   <div class="node-pill-green" style="font-size: 9px; padding: 4px 6px;">Kontak Diperoleh</div>
                 </div>
               </div>
