@@ -227,7 +227,7 @@ const INITIAL_STATISTIK_DATA: StatistikDataItem[] = [
   {
     id: 16,
     namaData: "Data Layanan Konsultasi dan Pendampingan Pengadaan (Klinik PBJ)",
-    kategori: "Tata Kelola & WBS",
+    kategori: "Tata Kelola & Pengaduan",
     definisi: "Data permohonan dan pelaksanaan konsultasi teknis, telaah dokumen, probity advice, serta pendampingan pengadaan bagi satuan kerja.",
     caraPemerolehan: "Kompilasi tiket konsultasi daring, buku tamu klinik PBJ, dan berita acara hasil telaah konsultasi",
     tingkatKedetailan: "Per tiket konsultasi, satker pemohon, isu bahasan (HPS, spesifikasi teknis, kontrak, e-purchasing), rekomendasi solusi",
@@ -239,21 +239,21 @@ const INITIAL_STATISTIK_DATA: StatistikDataItem[] = [
   },
   {
     id: 17,
-    namaData: "Data Pengaduan Pengadaan dan Sanggah Tender",
-    kategori: "Tata Kelola & WBS",
-    definisi: "Data penerimaan dan penanganan sanggah tender, sanggah banding, serta pengaduan masyarakat seputar pelaksanaan PBJ.",
-    caraPemerolehan: "Kompilasi modul sanggah SPSE dan formulir kanal pengaduan/Whistleblowing System (WBS) UKPBJ Kemnaker",
-    tingkatKedetailan: "Per nomor tiket aduan/sanggah, paket pekerjaan, substansi pengaduan, status telaah, rekomendasi tindak lanjut",
+    namaData: "Data Pengaduan dan Pengawasan Pengadaan",
+    kategori: "Tata Kelola & Pengaduan",
+    definisi: "Data penerimaan dan penanganan laporan pengaduan masyarakat seputar pelaksanaan PBJ.",
+    caraPemerolehan: "Kompilasi formulir kanal pengaduan dan bantuan teknis UKPBJ Kemnaker",
+    tingkatKedetailan: "Per nomor tiket aduan, paket pekerjaan, substansi pengaduan, status telaah, rekomendasi tindak lanjut",
     periode: "Bulanan",
-    relasiKodeStandar: "Kode Klasifikasi Aduan WBS KemenpanRB/Kemnaker",
+    relasiKodeStandar: "Kode Klasifikasi Aduan Pengadaan KemenpanRB/Kemnaker",
     taggingSPBE: "RAL.02.04.09 PENGADUAN DAN PENGAWASAN PBJ",
     kodeSDS: "SDS 10210117",
-    keterangan: "Jumlah Pengaduan dan Sanggah PBJ Tertangani"
+    keterangan: "Jumlah Pengaduan PBJ Tertangani"
   },
   {
     id: 18,
     namaData: "Data Tingkat Kematangan Kelembagaan UKPBJ (Maturity Level)",
-    kategori: "Tata Kelola & WBS",
+    kategori: "Tata Kelola & Pengaduan",
     definisi: "Data hasil penilaian dan pengukuran tingkat kematangan kelembagaan UKPBJ Kemnaker RI berdasarkan 4 domain (Proses Bisnis, Kelembagaan, SDM, dan Sistem Informasi) sesuai standar LKPP.",
     caraPemerolehan: "Hasil asesmen mandiri (Self-Assessment) dan validasi tim penilai kematangan UKPBJ LKPP",
     tingkatKedetailan: "Skor per variabel, level kematangan (Inisiasi, Berkembang, Proaktif, Kolaboratif, Strategis), bukti dukung dokumen",
@@ -266,7 +266,7 @@ const INITIAL_STATISTIK_DATA: StatistikDataItem[] = [
   {
     id: 19,
     namaData: "Data Indeks Tata Kelola Pengadaan (ITKP) Kemnaker",
-    kategori: "Tata Kelola & WBS",
+    kategori: "Tata Kelola & Pengaduan",
     definisi: "Data indeks komposit pengukuran pemanfaatan sistem pengadaan, kualifikasi SDM, dan tata kelola pengadaan kementerian yang diterbitkan oleh LKPP.",
     caraPemerolehan: "Hasil rekapitulasi penilaian tahunan LKPP terhadap Kementerian Ketenagakerjaan RI",
     tingkatKedetailan: "Nilai total indeks ITKP, komponen pemanfaatan pengadaan digital, persentase e-purchasing, capaian RUP tepat waktu",
@@ -279,7 +279,7 @@ const INITIAL_STATISTIK_DATA: StatistikDataItem[] = [
   {
     id: 20,
     namaData: "Data Dokumen Standar Pemilihan (SDP) dan SOP Tata Kelola PBJ",
-    kategori: "Tata Kelola & WBS",
+    kategori: "Tata Kelola & Pengaduan",
     definisi: "Data mengenai inventaris regulasi internal, Standar Dokumen Pemilihan (SDP), Surat Edaran, Pedoman Teknis, dan Standar Operasional Prosedur (SOP) PBJ yang aktif di Kemnaker RI.",
     caraPemerolehan: "Kompilasi produk hukum dan peraturan yang diunggah serta dipublikasikan pada repositori portal UKPBJ",
     tingkatKedetailan: "Per dokumen regulasi, nomor ketetapan, tahun berlaku, kategori (SOP, SDP, SE, Kepmenaker), tautan unduh berkas",
@@ -904,7 +904,7 @@ export default function DataStatistikPage() {
                     <option value="Kinerja & P3DN">Kinerja &amp; P3DN</option>
                     <option value="Manajemen Penyedia">Manajemen Penyedia</option>
                     <option value="SDM & Kelembagaan">SDM &amp; Kelembagaan</option>
-                    <option value="Tata Kelola & WBS">Tata Kelola &amp; WBS</option>
+                    <option value="Tata Kelola & Pengaduan">Tata Kelola &amp; Pengaduan</option>
                   </select>
                 </div>
 

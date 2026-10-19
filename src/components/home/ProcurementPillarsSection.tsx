@@ -215,7 +215,7 @@ export function ProcurementPillarsSection() {
                         {trans('Zona Integritas Anti-Gratifikasi', 'Anti-Gratification Integrity Zone')}
                       </h4>
                       <p className="text-slate-300 text-[11px] sm:text-xs mt-0.5 leading-relaxed">
-                        {trans('Komitmen transparansi penuh dan perlindungan pengaduan.', 'Full transparency commitment and whistleblower protection.')}
+                        {trans('Komitmen transparansi penuh dan perlindungan pengaduan.', 'Full transparency commitment and complaint protection.')}
                       </p>
                     </div>
                   </div>

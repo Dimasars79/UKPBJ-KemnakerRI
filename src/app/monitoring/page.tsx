@@ -63,19 +63,9 @@ export default function MonitoringPage() {
                   </span>
                 </h1>
 
-                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6">
+                <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
                   {t('page_monitoring.desc')}
                 </p>
-
-                <div className="flex items-center justify-center gap-3 flex-wrap">
-                  <Link
-                    href="/monitoring/data-statistik"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/25 transition-all"
-                  >
-                    <BarChart3 className="w-4 h-4" />
-                    <span>{trans('Form Daftar Data Statistik (SMData Pusdatik)', 'Statistical Data Form (SMData Pusdatik)')}</span>
-                  </Link>
-                </div>
               </FadeIn>
             </div>
           </div>

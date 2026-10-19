@@ -191,7 +191,7 @@ export default function InformasiPage() {
     { name: trans('Portal Informasi', 'Information Portal'), status: 'NORMAL', icon: <Globe className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
     { name: trans('Layanan Konsultasi', 'Consultation Desk'), status: 'NORMAL', icon: <MessageSquare className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
     { name: trans('Download Dokumen', 'Document Downloads'), status: 'NORMAL', icon: <Download className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: trans('Layanan Pengaduan', 'Whistleblowing / Complaints'), status: 'NORMAL', icon: <ShieldCheck className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+    { name: trans('Layanan Pengaduan', 'Complaints / Helpdesk'), status: 'NORMAL', icon: <ShieldCheck className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
     { name: trans('SIRUP Kemnaker', 'SiRUP MoM'), status: 'NORMAL', icon: <BarChart2 className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
   ];
 
@@ -407,36 +407,6 @@ export default function InformasiPage() {
               </div>
             </FadeIn>
 
-            {/* DAFTAR DATA STATISTIK (SMData Pusdatik) BANNER */}
-            <FadeIn direction="up" delay={0.15}>
-              <Link
-                href="/informasi/data-statistik"
-                className="bg-gradient-to-r from-[#0B2545] via-[#0F3866] to-[#0A1E38] text-white rounded-3xl p-5 sm:p-6 border border-white/10 shadow-lg shadow-blue-950/20 backdrop-blur-md flex items-center justify-between group hover:border-emerald-400/40 transition-all cursor-pointer"
-              >
-                <div className="flex items-center space-x-4 min-w-0">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                    <BarChart2 className="w-6 h-6" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-[10px] font-bold text-emerald-300 tracking-wider uppercase bg-emerald-500/20 px-2 py-0.5 rounded">
-                        Satu Data Kemnaker
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400">SMData Pusdatik</span>
-                    </div>
-                    <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-emerald-200 transition-colors truncate">
-                      {trans('Form Daftar Data Statistik PBJ', 'Procurement Statistical Data Form')}
-                    </h3>
-                    <p className="text-xs text-slate-300 truncate">
-                      {trans('20 Indikator Data Statistik & Tagging Arsitektur SPBE', '20 Statistical Indicators & SPBE Architecture Tagging')}
-                    </p>
-                  </div>
-                </div>
-                <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center shrink-0 ml-3 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-colors">
-                  <ChevronRight className="w-4 h-4" />
-                </div>
-              </Link>
-            </FadeIn>
 
             {/* BOTTOM INFO WIDGET */}
             <FadeIn direction="up" delay={0.2}>

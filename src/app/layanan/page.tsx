@@ -35,7 +35,7 @@ export default function LayananPage() {
       href: "https://sikap.inaproc.id/"
     },
     {
-      title: trans("Layanan Pengaduan", "Whistleblowing & Complaints"),
+      title: trans("Layanan Pengaduan", "Complaints & Helpdesk"),
       description: trans(
         "Sampaikan laporan, kendala teknis, atau pengaduan pengadaan langsung via WhatsApp Helpdesk resmi UKPBJ.",
         "Submit reports, technical issues, or procurement complaints directly via official UKPBJ WhatsApp Helpdesk."
