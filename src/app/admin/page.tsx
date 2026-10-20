@@ -725,6 +725,7 @@ export default function AdminPortalPage() {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchSupabaseActivityLogs, packagesList.length, newsList.length, agendaList.length, regulasiList.length, sopList.length, panduanList.length, photosList.length, videosList.length]);
 
   // Package Modal State

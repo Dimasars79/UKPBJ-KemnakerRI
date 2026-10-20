@@ -1435,6 +1435,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     // Also trigger server-side batch cleanup
     await syncAdminData('agendas', 'cleanup_expired_agendas');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newsList]);
 
   const addAgenda = async (agenda: Omit<AgendaItem, 'id' | 'syncFrontend'>) => {
