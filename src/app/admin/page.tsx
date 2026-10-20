@@ -1708,275 +1708,290 @@ export default function AdminPortalPage() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 280 }}
-              className={`relative w-72 max-w-[85vw] h-full flex flex-col justify-between overflow-y-auto shadow-2xl z-10 ${
+              className={`relative w-72 max-w-[85vw] h-full flex flex-col shrink-0 overflow-hidden shadow-2xl z-10 ${
                 isDark ? 'bg-slate-950 text-slate-100 border-r border-slate-800' : 'bg-white text-slate-900 border-r border-slate-200'
               }`}
             >
-              <div>
-                {/* Mobile Drawer Header with Logo & Close Button */}
-                <div className={`h-16 px-4 border-b flex items-center justify-between shrink-0 ${
-                  isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
-                }`}>
-                  <div className="flex items-center space-x-2.5">
-                    <div className={`w-8 h-8 rounded-xl p-1 flex items-center justify-center shadow-xs ${
-                      isDark ? 'bg-white/95 border border-white/20' : 'bg-white border border-slate-200'
-                    }`}>
-                      <Image 
-                        src="/logo-ukpbj-emblem.png" 
-                        alt="Logo UKPBJ" 
-                        width={28} 
-                        height={28} 
-                        className="w-full h-full object-contain" 
-                      />
-                    </div>
-                    <div>
-                      <h2 className={`font-extrabold text-xs tracking-wide ${isDark ? 'text-white' : 'text-primary-navy'}`}>
-                        PORTAL ADMIN
-                      </h2>
-                      <p className="text-[9px] text-accent-gold font-bold">UKPBJ KEMNAKER RI</p>
-                    </div>
+              {/* Mobile Drawer Header with Logo & Close Button - Pinned */}
+              <div className={`h-16 px-4 border-b flex items-center justify-between shrink-0 ${
+                isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
+              }`}>
+                <div className="flex items-center space-x-2.5">
+                  <div className={`w-8 h-8 rounded-xl p-1 flex items-center justify-center shadow-xs ${
+                    isDark ? 'bg-white/95 border border-white/20' : 'bg-white border border-slate-200'
+                  }`}>
+                    <Image 
+                      src="/logo-ukpbj-emblem.png" 
+                      alt="Logo UKPBJ" 
+                      width={28} 
+                      height={28} 
+                      className="w-full h-full object-contain" 
+                    />
                   </div>
+                  <div>
+                    <h2 className={`font-extrabold text-xs tracking-wide ${isDark ? 'text-white' : 'text-primary-navy'}`}>
+                      PORTAL ADMIN
+                    </h2>
+                    <p className="text-[9px] text-accent-gold font-bold">UKPBJ KEMNAKER RI</p>
+                  </div>
+                </div>
 
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-label="Tutup Menu"
+                  className={`p-1.5 rounded-xl transition-colors cursor-pointer ${
+                    isDark ? 'hover:bg-slate-800 text-slate-400 hover:text-white' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Mobile Navigation List - Scrollable with Custom Slim Scrollbar */}
+              <nav className="flex-1 overflow-y-auto p-3 space-y-3.5 custom-scrollbar min-h-0">
+                {/* UTAMA */}
+                <div className="space-y-1">
+                  <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+                    Utama
+                  </p>
                   <button
-                    type="button"
-                    onClick={() => setMobileMenuOpen(false)}
-                    aria-label="Tutup Menu"
-                    className={`p-1.5 rounded-xl transition-colors cursor-pointer ${
-                      isDark ? 'hover:bg-slate-800 text-slate-400 hover:text-white' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
+                    onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false); }}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      activeTab === 'dashboard'
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                        : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
                     }`}
                   >
-                    <X className="w-5 h-5" />
+                    <LayoutDashboard className="w-4 h-4" />
+                    <span>Dashboard</span>
                   </button>
                 </div>
 
-                {/* Mobile Navigation List */}
-                <nav className="p-3 space-y-4">
-                  {/* UTAMA */}
-                  <div className="space-y-1">
-                    <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
-                      Utama
-                    </p>
-                    <button
-                      onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false); }}
-                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'dashboard'
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                          : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <LayoutDashboard className="w-4 h-4" />
-                      <span>Dashboard</span>
-                    </button>
-                  </div>
+                {/* PENGADAAN */}
+                <div className="space-y-1">
+                  <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                    Pengadaan
+                  </p>
+                  <button
+                    onClick={() => { setActiveTab('paket'); setMobileMenuOpen(false); }}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      activeTab === 'paket'
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                        : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                    }`}
+                  >
+                    <Package className="w-4 h-4 text-blue-500" />
+                    <span>Paket Pengadaan</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${
+                      activeTab === 'paket' 
+                        ? 'bg-white/20 text-white' 
+                        : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {packagesList.length}
+                    </span>
+                  </button>
+                </div>
 
-                  {/* PENGADAAN */}
-                  <div className="space-y-1">
-                    <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
-                      Pengadaan
-                    </p>
-                    <button
-                      onClick={() => { setActiveTab('paket'); setMobileMenuOpen(false); }}
-                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'paket'
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                          : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Package className="w-4 h-4 text-blue-500" />
-                      <span>Paket Pengadaan</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${
-                        activeTab === 'paket' 
-                          ? 'bg-white/20 text-white' 
-                          : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
-                      }`}>
-                        {packagesList.length}
+                {/* CMS - Interactive Slide Down */}
+                <div className="space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => setIsCmsOpen(!isCmsOpen)}
+                    className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl transition-all cursor-pointer group ${
+                      isCmsOpen 
+                        ? isDark ? 'bg-amber-500/10 text-accent-gold' : 'bg-amber-50 text-amber-900 font-bold'
+                        : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900/60' : 'text-slate-700 hover:text-amber-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Globe className={`w-3.5 h-3.5 transition-colors ${
+                        isCmsOpen ? 'text-accent-gold' : isDark ? 'text-slate-400 group-hover:text-accent-gold' : 'text-slate-600 group-hover:text-amber-800'
+                      }`} />
+                      <span className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
+                        Kelola Web (CMS)
                       </span>
-                    </button>
-                  </div>
-
-                  {/* CMS */}
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between px-3 py-1">
-                      <p className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
-                        Kelola Web Publik (CMS)
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => setIsCmsOpen(!isCmsOpen)}
-                        className={`p-1 transition-colors cursor-pointer rounded-md ${isDark ? 'text-slate-400 hover:text-accent-gold' : 'text-slate-600 hover:text-amber-800'}`}
-                      >
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
-                      </button>
                     </div>
-
-                    <AnimatePresence initial={false}>
-                      {isCmsOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="overflow-hidden space-y-1 pl-1.5 border-l-2 border-accent-gold/30 ml-2"
-                        >
-                          {/* Tender & Seleksi */}
-                          <button
-                            onClick={() => { setActiveTab('paket'); setMobileMenuOpen(false); }}
-                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                              activeTab === 'paket'
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                            }`}
-                          >
-                            <Package className="w-3.5 h-3.5 text-blue-500" />
-                            <span>Tender & Seleksi</span>
-                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                              {packagesList.length}
-                            </span>
-                          </button>
-
-                          {/* Berita */}
-                          <button
-                            onClick={() => { setActiveTab('manage-berita'); setMobileMenuOpen(false); }}
-                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                              activeTab === 'manage-berita'
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                            }`}
-                          >
-                            <Newspaper className="w-3.5 h-3.5 text-amber-500" />
-                            <span>Berita & Pengumuman</span>
-                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
-                              {newsList.length}
-                            </span>
-                          </button>
-
-                          {/* Agenda */}
-                          <button
-                            onClick={() => { setActiveTab('manage-agenda'); setMobileMenuOpen(false); }}
-                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                              activeTab === 'manage-agenda'
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                            }`}
-                          >
-                            <Calendar className="w-3.5 h-3.5 text-emerald-500" />
-                            <span>Agenda & Jadwal</span>
-                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
-                              {agendaList.length}
-                            </span>
-                          </button>
-
-                          {/* Panduan & Juknis */}
-                          <button
-                            onClick={() => { setActiveTab('manage-panduan'); setMobileMenuOpen(false); }}
-                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                              activeTab === 'manage-panduan'
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                            }`}
-                          >
-                            <BookOpen className="w-3.5 h-3.5 text-teal-500" />
-                            <span>Panduan & Juknis</span>
-                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
-                              {panduanList.length}
-                            </span>
-                          </button>
-
-                          {/* Regulasi */}
-                          <button
-                            onClick={() => { setActiveTab('manage-regulasi'); setMobileMenuOpen(false); }}
-                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                              activeTab === 'manage-regulasi'
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                            }`}
-                          >
-                            <ScrollText className="w-3.5 h-3.5 text-blue-500" />
-                            <span>Regulasi & Aturan</span>
-                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                              {regulasiList.length}
-                            </span>
-                          </button>
-
-                          {/* SOP */}
-                          <button
-                            onClick={() => { setActiveTab('manage-sop'); setMobileMenuOpen(false); }}
-                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                              activeTab === 'manage-sop'
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                            }`}
-                          >
-                            <Layers className="w-3.5 h-3.5 text-purple-500" />
-                            <span>Standar SOP</span>
-                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
-                              {sopList.length}
-                            </span>
-                          </button>
-
-                          {/* Galeri & Media */}
-                          <button
-                            onClick={() => { setActiveTab('manage-galeri'); setMobileMenuOpen(false); }}
-                            className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                              activeTab === 'manage-galeri'
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                            }`}
-                          >
-                            <Camera className="w-3.5 h-3.5 text-cyan-500" />
-                            <span>Galeri & Media</span>
-                            <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
-                              {photosList.length + videosList.length}
-                            </span>
-                          </button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* SISTEM */}
-                  <div className="space-y-1">
-                    <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
-                      Sistem & Pengaturan
-                    </p>
-                    <button
-                      onClick={() => { setActiveTab('log-aktivitas'); setMobileMenuOpen(false); }}
-                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'log-aktivitas'
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                          : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <History className="w-4 h-4 text-emerald-500" />
-                      <span>Log Aktivitas</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
-                        Live
+                    <div className="flex items-center space-x-1.5">
+                      <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                        isCmsOpen 
+                          ? isDark ? 'bg-accent-gold/20 text-accent-gold' : 'bg-amber-200/80 text-amber-900'
+                          : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'
+                      }`}>
+                        7
                       </span>
-                    </button>
+                      <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                  </button>
 
-                    <button
-                      onClick={() => { setActiveTab('pengaturan'); setMobileMenuOpen(false); }}
-                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'pengaturan'
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                          : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Settings className="w-4 h-4 text-slate-400" />
-                      <span>Pengaturan Portal</span>
-                    </button>
-                  </div>
-                </nav>
-              </div>
+                  <AnimatePresence initial={false}>
+                    {isCmsOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden space-y-0.5 pl-2 border-l-2 border-accent-gold/30 ml-2.5 pt-0.5"
+                      >
+                        {/* Tender & Seleksi */}
+                        <button
+                          onClick={() => { setActiveTab('paket'); setMobileMenuOpen(false); }}
+                          className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                            activeTab === 'paket'
+                              ? 'bg-blue-600 text-white shadow-xs font-bold'
+                              : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                          }`}
+                        >
+                          <Package className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                          <span className="truncate">Tender & Seleksi</span>
+                          <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                            {packagesList.length}
+                          </span>
+                        </button>
 
-              {/* Profile Card & Back to Home */}
-              <div className={`p-4 border-t space-y-3 ${
-                isDark ? 'border-slate-800/80' : 'border-slate-200'
+                        {/* Berita */}
+                        <button
+                          onClick={() => { setActiveTab('manage-berita'); setMobileMenuOpen(false); }}
+                          className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                            activeTab === 'manage-berita'
+                              ? 'bg-blue-600 text-white shadow-xs font-bold'
+                              : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                          }`}
+                        >
+                          <Newspaper className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                          <span className="truncate">Berita & Pengumuman</span>
+                          <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
+                            {newsList.length}
+                          </span>
+                        </button>
+
+                        {/* Agenda */}
+                        <button
+                          onClick={() => { setActiveTab('manage-agenda'); setMobileMenuOpen(false); }}
+                          className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                            activeTab === 'manage-agenda'
+                              ? 'bg-blue-600 text-white shadow-xs font-bold'
+                              : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                          }`}
+                        >
+                          <Calendar className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          <span className="truncate">Agenda & Jadwal</span>
+                          <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                            {agendaList.length}
+                          </span>
+                        </button>
+
+                        {/* Panduan & Juknis */}
+                        <button
+                          onClick={() => { setActiveTab('manage-panduan'); setMobileMenuOpen(false); }}
+                          className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                            activeTab === 'manage-panduan'
+                              ? 'bg-blue-600 text-white shadow-xs font-bold'
+                              : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                          }`}
+                        >
+                          <BookOpen className="w-3.5 h-3.5 text-teal-500 shrink-0" />
+                          <span className="truncate">Panduan & Juknis</span>
+                          <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
+                            {panduanList.length}
+                          </span>
+                        </button>
+
+                        {/* Regulasi */}
+                        <button
+                          onClick={() => { setActiveTab('manage-regulasi'); setMobileMenuOpen(false); }}
+                          className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                            activeTab === 'manage-regulasi'
+                              ? 'bg-blue-600 text-white shadow-xs font-bold'
+                              : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                          }`}
+                        >
+                          <ScrollText className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                          <span className="truncate">Regulasi & Aturan</span>
+                          <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                            {regulasiList.length}
+                          </span>
+                        </button>
+
+                        {/* SOP */}
+                        <button
+                          onClick={() => { setActiveTab('manage-sop'); setMobileMenuOpen(false); }}
+                          className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                            activeTab === 'manage-sop'
+                              ? 'bg-blue-600 text-white shadow-xs font-bold'
+                              : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                          }`}
+                        >
+                          <Layers className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+                          <span className="truncate">Standar SOP</span>
+                          <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
+                            {sopList.length}
+                          </span>
+                        </button>
+
+                        {/* Galeri & Media */}
+                        <button
+                          onClick={() => { setActiveTab('manage-galeri'); setMobileMenuOpen(false); }}
+                          className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                            activeTab === 'manage-galeri'
+                              ? 'bg-blue-600 text-white shadow-xs font-bold'
+                              : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                          }`}
+                        >
+                          <Camera className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
+                          <span className="truncate">Galeri & Media</span>
+                          <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
+                            {photosList.length + videosList.length}
+                          </span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* SISTEM & PENGATURAN */}
+                <div className="space-y-1">
+                  <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+                    Sistem & Pengaturan
+                  </p>
+
+                  <button
+                    onClick={() => { setActiveTab('log-aktivitas'); setMobileMenuOpen(false); }}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      activeTab === 'log-aktivitas'
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                        : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                    }`}
+                  >
+                    <History className="w-4 h-4 text-emerald-500" />
+                    <span>Log Aktivitas</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                      Live
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => { setActiveTab('pengaturan'); setMobileMenuOpen(false); }}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      activeTab === 'pengaturan'
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                        : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                    }`}
+                  >
+                    <Settings className="w-4 h-4 text-slate-400" />
+                    <span>Pengaturan Portal</span>
+                  </button>
+                </div>
+              </nav>
+
+              {/* Profile Card & Back to Home - Pinned Footer */}
+              <div className={`p-3.5 border-t shrink-0 space-y-2.5 transition-colors ${
+                isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
               }`}>
-                <div className={`flex items-center space-x-3 px-2 py-2 rounded-xl border ${
-                  isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-200'
+                <div className={`flex items-center space-x-3 px-2.5 py-2 rounded-xl border ${
+                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}>
-                  <div className="w-8 h-8 rounded-full bg-accent-gold/20 border border-accent-gold/40 flex items-center justify-center font-bold text-accent-gold text-xs">
+                  <div className="w-8 h-8 rounded-full bg-accent-gold/20 border border-accent-gold/40 flex items-center justify-center font-bold text-accent-gold text-xs shrink-0">
                     {currentAdmin.nama_lengkap.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'AD'}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -1989,7 +2004,7 @@ export default function AdminPortalPage() {
                   <Link
                     href="/"
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-3 py-2 rounded-xl text-[11px] font-bold text-center flex items-center justify-center gap-1 transition-colors ${
+                    className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-colors ${
                       isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
                     }`}
                   >
@@ -1999,7 +2014,7 @@ export default function AdminPortalPage() {
 
                   <button
                     onClick={handleLogout}
-                    className="px-3 py-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-[11px] font-bold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <LogOut className="w-3 h-3" />
                     <span>Keluar</span>
@@ -2012,275 +2027,290 @@ export default function AdminPortalPage() {
       </AnimatePresence>
 
       {/* ========================================================= */}
-      {/* DESKTOP SIDEBAR NAVIGATION */}
       {/* ========================================================= */}
-      <aside className={`hidden md:flex w-64 md:w-72 border-r flex-col justify-between shrink-0 h-screen sticky top-0 overflow-y-auto transition-colors duration-300 ${
+      {/* DESKTOP SIDEBAR NAVIGATION (PINNED HEADER & FOOTER + SLIM SCROLLBAR) */}
+      {/* ========================================================= */}
+      <aside className={`hidden md:flex w-64 md:w-72 border-r flex-col shrink-0 h-screen sticky top-0 overflow-hidden transition-colors duration-300 select-none ${
         isDark ? 'bg-slate-950 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
       }`}>
-        <div>
-          {/* Logo & Portal Brand */}
-          <div className={`h-[5.5rem] px-5 border-b flex items-center justify-between shrink-0 box-border ${
-            isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
-          }`}>
-            <div className="flex items-center space-x-3">
-              <div className={`w-10 h-10 rounded-xl p-1.5 flex items-center justify-center shadow-md transition-all ${
-                isDark 
-                  ? 'bg-white/95 border border-white/20 shadow-blue-500/10' 
-                  : 'bg-white border border-slate-200 shadow-sm'
-              }`}>
-                <Image 
-                  src="/logo-ukpbj-emblem.png" 
-                  alt="Logo UKPBJ Kemnaker RI" 
-                  width={36} 
-                  height={36} 
-                  className="w-full h-full object-contain drop-shadow-xs" 
-                />
-              </div>
-              <div>
-                <h1 className={`font-extrabold text-sm tracking-wide ${isDark ? 'text-white' : 'text-primary-navy'}`}>
-                  PORTAL ADMIN
-                </h1>
-                <p className="text-[10px] text-accent-gold font-bold">UKPBJ KEMNAKER RI</p>
-              </div>
+        {/* Logo & Portal Brand - Fixed Pinned Header */}
+        <div className={`h-[5.5rem] px-5 border-b flex items-center justify-between shrink-0 box-border ${
+          isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
+        }`}>
+          <div className="flex items-center space-x-3">
+            <div className={`w-10 h-10 rounded-xl p-1.5 flex items-center justify-center shadow-md transition-all ${
+              isDark 
+                ? 'bg-white/95 border border-white/20 shadow-blue-500/10' 
+                : 'bg-white border border-slate-200 shadow-sm'
+            }`}>
+              <Image 
+                src="/logo-ukpbj-emblem.png" 
+                alt="Logo UKPBJ Kemnaker RI" 
+                width={36} 
+                height={36} 
+                className="w-full h-full object-contain drop-shadow-xs" 
+              />
+            </div>
+            <div>
+              <h1 className={`font-extrabold text-sm tracking-wide ${isDark ? 'text-white' : 'text-primary-navy'}`}>
+                PORTAL ADMIN
+              </h1>
+              <p className="text-[10px] text-accent-gold font-bold">UKPBJ KEMNAKER RI</p>
             </div>
           </div>
-
-          {/* Nav Items */}
-          <nav className="p-3 space-y-4">
-            {/* GRUP 1: UTAMA */}
-            <div className="space-y-1">
-              <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
-                Utama
-              </p>
-              
-              <button
-                onClick={() => setActiveTab('dashboard')}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'dashboard'
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                }`}
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                <span>Dashboard</span>
-              </button>
-            </div>
-
-            {/* GRUP 1: PENGADAAN */}
-            <div className="space-y-1">
-              <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
-                Pengadaan
-              </p>
-
-              {/* Paket Pengadaan */}
-              <button
-                onClick={() => setActiveTab('paket')}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'paket'
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                }`}
-              >
-                <Package className="w-4 h-4 text-blue-500" />
-                <span>Paket Pengadaan</span>
-                <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${
-                  activeTab === 'paket' 
-                    ? 'bg-white/20 text-white' 
-                    : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
-                }`}>
-                  {packagesList.length}
-                </span>
-              </button>
-            </div>
-
-            {/* GRUP 2: KELOLA WEB PUBLIK (CMS) - SIDE DOWN ACCORDION */}
-            <div className="space-y-1">
-              <div className="flex items-center justify-between px-3 py-1">
-                <p className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
-                  Kelola Web Publik (CMS)
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setIsCmsOpen(!isCmsOpen)}
-                  className={`p-1 transition-colors cursor-pointer rounded-md ${isDark ? 'text-slate-400 hover:text-accent-gold' : 'text-slate-600 hover:text-amber-800'}`}
-                  title="Buka/Tutup Menu Kelola Web"
-                >
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
-                </button>
-              </div>
-
-              {/* Side-Down Collapsible Submenu */}
-              <AnimatePresence initial={false}>
-                {isCmsOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden space-y-1 pl-1.5 border-l-2 border-accent-gold/30 ml-2"
-                  >
-                    {/* Tender & Seleksi */}
-                    <button
-                      onClick={() => setActiveTab('paket')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'paket'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Package className="w-3.5 h-3.5 text-blue-500" />
-                      <span>Tender & Seleksi</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                        {packagesList.length}
-                      </span>
-                    </button>
-
-                    {/* Berita */}
-                    <button
-                      onClick={() => setActiveTab('manage-berita')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'manage-berita'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Newspaper className="w-3.5 h-3.5 text-amber-500" />
-                      <span>Berita & Pengumuman</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
-                        {newsList.length}
-                      </span>
-                    </button>
-
-                    {/* Agenda */}
-                    <button
-                      onClick={() => setActiveTab('manage-agenda')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'manage-agenda'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Calendar className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>Agenda & Jadwal</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
-                        {agendaList.length}
-                      </span>
-                    </button>
-
-                    {/* Panduan & Juknis */}
-                    <button
-                      onClick={() => setActiveTab('manage-panduan')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'manage-panduan'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <BookOpen className="w-3.5 h-3.5 text-teal-500" />
-                      <span>Panduan & Juknis</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
-                        {panduanList.length}
-                      </span>
-                    </button>
-
-                    {/* Regulasi */}
-                    <button
-                      onClick={() => setActiveTab('manage-regulasi')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'manage-regulasi'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <ScrollText className="w-3.5 h-3.5 text-blue-500" />
-                      <span>Regulasi & Aturan</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                        {regulasiList.length}
-                      </span>
-                    </button>
-
-                    {/* SOP */}
-                    <button
-                      onClick={() => setActiveTab('manage-sop')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'manage-sop'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Layers className="w-3.5 h-3.5 text-purple-500" />
-                      <span>Standar SOP</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
-                        {sopList.length}
-                      </span>
-                    </button>
-
-                    {/* Galeri & Media (Foto/Video) */}
-                    <button
-                      onClick={() => setActiveTab('manage-galeri')}
-                      className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        activeTab === 'manage-galeri'
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                          : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                      }`}
-                    >
-                      <Camera className="w-3.5 h-3.5 text-cyan-500" />
-                      <span>Galeri & Media</span>
-                      <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
-                        {photosList.length + videosList.length}
-                      </span>
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* GRUP 3: SISTEM & PENGATURAN */}
-            <div className="space-y-1">
-              <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
-                Sistem & Pengaturan
-              </p>
-
-              {/* Log Aktivitas */}
-              <button
-                onClick={() => setActiveTab('log-aktivitas')}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'log-aktivitas'
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                }`}
-              >
-                <History className="w-4 h-4 text-emerald-500" />
-                <span>Log Aktivitas</span>
-                <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
-                  Live
-                </span>
-              </button>
-
-              {/* Pengaturan Portal */}
-              <button
-                onClick={() => setActiveTab('pengaturan')}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'pengaturan'
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
-                }`}
-              >
-                <Settings className="w-4 h-4 text-slate-400" />
-                <span>Pengaturan Portal</span>
-              </button>
-            </div>
-          </nav>
         </div>
 
-        {/* Profile Card & Back to Home */}
-        <div className={`p-4 border-t space-y-3 ${
-          isDark ? 'border-slate-800/80' : 'border-slate-200'
+        {/* Nav Items - Scrollable with Custom Slim Scrollbar */}
+        <nav className="flex-1 overflow-y-auto p-3 space-y-3.5 custom-scrollbar min-h-0">
+          {/* GRUP 1: UTAMA */}
+          <div className="space-y-1">
+            <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+              Utama
+            </p>
+            
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'dashboard'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span>Dashboard</span>
+            </button>
+          </div>
+
+          {/* GRUP 2: PENGADAAN */}
+          <div className="space-y-1">
+            <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+              Pengadaan
+            </p>
+
+            {/* Paket Pengadaan */}
+            <button
+              onClick={() => setActiveTab('paket')}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'paket'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+              }`}
+            >
+              <Package className="w-4 h-4 text-blue-500" />
+              <span>Paket Pengadaan</span>
+              <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${
+                activeTab === 'paket' 
+                  ? 'bg-white/20 text-white' 
+                  : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
+              }`}>
+                {packagesList.length}
+              </span>
+            </button>
+          </div>
+
+          {/* GRUP 3: KELOLA WEB PUBLIK (CMS) - INTERACTIVE SLIDE DOWN ACCORDION */}
+          <div className="space-y-1">
+            <button
+              type="button"
+              onClick={() => setIsCmsOpen(!isCmsOpen)}
+              className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl transition-all cursor-pointer group ${
+                isCmsOpen 
+                  ? isDark ? 'bg-amber-500/10 text-accent-gold' : 'bg-amber-50 text-amber-900 font-bold'
+                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900/60' : 'text-slate-700 hover:text-amber-900 hover:bg-slate-100'
+              }`}
+              title="Klik untuk membuka / menutup menu CMS"
+            >
+              <div className="flex items-center space-x-2">
+                <Globe className={`w-3.5 h-3.5 transition-colors ${
+                  isCmsOpen ? 'text-accent-gold' : isDark ? 'text-slate-400 group-hover:text-accent-gold' : 'text-slate-600 group-hover:text-amber-800'
+                }`} />
+                <span className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
+                  Kelola Web (CMS)
+                </span>
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                  isCmsOpen 
+                    ? isDark ? 'bg-accent-gold/20 text-accent-gold' : 'bg-amber-200/80 text-amber-900'
+                    : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'
+                }`}>
+                  7
+                </span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
+              </div>
+            </button>
+
+            {/* Side-Down Collapsible Submenu with Compact Height */}
+            <AnimatePresence initial={false}>
+              {isCmsOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden space-y-0.5 pl-2 border-l-2 border-accent-gold/30 ml-2.5 pt-0.5"
+                >
+                  {/* Tender & Seleksi */}
+                  <button
+                    onClick={() => setActiveTab('paket')}
+                    className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      activeTab === 'paket'
+                        ? 'bg-blue-600 text-white shadow-xs font-bold'
+                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Package className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                    <span className="truncate">Tender & Seleksi</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                      {packagesList.length}
+                    </span>
+                  </button>
+
+                  {/* Berita */}
+                  <button
+                    onClick={() => setActiveTab('manage-berita')}
+                    className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      activeTab === 'manage-berita'
+                        ? 'bg-blue-600 text-white shadow-xs font-bold'
+                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Newspaper className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                    <span className="truncate">Berita & Pengumuman</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
+                      {newsList.length}
+                    </span>
+                  </button>
+
+                  {/* Agenda */}
+                  <button
+                    onClick={() => setActiveTab('manage-agenda')}
+                    className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      activeTab === 'manage-agenda'
+                        ? 'bg-blue-600 text-white shadow-xs font-bold'
+                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <span className="truncate">Agenda & Jadwal</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                      {agendaList.length}
+                    </span>
+                  </button>
+
+                  {/* Panduan & Juknis */}
+                  <button
+                    onClick={() => setActiveTab('manage-panduan')}
+                    className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      activeTab === 'manage-panduan'
+                        ? 'bg-blue-600 text-white shadow-xs font-bold'
+                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <BookOpen className="w-3.5 h-3.5 text-teal-500 shrink-0" />
+                    <span className="truncate">Panduan & Juknis</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
+                      {panduanList.length}
+                    </span>
+                  </button>
+
+                  {/* Regulasi */}
+                  <button
+                    onClick={() => setActiveTab('manage-regulasi')}
+                    className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      activeTab === 'manage-regulasi'
+                        ? 'bg-blue-600 text-white shadow-xs font-bold'
+                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <ScrollText className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                    <span className="truncate">Regulasi & Aturan</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                      {regulasiList.length}
+                    </span>
+                  </button>
+
+                  {/* SOP */}
+                  <button
+                    onClick={() => setActiveTab('manage-sop')}
+                    className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      activeTab === 'manage-sop'
+                        ? 'bg-blue-600 text-white shadow-xs font-bold'
+                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+                    <span className="truncate">Standar SOP</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
+                      {sopList.length}
+                    </span>
+                  </button>
+
+                  {/* Galeri & Media (Foto/Video) */}
+                  <button
+                    onClick={() => setActiveTab('manage-galeri')}
+                    className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      activeTab === 'manage-galeri'
+                        ? 'bg-blue-600 text-white shadow-xs font-bold'
+                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Camera className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
+                    <span className="truncate">Galeri & Media</span>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
+                      {photosList.length + videosList.length}
+                    </span>
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* GRUP 4: SISTEM & PENGATURAN */}
+          <div className="space-y-1">
+            <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+              Sistem & Pengaturan
+            </p>
+
+            {/* Log Aktivitas */}
+            <button
+              onClick={() => setActiveTab('log-aktivitas')}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'log-aktivitas'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+              }`}
+            >
+              <History className="w-4 h-4 text-emerald-500" />
+              <span>Log Aktivitas</span>
+              <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                Live
+              </span>
+            </button>
+
+            {/* Pengaturan Portal */}
+            <button
+              onClick={() => setActiveTab('pengaturan')}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'pengaturan'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+              }`}
+            >
+              <Settings className="w-4 h-4 text-slate-400" />
+              <span>Pengaturan Portal</span>
+            </button>
+          </div>
+        </nav>
+
+        {/* Profile Card & Back to Home - Fixed Pinned Footer */}
+        <div className={`p-3.5 border-t shrink-0 space-y-2.5 transition-colors ${
+          isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
         }`}>
-          <div className={`flex items-center space-x-3 px-2 py-2 rounded-xl border ${
-            isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-200'
+          <div className={`flex items-center space-x-3 px-2.5 py-2 rounded-xl border ${
+            isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-50 border-slate-200'
           }`}>
-            <div className="w-9 h-9 rounded-full bg-accent-gold/20 border border-accent-gold/40 flex items-center justify-center font-bold text-accent-gold text-xs">
+            <div className="w-8 h-8 rounded-full bg-accent-gold/20 border border-accent-gold/40 flex items-center justify-center font-bold text-accent-gold text-xs shrink-0">
               {currentAdmin.nama_lengkap.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'AD'}
             </div>
             <div className="flex-1 min-w-0">
@@ -2292,7 +2322,7 @@ export default function AdminPortalPage() {
           <div className="grid grid-cols-2 gap-2">
             <Link
               href="/"
-              className={`px-3 py-2 rounded-xl text-[11px] font-bold text-center flex items-center justify-center gap-1 transition-colors ${
+              className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-colors ${
                 isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
               }`}
             >
@@ -2302,7 +2332,7 @@ export default function AdminPortalPage() {
 
             <button
               onClick={handleLogout}
-              className="px-3 py-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-[11px] font-bold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+              className="px-2.5 py-1.5 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
               <LogOut className="w-3 h-3" />
               <span>Keluar</span>
