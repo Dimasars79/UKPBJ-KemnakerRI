@@ -6489,6 +6489,7 @@ export default function AdminPortalPage() {
                             onClick={() => setMediaLightbox({ type: 'photo', title: item.title, src: item.src, desc: item.desc, category: item.category, date: item.date })}
                             className="relative aspect-video bg-slate-950 overflow-hidden cursor-pointer"
                           >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
                               src={item.src} 
                               alt={item.title} 
@@ -6643,6 +6644,7 @@ export default function AdminPortalPage() {
                             onClick={() => setMediaLightbox({ type: 'video', title: item.title, src: item.thumbnailUrl, desc: item.desc, category: item.category, date: item.date, url: item.url, views: item.views, duration: item.duration })}
                             className="relative aspect-video bg-slate-950 overflow-hidden cursor-pointer"
                           >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
                               src={item.thumbnailUrl} 
                               alt={item.title} 
@@ -6764,6 +6766,7 @@ export default function AdminPortalPage() {
                     {/* Media Display Area */}
                     <div className="relative aspect-video bg-black flex items-center justify-center">
                       {mediaLightbox.type === 'photo' ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
                         <img 
                           src={mediaLightbox.src} 
                           alt={mediaLightbox.title} 
