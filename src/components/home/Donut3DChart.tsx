@@ -82,8 +82,8 @@ export function Donut3DChart({
         'Z'
       ].join(' ');
 
-      // Vektor pop-out (mencuat keluar)
-      const isPopOutDefault = index === 1; // E-Purchasing atau segmen aktif
+      // Vektor pop-out (mencuat keluar saat di-hover)
+      const isPopOutDefault = false; 
       const popDistance = 14;
       const popX = Math.cos(midRad) * popDistance;
       const popY = Math.sin(midRad) * popDistance;
@@ -176,8 +176,8 @@ export function Donut3DChart({
           {/* Linear Gradient untuk Setiap Sektor (Memberikan kedalaman 3D lengkung) */}
           {slices.map((slice) => (
             <linearGradient
-              key={`grad-${slice.name}`}
-              id={`grad-${slice.name}`}
+              key={`grad-slice-${slice.index}`}
+              id={`grad-slice-${slice.index}`}
               x1="0%"
               y1="0%"
               x2="100%"
@@ -235,7 +235,7 @@ export function Donut3DChart({
                 {/* Sektor Pie Utama */}
                 <path
                   d={slice.pathData}
-                  fill={`url(#grad-${slice.name})`}
+                  fill={`url(#grad-slice-${slice.index})`}
                   stroke="rgba(255, 255, 255, 0.4)"
                   strokeWidth={isHovered ? 2.5 : 1.2}
                   filter="url(#step-shadow)"
