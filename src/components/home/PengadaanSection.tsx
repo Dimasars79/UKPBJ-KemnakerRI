@@ -557,7 +557,7 @@ export function PengadaanSection() {
                       );
                     }
 
-                    return docs.map((doc: any, idx: number) => (
+                    return docs.map((doc: { id?: string; name: string; size?: string; data?: string; url?: string }, idx: number) => (
                       <div 
                         key={doc.id || idx}
                         className={`flex items-center justify-between p-3.5 rounded-xl border transition-colors ${

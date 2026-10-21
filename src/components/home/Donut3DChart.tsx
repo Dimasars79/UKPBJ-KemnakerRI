@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export interface DonutSegment {
   name: string;
@@ -13,7 +12,7 @@ export interface DonutSegment {
 
 interface Donut3DChartProps {
   data: DonutSegment[];
-  totalCount: number;
+  totalCount?: number;
   activeSegmentIndex: number | null;
   onHoverSegment: (index: number | null) => void;
   formatMiliar: (nominal: number) => string;
@@ -21,7 +20,6 @@ interface Donut3DChartProps {
 
 export function Donut3DChart({
   data,
-  totalCount,
   activeSegmentIndex,
   onHoverSegment,
   formatMiliar

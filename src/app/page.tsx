@@ -5,9 +5,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { 
-  Users, ArrowRight, ShieldCheck, ChevronDown, Quote, ShoppingCart, 
-  BookOpen, Scale, Clock, TrendingDown, TrendingUp, Award, ThumbsUp, 
-  Calendar, Globe, FileText
+  Users, ArrowRight, ShieldCheck, Quote, ShoppingCart, 
+  BookOpen, Scale, TrendingUp, Calendar, Globe, FileText
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
