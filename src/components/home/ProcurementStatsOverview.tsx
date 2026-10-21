@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { 
-  BarChart3, ArrowRight, Layers, TrendingUp, Sparkles, CheckCircle2 
+  BarChart3, Layers, TrendingUp 
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -120,7 +120,7 @@ export function ProcurementStatsOverview() {
     return formatMiliar(sum);
   }, [packagesList]);
 
-  // Smooth scroll handler
+  // Smooth scroll handler ke bagian daftar paket pengadaan
   const scrollToPengadaan = () => {
     const el = document.getElementById('pengadaan');
     if (el) {
