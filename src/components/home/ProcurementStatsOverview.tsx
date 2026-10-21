@@ -121,6 +121,14 @@ export function ProcurementStatsOverview() {
     return formatMiliar(sum);
   }, [packagesList]);
 
+  // Smooth scroll handler ke bagian daftar paket pengadaan di beranda
+  const scrollToPengadaan = () => {
+    const el = document.getElementById('pengadaan');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="py-12 sm:py-16 relative overflow-hidden bg-[#0a2342] border-y border-white/10" id="kinerja">
       {/* Background ambient lighting */}
