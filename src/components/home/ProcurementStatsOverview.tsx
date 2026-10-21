@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { 
-  BarChart3, Layers, TrendingUp 
+  BarChart3, Layers, TrendingUp, ArrowRight 
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -120,14 +121,6 @@ export function ProcurementStatsOverview() {
     return formatMiliar(sum);
   }, [packagesList]);
 
-  // Smooth scroll handler ke bagian daftar paket pengadaan
-  const scrollToPengadaan = () => {
-    const el = document.getElementById('pengadaan');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <section className="py-12 sm:py-16 relative overflow-hidden bg-[#0a2342] border-y border-white/10" id="kinerja">
       {/* Background ambient lighting */}
@@ -190,13 +183,13 @@ export function ProcurementStatsOverview() {
                 <span className="w-2 h-2 rounded-full bg-accent-gold" />
                 {trans('Status Tahapan Paket Berjalan:', 'Active Package Stage Progress:')}
               </span>
-              <button
-                onClick={scrollToPengadaan}
-                className="text-accent-gold font-bold hover:underline inline-flex items-center gap-1 text-[11px]"
+              <Link
+                href="/monitoring"
+                className="text-accent-gold font-bold hover:underline inline-flex items-center gap-1.5 text-[11px] group transition-all"
               >
                 <span>{trans('Telusuri Daftar Paket Lengkap', 'Explore All Packages')}</span>
-                <span>&darr;</span>
-              </button>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
