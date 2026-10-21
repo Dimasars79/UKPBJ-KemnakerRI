@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Download,
   ChevronRight,
+  ChevronLeft,
   Sparkles,
   Headset
 } from 'lucide-react';
@@ -30,6 +31,8 @@ export function PengadaanSection() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [selectedStatus, setSelectedStatus] = useState<string>('Semua');
   const [activeModalPackage, setActiveModalPackage] = useState<ProcurementPackage | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const categories = ['Semua', 'Tender', 'Seleksi', 'Pengadaan Langsung', 'E-Purchasing'];
   const statuses = ['Semua', 'Pendaftaran Dibuka', 'Tahap Evaluasi', 'Selesai'];
@@ -47,6 +50,21 @@ export function PengadaanSection() {
       return matchSearch && matchCat && matchStatus;
     });
   }, [packagesList, searchQuery, selectedCategory, selectedStatus]);
+
+  const totalPages = Math.ceil(filteredPackages.length / itemsPerPage) || 1;
+
+  const paginatedPackages = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredPackages.slice(start, start + itemsPerPage);
+  }, [filteredPackages, currentPage, itemsPerPage]);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    const el = document.getElementById('pengadaan');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const getStatusBadge = (status: ProcurementPackage['status']) => {
     switch (status) {
@@ -124,7 +142,10 @@ export function PengadaanSection() {
                   type="text"
                   placeholder={trans("Cari nama paket, kode tender, atau unit kerja...", "Search package name, tender code, or unit...")}
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="w-full pl-9 sm:pl-11 pr-3 sm:pr-4 py-2 sm:py-2.5 md:py-3 bg-slate-50 border border-slate-200 rounded-lg sm:rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-all"
                 />
               </div>
@@ -138,7 +159,10 @@ export function PengadaanSection() {
                   return (
                     <button
                       key={cat}
-                      onClick={() => setSelectedCategory(cat)}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setCurrentPage(1);
+                      }}
                       className={`px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all ${
                         selectedCategory === cat
                           ? 'bg-primary-navy text-white shadow-md'
@@ -155,7 +179,10 @@ export function PengadaanSection() {
               <div className="lg:col-span-2 relative">
                 <select
                   value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedStatus(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2.5 bg-blue-50/75 border border-blue-200/90 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold text-blue-950 hover:bg-blue-100/60 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue transition-all cursor-pointer"
                 >
                   {statuses.map((st) => {
@@ -178,9 +205,9 @@ export function PengadaanSection() {
 
         {/* Package Grid / List */}
         <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
-          {filteredPackages.length > 0 ? (
-            filteredPackages.map((pkg, idx) => (
-              <FadeIn key={pkg.id} delay={idx * 0.05} direction="up">
+          {paginatedPackages.length > 0 ? (
+            paginatedPackages.map((pkg, idx) => (
+              <FadeIn key={pkg.id} delay={idx * 0.04} direction="up">
                 <div className="bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-5 md:p-6 border border-slate-200/90 shadow-xs hover:shadow-md hover:border-primary-blue/40 transition-all duration-300 group">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
                     
@@ -262,11 +289,89 @@ export function PengadaanSection() {
                   setSearchQuery('');
                   setSelectedCategory('Semua');
                   setSelectedStatus('Semua');
+                  setCurrentPage(1);
                 }}
                 className="mt-4 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all"
               >
                 {trans('Reset Pencarian', 'Reset Search')}
               </button>
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {filteredPackages.length > itemsPerPage && (
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200/80">
+              <p className="text-xs text-slate-500">
+                {trans(
+                  `Menampilkan ${(currentPage - 1) * itemsPerPage + 1} - ${Math.min(currentPage * itemsPerPage, filteredPackages.length)} dari ${filteredPackages.length} paket pengadaan`,
+                  `Showing ${(currentPage - 1) * itemsPerPage + 1} - ${Math.min(currentPage * itemsPerPage, filteredPackages.length)} of ${filteredPackages.length} procurement packages`
+                )}
+              </p>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 border transition-all ${
+                    currentPage === 1
+                      ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50 hover:border-primary-blue shadow-xs'
+                  }`}
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">{trans('Sebelumnya', 'Prev')}</span>
+                </button>
+
+                {/* Page Number Buttons */}
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                    // Show first, last, and current +- 1
+                    if (
+                      pageNum === 1 ||
+                      pageNum === totalPages ||
+                      (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                    ) {
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => handlePageChange(pageNum)}
+                          className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                            currentPage === pageNum
+                              ? 'bg-primary-navy text-white shadow-sm'
+                              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    }
+                    if (
+                      (pageNum === 2 && currentPage > 3) ||
+                      (pageNum === totalPages - 1 && currentPage < totalPages - 2)
+                    ) {
+                      return (
+                        <span key={pageNum} className="px-1 text-slate-400 text-xs">
+                          ...
+                        </span>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+
+                <button
+                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 border transition-all ${
+                    currentPage === totalPages
+                      ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50 hover:border-primary-blue shadow-xs'
+                  }`}
+                >
+                  <span className="hidden sm:inline">{trans('Berikutnya', 'Next')}</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -452,7 +557,7 @@ export function PengadaanSection() {
                       );
                     }
 
-                    return docs.map((doc, idx) => (
+                    return docs.map((doc: any, idx: number) => (
                       <div 
                         key={doc.id || idx}
                         className={`flex items-center justify-between p-3.5 rounded-xl border transition-colors ${

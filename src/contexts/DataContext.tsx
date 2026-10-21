@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { filterActiveAgendas, isAgendaExpired } from '@/lib/agendaUtils';
+import { MOCK_PACKAGES_50 } from '@/data/mockPackages50';
 
 export interface NewsItem {
   id: string;
@@ -405,88 +406,7 @@ export const getDynamicDefaultAgendas = (): AgendaItem[] => {
 
 const DEFAULT_AGENDAS: AgendaItem[] = getDynamicDefaultAgendas();
 
-const DEFAULT_PACKAGES: ProcurementPackage[] = [
-  {
-    id: 'PKG-2026-001',
-    code: 'TND-984210',
-    title: 'Pengadaan Jasa Konsultan Pengembangan Arsitektur IT & Portal UKPBJ',
-    unit: 'Biro Perencanaan dan Manajemen Kinerja - Kemnaker RI',
-    hps: 'Rp 500.000.000',
-    category: 'Tender',
-    status: 'Pendaftaran Dibuka',
-    deadline: '20 Agu 2026',
-    method: 'Tender - Pascakualifikasi Satu File',
-    docCount: 3,
-    fileName: 'KAK-Konsultan-Portal-UKPBJ.pdf',
-    fileSize: '2.4 MB',
-    downloadUrl: '#',
-    desc: 'Pengadaan jasa konsultan IT untuk mendukung implementasi sistem informasi terintegrasi dan arsitektur satu portal di lingkungan Kemnaker.'
-  },
-  {
-    id: 'PKG-2026-002',
-    code: 'TND-984211',
-    title: 'Pengadaan Peralatan Workshop Pelatihan Vokasi & Produktivitas',
-    unit: 'Ditjen Pembinaan Pelatihan Vokasi dan Produktivitas (Binalavotas)',
-    hps: 'Rp 2.150.000.000',
-    category: 'Tender',
-    status: 'Tahap Evaluasi',
-    deadline: '16 Agu 2026',
-    method: 'Tender - Pascakualifikasi Dua File',
-    docCount: 4,
-    fileName: 'Dokumen-Pemilihan-Peralatan-Workshop.pdf',
-    fileSize: '3.8 MB',
-    downloadUrl: '#',
-    desc: 'Pengadaan sarana dan prasarana penunjang pelatihan vokasi tenaga kerja di balai besar pelatihan.'
-  },
-  {
-    id: 'PKG-2026-003',
-    code: 'SLK-882014',
-    title: 'Jasa Konsultansi Pengawasan Renovasi Gedung Pusat Pasar Kerja',
-    unit: 'Pusat Pasar Kerja (PaskerID) Kemnaker RI',
-    hps: 'Rp 350.000.000',
-    category: 'Seleksi',
-    status: 'Pemberian Penjelasan',
-    deadline: '22 Agu 2026',
-    method: 'Seleksi Kualifikasi Kualitas & Biaya',
-    docCount: 2,
-    fileName: 'Spesifikasi-Pengawasan-Renovasi.pdf',
-    fileSize: '1.9 MB',
-    downloadUrl: '#',
-    desc: 'Pengawasan berkala mutu konstruksi fisik renovasi ruang layanan ketenagakerjaan terpadu.'
-  },
-  {
-    id: 'PKG-2026-004',
-    code: 'PL-441092',
-    title: 'Pengadaan Lisensi Software Keamanan & Monitoring Server SPSE',
-    unit: 'Pusat Data dan Informasi (Pusdatin) Kemnaker RI',
-    hps: 'Rp 180.000.000',
-    category: 'Pengadaan Langsung',
-    status: 'Selesai',
-    deadline: '05 Agu 2026',
-    method: 'Pengadaan Langsung',
-    docCount: 2,
-    fileName: 'Rincian-Lisensi-Firewall-SPSE.pdf',
-    fileSize: '1.2 MB',
-    downloadUrl: '#',
-    desc: 'Lisensi tahunan firewall dan perangkat pemantau lalu lintas jaringan pengadaan.'
-  },
-  {
-    id: 'PKG-2026-005',
-    code: 'TND-984215',
-    title: 'Pengadaan Jasa Kebersihan, Keamanan, dan Pengelolaan Fasilitas Kantor',
-    unit: 'Biro Umum dan Pengadaan Barang/Jasa Kemnaker RI',
-    hps: 'Rp 850.000.000',
-    category: 'Tender',
-    status: 'Pendaftaran Dibuka',
-    deadline: '25 Agu 2026',
-    method: 'Tender Cepat',
-    docCount: 3,
-    fileName: 'Kerangka-Acuan-Kerja-Cleaning-Security.pdf',
-    fileSize: '2.1 MB',
-    downloadUrl: '#',
-    desc: 'Penyediaan alih daya tenaga pengamanan dan kebersihan gedung kementerian.'
-  }
-];
+const DEFAULT_PACKAGES: ProcurementPackage[] = MOCK_PACKAGES_50;
 
 const DEFAULT_REGULASI: RegulasiItem[] = [
   {
@@ -992,7 +912,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             fileSize: p.file_size,
             downloadUrl: p.file_url || '#'
           }));
-          setPackagesList(mappedPkgs);
+          if (mappedPkgs.length >= 20) {
+            setPackagesList(mappedPkgs);
+          } else {
+            setPackagesList(MOCK_PACKAGES_50);
+          }
         }
 
         if (Array.isArray(regulasi)) {
@@ -1196,7 +1120,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             });
           }
         }
-        if (Array.isArray(parsed.packagesList)) setPackagesList(parsed.packagesList);
+        if (Array.isArray(parsed.packagesList) && parsed.packagesList.length >= 20) {
+          setPackagesList(parsed.packagesList);
+        } else {
+          setPackagesList(MOCK_PACKAGES_50);
+        }
         if (Array.isArray(parsed.regulasiList)) setRegulasiList(parsed.regulasiList);
         if (Array.isArray(parsed.sopList)) setSopList(parsed.sopList);
         if (Array.isArray(parsed.panduanList)) setPanduanList(parsed.panduanList);

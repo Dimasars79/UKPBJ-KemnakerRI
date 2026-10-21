@@ -12,8 +12,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { HeroSection } from '@/components/home/HeroSection';
-import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
-import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
+import { ProcurementStatsOverview } from '@/components/home/ProcurementStatsOverview';
 import { PengadaanSection } from '@/components/home/PengadaanSection';
 import { BeritaSection } from '@/components/home/BeritaSection';
 import { FadeIn } from '@/components/animations/FadeIn';
@@ -22,52 +21,9 @@ import { useData } from '@/contexts/DataContext';
 
 import { parseAgendaDateObject, isAgendaExpired } from '@/lib/agendaUtils';
 
-const yearStats: Record<string, {
-  waktu: string;
-  waktuSub: { id: string; en: string };
-  efisiensi: string;
-  efisiensiSub: { id: string; en: string };
-  kualitas: string;
-  kualitasSub: { id: string; en: string };
-  layanan: string;
-  layananSub: { id: string; en: string };
-}> = {
-  '2026': {
-    waktu: '95%',
-    waktuSub: { id: 'Ketepatan waktu proses', en: 'Process timeliness' },
-    efisiensi: 'Rp 12.4M',
-    efisiensiSub: { id: 'Penghematan anggaran', en: 'Budget savings' },
-    kualitas: 'A+',
-    kualitasSub: { id: 'Indeks tata kelola', en: 'Governance index' },
-    layanan: '98%',
-    layananSub: { id: 'Kepuasan pengguna', en: 'User satisfaction' },
-  },
-  '2025': {
-    waktu: '92.4%',
-    waktuSub: { id: 'Ketepatan waktu proses', en: 'Process timeliness' },
-    efisiensi: 'Rp 10.8M',
-    efisiensiSub: { id: 'Penghematan anggaran', en: 'Budget savings' },
-    kualitas: 'A',
-    kualitasSub: { id: 'Indeks tata kelola', en: 'Governance index' },
-    layanan: '96.2%',
-    layananSub: { id: 'Kepuasan pengguna', en: 'User satisfaction' },
-  },
-  '2024': {
-    waktu: '89.1%',
-    waktuSub: { id: 'Ketepatan waktu proses', en: 'Process timeliness' },
-    efisiensi: 'Rp 8.6M',
-    efisiensiSub: { id: 'Penghematan anggaran', en: 'Budget savings' },
-    kualitas: 'A-',
-    kualitasSub: { id: 'Indeks tata kelola', en: 'Governance index' },
-    layanan: '94.5%',
-    layananSub: { id: 'Kepuasan pengguna', en: 'User satisfaction' },
-  },
-};
-
 export default function Home() {
   const { t, trans } = useLanguage();
   const { agendaList } = useData();
-  const [selectedYear, setSelectedYear] = React.useState<'2026' | '2025' | '2024'>('2026');
 
   // Dynamically sort and find the closest upcoming agenda (Jadwal Terdekat)
   const sortedUpcomingAgendas = React.useMemo(() => {
@@ -241,11 +197,11 @@ export default function Home() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-accent-gold/20 rounded-full blur-2xl sm:blur-3xl group-hover:bg-accent-gold/40 transition-colors duration-700 pointer-events-none animate-pulse" />
                   <Image 
-                    src="/logo-ukpbj-kemnaker.png" 
+                    src="/logo-ukpbj-kemnaker-new.png" 
                     alt="Logo UKPBJ" 
-                    width={400} 
-                    height={145} 
-                    className="w-44 sm:w-56 md:w-64 lg:w-80 h-auto object-contain drop-shadow-[0_15px_35px_rgba(10,35,66,0.12)] group-hover:scale-105 transition-transform duration-700 relative z-10" 
+                    width={500} 
+                    height={180} 
+                    className="w-52 sm:w-64 md:w-72 lg:w-96 h-auto object-contain drop-shadow-[0_15px_35px_rgba(10,35,66,0.12)] group-hover:scale-105 transition-transform duration-700 relative z-10" 
                   />
                 </div>
               </FadeIn>
@@ -309,152 +265,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 2.5 Performance Dashboard */}
-        <section className="py-14 sm:py-24 relative overflow-hidden bg-[#0a2342] border-y border-white/10" id="kinerja">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] pointer-events-none" />
-          
-          <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-accent-gold/10 rounded-full blur-[150px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary-blue/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 sm:mb-10 gap-4 sm:gap-6">
-              <FadeIn direction="left" className="mb-2 md:mb-0">
-                <div className="inline-block relative">
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 relative z-10">
-                    {t('home.dashboard_title')}
-                  </h2>
-                  <div className="absolute -bottom-2 left-0 w-1/3 h-1 bg-accent-gold rounded-full" />
-                </div>
-                <p className="text-slate-300 max-w-2xl mt-4 sm:mt-6 text-xs sm:text-base leading-relaxed">
-                  {trans('Indikator Kinerja Pengadaan Barang/Jasa UKPBJ Kementerian Ketenagakerjaan', 'Procurement Performance Indicators of Kemnaker UKPBJ')}
-                </p>
-              </FadeIn>
-              
-              {/* Year Dropdown */}
-              <FadeIn direction="right">
-                <div className="relative group self-start md:self-auto">
-                  <select 
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value as '2026' | '2025' | '2024')}
-                    className="appearance-none bg-white/5 backdrop-blur-md border border-white/10 text-white font-medium text-xs sm:text-base rounded-full px-4 sm:px-6 py-2 sm:py-2.5 pr-9 sm:pr-12 focus:outline-none focus:border-accent-gold/40 focus:ring-2 focus:ring-accent-gold/20 hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer shadow-sm"
-                  >
-                    <option value="2026" className="text-primary-navy">{trans('Tahun 2026', 'Year 2026')}</option>
-                    <option value="2025" className="text-primary-navy">{trans('Tahun 2025', 'Year 2025')}</option>
-                    <option value="2024" className="text-primary-navy">{trans('Tahun 2024', 'Year 2024')}</option>
-                  </select>
-                  <ChevronDown className="absolute right-3.5 sm:right-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-white pointer-events-none group-hover:text-accent-gold transition-colors" />
-                </div>
-              </FadeIn>
-            </div>
-            
-            {/* 4 Stat Cards */}
-            <StaggerContainer key={selectedYear} className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 mb-8 sm:mb-12">
-              <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-accent-gold/50 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)] transition-all duration-300">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-2.5 sm:mb-4 group-hover:bg-accent-gold/20 transition-colors">
-                    <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-accent-gold" />
-                  </div>
-                  <h4 className="text-xs sm:text-base font-bold text-slate-200 mb-0.5 sm:mb-1 relative z-10">
-                    {trans('Waktu', 'Time')}
-                  </h4>
-                  <p className="text-xl sm:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-accent-gold transition-colors">
-                    {yearStats[selectedYear]?.waktu || '95%'}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 sm:mt-2 relative z-10 line-clamp-1 sm:line-clamp-none">
-                    {trans(yearStats[selectedYear]?.waktuSub.id || 'Ketepatan waktu proses', yearStats[selectedYear]?.waktuSub.en || 'Process timeliness')}
-                  </p>
-                </div>
-              </StaggerItem>
-              
-              <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-green-400/50 hover:shadow-[0_8px_30px_rgba(74,222,128,0.15)] transition-all duration-300">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-2.5 sm:mb-4 group-hover:bg-green-400/20 transition-colors">
-                    <TrendingDown className="w-4 h-4 sm:w-6 sm:h-6 text-green-400" />
-                  </div>
-                  <h4 className="text-xs sm:text-base font-bold text-slate-200 mb-0.5 sm:mb-1 relative z-10">
-                    {trans('Efisiensi', 'Efficiency')}
-                  </h4>
-                  <p className="text-lg sm:text-2xl lg:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-green-400 transition-colors">
-                    {yearStats[selectedYear]?.efisiensi || 'Rp 12.4M'}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 sm:mt-2 relative z-10 line-clamp-1 sm:line-clamp-none">
-                    {trans(yearStats[selectedYear]?.efisiensiSub.id || 'Penghematan anggaran', yearStats[selectedYear]?.efisiensiSub.en || 'Budget savings')}
-                  </p>
-                </div>
-              </StaggerItem>
-
-              <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-purple-400/50 hover:shadow-[0_8px_30px_rgba(192,132,252,0.15)] transition-all duration-300">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-2.5 sm:mb-4 group-hover:bg-purple-400/20 transition-colors">
-                    <Award className="w-4 h-4 sm:w-6 sm:h-6 text-purple-400" />
-                  </div>
-                  <h4 className="text-xs sm:text-base font-bold text-slate-200 mb-0.5 sm:mb-1 relative z-10">
-                    {trans('Kualitas', 'Quality')}
-                  </h4>
-                  <p className="text-xl sm:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-purple-400 transition-colors">
-                    {yearStats[selectedYear]?.kualitas || 'A+'}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 sm:mt-2 relative z-10 line-clamp-1 sm:line-clamp-none">
-                    {trans(yearStats[selectedYear]?.kualitasSub.id || 'Indeks tata kelola', yearStats[selectedYear]?.kualitasSub.en || 'Governance index')}
-                  </p>
-                </div>
-              </StaggerItem>
-
-              <StaggerItem>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] h-full relative overflow-hidden group hover:-translate-y-2 hover:border-pink-400/50 hover:shadow-[0_8px_30px_rgba(244,114,182,0.15)] transition-all duration-300">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-2.5 sm:mb-4 group-hover:bg-pink-400/20 transition-colors">
-                    <ThumbsUp className="w-4 h-4 sm:w-6 sm:h-6 text-pink-400" />
-                  </div>
-                  <h4 className="text-xs sm:text-base font-bold text-slate-200 mb-0.5 sm:mb-1 relative z-10">
-                    {trans('Layanan', 'Service')}
-                  </h4>
-                  <p className="text-xl sm:text-3xl font-black text-white relative z-10 drop-shadow-sm group-hover:text-pink-400 transition-colors">
-                    {yearStats[selectedYear]?.layanan || '98%'}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 sm:mt-2 relative z-10 line-clamp-1 sm:line-clamp-none">
-                    {trans(yearStats[selectedYear]?.layananSub.id || 'Kepuasan pengguna', yearStats[selectedYear]?.layananSub.en || 'User satisfaction')}
-                  </p>
-                </div>
-              </StaggerItem>
-            </StaggerContainer>
-
-            {/* Performance & Efficiency Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-              <FadeIn direction="up" delay={0.2}>
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-blue-400" />
-                      <span>{trans('Realisasi Paket Selesai', 'Completed Packages Realization')}</span>
-                    </h4>
-                    <span className="text-[10px] sm:text-xs text-slate-400 font-semibold px-2.5 py-0.5 rounded-full bg-white/10">
-                      {trans(`Tahun ${selectedYear}`, `Year ${selectedYear}`)}
-                    </span>
-                  </div>
-                  <PerformanceChart year={selectedYear} />
-                </div>
-              </FadeIn>
-              <FadeIn direction="up" delay={0.4}>
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-green-400" />
-                      <span>{trans('Efisiensi Anggaran PBJ', 'PBJ Budget Efficiency')}</span>
-                    </h4>
-                    <span className="text-[10px] sm:text-xs text-slate-400 font-semibold px-2.5 py-0.5 rounded-full bg-white/10">
-                      {trans(`Tahun ${selectedYear}`, `Year ${selectedYear}`)}
-                    </span>
-                  </div>
-                  <EfficiencyChart year={selectedYear} />
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
+        {/* 2.5 Ikhtisar Distribusi & Tahapan Pengadaan (Pengganti Dashboard Kinerja) */}
+        <ProcurementStatsOverview />
 
         {/* 3. Menu Pengadaan Barang & Jasa */}
         <PengadaanSection />
