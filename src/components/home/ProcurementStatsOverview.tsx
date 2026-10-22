@@ -284,8 +284,8 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
         <div className="bg-[#0C1E38]/90 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 lg:p-12 shadow-2xl mb-6">
           <div className="grid grid-cols-2 lg:grid-cols-12 gap-2.5 sm:gap-4 lg:gap-8 items-center">
             
-            {/* SISI TENGAH: HERO 3D DONUT CHART (Spanning 2 kolom di mobile, center di desktop) */}
-            <div className="col-span-2 lg:col-span-4 lg:col-start-5 lg:row-start-1 lg:row-span-2 order-1 lg:order-2 flex justify-center py-2 lg:py-0">
+            {/* SISI TENGAH: HERO 3D DONUT CHART (Besar & Dominan di Tengah) */}
+            <div className="col-span-2 lg:col-span-6 lg:col-start-4 lg:row-start-1 lg:row-span-2 order-1 lg:order-2 flex justify-center py-2 lg:py-0">
               <ProcurementDonutChart 
                 data={donutData}
                 totalPaguFormatted={totalAllPaguFormatted}
@@ -299,21 +299,21 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
             {/* BARIS 1: Tender (Kiri) & E-Purchasing (Kanan) */}
             {renderMethodCard(
               tenderItem,
-              "col-span-1 lg:col-span-4 lg:col-start-1 lg:row-start-1 order-2 lg:order-1"
+              "col-span-1 lg:col-span-3 lg:col-start-1 lg:row-start-1 order-2 lg:order-1"
             )}
             {renderMethodCard(
               ePurchasingItem,
-              "col-span-1 lg:col-span-4 lg:col-start-9 lg:row-start-1 order-2 lg:order-3"
+              "col-span-1 lg:col-span-3 lg:col-start-10 lg:row-start-1 order-2 lg:order-3"
             )}
 
             {/* BARIS 2: Seleksi (Kiri) & Pengadaan Langsung (Kanan) */}
             {renderMethodCard(
               seleksiItem,
-              "col-span-1 lg:col-span-4 lg:col-start-1 lg:row-start-2 order-3 lg:order-1"
+              "col-span-1 lg:col-span-3 lg:col-start-1 lg:row-start-2 order-3 lg:order-1"
             )}
             {renderMethodCard(
               pengadaanLangsungItem,
-              "col-span-1 lg:col-span-4 lg:col-start-9 lg:row-start-2 order-3 lg:order-3"
+              "col-span-1 lg:col-span-3 lg:col-start-10 lg:row-start-2 order-3 lg:order-3"
             )}
 
           </div>

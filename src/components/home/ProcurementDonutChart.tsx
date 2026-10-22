@@ -162,16 +162,14 @@ export function ProcurementDonutChart({
   }, [data, cx, cy, Rx, Ry, rx, ry, depth]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center select-none py-2">
+    <div className="relative flex flex-col items-center justify-center select-none py-2 w-full">
       {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang diagram) */}
-      <div className="absolute w-64 h-64 rounded-full bg-blue-500/15 blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute w-72 h-72 sm:w-96 sm:h-96 lg:w-[460px] lg:h-[460px] rounded-full bg-blue-500/15 blur-3xl pointer-events-none animate-pulse" />
 
       {/* 2. ISOMETRIC 3D SVG CONTAINER */}
       <svg
-        width={vbWidth}
-        height={vbHeight}
         viewBox={`0 0 ${vbWidth} ${vbHeight}`}
-        className="overflow-visible select-none max-w-full h-auto drop-shadow-2xl"
+        className="overflow-visible select-none w-full max-w-[340px] sm:max-w-[420px] lg:max-w-[480px] xl:max-w-[520px] h-auto drop-shadow-2xl"
       >
         <defs>
           {/* Bayangan Lantai Pekat (Floor Ambient Shadow) */}
