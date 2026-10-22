@@ -193,36 +193,35 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
             : 'bg-[#071629]/75 hover:bg-white/5 border-white/10'
         }`}
       >
-        {/* ATAS: Icon + Nama di Kiri, Badge Persentase di Kanan */}
-        <div className="flex items-center justify-between gap-1.5 mb-2">
-          <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-            <div className={`w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 shadow-md ${item.iconBg}`}>
-              {item.icon}
-            </div>
-            <div className="min-w-0">
-              <h4 className="text-xs sm:text-sm lg:text-base font-bold text-white tracking-wide group-hover/card:text-accent-gold transition-colors truncate">
-                {item.name}
-              </h4>
-              <p className="text-[10px] sm:text-[11px] lg:text-xs text-slate-400 truncate">
-                {item.count} Paket
-              </p>
-            </div>
+        {/* BARIS 1: Icon di Kiri, Badge Persentase di Kanan */}
+        <div className="flex items-center justify-between mb-2 sm:mb-2.5">
+          <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 shadow-md ${item.iconBg}`}>
+            {item.icon}
           </div>
-
-          <div className={`px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg border text-[10px] sm:text-xs font-black shadow-sm shrink-0 ${item.badgeBg} ${item.badgeText}`}>
+          <div className={`px-2 py-0.5 rounded-md sm:rounded-lg border text-[10px] sm:text-xs font-black shadow-sm shrink-0 ${item.badgeBg} ${item.badgeText}`}>
             {item.percentage}%
           </div>
         </div>
 
-        {/* TENGAH: Realisasi Pagu */}
-        <div className="flex items-baseline justify-between gap-1 mb-2">
-          <span className="text-[10px] sm:text-xs text-slate-400 font-medium truncate">Pagu</span>
+        {/* BARIS 2: Nama Metode Lengkap Tanpa Terpotong (Lebar Penuh) */}
+        <div className="mb-2 sm:mb-2.5 min-h-[38px] sm:min-h-[42px] flex flex-col justify-center">
+          <h4 className="text-xs sm:text-sm lg:text-[15px] font-bold text-white tracking-tight group-hover/card:text-accent-gold transition-colors leading-snug">
+            {item.name}
+          </h4>
+          <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">
+            {item.count} Paket
+          </p>
+        </div>
+
+        {/* BARIS 3: Nilai Pagu */}
+        <div className="flex items-baseline justify-between gap-1 mb-2 sm:mb-2.5 pt-1 border-t border-white/5">
+          <span className="text-[10px] sm:text-xs text-slate-400 font-medium">Pagu</span>
           <span className="font-black text-white text-xs sm:text-sm lg:text-base tracking-tight shrink-0">
             {item.paguFormatted}
           </span>
         </div>
 
-        {/* BAWAH: Progress Bar Ramping Full Width */}
+        {/* BARIS 4: Progress Bar Ramping Full Width */}
         <div className="w-full h-1.5 sm:h-2 bg-slate-950/80 rounded-full overflow-hidden p-0.5 border border-white/5">
           <div
             className={`h-full rounded-full bg-gradient-to-r ${item.barGradient} transition-all duration-500`}
