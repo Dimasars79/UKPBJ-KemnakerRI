@@ -18,6 +18,7 @@ interface ProcurementDonutChartProps {
   totalPackages: number;
   activeMethod: string | null;
   onHoverMethod: (method: string | null) => void;
+  onSelectMethod?: (method: string) => void;
 }
 
 export function ProcurementDonutChart({
@@ -25,7 +26,8 @@ export function ProcurementDonutChart({
   totalPaguFormatted,
   totalPackages,
   activeMethod,
-  onHoverMethod
+  onHoverMethod,
+  onSelectMethod
 }: ProcurementDonutChartProps) {
   const [internalHover, setInternalHover] = useState<string | null>(null);
   const currentActive = activeMethod || internalHover;
@@ -279,6 +281,7 @@ export function ProcurementDonutChart({
                 style={{
                   transform: `translateY(${offsetY}px)`
                 }}
+                onClick={() => onSelectMethod?.(seg.name)}
                 onMouseEnter={() => {
                   setInternalHover(seg.name);
                   onHoverMethod(seg.name);

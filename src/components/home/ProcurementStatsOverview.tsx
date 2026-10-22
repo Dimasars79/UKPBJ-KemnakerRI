@@ -11,12 +11,30 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { ProcurementDonutChart, DonutMethodItem } from './ProcurementDonutChart';
 
-export function ProcurementStatsOverview() {
+export interface ProcurementStatsOverviewProps {
+  onSelectMethod?: (method: string) => void;
+}
+
+export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOverviewProps = {}) {
   const { packagesList } = useData();
   const { trans } = useLanguage();
   
   // State hover interaktif yang menghubungkan badge samping dan sektor donut di tengah
   const [hoveredMethod, setHoveredMethod] = useState<string | null>(null);
+
+  // Handler klik metode untuk mengaktifkan filter paket di bawah dan scroll
+  const handleMethodClick = (methodName: string) => {
+    if (onSelectMethod) {
+      onSelectMethod(methodName);
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('filter-procurement-category', { detail: methodName }));
+      const el = document.getElementById('pengadaan');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   // Helper konversi string Rupiah ke angka numerik
   const parseRupiahNumber = (rupiahStr: string): number => {
@@ -220,9 +238,11 @@ export function ProcurementStatsOverview() {
                 return (
                   <div
                     key={item.name}
+                    onClick={() => handleMethodClick(item.name)}
                     onMouseEnter={() => setHoveredMethod(item.name)}
                     onMouseLeave={() => setHoveredMethod(null)}
-                    className={`p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer ${
+                    title={`Klik untuk memfilter daftar paket ${item.name}`}
+                    className={`p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer group/card ${
                       isHovered 
                         ? 'bg-white/10 border-white/30 shadow-xl scale-[1.02]' 
                         : 'bg-[#071629]/75 hover:bg-white/5 border-white/10'
@@ -235,7 +255,7 @@ export function ProcurementStatsOverview() {
                           {item.icon}
                         </div>
                         <div>
-                          <h4 className="text-sm sm:text-base font-bold text-white tracking-wide">{item.name}</h4>
+                          <h4 className="text-sm sm:text-base font-bold text-white tracking-wide group-hover/card:text-accent-gold transition-colors">{item.name}</h4>
                           <p className="text-xs text-slate-400 mt-0.5">{item.count} Paket Pengadaan</p>
                         </div>
                       </div>
@@ -257,6 +277,12 @@ export function ProcurementStatsOverview() {
                         className={`h-full rounded-full bg-gradient-to-r ${item.barGradient} transition-all duration-500`}
                         style={{ width: `${Math.max(item.percentage, 5)}%` }}
                       />
+                    </div>
+
+                    {/* Petunjuk Aksi Klik ke Tabel Bawah */}
+                    <div className="flex items-center justify-between text-[11px] text-blue-300/80 font-bold pt-2.5 group-hover/card:text-accent-gold transition-colors">
+                      <span>{trans('Tampilkan di Daftar Paket', 'Show in Package List')}</span>
+                      <span className="text-xs group-hover/card:translate-y-0.5 transition-transform">&darr;</span>
                     </div>
                   </div>
                 );
@@ -271,6 +297,7 @@ export function ProcurementStatsOverview() {
                 totalPackages={packagesList.length}
                 activeMethod={hoveredMethod}
                 onHoverMethod={setHoveredMethod}
+                onSelectMethod={handleMethodClick}
               />
             </div>
 
@@ -281,9 +308,11 @@ export function ProcurementStatsOverview() {
                 return (
                   <div
                     key={item.name}
+                    onClick={() => handleMethodClick(item.name)}
                     onMouseEnter={() => setHoveredMethod(item.name)}
                     onMouseLeave={() => setHoveredMethod(null)}
-                    className={`p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer ${
+                    title={`Klik untuk memfilter daftar paket ${item.name}`}
+                    className={`p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer group/card ${
                       isHovered 
                         ? 'bg-white/10 border-white/30 shadow-xl scale-[1.02]' 
                         : 'bg-[#071629]/75 hover:bg-white/5 border-white/10'
@@ -296,7 +325,7 @@ export function ProcurementStatsOverview() {
                           {item.icon}
                         </div>
                         <div>
-                          <h4 className="text-sm sm:text-base font-bold text-white tracking-wide">{item.name}</h4>
+                          <h4 className="text-sm sm:text-base font-bold text-white tracking-wide group-hover/card:text-accent-gold transition-colors">{item.name}</h4>
                           <p className="text-xs text-slate-400 mt-0.5">{item.count} Paket Pengadaan</p>
                         </div>
                       </div>
@@ -318,6 +347,12 @@ export function ProcurementStatsOverview() {
                         className={`h-full rounded-full bg-gradient-to-r ${item.barGradient} transition-all duration-500`}
                         style={{ width: `${Math.max(item.percentage, 5)}%` }}
                       />
+                    </div>
+
+                    {/* Petunjuk Aksi Klik ke Tabel Bawah */}
+                    <div className="flex items-center justify-between text-[11px] text-blue-300/80 font-bold pt-2.5 group-hover/card:text-accent-gold transition-colors">
+                      <span>{trans('Tampilkan di Daftar Paket', 'Show in Package List')}</span>
+                      <span className="text-xs group-hover/card:translate-y-0.5 transition-transform">&darr;</span>
                     </div>
                   </div>
                 );

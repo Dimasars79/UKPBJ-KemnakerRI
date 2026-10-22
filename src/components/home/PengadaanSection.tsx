@@ -24,15 +24,41 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { useData, ProcurementPackage } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-export function PengadaanSection() {
+export interface PengadaanSectionProps {
+  activeCategory?: string;
+  onCategoryChange?: (category: string) => void;
+}
+
+export function PengadaanSection({ activeCategory, onCategoryChange }: PengadaanSectionProps = {}) {
   const { t, trans } = useLanguage();
   const { packagesList } = useData();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
+  const [selectedCategory, setSelectedCategory] = useState<string>(activeCategory || 'Semua');
   const [selectedStatus, setSelectedStatus] = useState<string>('Semua');
   const [activeModalPackage, setActiveModalPackage] = useState<ProcurementPackage | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
+  // Sinkronkan state kategori bila prop activeCategory berubah dari luar
+  React.useEffect(() => {
+    if (activeCategory && activeCategory !== selectedCategory) {
+      setSelectedCategory(activeCategory);
+      setCurrentPage(1);
+    }
+  }, [activeCategory, selectedCategory]);
+
+  // Sinkronkan via custom window event jika dipanggil dari luar
+  React.useEffect(() => {
+    const handleCustomFilter = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail) {
+        setSelectedCategory(customEvent.detail);
+        setCurrentPage(1);
+      }
+    };
+    window.addEventListener('filter-procurement-category', handleCustomFilter);
+    return () => window.removeEventListener('filter-procurement-category', handleCustomFilter);
+  }, []);
 
   const categories = ['Semua', 'Tender', 'Seleksi', 'Pengadaan Langsung', 'E-Purchasing'];
   const statuses = ['Semua', 'Pendaftaran Dibuka', 'Tahap Evaluasi', 'Selesai'];
@@ -162,6 +188,9 @@ export function PengadaanSection() {
                       onClick={() => {
                         setSelectedCategory(cat);
                         setCurrentPage(1);
+                        if (onCategoryChange) {
+                          onCategoryChange(cat);
+                        }
                       }}
                       className={`px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all ${
                         selectedCategory === cat

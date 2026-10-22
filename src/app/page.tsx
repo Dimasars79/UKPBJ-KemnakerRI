@@ -24,6 +24,17 @@ export default function Home() {
   const { t, trans } = useLanguage();
   const { agendaList } = useData();
 
+  // State sinkronisasi metode pengadaan yang dipilih dari kartu atas ke tabel bawah
+  const [selectedMethodCategory, setSelectedMethodCategory] = React.useState<string>('Semua');
+
+  const handleSelectMethod = (method: string) => {
+    setSelectedMethodCategory(method);
+    const el = document.getElementById('pengadaan');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Dynamically sort and find the closest upcoming agenda (Jadwal Terdekat)
   const sortedUpcomingAgendas = React.useMemo(() => {
     const activeAgendas = agendaList.filter(
@@ -265,10 +276,13 @@ export default function Home() {
         </section>
 
         {/* 2.5 Ikhtisar Distribusi & Tahapan Pengadaan (Pengganti Dashboard Kinerja) */}
-        <ProcurementStatsOverview />
+        <ProcurementStatsOverview onSelectMethod={handleSelectMethod} />
 
         {/* 3. Menu Pengadaan Barang & Jasa */}
-        <PengadaanSection />
+        <PengadaanSection 
+          activeCategory={selectedMethodCategory} 
+          onCategoryChange={setSelectedMethodCategory} 
+        />
 
         {/* 4. Berita & Pengumuman Carousel */}
         <BeritaSection />
