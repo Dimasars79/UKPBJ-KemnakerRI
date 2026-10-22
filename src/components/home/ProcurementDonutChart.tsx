@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useState } from 'react';
 
 export interface DonutMethodItem {
   name: string;
@@ -27,58 +27,70 @@ export function ProcurementDonutChart({
   activeMethod,
   onHoverMethod
 }: ProcurementDonutChartProps) {
-  // Ref container untuk mendeteksi posisi kursor mouse (3D Parallax Tilt)
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isHoveringCard, setIsHoveringCard] = useState(false);
+  const [internalHover, setInternalHover] = useState<string | null>(null);
+  const currentActive = activeMethod || internalHover;
 
-  // Parameter Geometri Cincin 3D Kapsul Membulat
-  const size = 300;
-  const cx = size / 2;
-  const cy = size / 2;
-  const radius = 98; // Radius cincin tengah
-  const strokeWidth = 38; // Ketebalan busur kapsul
-  const innerPuckRadius = 52; // Jari-jari tombol silinder putih di tengah
+  // Dimensi Isometrik 3D
+  const vbWidth = 340;
+  const vbHeight = 310;
+  const cx = 170;
+  const cy = 138;
+  const Rx = 120; // Radius luar horizontal
+  const Ry = 86;  // Radius luar vertikal (aspek rasio elips isometrik 3D)
+  const rx = 66;  // Radius dalam horizontal
+  const ry = 47;  // Radius dalam vertikal
+  const depth = 22; // Ketebalan dinding silinder 3D ke bawah
 
-  // Hitung sudut masing-masing busur kapsul membulat
-  const arcs = useMemo(() => {
+  // Perhitungan Geometri Segmen Isometrik 3D
+  const segments = useMemo(() => {
     const totalPercentage = data.reduce((acc, curr) => acc + curr.percentage, 0) || 100;
-    
-    // Sudut awal: jam 12 (-90 derajat)
-    let currentAngle = -90;
+    let currentAngle = -90; // Mulai dari jam 12
 
-    // Gradien khusus untuk memberikan efek kedalaman 3D lengkung per segmen
-    const gradientsMap: Record<string, { start: string; end: string; shadow: string }> = {
+    // Skema Warna Claymorphism 3D: Permukaan Atas Glossy + Dinding Samping Dalam
+    const colorThemes: Record<string, {
+      topLight: string;
+      topDark: string;
+      wallLight: string;
+      wallDark: string;
+      glow: string;
+    }> = {
       'Tender': {
-        start: '#38BDF8',
-        end: '#1D4ED8',
-        shadow: '#0F2A6B'
+        topLight: '#60A5FA',
+        topDark: '#1D4ED8',
+        wallLight: '#1E40AF',
+        wallDark: '#0F266A',
+        glow: 'rgba(59, 130, 246, 0.5)'
       },
       'E-Purchasing': {
-        start: '#FB7185',
-        end: '#BE123C',
-        shadow: '#5F091F'
-      },
-      'Seleksi': {
-        start: '#C084FC',
-        end: '#6D28D9',
-        shadow: '#3B1475'
+        topLight: '#FB7185',
+        topDark: '#BE123C',
+        wallLight: '#9F1239',
+        wallDark: '#5E0820',
+        glow: 'rgba(244, 63, 94, 0.5)'
       },
       'Pengadaan Langsung': {
-        start: '#34D399',
-        end: '#047857',
-        shadow: '#023829'
+        topLight: '#34D399',
+        topDark: '#059669',
+        wallLight: '#047857',
+        wallDark: '#023829',
+        glow: 'rgba(16, 185, 129, 0.5)'
+      },
+      'Seleksi': {
+        topLight: '#C084FC',
+        topDark: '#7E22CE',
+        wallLight: '#6B21A8',
+        wallDark: '#3B0764',
+        glow: 'rgba(168, 85, 247, 0.5)'
       }
     };
 
     return data.map((item, index) => {
-      // Sudut sebaran busur
       const sliceAngle = (item.percentage / totalPercentage) * 360;
       
-      // Berikan jarak napas tipis di antara busur kapsul membulat
-      const gapAngle = 6; 
-      const startAngle = currentAngle + gapAngle / 2;
-      const endAngle = currentAngle + sliceAngle - gapAngle / 2;
+      // Celah tipis antar irisan kapsul
+      const gap = 3.5;
+      const startAngle = currentAngle + gap / 2;
+      const endAngle = currentAngle + sliceAngle - gap / 2;
       const midAngle = currentAngle + sliceAngle / 2;
       currentAngle += sliceAngle;
 
@@ -86,281 +98,327 @@ export function ProcurementDonutChart({
       const endRad = (endAngle * Math.PI) / 180;
       const midRad = (midAngle * Math.PI) / 180;
 
-      const x1 = cx + radius * Math.cos(startRad);
-      const y1 = cy + radius * Math.sin(startRad);
-      const x2 = cx + radius * Math.cos(endRad);
-      const y2 = cy + radius * Math.sin(endRad);
+      // Koordinat Permukaan Atas (Top Face)
+      const x1 = cx + Rx * Math.cos(startRad);
+      const y1 = cy + Ry * Math.sin(startRad);
+      const x2 = cx + Rx * Math.cos(endRad);
+      const y2 = cy + Ry * Math.sin(endRad);
 
-      const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+      const x3 = cx + rx * Math.cos(endRad);
+      const y3 = cy + ry * Math.sin(endRad);
+      const x4 = cx + rx * Math.cos(startRad);
+      const y4 = cy + ry * Math.sin(startRad);
 
-      // Path busur utama untuk stroke
-      const pathD = `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${radius} ${radius} 0 ${largeArc} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+      const largeArc = sliceAngle > 180 ? 1 : 0;
 
-      // Posisi teks persentase di tengah lengkungan busur
-      const textX = cx + radius * Math.cos(midRad);
-      const textY = cy + radius * Math.sin(midRad) + 5;
+      // Path Permukaan Atas
+      const topPath = [
+        `M ${x1.toFixed(2)} ${y1.toFixed(2)}`,
+        `A ${Rx} ${Ry} 0 ${largeArc} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`,
+        `L ${x3.toFixed(2)} ${y3.toFixed(2)}`,
+        `A ${rx} ${ry} 0 ${largeArc} 0 ${x4.toFixed(2)} ${y4.toFixed(2)}`,
+        'Z'
+      ].join(' ');
 
-      const grad = gradientsMap[item.name] || {
-        start: item.color,
-        end: item.color,
-        shadow: '#0B1F3D'
+      // Path Dinding Luar Silinder 3D (Side Wall Extrusion)
+      const wallPath = [
+        `M ${x1.toFixed(2)} ${y1.toFixed(2)}`,
+        `A ${Rx} ${Ry} 0 ${largeArc} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`,
+        `L ${x2.toFixed(2)} ${(y2 + depth).toFixed(2)}`,
+        `A ${Rx} ${Ry} 0 ${largeArc} 0 ${x1.toFixed(2)} ${(y1 + depth).toFixed(2)}`,
+        'Z'
+      ].join(' ');
+
+      // Posisi Teks Persentase di Tengah Permukaan Irisan
+      const textRadiusX = (Rx + rx) / 2;
+      const textRadiusY = (Ry + ry) / 2;
+      const textX = cx + textRadiusX * Math.cos(midRad);
+      const textY = cy + textRadiusY * Math.sin(midRad) + 4;
+
+      const theme = colorThemes[item.name] || {
+        topLight: '#60A5FA',
+        topDark: '#2563EB',
+        wallLight: '#1D4ED8',
+        wallDark: '#1E3A8A',
+        glow: 'rgba(59, 130, 246, 0.4)'
       };
+
+      // Vector angkat 3D saat di-hover
+      const liftY = -8;
 
       return {
         ...item,
         index,
-        pathD,
+        topPath,
+        wallPath,
         textX,
         textY,
-        grad
+        theme,
+        liftY
       };
     });
-  }, [data, cx, cy, radius]);
-
-  // Handler interaksi mouse untuk efek 3D Parallax Tilt
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Normalisasi -1 s.d 1
-    const normX = (x / rect.width) * 2 - 1;
-    const normY = (y / rect.height) * 2 - 1;
-
-    // Maksimal kemiringan 12 derajat
-    setTilt({
-      x: -normY * 12,
-      y: normX * 12
-    });
-  };
-
-  const handleMouseEnter = () => {
-    setIsHoveringCard(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHoveringCard(false);
-    setTilt({ x: 0, y: 0 });
-    onHoverMethod(null);
-  };
+  }, [data, cx, cy, Rx, Ry, rx, ry, depth]);
 
   return (
-    <div 
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className="relative flex flex-col items-center justify-center select-none py-2 cursor-pointer"
-      style={{ perspective: '1000px' }}
-    >
-      {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang cincin) */}
-      <div 
-        className="absolute w-60 h-60 rounded-full bg-blue-500/20 blur-3xl pointer-events-none transition-all duration-700"
-        style={{
-          transform: isHoveringCard ? 'scale(1.15)' : 'scale(1)',
-          opacity: isHoveringCard ? 0.9 : 0.5
-        }}
-      />
+    <div className="relative flex flex-col items-center justify-center select-none py-2">
+      {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang diagram) */}
+      <div className="absolute w-64 h-64 rounded-full bg-blue-500/15 blur-3xl pointer-events-none animate-pulse" />
 
-      {/* 2. ELEMEN 3D YANG DAPAT DIMIRINGKAN (Tilt & Floating Motion) */}
-      <div
-        className="relative transition-transform ease-out"
-        style={{
-          transform: isHoveringCard
-            ? `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(1.03)`
-            : 'rotateX(0deg) rotateY(0deg) scale(1)',
-          transitionDuration: isHoveringCard ? '120ms' : '600ms',
-          transformStyle: 'preserve-3d'
-        }}
+      {/* 2. ISOMETRIC 3D SVG CONTAINER */}
+      <svg
+        width={vbWidth}
+        height={vbHeight}
+        viewBox={`0 0 ${vbWidth} ${vbHeight}`}
+        className="overflow-visible select-none max-w-full h-auto drop-shadow-2xl"
       >
-        <svg
-          width={size}
-          height={size}
-          viewBox={`0 0 ${size} ${size}`}
-          className="overflow-visible select-none max-w-full h-auto drop-shadow-2xl animate-float-slow"
-        >
-          <defs>
-            {/* Filter Bayangan Tumpuk Antar Busur (3D Extrusion Shadow) */}
-            <filter id="arc-depth-shadow" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="-2" dy="5" stdDeviation="4" floodColor="#000000" floodOpacity="0.65" />
-            </filter>
+        <defs>
+          {/* Bayangan Lantai Pekat (Floor Ambient Shadow) */}
+          <filter id="clay-floor-shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="13" />
+          </filter>
 
-            {/* Filter Bayangan Piringan Silinder Putih Tengah */}
-            <filter id="puck-depth" x="-40%" y="-40%" width="180%" height="180%">
-              <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor="#000000" floodOpacity="0.45" />
-            </filter>
+          {/* Bayangan Jatuh Antar Segmen 3D */}
+          <filter id="clay-slice-shadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="8" stdDeviation="5" floodColor="#000000" floodOpacity="0.6" />
+          </filter>
 
-            {/* Gradien untuk Tiap Busur Cincin */}
-            {arcs.map((arc) => (
+          {/* Filter Timbul Piringan Silinder Putih */}
+          <filter id="center-podium-shadow" x="-40%" y="-40%" width="180%" height="180%">
+            <feDropShadow dx="0" dy="6" stdDeviation="7" floodColor="#000000" floodOpacity="0.45" />
+          </filter>
+
+          {/* Gradien untuk Dinding Samping dan Permukaan Atas Tiap Irisan */}
+          {segments.map((seg) => (
+            <React.Fragment key={`grads-${seg.index}`}>
+              {/* Gradien Permukaan Atas Glossy */}
               <linearGradient
-                key={`grad-arc-${arc.index}`}
-                id={`grad-arc-${arc.index}`}
+                id={`grad-top-${seg.index}`}
                 x1="0%"
                 y1="0%"
                 x2="100%"
                 y2="100%"
               >
-                <stop offset="0%" stopColor={arc.grad.start} />
-                <stop offset="100%" stopColor={arc.grad.end} />
+                <stop offset="0%" stopColor={seg.theme.topLight} />
+                <stop offset="100%" stopColor={seg.theme.topDark} />
               </linearGradient>
-            ))}
 
-            {/* Gradien Piringan Silinder Putih */}
-            <radialGradient id="puck-grad" cx="40%" cy="30%" r="70%">
-              <stop offset="0%" stopColor="#FFFFFF" />
-              <stop offset="70%" stopColor="#F1F5F9" />
-              <stop offset="100%" stopColor="#E2E8F0" />
-            </radialGradient>
-          </defs>
+              {/* Gradien Dinding Silinder 3D */}
+              <linearGradient
+                id={`grad-wall-${seg.index}`}
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stopColor={seg.theme.wallLight} />
+                <stop offset="100%" stopColor={seg.theme.wallDark} />
+              </linearGradient>
+            </React.Fragment>
+          ))}
 
-          {/* LAPISAN 1: SISI BAWAH 3D SILINDER (Extruded Side Rim di bawah busur) */}
-          <g>
-            {arcs.map((arc) => (
+          {/* Gradien Piringan Silinder Putih Pusat */}
+          <radialGradient id="podium-top" cx="45%" cy="35%" r="65%">
+            <stop offset="0%" stopColor="#FFFFFF" />
+            <stop offset="75%" stopColor="#F8FAFC" />
+            <stop offset="100%" stopColor="#E2E8F0" />
+          </radialGradient>
+
+          {/* Efek Kilau Cahaya Berputar (Sheen Sweep Beam) */}
+          <linearGradient id="sheen-beam" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="transparent" />
+            <stop offset="45%" stopColor="rgba(255, 255, 255, 0.05)" />
+            <stop offset="50%" stopColor="rgba(255, 255, 255, 0.45)" />
+            <stop offset="55%" stopColor="rgba(255, 255, 255, 0.05)" />
+            <stop offset="100%" stopColor="transparent" />
+          </linearGradient>
+        </defs>
+
+        {/* 1. BAYANGAN LANTAI ISOMETRIK PEKAT (Deep Floor Shadow di Bawah Silinder) */}
+        <ellipse
+          cx={cx}
+          cy={cy + depth + 48}
+          rx={Rx * 1.08}
+          ry={Ry * 0.42}
+          fill="#000000"
+          opacity="0.75"
+          filter="url(#clay-floor-shadow)"
+        />
+
+        {/* 2. LAPISAN DINDING SAMPING 3D SILINDER (Extruded Side Walls) */}
+        <g>
+          {segments.map((seg) => {
+            const isHovered = currentActive === seg.name;
+            const offsetY = isHovered ? seg.liftY : 0;
+
+            return (
               <path
-                key={`base-shadow-${arc.name}`}
-                d={arc.pathD}
-                fill="none"
-                stroke={arc.grad.shadow}
-                strokeWidth={strokeWidth}
-                strokeLinecap="round"
-                transform="translate(0, 5)"
-                opacity="0.9"
+                key={`wall-${seg.name}`}
+                d={seg.wallPath}
+                fill={`url(#grad-wall-${seg.index})`}
+                stroke="rgba(0, 0, 0, 0.3)"
+                strokeWidth={0.8}
+                className="transition-transform duration-300"
+                style={{
+                  transform: `translateY(${offsetY}px)`
+                }}
               />
-            ))}
-          </g>
+            );
+          })}
+        </g>
 
-          {/* LAPISAN 2: BUSUR UTAMA 3D DENGAN ROUNDED CAPS (Persis Gambar Referensi) */}
-          <g filter="url(#arc-depth-shadow)">
-            {arcs.map((arc) => {
-              const isHovered = activeMethod === arc.name;
-              return (
+        {/* 3. LAPISAN PERMUKAAN ATAS GLOSSY (Top Claymorphic Faces) */}
+        <g filter="url(#clay-slice-shadow)">
+          {segments.map((seg) => {
+            const isHovered = currentActive === seg.name;
+            const offsetY = isHovered ? seg.liftY : 0;
+
+            return (
+              <g
+                key={`top-group-${seg.name}`}
+                className="cursor-pointer transition-transform duration-300"
+                style={{
+                  transform: `translateY(${offsetY}px)`
+                }}
+                onMouseEnter={() => {
+                  setInternalHover(seg.name);
+                  onHoverMethod(seg.name);
+                }}
+                onMouseLeave={() => {
+                  setInternalHover(null);
+                  onHoverMethod(null);
+                }}
+              >
+                {/* Permukaan Atas Busur */}
                 <path
-                  key={`main-arc-${arc.name}`}
-                  d={arc.pathD}
-                  fill="none"
-                  stroke={`url(#grad-arc-${arc.index})`}
-                  strokeWidth={isHovered ? strokeWidth + 4 : strokeWidth}
-                  strokeLinecap="round"
-                  className="transition-all duration-300"
+                  d={seg.topPath}
+                  fill={`url(#grad-top-${seg.index})`}
+                  stroke="rgba(255, 255, 255, 0.45)"
+                  strokeWidth={isHovered ? 2.5 : 1.2}
+                  className="transition-all duration-300 hover:brightness-110"
                   style={{
-                    filter: isHovered ? 'brightness(1.2)' : 'none'
+                    filter: isHovered ? `drop-shadow(0 0 10px ${seg.theme.glow})` : 'none'
                   }}
-                  onMouseEnter={() => onHoverMethod(arc.name)}
-                  onMouseLeave={() => onHoverMethod(null)}
                 />
-              );
-            })}
-          </g>
 
-          {/* LAPISAN 3: TEKS PERSENTASE DI TENGAH BUSUR */}
-          <g className="pointer-events-none">
-            {arcs.map((arc) => {
-              if (arc.percentage < 5) return null;
-              const isHovered = activeMethod === arc.name;
-              return (
-                <text
-                  key={`text-pct-${arc.name}`}
-                  x={arc.textX}
-                  y={arc.textY}
-                  textAnchor="middle"
-                  className="font-black text-xs sm:text-[13px] fill-white tracking-tight transition-all duration-300"
-                  style={{
-                    textShadow: '0 2px 5px rgba(0,0,0,0.8)',
-                    fontWeight: 800,
-                    transformOrigin: `${arc.textX}px ${arc.textY}px`,
-                    transform: isHovered ? 'scale(1.15)' : 'scale(1)'
-                  }}
-                >
-                  {arc.percentage}%
-                </text>
-              );
-            })}
-          </g>
+                {/* Garis Kilau Bevel Lengkung di Tepi Atas */}
+                <path
+                  d={seg.topPath}
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.2)"
+                  strokeWidth={1}
+                />
+              </g>
+            );
+          })}
+        </g>
 
-          {/* LAPISAN 4: PIRINGAN SILINDER PUTIH TIMBUL DI TENGAH (Floating 3D Raised Puck) */}
-          <g filter="url(#puck-depth)">
-            {/* Sisi Tebal Silinder (Bevel Layer bawah) */}
-            <circle
-              cx={cx}
-              cy={cy + 4}
-              r={innerPuckRadius}
-              fill="#94A3B8"
-            />
-
-            {/* Piringan Utama Putih Atas */}
-            <circle
-              cx={cx}
-              cy={cy}
-              r={innerPuckRadius}
-              fill="url(#puck-grad)"
-              stroke="#FFFFFF"
-              strokeWidth="2"
-            />
-
-            {/* Lingkaran cincin dalam piringan */}
-            <circle
-              cx={cx}
-              cy={cy}
-              r={innerPuckRadius - 5}
-              fill="none"
-              stroke="rgba(0, 0, 0, 0.06)"
-              strokeWidth="1"
-            />
-          </g>
-
-          {/* LAPISAN 5: KONTEN TEKS PADA SILINDER TENGAH (Total Valuasi) */}
-          <g className="pointer-events-none text-center">
-            {/* Label Judul Kecil */}
-            <text
-              x={cx}
-              y={cy - 16}
-              textAnchor="middle"
-              className="text-[9px] font-extrabold fill-slate-500 uppercase tracking-widest"
-            >
-              TOTAL
-            </text>
-
-            {/* Nominal Besar Pagu */}
-            <text
-              x={cx}
-              y={cy + 5}
-              textAnchor="middle"
-              className="text-sm sm:text-base font-black fill-[#0A2342] tracking-tight"
-              style={{
-                textShadow: '0 1px 2px rgba(255,255,255,0.8)'
-              }}
-            >
-              {totalPaguFormatted}
-            </text>
-
-            {/* Subteks Jumlah Paket */}
-            <text
-              x={cx}
-              y={cy + 21}
-              textAnchor="middle"
-              className="text-[10px] font-bold fill-slate-600"
-            >
-              {totalPackages} Paket
-            </text>
-          </g>
-        </svg>
-
-        {/* 3. BAYANGAN LANTAI DINAMIS (Ground Blur Shadow) */}
-        <div 
-          className="w-44 h-4 mx-auto rounded-full bg-black/60 blur-md transition-all duration-500"
+        {/* 4. KILAU CAHAYA MELINGKAR PERIODIK (Sheen Sweep Light) */}
+        <ellipse
+          cx={cx}
+          cy={cy}
+          rx={Rx - 2}
+          ry={Ry - 2}
+          fill="none"
+          stroke="url(#sheen-beam)"
+          strokeWidth={depth}
+          opacity="0.6"
+          className="pointer-events-none animate-spin"
           style={{
-            transform: isHoveringCard ? 'scale(1.1) translateY(4px)' : 'scale(1) translateY(0px)',
-            opacity: isHoveringCard ? 0.75 : 0.45
+            animationDuration: '10s',
+            transformOrigin: `${cx}px ${cy}px`
           }}
         />
-      </div>
 
-      {/* Petunjuk Interaktif Mikro */}
-      <span className="text-[10px] text-slate-400 font-medium mt-1 flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
-        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping" />
-        Geser kursor untuk melihat efek 3D
-      </span>
+        {/* 5. TEKS PERSENTASE DI PERMUKAAN IRISAN */}
+        <g className="pointer-events-none">
+          {segments.map((seg) => {
+            if (seg.percentage < 5) return null;
+            const isHovered = currentActive === seg.name;
+            const offsetY = isHovered ? seg.liftY : 0;
+
+            return (
+              <text
+                key={`label-${seg.name}`}
+                x={seg.textX}
+                y={seg.textY + offsetY}
+                textAnchor="middle"
+                className="font-black text-xs sm:text-[13px] fill-white tracking-tight transition-all duration-300"
+                style={{
+                  textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                  fontWeight: 800
+                }}
+              >
+                {seg.percentage}%
+              </text>
+            );
+          })}
+        </g>
+
+        {/* 6. PIRINGAN SILINDER TIMBUL PUTIH DI TENGAH (3D White Raised Podium) */}
+        <g filter="url(#center-podium-shadow)">
+          {/* Sisi Tebal Silinder Putih */}
+          <ellipse
+            cx={cx}
+            cy={cy + 8}
+            rx={rx * 0.76}
+            ry={ry * 0.76}
+            fill="#94A3B8"
+          />
+
+          {/* Permukaan Atas Piringan Putih Glossy */}
+          <ellipse
+            cx={cx}
+            cy={cy}
+            rx={rx * 0.76}
+            ry={ry * 0.76}
+            fill="url(#podium-top)"
+            stroke="#FFFFFF"
+            strokeWidth="2"
+          />
+
+          {/* Cincin Aksen Emas Halus di Sekeliling Piringan */}
+          <ellipse
+            cx={cx}
+            cy={cy}
+            rx={rx * 0.76 - 3}
+            ry={ry * 0.76 - 3}
+            fill="none"
+            stroke="rgba(212, 175, 55, 0.25)"
+            strokeWidth="1"
+          />
+        </g>
+
+        {/* 7. KONTEN METRIK PADA PODIUM PUSAT */}
+        <g className="pointer-events-none text-center">
+          <text
+            x={cx}
+            y={cy - 12}
+            textAnchor="middle"
+            className="text-[9px] font-black fill-slate-500 uppercase tracking-widest"
+          >
+            TOTAL
+          </text>
+          <text
+            x={cx}
+            y={cy + 5}
+            textAnchor="middle"
+            className="text-sm sm:text-[15px] font-black fill-[#0A2342] tracking-tight"
+            style={{
+              textShadow: '0 1px 2px rgba(255,255,255,0.8)'
+            }}
+          >
+            {totalPaguFormatted}
+          </text>
+          <text
+            x={cx}
+            y={cy + 19}
+            textAnchor="middle"
+            className="text-[10px] font-bold fill-slate-600"
+          >
+            {totalPackages} Paket
+          </text>
+        </g>
+      </svg>
     </div>
   );
 }
