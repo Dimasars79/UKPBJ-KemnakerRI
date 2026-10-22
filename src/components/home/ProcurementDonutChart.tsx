@@ -27,12 +27,12 @@ export function ProcurementDonutChart({
   activeMethod,
   onHoverMethod
 }: ProcurementDonutChartProps) {
-  // Geometri Donut
-  const size = 230;
+  // Geometri Donut Besar & Proporsional
+  const size = 280;
   const cx = size / 2;
   const cy = size / 2;
-  const R = 100; // Radius luar
-  const r = 62;  // Radius dalam (lubang donut)
+  const R = 126; // Radius luar
+  const r = 78;  // Radius dalam (lubang tengah lega)
 
   // Hitung sudut masing-masing segmen (dimulai dari -90 derajat / jam 12)
   const slices = useMemo(() => {
@@ -40,7 +40,6 @@ export function ProcurementDonutChart({
     let currentAngle = -90;
 
     return data.map((item, index) => {
-      // Sudut proporsional
       const sliceAngle = (item.percentage / totalPercentage) * 360;
       const startAngle = currentAngle;
       const endAngle = currentAngle + sliceAngle;
@@ -73,10 +72,10 @@ export function ProcurementDonutChart({
         'Z'
       ].join(' ');
 
-      // Posisi teks persentase di tengah irisan
+      // Posisi teks persentase di tengah irisan cincin
       const textRadius = (R + r) / 2;
       const textX = cx + textRadius * Math.cos(midRad);
-      const textY = cy + textRadius * Math.sin(midRad) + 4; // Penyesuaian vertikal font
+      const textY = cy + textRadius * Math.sin(midRad) + 5;
 
       return {
         ...item,
@@ -89,145 +88,110 @@ export function ProcurementDonutChart({
   }, [data, cx, cy, R, r]);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
-      {/* 1. DONUT SVG CHART DENGAN INNER METRICS */}
-      <div className="relative shrink-0 flex items-center justify-center">
-        <svg
-          width={size}
-          height={size}
-          viewBox={`0 0 ${size} ${size}`}
-          className="overflow-visible select-none drop-shadow-lg"
-        >
-          <defs>
-            {/* Bayangan halus segmen */}
-            <filter id="donut-shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#000000" floodOpacity="0.4" />
-            </filter>
-          </defs>
+    <div className="relative flex items-center justify-center select-none py-2">
+      {/* Ambient Radial Backlight Glow */}
+      <div className="absolute w-56 h-56 rounded-full bg-blue-500/15 blur-3xl pointer-events-none" />
 
-          {/* Slices Donut */}
-          <g filter="url(#donut-shadow)">
-            {slices.map((slice) => {
-              const isHovered = activeMethod === slice.name;
-              return (
-                <path
-                  key={slice.name}
-                  d={slice.pathData}
-                  fill={slice.color}
-                  stroke="#0A1D37"
-                  strokeWidth={3}
-                  className="transition-all duration-300 cursor-pointer hover:opacity-95"
-                  style={{
-                    transformOrigin: `${cx}px ${cy}px`,
-                    transform: isHovered ? 'scale(1.04)' : 'scale(1)',
-                    filter: isHovered ? 'brightness(1.15)' : 'none'
-                  }}
-                  onMouseEnter={() => onHoverMethod(slice.name)}
-                  onMouseLeave={() => onHoverMethod(null)}
-                />
-              );
-            })}
-          </g>
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className="overflow-visible drop-shadow-2xl max-w-full h-auto"
+      >
+        <defs>
+          {/* Bayangan halus 3D */}
+          <filter id="donut-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#000000" floodOpacity="0.5" />
+          </filter>
+        </defs>
 
-          {/* Teks Persentase di Tengah Irisan Donut */}
-          <g className="pointer-events-none">
-            {slices.map((slice) => {
-              if (slice.percentage < 5) return null; // Sembunyikan bila terlalu kecil
-              return (
-                <text
-                  key={`label-${slice.name}`}
-                  x={slice.textX}
-                  y={slice.textY}
-                  textAnchor="middle"
-                  className="font-bold text-xs sm:text-[13px] fill-white"
-                  style={{
-                    textShadow: '0 1px 3px rgba(0,0,0,0.6)',
-                    fontWeight: 700
-                  }}
-                >
-                  {slice.percentage}%
-                </text>
-              );
-            })}
-          </g>
+        {/* 1. Slices Donut Chart */}
+        <g filter="url(#donut-shadow)">
+          {slices.map((slice) => {
+            const isHovered = activeMethod === slice.name;
+            return (
+              <path
+                key={slice.name}
+                d={slice.pathData}
+                fill={slice.color}
+                stroke="#07172B"
+                strokeWidth={3.5}
+                className="transition-all duration-300 cursor-pointer"
+                style={{
+                  transformOrigin: `${cx}px ${cy}px`,
+                  transform: isHovered ? 'scale(1.045)' : 'scale(1)',
+                  filter: isHovered ? 'brightness(1.15) drop-shadow(0 0 8px rgba(255,255,255,0.3))' : 'none'
+                }}
+                onMouseEnter={() => onHoverMethod(slice.name)}
+                onMouseLeave={() => onHoverMethod(null)}
+              />
+            );
+          })}
+        </g>
 
-          {/* Lubang Donut Tengah (Dark Center Hub) */}
-          <circle
-            cx={cx}
-            cy={cy}
-            r={r - 1}
-            fill="#081A32"
-            stroke="rgba(255, 255, 255, 0.08)"
-            strokeWidth={1}
-            className="drop-shadow-inner"
-          />
+        {/* 2. Teks Persentase di Setiap Irisan (Persis seperti gambar referensi) */}
+        <g className="pointer-events-none">
+          {slices.map((slice) => {
+            if (slice.percentage < 4) return null;
+            return (
+              <text
+                key={`label-${slice.name}`}
+                x={slice.textX}
+                y={slice.textY}
+                textAnchor="middle"
+                className="font-black text-sm sm:text-base fill-white tracking-tight"
+                style={{
+                  textShadow: '0 2px 4px rgba(0,0,0,0.7)'
+                }}
+              >
+                {slice.percentage}%
+              </text>
+            );
+          })}
+        </g>
 
-          {/* Konten Metrik di Pusat Lubang Donut */}
-          <g className="pointer-events-none text-center">
-            <text
-              x={cx}
-              y={cy - 14}
-              textAnchor="middle"
-              className="text-[10px] font-medium fill-slate-400 uppercase tracking-wider"
-            >
-              Total
-            </text>
-            <text
-              x={cx}
-              y={cy + 6}
-              textAnchor="middle"
-              className="text-sm sm:text-base font-extrabold fill-white tracking-tight"
-            >
-              {totalPaguFormatted}
-            </text>
-            <text
-              x={cx}
-              y={cy + 22}
-              textAnchor="middle"
-              className="text-[10px] font-semibold fill-slate-400"
-            >
-              {totalPackages} Paket
-            </text>
-          </g>
-        </svg>
-      </div>
+        {/* 3. Lubang Donut Tengah Gelap (Deep Navy Hub) */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r - 1}
+          fill="#061528"
+          stroke="rgba(255, 255, 255, 0.1)"
+          strokeWidth={1.5}
+          className="drop-shadow-inner"
+        />
 
-      {/* 2. LEGEND METODE DI SEBELAH KANAN CHART */}
-      <div className="flex-1 w-full flex flex-col justify-center gap-3">
-        {data.map((item) => {
-          const isHovered = activeMethod === item.name;
-          return (
-            <div
-              key={item.name}
-              className={`flex items-center justify-between p-2 rounded-xl transition-all cursor-pointer ${
-                isHovered ? 'bg-white/10 ring-1 ring-white/20' : 'hover:bg-white/5'
-              }`}
-              onMouseEnter={() => onHoverMethod(item.name)}
-              onMouseLeave={() => onHoverMethod(null)}
-            >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <span
-                  className="w-3 h-3 rounded-full shrink-0 shadow-sm"
-                  style={{ backgroundColor: item.color }}
-                />
-                <div className="min-w-0">
-                  <p className="text-xs font-bold text-white truncate">{item.name}</p>
-                  <p className="text-[11px] font-semibold text-slate-300">
-                    {item.paguFormatted}
-                  </p>
-                  <p className="text-[10px] text-slate-400">{item.count} Paket</p>
-                </div>
-              </div>
-
-              <div className="text-right shrink-0 pl-2">
-                <span className="text-xs sm:text-sm font-bold text-white">
-                  {item.percentage}%
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+        {/* 4. Metrik Teks Pusat Donut */}
+        <g className="pointer-events-none text-center">
+          <text
+            x={cx}
+            y={cy - 18}
+            textAnchor="middle"
+            className="text-[10px] font-bold fill-slate-400 uppercase tracking-widest"
+          >
+            TOTAL VALUASI
+          </text>
+          <text
+            x={cx}
+            y={cy + 8}
+            textAnchor="middle"
+            className="text-lg sm:text-xl font-black fill-white tracking-tight"
+            style={{
+              textShadow: '0 2px 6px rgba(0,0,0,0.6)'
+            }}
+          >
+            {totalPaguFormatted}
+          </text>
+          <text
+            x={cx}
+            y={cy + 26}
+            textAnchor="middle"
+            className="text-[11px] font-medium fill-slate-400"
+          >
+            {totalPackages} Paket Pengadaan
+          </text>
+        </g>
+      </svg>
     </div>
   );
 }
