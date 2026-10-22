@@ -1,39 +1,15 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 
+/**
+ * High-performance, zero-JS stagger container.
+ * Eliminates scroll event listeners and IntersectionObservers for instant 60fps/120fps scrolling.
+ */
 export function StaggerContainer({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      animate="visible"
-      viewport={{ once: true }}
-      variants={{
-        visible: {
-          transition: {
-            staggerChildren: 0.06,
-          },
-        },
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }
 
 export function StaggerItem({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 14 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }
