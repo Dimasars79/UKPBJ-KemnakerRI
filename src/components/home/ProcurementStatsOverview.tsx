@@ -160,63 +160,6 @@ export function ProcurementStatsOverview() {
     return methodsData.filter((m) => m.name === 'E-Purchasing' || m.name === 'Pengadaan Langsung');
   }, [methodsData]);
 
-  // 2. DATA TAHAPAN STATUS (4 Cards Progres Cepat)
-  const stageSummary = useMemo(() => {
-    const totalPackages = packagesList.length || 1;
-
-    const stages = [
-      {
-        key: 'Pendaftaran Dibuka',
-        label: trans('Pendaftaran Dibuka', 'Registration Open'),
-        dotColor: 'bg-emerald-400',
-        barColor: 'from-emerald-500 to-teal-400',
-        textColor: 'text-emerald-400'
-      },
-      {
-        key: 'Pemberian Penjelasan',
-        label: trans('Aanwijzing / Tanya Jawab', 'Clarification (Aanwijzing)'),
-        dotColor: 'bg-amber-400',
-        barColor: 'from-amber-500 to-yellow-400',
-        textColor: 'text-amber-400'
-      },
-      {
-        key: 'Tahap Evaluasi',
-        label: trans('Tahap Evaluasi', 'Evaluation Stage'),
-        dotColor: 'bg-blue-400',
-        barColor: 'from-blue-500 to-cyan-400',
-        textColor: 'text-blue-400'
-      },
-      {
-        key: 'Selesai',
-        label: trans('Selesai / Penetapan', 'Completed / Awarded'),
-        dotColor: 'bg-purple-400',
-        barColor: 'from-purple-500 to-indigo-400',
-        textColor: 'text-purple-400'
-      }
-    ];
-
-    return stages.map((stg) => {
-      const matched = packagesList.filter((p) => p.status === stg.key);
-      const totalPagu = matched.reduce((acc, curr) => acc + parseRupiahNumber(curr.hps), 0);
-      const percentage = Math.round((matched.length / totalPackages) * 100);
-
-      return {
-        ...stg,
-        count: matched.length,
-        percentage,
-        totalPagu: totalPagu > 0 ? formatMiliar(totalPagu) : 'Rp 0'
-      };
-    });
-  }, [packagesList, trans]);
-
-  // Smooth scroll handler ke bagian daftar paket pengadaan di beranda
-  const scrollToPengadaan = () => {
-    const el = document.getElementById('pengadaan');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <section className="py-12 sm:py-16 relative overflow-hidden bg-[#07172B] border-y border-white/10" id="kinerja">
       {/* Background ambient lighting */}
@@ -245,7 +188,7 @@ export function ProcurementStatsOverview() {
           </FadeIn>
 
           <FadeIn direction="right">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <div className="px-3.5 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
                 <Layers className="w-3.5 h-3.5 text-blue-400" />
                 <span className="text-xs font-bold text-white">{packagesList.length} Paket</span>
@@ -254,6 +197,13 @@ export function ProcurementStatsOverview() {
                 <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
                 <span className="text-xs font-bold text-emerald-300">{totalAllPaguFormatted}</span>
               </div>
+              <Link
+                href="/monitoring"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-accent-gold/15 hover:bg-accent-gold/25 border border-accent-gold/40 text-accent-gold text-xs font-bold transition-all group shadow-sm"
+              >
+                <span>{trans('Monitoring Pengadaan', 'Procurement Monitoring')}</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </FadeIn>
         </div>
@@ -371,57 +321,6 @@ export function ProcurementStatsOverview() {
             </div>
 
           </div>
-
-          {/* 2. CARD BAWAH: STATUS TAHAPAN PAKET BERJALAN (Divider & Integrated Strip) */}
-          <div className="mt-8 pt-6 border-t border-white/10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-              <span className="font-extrabold text-slate-200 uppercase tracking-wider text-xs flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-accent-gold shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
-                {trans('STATUS TAHAPAN PAKET BERJALAN:', 'ACTIVE PACKAGE STAGE PROGRESS:')}
-              </span>
-
-              <Link
-                href="/monitoring"
-                className="text-accent-gold font-bold hover:underline inline-flex items-center gap-1.5 text-xs group transition-all self-start sm:self-auto"
-              >
-                <span>{trans('Telusuri Daftar Paket Lengkap', 'Explore All Packages')}</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {stageSummary.map((stg) => (
-                <div 
-                  key={stg.key}
-                  onClick={scrollToPengadaan}
-                  className="p-3.5 rounded-2xl bg-[#071629]/80 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all cursor-pointer group shadow-sm"
-                >
-                  <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="font-bold text-white group-hover:text-accent-gold transition-colors truncate">
-                      {stg.label}
-                    </span>
-                    <span className={`font-mono font-bold text-xs sm:text-sm ${stg.textColor}`}>
-                      {stg.count}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 mb-2.5">
-                    <span className="font-semibold text-slate-300">{stg.totalPagu}</span>
-                    <span className="font-bold text-slate-200">{stg.percentage}%</span>
-                  </div>
-
-                  {/* Micro Progress Bar */}
-                  <div className="w-full h-1.5 bg-slate-950/80 rounded-full overflow-hidden p-0.5">
-                    <div 
-                      className={`h-full rounded-full bg-gradient-to-r ${stg.barColor} transition-all duration-500`}
-                      style={{ width: `${Math.max(stg.percentage, 5)}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
         </div>
 
       </div>
