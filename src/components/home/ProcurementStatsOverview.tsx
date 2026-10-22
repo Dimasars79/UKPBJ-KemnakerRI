@@ -209,12 +209,12 @@ export function ProcurementStatsOverview() {
         </div>
 
         {/* 1. UNIFIED HERO CARD: CENTERED DONUT CHART DENGAN 4 BADGE KARTU SIMETRIS */}
-        <div className="bg-[#0C1E38]/90 backdrop-blur-md border border-white/10 rounded-3xl p-5 sm:p-8 shadow-2xl mb-6">
+        <div className="bg-[#0C1E38]/90 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl mb-6">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             
             {/* SISI KIRI (2 Badge Cards: Tender & Seleksi) */}
-            <div className="lg:col-span-4 space-y-4 order-2 lg:order-1">
+            <div className="lg:col-span-4 space-y-6 sm:space-y-7 order-2 lg:order-1">
               {leftMethods.map((item) => {
                 const isHovered = hoveredMethod === item.name;
                 return (
@@ -222,35 +222,37 @@ export function ProcurementStatsOverview() {
                     key={item.name}
                     onMouseEnter={() => setHoveredMethod(item.name)}
                     onMouseLeave={() => setHoveredMethod(null)}
-                    className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                    className={`p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer ${
                       isHovered 
-                        ? 'bg-white/10 border-white/30 shadow-lg scale-[1.02]' 
-                        : 'bg-[#071629]/70 hover:bg-white/5 border-white/10'
+                        ? 'bg-white/10 border-white/30 shadow-xl scale-[1.02]' 
+                        : 'bg-[#071629]/75 hover:bg-white/5 border-white/10'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-md ${item.iconBg}`}>
+                    {/* Header Baris: Icon + Nama + Badge Persentase */}
+                    <div className="flex items-center justify-between mb-4 sm:mb-5">
+                      <div className="flex items-center gap-3.5">
+                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-md ${item.iconBg}`}>
                           {item.icon}
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-white">{item.name}</h4>
-                          <p className="text-[11px] text-slate-400">{item.count} Paket</p>
+                          <h4 className="text-sm sm:text-base font-bold text-white tracking-wide">{item.name}</h4>
+                          <p className="text-xs text-slate-400 mt-0.5">{item.count} Paket Pengadaan</p>
                         </div>
                       </div>
 
-                      <div className={`px-2.5 py-1 rounded-lg border text-xs font-extrabold ${item.badgeBg} ${item.badgeText}`}>
+                      <div className={`px-3 py-1 rounded-xl border text-xs sm:text-sm font-extrabold shadow-sm ${item.badgeBg} ${item.badgeText}`}>
                         {item.percentage}%
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="text-slate-400 text-[11px]">Nilai Pagu:</span>
-                      <span className="font-extrabold text-white text-xs sm:text-sm">{item.paguFormatted}</span>
+                    {/* Baris Tengah: Label Nilai Pagu & Nominal Rupiah */}
+                    <div className="flex items-center justify-between text-xs mb-3 sm:mb-3.5 pt-1">
+                      <span className="text-slate-400 text-xs font-medium">Nilai Pagu:</span>
+                      <span className="font-black text-white text-sm sm:text-base tracking-tight">{item.paguFormatted}</span>
                     </div>
 
-                    {/* Progress Bar */}
-                    <div className="w-full h-1.5 bg-slate-950/80 rounded-full overflow-hidden p-0.5">
+                    {/* Progress Bar Lega */}
+                    <div className="w-full h-2 bg-slate-950/80 rounded-full overflow-hidden p-0.5 border border-white/5">
                       <div
                         className={`h-full rounded-full bg-gradient-to-r ${item.barGradient} transition-all duration-500`}
                         style={{ width: `${Math.max(item.percentage, 5)}%` }}
@@ -262,7 +264,7 @@ export function ProcurementStatsOverview() {
             </div>
 
             {/* SISI TENGAH: CENTERED HERO DONUT CHART (Diameter Lega) */}
-            <div className="lg:col-span-4 flex justify-center order-1 lg:order-2 py-2">
+            <div className="lg:col-span-4 flex justify-center order-1 lg:order-2 py-4 lg:py-0">
               <ProcurementDonutChart 
                 data={donutData}
                 totalPaguFormatted={totalAllPaguFormatted}
@@ -273,7 +275,7 @@ export function ProcurementStatsOverview() {
             </div>
 
             {/* SISI KANAN (2 Badge Cards: E-Purchasing & Pengadaan Langsung) */}
-            <div className="lg:col-span-4 space-y-4 order-3">
+            <div className="lg:col-span-4 space-y-6 sm:space-y-7 order-3">
               {rightMethods.map((item) => {
                 const isHovered = hoveredMethod === item.name;
                 return (
@@ -281,35 +283,37 @@ export function ProcurementStatsOverview() {
                     key={item.name}
                     onMouseEnter={() => setHoveredMethod(item.name)}
                     onMouseLeave={() => setHoveredMethod(null)}
-                    className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                    className={`p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer ${
                       isHovered 
-                        ? 'bg-white/10 border-white/30 shadow-lg scale-[1.02]' 
-                        : 'bg-[#071629]/70 hover:bg-white/5 border-white/10'
+                        ? 'bg-white/10 border-white/30 shadow-xl scale-[1.02]' 
+                        : 'bg-[#071629]/75 hover:bg-white/5 border-white/10'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-md ${item.iconBg}`}>
+                    {/* Header Baris: Icon + Nama + Badge Persentase */}
+                    <div className="flex items-center justify-between mb-4 sm:mb-5">
+                      <div className="flex items-center gap-3.5">
+                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-md ${item.iconBg}`}>
                           {item.icon}
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-white">{item.name}</h4>
-                          <p className="text-[11px] text-slate-400">{item.count} Paket</p>
+                          <h4 className="text-sm sm:text-base font-bold text-white tracking-wide">{item.name}</h4>
+                          <p className="text-xs text-slate-400 mt-0.5">{item.count} Paket Pengadaan</p>
                         </div>
                       </div>
 
-                      <div className={`px-2.5 py-1 rounded-lg border text-xs font-extrabold ${item.badgeBg} ${item.badgeText}`}>
+                      <div className={`px-3 py-1 rounded-xl border text-xs sm:text-sm font-extrabold shadow-sm ${item.badgeBg} ${item.badgeText}`}>
                         {item.percentage}%
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="text-slate-400 text-[11px]">Nilai Pagu:</span>
-                      <span className="font-extrabold text-white text-xs sm:text-sm">{item.paguFormatted}</span>
+                    {/* Baris Tengah: Label Nilai Pagu & Nominal Rupiah */}
+                    <div className="flex items-center justify-between text-xs mb-3 sm:mb-3.5 pt-1">
+                      <span className="text-slate-400 text-xs font-medium">Nilai Pagu:</span>
+                      <span className="font-black text-white text-sm sm:text-base tracking-tight">{item.paguFormatted}</span>
                     </div>
 
-                    {/* Progress Bar */}
-                    <div className="w-full h-1.5 bg-slate-950/80 rounded-full overflow-hidden p-0.5">
+                    {/* Progress Bar Lega */}
+                    <div className="w-full h-2 bg-slate-950/80 rounded-full overflow-hidden p-0.5 border border-white/5">
                       <div
                         className={`h-full rounded-full bg-gradient-to-r ${item.barGradient} transition-all duration-500`}
                         style={{ width: `${Math.max(item.percentage, 5)}%` }}
