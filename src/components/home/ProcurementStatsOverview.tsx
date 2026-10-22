@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { 
   BarChart3, Layers, TrendingUp, ArrowRight,
   Gavel, ShoppingCart, Users, FileText,
-  PieChart, MousePointerClick
+  PieChart
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -296,19 +296,10 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
                 onSelectMethod={handleMethodClick}
               />
 
-              {/* KAPSUL PENJELASAN GRAFIK & PETUNJUK INTERAKTIF (Opsi 1) */}
-              <div className="mt-2 sm:mt-3 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex flex-col items-center text-center max-w-sm sm:max-w-md shadow-lg transition-all group/pill">
-                <div className="flex items-center gap-1.5 text-xs sm:text-[13px] font-bold text-white tracking-wide">
-                  <PieChart className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                  <span>{trans('Proporsi Pagu per Metode Pemilihan', 'Budget Share by Selection Method')}</span>
-                </div>
-                <div className="flex items-center gap-1.5 mt-1 text-[10px] sm:text-[11px] text-slate-300 font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-pulse shrink-0" />
-                  <span className="flex items-center gap-1">
-                    <MousePointerClick className="w-3 h-3 text-accent-gold inline shrink-0" />
-                    {trans('Arahkan kursor atau klik irisan untuk melihat detail paket', 'Hover or click slices to inspect procurement packages')}
-                  </span>
-                </div>
+              {/* KAPSUL PENJELASAN GRAFIK (Minimalis & Elegan) */}
+              <div className="mt-2.5 sm:mt-3 px-4 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex items-center gap-2 text-xs sm:text-[13px] font-bold text-white tracking-wide shadow-lg transition-all">
+                <PieChart className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                <span>{trans('Proporsi Pagu per Metode Pemilihan', 'Budget Share by Selection Method')}</span>
               </div>
             </div>
 
