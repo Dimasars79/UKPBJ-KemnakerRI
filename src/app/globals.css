@@ -87,6 +87,15 @@
   animation: float-subtle 8s ease-in-out infinite;
 }
 
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(0.6deg); }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
 .animate-glow-pulse {
   animation: glow-pulse 4s ease-in-out infinite;
 }
