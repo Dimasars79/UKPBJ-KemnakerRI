@@ -234,11 +234,11 @@ export function ProcurementStatsOverview() {
               <span>{trans('Proporsi Valuasi Pengadaan', 'Procurement Valuation')}</span>
             </div>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
-              {trans('Distribusi Metode & Realisasi Pagu', 'Procurement Method Distribution & Ceiling')}
+              {trans('Komposisi & Nilai Pengadaan', 'Procurement Composition & Value')}
             </h2>
             <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-xl">
               {trans(
-                'Proporsi nilai anggaran dan persebaran kuantitas paket pengadaan barang/jasa Kementerian Ketenagakerjaan RI.',
+                'Proporsi nilai anggaran dan sebaran paket pengadaan barang/jasa Kementerian Ketenagakerjaan RI.',
                 'Proportion of budget value and distribution of procurement packages in the Ministry of Manpower.'
               )}
             </p>
