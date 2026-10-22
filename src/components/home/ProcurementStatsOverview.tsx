@@ -4,7 +4,8 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { 
   BarChart3, Layers, TrendingUp, ArrowRight,
-  Gavel, ShoppingCart, Users, FileText
+  Gavel, ShoppingCart, Users, FileText,
+  PieChart, MousePointerClick
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -285,7 +286,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
           <div className="grid grid-cols-2 lg:grid-cols-12 gap-2.5 sm:gap-4 lg:gap-8 items-center">
             
             {/* SISI TENGAH: HERO 3D DONUT CHART (Besar & Dominan di Tengah) */}
-            <div className="col-span-2 lg:col-span-6 lg:col-start-4 lg:row-start-1 lg:row-span-2 order-1 lg:order-2 flex justify-center py-2 lg:py-0">
+            <div className="col-span-2 lg:col-span-6 lg:col-start-4 lg:row-start-1 lg:row-span-2 order-1 lg:order-2 flex flex-col items-center justify-center py-2 lg:py-0">
               <ProcurementDonutChart 
                 data={donutData}
                 totalPaguFormatted={totalAllPaguFormatted}
@@ -294,6 +295,21 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
                 onHoverMethod={setHoveredMethod}
                 onSelectMethod={handleMethodClick}
               />
+
+              {/* KAPSUL PENJELASAN GRAFIK & PETUNJUK INTERAKTIF (Opsi 1) */}
+              <div className="mt-2 sm:mt-3 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex flex-col items-center text-center max-w-sm sm:max-w-md shadow-lg transition-all group/pill">
+                <div className="flex items-center gap-1.5 text-xs sm:text-[13px] font-bold text-white tracking-wide">
+                  <PieChart className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                  <span>{trans('Proporsi Pagu per Metode Pemilihan', 'Budget Share by Selection Method')}</span>
+                </div>
+                <div className="flex items-center gap-1.5 mt-1 text-[10px] sm:text-[11px] text-slate-300 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-pulse shrink-0" />
+                  <span className="flex items-center gap-1">
+                    <MousePointerClick className="w-3 h-3 text-accent-gold inline shrink-0" />
+                    {trans('Arahkan kursor atau klik irisan untuk melihat detail paket', 'Hover or click slices to inspect procurement packages')}
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* BARIS 1: Tender (Kiri) & E-Purchasing (Kanan) */}
