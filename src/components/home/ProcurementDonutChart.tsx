@@ -163,8 +163,8 @@ export function ProcurementDonutChart({
 
   return (
     <div className="relative flex flex-col items-center justify-center select-none py-2 w-full">
-      {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang diagram) */}
-      <div className="absolute w-72 h-72 sm:w-96 sm:h-96 lg:w-[460px] lg:h-[460px] rounded-full bg-blue-500/15 blur-3xl pointer-events-none animate-pulse" />
+      {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang diagram - Single-Pass GPU Native) */}
+      <div className="absolute w-72 h-72 sm:w-96 sm:h-96 lg:w-[460px] lg:h-[460px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,transparent_70%)] pointer-events-none" />
 
       {/* 2. ISOMETRIC 3D SVG CONTAINER */}
       <svg

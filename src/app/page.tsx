@@ -198,20 +198,20 @@ export default function Home() {
         <section className="py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white" id="profil">
           <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-60 pointer-events-none" />
           
-          <div className="absolute top-0 right-0 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] bg-primary-blue/10 rounded-full blur-[150px] -translate-y-1/3 translate-x-1/3 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-accent-gold/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+          {/* Ambient Lighting - Single-pass GPU native radial gradients */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(10,35,66,0.06)_0%,transparent_60%),radial-gradient(circle_at_15%_85%,rgba(212,175,55,0.05)_0%,transparent_50%)] pointer-events-none" />
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-10 md:gap-12 lg:gap-16">
               <FadeIn direction="right" className="w-full lg:w-1/3 flex justify-center">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-accent-gold/20 rounded-full blur-2xl sm:blur-3xl group-hover:bg-accent-gold/40 transition-colors duration-700 pointer-events-none animate-pulse" />
+                  <div className="absolute inset-0 bg-accent-gold/15 rounded-full blur-xl group-hover:bg-accent-gold/25 transition-colors duration-500 pointer-events-none" />
                   <Image 
                     src="/logo-ukpbj-kemnaker-new.png" 
                     alt="Logo UKPBJ" 
                     width={500} 
                     height={180} 
-                    className="w-52 sm:w-64 md:w-72 lg:w-96 h-auto object-contain drop-shadow-[0_15px_35px_rgba(10,35,66,0.12)] group-hover:scale-105 transition-transform duration-700 relative z-10" 
+                    className="w-52 sm:w-64 md:w-72 lg:w-96 h-auto object-contain drop-shadow-[0_10px_25px_rgba(10,35,66,0.1)] group-hover:scale-105 transition-transform duration-500 relative z-10" 
                   />
                 </div>
               </FadeIn>
@@ -221,7 +221,7 @@ export default function Home() {
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-5 text-primary-navy tracking-tight">{t('home.about_title')}</h2>
                   <div className="w-10 sm:w-12 md:w-16 h-0.5 sm:h-1 bg-accent-gold mb-4 sm:mb-6 md:mb-8 rounded-full" />
                   
-                  <div className="relative p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white/80 backdrop-blur-md border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-6 sm:mb-8 md:mb-10 group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                  <div className="relative p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-6 sm:mb-8 md:mb-10 group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
                     <Quote className="absolute top-3 left-3 sm:top-5 sm:left-5 w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 text-accent-gold/15 transform -scale-x-100 group-hover:scale-110 group-hover:-scale-x-110 transition-transform duration-500" />
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-700 leading-relaxed font-medium relative z-10 pl-3 sm:pl-4 md:pl-8 border-l-2 sm:border-l-4 border-accent-gold/50">
                       {t('home.about_desc')}
@@ -306,7 +306,7 @@ export default function Home() {
 
                 {/* 2 Quick Info Cards side by side or responsive grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5 mb-6 sm:mb-8">
-                  <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10">
                     <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 text-accent-gold flex items-center justify-center shrink-0">
                       <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-accent-gold" />
                     </div>
@@ -316,7 +316,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10">
                     <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 text-accent-gold flex items-center justify-center shrink-0">
                       <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-accent-gold" />
                     </div>
@@ -360,7 +360,7 @@ export default function Home() {
                 )}
               </FadeIn>
 
-              <FadeIn direction="left" delay={0.2} className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 group max-w-lg mx-auto w-full bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+              <FadeIn direction="left" delay={0.2} className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 group max-w-lg mx-auto w-full bg-slate-900 flex items-center justify-center p-3 sm:p-4">
                 {/* Background ambient lighting */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-accent-gold/15 via-primary-blue/20 to-cyan-500/10 opacity-70 pointer-events-none" />
 

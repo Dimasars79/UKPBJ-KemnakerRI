@@ -31,50 +31,40 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
       className={`relative w-full max-w-[500px] sm:max-w-[560px] lg:max-w-[620px] aspect-[4/3.7] select-none flex items-center justify-center mx-auto ${className}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ perspective: 1400 }}
     >
-      {/* ================= 1. CLEAN SOFT AMBIENT LIGHTING ================= */}
+      {/* ================= 1. CLEAN HIGH-PERFORMANCE AMBIENT LIGHTING ================= */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
-        {/* Core Soft Ambient Glow */}
-        <div className="w-[260px] sm:w-[460px] h-[260px] sm:h-[460px] bg-gradient-to-tr from-blue-600/25 via-cyan-400/20 to-transparent rounded-full blur-[60px] sm:blur-[110px]" />
+        {/* Core Soft Ambient Radial Glow (Single-pass GPU native, zero gaussian convolution) */}
+        <div className="w-[300px] sm:w-[480px] h-[300px] sm:h-[480px] bg-[radial-gradient(circle,rgba(37,99,235,0.2)_0%,rgba(6,182,212,0.12)_45%,transparent_70%)] rounded-full" />
         
-        {/* Soft Ground Ambient Shadow / Light */}
-        <div className="absolute bottom-2 sm:bottom-4 w-[240px] sm:w-[400px] h-[50px] sm:h-[90px] bg-cyan-500/15 rounded-[100%] blur-xl sm:blur-3xl" />
+        {/* Soft Ground Ambient Base */}
+        <div className="absolute bottom-2 sm:bottom-4 w-[240px] sm:w-[380px] h-[40px] sm:h-[60px] bg-[radial-gradient(ellipse,rgba(6,182,212,0.15)_0%,transparent_75%)] rounded-[100%]" />
       </div>
 
-      {/* ================= 2. MASTER 3D PARALLAX STAGE ================= */}
+      {/* ================= 2. MASTER PARALLAX STAGE (GPU Accelerated) ================= */}
       <motion.div
         style={{
           rotateX: springY,
           rotateY: springX,
-          transformStyle: "preserve-3d",
         }}
-        className="relative w-full h-full flex items-center justify-center transition-transform duration-200 ease-out"
+        className="relative w-full h-full flex items-center justify-center will-change-transform"
       >
 
-        {/* ================= ELEMENT 1: GEDUNG KONSTRUKSI (TRANSPARENT 3D ANCHOR - MIDGROUND LEFT) ================= */}
+        {/* ================= ELEMENT 1: GEDUNG KONSTRUKSI ================= */}
         <motion.div
           animate={{
-            y: [0, -12, 0],
-            rotateX: [-1, 1.2, -1],
-            rotateY: [1.2, -1, 1.2],
-            rotateZ: [-0.6, 0.6, -0.6],
+            y: [0, -8, 0],
           }}
           transition={{
             repeat: Infinity,
-            duration: 7.2,
+            duration: 6.5,
             ease: "easeInOut",
           }}
-          style={{ transformStyle: "preserve-3d" }}
-          className="absolute left-[1%] sm:left-[3%] top-[3%] sm:top-[2%] w-[60%] sm:w-[56%] aspect-square z-10 group cursor-pointer"
+          className="absolute left-[1%] sm:left-[3%] top-[3%] sm:top-[2%] w-[60%] sm:w-[56%] aspect-square z-10 group cursor-pointer will-change-transform"
         >
-          {/* Volumetric Backlight Aura */}
-          <div className="absolute inset-8 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none -z-10 group-hover:bg-cyan-400/35 transition-colors duration-500" />
-          
-          {/* Pure Transparent PNG Cutout - 100% Zero Box */}
           <motion.div 
-            whileHover={{ scale: 1.05, y: -4 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            whileHover={{ scale: 1.04, y: -4 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className="relative w-full h-full overflow-visible"
           >
             <Image
@@ -84,37 +74,28 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
               priority
               quality={85}
               sizes="(max-width: 768px) 60vw, 400px"
-              className="object-contain object-center drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
+              className="object-contain object-center drop-shadow-[0_15px_25px_rgba(0,0,0,0.65)]"
             />
           </motion.div>
         </motion.div>
 
 
-        {/* ================= ELEMENT 2: KOP SURAT & DOKUMEN (TRANSPARENT AIR CURRENT HOVER - TOP RIGHT) ================= */}
+        {/* ================= ELEMENT 2: KOP SURAT & DOKUMEN ================= */}
         <motion.div
           animate={{
-            y: [0, -18, 0],
-            x: [0, 5, 0],
-            rotateZ: [-2, 2.5, -2],
-            rotateX: [1.5, -2, 1.5],
-            rotateY: [-1.5, 2, -1.5],
+            y: [0, -10, 0],
           }}
           transition={{
             repeat: Infinity,
-            duration: 6.4,
+            duration: 5.5,
             ease: "easeInOut",
-            delay: 0.8,
+            delay: 0.6,
           }}
-          style={{ transformStyle: "preserve-3d" }}
-          className="absolute right-[1%] sm:right-[3%] top-[-2%] sm:top-[-1%] w-[48%] sm:w-[44%] aspect-square z-20 group cursor-pointer"
+          className="absolute right-[1%] sm:right-[3%] top-[-2%] sm:top-[-1%] w-[48%] sm:w-[44%] aspect-square z-20 group cursor-pointer will-change-transform"
         >
-          {/* Volumetric Gold/Amber Aura */}
-          <div className="absolute inset-8 bg-amber-500/15 rounded-full blur-3xl pointer-events-none -z-10 group-hover:bg-amber-400/30 transition-colors duration-500" />
-
-          {/* Pure Transparent Cutout - 100% Zero Box */}
           <motion.div 
-            whileHover={{ scale: 1.06, y: -6, rotateZ: 4 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            whileHover={{ scale: 1.05, y: -4, rotate: 2 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className="relative w-full h-full overflow-visible"
           >
             <Image
@@ -124,47 +105,28 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
               priority
               quality={85}
               sizes="(max-width: 768px) 45vw, 300px"
-              className="object-contain object-center drop-shadow-[0_20px_30px_rgba(0,0,0,0.85)]"
+              className="object-contain object-center drop-shadow-[0_15px_25px_rgba(0,0,0,0.65)]"
             />
           </motion.div>
         </motion.div>
 
 
-        {/* ================= ELEMENT 3: LAPTOP E-KATALOG & SPSE (TRANSPARENT DIGITAL CORE - FOREGROUND BOTTOM RIGHT) ================= */}
+        {/* ================= ELEMENT 3: LAPTOP E-KATALOG & SPSE ================= */}
         <motion.div
           animate={{
-            y: [0, 12, 0],
-            rotateZ: [0.8, -0.8, 0.8],
-            rotateX: [0.6, -0.8, 0.6],
-            rotateY: [-0.6, 0.8, -0.6],
+            y: [0, 8, 0],
           }}
           transition={{
             repeat: Infinity,
-            duration: 5.6,
+            duration: 5.8,
             ease: "easeInOut",
-            delay: 0.4,
+            delay: 0.3,
           }}
-          style={{ transformStyle: "preserve-3d" }}
-          className="absolute right-[-1%] sm:right-[1%] bottom-[-1%] sm:bottom-[0%] w-[64%] sm:w-[60%] aspect-square z-30 group cursor-pointer"
+          className="absolute right-[-1%] sm:right-[1%] bottom-[-1%] sm:bottom-[0%] w-[64%] sm:w-[60%] aspect-square z-30 group cursor-pointer will-change-transform"
         >
-          {/* Dynamic Cyan Hologram Backlight */}
           <motion.div 
-            animate={{
-              opacity: [0.25, 0.45, 0.25],
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 4,
-              ease: "easeInOut",
-            }}
-            className="absolute inset-6 bg-cyan-400/30 rounded-full blur-3xl pointer-events-none -z-10 group-hover:bg-cyan-400/50 transition-colors duration-500" 
-          />
-
-          {/* Pure Transparent Cutout - 100% Zero Box */}
-          <motion.div 
-            whileHover={{ scale: 1.06, y: -4 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            whileHover={{ scale: 1.05, y: -4 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className="relative w-full h-full overflow-visible"
           >
             <Image
@@ -174,13 +136,13 @@ export function ProcurementVisualComposition({ className = "" }: ProcurementVisu
               priority
               quality={85}
               sizes="(max-width: 768px) 65vw, 440px"
-              className="object-contain object-center drop-shadow-[0_30px_45px_rgba(0,0,0,0.95)]"
+              className="object-contain object-center drop-shadow-[0_20px_35px_rgba(0,0,0,0.75)]"
             />
           </motion.div>
         </motion.div>
 
-        {/* ================= CONNECTING INTERSECTION CYBER GLOW ================= */}
-        <div className="absolute top-[46%] left-[44%] w-24 h-24 bg-cyan-400/15 rounded-full blur-2xl pointer-events-none z-20 animate-pulse" />
+        {/* Ambient Center Accent Dot */}
+        <div className="absolute top-[48%] left-[46%] w-16 h-16 bg-cyan-400/10 rounded-full blur-xl pointer-events-none z-20" />
 
       </motion.div>
     </div>

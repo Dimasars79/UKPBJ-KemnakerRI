@@ -235,10 +235,8 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
 
   return (
     <section className="py-12 sm:py-16 relative overflow-hidden bg-[#07172B] border-y border-white/10" id="kinerja">
-      {/* Background ambient lighting */}
-      <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-      <div className="absolute top-1/3 left-10 w-96 h-96 bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-accent-gold/10 rounded-full blur-[140px] pointer-events-none" />
+      {/* Background ambient lighting - High-performance single-pass radial gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_35%,rgba(37,99,235,0.12)_0%,transparent_50%),radial-gradient(circle_at_85%_75%,rgba(245,158,11,0.08)_0%,transparent_45%)] pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
         
@@ -282,7 +280,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
         </div>
 
         {/* 1. UNIFIED HERO CARD: CENTERED DONUT CHART DENGAN 4 BADGE KARTU 2 BARIS KANAN KIRI */}
-        <div className="bg-[#0C1E38]/90 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 lg:p-12 shadow-2xl mb-6">
+        <div className="bg-[#0B1E38] border border-white/10 rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 lg:p-12 shadow-2xl mb-6">
           <div className="grid grid-cols-2 lg:grid-cols-12 gap-2.5 sm:gap-4 lg:gap-8 items-center">
             
             {/* SISI TENGAH: HERO 3D DONUT CHART (Besar & Dominan di Tengah) */}

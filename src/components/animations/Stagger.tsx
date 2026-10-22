@@ -13,7 +13,7 @@ export function StaggerContainer({ children, className = "" }: { children: React
       variants={{
         visible: {
           transition: {
-            staggerChildren: 0.1,
+            staggerChildren: 0.06,
           },
         },
       }}
@@ -28,8 +28,8 @@ export function StaggerItem({ children, className = "" }: { children: React.Reac
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 30 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] } },
+        hidden: { opacity: 0, y: 14 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
       }}
       className={className}
     >
