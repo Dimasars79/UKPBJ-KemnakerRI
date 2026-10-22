@@ -225,13 +225,30 @@ export function ProcurementDonutChart({
             <stop offset="100%" stopColor="#E2E8F0" />
           </radialGradient>
 
-          {/* Efek Kilau Cahaya Berputar (Sheen Sweep Beam) */}
-          <linearGradient id="sheen-beam" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="transparent" />
-            <stop offset="45%" stopColor="rgba(255, 255, 255, 0.05)" />
-            <stop offset="50%" stopColor="rgba(255, 255, 255, 0.45)" />
-            <stop offset="55%" stopColor="rgba(255, 255, 255, 0.05)" />
-            <stop offset="100%" stopColor="transparent" />
+          {/* Clip path untuk Permukaan Cincin Donut Atas (Persis Rx, Ry sampai rx, ry) */}
+          <clipPath id="donut-top-surface">
+            <path
+              d={`M ${cx - Rx} ${cy} A ${Rx} ${Ry} 0 1 0 ${cx + Rx} ${cy} A ${Rx} ${Ry} 0 1 0 ${cx - Rx} ${cy} Z M ${cx - rx} ${cy} A ${rx} ${ry} 0 1 1 ${cx + rx} ${cy} A ${rx} ${ry} 0 1 1 ${cx - rx} ${cy} Z`}
+              fillRule="evenodd"
+            />
+          </clipPath>
+
+          {/* Gradien Kilau Permukaan Sapuan Melingkar Utama */}
+          <linearGradient id="sheen-body-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+            <stop offset="25%" stopColor="#FFFFFF" stopOpacity="0.15" />
+            <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.4" />
+            <stop offset="75%" stopColor="#FFFFFF" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+          </linearGradient>
+
+          {/* Gradien Kilau Tepian Luar Donut (Outer Rim Specular Streak) */}
+          <linearGradient id="sheen-rim-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+            <stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.6" />
+            <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.95" />
+            <stop offset="70%" stopColor="#FFFFFF" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -315,22 +332,62 @@ export function ProcurementDonutChart({
           })}
         </g>
 
-        {/* 4. KILAU CAHAYA MELINGKAR PERIODIK (Sheen Sweep Light) */}
+        {/* 4. KILAU CAHAYA MELINGKAR PERSIS DI BULETAN LUAR (Outer Rim & Surface Sheen Sweep) */}
+        {/* Bevel Lengkung Luar Statis untuk Efek Keramik/Kaca 3D */}
         <ellipse
           cx={cx}
           cy={cy}
-          rx={Rx - 2}
-          ry={Ry - 2}
+          rx={Rx}
+          ry={Ry}
           fill="none"
-          stroke="url(#sheen-beam)"
-          strokeWidth={depth}
-          opacity="0.6"
-          className="pointer-events-none animate-spin"
-          style={{
-            animationDuration: '10s',
-            transformOrigin: `${cx}px ${cy}px`
-          }}
+          stroke="rgba(255, 255, 255, 0.35)"
+          strokeWidth={1.2}
+          className="pointer-events-none"
         />
+
+        {/* Sapuan kilau berputar yang terpasang persis di buletan dan permukaan cincin luar */}
+        <g clipPath="url(#donut-top-surface)" className="pointer-events-none">
+          <g transform={`translate(${cx}, ${cy}) scale(1, ${Ry / Rx})`}>
+            <g>
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="0 0 0"
+                to="360 0 0"
+                dur="9s"
+                repeatCount="indefinite"
+              />
+
+              {/* Kilau Permukaan Utama (Primary Sweep Face) */}
+              <path
+                d="M 98.30 -68.83 A 120 120 0 0 1 98.30 68.83 L 57.34 40.15 A 70 70 0 0 0 57.34 -40.15 Z"
+                fill="url(#sheen-body-grad)"
+              />
+
+              {/* Garis Kilau Terang Persis di Bibir Lingkaran Luar (Outer Rim Bevel Glint) */}
+              <path
+                d="M 105.25 -55.96 A 119 119 0 0 1 105.25 55.96"
+                fill="none"
+                stroke="url(#sheen-rim-grad)"
+                strokeWidth={3}
+                strokeLinecap="round"
+              />
+
+              {/* Kilau Kedua Sekunder di Seberang (180 deg) agar Refleksi Dinamis & Seimbang */}
+              <path
+                d="M -98.30 68.83 A 120 120 0 0 1 -98.30 -68.83 L -57.34 -40.15 A 70 70 0 0 0 -57.34 40.15 Z"
+                fill="rgba(255, 255, 255, 0.15)"
+              />
+              <path
+                d="M -105.25 55.96 A 119 119 0 0 1 -105.25 -55.96"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.4)"
+                strokeWidth={2}
+                strokeLinecap="round"
+              />
+            </g>
+          </g>
+        </g>
 
         {/* 5. TEKS PERSENTASE DI PERMUKAAN IRISAN */}
         <g className="pointer-events-none">
