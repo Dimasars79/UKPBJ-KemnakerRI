@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { HeroSection } from '@/components/home/HeroSection';
 import { ProcurementStatsOverview } from '@/components/home/ProcurementStatsOverview';
 import { PengadaanSection } from '@/components/home/PengadaanSection';
@@ -397,138 +398,165 @@ export default function Home() {
                 </FadeIn>
               </div>
             ) : (
-              /* ==============================================================
-                 TAMPILAN 2 (DEFAULT CMS): TANPA GAMBAR (Banner Terpadu 1 Kolom)
-                 0% Teks Ganda, Sangat Ringan, Padat & Elegan
-                 ============================================================== */
-              <FadeIn direction="up">
-                <div className="relative rounded-3xl bg-gradient-to-b from-[#0C2344] via-[#091C36] to-[#051122] border border-amber-400/30 p-6 sm:p-8 lg:p-10 shadow-2xl overflow-hidden">
-                  {/* Background ambient radial glow */}
-                  <div 
-                    className="absolute -top-24 -right-24 w-80 h-80 pointer-events-none opacity-30"
-                    style={{ background: 'radial-gradient(circle, rgba(234,179,8,0.2) 0%, transparent 70%)' }}
-                  />
-                  <div className="absolute -right-8 -bottom-8 opacity-[0.03] pointer-events-none text-white select-none">
-                    <ShieldCheck className="w-80 h-80" />
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="group relative rounded-3xl bg-gradient-to-b from-[#0C2344] via-[#091C36] to-[#051122] border border-amber-400/30 hover:border-amber-400/60 p-6 sm:p-8 lg:p-10 shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_25px_60px_rgba(251,191,36,0.12)]"
+              >
+                {/* Background ambient radial glow dengan animasi breathing halus */}
+                <motion.div 
+                  animate={{ 
+                    opacity: [0.25, 0.45, 0.25], 
+                    scale: [1, 1.12, 1] 
+                  }}
+                  transition={{ 
+                    duration: 6, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                  }}
+                  className="absolute -top-24 -right-24 w-96 h-96 pointer-events-none rounded-full"
+                  style={{ background: 'radial-gradient(circle, rgba(234,179,8,0.25) 0%, transparent 70%)' }}
+                />
+                
+                {/* Watermark Shield dengan efek rotasi mikro */}
+                <div className="absolute -right-8 -bottom-8 opacity-[0.035] group-hover:opacity-[0.07] pointer-events-none text-white select-none transition-opacity duration-700">
+                  <ShieldCheck className="w-80 h-80 group-hover:scale-105 group-hover:rotate-2 transition-transform duration-700 ease-out" />
+                </div>
+
+                {/* Top Bar: Agenda Pill + Kategori & Status Badge */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-5 sm:pb-6 border-b border-white/10 relative z-10">
+                  <div className="inline-flex items-center space-x-2 bg-white/10 hover:bg-white/15 px-3.5 py-1.5 rounded-full text-accent-gold font-semibold text-xs sm:text-sm transition-colors duration-300">
+                    <Calendar className="w-4 h-4 text-accent-gold" />
+                    <span>{t('home.agenda_title')}</span>
                   </div>
 
-                  {/* Top Bar: Agenda Pill + Kategori & Status Badge */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 pb-5 sm:pb-6 border-b border-white/10 relative z-10">
-                    <div className="inline-flex items-center space-x-2 bg-white/10 px-3.5 py-1.5 rounded-full text-accent-gold font-semibold text-xs sm:text-sm">
-                      <Calendar className="w-4 h-4 text-accent-gold" />
-                      <span>{t('home.agenda_title')}</span>
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    {latestAgenda?.category && (
+                      <span className="px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-accent-gold text-xs font-bold uppercase tracking-wider shadow-xs">
+                        {latestAgenda.category}
+                      </span>
+                    )}
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>{latestAgenda?.status || trans('Terjadwal', 'Scheduled')}</span>
                     </div>
+                  </div>
+                </div>
 
-                    <div className="flex items-center gap-2.5 sm:gap-3">
-                      {latestAgenda?.category && (
-                        <span className="px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-accent-gold text-xs font-bold uppercase tracking-wider">
-                          {latestAgenda.category}
-                        </span>
-                      )}
-                      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <span>{latestAgenda?.status || trans('Terjadwal', 'Scheduled')}</span>
+                {/* Main Content Layout (Stamp Tanggal + Rincian Kegiatan + Tombol Aksi) */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center py-6 sm:py-8 relative z-10">
+                  {/* Left: Kalender Tanggal Tegas & Menonjol (Interactive Ticket Pass) */}
+                  <motion.div 
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                    className="lg:col-span-3 flex lg:flex-col items-center justify-center gap-4 lg:gap-1.5 bg-gradient-to-b from-[#14325E] to-[#0A1B33] border-2 border-amber-400/70 hover:border-amber-300 rounded-2xl p-4 sm:p-6 text-center shadow-lg shadow-black/40 hover:shadow-amber-500/20 transition-all duration-300 cursor-default select-none relative overflow-hidden group/ticket"
+                  >
+                    {/* Subtle light sweep reflection */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/ticket:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
+                    
+                    <span className="text-xs sm:text-sm font-black text-amber-300 tracking-widest uppercase">
+                      {agendaMonthStr}
+                    </span>
+                    <span className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-none my-1 tracking-tight drop-shadow-[0_2px_10px_rgba(255,255,255,0.15)]">
+                      {agendaDayStr}
+                    </span>
+                    <span className="text-xs font-bold text-slate-300 tracking-wider">
+                      {agendaYearStr}
+                    </span>
+                  </motion.div>
+
+                  {/* Center: Judul, Deskripsi & Info Waktu/Tempat/Penyelenggara */}
+                  <div className="lg:col-span-6 flex flex-col justify-center">
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white mb-2.5 leading-snug group-hover:text-amber-100 transition-colors duration-300">
+                      {latestAgenda ? latestAgenda.title : t('home.agenda_subtitle')}
+                    </h2>
+                    <p className="text-sm sm:text-base text-slate-300 mb-5 leading-relaxed line-clamp-2 sm:line-clamp-3">
+                      {latestAgenda?.description || t('home.agenda_desc')}
+                    </p>
+
+                    {/* Unified Glassmorphism Info Bar dengan Mikro-Hover */}
+                    <div className="inline-flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl sm:rounded-full bg-white/5 hover:bg-white/[0.08] border border-white/10 hover:border-amber-400/30 text-[11px] sm:text-xs text-slate-300 backdrop-blur-md divide-y sm:divide-y-0 sm:divide-x divide-white/10 max-w-full shadow-inner transition-colors duration-300">
+                      <div className="flex items-center gap-1.5 sm:gap-2 pl-3.5 pr-3 py-2 sm:py-1.5 group/info">
+                        <Clock className="w-3.5 h-3.5 text-accent-gold shrink-0 group-hover/info:scale-110 transition-transform duration-200" />
+                        <span className="font-medium text-slate-200 whitespace-nowrap">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:py-1.5 group/info">
+                        <MapPin className="w-3.5 h-3.5 text-accent-gold shrink-0 group-hover/info:scale-110 transition-transform duration-200" />
+                        <span className="font-medium text-slate-200 truncate">{latestAgenda ? latestAgenda.location : 'Auditorium Kemnaker'}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 sm:gap-2 pl-3 pr-4 py-2 sm:py-1.5 group/info">
+                        <Building2 className="w-3.5 h-3.5 text-accent-gold shrink-0 group-hover/info:scale-110 transition-transform duration-200" />
+                        <span className="font-medium text-slate-200 truncate">{latestAgenda ? latestAgenda.organizer : 'UKPBJ Kemnaker'}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Main Content Layout (Stamp Tanggal + Rincian Kegiatan + Tombol Aksi) */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center py-6 sm:py-8 relative z-10">
-                    {/* Left: Kalender Tanggal Tegas & Menonjol */}
-                    <div className="lg:col-span-3 flex lg:flex-col items-center justify-center gap-4 lg:gap-1.5 bg-gradient-to-b from-[#14325E] to-[#0A1B33] border-2 border-amber-400/70 rounded-2xl p-4 sm:p-6 text-center shadow-lg shadow-black/40">
-                      <span className="text-xs sm:text-sm font-black text-amber-300 tracking-widest uppercase">
-                        {agendaMonthStr}
-                      </span>
-                      <span className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-none my-1 tracking-tight">
-                        {agendaDayStr}
-                      </span>
-                      <span className="text-xs font-bold text-slate-300 tracking-wider">
-                        {agendaYearStr}
-                      </span>
-                    </div>
+                  {/* Right: Tombol CTA & Zoom */}
+                  <div className="lg:col-span-3 flex flex-col gap-3 justify-center lg:border-l lg:border-white/10 lg:pl-6">
+                    <Link 
+                      href="/agenda" 
+                      className="group/btn relative overflow-hidden inline-flex justify-center items-center bg-gradient-to-r from-accent-gold via-yellow-400 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-primary-navy font-extrabold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 hover:scale-102 text-xs sm:text-sm text-center"
+                    >
+                      {/* Shimmer sweep reflection on button */}
+                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+                      <span className="relative z-10">{t('home.agenda_btn')}</span>
+                      <ArrowRight className="w-4 h-4 ml-2 relative z-10 group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+                    </Link>
 
-                    {/* Center: Judul, Deskripsi & Info Waktu/Tempat/Penyelenggara */}
-                    <div className="lg:col-span-6 flex flex-col justify-center">
-                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white mb-2.5 leading-snug">
-                        {latestAgenda ? latestAgenda.title : t('home.agenda_subtitle')}
-                      </h2>
-                      <p className="text-sm sm:text-base text-slate-300 mb-5 leading-relaxed line-clamp-2 sm:line-clamp-3">
-                        {latestAgenda?.description || t('home.agenda_desc')}
-                      </p>
-
-                      {/* Unified Glassmorphism Info Bar */}
-                      <div className="inline-flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl sm:rounded-full bg-white/5 border border-white/10 text-[11px] sm:text-xs text-slate-300 backdrop-blur-md divide-y sm:divide-y-0 sm:divide-x divide-white/10 max-w-full shadow-inner">
-                        <div className="flex items-center gap-1.5 sm:gap-2 pl-3.5 pr-3 py-2 sm:py-1.5">
-                          <Clock className="w-3.5 h-3.5 text-accent-gold shrink-0" />
-                          <span className="font-medium text-slate-200 whitespace-nowrap">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:py-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-accent-gold shrink-0" />
-                          <span className="font-medium text-slate-200 truncate">{latestAgenda ? latestAgenda.location : 'Auditorium Kemnaker'}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 sm:gap-2 pl-3 pr-4 py-2 sm:py-1.5">
-                          <Building2 className="w-3.5 h-3.5 text-accent-gold shrink-0" />
-                          <span className="font-medium text-slate-200 truncate">{latestAgenda ? latestAgenda.organizer : 'UKPBJ Kemnaker'}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: Tombol CTA & Zoom */}
-                    <div className="lg:col-span-3 flex flex-col gap-3 justify-center lg:border-l lg:border-white/10 lg:pl-6">
-                      <Link 
-                        href="/agenda" 
-                        className="inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg hover:scale-102 text-xs sm:text-sm text-center"
+                    {latestAgenda?.zoomUrl && (
+                      <a 
+                        href={latestAgenda.zoomUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex justify-center items-center bg-blue-600 hover:bg-blue-500 hover:scale-102 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 text-xs sm:text-sm text-center shadow-md shadow-blue-600/30"
                       >
-                        <span>{t('home.agenda_btn')}</span>
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Link>
-
-                      {latestAgenda?.zoomUrl && (
-                        <a 
-                          href={latestAgenda.zoomUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all text-xs sm:text-sm text-center"
-                        >
-                          <span>Ikuti via Zoom</span>
-                          <ExternalLink className="w-4 h-4 ml-2" />
-                        </a>
-                      )}
-                    </div>
+                        <span>Ikuti via Zoom</span>
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </a>
+                    )}
                   </div>
+                </div>
 
-                  {/* Bottom: Jadwal Kegiatan Berikutnya (Grid Kartu Minimalis) */}
-                  {nextAgendas && nextAgendas.length > 0 && (
-                    <div className="pt-5 sm:pt-6 border-t border-white/10 relative z-10">
-                      <p className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
-                        Jadwal Kegiatan Berikutnya:
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {nextAgendas.map((nextAg) => (
+                {/* Bottom: Jadwal Kegiatan Berikutnya (Grid Kartu dengan Hover Lift) */}
+                {nextAgendas && nextAgendas.length > 0 && (
+                  <div className="pt-5 sm:pt-6 border-t border-white/10 relative z-10">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
+                      Jadwal Kegiatan Berikutnya:
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {nextAgendas.map((nextAg) => (
+                        <motion.div
+                          key={nextAg.id}
+                          whileHover={{ y: -2, x: 2 }}
+                          transition={{ duration: 0.2 }}
+                        >
                           <Link
-                            key={nextAg.id}
                             href="/agenda"
-                            className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/40 transition-all text-xs group"
+                            className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/50 hover:shadow-md hover:shadow-black/20 transition-all duration-300 text-xs group/next h-full"
                           >
                             <div className="min-w-0 pr-2">
-                              <p className="font-semibold text-slate-200 group-hover:text-accent-gold transition-colors truncate">
+                              <p className="font-semibold text-slate-200 group-hover/next:text-accent-gold transition-colors truncate">
                                 {nextAg.title}
                               </p>
-                              <p className="text-[10px] text-slate-400 mt-0.5 truncate">
-                                {nextAg.location || 'Kemnaker RI'}
+                              <p className="text-[10px] text-slate-400 mt-0.5 truncate flex items-center gap-1">
+                                <MapPin className="w-2.5 h-2.5 text-slate-400" />
+                                <span>{nextAg.location || 'Kemnaker RI'}</span>
                               </p>
                             </div>
-                            <span className="text-[11px] text-accent-gold shrink-0 font-bold ml-2">
-                              {nextAg.date} &rarr;
+                            <span className="text-[11px] text-accent-gold shrink-0 font-bold ml-2 flex items-center gap-1">
+                              <span>{nextAg.date}</span>
+                              <ArrowRight className="w-3.5 h-3.5 group-hover/next:translate-x-1 transition-transform duration-200" />
                             </span>
                           </Link>
-                        ))}
-                      </div>
+                        </motion.div>
+                      ))}
                     </div>
-                  )}
-                </div>
-              </FadeIn>
+                  </div>
+                )}
+              </motion.div>
             )}
           </div>
         </section>
