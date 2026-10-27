@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   Users, ArrowRight, ShieldCheck, Quote, ShoppingCart, 
   BookOpen, Scale, TrendingUp, Calendar, Globe, FileText,
-  Clock, MapPin, Building2
+  Clock, MapPin, Building2, ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -303,80 +303,83 @@ export default function Home() {
         <section className="py-14 sm:py-20 bg-primary-navy text-white relative overflow-hidden" id="agenda">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              <FadeIn direction="right">
-                <div className="inline-flex items-center space-x-2 bg-white/10 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-accent-gold font-medium text-xs sm:text-sm mb-4 sm:mb-6">
-                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <span>{t('home.agenda_title')}</span>
-                </div>
-                <h2 className="text-xl sm:text-2xl md:text-4xl font-bold mb-3 sm:mb-6 leading-tight">
-                  {latestAgenda ? latestAgenda.title : t('home.agenda_subtitle')}
-                </h2>
-                <p className="text-sm sm:text-lg text-slate-300 mb-6 sm:mb-8 leading-relaxed">
-                  {t('home.agenda_desc')}
-                </p>
+            {latestAgenda?.imageUrl ? (
+              /* ==============================================================
+                 TAMPILAN 1: JIKA ADA POSTER GAMBAR DARI CMS (2 Kolom Kiri & Kanan)
+                 ============================================================== */
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <FadeIn direction="right">
+                  <div className="inline-flex items-center space-x-2 bg-white/10 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-accent-gold font-medium text-xs sm:text-sm mb-4 sm:mb-6">
+                    <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span>{t('home.agenda_title')}</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl md:text-4xl font-bold mb-3 sm:mb-6 leading-tight">
+                    {latestAgenda ? latestAgenda.title : t('home.agenda_subtitle')}
+                  </h2>
+                  <p className="text-sm sm:text-lg text-slate-300 mb-6 sm:mb-8 leading-relaxed">
+                    {latestAgenda?.description || t('home.agenda_desc')}
+                  </p>
 
-                {/* 2 Quick Info Cards side by side or responsive grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5 mb-6 sm:mb-8">
-                  <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 text-accent-gold flex items-center justify-center shrink-0">
-                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-accent-gold" />
+                  {/* 2 Quick Info Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5 mb-6 sm:mb-8">
+                    <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 text-accent-gold flex items-center justify-center shrink-0">
+                        <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-accent-gold" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-xs sm:text-sm text-white truncate">{latestAgenda ? latestAgenda.date : 'Sabtu, 26 Oktober 2026'}</h4>
+                        <p className="text-[11px] text-slate-300 truncate">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</p>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <h4 className="font-bold text-xs sm:text-sm text-white truncate">{latestAgenda ? latestAgenda.date : 'Sabtu, 26 Oktober 2026'}</h4>
-                      <p className="text-[11px] text-slate-300 truncate">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</p>
+
+                    <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 text-accent-gold flex items-center justify-center shrink-0">
+                        <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-accent-gold" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-xs sm:text-sm text-white truncate">{latestAgenda ? latestAgenda.location : 'Auditorium Utama'}</h4>
+                        <p className="text-[11px] text-slate-300 truncate">{latestAgenda ? latestAgenda.organizer : 'Gedung LKPP / Kemnaker'}</p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/10">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 text-accent-gold flex items-center justify-center shrink-0">
-                      <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-accent-gold" />
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className="font-bold text-xs sm:text-sm text-white truncate">{latestAgenda ? latestAgenda.location : 'Auditorium Utama'}</h4>
-                      <p className="text-[11px] text-slate-300 truncate">{latestAgenda ? latestAgenda.organizer : 'Gedung LKPP / Kemnaker'}</p>
-                    </div>
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                    <Link href="/agenda" className="w-full sm:w-auto inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-6 sm:px-8 rounded-xl transition-all shadow-lg hover:scale-102 text-xs sm:text-sm">
+                      <span>{t('home.agenda_btn')}</span>
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
                   </div>
-                </div>
 
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                  <Link href="/agenda" className="w-full sm:w-auto inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3 px-6 sm:px-8 rounded-xl transition-all shadow-lg hover:scale-102 text-xs sm:text-sm">
-                    <span>{t('home.agenda_btn')}</span>
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </div>
-
-                {nextAgendas && nextAgendas.length > 0 && (
-                  <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/10">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-400 font-bold mb-2.5 sm:mb-3 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
-                      Jadwal Kegiatan Berikutnya:
-                    </p>
-                    <div className="flex flex-col gap-2">
-                      {nextAgendas.map((nextAg) => (
-                        <Link
-                          key={nextAg.id}
-                          href="/agenda"
-                          className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all text-xs group"
-                        >
-                          <span className="font-semibold text-slate-200 group-hover:text-accent-gold transition-colors truncate max-w-[200px] sm:max-w-xs">
-                            {nextAg.title}
-                          </span>
-                          <span className="text-[11px] text-accent-gold shrink-0 font-bold ml-2">
-                            {nextAg.date} &rarr;
-                          </span>
-                        </Link>
-                      ))}
+                  {nextAgendas && nextAgendas.length > 0 && (
+                    <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/10">
+                      <p className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-400 font-bold mb-2.5 sm:mb-3 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
+                        Jadwal Kegiatan Berikutnya:
+                      </p>
+                      <div className="flex flex-col gap-2">
+                        {nextAgendas.map((nextAg) => (
+                          <Link
+                            key={nextAg.id}
+                            href="/agenda"
+                            className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all text-xs group"
+                          >
+                            <span className="font-semibold text-slate-200 group-hover:text-accent-gold transition-colors truncate max-w-[200px] sm:max-w-xs">
+                              {nextAg.title}
+                            </span>
+                            <span className="text-[11px] text-accent-gold shrink-0 font-bold ml-2">
+                              {nextAg.date} &rarr;
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </FadeIn>
+                  )}
+                </FadeIn>
 
-              <FadeIn direction="left" delay={0.2} className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 group max-w-lg mx-auto w-full bg-slate-900 flex items-center justify-center p-3 sm:p-4">
-                {/* Background ambient lighting */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-accent-gold/15 via-primary-blue/20 to-cyan-500/10 opacity-70 pointer-events-none" />
+                <FadeIn direction="left" delay={0.2} className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 group max-w-lg mx-auto w-full bg-slate-900 flex items-center justify-center p-3 sm:p-4">
+                  {/* Background ambient lighting */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-accent-gold/15 via-primary-blue/20 to-cyan-500/10 opacity-70 pointer-events-none" />
 
-                {latestAgenda?.imageUrl ? (
                   <div className="relative w-full flex items-center justify-center overflow-hidden rounded-2xl bg-slate-950/60 border border-white/10">
                     <Image 
                       src={latestAgenda.imageUrl} 
@@ -391,124 +394,142 @@ export default function Home() {
                       <p className="text-white text-xs sm:text-sm font-medium">{t('home.agenda_hint')}</p>
                     </div>
                   </div>
-                ) : (
-                  /* Option 1: Digital Event Pass / Tiket Agenda Resmi (Super Ringan & 0 KB Image) */
-                  <div className="relative w-full rounded-2xl bg-gradient-to-b from-[#0C2344] via-[#08182F] to-[#040C18] border border-amber-400/30 p-5 sm:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden">
-                    {/* Watermark Crest Background */}
-                    <div className="absolute -right-10 -bottom-10 opacity-[0.04] pointer-events-none text-white select-none">
-                      <ShieldCheck className="w-64 h-64" />
-                    </div>
-                    {/* Radial top-right glow */}
-                    <div 
-                      className="absolute -top-12 -right-12 w-48 h-48 pointer-events-none opacity-40"
-                      style={{ background: 'radial-gradient(circle, rgba(234,179,8,0.2) 0%, transparent 70%)' }}
-                    />
+                </FadeIn>
+              </div>
+            ) : (
+              /* ==============================================================
+                 TAMPILAN 2 (DEFAULT CMS): TANPA GAMBAR (Banner Terpadu 1 Kolom)
+                 0% Teks Ganda, Sangat Ringan, Padat & Elegan
+                 ============================================================== */
+              <FadeIn direction="up">
+                <div className="relative rounded-3xl bg-gradient-to-b from-[#0C2344] via-[#091C36] to-[#051122] border border-amber-400/30 p-6 sm:p-8 lg:p-10 shadow-2xl overflow-hidden">
+                  {/* Background ambient radial glow */}
+                  <div 
+                    className="absolute -top-24 -right-24 w-80 h-80 pointer-events-none opacity-30"
+                    style={{ background: 'radial-gradient(circle, rgba(234,179,8,0.2) 0%, transparent 70%)' }}
+                  />
+                  <div className="absolute -right-8 -bottom-8 opacity-[0.03] pointer-events-none text-white select-none">
+                    <ShieldCheck className="w-80 h-80" />
+                  </div>
 
-                    {/* 1. Header Pass */}
-                    <div>
-                      <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400/40 flex items-center justify-center shrink-0">
-                            <ShieldCheck className="w-4 h-4 text-accent-gold" />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-[10px] sm:text-[11px] font-black tracking-widest text-slate-200 uppercase leading-none truncate">
-                              UKPBJ KEMNAKER RI
-                            </p>
-                            <p className="text-[9px] text-amber-300/80 font-bold tracking-wider uppercase mt-0.5">
-                              {trans('Digital Agenda Pass', 'Official Event Pass')}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-[10px] font-bold shrink-0">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>{latestAgenda?.status || trans('Terjadwal', 'Scheduled')}</span>
-                        </div>
-                      </div>
-
-                      {/* 2. Pass Body: Date Badge + Title */}
-                      <div className="my-5 flex items-start gap-3.5 sm:gap-4">
-                        {/* Embossed Calendar Date Pass Stamp */}
-                        <div className="flex flex-col items-center justify-center bg-gradient-to-b from-[#14325E] to-[#0A1B33] border-2 border-amber-400/70 rounded-2xl p-2.5 sm:p-3 min-w-[68px] sm:min-w-[76px] text-center shadow-lg shadow-black/40 shrink-0">
-                          <span className="text-[10px] sm:text-[11px] font-black text-amber-300 tracking-wider uppercase">
-                            {agendaMonthStr}
-                          </span>
-                          <span className="text-2xl sm:text-3xl font-black text-white leading-tight my-0.5">
-                            {agendaDayStr}
-                          </span>
-                          <span className="text-[9px] font-bold text-slate-300">
-                            {agendaYearStr}
-                          </span>
-                        </div>
-
-                        {/* Title and Category */}
-                        <div className="flex-1 min-w-0">
-                          <span className="inline-block px-2.5 py-0.5 rounded-md bg-amber-400/15 border border-amber-400/30 text-accent-gold text-[10px] font-extrabold uppercase tracking-wider mb-1.5">
-                            {latestAgenda?.category || 'Bimtek & Pengadaan'}
-                          </span>
-                          <h3 className="text-sm sm:text-base font-bold text-white leading-snug line-clamp-3 group-hover:text-amber-200 transition-colors">
-                            {latestAgenda?.title || trans('Sosialisasi Tata Kelola Pengadaan Kemnaker RI', 'Procurement Governance Socialization')}
-                          </h3>
-                        </div>
-                      </div>
-
-                      {/* 3. Meta Details Grid (Time, Location, Organizer) */}
-                      <div className="space-y-1.5 text-xs text-slate-300">
-                        <div className="flex items-center gap-2 p-2 rounded-xl bg-white/5 border border-white/5">
-                          <Clock className="w-3.5 h-3.5 text-accent-gold shrink-0" />
-                          <span className="truncate text-[11px] sm:text-xs">{latestAgenda?.time || '08:30 - 16:30 WIB'}</span>
-                        </div>
-                        <div className="flex items-center gap-2 p-2 rounded-xl bg-white/5 border border-white/5">
-                          <MapPin className="w-3.5 h-3.5 text-accent-gold shrink-0" />
-                          <span className="truncate text-[11px] sm:text-xs">{latestAgenda?.location || trans('Auditorium Gedung Kemnaker', 'Kemnaker Main Hall')}</span>
-                        </div>
-                        <div className="flex items-center gap-2 p-2 rounded-xl bg-white/5 border border-white/5">
-                          <Building2 className="w-3.5 h-3.5 text-accent-gold shrink-0" />
-                          <span className="truncate text-[11px] sm:text-xs">{latestAgenda?.organizer || trans('Biro Perencanaan & PBJ', 'Planning Bureau & UKPBJ')}</span>
-                        </div>
-                      </div>
+                  {/* Top Bar: Agenda Pill + Kategori & Status Badge */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 pb-5 sm:pb-6 border-b border-white/10 relative z-10">
+                    <div className="inline-flex items-center space-x-2 bg-white/10 px-3.5 py-1.5 rounded-full text-accent-gold font-semibold text-xs sm:text-sm">
+                      <Calendar className="w-4 h-4 text-accent-gold" />
+                      <span>{t('home.agenda_title')}</span>
                     </div>
 
-                    {/* 4. Ticket Perforation Divider */}
-                    <div className="relative my-4">
-                      {/* Notch cut-outs */}
-                      <div className="absolute -left-7 sm:-left-8 -top-2.5 w-5 h-5 rounded-full bg-slate-900 border-r border-amber-500/30" />
-                      <div className="absolute -right-7 sm:-right-8 -top-2.5 w-5 h-5 rounded-full bg-slate-900 border-l border-amber-500/30" />
-                      <div className="border-t border-dashed border-white/20 w-full" />
-                    </div>
-
-                    {/* 5. Pass Footer: Barcode & Quick Action */}
-                    <div className="flex items-center justify-between gap-3 pt-0.5">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-0.5 sm:gap-1 opacity-70">
-                          <span className="w-0.5 sm:w-1 h-4 bg-white rounded-2xs" />
-                          <span className="w-1 sm:w-1.5 h-4 bg-white rounded-2xs" />
-                          <span className="w-0.5 h-4 bg-white rounded-2xs" />
-                          <span className="w-1.5 sm:w-2 h-4 bg-white rounded-2xs" />
-                          <span className="w-0.5 h-4 bg-white rounded-2xs" />
-                          <span className="w-1 h-4 bg-white rounded-2xs" />
-                          <span className="w-0.5 sm:w-1 h-4 bg-white rounded-2xs" />
-                          <span className="w-1.5 h-4 bg-white rounded-2xs" />
-                          <span className="w-0.5 h-4 bg-white rounded-2xs" />
-                        </div>
-                        <span className="font-mono text-[9px] text-slate-400 tracking-wider">
-                          PASS #{latestAgenda?.id ? String(latestAgenda.id).slice(0, 8).toUpperCase() : 'UKPBJ-2026'}
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      {latestAgenda?.category && (
+                        <span className="px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-accent-gold text-xs font-bold uppercase tracking-wider">
+                          {latestAgenda.category}
                         </span>
+                      )}
+                      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>{latestAgenda?.status || trans('Terjadwal', 'Scheduled')}</span>
                       </div>
-
-                      <Link
-                        href="/agenda"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-accent-gold/20 hover:bg-accent-gold border border-accent-gold/40 text-accent-gold hover:text-primary-navy font-bold text-xs transition-all duration-200 group/btn"
-                      >
-                        <span>{trans('Detail Agenda', 'Agenda Details')}</span>
-                        <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
-                      </Link>
                     </div>
                   </div>
-                )}
+
+                  {/* Main Content Layout (Stamp Tanggal + Rincian Kegiatan + Tombol Aksi) */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center py-6 sm:py-8 relative z-10">
+                    {/* Left: Kalender Tanggal Tegas & Menonjol */}
+                    <div className="lg:col-span-3 flex lg:flex-col items-center justify-center gap-4 lg:gap-1.5 bg-gradient-to-b from-[#14325E] to-[#0A1B33] border-2 border-amber-400/70 rounded-2xl p-4 sm:p-6 text-center shadow-lg shadow-black/40">
+                      <span className="text-xs sm:text-sm font-black text-amber-300 tracking-widest uppercase">
+                        {agendaMonthStr}
+                      </span>
+                      <span className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-none my-1 tracking-tight">
+                        {agendaDayStr}
+                      </span>
+                      <span className="text-xs font-bold text-slate-300 tracking-wider">
+                        {agendaYearStr}
+                      </span>
+                    </div>
+
+                    {/* Center: Judul, Deskripsi & Info Waktu/Tempat/Penyelenggara */}
+                    <div className="lg:col-span-6 flex flex-col justify-center">
+                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white mb-2.5 leading-snug">
+                        {latestAgenda ? latestAgenda.title : t('home.agenda_subtitle')}
+                      </h2>
+                      <p className="text-sm sm:text-base text-slate-300 mb-5 leading-relaxed line-clamp-2 sm:line-clamp-3">
+                        {latestAgenda?.description || t('home.agenda_desc')}
+                      </p>
+
+                      {/* 3 Inline Info Badges */}
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-xs sm:text-sm text-slate-200">
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
+                          <Clock className="w-4 h-4 text-accent-gold shrink-0" />
+                          <span>{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
+                          <MapPin className="w-4 h-4 text-accent-gold shrink-0" />
+                          <span>{latestAgenda ? latestAgenda.location : 'Auditorium Kemnaker'}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
+                          <Building2 className="w-4 h-4 text-accent-gold shrink-0" />
+                          <span>{latestAgenda ? latestAgenda.organizer : 'UKPBJ Kemnaker'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right: Tombol CTA & Zoom */}
+                    <div className="lg:col-span-3 flex flex-col gap-3 justify-center lg:border-l lg:border-white/10 lg:pl-6">
+                      <Link 
+                        href="/agenda" 
+                        className="inline-flex justify-center items-center bg-accent-gold hover:bg-yellow-500 text-primary-navy font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg hover:scale-102 text-xs sm:text-sm text-center"
+                      >
+                        <span>{t('home.agenda_btn')}</span>
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Link>
+
+                      {latestAgenda?.zoomUrl && (
+                        <a 
+                          href={latestAgenda.zoomUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all text-xs sm:text-sm text-center"
+                        >
+                          <span>Ikuti via Zoom</span>
+                          <ExternalLink className="w-4 h-4 ml-2" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Bottom: Jadwal Kegiatan Berikutnya (Grid Kartu Minimalis) */}
+                  {nextAgendas && nextAgendas.length > 0 && (
+                    <div className="pt-5 sm:pt-6 border-t border-white/10 relative z-10">
+                      <p className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
+                        Jadwal Kegiatan Berikutnya:
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {nextAgendas.map((nextAg) => (
+                          <Link
+                            key={nextAg.id}
+                            href="/agenda"
+                            className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/40 transition-all text-xs group"
+                          >
+                            <div className="min-w-0 pr-2">
+                              <p className="font-semibold text-slate-200 group-hover:text-accent-gold transition-colors truncate">
+                                {nextAg.title}
+                              </p>
+                              <p className="text-[10px] text-slate-400 mt-0.5 truncate">
+                                {nextAg.location || 'Kemnaker RI'}
+                              </p>
+                            </div>
+                            <span className="text-[11px] text-accent-gold shrink-0 font-bold ml-2">
+                              {nextAg.date} &rarr;
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </FadeIn>
-            </div>
+            )}
           </div>
         </section>
       </main>
