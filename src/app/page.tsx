@@ -456,19 +456,19 @@ export default function Home() {
                         {latestAgenda?.description || t('home.agenda_desc')}
                       </p>
 
-                      {/* 3 Inline Info Badges */}
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-xs sm:text-sm text-slate-200">
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
-                          <Clock className="w-4 h-4 text-accent-gold shrink-0" />
-                          <span>{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</span>
+                      {/* Unified Glassmorphism Info Bar */}
+                      <div className="inline-flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl sm:rounded-full bg-white/5 border border-white/10 text-[11px] sm:text-xs text-slate-300 backdrop-blur-md divide-y sm:divide-y-0 sm:divide-x divide-white/10 max-w-full shadow-inner">
+                        <div className="flex items-center gap-1.5 sm:gap-2 pl-3.5 pr-3 py-2 sm:py-1.5">
+                          <Clock className="w-3.5 h-3.5 text-accent-gold shrink-0" />
+                          <span className="font-medium text-slate-200 whitespace-nowrap">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</span>
                         </div>
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
-                          <MapPin className="w-4 h-4 text-accent-gold shrink-0" />
-                          <span>{latestAgenda ? latestAgenda.location : 'Auditorium Kemnaker'}</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:py-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-accent-gold shrink-0" />
+                          <span className="font-medium text-slate-200 truncate">{latestAgenda ? latestAgenda.location : 'Auditorium Kemnaker'}</span>
                         </div>
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
-                          <Building2 className="w-4 h-4 text-accent-gold shrink-0" />
-                          <span>{latestAgenda ? latestAgenda.organizer : 'UKPBJ Kemnaker'}</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2 pl-3 pr-4 py-2 sm:py-1.5">
+                          <Building2 className="w-3.5 h-3.5 text-accent-gold shrink-0" />
+                          <span className="font-medium text-slate-200 truncate">{latestAgenda ? latestAgenda.organizer : 'UKPBJ Kemnaker'}</span>
                         </div>
                       </div>
                     </div>
