@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { ArrowRight, BarChart3 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ProcurementVisualComposition } from './ProcurementVisualComposition';
@@ -32,14 +33,23 @@ export function HeroSection() {
           <div className="lg:col-span-7 xl:col-span-7 flex flex-col justify-center text-left">
             
             {/* Header Tag */}
-            <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold mb-4 sm:mb-5 self-start shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold mb-4 sm:mb-5 self-start shadow-sm"
+            >
               <span className="text-[11px] font-bold text-amber-300 tracking-wider uppercase">
                 {trans('UKPBJ Kemnaker RI', 'UKPBJ Kemnaker RI')}
               </span>
-            </div>
+            </motion.div>
 
             {/* Main Bold Headline - Precision 2-Line Alignment */}
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
               <h1 className="font-extrabold text-white tracking-tight mb-5 sm:mb-6">
                 <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] xl:text-[2.95rem] leading-[1.25] pb-1 drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)] sm:whitespace-nowrap">
                   {trans('Pengadaan Barang/Jasa', 'Goods & Services Procurement')}
@@ -55,10 +65,15 @@ export function HeroSection() {
                   'Realizing transparent, accountable, and nationally integrated procurement governance.'
                 )}
               </p>
-            </div>
+            </motion.div>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3.5 sm:gap-4 mb-4 sm:mb-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="flex flex-wrap items-center gap-3.5 sm:gap-4 mb-4 sm:mb-6"
+            >
               <Link
                 href="/layanan"
                 className="group inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full font-bold text-sm sm:text-base text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 hover:scale-102 transition-all duration-300"
@@ -74,7 +89,7 @@ export function HeroSection() {
                 <BarChart3 className="w-4 h-4 text-cyan-300" />
                 <span>{trans('Monitoring & Realisasi', 'Monitoring & Realization')}</span>
               </Link>
-            </div>
+            </motion.div>
           </div>
 
           {/* ================= RIGHT COLUMN: INTERACTIVE 3D VISUAL COMPOSITION (KOP SURAT, GEDUNG KONSTRUKSI, BOX) ================= */}
