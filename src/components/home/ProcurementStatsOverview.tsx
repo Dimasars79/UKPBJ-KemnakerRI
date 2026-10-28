@@ -273,7 +273,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
             </div>
 
             {/* SISI TENGAH: HERO 3D DONUT CHART (Besar & Dominan di Tengah) */}
-            <div className="order-1 lg:order-2 col-span-1 md:col-span-2 lg:col-span-6 flex flex-col items-center justify-center py-2 lg:py-0 w-full overflow-visible">
+            <div className="order-1 lg:order-2 col-span-1 md:col-span-2 lg:col-span-6 flex flex-col items-center justify-center py-1 sm:py-2 lg:py-0 w-full overflow-visible">
               <ProcurementDonutChart 
                 data={donutData}
                 totalPaguFormatted={totalAllPaguFormatted}
@@ -284,7 +284,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
               />
 
               {/* KAPSUL PENJELASAN GRAFIK */}
-              <div className="mt-3 px-4 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex items-center gap-2 text-xs sm:text-[13px] font-bold text-white tracking-wide shadow-lg transition-all">
+              <div className="mt-2 sm:mt-2.5 lg:mt-3 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex items-center gap-2 text-xs sm:text-[13px] font-bold text-white tracking-wide shadow-lg transition-all">
                 <PieChart className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                 <span>{trans('Proporsi Pagu per Metode Pemilihan', 'Budget Share by Selection Method')}</span>
               </div>

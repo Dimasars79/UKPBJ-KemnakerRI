@@ -34,7 +34,7 @@ export function ProcurementDonutChart({
 
   // Dimensi Isometrik 3D
   const vbWidth = 340;
-  const vbHeight = 310;
+  const vbHeight = 265;
   const cx = 170;
   const cy = 138;
   const Rx = 120; // Radius luar horizontal
@@ -162,7 +162,7 @@ export function ProcurementDonutChart({
   }, [data, cx, cy, Rx, Ry, rx, ry, depth]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center select-none py-2 w-full">
+    <div className="relative flex flex-col items-center justify-center select-none py-1 sm:py-1.5 lg:py-2 w-full">
       {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang diagram - Single-Pass GPU Native) */}
       <div className="absolute w-64 h-64 sm:w-80 sm:h-80 lg:w-[380px] lg:h-[380px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,transparent_70%)] pointer-events-none" />
 

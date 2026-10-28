@@ -242,42 +242,48 @@ export default function Home() {
                   </div>
                 </FadeIn>
                 
-                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 md:gap-6">
+                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 md:gap-6">
                   <StaggerItem>
-                    <div className="flex flex-col p-4 sm:p-5 md:p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center mb-3 sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
-                        <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                    <div className="flex flex-col p-3 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
+                      <div className="flex items-center gap-2.5 mb-2 sm:mb-0 sm:block">
+                        <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
+                          <ShoppingCart className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                        </div>
+                        <h3 className="text-sm sm:text-lg md:text-xl font-bold text-primary-navy group-hover:text-accent-gold transition-colors duration-300 sm:mb-2 md:mb-3">
+                          {trans('Eksekusi Pengadaan', 'Procurement Execution')}
+                        </h3>
                       </div>
-                      <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-2 md:mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">
-                        {trans('Eksekusi Pengadaan', 'Procurement Execution')}
-                      </h3>
-                      <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
+                      <p className="text-slate-500 text-[11px] sm:text-sm leading-relaxed">
                         {trans('Menyelenggarakan proses tender dan pemilihan penyedia yang tangkas dan adil.', 'Conducting agile and fair tender and vendor selection processes.')}
                       </p>
                     </div>
                   </StaggerItem>
                   <StaggerItem>
-                    <div className="flex flex-col p-4 sm:p-5 md:p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center mb-3 sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
-                        <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                    <div className="flex flex-col p-3 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
+                      <div className="flex items-center gap-2.5 mb-2 sm:mb-0 sm:block">
+                        <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
+                          <BookOpen className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                        </div>
+                        <h3 className="text-sm sm:text-lg md:text-xl font-bold text-primary-navy group-hover:text-accent-gold transition-colors duration-300 sm:mb-2 md:mb-3">
+                          {trans('Pembinaan SDM', 'Human Resource Development')}
+                        </h3>
                       </div>
-                      <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-2 md:mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">
-                        {trans('Pembinaan SDM', 'Human Resource Development')}
-                      </h3>
-                      <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
+                      <p className="text-slate-500 text-[11px] sm:text-sm leading-relaxed">
                         {trans('Meningkatkan kapasitas dan keahlian Pejabat Pembuat Komitmen (PPK) secara berkelanjutan.', 'Continuously enhancing the capacity and skills of Commitment Making Officers (PPK).')}
                       </p>
                     </div>
                   </StaggerItem>
                   <StaggerItem>
-                    <div className="flex flex-col p-4 sm:p-5 md:p-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center mb-3 sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
-                        <Scale className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                    <div className="flex flex-col p-3 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:border-accent-gold/30 transition-all duration-300 group transform hover:-translate-y-1.5 h-full">
+                      <div className="flex items-center gap-2.5 mb-2 sm:mb-0 sm:block">
+                        <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-blue-50/70 group-hover:bg-primary-blue flex items-center justify-center sm:mb-4 md:mb-5 transition-colors duration-300 shrink-0">
+                          <Scale className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 text-primary-blue group-hover:text-white transition-colors duration-300" />
+                        </div>
+                        <h3 className="text-sm sm:text-lg md:text-xl font-bold text-primary-navy group-hover:text-accent-gold transition-colors duration-300 sm:mb-2 md:mb-3">
+                          {trans('Advokasi & Konsultasi', 'Advocacy & Consultation')}
+                        </h3>
                       </div>
-                      <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-2 md:mb-3 text-primary-navy group-hover:text-accent-gold transition-colors duration-300">
-                        {trans('Advokasi & Konsultasi', 'Advocacy & Consultation')}
-                      </h3>
-                      <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
+                      <p className="text-slate-500 text-[11px] sm:text-sm leading-relaxed">
                         {trans('Memberikan pendampingan hukum dan solusi penyelesaian sengketa pengadaan.', 'Providing legal assistance and procurement dispute resolution solutions.')}
                       </p>
                     </div>
