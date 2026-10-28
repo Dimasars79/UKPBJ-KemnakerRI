@@ -262,7 +262,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
             {/* SISI KIRI: Tender & Seleksi (Desktop: Kolom 1-3 | Mobile/Tablet: 2 Kartu Berdampingan) */}
             <div className="order-2 lg:order-1 col-span-1 md:col-span-1 lg:col-span-3 flex flex-col gap-2.5 sm:gap-3.5 w-full">
               {/* Badge Proporsi Valuasi Pengadaan tepat di atas widget Tender */}
-              <div className="h-7 sm:h-8 inline-flex items-center gap-1.5 px-3 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider self-start whitespace-nowrap shadow-sm mb-0.5">
+              <div className="h-7 sm:h-8 inline-flex items-center gap-1.5 px-3 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider self-start whitespace-nowrap shadow-sm -mt-2 sm:-mt-3.5 mb-2.5 sm:mb-3.5">
                 <BarChart3 className="w-3.5 h-3.5 text-blue-300 shrink-0" />
                 <span>{trans('Proporsi Valuasi Pengadaan', 'Procurement Valuation')}</span>
               </div>
@@ -293,7 +293,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
             {/* SISI KANAN: E-Purchasing & Pengadaan Langsung (Desktop: Kolom 10-12 | Mobile/Tablet: 2 Kartu Berdampingan) */}
             <div className="order-3 lg:order-3 col-span-1 md:col-span-1 lg:col-span-3 flex flex-col gap-2.5 sm:gap-3.5 w-full">
               {/* Badges Ringkasan & Monitoring tepat di atas widget E-Purchasing */}
-              <div className="h-7 sm:h-8 flex items-center gap-1.5 self-start lg:self-end whitespace-nowrap shadow-sm mb-0.5">
+              <div className="h-7 sm:h-8 flex items-center gap-1.5 self-start lg:self-end whitespace-nowrap shadow-sm -mt-2 sm:-mt-3.5 mb-2.5 sm:mb-3.5">
                 <div className="h-full px-2.5 sm:px-3 rounded-full bg-white/5 border border-white/10 flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold">
                   <Layers className="w-3 h-3 text-blue-400 shrink-0" />
                   <span className="text-white">{packagesList.length} Paket</span>
