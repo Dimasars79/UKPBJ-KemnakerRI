@@ -176,8 +176,8 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
   const ePurchasingItem = useMemo(() => methodsData.find((m) => m.name === 'E-Purchasing'), [methodsData]);
   const pengadaanLangsungItem = useMemo(() => methodsData.find((m) => m.name === 'Pengadaan Langsung'), [methodsData]);
 
-  // Helper render kartu metode (responsif 2 baris kanan-kiri di mobile, simetris kiri-kanan di desktop)
-  const renderMethodCard = (item: typeof methodsData[0] | undefined, gridClasses: string) => {
+  // Helper render kartu metode
+  const renderMethodCard = (item: typeof methodsData[0] | undefined, extraClasses: string = "") => {
     if (!item) return null;
     const isHovered = hoveredMethod === item.name;
 
@@ -188,11 +188,11 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
         onMouseEnter={() => setHoveredMethod(item.name)}
         onMouseLeave={() => setHoveredMethod(null)}
         title={`Klik untuk melihat daftar paket ${item.name}`}
-        className={`${gridClasses} p-3 sm:p-4 lg:p-5 rounded-xl sm:rounded-2xl border transition-all cursor-pointer group/card flex flex-col justify-between ${
+        className={`w-full p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all cursor-pointer group/card flex flex-col justify-between ${
           isHovered 
             ? 'bg-white/10 border-white/30 shadow-xl scale-[1.02]' 
-            : 'bg-[#071629]/75 hover:bg-white/5 border-white/10'
-        }`}
+            : 'bg-[#071629]/80 hover:bg-white/5 border-white/10'
+        } ${extraClasses}`}
       >
         {/* BARIS 1: Icon di Kiri, Badge Persentase di Kanan */}
         <div className="flex items-center justify-between mb-2 sm:mb-2.5">
@@ -205,8 +205,8 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
         </div>
 
         {/* BARIS 2: Nama Metode Lengkap Tanpa Terpotong (Lebar Penuh) */}
-        <div className="mb-2 sm:mb-2.5 min-h-[38px] sm:min-h-[42px] flex flex-col justify-center">
-          <h4 className="text-xs sm:text-sm lg:text-[15px] font-bold text-white tracking-tight group-hover/card:text-accent-gold transition-colors leading-snug">
+        <div className="mb-2 sm:mb-2.5 min-h-[36px] sm:min-h-[40px] flex flex-col justify-center">
+          <h4 className="text-xs sm:text-sm lg:text-[14px] font-bold text-white tracking-tight group-hover/card:text-accent-gold transition-colors leading-snug">
             {item.name}
           </h4>
           <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">
@@ -215,7 +215,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
         </div>
 
         {/* BARIS 3: Nilai Pagu */}
-        <div className="flex items-baseline justify-between gap-1 mb-2 sm:mb-2.5 pt-1 border-t border-white/5">
+        <div className="flex items-baseline justify-between gap-1 mb-2 sm:mb-2.5 pt-1.5 border-t border-white/5">
           <span className="text-[10px] sm:text-xs text-slate-400 font-medium">Pagu</span>
           <span className="font-black text-white text-xs sm:text-sm lg:text-base tracking-tight shrink-0">
             {item.paguFormatted}
@@ -241,12 +241,8 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
         
         {/* COMPACT SECTION HEADER */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 gap-3">
+        <div className="mb-6 sm:mb-8">
           <FadeIn direction="left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider mb-2 shadow-sm">
-              <BarChart3 className="w-3.5 h-3.5 text-blue-300" />
-              <span>{trans('Proporsi Valuasi Pengadaan', 'Procurement Valuation')}</span>
-            </div>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
               {trans('Komposisi & Nilai Pengadaan', 'Procurement Composition & Value')}
             </h2>
@@ -257,34 +253,27 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
               )}
             </p>
           </FadeIn>
-
-          <FadeIn direction="right">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="px-3.5 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
-                <Layers className="w-3.5 h-3.5 text-blue-400" />
-                <span className="text-xs font-bold text-white">{packagesList.length} Paket</span>
-              </div>
-              <div className="px-3.5 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
-                <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-xs font-bold text-emerald-300">{totalAllPaguFormatted}</span>
-              </div>
-              <Link
-                href="/monitoring"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-accent-gold/15 hover:bg-accent-gold/25 border border-accent-gold/40 text-accent-gold text-xs font-bold transition-all group shadow-sm"
-              >
-                <span>{trans('Monitoring Pengadaan', 'Procurement Monitoring')}</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </FadeIn>
         </div>
 
-        {/* 1. UNIFIED HERO CARD: CENTERED DONUT CHART DENGAN 4 BADGE KARTU 2 BARIS KANAN KIRI */}
-        <div className="bg-[#0B1E38] border border-white/10 rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 lg:p-12 shadow-2xl mb-6">
-          <div className="grid grid-cols-2 lg:grid-cols-12 gap-2.5 sm:gap-4 lg:gap-8 items-center">
+        {/* 1. UNIFIED HERO CARD: 3-COLUMN ROBUST LAYOUT (KIRI: TENDER & SELEKSI | TENGAH: 3D DONUT | KANAN: E-PURCHASING & PL) */}
+        <div className="bg-[#0B1E38] border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
             
+            {/* SISI KIRI: Tender & Seleksi (Desktop: Kolom 1-3 | Mobile/Tablet: 2 Kartu Berdampingan) */}
+            <div className="order-2 lg:order-1 col-span-1 md:col-span-1 lg:col-span-3 flex flex-col gap-2.5 sm:gap-3.5 w-full">
+              {/* Badge Proporsi Valuasi Pengadaan tepat di atas widget Tender */}
+              <div className="h-7 sm:h-8 inline-flex items-center gap-1.5 px-3 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider self-start whitespace-nowrap shadow-sm mb-0.5">
+                <BarChart3 className="w-3.5 h-3.5 text-blue-300 shrink-0" />
+                <span>{trans('Proporsi Valuasi Pengadaan', 'Procurement Valuation')}</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-2.5 sm:gap-4 w-full">
+                {renderMethodCard(tenderItem)}
+                {renderMethodCard(seleksiItem)}
+              </div>
+            </div>
+
             {/* SISI TENGAH: HERO 3D DONUT CHART (Besar & Dominan di Tengah) */}
-            <div className="col-span-2 lg:col-span-6 lg:col-start-4 lg:row-start-1 lg:row-span-2 order-1 lg:order-2 flex flex-col items-center justify-center py-2 lg:py-0">
+            <div className="order-1 lg:order-2 col-span-1 md:col-span-2 lg:col-span-6 flex flex-col items-center justify-center py-2 lg:py-0 w-full overflow-visible">
               <ProcurementDonutChart 
                 data={donutData}
                 totalPaguFormatted={totalAllPaguFormatted}
@@ -294,32 +283,37 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
                 onSelectMethod={handleMethodClick}
               />
 
-              {/* KAPSUL PENJELASAN GRAFIK (Minimalis & Elegan) */}
-              <div className="mt-2.5 sm:mt-3 px-4 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex items-center gap-2 text-xs sm:text-[13px] font-bold text-white tracking-wide shadow-lg transition-all">
+              {/* KAPSUL PENJELASAN GRAFIK */}
+              <div className="mt-3 px-4 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex items-center gap-2 text-xs sm:text-[13px] font-bold text-white tracking-wide shadow-lg transition-all">
                 <PieChart className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                 <span>{trans('Proporsi Pagu per Metode Pemilihan', 'Budget Share by Selection Method')}</span>
               </div>
             </div>
 
-            {/* BARIS 1: Tender (Kiri) & E-Purchasing (Kanan) */}
-            {renderMethodCard(
-              tenderItem,
-              "col-span-1 lg:col-span-3 lg:col-start-1 lg:row-start-1 order-2 lg:order-1"
-            )}
-            {renderMethodCard(
-              ePurchasingItem,
-              "col-span-1 lg:col-span-3 lg:col-start-10 lg:row-start-1 order-2 lg:order-3"
-            )}
-
-            {/* BARIS 2: Seleksi (Kiri) & Pengadaan Langsung (Kanan) */}
-            {renderMethodCard(
-              seleksiItem,
-              "col-span-1 lg:col-span-3 lg:col-start-1 lg:row-start-2 order-3 lg:order-1"
-            )}
-            {renderMethodCard(
-              pengadaanLangsungItem,
-              "col-span-1 lg:col-span-3 lg:col-start-10 lg:row-start-2 order-3 lg:order-3"
-            )}
+            {/* SISI KANAN: E-Purchasing & Pengadaan Langsung (Desktop: Kolom 10-12 | Mobile/Tablet: 2 Kartu Berdampingan) */}
+            <div className="order-3 lg:order-3 col-span-1 md:col-span-1 lg:col-span-3 flex flex-col gap-2.5 sm:gap-3.5 w-full">
+              {/* Badges Ringkasan & Monitoring tepat di atas widget E-Purchasing */}
+              <div className="h-7 sm:h-8 flex items-center gap-1.5 self-start lg:self-end whitespace-nowrap shadow-sm mb-0.5">
+                <div className="h-full px-2.5 sm:px-3 rounded-full bg-white/5 border border-white/10 flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold">
+                  <Layers className="w-3 h-3 text-blue-400 shrink-0" />
+                  <span className="text-white">{packagesList.length} Paket</span>
+                  <span className="text-white/30">•</span>
+                  <TrendingUp className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span className="text-emerald-300">{totalAllPaguFormatted}</span>
+                </div>
+                <Link
+                  href="/monitoring"
+                  className="h-full inline-flex items-center gap-1 px-2.5 sm:px-3 rounded-full bg-accent-gold/15 hover:bg-accent-gold/25 border border-accent-gold/40 text-accent-gold text-[10px] sm:text-[11px] font-bold transition-all group shadow-sm"
+                >
+                  <span>{trans('Monitoring', 'Monitoring')}</span>
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform shrink-0" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-2.5 sm:gap-4 w-full">
+                {renderMethodCard(ePurchasingItem)}
+                {renderMethodCard(pengadaanLangsungItem)}
+              </div>
+            </div>
 
           </div>
         </div>
