@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import Link from 'next/link';
 import { 
   FileText, 
   ChevronLeft, 
@@ -10,7 +11,6 @@ import {
   Info, 
   X, 
   ShieldCheck, 
-  AlertCircle,
   Search
 } from 'lucide-react';
 import { useData, ProcurementPackage } from '@/contexts/DataContext';
