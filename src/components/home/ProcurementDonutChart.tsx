@@ -30,7 +30,7 @@ export function ProcurementDonutChart({
   onSelectMethod
 }: ProcurementDonutChartProps) {
   const [internalHover, setInternalHover] = useState<string | null>(null);
-  const currentActive = activeMethod || internalHover;
+  const currentActive = activeMethod !== undefined && activeMethod !== null ? activeMethod : internalHover;
 
   // Dimensi Isometrik 3D
   const vbWidth = 340;
@@ -61,28 +61,28 @@ export function ProcurementDonutChart({
         topDark: '#1D4ED8',
         wallLight: '#1E40AF',
         wallDark: '#0F266A',
-        glow: 'rgba(59, 130, 246, 0.5)'
+        glow: 'rgba(59, 130, 246, 0.55)'
       },
       'E-Purchasing': {
         topLight: '#FB7185',
         topDark: '#BE123C',
         wallLight: '#9F1239',
         wallDark: '#5E0820',
-        glow: 'rgba(244, 63, 94, 0.5)'
+        glow: 'rgba(244, 63, 94, 0.55)'
       },
       'Pengadaan Langsung': {
         topLight: '#34D399',
         topDark: '#059669',
         wallLight: '#047857',
         wallDark: '#023829',
-        glow: 'rgba(16, 185, 129, 0.5)'
+        glow: 'rgba(16, 185, 129, 0.55)'
       },
       'Seleksi': {
         topLight: '#C084FC',
         topDark: '#7E22CE',
         wallLight: '#6B21A8',
         wallDark: '#3B0764',
-        glow: 'rgba(168, 85, 247, 0.5)'
+        glow: 'rgba(168, 85, 247, 0.55)'
       }
     };
 
@@ -145,8 +145,11 @@ export function ProcurementDonutChart({
         glow: 'rgba(59, 130, 246, 0.4)'
       };
 
-      // Vector angkat 3D saat di-hover
-      const liftY = -8;
+      // Vector angkat 3D saat di-hover (halus dan proporsional)
+      const liftY = -7;
+
+      // Nilai kedalaman (Z-depth) untuk sorting: Sisi depan (y lebih besar) tampil di depan
+      const depthOrder = y1 + y2;
 
       return {
         ...item,
@@ -156,14 +159,36 @@ export function ProcurementDonutChart({
         textX,
         textY,
         theme,
-        liftY
+        liftY,
+        depthOrder
       };
     });
   }, [data, cx, cy, Rx, Ry, rx, ry, depth]);
 
+  // Item yang sedang aktif di-hover (untuk detail pada piringan pusat)
+  const activeItem = useMemo(() => {
+    if (!currentActive) return null;
+    return data.find(d => d.name === currentActive) || null;
+  }, [data, currentActive]);
+
+  // Urutan render 3D: Sektor di belakang dirender lebih dulu, sektor depan di atas,
+  // dan sektor yang aktif di-hover dinaikkan ke paling atas tumpukan
+  const sortedSegments = useMemo(() => {
+    return [...segments].sort((a, b) => {
+      if (a.name === currentActive) return 1;
+      if (b.name === currentActive) return -1;
+      return a.depthOrder - b.depthOrder;
+    });
+  }, [segments, currentActive]);
+
+  const handleSliceHover = (name: string | null) => {
+    setInternalHover(name);
+    onHoverMethod(name);
+  };
+
   return (
     <div className="relative flex flex-col items-center justify-center select-none py-1 sm:py-1.5 lg:py-2 w-full">
-      {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang diagram - Single-Pass GPU Native) */}
+      {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang diagram) */}
       <div className="absolute w-64 h-64 sm:w-80 sm:h-80 lg:w-[380px] lg:h-[380px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,transparent_70%)] pointer-events-none" />
 
       {/* 2. ISOMETRIC 3D SVG CONTAINER */}
@@ -179,7 +204,7 @@ export function ProcurementDonutChart({
 
           {/* Bayangan Jatuh Antar Segmen 3D */}
           <filter id="clay-slice-shadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="8" stdDeviation="5" floodColor="#000000" floodOpacity="0.6" />
+            <feDropShadow dx="0" dy="6" stdDeviation="4" floodColor="#000000" floodOpacity="0.5" />
           </filter>
 
           {/* Filter Timbul Piringan Silinder Putih */}
@@ -235,114 +260,70 @@ export function ProcurementDonutChart({
           filter="url(#clay-floor-shadow)"
         />
 
-        {/* 2. LAPISAN DINDING SAMPING 3D SILINDER (Extruded Side Walls) */}
-        <g>
-          {segments.map((seg) => {
-            const isHovered = currentActive === seg.name;
-            const offsetY = isHovered ? seg.liftY : 0;
-
-            return (
-              <path
-                key={`wall-${seg.name}`}
-                d={seg.wallPath}
-                fill={`url(#grad-wall-${seg.index})`}
-                stroke="rgba(0, 0, 0, 0.3)"
-                strokeWidth={0.8}
-                className="transition-transform duration-300"
-                style={{
-                  transform: `translateY(${offsetY}px)`
-                }}
-              />
-            );
-          })}
-        </g>
-
-        {/* 3. LAPISAN PERMUKAAN ATAS GLOSSY (Top Claymorphic Faces) */}
+        {/* 2. LAPISAN VISUAL 3D IRISAN DONUT (Tersinkronisasi & Diurutkan secara Depth 3D) */}
         <g filter="url(#clay-slice-shadow)">
-          {segments.map((seg) => {
+          {sortedSegments.map((seg) => {
             const isHovered = currentActive === seg.name;
             const offsetY = isHovered ? seg.liftY : 0;
 
             return (
               <g
-                key={`top-group-${seg.name}`}
-                className="cursor-pointer transition-transform duration-300"
+                key={`visual-slice-${seg.name}`}
+                className="pointer-events-none"
                 style={{
-                  transform: `translateY(${offsetY}px)`
-                }}
-                onClick={() => onSelectMethod?.(seg.name)}
-                onMouseEnter={() => {
-                  setInternalHover(seg.name);
-                  onHoverMethod(seg.name);
-                }}
-                onMouseLeave={() => {
-                  setInternalHover(null);
-                  onHoverMethod(null);
+                  transform: `translateY(${offsetY}px)`,
+                  transition: 'transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.28s ease',
+                  filter: isHovered
+                    ? `drop-shadow(0 0 14px ${seg.theme.glow}) brightness(1.12)`
+                    : 'none'
                 }}
               >
-                {/* Permukaan Atas Busur */}
+                {/* Dinding Samping Silinder 3D */}
+                <path
+                  d={seg.wallPath}
+                  fill={`url(#grad-wall-${seg.index})`}
+                  stroke="rgba(0, 0, 0, 0.35)"
+                  strokeWidth={0.8}
+                />
+
+                {/* Permukaan Atas Glossy */}
                 <path
                   d={seg.topPath}
                   fill={`url(#grad-top-${seg.index})`}
-                  stroke="rgba(255, 255, 255, 0.45)"
-                  strokeWidth={isHovered ? 2.5 : 1.2}
-                  className="transition-all duration-300 hover:brightness-110"
-                  style={{
-                    filter: isHovered ? `drop-shadow(0 0 10px ${seg.theme.glow})` : 'none'
-                  }}
+                  stroke="rgba(255, 255, 255, 0.55)"
+                  strokeWidth={isHovered ? 2.2 : 1.2}
                 />
 
                 {/* Garis Kilau Bevel Lengkung di Tepi Atas */}
                 <path
                   d={seg.topPath}
                   fill="none"
-                  stroke="rgba(255, 255, 255, 0.2)"
-                  strokeWidth={1}
+                  stroke="rgba(255, 255, 255, 0.25)"
+                  strokeWidth={0.8}
                 />
+
+                {/* Label Persentase di Atas Irisan */}
+                {seg.percentage >= 5 && (
+                  <text
+                    x={seg.textX}
+                    y={seg.textY}
+                    textAnchor="middle"
+                    className="font-black text-xs sm:text-[13px] fill-white tracking-tight"
+                    style={{
+                      textShadow: '0 2px 4px rgba(0,0,0,0.85)',
+                      fontWeight: 800
+                    }}
+                  >
+                    {seg.percentage}%
+                  </text>
+                )}
               </g>
             );
           })}
         </g>
 
-        {/* 4. BEVEL LENGKUNG LUAR STATIS MINIMALIS */}
-        <ellipse
-          cx={cx}
-          cy={cy}
-          rx={Rx}
-          ry={Ry}
-          fill="none"
-          stroke="rgba(255, 255, 255, 0.25)"
-          strokeWidth={1}
-          className="pointer-events-none"
-        />
-
-        {/* 5. TEKS PERSENTASE DI PERMUKAAN IRISAN */}
-        <g className="pointer-events-none">
-          {segments.map((seg) => {
-            if (seg.percentage < 5) return null;
-            const isHovered = currentActive === seg.name;
-            const offsetY = isHovered ? seg.liftY : 0;
-
-            return (
-              <text
-                key={`label-${seg.name}`}
-                x={seg.textX}
-                y={seg.textY + offsetY}
-                textAnchor="middle"
-                className="font-black text-xs sm:text-[13px] fill-white tracking-tight transition-all duration-300"
-                style={{
-                  textShadow: '0 2px 4px rgba(0,0,0,0.8)',
-                  fontWeight: 800
-                }}
-              >
-                {seg.percentage}%
-              </text>
-            );
-          })}
-        </g>
-
-        {/* 6. PIRINGAN SILINDER TIMBUL PUTIH DI TENGAH (3D White Raised Podium) */}
-        <g filter="url(#center-podium-shadow)">
+        {/* 3. PIRINGAN SILINDER TIMBUL PUTIH DI TENGAH (3D White Raised Podium) */}
+        <g filter="url(#center-podium-shadow)" className="pointer-events-none">
           {/* Sisi Tebal Silinder Putih */}
           <ellipse
             cx={cx}
@@ -375,35 +356,93 @@ export function ProcurementDonutChart({
           />
         </g>
 
-        {/* 7. KONTEN METRIK PADA PODIUM PUSAT */}
-        <g className="pointer-events-none text-center">
-          <text
-            x={cx}
-            y={cy - 12}
-            textAnchor="middle"
-            className="text-[9px] font-black fill-slate-500 uppercase tracking-widest"
-          >
-            TOTAL
-          </text>
-          <text
-            x={cx}
-            y={cy + 5}
-            textAnchor="middle"
-            className="text-sm sm:text-[15px] font-black fill-[#0A2342] tracking-tight"
-            style={{
-              textShadow: '0 1px 2px rgba(255,255,255,0.8)'
-            }}
-          >
-            {totalPaguFormatted}
-          </text>
-          <text
-            x={cx}
-            y={cy + 19}
-            textAnchor="middle"
-            className="text-[10px] font-bold fill-slate-600"
-          >
-            {totalPackages} Paket
-          </text>
+        {/* 4. KONTEN METRIK PADA PODIUM PUSAT (INTERAKTIF & RESPONSIF TERHADAP HOVER) */}
+        <g className="pointer-events-none text-center select-none">
+          {activeItem ? (
+            <>
+              <text
+                x={cx}
+                y={cy - 12}
+                textAnchor="middle"
+                className="text-[9px] font-black uppercase tracking-wider transition-all duration-200"
+                fill={activeItem.color}
+              >
+                {activeItem.name.length > 14 ? activeItem.name.slice(0, 14) + '...' : activeItem.name} ({activeItem.percentage}%)
+              </text>
+              <text
+                x={cx}
+                y={cy + 5}
+                textAnchor="middle"
+                className="text-[13px] sm:text-[14px] font-black fill-[#0A2342] tracking-tight transition-all duration-200"
+                style={{ textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
+              >
+                {activeItem.paguFormatted}
+              </text>
+              <text
+                x={cx}
+                y={cy + 19}
+                textAnchor="middle"
+                className="text-[10px] font-bold fill-slate-600 transition-all duration-200"
+              >
+                {activeItem.count.toLocaleString('id-ID')} Paket
+              </text>
+            </>
+          ) : (
+            <>
+              <text
+                x={cx}
+                y={cy - 12}
+                textAnchor="middle"
+                className="text-[9px] font-black fill-slate-500 uppercase tracking-widest transition-all duration-200"
+              >
+                TOTAL
+              </text>
+              <text
+                x={cx}
+                y={cy + 5}
+                textAnchor="middle"
+                className="text-sm sm:text-[15px] font-black fill-[#0A2342] tracking-tight transition-all duration-200"
+                style={{ textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
+              >
+                {totalPaguFormatted}
+              </text>
+              <text
+                x={cx}
+                y={cy + 19}
+                textAnchor="middle"
+                className="text-[10px] font-bold fill-slate-600 transition-all duration-200"
+              >
+                {totalPackages.toLocaleString('id-ID')} Paket
+              </text>
+            </>
+          )}
+        </g>
+
+        {/* 5. LAPISAN INTERAKTIF STATIS / HIT TEST AREA (100% BEBAS BUG JITTER / FLICKER) */}
+        {/* Layer ini berposisi statis sehingga kursor tidak akan pernah 'lepas' saat irisan visual terangkat */}
+        <g>
+          {segments.map((seg) => (
+            <g
+              key={`hit-area-${seg.name}`}
+              className="cursor-pointer"
+              onClick={() => onSelectMethod?.(seg.name)}
+              onMouseEnter={() => handleSliceHover(seg.name)}
+              onMouseLeave={() => handleSliceHover(null)}
+            >
+              <path
+                d={seg.topPath}
+                fill="#000000"
+                opacity="0.0001"
+                pointerEvents="all"
+              />
+              <path
+                d={seg.wallPath}
+                fill="#000000"
+                opacity="0.0001"
+                pointerEvents="all"
+              />
+            </g>
+          ))}
         </g>
       </svg>
     </div>

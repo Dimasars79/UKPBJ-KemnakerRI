@@ -230,6 +230,22 @@ export default function PusatPembaruanPage() {
     return filteredUpdates.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredUpdates, currentPage]);
 
+  // Algoritma Pintar Pagination dengan Ellipsis (...) - Opsi 2 (Segmented Group)
+  const getPageNumbers = () => {
+    if (totalPages <= 6) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages: (number | string)[] = [];
+    if (currentPage <= 3) {
+      pages.push(1, 2, 3, '...', totalPages);
+    } else if (currentPage >= totalPages - 2) {
+      pages.push(1, '...', totalPages - 2, totalPages - 1, totalPages);
+    } else {
+      pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+    }
+    return pages;
+  };
+
   // Counts for tabs
   const countStats = useMemo(() => {
     return {
@@ -508,44 +524,62 @@ export default function PusatPembaruanPage() {
                     ))}
                   </div>
 
-                  {/* PAGINATION CONTROLS */}
+                  {/* PAGINATION CONTROLS (Opsi 2: Segmented Button Group Bank / Stripe) */}
                   {totalPages > 1 && (
-                    <div className="mt-5 sm:mt-6 flex items-center justify-between gap-2 bg-white px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 shadow-xs">
-                      <p className="text-[11px] sm:text-xs text-slate-500 font-medium whitespace-nowrap">
-                        <span className="hidden sm:inline">Halaman </span>
-                        <span className="font-bold text-primary-navy">{currentPage}</span>
-                        <span className="text-slate-400 font-normal"> / {totalPages}</span>
-                      </p>
+                    <div className="mt-6 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/80 bg-white flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+                      {/* Counter Text */}
+                      <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 font-medium order-2 sm:order-1 text-center sm:text-left">
+                        <span>
+                          Menampilkan <strong className="text-primary-navy font-bold">{Math.min(filteredUpdates.length, (currentPage - 1) * ITEMS_PER_PAGE + 1)}-{Math.min(currentPage * ITEMS_PER_PAGE, filteredUpdates.length)}</strong> dari <strong className="text-primary-navy font-bold">{filteredUpdates.length.toLocaleString('id-ID')}</strong> pembaruan
+                        </span>
+                        <span className="text-slate-400 font-normal">
+                          (Halaman {currentPage} dari {totalPages})
+                        </span>
+                      </div>
 
-                      <div className="flex items-center gap-1 sm:gap-1.5">
+                      {/* Unified Segmented Button Group */}
+                      <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white shadow-2xs divide-x divide-slate-200 overflow-hidden order-1 sm:order-2">
+                        {/* Tombol Sebelumnya */}
                         <button
                           onClick={() => {
                             setCurrentPage((prev) => Math.max(prev - 1, 1));
+                            window.scrollTo({ top: 380, behavior: 'smooth' });
                           }}
                           disabled={currentPage === 1}
                           aria-label="Halaman sebelumnya"
-                          className={`h-7 sm:h-8 px-2 sm:px-3 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold flex items-center gap-1 border transition-all ${
+                          className={`px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 transition-colors ${
                             currentPage === 1
-                              ? 'bg-slate-50 text-slate-300 border-slate-200 cursor-not-allowed'
-                              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-primary-blue shadow-xs cursor-pointer active:scale-95'
+                              ? 'text-slate-300 cursor-not-allowed bg-slate-50/50'
+                              : 'text-slate-700 hover:text-primary-navy hover:bg-slate-50 active:bg-slate-100 cursor-pointer'
                           }`}
                         >
                           <ChevronLeft className="w-3.5 h-3.5" />
                           <span className="hidden sm:inline">Sebelumnya</span>
                         </button>
 
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: totalPages }).map((_, i) => {
-                            const pageNum = i + 1;
+                        {/* Nomor Halaman di Layar Desktop */}
+                        <div className="hidden sm:flex items-center divide-x divide-slate-200">
+                          {getPageNumbers().map((item, idx) => {
+                            if (item === '...') {
+                              return (
+                                <span key={`dots-${idx}`} className="px-3 py-2 text-xs text-slate-400 select-none bg-slate-50/40 font-bold tracking-widest">
+                                  •••
+                                </span>
+                              );
+                            }
+                            const pageNum = item as number;
                             const isActive = currentPage === pageNum;
                             return (
                               <button
                                 key={pageNum}
-                                onClick={() => setCurrentPage(pageNum)}
-                                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+                                onClick={() => {
+                                  setCurrentPage(pageNum);
+                                  window.scrollTo({ top: 380, behavior: 'smooth' });
+                                }}
+                                className={`min-w-[40px] px-3 py-2 text-xs font-bold transition-colors cursor-pointer ${
                                   isActive
-                                    ? 'bg-primary-blue text-white shadow-sm shadow-blue-500/25 scale-105'
-                                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                                    ? 'bg-primary-navy text-white font-black shadow-xs'
+                                    : 'text-slate-700 hover:bg-slate-100 hover:text-primary-navy'
                                 }`}
                               >
                                 {pageNum}
@@ -554,16 +588,23 @@ export default function PusatPembaruanPage() {
                           })}
                         </div>
 
+                        {/* Indikator Halaman di Layar Mobile */}
+                        <span className="sm:hidden px-3.5 py-2 text-xs font-bold text-slate-700 bg-slate-50/50">
+                          {currentPage} / {totalPages}
+                        </span>
+
+                        {/* Tombol Selanjutnya */}
                         <button
                           onClick={() => {
                             setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                            window.scrollTo({ top: 380, behavior: 'smooth' });
                           }}
                           disabled={currentPage === totalPages}
                           aria-label="Halaman selanjutnya"
-                          className={`h-7 sm:h-8 px-2 sm:px-3 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold flex items-center gap-1 border transition-all ${
+                          className={`px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 transition-colors ${
                             currentPage === totalPages
-                              ? 'bg-slate-50 text-slate-300 border-slate-200 cursor-not-allowed'
-                              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-primary-blue shadow-xs cursor-pointer active:scale-95'
+                              ? 'text-slate-300 cursor-not-allowed bg-slate-50/50'
+                              : 'text-slate-700 hover:text-primary-navy hover:bg-slate-50 active:bg-slate-100 cursor-pointer'
                           }`}
                         >
                           <span className="hidden sm:inline">Selanjutnya</span>
