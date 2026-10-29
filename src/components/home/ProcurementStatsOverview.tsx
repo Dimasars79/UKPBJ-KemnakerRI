@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { 
-  BarChart3, Layers, TrendingUp, ArrowRight,
+  BarChart3, ArrowRight,
   Gavel, ShoppingCart, Users, FileText,
   PieChart
 } from 'lucide-react';
@@ -45,8 +45,11 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
     return isNaN(num) ? 0 : num;
   };
 
-  // Helper format ringkas Rupiah (Miliar / Juta)
+  // Helper format ringkas Rupiah (Triliun / Miliar / Juta)
   const formatMiliar = (nominal: number): string => {
+    if (nominal >= 1_000_000_000_000) {
+      return `Rp ${(nominal / 1_000_000_000_000).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} T`;
+    }
     if (nominal >= 1_000_000_000) {
       return `Rp ${(nominal / 1_000_000_000).toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} M`;
     }
@@ -56,35 +59,62 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
     return `Rp ${nominal.toLocaleString('id-ID')}`;
   };
 
-  // Total Nilai Anggaran Keseluruhan
-  const totalBudgetNumber = useMemo(() => {
-    return packagesList.reduce((acc, curr) => acc + parseRupiahNumber(curr.hps), 0);
+  // Cek apakah data paket yang dimuat berasal dari full import (>= 5000 paket)
+  const isUsingFullRupData = useMemo(() => {
+    return packagesList.length >= 5000;
   }, [packagesList]);
+
+  // Total Nilai Anggaran Keseluruhan (Official RUP 2026 Kemnaker: Rp 1.510.789.870.868)
+  const totalBudgetNumber = useMemo(() => {
+    if (isUsingFullRupData) {
+      return packagesList.reduce((acc, curr) => acc + parseRupiahNumber(curr.hps), 0);
+    }
+    return 1510789870868;
+  }, [packagesList, isUsingFullRupData]);
 
   const totalAllPaguFormatted = useMemo(() => {
     return formatMiliar(totalBudgetNumber);
   }, [totalBudgetNumber]);
 
-  // 1. DATA DISTRIBUSI METODE PENGADAAN (4 METODE)
+  // Total Jumlah Paket (Official RUP 2026: 8.333 Paket)
+  const totalPackagesCount = useMemo(() => {
+    if (isUsingFullRupData) return packagesList.length;
+    return 8333;
+  }, [packagesList, isUsingFullRupData]);
+
+  // 1. DATA DISTRIBUSI METODE PENGADAAN (4 METODE RESMI RUP KEMNAKER)
   const methodsData = useMemo(() => {
-    const counts: Record<string, { count: number; totalPagu: number }> = {
-      'Tender': { count: 0, totalPagu: 0 },
-      'E-Purchasing': { count: 0, totalPagu: 0 },
-      'Seleksi': { count: 0, totalPagu: 0 },
-      'Pengadaan Langsung': { count: 0, totalPagu: 0 }
+    // Data RUP Resmi dari data_dashboard_rup_table Kemnaker RI 2026
+    const defaultRupCounts: Record<string, { count: number; totalPagu: number }> = {
+      'E-Purchasing': { count: 1792, totalPagu: 523553694727 },
+      'Tender': { count: 30, totalPagu: 447632574750 },
+      'Pengadaan Langsung': { count: 6122, totalPagu: 334239894141 },
+      'Seleksi': { count: 31, totalPagu: 80618326250 }
     };
 
-    packagesList.forEach((pkg) => {
-      const cat = pkg.category || 'Tender';
-      const num = parseRupiahNumber(pkg.hps);
-      if (counts[cat]) {
-        counts[cat].count += 1;
-        counts[cat].totalPagu += num;
-      } else {
-        counts['Tender'].count += 1;
-        counts['Tender'].totalPagu += num;
-      }
-    });
+    let counts = defaultRupCounts;
+
+    if (isUsingFullRupData) {
+      const dynamicCounts: Record<string, { count: number; totalPagu: number }> = {
+        'Tender': { count: 0, totalPagu: 0 },
+        'E-Purchasing': { count: 0, totalPagu: 0 },
+        'Seleksi': { count: 0, totalPagu: 0 },
+        'Pengadaan Langsung': { count: 0, totalPagu: 0 }
+      };
+
+      packagesList.forEach((pkg) => {
+        const cat = pkg.category || 'Tender';
+        const num = parseRupiahNumber(pkg.hps);
+        if (dynamicCounts[cat]) {
+          dynamicCounts[cat].count += 1;
+          dynamicCounts[cat].totalPagu += num;
+        } else {
+          dynamicCounts['Pengadaan Langsung'].count += 1;
+          dynamicCounts['Pengadaan Langsung'].totalPagu += num;
+        }
+      });
+      counts = dynamicCounts;
+    }
 
     const totalPaguSum = totalBudgetNumber || 1;
 
@@ -277,7 +307,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
               <ProcurementDonutChart 
                 data={donutData}
                 totalPaguFormatted={totalAllPaguFormatted}
-                totalPackages={packagesList.length}
+                totalPackages={totalPackagesCount}
                 activeMethod={hoveredMethod}
                 onHoverMethod={setHoveredMethod}
                 onSelectMethod={handleMethodClick}
@@ -292,15 +322,8 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
 
             {/* SISI KANAN: E-Purchasing & Pengadaan Langsung (Desktop: Kolom 10-12 | Mobile/Tablet: 2 Kartu Berdampingan) */}
             <div className="order-3 lg:order-3 col-span-1 md:col-span-1 lg:col-span-3 flex flex-col gap-2.5 sm:gap-3.5 w-full">
-              {/* Badges Ringkasan & Monitoring tepat di atas widget E-Purchasing */}
-              <div className="h-7 sm:h-8 flex items-center gap-1.5 self-start lg:self-end whitespace-nowrap shadow-sm -mt-2 sm:-mt-3.5 mb-2.5 sm:mb-3.5">
-                <div className="h-full px-2.5 sm:px-3 rounded-full bg-white/5 border border-white/10 flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold">
-                  <Layers className="w-3 h-3 text-blue-400 shrink-0" />
-                  <span className="text-white">{packagesList.length} Paket</span>
-                  <span className="text-white/30">•</span>
-                  <TrendingUp className="w-3 h-3 text-emerald-400 shrink-0" />
-                  <span className="text-emerald-300">{totalAllPaguFormatted}</span>
-                </div>
+              {/* Tombol Monitoring tepat di atas widget E-Purchasing */}
+              <div className="h-7 sm:h-8 flex items-center self-start lg:self-end whitespace-nowrap shadow-sm -mt-2 sm:-mt-3.5 mb-2.5 sm:mb-3.5">
                 <Link
                   href="/monitoring"
                   className="h-full inline-flex items-center gap-1 px-2.5 sm:px-3 rounded-full bg-accent-gold/15 hover:bg-accent-gold/25 border border-accent-gold/40 text-accent-gold text-[10px] sm:text-[11px] font-bold transition-all group shadow-sm"

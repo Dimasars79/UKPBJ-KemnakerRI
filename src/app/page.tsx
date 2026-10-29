@@ -457,7 +457,7 @@ export default function Home() {
                   <motion.div 
                     whileHover={{ scale: 1.02, y: -1 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="lg:col-span-3 flex lg:flex-col items-center justify-center gap-3 lg:gap-1 bg-gradient-to-b from-[#14325E] to-[#0A1B33] border-2 border-amber-400/70 hover:border-amber-300 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center shadow-md shadow-black/40 hover:shadow-amber-500/20 transition-all duration-300 cursor-default select-none relative overflow-hidden group/ticket"
+                    className="lg:col-span-2 flex lg:flex-col items-center justify-center gap-3 lg:gap-1 bg-gradient-to-b from-[#14325E] to-[#0A1B33] border-2 border-amber-400/70 hover:border-amber-300 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center shadow-md shadow-black/40 hover:shadow-amber-500/20 transition-all duration-300 cursor-default select-none relative overflow-hidden group/ticket"
                   >
                     {/* Subtle light sweep reflection */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/ticket:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
@@ -474,7 +474,7 @@ export default function Home() {
                   </motion.div>
 
                   {/* Center: Judul, Deskripsi & Info Waktu/Tempat/Penyelenggara */}
-                  <div className="lg:col-span-6 flex flex-col justify-center">
+                  <div className="lg:col-span-7 flex flex-col justify-center">
                     <h2 className="text-base sm:text-xl lg:text-2xl font-extrabold text-white mb-1.5 sm:mb-2 leading-snug group-hover:text-amber-100 transition-colors duration-300">
                       {latestAgenda ? latestAgenda.title : t('home.agenda_subtitle')}
                     </h2>
@@ -483,18 +483,28 @@ export default function Home() {
                     </p>
 
                     {/* Unified Glassmorphism Info Bar dengan Mikro-Hover */}
-                    <div className="inline-flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl sm:rounded-full bg-white/5 hover:bg-white/[0.08] border border-white/10 hover:border-amber-400/30 text-[11px] sm:text-xs text-slate-300 backdrop-blur-md divide-y sm:divide-y-0 sm:divide-x divide-white/10 max-w-full shadow-inner transition-colors duration-300">
-                      <div className="flex items-center gap-1.5 pl-3 pr-2.5 py-1.5 sm:py-1 group/info">
-                        <Clock className="w-3.5 h-3.5 text-accent-gold shrink-0 group-hover/info:scale-110 transition-transform duration-200" />
+                    <div className="flex flex-col sm:inline-flex sm:flex-row items-stretch sm:items-center rounded-2xl sm:rounded-full bg-white/5 hover:bg-white/[0.08] border border-white/10 hover:border-amber-400/30 text-[11px] sm:text-xs text-slate-300 backdrop-blur-md divide-y sm:divide-y-0 sm:divide-x divide-white/10 w-full sm:w-fit max-w-full shadow-inner transition-colors duration-300 overflow-hidden">
+                      <div className="flex items-center gap-2.5 px-3.5 sm:pl-3.5 sm:pr-3 py-2 sm:py-1.5 shrink-0 group/info">
+                        <div className="w-5 h-5 rounded-md bg-amber-400/10 border border-amber-400/20 flex items-center justify-center shrink-0">
+                          <Clock className="w-3 h-3 text-accent-gold group-hover/info:scale-110 transition-transform duration-200" />
+                        </div>
                         <span className="font-medium text-slate-200 whitespace-nowrap">{latestAgenda ? latestAgenda.time : '08:30 - 16:30 WIB'}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 px-2.5 py-1.5 sm:py-1 group/info">
-                        <MapPin className="w-3.5 h-3.5 text-accent-gold shrink-0 group-hover/info:scale-110 transition-transform duration-200" />
-                        <span className="font-medium text-slate-200 truncate">{latestAgenda ? latestAgenda.location : 'Auditorium Kemnaker'}</span>
+                      <div className="flex items-center gap-2.5 px-3.5 sm:px-3 py-2 sm:py-1.5 min-w-0 group/info">
+                        <div className="w-5 h-5 rounded-md bg-amber-400/10 border border-amber-400/20 flex items-center justify-center shrink-0">
+                          <MapPin className="w-3 h-3 text-accent-gold group-hover/info:scale-110 transition-transform duration-200" />
+                        </div>
+                        <span className="font-medium text-slate-200 truncate" title={latestAgenda ? latestAgenda.location : 'Auditorium Kemnaker'}>
+                          {latestAgenda ? latestAgenda.location : 'Auditorium Kemnaker'}
+                        </span>
                       </div>
-                      <div className="flex items-center gap-1.5 pl-2.5 pr-3 py-1.5 sm:py-1 group/info">
-                        <Building2 className="w-3.5 h-3.5 text-accent-gold shrink-0 group-hover/info:scale-110 transition-transform duration-200" />
-                        <span className="font-medium text-slate-200 truncate">{latestAgenda ? latestAgenda.organizer : 'UKPBJ Kemnaker'}</span>
+                      <div className="flex items-center gap-2.5 px-3.5 sm:pl-3 sm:pr-5 py-2 sm:py-1.5 min-w-0 group/info">
+                        <div className="w-5 h-5 rounded-md bg-amber-400/10 border border-amber-400/20 flex items-center justify-center shrink-0">
+                          <Building2 className="w-3 h-3 text-accent-gold group-hover/info:scale-110 transition-transform duration-200" />
+                        </div>
+                        <span className="font-medium text-slate-200 truncate" title={latestAgenda ? latestAgenda.organizer : 'UKPBJ Kemnaker'}>
+                          {latestAgenda ? latestAgenda.organizer : 'UKPBJ Kemnaker'}
+                        </span>
                       </div>
                     </div>
                   </div>

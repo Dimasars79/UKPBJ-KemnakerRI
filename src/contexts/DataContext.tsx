@@ -1120,7 +1120,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             });
           }
         }
-        if (Array.isArray(parsed.packagesList) && parsed.packagesList.length >= 20) {
+        if (Array.isArray(parsed.packagesList) && parsed.packagesList.length >= 20 && parsed.packagesList.some((p: ProcurementPackage) => p.code?.startsWith('RUP-'))) {
           setPackagesList(parsed.packagesList);
         } else {
           setPackagesList(MOCK_PACKAGES_50);

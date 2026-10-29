@@ -145,11 +145,11 @@ export function PengadaanSection({ activeCategory, onCategoryChange }: Pengadaan
           <FadeIn direction="right">
             <div className="flex items-center gap-3">
               <a 
-                href="https://spse.inaproc.id/kemlu/pengumuman" 
+                href="https://data.inaproc.id/rup" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-primary-navy to-primary-blue text-white text-xs sm:text-sm font-bold hover:shadow-lg hover:shadow-blue-900/20 hover:-translate-y-0.5 transition-all"
-                title="Buka Portal SPSE INAPROC Kemlu"
+                title="Buka Portal Data INAPROC RUP"
               >
                 <span>{trans('Portal SPSE INAPROC', 'SPSE INAPROC Portal')}</span>
                 <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent-gold" />
