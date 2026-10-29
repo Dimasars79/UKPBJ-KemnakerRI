@@ -1,16 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   FileText, 
   ChevronLeft, 
   ChevronRight, 
+  ChevronsLeft,
+  ChevronsRight,
   ExternalLink, 
   Info, 
   X, 
   ShieldCheck, 
-  AlertCircle
+  AlertCircle,
+  Search,
+  Filter
 } from 'lucide-react';
 import { useData, ProcurementPackage } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -21,6 +25,11 @@ export function DataTable() {
   const { trans } = useLanguage();
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Semua');
+  const [selectedStatus, setSelectedStatus] = useState('Semua');
+
   const [selectedPackage, setSelectedPackage] = useState<ProcurementPackage | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -39,18 +48,69 @@ export function DataTable() {
     };
   }, [selectedPackage]);
 
-  const itemsPerPage = 20;
-  const totalPages = Math.ceil(packagesList.length / itemsPerPage) || 1;
+  // Reset ke halaman 1 saat filter atau pencarian berubah
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedStatus, itemsPerPage]);
 
-  const validCurrentPage = Math.min(currentPage, totalPages);
+  // Filter paket berdasarkan pencarian, kategori, dan status
+  const filteredPackages = useMemo(() => {
+    return packagesList.filter((pkg) => {
+      const q = searchQuery.toLowerCase().trim();
+      const matchSearch = 
+        !q ||
+        pkg.title.toLowerCase().includes(q) ||
+        pkg.code.toLowerCase().includes(q) ||
+        pkg.unit.toLowerCase().includes(q);
+      
+      const matchCat = selectedCategory === 'Semua' || pkg.category === selectedCategory;
+      const matchStatus = selectedStatus === 'Semua' || pkg.status === selectedStatus;
+
+      return matchSearch && matchCat && matchStatus;
+    });
+  }, [packagesList, searchQuery, selectedCategory, selectedStatus]);
+
+  const totalPages = Math.ceil(filteredPackages.length / itemsPerPage) || 1;
+  const validCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
   const startIndex = (validCurrentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, packagesList.length);
-  const currentPackages = packagesList.slice(startIndex, endIndex);
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredPackages.length);
+  const currentPackages = filteredPackages.slice(startIndex, endIndex);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
+      const el = document.getElementById('monitoring-table-container');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
+  };
+
+  // Algoritma Pintar Pagination dengan Ellipsis (...)
+  // Menghasilkan maksimal 7 tombol halaman agar selalu rapi dan proporsional
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages: (number | string)[] = [];
+    if (validCurrentPage <= 4) {
+      for (let i = 1; i <= 5; i++) pages.push(i);
+      pages.push('...');
+      pages.push(totalPages);
+    } else if (validCurrentPage >= totalPages - 3) {
+      pages.push(1);
+      pages.push('...');
+      for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      pages.push('...');
+      pages.push(validCurrentPage - 1);
+      pages.push(validCurrentPage);
+      pages.push(validCurrentPage + 1);
+      pages.push('...');
+      pages.push(totalPages);
+    }
+    return pages;
   };
 
   const getTargetUrl = (pkg: ProcurementPackage) => {
@@ -61,14 +121,15 @@ export function DataTable() {
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mt-8">
-      <div className="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-center bg-slate-50/50">
+    <div id="monitoring-table-container" className="w-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mt-8 scroll-mt-24">
+      {/* Table Header & Quick Action */}
+      <div className="p-4 sm:p-6 border-b border-slate-100 flex flex-col md:flex-row gap-4 md:justify-between md:items-center bg-slate-50/50">
         <div>
           <h3 className="text-xl font-bold text-primary-navy">{trans('Analisis Data Pengadaan', 'Procurement Data Analysis')}</h3>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
             {trans(
-              `Daftar paket pengadaan langsung dari basis data SPSE Kemnaker (${packagesList.length} paket • Halaman ${validCurrentPage} dari ${totalPages})`,
-              `List of procurement packages directly from MoM SPSE database (${packagesList.length} packages • Page ${validCurrentPage} of ${totalPages})`
+              `Daftar paket pengadaan resmi dari basis data SPSE/RUP Kemnaker RI (${filteredPackages.length.toLocaleString('id-ID')} paket ditemukan)`,
+              `Official procurement packages list from MoM SPSE/RUP database (${filteredPackages.length.toLocaleString('id-ID')} packages found)`
             )}
           </p>
         </div>
@@ -87,7 +148,80 @@ export function DataTable() {
           </Link>
         </div>
       </div>
+
+      {/* Toolbar Filter & Pencarian Cepat */}
+      <div className="p-3.5 sm:p-4 border-b border-slate-100 bg-white flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        {/* Search input */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder={trans('Cari nama paket, kode RUP, atau satker...', 'Search package name, RUP code, or unit...')}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-800 placeholder-slate-400"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs w-4 h-4 flex items-center justify-center rounded-full hover:bg-slate-200"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {/* Filter Controls */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Filter Kategori */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-bold text-slate-500 hidden sm:inline">{trans('Kategori:', 'Category:')}</span>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none text-slate-700 font-medium cursor-pointer hover:bg-slate-100 transition-colors"
+            >
+              <option value="Semua">Semua Metode ({packagesList.length})</option>
+              <option value="Tender">Tender</option>
+              <option value="Seleksi">Seleksi</option>
+              <option value="E-Purchasing">E-Purchasing</option>
+              <option value="Pengadaan Langsung">Pengadaan Langsung</option>
+            </select>
+          </div>
+
+          {/* Filter Status */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-bold text-slate-500 hidden sm:inline">Status:</span>
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none text-slate-700 font-medium cursor-pointer hover:bg-slate-100 transition-colors"
+            >
+              <option value="Semua">Semua Status</option>
+              <option value="Pendaftaran Dibuka">Pendaftaran Dibuka</option>
+              <option value="Tahap Evaluasi">Tahap Evaluasi</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
+
+          {/* Items Per Page */}
+          <div className="flex items-center gap-1.5 ml-auto sm:ml-0">
+            <select
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              className="px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none text-slate-700 font-semibold cursor-pointer hover:bg-slate-100 transition-colors"
+              title="Jumlah baris per halaman"
+            >
+              <option value={10}>10 / hal</option>
+              <option value={20}>20 / hal</option>
+              <option value={50}>50 / hal</option>
+              <option value={100}>100 / hal</option>
+            </select>
+          </div>
+        </div>
+      </div>
       
+      {/* Table Data */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm text-slate-600 whitespace-nowrap">
           <thead className="bg-slate-50 text-slate-500 uppercase text-xs font-semibold border-b border-slate-100">
@@ -111,7 +245,7 @@ export function DataTable() {
                         <FileText className="w-4 h-4" />
                       </div>
                       <div className="min-w-0 max-w-xs sm:max-w-md">
-                        <span className="block font-bold truncate text-slate-900">{pkg.title}</span>
+                        <span className="block font-bold truncate text-slate-900" title={pkg.title}>{pkg.title}</span>
                         <span className="text-[11px] text-slate-400 font-mono">{pkg.code}</span>
                       </div>
                     </div>
@@ -122,7 +256,7 @@ export function DataTable() {
                     </span>
                   </td>
                   <td className="px-6 py-4 font-bold text-slate-900">{pkg.hps}</td>
-                  <td className="px-6 py-4 text-slate-600 text-xs">{pkg.unit}</td>
+                  <td className="px-6 py-4 text-slate-600 text-xs max-w-xs truncate" title={pkg.unit}>{pkg.unit}</td>
                   <td className="px-6 py-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                       pkg.status === 'Selesai' ? 'bg-green-100 text-green-700' :
@@ -173,7 +307,7 @@ export function DataTable() {
             ) : (
               <tr>
                 <td colSpan={7} className="px-6 py-12 text-center text-slate-400">
-                  {trans('Tidak ada data paket pengadaan di database.', 'No procurement package data in the database.')}
+                  {trans('Tidak ada data paket pengadaan yang cocok dengan kriteria pencarian.', 'No procurement package data matches the search criteria.')}
                 </td>
               </tr>
             )}
@@ -181,59 +315,110 @@ export function DataTable() {
         </table>
       </div>
 
-      {/* Pagination Controls */}
+      {/* Smart, Compact, and Elegant Pagination Controls */}
       {totalPages > 1 && (
-        <div className="p-4 sm:p-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/30">
-          <p className="text-xs text-slate-500 font-medium">
+        <div className="p-4 sm:p-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/50">
+          {/* Showing Counter */}
+          <p className="text-xs text-slate-500 font-medium order-2 sm:order-1 text-center sm:text-left">
             {trans(
-              `Menampilkan ${startIndex + 1} - ${endIndex} dari ${packagesList.length} paket`,
-              `Showing ${startIndex + 1} - ${endIndex} of ${packagesList.length} packages`
+              `Menampilkan ${startIndex + 1} - ${endIndex} dari ${filteredPackages.length.toLocaleString('id-ID')} paket (Halaman ${validCurrentPage} dari ${totalPages})`,
+              `Showing ${startIndex + 1} - ${endIndex} of ${filteredPackages.length.toLocaleString('id-ID')} packages (Page ${validCurrentPage} of ${totalPages})`
             )}
           </p>
 
-          <div className="flex items-center gap-1.5">
+          {/* Page Buttons with Smart Ellipsis */}
+          <div className="flex items-center gap-1 order-1 sm:order-2">
+            {/* Lompat ke Halaman Pertama */}
+            <button
+              onClick={() => handlePageChange(1)}
+              disabled={validCurrentPage === 1}
+              className={`p-1.5 sm:p-2 rounded-lg border text-xs font-medium transition-all ${
+                validCurrentPage === 1
+                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50 opacity-60'
+                  : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 cursor-pointer bg-white shadow-2xs'
+              }`}
+              title="Halaman Pertama"
+              aria-label="Halaman Pertama"
+            >
+              <ChevronsLeft className="w-4 h-4" />
+            </button>
+
+            {/* Halaman Sebelumnya */}
             <button
               onClick={() => handlePageChange(validCurrentPage - 1)}
               disabled={validCurrentPage === 1}
-              className={`p-2 rounded-lg border text-xs font-medium transition-all ${
+              className={`p-1.5 sm:p-2 rounded-lg border text-xs font-medium transition-all ${
                 validCurrentPage === 1
-                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50'
+                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50 opacity-60'
                   : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 cursor-pointer bg-white shadow-2xs'
               }`}
+              title="Halaman Sebelumnya"
               aria-label="Halaman Sebelumnya"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            {Array.from({ length: totalPages }).map((_, index) => {
-              const pageNum = index + 1;
-              const isActive = validCurrentPage === pageNum;
-              return (
-                <button
-                  key={pageNum}
-                  onClick={() => handlePageChange(pageNum)}
-                  className={`min-w-[34px] h-[34px] px-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-primary-navy text-white shadow-xs'
-                      : 'border border-slate-200 text-slate-700 hover:bg-slate-100 bg-white'
-                  }`}
-                >
-                  {pageNum}
-                </button>
-              );
-            })}
+            {/* Nomor Halaman di Layar Desktop (Maksimal 7 tombol rapi) */}
+            <div className="hidden sm:flex items-center gap-1">
+              {getPageNumbers().map((item, idx) => {
+                if (item === '...') {
+                  return (
+                    <span key={`dots-${idx}`} className="w-8 h-8 flex items-center justify-center text-xs text-slate-400 select-none">
+                      •••
+                    </span>
+                  );
+                }
+                const pageNum = item as number;
+                const isActive = validCurrentPage === pageNum;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => handlePageChange(pageNum)}
+                    className={`min-w-[34px] h-[34px] px-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-primary-navy text-white shadow-xs scale-105'
+                        : 'border border-slate-200 text-slate-700 hover:bg-slate-100 bg-white hover:border-slate-300'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
 
+            {/* Indikator Halaman di Layar Mobile */}
+            <div className="sm:hidden px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs">
+              {validCurrentPage} / {totalPages}
+            </div>
+
+            {/* Halaman Berikutnya */}
             <button
               onClick={() => handlePageChange(validCurrentPage + 1)}
               disabled={validCurrentPage === totalPages}
-              className={`p-2 rounded-lg border text-xs font-medium transition-all ${
+              className={`p-1.5 sm:p-2 rounded-lg border text-xs font-medium transition-all ${
                 validCurrentPage === totalPages
-                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50'
+                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50 opacity-60'
                   : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 cursor-pointer bg-white shadow-2xs'
               }`}
+              title="Halaman Berikutnya"
               aria-label="Halaman Berikutnya"
             >
               <ChevronRight className="w-4 h-4" />
+            </button>
+
+            {/* Lompat ke Halaman Terakhir */}
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              disabled={validCurrentPage === totalPages}
+              className={`p-1.5 sm:p-2 rounded-lg border text-xs font-medium transition-all ${
+                validCurrentPage === totalPages
+                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50 opacity-60'
+                  : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 cursor-pointer bg-white shadow-2xs'
+              }`}
+              title="Halaman Terakhir"
+              aria-label="Halaman Terakhir"
+            >
+              <ChevronsRight className="w-4 h-4" />
             </button>
           </div>
         </div>
