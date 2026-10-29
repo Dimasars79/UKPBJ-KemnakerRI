@@ -6,19 +6,15 @@ import {
   FileText, 
   ChevronLeft, 
   ChevronRight, 
-  ChevronsLeft,
-  ChevronsRight,
   ExternalLink, 
   Info, 
   X, 
   ShieldCheck, 
   AlertCircle,
-  Search,
-  Filter
+  Search
 } from 'lucide-react';
 import { useData, ProcurementPackage } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import Link from 'next/link';
 
 export function DataTable() {
   const { packagesList } = useData();
@@ -86,29 +82,22 @@ export function DataTable() {
     }
   };
 
-  // Algoritma Pintar Pagination dengan Ellipsis (...)
-  // Menghasilkan maksimal 7 tombol halaman agar selalu rapi dan proporsional
+  // Algoritma Pintar Pagination dengan Ellipsis (...) - Opsi 2 (Segmented Group)
+  // Menghasilkan maksimal 5-7 segmen halaman agar selalu solid, rapi, dan proporsional
   const getPageNumbers = () => {
-    if (totalPages <= 7) {
+    if (totalPages <= 6) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
     const pages: (number | string)[] = [];
-    if (validCurrentPage <= 4) {
-      for (let i = 1; i <= 5; i++) pages.push(i);
-      pages.push('...');
-      pages.push(totalPages);
-    } else if (validCurrentPage >= totalPages - 3) {
-      pages.push(1);
-      pages.push('...');
-      for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+    if (validCurrentPage <= 3) {
+      // Dekat awal: 1, 2, 3, ..., totalPages
+      pages.push(1, 2, 3, '...', totalPages);
+    } else if (validCurrentPage >= totalPages - 2) {
+      // Dekat akhir: 1, ..., totalPages-2, totalPages-1, totalPages
+      pages.push(1, '...', totalPages - 2, totalPages - 1, totalPages);
     } else {
-      pages.push(1);
-      pages.push('...');
-      pages.push(validCurrentPage - 1);
-      pages.push(validCurrentPage);
-      pages.push(validCurrentPage + 1);
-      pages.push('...');
-      pages.push(totalPages);
+      // Di tengah: 1, ..., cur-1, cur, cur+1, ..., totalPages
+      pages.push(1, '...', validCurrentPage - 1, validCurrentPage, validCurrentPage + 1, '...', totalPages);
     }
     return pages;
   };
@@ -315,55 +304,46 @@ export function DataTable() {
         </table>
       </div>
 
-      {/* Smart, Compact, and Elegant Pagination Controls */}
+      {/* Smart Segmented Pagination Bar (Opsi 2: Segmented Button Group Gaya Stripe / Dashboard Bank) */}
       {totalPages > 1 && (
-        <div className="p-4 sm:p-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/50">
+        <div className="p-4 sm:p-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/60">
           {/* Showing Counter */}
-          <p className="text-xs text-slate-500 font-medium order-2 sm:order-1 text-center sm:text-left">
-            {trans(
-              `Menampilkan ${startIndex + 1} - ${endIndex} dari ${filteredPackages.length.toLocaleString('id-ID')} paket (Halaman ${validCurrentPage} dari ${totalPages})`,
-              `Showing ${startIndex + 1} - ${endIndex} of ${filteredPackages.length.toLocaleString('id-ID')} packages (Page ${validCurrentPage} of ${totalPages})`
-            )}
-          </p>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 font-medium order-2 sm:order-1 text-center sm:text-left">
+            <span>
+              {trans(
+                `Menampilkan ${startIndex + 1} - ${endIndex} dari ${filteredPackages.length.toLocaleString('id-ID')} paket`,
+                `Showing ${startIndex + 1} - ${endIndex} of ${filteredPackages.length.toLocaleString('id-ID')} packages`
+              )}
+            </span>
+            <span className="text-slate-400 font-normal">
+              {trans(`(Halaman ${validCurrentPage} dari ${totalPages})`, `(Page ${validCurrentPage} of ${totalPages})`)}
+            </span>
+          </div>
 
-          {/* Page Buttons with Smart Ellipsis */}
-          <div className="flex items-center gap-1 order-1 sm:order-2">
-            {/* Lompat ke Halaman Pertama */}
-            <button
-              onClick={() => handlePageChange(1)}
-              disabled={validCurrentPage === 1}
-              className={`p-1.5 sm:p-2 rounded-lg border text-xs font-medium transition-all ${
-                validCurrentPage === 1
-                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50 opacity-60'
-                  : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 cursor-pointer bg-white shadow-2xs'
-              }`}
-              title="Halaman Pertama"
-              aria-label="Halaman Pertama"
-            >
-              <ChevronsLeft className="w-4 h-4" />
-            </button>
-
-            {/* Halaman Sebelumnya */}
+          {/* Unified Segmented Button Group */}
+          <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white shadow-2xs divide-x divide-slate-200 overflow-hidden order-1 sm:order-2">
+            {/* Tombol Sebelumnya */}
             <button
               onClick={() => handlePageChange(validCurrentPage - 1)}
               disabled={validCurrentPage === 1}
-              className={`p-1.5 sm:p-2 rounded-lg border text-xs font-medium transition-all ${
+              className={`px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 transition-colors ${
                 validCurrentPage === 1
-                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50 opacity-60'
-                  : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 cursor-pointer bg-white shadow-2xs'
+                  ? 'text-slate-300 cursor-not-allowed bg-slate-50/50'
+                  : 'text-slate-700 hover:text-primary-navy hover:bg-slate-50 active:bg-slate-100 cursor-pointer'
               }`}
               title="Halaman Sebelumnya"
               aria-label="Halaman Sebelumnya"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{trans('Sebelumnya', 'Previous')}</span>
             </button>
 
-            {/* Nomor Halaman di Layar Desktop (Maksimal 7 tombol rapi) */}
-            <div className="hidden sm:flex items-center gap-1">
+            {/* Nomor Halaman di Layar Desktop */}
+            <div className="hidden sm:flex items-center divide-x divide-slate-200">
               {getPageNumbers().map((item, idx) => {
                 if (item === '...') {
                   return (
-                    <span key={`dots-${idx}`} className="w-8 h-8 flex items-center justify-center text-xs text-slate-400 select-none">
+                    <span key={`dots-${idx}`} className="px-3 py-2 text-xs text-slate-400 select-none bg-slate-50/40 font-bold tracking-widest">
                       •••
                     </span>
                   );
@@ -374,10 +354,10 @@ export function DataTable() {
                   <button
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
-                    className={`min-w-[34px] h-[34px] px-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    className={`min-w-[40px] px-3 py-2 text-xs font-bold transition-colors cursor-pointer ${
                       isActive
-                        ? 'bg-primary-navy text-white shadow-xs scale-105'
-                        : 'border border-slate-200 text-slate-700 hover:bg-slate-100 bg-white hover:border-slate-300'
+                        ? 'bg-primary-navy text-white font-black shadow-xs'
+                        : 'text-slate-700 hover:bg-slate-100 hover:text-primary-navy'
                     }`}
                   >
                     {pageNum}
@@ -387,38 +367,24 @@ export function DataTable() {
             </div>
 
             {/* Indikator Halaman di Layar Mobile */}
-            <div className="sm:hidden px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs">
+            <span className="sm:hidden px-3.5 py-2 text-xs font-bold text-slate-700 bg-slate-50/50">
               {validCurrentPage} / {totalPages}
-            </div>
+            </span>
 
-            {/* Halaman Berikutnya */}
+            {/* Tombol Berikutnya */}
             <button
               onClick={() => handlePageChange(validCurrentPage + 1)}
               disabled={validCurrentPage === totalPages}
-              className={`p-1.5 sm:p-2 rounded-lg border text-xs font-medium transition-all ${
+              className={`px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 transition-colors ${
                 validCurrentPage === totalPages
-                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50 opacity-60'
-                  : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 cursor-pointer bg-white shadow-2xs'
+                  ? 'text-slate-300 cursor-not-allowed bg-slate-50/50'
+                  : 'text-slate-700 hover:text-primary-navy hover:bg-slate-50 active:bg-slate-100 cursor-pointer'
               }`}
               title="Halaman Berikutnya"
               aria-label="Halaman Berikutnya"
             >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-
-            {/* Lompat ke Halaman Terakhir */}
-            <button
-              onClick={() => handlePageChange(totalPages)}
-              disabled={validCurrentPage === totalPages}
-              className={`p-1.5 sm:p-2 rounded-lg border text-xs font-medium transition-all ${
-                validCurrentPage === totalPages
-                  ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-50 opacity-60'
-                  : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 cursor-pointer bg-white shadow-2xs'
-              }`}
-              title="Halaman Terakhir"
-              aria-label="Halaman Terakhir"
-            >
-              <ChevronsRight className="w-4 h-4" />
+              <span className="hidden sm:inline">{trans('Berikutnya', 'Next')}</span>
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

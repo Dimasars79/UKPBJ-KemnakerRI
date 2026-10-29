@@ -185,7 +185,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
         icon: meta.icon
       };
     });
-  }, [packagesList, totalBudgetNumber]);
+  }, [packagesList, totalBudgetNumber, isUsingFullRupData]);
 
   // Data khusus untuk komponen Donut Chart (format DonutMethodItem)
   const donutData: DonutMethodItem[] = useMemo(() => {
