@@ -3091,20 +3091,20 @@ export default function AdminPortalPage() {
                     </div>
 
                     {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between my-2.5 sm:my-4">
-                      <div className="flex items-baseline gap-2 sm:gap-2.5">
+                    <div className="flex items-center justify-between my-2.5 sm:my-4">
+                      <div className="flex items-center gap-2 sm:gap-2.5">
                         <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {packagesList.length}
                         </span>
-                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-tight">
+                        <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-none">
                           Paket Terdaftar
                         </span>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex flex-col justify-center">
                         <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Total Estimasi Pagu
                         </span>
-                        <span className="text-xs sm:text-sm md:text-base font-black text-amber-500 leading-tight">
+                        <span className="text-xs sm:text-sm md:text-base font-black text-amber-500 leading-tight mt-0.5">
                           Rp 48.2 M
                         </span>
                       </div>
@@ -3172,20 +3172,20 @@ export default function AdminPortalPage() {
                     </div>
 
                     {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between my-2.5 sm:my-4">
-                      <div className="flex items-baseline gap-2 sm:gap-2.5">
+                    <div className="flex items-center justify-between my-2.5 sm:my-4">
+                      <div className="flex items-center gap-2 sm:gap-2.5">
                         <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {newsList.length}
                         </span>
-                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 leading-tight">
+                        <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 leading-none">
                           Artikel Terbit
                         </span>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex flex-col justify-center">
                         <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Estimasi Pembaca
                         </span>
-                        <span className="text-xs sm:text-sm md:text-base font-black text-blue-500 leading-tight">
+                        <span className="text-xs sm:text-sm md:text-base font-black text-blue-500 leading-tight mt-0.5">
                           14.8K Tayang
                         </span>
                       </div>
@@ -3258,20 +3258,20 @@ export default function AdminPortalPage() {
                     </div>
 
                     {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between my-2.5 sm:my-4">
-                      <div className="flex items-baseline gap-2 sm:gap-2.5">
+                    <div className="flex items-center justify-between my-2.5 sm:my-4">
+                      <div className="flex items-center gap-2 sm:gap-2.5">
                         <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {agendaList.length}
                         </span>
-                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-tight">
+                        <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-none">
                           Jadwal Kegiatan
                         </span>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex flex-col justify-center">
                         <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Target Partisipasi
                         </span>
-                        <span className="text-xs sm:text-sm md:text-base font-black text-emerald-500 leading-tight">
+                        <span className="text-xs sm:text-sm md:text-base font-black text-emerald-500 leading-tight mt-0.5">
                           850+ Peserta
                         </span>
                       </div>
@@ -3341,20 +3341,20 @@ export default function AdminPortalPage() {
                     </div>
 
                     {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-baseline justify-between my-2.5 sm:my-4">
-                      <div className="flex items-baseline gap-2 sm:gap-2.5">
+                    <div className="flex items-center justify-between my-2.5 sm:my-4">
+                      <div className="flex items-center gap-2 sm:gap-2.5">
                         <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {regulasiList.length + sopList.length}
                         </span>
-                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 leading-tight">
+                        <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 leading-none">
                           Total Dokumen
                         </span>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex flex-col justify-center">
                         <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                           Status Validasi
                         </span>
-                        <span className="text-xs sm:text-sm md:text-base font-black text-emerald-500 leading-tight">
+                        <span className="text-xs sm:text-sm md:text-base font-black text-emerald-500 leading-tight mt-0.5">
                           100% Sah & Aktif
                         </span>
                       </div>

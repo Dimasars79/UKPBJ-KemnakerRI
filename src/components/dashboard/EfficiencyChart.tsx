@@ -4,7 +4,6 @@ import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useData } from '@/contexts/DataContext';
-import { ShieldCheck } from 'lucide-react';
 
 interface TkdnDataItem {
   name: string;
@@ -173,8 +172,8 @@ export function EfficiencyChart() {
         </div>
       </div>
 
-      {/* LEGENDA & STATUS INPRES DI BAWAH DONUT (DINAMIS) */}
-      <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
+      {/* LEGENDA DI BAWAH DONUT (DINAMIS) */}
+      <div className="pt-2 border-t border-slate-100">
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="flex items-center gap-1.5 p-1.5 rounded-lg bg-emerald-50 border border-emerald-200/60">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
@@ -191,15 +190,6 @@ export function EfficiencyChart() {
               <span className="text-xs font-black text-amber-700 truncate block">{tkdnData[1].value}% ({imporNominalDisplay})</span>
             </div>
           </div>
-        </div>
-
-        {/* BADGE KEPATUHAN INPRES TARGET NASIONAL */}
-        <div className="flex items-center justify-between px-2.5 py-1 rounded-md bg-blue-50 border border-blue-200/50 text-[10px] text-blue-800 font-semibold">
-          <span className="flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-            <span>Porsi UMK: {umkPctDisplay}</span>
-          </span>
-          <span className="font-bold text-emerald-600">✓ Target &gt; 40% Terpenuhi</span>
         </div>
       </div>
     </div>
