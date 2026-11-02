@@ -11,27 +11,51 @@ import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { DataTable } from '@/components/dashboard/DataTable';
 import { TrendingUp, Clock, PackageCheck, BarChart3 } from 'lucide-react';
 
+import { useData } from '@/contexts/DataContext';
+
 export default function MonitoringPage() {
   const { t, trans } = useLanguage();
+  const { packagesList } = useData();
+
+  // Helper konversi string Rupiah ke angka numerik
+  const parseRupiahNumber = (rupiahStr: string): number => {
+    if (!rupiahStr) return 0;
+    const clean = rupiahStr.replace(/[^0-9]/g, '');
+    const num = parseInt(clean, 10);
+    return isNaN(num) ? 0 : num;
+  };
+
+  const { totalPackagesCount, savingsDisplay } = React.useMemo(() => {
+    const count = packagesList && packagesList.length > 0 ? packagesList.length : 428;
+    const totalPaguNum = packagesList && packagesList.length > 0
+      ? packagesList.reduce((acc, p) => acc + parseRupiahNumber(p.hps), 0)
+      : 842300000000;
+    const savingsNum = Math.round(totalPaguNum * 0.048);
+
+    return {
+      totalPackagesCount: count.toLocaleString('id-ID'),
+      savingsDisplay: `Rp ${savingsNum.toLocaleString('id-ID')}`
+    };
+  }, [packagesList]);
 
   const performanceStats = [
     { 
-      title: trans('Total Paket Selesai', 'Total Completed Packages'), 
-      value: '428', 
+      title: trans('Total Paket Pengadaan Terdata', 'Total Registered Packages'), 
+      value: totalPackagesCount, 
       icon: <PackageCheck className="w-8 h-8 text-white" />, 
       trend: trans('+12% dari bulan lalu', '+12% from last month') 
     },
     { 
-      title: trans('Efisiensi Waktu', 'Time Efficiency'), 
+      title: trans('Efisiensi Waktu Proses', 'Time Efficiency'), 
       value: '18%', 
       icon: <Clock className="w-8 h-8 text-white" />, 
       trend: trans('Lebih cepat 4 hari/paket', '4 days faster per package') 
     },
     { 
-      title: trans('Penghematan Pagu', 'Budget Savings'), 
-      value: 'Rp 14.500.000.000', 
+      title: trans('Penghematan Pagu (Efisiensi)', 'Budget Savings (Efficiency)'), 
+      value: savingsDisplay, 
       icon: <TrendingUp className="w-8 h-8 text-white" />, 
-      trend: trans('12.5% efisiensi anggaran', '12.5% budget efficiency') 
+      trend: trans('4.8% efisiensi dari HPS', '4.8% efficiency from HPS') 
     },
   ];
 
@@ -94,7 +118,7 @@ export default function MonitoringPage() {
               <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
                 <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                  <span>{trans('Tren Penyelesaian Paket', 'Package Completion Trend')}</span>
+                  <span>{trans('Tren Kinerja Pengadaan', 'Procurement Performance Trend')}</span>
                 </h3>
                 <PerformanceChart />
               </div>
@@ -102,8 +126,8 @@ export default function MonitoringPage() {
             <FadeIn direction="up" delay={0.2}>
               <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
                 <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span>{trans('Paket per Kategori', 'Packages by Category')}</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>{trans('Komitmen PDN & UMK (TKDN)', 'Domestic & SME Commitment')}</span>
                 </h3>
                 <EfficiencyChart />
               </div>
@@ -112,7 +136,7 @@ export default function MonitoringPage() {
               <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
                 <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  <span>{trans('Target vs Realisasi', 'Target vs Realization')}</span>
+                  <span>{trans('Target vs Realisasi & Efisiensi', 'Target vs Realization & Savings')}</span>
                 </h3>
                 <CategoryChart />
               </div>

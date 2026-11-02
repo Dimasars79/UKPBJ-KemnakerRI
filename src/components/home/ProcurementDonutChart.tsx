@@ -328,8 +328,8 @@ export function ProcurementDonutChart({
           <ellipse
             cx={cx}
             cy={cy + 8}
-            rx={rx * 0.76}
-            ry={ry * 0.76}
+            rx={rx * 0.82}
+            ry={ry * 0.82}
             fill="#94A3B8"
           />
 
@@ -337,8 +337,8 @@ export function ProcurementDonutChart({
           <ellipse
             cx={cx}
             cy={cy}
-            rx={rx * 0.76}
-            ry={ry * 0.76}
+            rx={rx * 0.82}
+            ry={ry * 0.82}
             fill="url(#podium-top)"
             stroke="#FFFFFF"
             strokeWidth="2"
@@ -348,8 +348,8 @@ export function ProcurementDonutChart({
           <ellipse
             cx={cx}
             cy={cy}
-            rx={rx * 0.76 - 3}
-            ry={ry * 0.76 - 3}
+            rx={rx * 0.82 - 3}
+            ry={ry * 0.82 - 3}
             fill="none"
             stroke="rgba(212, 175, 55, 0.25)"
             strokeWidth="1"
@@ -364,14 +364,17 @@ export function ProcurementDonutChart({
                 x={cx}
                 y={cy - 12}
                 textAnchor="middle"
-                className="text-[9px] font-black uppercase tracking-wider transition-all duration-200"
+                className="font-extrabold uppercase tracking-tight transition-all duration-200"
+                style={{
+                  fontSize: activeItem.name.length > 12 ? '7.5px' : '8px'
+                }}
                 fill={activeItem.color}
               >
-                {activeItem.name.length > 14 ? activeItem.name.slice(0, 14) + '...' : activeItem.name} ({activeItem.percentage}%)
+                {activeItem.name === 'Pengadaan Langsung' ? 'Peng. Langsung' : activeItem.name} ({activeItem.percentage}%)
               </text>
               <text
                 x={cx}
-                y={cy + 5}
+                y={cy + 4}
                 textAnchor="middle"
                 className="text-[13px] sm:text-[14px] font-black fill-[#0A2342] tracking-tight transition-all duration-200"
                 style={{ textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
@@ -380,9 +383,9 @@ export function ProcurementDonutChart({
               </text>
               <text
                 x={cx}
-                y={cy + 19}
+                y={cy + 18}
                 textAnchor="middle"
-                className="text-[10px] font-bold fill-slate-600 transition-all duration-200"
+                className="text-[9.5px] font-bold fill-slate-600 transition-all duration-200"
               >
                 {activeItem.count.toLocaleString('id-ID')} Paket
               </text>
@@ -399,7 +402,7 @@ export function ProcurementDonutChart({
               </text>
               <text
                 x={cx}
-                y={cy + 5}
+                y={cy + 4}
                 textAnchor="middle"
                 className="text-sm sm:text-[15px] font-black fill-[#0A2342] tracking-tight transition-all duration-200"
                 style={{ textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
@@ -408,9 +411,9 @@ export function ProcurementDonutChart({
               </text>
               <text
                 x={cx}
-                y={cy + 19}
+                y={cy + 18}
                 textAnchor="middle"
-                className="text-[10px] font-bold fill-slate-600 transition-all duration-200"
+                className="text-[9.5px] font-bold fill-slate-600 transition-all duration-200"
               >
                 {totalPackages.toLocaleString('id-ID')} Paket
               </text>
