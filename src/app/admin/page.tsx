@@ -648,6 +648,7 @@ export default function AdminPortalPage() {
     updateAgenda,
     deleteAgenda,
     packagesList,
+    totalPackagesCount,
     addPackage,
     updatePackage,
     deletePackage,
@@ -1789,7 +1790,7 @@ export default function AdminPortalPage() {
                         ? 'bg-white/20 text-white' 
                         : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
                     }`}>
-                      {packagesList.length}
+                      {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
                     </span>
                   </button>
                 </div>
@@ -1846,7 +1847,7 @@ export default function AdminPortalPage() {
                           <Package className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                           <span className="truncate">Tender & Seleksi</span>
                           <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                            {packagesList.length}
+                            {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
                           </span>
                         </button>
 
@@ -2104,7 +2105,7 @@ export default function AdminPortalPage() {
                   ? 'bg-white/20 text-white' 
                   : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
               }`}>
-                {packagesList.length}
+                {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
               </span>
             </button>
           </div>
@@ -2163,7 +2164,7 @@ export default function AdminPortalPage() {
                     <Package className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                     <span className="truncate">Tender & Seleksi</span>
                     <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                      {packagesList.length}
+                      {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
                     </span>
                   </button>
 
@@ -3094,7 +3095,7 @@ export default function AdminPortalPage() {
                     <div className="flex items-center justify-between my-2.5 sm:my-4">
                       <div className="flex items-center gap-2 sm:gap-2.5">
                         <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                          {packagesList.length}
+                          {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
                         </span>
                         <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-none">
                           Paket Terdaftar
@@ -4818,7 +4819,7 @@ export default function AdminPortalPage() {
               <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
                 <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Paket</span>
                 <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
-                  <span className={`text-xl sm:text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{packagesList.length}</span>
+                  <span className={`text-xl sm:text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}</span>
                   <span className="text-[10px] font-bold text-blue-500">Paket Terdaftar</span>
                 </div>
               </div>

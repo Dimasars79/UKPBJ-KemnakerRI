@@ -97,7 +97,7 @@ export async function GET(req: NextRequest) {
     ] = await Promise.all([
       supabaseAdmin.from('news').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('agendas').select('*').order('created_at', { ascending: false }),
-      supabaseAdmin.from('procurement_packages').select('*').order('created_at', { ascending: false }),
+      supabaseAdmin.from('procurement_packages').select('*', { count: 'exact' }).order('created_at', { ascending: false }),
       supabaseAdmin.from('regulasi').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('sop').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('panduan').select('*').order('created_at', { ascending: false }),
@@ -125,6 +125,7 @@ export async function GET(req: NextRequest) {
         news: newsRes.data || [],
         agendas: activeAgendas,
         procurement_packages: packagesRes.data || [],
+        total_packages_count: packagesRes.count || packagesRes.data?.length || 0,
         regulasi: regulasiRes.data || [],
         sop: sopRes.data || [],
         panduan: panduanRes.data || [],

@@ -15,7 +15,7 @@ import { useData } from '@/contexts/DataContext';
 
 export default function MonitoringPage() {
   const { t, trans } = useLanguage();
-  const { packagesList } = useData();
+  const { packagesList, totalPackagesCount: totalDbCount } = useData();
 
   // Helper konversi string Rupiah ke angka numerik
   const parseRupiahNumber = (rupiahStr: string): number => {
@@ -26,7 +26,7 @@ export default function MonitoringPage() {
   };
 
   const { totalPackagesCount, savingsDisplay } = React.useMemo(() => {
-    const count = packagesList && packagesList.length > 0 ? packagesList.length : 428;
+    const count = totalDbCount || (packagesList && packagesList.length > 0 ? packagesList.length : 8333);
     const totalPaguNum = packagesList && packagesList.length > 0
       ? packagesList.reduce((acc, p) => acc + parseRupiahNumber(p.hps), 0)
       : 842300000000;
@@ -36,25 +36,25 @@ export default function MonitoringPage() {
       totalPackagesCount: count.toLocaleString('id-ID'),
       savingsDisplay: `Rp ${savingsNum.toLocaleString('id-ID')}`
     };
-  }, [packagesList]);
+  }, [packagesList, totalDbCount]);
 
   const performanceStats = [
     { 
       title: trans('Total Paket Pengadaan Terdata', 'Total Registered Packages'), 
       value: totalPackagesCount, 
-      icon: <PackageCheck className="w-8 h-8 text-white" />, 
+      icon: <PackageCheck className="w-4 h-4 sm:w-7 sm:h-7 text-white" />, 
       trend: trans('+12% dari bulan lalu', '+12% from last month') 
     },
     { 
       title: trans('Efisiensi Waktu Proses', 'Time Efficiency'), 
       value: '18%', 
-      icon: <Clock className="w-8 h-8 text-white" />, 
+      icon: <Clock className="w-4 h-4 sm:w-7 sm:h-7 text-white" />, 
       trend: trans('Lebih cepat 4 hari/paket', '4 days faster per package') 
     },
     { 
       title: trans('Penghematan Pagu (Efisiensi)', 'Budget Savings (Efficiency)'), 
       value: savingsDisplay, 
-      icon: <TrendingUp className="w-8 h-8 text-white" />, 
+      icon: <TrendingUp className="w-4 h-4 sm:w-7 sm:h-7 text-white" />, 
       trend: trans('4.8% efisiensi dari HPS', '4.8% efficiency from HPS') 
     },
   ];
@@ -96,18 +96,18 @@ export default function MonitoringPage() {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
           {/* Stat Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-6 mb-8 sm:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-6 mb-6 sm:mb-12">
             {performanceStats.map((stat, idx) => (
-              <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white rounded-2xl shadow-lg border border-slate-100 p-4 sm:p-6 flex items-center gap-3.5 sm:gap-5">
-                <div className="bg-gradient-to-br from-primary-blue to-blue-600 rounded-xl p-3 sm:p-4 shadow-md shrink-0">
-                  <div className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center">
+              <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white rounded-xl sm:rounded-2xl shadow-sm sm:shadow-lg border border-slate-100 p-2.5 sm:p-6 flex items-center gap-3 sm:gap-5">
+                <div className="bg-gradient-to-br from-primary-blue to-blue-600 rounded-lg sm:rounded-xl p-2 sm:p-4 shadow-sm sm:shadow-md shrink-0">
+                  <div className="w-4 h-4 sm:w-7 sm:h-7 flex items-center justify-center">
                     {stat.icon}
                   </div>
                 </div>
                 <div className="min-w-0">
-                  <p className="text-slate-500 text-xs sm:text-sm font-medium mb-0.5 sm:mb-1 truncate">{stat.title}</p>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary-navy mb-0.5 sm:mb-1 truncate">{stat.value}</h3>
-                  <p className="text-green-600 text-[11px] sm:text-xs font-bold truncate">{stat.trend}</p>
+                  <p className="text-slate-500 text-[10px] sm:text-sm font-medium mb-0 sm:mb-1 truncate">{stat.title}</p>
+                  <h3 className="text-base sm:text-2xl md:text-3xl font-extrabold text-primary-navy mb-0 sm:mb-1 truncate leading-tight">{stat.value}</h3>
+                  <p className="text-green-600 text-[10px] sm:text-xs font-bold truncate leading-tight">{stat.trend}</p>
                 </div>
               </FadeIn>
             ))}

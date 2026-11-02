@@ -176,6 +176,7 @@ interface DataContextType {
 
   // Procurement Packages (Tender & Seleksi)
   packagesList: ProcurementPackage[];
+  totalPackagesCount: number;
   addPackage: (pkg: Omit<ProcurementPackage, 'id'>) => void;
   updatePackage: (id: string, updated: Partial<ProcurementPackage>) => void;
   deletePackage: (id: string) => void;
@@ -734,6 +735,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [newsList, setNewsList] = useState<NewsItem[]>(DEFAULT_NEWS);
   const [agendaList, setAgendaList] = useState<AgendaItem[]>(() => filterActiveAgendas(DEFAULT_AGENDAS).active);
   const [packagesList, setPackagesList] = useState<ProcurementPackage[]>(DEFAULT_PACKAGES);
+  const [totalPackagesCount, setTotalPackagesCount] = useState<number>(() => DEFAULT_PACKAGES.length);
   const [regulasiList, setRegulasiList] = useState<RegulasiItem[]>(DEFAULT_REGULASI);
   const [sopList, setSopList] = useState<SopItem[]>(DEFAULT_SOP);
   const [panduanList, setPanduanList] = useState<PanduanItem[]>(DEFAULT_PANDUAN);
@@ -782,6 +784,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           news,
           agendas,
           procurement_packages,
+          total_packages_count,
           regulasi,
           sop,
           panduan,
@@ -916,6 +919,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             setPackagesList(mappedPkgs);
           } else {
             setPackagesList(MOCK_PACKAGES_50);
+          }
+          if (typeof total_packages_count === 'number' && total_packages_count > 0) {
+            setTotalPackagesCount(total_packages_count);
+          } else {
+            setTotalPackagesCount(mappedPkgs.length >= 20 ? mappedPkgs.length : MOCK_PACKAGES_50.length);
           }
         }
 
@@ -1467,6 +1475,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     };
     const updated = [newEntry, ...packagesList.filter((p) => p.id !== tempId)];
     setPackagesList(updated);
+    setTotalPackagesCount((prev) => prev + 1);
     persist(newsList, agendaList, updated);
 
     const res = await syncAdminData('procurement_packages', 'insert', {
@@ -1528,6 +1537,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const deletePackage = async (id: string) => {
     const updated = packagesList.filter((item) => item.id !== id);
     setPackagesList(updated);
+    setTotalPackagesCount((prev) => Math.max(0, prev - 1));
     persist(newsList, agendaList, updated);
 
     await syncAdminData('procurement_packages', 'delete', { id });
@@ -2013,6 +2023,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         updateAgenda,
         deleteAgenda,
         packagesList,
+        totalPackagesCount,
         addPackage,
         updatePackage,
         deletePackage,
