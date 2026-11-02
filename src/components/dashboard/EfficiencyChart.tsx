@@ -37,7 +37,7 @@ export function EfficiencyChart() {
   };
 
   // Kalkulasi Dinamis dari packagesList (Terkoneksi ke Supabase / RUP Kemnaker)
-  const { tkdnData, pdnPctDisplay, umkPctDisplay, pdnNominalDisplay, imporNominalDisplay } = useMemo(() => {
+  const { tkdnData, pdnPctDisplay, pdnNominalDisplay, imporNominalDisplay } = useMemo(() => {
     if (!packagesList || packagesList.length === 0) {
       return {
         tkdnData: [
@@ -45,7 +45,6 @@ export function EfficiencyChart() {
           { name: trans('Produk Impor Khusus', 'Special Imported Products'), value: 7.6, nominal: 'Rp 112,6 M', color: '#F59E0B' }
         ],
         pdnPctDisplay: '92.4%',
-        umkPctDisplay: '74.8%',
         pdnNominalDisplay: 'Rp 1,36 T',
         imporNominalDisplay: 'Rp 112 M'
       };
@@ -53,21 +52,15 @@ export function EfficiencyChart() {
 
     let pdnSum = 0;
     let imporSum = 0;
-    let umkCount = 0;
 
     packagesList.forEach((pkg) => {
       const hpsNum = parseRupiahNumber(pkg.hps);
       const isImpor = pkg.desc?.includes('PDN: Tidak');
-      const isUmk = pkg.desc?.includes('Usaha Mikro/Kecil: Ya');
 
       if (isImpor) {
         imporSum += hpsNum;
       } else {
         pdnSum += hpsNum;
-      }
-
-      if (isUmk) {
-        umkCount++;
       }
     });
 
@@ -75,7 +68,6 @@ export function EfficiencyChart() {
     const totalSum = pdnSum + imporSum || 1;
     const pdnPercentage = Number(((pdnSum / totalSum) * 100).toFixed(1));
     const imporPercentage = Number((100 - pdnPercentage).toFixed(1));
-    const umkPercentage = Number(((umkCount / (packagesList.length || 1)) * 100).toFixed(1));
 
     return {
       tkdnData: [
@@ -93,7 +85,6 @@ export function EfficiencyChart() {
         }
       ],
       pdnPctDisplay: `${pdnPercentage}%`,
-      umkPctDisplay: `${umkPercentage}%`,
       pdnNominalDisplay: formatMiliar(pdnSum),
       imporNominalDisplay: formatMiliar(imporSum)
     };
