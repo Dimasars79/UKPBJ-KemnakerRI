@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Integrasi dan Kontrak API Sistem Konsultasi UKPBJ</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      width: 1200px;
+      min-height: 640px;
+      padding: 48px 56px;
+      color: #0f284e;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    /* MAIN TITLE */
+    .slide-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #0f2d59;
+      letter-spacing: -0.2px;
+      margin-bottom: 38px;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #174276;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* TABLE STYLING */
+    .table-container {
+      width: 100%;
+      margin-bottom: 38px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    thead tr {
+      border-top: 2px solid #0f2d59;
+      border-bottom: 2px solid #0f2d59;
+    }
+
+    th {
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f2d59;
+    }
+
+    th:first-child, td:first-child {
+      padding-left: 6px;
+      width: 28%;
+    }
+
+    th:nth-child(2), td:nth-child(2) {
+      width: 27%;
+    }
+
+    th:nth-child(3), td:nth-child(3) {
+      width: 20%;
+    }
+
+    th:last-child, td:last-child {
+      padding-right: 6px;
+      width: 25%;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    td {
+      padding: 14px 14px;
+      font-size: 14.5px;
+      color: #1e293b;
+      vertical-align: middle;
+    }
+
+    td strong {
+      font-weight: 700;
+      color: #0f284e;
+    }
+
+    /* SECTION 2 - DUAL BOX CONTAINER */
+    .contract-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .contract-box {
+      background-color: #f1f6fa;
+      border-radius: 4px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* CODE BOX (LEFT) */
+    .code-content {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: #0f284e;
+    }
+
+    .code-method {
+      font-weight: 700;
+      color: #0f2d59;
+    }
+
+    .code-header {
+      color: #475569;
+    }
+
+    .code-status {
+      font-weight: 800;
+      color: #1565c0;
+      margin: 3px 0;
+    }
+
+    .code-json {
+      color: #0f284e;
+      white-space: pre;
+    }
+
+    /* ERROR BOX (RIGHT) */
+    .error-box-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #154276;
+      margin-bottom: 14px;
+    }
+
+    .error-item {
+      margin-bottom: 14px;
+    }
+
+    .error-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .error-code {
+      font-weight: 800;
+      font-size: 14.5px;
+      color: #154276;
+      font-family: 'Consolas', 'Segoe UI', monospace;
+      margin-bottom: 2px;
+    }
+
+    .error-desc {
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MAIN TITLE -->
+  <h1 class="slide-title">Contoh hasil: integrasi dan kontrak API sistem konsultasi UKPBJ</h1>
+
+  <!-- 1. DAFTAR INTEGRASI -->
+  <div class="section-title">1 · Daftar integrasi</div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Dari → ke</th>
+          <th>Data yang dikirim</th>
+          <th>Kapan dikirim</th>
+          <th>Jika gagal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Portal publik → Konsultasi PBJ</strong></td>
+          <td>konsultasi_id, tanggal</td>
+          <td>Tiap 5 menit</td>
+          <td>Tampilkan jadwal terakhir</td>
+        </tr>
+        <tr>
+          <td><strong>Konsultasi PBJ → Email service</strong></td>
+          <td>Email pemohon, pokja, jam</td>
+          <td>Saat konsultasi disetujui</td>
+          <td>Tandai "gagal kirim", coba ulang</td>
+        </tr>
+        <tr>
+          <td><strong>Konsultasi PBJ → Identity provider</strong></td>
+          <td>Token login</td>
+          <td>Saat pegawai login</td>
+          <td>Minta pegawai login ulang</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2. SATU KONTRAK API -->
+  <div class="section-title">2 · Satu kontrak API: ambil jadwal konsultasi</div>
+  <div class="contract-grid">
+    <!-- LEFT BOX -->
+    <div class="contract-box">
+      <div class="code-content">
+        <div class="code-method">GET /api/v1/konsultasi/K01/jadwal</div>
+        <div class="code-header">Authorization: Bearer &lt;token&gt;</div>
+        <div class="code-status">200 OK</div>
+        <div class="code-json">{ "konsultasi_id": "K01",
+  "jadwal": [ { "mulai": "09:00",
+    "status": "DISETUJUI" } ] }</div>
+      </div>
+    </div>
+
+    <!-- RIGHT BOX -->
+    <div class="contract-box">
+      <div class="error-box-title">Error yang disepakati</div>
+      
+      <div class="error-item">
+        <div class="error-code">401 UNAUTHORIZED</div>
+        <div class="error-desc">Token tidak ada atau tidak valid.</div>
+      </div>
+
+      <div class="error-item">
+        <div class="error-code">404 KONSULTASI_TIDAK_ADA</div>
+        <div class="error-desc">Kode konsultasi tidak ditemukan.</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

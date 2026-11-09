@@ -1,0 +1,93 @@
+<mxfile host="app.diagrams.net" modified="2026-11-05T08:30:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="arsitektur-ukpbj-simple" name="Arsitektur UKPBJ">
+    <mxGraphModel dx="1000" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- SYSTEM BOUNDARY -->
+        <mxCell id="boundary" value="BATAS SISTEM PORTAL UKPBJ KEMNAKER" style="swimlane;whiteSpace=wrap;html=1;dashed=1;dashPattern=6 6;fillColor=none;strokeColor=#444444;strokeWidth=1;fontColor=#222222;fontSize=11;fontStyle=1;startSize=24;" vertex="1" parent="1">
+          <mxGeometry x="220" y="70" width="540" height="320" as="geometry" />
+        </mxCell>
+
+        <!-- ACTORS (KIRI) -->
+        <mxCell id="actor_pegawai" value="Pegawai / PPK&#xa;[Pemohon]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="130" width="110" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="actor_pokja" value="Pokja Pemilihan&#xa;[Verifikator]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="220" width="110" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- CONTAINERS INSIDE BOUNDARY -->
+        <mxCell id="webapp" value="Web app&#xa;[Next.js]&#xa;UI pada browser" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" vertex="1" parent="boundary">
+          <mxGeometry x="30" y="60" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="backend" value="Backend API&#xa;[Modular monolith]&#xa;Aturan konsultasi dan akses" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" vertex="1" parent="boundary">
+          <mxGeometry x="230" y="60" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="database" value="Database&#xa;[PostgreSQL]&#xa;Data tiket dan regulasi" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" vertex="1" parent="boundary">
+          <mxGeometry x="230" y="190" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- EXTERNAL SERVICE (KANAN) -->
+        <mxCell id="email_service" value="Email service&#xa;[External]&#xa;Kirim notifikasi" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="830" y="130" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sso_service" value="SSO SIAPKerja&#xa;[External]&#xa;Validasi login" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="830" y="240" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- CONNECTORS / PANAH -->
+        <!-- Pegawai to WebApp -->
+        <mxCell id="c1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;" edge="1" parent="1" source="actor_pegawai" target="webapp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Pokja to WebApp -->
+        <mxCell id="c2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;" edge="1" parent="1" source="actor_pokja" target="webapp">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="245" />
+              <mxPoint x="200" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- WebApp to Backend -->
+        <mxCell id="c3" value="HTTPS / JSON" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;fontSize=10;fontColor=#000000;labelBackgroundColor=#ffffff;" edge="1" parent="boundary" source="webapp" target="backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Backend to Database -->
+        <mxCell id="c4" value="SQL" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;fontSize=10;fontColor=#000000;labelBackgroundColor=#ffffff;" edge="1" parent="boundary" source="backend" target="database">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Backend to Email Service -->
+        <mxCell id="c5" value="API email" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;fontSize=10;fontColor=#000000;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="backend" target="email_service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Backend to SSO -->
+        <mxCell id="c6" value="OAuth2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;fontSize=10;fontColor=#000000;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="backend" target="sso_service">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="160" />
+              <mxPoint x="720" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- FOOTER TEXT (SLIDE 186) -->
+        <mxCell id="footer_text" value="Backend menyimpan data ke Database dan memanggil email service secara terpisah.&#xa;Alasan: satu modular Backend untuk scope awal sederhana. Konsekuensi: modul di-deploy bersama. Email masih asumsi." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9.5;fontColor=#555555;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="220" y="405" width="580" height="35" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

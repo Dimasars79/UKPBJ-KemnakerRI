@@ -1,0 +1,71 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Arsitektur UKPBJ" id="FyAy-Mb_DrkrVmCBv7zc">
+    <mxGraphModel dx="1030" dy="561" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-1" parent="1" style="swimlane;whiteSpace=wrap;html=1;dashed=1;dashPattern=6 6;fillColor=none;strokeColor=#444444;strokeWidth=1;fontColor=#222222;fontSize=11;fontStyle=1;startSize=24;" value="BATAS SISTEM PORTAL UKPBJ KEMNAKER" vertex="1">
+          <mxGeometry height="320" width="540" x="220" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-2" parent="Nq5CPoC5HdJrwao-3KyH-1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" value="Web app&#xa;[Next.js]&#xa;UI pada browser" vertex="1">
+          <mxGeometry height="60" width="130" x="30" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-3" parent="Nq5CPoC5HdJrwao-3KyH-1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" value="Backend API&#xa;[Modular monolith]&#xa;Aturan konsultasi dan akses" vertex="1">
+          <mxGeometry height="60" width="160" x="230" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-4" parent="Nq5CPoC5HdJrwao-3KyH-1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" value="Database&#xa;[PostgreSQL]&#xa;Data tiket dan regulasi" vertex="1">
+          <mxGeometry height="60" width="160" x="230" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-5" edge="1" parent="Nq5CPoC5HdJrwao-3KyH-1" source="Nq5CPoC5HdJrwao-3KyH-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;fontSize=10;fontColor=#000000;labelBackgroundColor=#ffffff;" target="Nq5CPoC5HdJrwao-3KyH-3" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;HTTPS / JSON&lt;/font&gt;">
+          <mxGeometry relative="1" x="-0.1429" y="10" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-6" edge="1" parent="Nq5CPoC5HdJrwao-3KyH-1" source="Nq5CPoC5HdJrwao-3KyH-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;fontSize=10;fontColor=#000000;labelBackgroundColor=#ffffff;" target="Nq5CPoC5HdJrwao-3KyH-4" value="SQL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" value="Pegawai / PPK&#xa;[Pemohon]" vertex="1">
+          <mxGeometry height="50" width="110" x="60" y="135" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" value="Pokja Pemilihan&#xa;[Verifikator]" vertex="1">
+          <mxGeometry height="50" width="110" x="60" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" value="Email service&#xa;[External]&#xa;Kirim notifikasi" vertex="1">
+          <mxGeometry height="60" width="130" x="830" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontColor=#000000;fontSize=11;" value="SSO SIAPKerja&#xa;[External]&#xa;Validasi login" vertex="1">
+          <mxGeometry height="60" width="130" x="830" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-11" edge="1" parent="1" source="Nq5CPoC5HdJrwao-3KyH-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;" target="Nq5CPoC5HdJrwao-3KyH-2" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="190" y="160" />
+              <mxPoint x="190" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-12" edge="1" parent="1" source="Nq5CPoC5HdJrwao-3KyH-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;" target="Nq5CPoC5HdJrwao-3KyH-2" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="245" />
+              <mxPoint x="200" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-13" edge="1" parent="1" source="Nq5CPoC5HdJrwao-3KyH-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;fontSize=10;fontColor=#000000;labelBackgroundColor=#ffffff;" target="Nq5CPoC5HdJrwao-3KyH-9" value="API email">
+          <mxGeometry relative="1" y="10" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Nq5CPoC5HdJrwao-3KyH-14" edge="1" parent="1" source="Nq5CPoC5HdJrwao-3KyH-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#333333;strokeWidth=1;endArrow=block;endFill=1;fontSize=10;fontColor=#000000;labelBackgroundColor=#ffffff;" target="Nq5CPoC5HdJrwao-3KyH-10" value="OAuth2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="160" />
+              <mxPoint x="720" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

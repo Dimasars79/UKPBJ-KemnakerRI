@@ -19,7 +19,6 @@ export default function TKDNPage() {
   const [bahanBaku, setBahanBaku] = useState(45);
   const [tenagaKerja, setTenagaKerja] = useState(30);
   const [alatKerja, setAlatKerja] = useState(25);
-  const [activeTab, setActiveTab] = useState<'flow' | 'calculator'>('flow');
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
@@ -184,146 +183,142 @@ export default function TKDNPage() {
                     <span>{trans('Ajukan Sertifikat via SIINas', 'Apply Certificate via SIINas')}</span>
                     <ExternalLink className="w-4 h-4" />
                   </a>
-                  <button
-                    onClick={() => setActiveTab(activeTab === 'calculator' ? 'flow' : 'calculator')}
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs sm:text-sm font-bold px-6 py-3.5 rounded-2xl backdrop-blur-md transition-all"
-                  >
-                    <Calculator className="w-4 h-4 text-accent-gold" />
-                    <span>{activeTab === 'calculator' ? trans('Lihat Alur 5 Tahapan', 'View 5-Step Flow') : trans('Simulasi Hitung TKDN', 'TKDN Calculator Simulation')}</span>
-                  </button>
                 </div>
               </FadeIn>
             </div>
           </div>
         </section>
 
-        {/* ALUR 5 TAHAP PENGAJUAN / KALKULATOR */}
+        {/* ALUR 5 TAHAP PENGAJUAN & KALKULATOR */}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl -mt-5 sm:-mt-6 relative z-20">
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl border border-slate-200/80">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl border border-slate-200/80 space-y-10 sm:space-y-12">
             
-            {activeTab === 'flow' ? (
-              <div>
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-5 sm:pb-8 border-b border-slate-100">
-                  <div>
-                    <span className="text-[10px] sm:text-[11px] font-bold text-primary-blue bg-blue-50 px-2.5 sm:px-3 py-1 rounded-full uppercase tracking-wider">
-                      {trans('Mekanisme Resmi Kemenperin RI', 'Official Ministry of Industry Mechanism')}
-                    </span>
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy mt-2 leading-snug">
-                      {trans('5 Tahapan Alur Pengajuan Sertifikasi TKDN IK (Gratis)', '5 Steps of Small Industry TKDN Certification Submission (Free)')}
-                    </h2>
-                    <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                      {trans('Proses verifikasi data dilaksanakan maksimal 5 (lima) hari kerja setelah seluruh berkas dinyatakan lengkap.', 'The data verification process takes a maximum of 5 (five) working days after all documents are declared complete.')}
-                    </p>
-                  </div>
-                </div>
-
-                {/* 5 Flow Steps Grid - 1 col on mobile, 2 cols on small tablet, 3 cols on iPad/Tablet, 5 cols on desktop */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 mt-6 sm:mt-8">
-                  {flowSteps.map((step, idx) => (
-                    <div 
-                      key={step.step}
-                      className="bg-slate-50/80 hover:bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-4 lg:p-5 border border-slate-200/80 hover:border-primary-blue/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
-                    >
-                      <div>
-                        <div className="flex items-center justify-between mb-2.5 sm:mb-3">
-                          <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-primary-navy text-accent-gold text-xs font-black flex items-center justify-center shadow-xs">
-                            {step.step}
-                          </span>
-                          <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200">
-                            {step.tag}
-                          </span>
-                        </div>
-                        <h3 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary-blue transition-colors mb-1 sm:mb-2 leading-snug">
-                          {step.title}
-                        </h3>
-                        <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed">
-                          {step.desc}
-                        </p>
-                      </div>
-
-                      <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-slate-200/50 flex items-center justify-between text-[10px] sm:text-[11px] font-semibold text-slate-400 group-hover:text-primary-navy">
-                        <span>{trans(`Tahap ${idx + 1}`, `Stage ${idx + 1}`)}</span>
-                        <ChevronRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              /* TKDN Interactive Calculator Tool */
-              <div>
-                <div className="pb-4 sm:pb-6 border-b border-slate-100 mb-5 sm:mb-6">
-                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy mt-1 leading-snug">
-                    {trans('Kalkulator Simulasi Estimasi Nilai TKDN', 'TKDN Estimated Value Simulation Calculator')}
+            {/* 1. BAGIAN 5 TAHAPAN ALUR PENGAJUAN */}
+            <div>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-5 sm:pb-8 border-b border-slate-100">
+                <div>
+                  <span className="text-[10px] sm:text-[11px] font-bold text-primary-blue bg-blue-50 px-2.5 sm:px-3 py-1 rounded-full uppercase tracking-wider">
+                    {trans('Mekanisme Resmi Kemenperin RI', 'Official Ministry of Industry Mechanism')}
+                  </span>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy mt-2 leading-snug">
+                    {trans('5 Tahapan Alur Pengajuan Sertifikasi TKDN IK (Gratis)', '5 Steps of Small Industry TKDN Certification Submission (Free)')}
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                    {trans('Geser parameter di bawah untuk mensimulasikan persentase kandungan komponen lokal pada barang/jasa Anda.', 'Slide parameters below to simulate domestic component percentage on your goods/services.')}
+                    {trans('Proses verifikasi data dilaksanakan maksimal 5 (lima) hari kerja setelah seluruh berkas dinyatakan lengkap.', 'The data verification process takes a maximum of 5 (five) working days after all documents are declared complete.')}
                   </p>
                 </div>
+              </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-                  <div className="md:col-span-7 space-y-4 sm:space-y-6">
+              {/* 5 Flow Steps Grid - 1 col on mobile, 2 cols on small tablet, 3 cols on iPad/Tablet, 5 cols on desktop */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 mt-6 sm:mt-8">
+                {flowSteps.map((step, idx) => (
+                  <div 
+                    key={step.step}
+                    className="bg-slate-50/80 hover:bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-4 lg:p-5 border border-slate-200/80 hover:border-primary-blue/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
+                  >
                     <div>
-                      <div className="flex justify-between text-xs font-bold text-slate-700 mb-2">
-                        <span>{trans('Komponen Bahan Baku Lokal:', 'Local Raw Material Component:')}</span>
-                        <span className="text-primary-blue font-extrabold">{bahanBaku}%</span>
+                      <div className="flex items-center justify-between mb-2.5 sm:mb-3">
+                        <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-primary-navy text-accent-gold text-xs font-black flex items-center justify-center shadow-xs">
+                          {step.step}
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200">
+                          {step.tag}
+                        </span>
                       </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={bahanBaku}
-                        onChange={(e) => setBahanBaku(Number(e.target.value))}
-                        className="w-full accent-primary-blue h-2 bg-slate-200 rounded-lg cursor-pointer"
-                      />
+                      <h3 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary-blue transition-colors mb-1 sm:mb-2 leading-snug">
+                        {step.title}
+                      </h3>
+                      <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed">
+                        {step.desc}
+                      </p>
                     </div>
 
-                    <div>
-                      <div className="flex justify-between text-xs font-bold text-slate-700 mb-2">
-                        <span>{trans('Tenaga Kerja Warga Negara Indonesia (WNI):', 'Indonesian Citizen (WNI) Labor:')}</span>
-                        <span className="text-primary-blue font-extrabold">{tenagaKerja}%</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={tenagaKerja}
-                        onChange={(e) => setTenagaKerja(Number(e.target.value))}
-                        className="w-full accent-primary-blue h-2 bg-slate-200 rounded-lg cursor-pointer"
-                      />
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between text-xs font-bold text-slate-700 mb-2">
-                        <span>{trans('Fasilitas Mesin & Peralatan Kerja Lokal:', 'Local Machinery & Work Equipment Facility:')}</span>
-                        <span className="text-primary-blue font-extrabold">{alatKerja}%</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={alatKerja}
-                        onChange={(e) => setAlatKerja(Number(e.target.value))}
-                        className="w-full accent-primary-blue h-2 bg-slate-200 rounded-lg cursor-pointer"
-                      />
+                    <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-slate-200/50 flex items-center justify-between text-[10px] sm:text-[11px] font-semibold text-slate-400 group-hover:text-primary-navy">
+                      <span>{trans(`Tahap ${idx + 1}`, `Stage ${idx + 1}`)}</span>
+                      <ChevronRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
 
-                  <div className="md:col-span-5 bg-gradient-to-br from-primary-navy to-[#113264] rounded-2xl p-4 sm:p-6 text-white text-center shadow-lg flex flex-col justify-center items-center">
-                    <span className="text-[11px] sm:text-xs font-semibold text-blue-200 uppercase tracking-wider">{trans('Estimasi Nilai TKDN Anda', 'Your Estimated TKDN Value')}</span>
-                    <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-accent-gold my-2 sm:my-3 tracking-tight">
-                      {totalTKDN}%
+            {/* 2. BAGIAN KALKULATOR SIMULASI ESTIMASI NILAI TKDN (DI BAWAH 5 ALUR) */}
+            <div id="kalkulator-tkdn" className="scroll-mt-28 pt-8 sm:pt-10 border-t border-slate-200">
+              <div className="pb-4 sm:pb-6 mb-5 sm:mb-6">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-700 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-2">
+                  <Calculator className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{trans('Simulasi Mandiri', 'Self Simulation Tool')}</span>
+                </div>
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy mt-1 leading-snug">
+                  {trans('Kalkulator Simulasi Estimasi Nilai TKDN', 'TKDN Estimated Value Simulation Calculator')}
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  {trans('Geser parameter di bawah untuk mensimulasikan persentase kandungan komponen lokal pada barang/jasa Anda.', 'Slide parameters below to simulate domestic component percentage on your goods/services.')}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+                <div className="md:col-span-7 space-y-4 sm:space-y-6">
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-slate-700 mb-2">
+                      <span>{trans('Komponen Bahan Baku Lokal:', 'Local Raw Material Component:')}</span>
+                      <span className="text-primary-blue font-extrabold">{bahanBaku}%</span>
                     </div>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold mb-3 sm:mb-4 bg-white/10 text-white">
-                      {totalTKDN >= 40 ? trans('✓ Memenuhi Syarat Preferensi PBJ (≥ 40%)', '✓ Meets PBJ Preference Criteria (≥ 40%)') : trans('Belum Memenuhi Ambang 40%', 'Does Not Meet 40% Threshold')}
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={bahanBaku}
+                      onChange={(e) => setBahanBaku(Number(e.target.value))}
+                      className="w-full accent-primary-blue h-2 bg-slate-200 rounded-lg cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-slate-700 mb-2">
+                      <span>{trans('Tenaga Kerja Warga Negara Indonesia (WNI):', 'Indonesian Citizen (WNI) Labor:')}</span>
+                      <span className="text-primary-blue font-extrabold">{tenagaKerja}%</span>
                     </div>
-                    <p className="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
-                      {trans('Produk dengan nilai TKDN ≥ 40% mendapatkan prioritas utama dalam belanja barang/jasa APBN/APBD kementerian.', 'Products with TKDN value ≥ 40% receive top priority in ministry APBN/APBD procurement.')}
-                    </p>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={tenagaKerja}
+                      onChange={(e) => setTenagaKerja(Number(e.target.value))}
+                      className="w-full accent-primary-blue h-2 bg-slate-200 rounded-lg cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-slate-700 mb-2">
+                      <span>{trans('Fasilitas Mesin & Peralatan Kerja Lokal:', 'Local Machinery & Work Equipment Facility:')}</span>
+                      <span className="text-primary-blue font-extrabold">{alatKerja}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={alatKerja}
+                      onChange={(e) => setAlatKerja(Number(e.target.value))}
+                      className="w-full accent-primary-blue h-2 bg-slate-200 rounded-lg cursor-pointer"
+                    />
                   </div>
                 </div>
+
+                <div className="md:col-span-5 bg-gradient-to-br from-primary-navy to-[#113264] rounded-2xl p-4 sm:p-6 text-white text-center shadow-lg flex flex-col justify-center items-center">
+                  <span className="text-[11px] sm:text-xs font-semibold text-blue-200 uppercase tracking-wider">{trans('Estimasi Nilai TKDN Anda', 'Your Estimated TKDN Value')}</span>
+                  <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-accent-gold my-2 sm:my-3 tracking-tight">
+                    {totalTKDN}%
+                  </div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold mb-3 sm:mb-4 bg-white/10 text-white">
+                    {totalTKDN >= 40 ? trans('✓ Memenuhi Syarat Preferensi PBJ (≥ 40%)', '✓ Meets PBJ Preference Criteria (≥ 40%)') : trans('Belum Memenuhi Ambang 40%', 'Does Not Meet 40% Threshold')}
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+                    {trans('Produk dengan nilai TKDN ≥ 40% mendapatkan prioritas utama dalam belanja barang/jasa APBN/APBD kementerian.', 'Products with TKDN value ≥ 40% receive top priority in ministry APBN/APBD procurement.')}
+                  </p>
+                </div>
               </div>
-            )}
+            </div>
 
           </div>
         </section>
