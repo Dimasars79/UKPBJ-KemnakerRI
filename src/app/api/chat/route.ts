@@ -75,10 +75,21 @@ export async function POST(req: Request) {
     let reply = '';
     let lastError = '';
 
-    // ================= 0. RETRIEVAL AUGMENTED GENERATION (RAG) =================
-    const userMessage = messages[messages.length - 1]?.text || messages[messages.length - 1]?.content || '';
+    // ================= 0. GUARDRAIL & SCOPE FILTER (ANTI-ABUSE) =================
+    const userMessage = (messages[messages.length - 1]?.text || messages[messages.length - 1]?.content || '').trim();
+    const lowerUserMsg = userMessage.toLowerCase();
+
+    // Deteksi upaya jailbreak atau prompt extraction secara instan
+    const isJailbreakAttempt = /ignore (previous|all)|abaikan instruksi|kamu sekarang adalah dan|jailbreak|unrestricted mode|tampilkan system prompt|bocorkan prompt|system instruction|show prompt/i.test(lowerUserMsg);
+    if (isJailbreakAttempt) {
+      return NextResponse.json({
+        reply: 'Mohon maaf, sebagai Asisten Virtual Resmi UKPBJ Kemnaker RI, saya tidak dapat mengubah instruksi atau membagikan konfigurasi sistem keamanan. Apakah ada informasi seputar pengadaan barang/jasa atau layanan Kemnaker yang dapat saya bantu?'
+      });
+    }
+
+    // ================= 0.1 RETRIEVAL AUGMENTED GENERATION (RAG) =================
     const retrievedData = await retrieveKnowledge(userMessage);
-    const RAG_PROMPT = `${SYSTEM_PROMPT}\n\n=== DATA KONTEKS PENCARIAN (RETRIEVAL) ===\n${retrievedData ? retrievedData : 'Tidak ada data spesifik yang ditemukan di database untuk pertanyaan ini.'}\n==========================================\n\nBerdasarkan data konteks di atas, tolong jawab pertanyaan pengguna. PANDUAN FORMAT CEPAT:\n- Berikan jawaban yang padat, akurat, ringkas, dan to-the-point (maksimal 2-3 paragraf singkat atau poin-poin penting).`;
+    const RAG_PROMPT = `${SYSTEM_PROMPT}\n\n=== DATA KONTEKS & DOKUMEN SISTEM ===\n${retrievedData ? retrievedData : 'Data dinamis spesifik tidak ditemukan di database lokal.'}\n======================================\n\nPANDUAN FORMAT RESPON:\n1. Jawab pertanyaan pengguna dengan solusi yang jelas, runtut, dan aplikatif selama masih dalam lingkup Pengadaan Barang/Jasa (PBJ), LKPP/LPSE/SIKaP/Katalog, atau Kemnaker RI.\n2. Jika pertanyaan mengenai data spesifik internal Kemnaker (paket tender, jadwal agenda, nama pejabat/satker), utamakan rujukan dari dokumen konteks di atas.\n3. Jika pertanyaan mengenai SOP (Standar Operasional Prosedur), alur kerja, tata cara, regulasi, panduan teknis, dan layanan ekosistem pengadaan nasional (LPSE/SPSE, LKPP, SIKaP, E-Katalog V6, SiRUP, Bela Pengadaan, Sertifikasi PBJ, SIAPkerja Kemnaker), gunakan pemahaman ahli SOP Anda secara luas untuk menjabarkan aktor pelaksana, dokumen syarat, tahapan kerja runtut, dan dokumen output akhir beserta tautan portal resminya. JANGAN hanya terpaku pada teks di database lokal.\n4. PERINGATAN BATASAN DOMAIN: Jika pengguna bertanya hal di luar pengadaan dan layanan Kemnaker (seperti coding umum, tugas sekolah, resep, politik praktis, hiburan, curhat), WAJIB TOLAK DENGAN SOPAN menggunakan format penolakan resmi yang telah ditentukan.\n5. Gunakan Markdown yang rapi dengan penomoran atau poin-poin agar mudah dipahami.`;
 
     // ================= 1. JALUR UTAMA: GOOGLE AI STUDIO (MULTI-ACCOUNT ROTATION & FAILOVER) =================
     if (geminiKeys.length > 0) {
@@ -129,7 +140,7 @@ export async function POST(req: Request) {
                   contents: geminiContents,
                   generationConfig: {
                     temperature: 0.2,
-                    maxOutputTokens: 600,
+                    maxOutputTokens: 1200,
                   },
                 }),
               }

@@ -38,7 +38,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     {
       id: 'welcome',
       role: 'assistant',
-      text: 'Halo! Saya **Asisten Virtual PBJ Kemnaker** 🤖. Ada yang bisa saya bantu terkait regulasi, panduan SPSE, paket tender, atau layanan pengadaan hari ini?',
+      text: 'Halo! Saya **Asisten Virtual PBJ Kemnaker** 🤖. Ada yang bisa saya bantu terkait panduan LPSE/SPSE, SIKaP, E-Katalog LKPP, regulasi pengadaan, paket lelang, atau layanan ketenagakerjaan Kemnaker hari ini?',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);

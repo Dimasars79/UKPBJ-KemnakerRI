@@ -734,7 +734,10 @@ export default function AdminPortalPage() {
   const [selectedPackage, setSelectedPackage] = useState<ProcurementPackage | null>(null);
   const [editingPackage, setEditingPackage] = useState<ProcurementPackage | null>(null);
   const [packageCategoryFilter, setPackageCategoryFilter] = useState('all');
+  const [packageStatusFilter, setPackageStatusFilter] = useState<'all' | 'Pendaftaran Dibuka' | 'evaluation_or_done'>('all');
   const [packageSearchText, setPackageSearchText] = useState('');
+  const [packageCurrentPage, setPackageCurrentPage] = useState(1);
+  const [packagePageSize, setPackagePageSize] = useState(6);
 
   // Add / Edit Package Modal State
   const [showPackageModal, setShowPackageModal] = useState(false);
@@ -4201,9 +4204,18 @@ export default function AdminPortalPage() {
 
                   <div className="space-y-3">
                     {/* Tender Deadline Card */}
-                    <div className={`p-3.5 rounded-2xl border space-y-1.5 ${
-                      isDark ? 'bg-slate-950/60 border-amber-500/30' : 'bg-amber-50/80 border-amber-200 shadow-xs'
-                    }`}>
+                    <div 
+                      onClick={() => {
+                        if (packagesList[0]) {
+                          setSelectedPackage(packagesList[0]);
+                          setShowDetailModal(true);
+                        }
+                      }}
+                      title="Klik untuk melihat detail paket pengadaan"
+                      className={`p-3.5 rounded-2xl border space-y-1.5 transition-all cursor-pointer group hover:scale-[1.01] ${
+                        isDark ? 'bg-slate-950/60 border-amber-500/30 hover:border-amber-400' : 'bg-amber-50/80 border-amber-200 shadow-xs hover:border-amber-300'
+                      }`}
+                    >
                       <div className="flex justify-between items-center">
                         <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500 text-slate-950">
                           Batas Tender Hari Ini
@@ -4213,7 +4225,7 @@ export default function AdminPortalPage() {
                           <span>16:00 WIB</span>
                         </span>
                       </div>
-                      <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'} group-hover:text-amber-500 transition-colors`}>
                         {packagesList[0]?.title || 'Pengadaan Server & Storage SPSE'}
                       </p>
                       <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
@@ -4221,13 +4233,22 @@ export default function AdminPortalPage() {
                       </p>
                     </div>
 
-                    {/* Upcoming Agenda 1 */}
+                    {/* Upcoming Agenda List */}
                     {agendaList.slice(0, 2).map((agenda) => (
-                      <div key={agenda.id} className={`p-3 rounded-2xl border flex items-center justify-between ${
-                        isDark ? 'bg-slate-950/40 border-slate-800' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:bg-white hover:shadow-sm'
-                      }`}>
+                      <div 
+                        key={agenda.id} 
+                        onClick={() => {
+                          setEditingAgenda(agenda);
+                          setAgendaFormData({ ...agenda });
+                          setShowAgendaModal(true);
+                        }}
+                        title="Klik untuk mengedit agenda ini"
+                        className={`p-3 rounded-2xl border flex items-center justify-between transition-all cursor-pointer group hover:scale-[1.01] ${
+                          isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:bg-white hover:border-blue-300 hover:shadow-sm'
+                        }`}
+                      >
                         <div className="min-w-0 pr-2">
-                          <p className={`font-bold text-xs truncate ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
+                          <p className={`font-bold text-xs truncate ${isDark ? 'text-slate-200' : 'text-slate-900'} group-hover:text-blue-500 transition-colors`}>
                             {agenda.title}
                           </p>
                           <p className={`text-[10px] mt-0.5 flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
@@ -4244,13 +4265,43 @@ export default function AdminPortalPage() {
                     ))}
                   </div>
 
-                  <button
-                    onClick={() => setActiveTab('manage-agenda')}
-                    className="w-full py-2 rounded-xl bg-accent-gold/10 hover:bg-accent-gold text-accent-gold hover:text-slate-950 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                  >
-                    <PlusCircle className="w-3.5 h-3.5" />
-                    <span>Jadwalkan Agenda Baru</span>
-                  </button>
+                  {/* Action Buttons: Direct Input & Manage Tab Shortcut */}
+                  <div className="pt-1 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingAgenda(null);
+                        setAgendaFormData({
+                          title: '',
+                          category: 'Bimtek',
+                          date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+                          time: '09:00 - 12:00 WIB',
+                          location: 'Gedung Kemnaker RI',
+                          organizer: 'UKPBJ Kemnaker RI',
+                          capacity: '100 Peserta',
+                          description: '',
+                          imageUrl: '',
+                          status: 'Terjadwal',
+                          zoomUrl: ''
+                        });
+                        setShowAgendaModal(true);
+                      }}
+                      className="flex-1 py-2 sm:py-2.5 rounded-xl bg-accent-gold/15 hover:bg-accent-gold text-accent-gold hover:text-slate-950 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
+                    >
+                      <PlusCircle className="w-3.5 h-3.5" />
+                      <span>Jadwalkan Agenda Baru</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('manage-agenda')}
+                      title="Buka tab kelola agenda selengkapnya"
+                      className={`p-2 sm:p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                        isDark ? 'border-slate-800 bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-white' : 'border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700'
+                      }`}
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* WIDGET 3: GOVERNMENT ECOSYSTEM INTEGRATION STATUS */}
@@ -4515,7 +4566,7 @@ export default function AdminPortalPage() {
                   }`}>
                     <tr>
                       <th className="p-3 sm:p-4 font-bold">Judul Berita</th>
-                      <th className="p-3 sm:p-4 font-bold">Kategori</th>
+                      <th className="p-3 sm:p-4 font-bold whitespace-nowrap">Kategori</th>
                       <th className="p-3 sm:p-4 font-bold">Penulis / Unit</th>
                       <th className="p-3 sm:p-4 font-bold">Status Publikasi</th>
                       <th className="p-3 sm:p-4 font-bold">Tanggal & Views</th>
@@ -4557,18 +4608,18 @@ export default function AdminPortalPage() {
                             </div>
                           </div>
                         </td>
-                        <td className="p-3 sm:p-4">
-                          <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[10px] font-bold border ${isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-100 text-blue-800 border-blue-200'}`}>
+                        <td className="p-3 sm:p-4 whitespace-nowrap">
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold border whitespace-nowrap ${isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-100 text-blue-800 border-blue-200'}`}>
                             {item.category}
                           </span>
                         </td>
                         <td className={`p-3 sm:p-4 text-[10px] sm:text-[11px] font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                           {item.author}
                         </td>
-                        <td className="p-3 sm:p-4">
+                        <td className="p-3 sm:p-4 whitespace-nowrap">
                           <button
                             onClick={() => handleToggleNewsStatus(item.id)}
-                            className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer ${
+                            className={`px-2.5 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer whitespace-nowrap ${
                               item.status === 'Published'
                                 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30 hover:bg-emerald-500/20'
                                 : 'bg-amber-500/10 text-amber-500 border-amber-500/30 hover:bg-amber-500/20'
@@ -4814,36 +4865,124 @@ export default function AdminPortalPage() {
               </button>
             </div>
 
-            {/* Quick Stats Grid */}
+            {/* Quick Stats Grid - Interactive Clickable Filters */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
-                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Paket</span>
+              {/* 1. Total Paket */}
+              <button
+                type="button"
+                onClick={() => {
+                  setPackageCategoryFilter('all');
+                  setPackageStatusFilter('all');
+                  setPackageSearchText('');
+                  setPackageCurrentPage(1);
+                }}
+                title="Klik untuk menampilkan semua paket"
+                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border text-left transition-all duration-200 cursor-pointer group hover:scale-[1.01] ${
+                  packageCategoryFilter === 'all' && packageStatusFilter === 'all'
+                    ? isDark ? 'bg-blue-950/40 border-blue-500/70 ring-2 ring-blue-500/40 shadow-lg shadow-blue-500/10' : 'bg-blue-50/80 border-blue-400 ring-2 ring-blue-400/40 shadow-md'
+                    : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200 shadow-2xs hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Paket</span>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all ${
+                    packageCategoryFilter === 'all' && packageStatusFilter === 'all'
+                      ? 'bg-blue-600 text-white'
+                      : 'opacity-0 group-hover:opacity-100 bg-slate-800 text-slate-300'
+                  }`}>Aktif</span>
+                </div>
                 <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
                   <span className={`text-xl sm:text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}</span>
-                  <span className="text-[10px] font-bold text-blue-500">Paket Terdaftar</span>
+                  <span className="text-[10px] font-bold text-blue-500">Semua Paket</span>
                 </div>
-              </div>
-              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
-                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Pendaftaran Dibuka</span>
+              </button>
+
+              {/* 2. Pendaftaran Dibuka */}
+              <button
+                type="button"
+                onClick={() => {
+                  setPackageStatusFilter(packageStatusFilter === 'Pendaftaran Dibuka' ? 'all' : 'Pendaftaran Dibuka');
+                  setPackageCategoryFilter('all');
+                  setPackageCurrentPage(1);
+                }}
+                title="Klik untuk filter hanya paket yang Pendaftarannya Dibuka"
+                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border text-left transition-all duration-200 cursor-pointer group hover:scale-[1.01] ${
+                  packageStatusFilter === 'Pendaftaran Dibuka'
+                    ? isDark ? 'bg-emerald-950/40 border-emerald-500/70 ring-2 ring-emerald-500/40 shadow-lg shadow-emerald-500/10' : 'bg-emerald-50/80 border-emerald-400 ring-2 ring-emerald-400/40 shadow-md'
+                    : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200 shadow-2xs hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Pendaftaran Dibuka</span>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all ${
+                    packageStatusFilter === 'Pendaftaran Dibuka'
+                      ? 'bg-emerald-600 text-white'
+                      : 'opacity-0 group-hover:opacity-100 bg-slate-800 text-slate-300'
+                  }`}>Filter</span>
+                </div>
                 <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
                   <span className="text-xl sm:text-2xl font-black text-emerald-500">{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length}</span>
                   <span className="text-[10px] font-bold text-emerald-600">Sedang Berjalan</span>
                 </div>
-              </div>
-              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
-                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Evaluasi / Selesai</span>
+              </button>
+
+              {/* 3. Evaluasi / Selesai */}
+              <button
+                type="button"
+                onClick={() => {
+                  setPackageStatusFilter(packageStatusFilter === 'evaluation_or_done' ? 'all' : 'evaluation_or_done');
+                  setPackageCategoryFilter('all');
+                  setPackageCurrentPage(1);
+                }}
+                title="Klik untuk filter paket tahap Evaluasi atau Selesai"
+                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border text-left transition-all duration-200 cursor-pointer group hover:scale-[1.01] ${
+                  packageStatusFilter === 'evaluation_or_done'
+                    ? isDark ? 'bg-amber-950/40 border-amber-500/70 ring-2 ring-amber-500/40 shadow-lg shadow-amber-500/10' : 'bg-amber-50/80 border-amber-400 ring-2 ring-amber-400/40 shadow-md'
+                    : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200 shadow-2xs hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Evaluasi / Selesai</span>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all ${
+                    packageStatusFilter === 'evaluation_or_done'
+                      ? 'bg-amber-600 text-white'
+                      : 'opacity-0 group-hover:opacity-100 bg-slate-800 text-slate-300'
+                  }`}>Filter</span>
+                </div>
                 <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
                   <span className="text-xl sm:text-2xl font-black text-amber-500">{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length}</span>
                   <span className="text-[10px] font-bold text-amber-600">Tahap Penilaian</span>
                 </div>
-              </div>
-              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'}`}>
-                <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Tender & Seleksi</span>
+              </button>
+
+              {/* 4. Total Tender & Seleksi */}
+              <button
+                type="button"
+                onClick={() => {
+                  setPackageCategoryFilter(packageCategoryFilter === 'tender_seleksi' ? 'all' : 'tender_seleksi');
+                  setPackageStatusFilter('all');
+                  setPackageCurrentPage(1);
+                }}
+                title="Klik untuk filter paket Tender & Seleksi"
+                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border text-left transition-all duration-200 cursor-pointer group hover:scale-[1.01] ${
+                  packageCategoryFilter === 'tender_seleksi'
+                    ? isDark ? 'bg-indigo-950/40 border-indigo-500/70 ring-2 ring-indigo-500/40 shadow-lg shadow-indigo-500/10' : 'bg-indigo-50/80 border-indigo-400 ring-2 ring-indigo-400/40 shadow-md'
+                    : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200 shadow-2xs hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Tender & Seleksi</span>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all ${
+                    packageCategoryFilter === 'tender_seleksi'
+                      ? 'bg-indigo-600 text-white'
+                      : 'opacity-0 group-hover:opacity-100 bg-slate-800 text-slate-300'
+                  }`}>Filter</span>
+                </div>
                 <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1">
                   <span className="text-xl sm:text-2xl font-black text-indigo-500">{packagesList.filter(p => p.category === 'Tender' || p.category === 'Seleksi').length}</span>
                   <span className="text-[10px] font-bold text-indigo-600">Kompetitif</span>
                 </div>
-              </div>
+              </button>
             </div>
 
             {/* Filter & Search Toolbar */}
@@ -4860,7 +4999,11 @@ export default function AdminPortalPage() {
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setPackageCategoryFilter(tab.id)}
+                    onClick={() => {
+                      setPackageCategoryFilter(tab.id);
+                      setPackageStatusFilter('all');
+                      setPackageCurrentPage(1);
+                    }}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       packageCategoryFilter === tab.id
                         ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
@@ -4872,6 +5015,38 @@ export default function AdminPortalPage() {
                     {tab.label}
                   </button>
                 ))}
+
+                {/* Status Filter Indicator Chip */}
+                {packageStatusFilter !== 'all' && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                    <span>Status: {packageStatusFilter === 'Pendaftaran Dibuka' ? 'Pendaftaran Dibuka' : 'Evaluasi & Selesai'}</span>
+                    <button 
+                      onClick={() => {
+                        setPackageStatusFilter('all');
+                        setPackageCurrentPage(1);
+                      }}
+                      className="hover:text-amber-400 font-black cursor-pointer ml-1"
+                      title="Hapus Filter Status"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+                {packageCategoryFilter === 'tender_seleksi' && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    <span>Kategori: Tender & Seleksi</span>
+                    <button 
+                      onClick={() => {
+                        setPackageCategoryFilter('all');
+                        setPackageCurrentPage(1);
+                      }}
+                      className="hover:text-indigo-300 font-black cursor-pointer ml-1"
+                      title="Hapus Filter Kategori"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
               </div>
 
               <div className="relative w-full md:w-72">
@@ -4882,7 +5057,10 @@ export default function AdminPortalPage() {
                   type="text"
                   placeholder="Cari kode, paket, satker..."
                   value={packageSearchText}
-                  onChange={(e) => setPackageSearchText(e.target.value)}
+                  onChange={(e) => {
+                    setPackageSearchText(e.target.value);
+                    setPackageCurrentPage(1);
+                  }}
                   className={`w-full pl-9 pr-3.5 py-1.5 border rounded-xl text-xs outline-none transition-all ${
                     isDark
                       ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-blue-500'
@@ -4891,7 +5069,10 @@ export default function AdminPortalPage() {
                 />
                 {packageSearchText && (
                   <button
-                    onClick={() => setPackageSearchText('')}
+                    onClick={() => {
+                      setPackageSearchText('');
+                      setPackageCurrentPage(1);
+                    }}
                     className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs"
                   >
                     ✕
@@ -4900,151 +5081,318 @@ export default function AdminPortalPage() {
               </div>
             </div>
 
-            {/* Packages Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-              {packagesList
-                .filter((pkg) => {
-                  const matchCat = packageCategoryFilter === 'all' || pkg.category === packageCategoryFilter;
-                  if (!matchCat) return false;
-                  if (packageSearchText) {
-                    const q = packageSearchText.toLowerCase();
-                    return (
-                      pkg.title.toLowerCase().includes(q) ||
-                      pkg.code.toLowerCase().includes(q) ||
-                      pkg.unit.toLowerCase().includes(q) ||
-                      (pkg.method && pkg.method.toLowerCase().includes(q)) ||
-                      (pkg.hps && pkg.hps.toLowerCase().includes(q))
-                    );
-                  }
-                  return true;
-                })
-                .map((pkg) => (
-                <div key={pkg.id} className={`p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all space-y-3 flex flex-col justify-between ${
-                  isDark ? 'bg-slate-900 border-slate-800 hover:border-blue-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-blue-500/40'
-                }`}>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                          {pkg.category}
-                        </span>
-                        <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700'} font-mono font-bold`}>
-                          {pkg.code}
-                        </span>
-                      </div>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                        pkg.status === 'Pendaftaran Dibuka'
-                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
-                          : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+            {/* Packages Grid & Pagination */}
+            {(() => {
+              const filteredPackages = packagesList.filter((pkg) => {
+                const matchCat = packageCategoryFilter === 'all'
+                  ? true
+                  : packageCategoryFilter === 'tender_seleksi'
+                  ? (pkg.category === 'Tender' || pkg.category === 'Seleksi')
+                  : pkg.category === packageCategoryFilter;
+
+                if (!matchCat) return false;
+
+                const matchStatus = packageStatusFilter === 'all'
+                  ? true
+                  : packageStatusFilter === 'Pendaftaran Dibuka'
+                  ? pkg.status === 'Pendaftaran Dibuka'
+                  : packageStatusFilter === 'evaluation_or_done'
+                  ? pkg.status !== 'Pendaftaran Dibuka'
+                  : true;
+
+                if (!matchStatus) return false;
+
+                if (packageSearchText) {
+                  const q = packageSearchText.toLowerCase();
+                  return (
+                    pkg.title.toLowerCase().includes(q) ||
+                    pkg.code.toLowerCase().includes(q) ||
+                    pkg.unit.toLowerCase().includes(q) ||
+                    (pkg.method && pkg.method.toLowerCase().includes(q)) ||
+                    (pkg.hps && pkg.hps.toLowerCase().includes(q))
+                  );
+                }
+                return true;
+              });
+
+              const totalPackagePages = Math.max(1, Math.ceil(filteredPackages.length / packagePageSize));
+              const safePackageCurrentPage = Math.min(Math.max(1, packageCurrentPage), totalPackagePages);
+              const startPkgIdx = (safePackageCurrentPage - 1) * packagePageSize;
+              const paginatedPackages = filteredPackages.slice(startPkgIdx, startPkgIdx + packagePageSize);
+
+              return (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                    {paginatedPackages.length === 0 ? (
+                      <div className={`col-span-1 md:col-span-2 p-8 text-center rounded-2xl border ${
+                        isDark ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-white border-slate-200 text-slate-600'
                       }`}>
-                        {pkg.status}
-                      </span>
-                    </div>
-
-                    <h3 className={`font-bold text-sm leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.title}</h3>
-                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-2`}>{pkg.desc || 'Pengadaan barang/jasa untuk mendukung kegiatan operasional kementerian.'}</p>
-
-                    <div className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} flex items-center justify-between`}>
-                      <div>
-                        <span>Satuan Kerja: </span>
-                        <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{pkg.unit}</strong>
+                        <p className="text-sm font-semibold">Tidak ada paket pengadaan yang sesuai dengan filter pencarian.</p>
                       </div>
-                      <div>
-                        <span>Batas: </span>
-                        <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{pkg.deadline}</strong>
-                      </div>
-                    </div>
+                    ) : (
+                      paginatedPackages.map((pkg) => (
+                        <div key={pkg.id} className={`p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all space-y-3 flex flex-col justify-between ${
+                          isDark ? 'bg-slate-900 border-slate-800 hover:border-blue-500/40' : 'bg-white border-slate-200 shadow-sm hover:border-blue-500/40'
+                        }`}>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-start">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                                  {pkg.category}
+                                </span>
+                                <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700'} font-mono font-bold`}>
+                                  {pkg.code}
+                                </span>
+                              </div>
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                                pkg.status === 'Pendaftaran Dibuka'
+                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                              }`}>
+                                {pkg.status}
+                              </span>
+                            </div>
 
-                    {/* Attachment Document Badge */}
-                    <div className={`p-2 rounded-xl border flex items-center justify-between gap-2 text-xs ${
-                      pkg.fileData || (pkg.downloadUrl && pkg.downloadUrl !== '#')
-                        ? isDark ? 'bg-blue-950/20 border-blue-800/40 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-900'
-                        : isDark ? 'bg-slate-950/40 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-700'
+                            <h3 className={`font-bold text-sm leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{pkg.title}</h3>
+                            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} line-clamp-2`}>{pkg.desc || 'Pengadaan barang/jasa untuk mendukung kegiatan operasional kementerian.'}</p>
+
+                            <div className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} flex items-center justify-between`}>
+                              <div>
+                                <span>Satuan Kerja: </span>
+                                <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{pkg.unit}</strong>
+                              </div>
+                              <div>
+                                <span>Batas: </span>
+                                <strong className={isDark ? 'text-slate-200' : 'text-slate-800 font-bold'}>{pkg.deadline}</strong>
+                              </div>
+                            </div>
+
+                            {/* Attachment Document Badge */}
+                            <div className={`p-2 rounded-xl border flex items-center justify-between gap-2 text-xs ${
+                              pkg.fileData || (pkg.downloadUrl && pkg.downloadUrl !== '#')
+                                ? isDark ? 'bg-blue-950/20 border-blue-800/40 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-900'
+                                : isDark ? 'bg-slate-950/40 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-700'
+                            }`}>
+                              <div className="flex items-center gap-2 min-w-0">
+                                <FileText className={`w-3.5 h-3.5 shrink-0 ${pkg.fileData || (pkg.downloadUrl && pkg.downloadUrl !== '#') ? 'text-blue-500' : isDark ? 'text-slate-400' : 'text-slate-600'}`} />
+                                <span className="font-bold text-[11px] truncate">
+                                  {pkg.fileName || (pkg.documents && pkg.documents[0]?.name) || 'Dokumen-Pengadaan.pdf'}
+                                </span>
+                                <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'} shrink-0 font-mono`}>
+                                  ({pkg.fileSize || (pkg.documents && pkg.documents[0]?.size) || '2.5 MB'})
+                                </span>
+                              </div>
+
+                              {pkg.fileData ? (
+                                <a
+                                  href={pkg.fileData}
+                                  download={pkg.fileName || `${pkg.code}-Dokumen.pdf`}
+                                  className="px-2 py-0.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shrink-0"
+                                  title="Unduh Dokumen Pengadaan"
+                                >
+                                  <Download className="w-2.5 h-2.5" />
+                                  <span>Unduh</span>
+                                </a>
+                              ) : pkg.downloadUrl && pkg.downloadUrl !== '#' ? (
+                                <a
+                                  href={pkg.downloadUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-2 py-0.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shrink-0"
+                                  title="Unduh Dokumen"
+                                >
+                                  <Download className="w-2.5 h-2.5" />
+                                  <span>Unduh</span>
+                                </a>
+                              ) : null}
+                            </div>
+                          </div>
+
+                          <div className={`pt-3 border-t flex justify-between items-center ${
+                            isDark ? 'border-slate-800' : 'border-slate-100'
+                          }`}>
+                            <div>
+                              <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-bold'} block`}>Nilai HPS:</span>
+                              <strong className={`text-xs ${isDark ? 'text-accent-gold' : 'text-amber-700 font-black'} font-mono font-bold`}>{pkg.hps}</strong>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                onClick={() => {
+                                  setSelectedPackage(pkg);
+                                  setShowDetailModal(true);
+                                }}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                  isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-800 hover:text-white'
+                                }`}
+                              >
+                                Detail
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setEditingPackage(pkg);
+                                  setPackageFormData({
+                                    ...pkg,
+                                    documents: pkg.documents || []
+                                  });
+                                  setShowPackageModal(true);
+                                }}
+                                title="Edit Paket"
+                                className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                                  isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-700 hover:text-white'
+                                }`}
+                              >
+                                <Edit3 className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => handleDeletePackage(pkg.id)}
+                                title="Hapus Paket"
+                                className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
+                                  isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600 text-slate-700'
+                                }`}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {/* Pagination Footer */}
+                  {filteredPackages.length > 0 && (
+                    <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs ${
+                      isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                     }`}>
-                      <div className="flex items-center gap-2 min-w-0">
-                        <FileText className={`w-3.5 h-3.5 shrink-0 ${pkg.fileData || (pkg.downloadUrl && pkg.downloadUrl !== '#') ? 'text-blue-500' : isDark ? 'text-slate-400' : 'text-slate-600'}`} />
-                        <span className="font-bold text-[11px] truncate">
-                          {pkg.fileName || (pkg.documents && pkg.documents[0]?.name) || 'Dokumen-Pengadaan.pdf'}
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className={isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}>
+                          Menampilkan <strong className={isDark ? 'text-white' : 'text-slate-900'}>{startPkgIdx + 1}</strong> - <strong className={isDark ? 'text-white' : 'text-slate-900'}>{Math.min(startPkgIdx + packagePageSize, filteredPackages.length)}</strong> dari <strong className={isDark ? 'text-white' : 'text-slate-900'}>{filteredPackages.length}</strong> paket
                         </span>
-                        <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'} shrink-0 font-mono`}>
-                          ({pkg.fileSize || (pkg.documents && pkg.documents[0]?.size) || '2.5 MB'})
-                        </span>
+
+                        <div className="flex items-center gap-1.5 text-[11px]">
+                          <span className={isDark ? 'text-slate-500' : 'text-slate-400'}>Tampilkan:</span>
+                          <select
+                            value={packagePageSize}
+                            onChange={(e) => {
+                              setPackagePageSize(Number(e.target.value));
+                              setPackageCurrentPage(1);
+                            }}
+                            className={`px-2 py-1 rounded-lg border text-xs font-semibold outline-none cursor-pointer ${
+                              isDark ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-white border-slate-300 text-slate-800'
+                            }`}
+                          >
+                            <option value={4}>4 / hal</option>
+                            <option value={6}>6 / hal</option>
+                            <option value={8}>8 / hal</option>
+                            <option value={12}>12 / hal</option>
+                            <option value={20}>20 / hal</option>
+                          </select>
+                        </div>
                       </div>
 
-                      {pkg.fileData ? (
-                        <a
-                          href={pkg.fileData}
-                          download={pkg.fileName || `${pkg.code}-Dokumen.pdf`}
-                          className="px-2 py-0.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shrink-0"
-                          title="Unduh Dokumen Pengadaan"
-                        >
-                          <Download className="w-2.5 h-2.5" />
-                          <span>Unduh</span>
-                        </a>
-                      ) : pkg.downloadUrl && pkg.downloadUrl !== '#' ? (
-                        <a
-                          href={pkg.downloadUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-2 py-0.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shrink-0"
-                          title="Unduh Dokumen"
-                        >
-                          <Download className="w-2.5 h-2.5" />
-                          <span>Unduh</span>
-                        </a>
-                      ) : null}
-                    </div>
-                  </div>
+                      {/* Right: Page Navigation Buttons */}
+                      {totalPackagePages > 1 && (
+                        <div className="flex items-center gap-1 self-center sm:self-auto">
+                          <button
+                            onClick={() => setPackageCurrentPage(1)}
+                            disabled={safePackageCurrentPage === 1}
+                            title="Halaman Pertama"
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              safePackageCurrentPage === 1
+                                ? 'opacity-40 cursor-not-allowed border-transparent'
+                                : isDark
+                                ? 'border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer'
+                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100 cursor-pointer shadow-2xs'
+                            }`}
+                          >
+                            <ChevronsLeft className="w-3.5 h-3.5" />
+                          </button>
 
-                  <div className={`pt-3 border-t flex justify-between items-center ${
-                    isDark ? 'border-slate-800' : 'border-slate-100'
-                  }`}>
-                    <div>
-                      <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600 font-bold'} block`}>Nilai HPS:</span>
-                      <strong className={`text-xs ${isDark ? 'text-accent-gold' : 'text-amber-700 font-black'} font-mono font-bold`}>{pkg.hps}</strong>
+                          <button
+                            onClick={() => setPackageCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={safePackageCurrentPage === 1}
+                            title="Halaman Sebelumnya"
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              safePackageCurrentPage === 1
+                                ? 'opacity-40 cursor-not-allowed border-transparent'
+                                : isDark
+                                ? 'border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer'
+                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100 cursor-pointer shadow-2xs'
+                            }`}
+                          >
+                            <ChevronLeft className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Page Number Pills */}
+                          <div className="flex items-center gap-1 px-1">
+                            {Array.from({ length: totalPackagePages }, (_, i) => i + 1)
+                              .filter(p => {
+                                if (totalPackagePages <= 6) return true;
+                                if (p === 1 || p === totalPackagePages) return true;
+                                return Math.abs(p - safePackageCurrentPage) <= 1;
+                              })
+                              .map((page, index, array) => {
+                                const prevPage = array[index - 1];
+                                const showEllipsis = prevPage && page - prevPage > 1;
+
+                                return (
+                                  <React.Fragment key={page}>
+                                    {showEllipsis && (
+                                      <span className={`px-1 text-xs ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>...</span>
+                                    )}
+                                    <button
+                                      onClick={() => setPackageCurrentPage(page)}
+                                      className={`min-w-[28px] h-7 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                        safePackageCurrentPage === page
+                                          ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
+                                          : isDark
+                                          ? 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
+                                          : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-2xs'
+                                      }`}
+                                    >
+                                      {page}
+                                    </button>
+                                  </React.Fragment>
+                                );
+                              })}
+                          </div>
+
+                          <button
+                            onClick={() => setPackageCurrentPage(prev => Math.min(totalPackagePages, prev + 1))}
+                            disabled={safePackageCurrentPage === totalPackagePages}
+                            title="Halaman Selanjutnya"
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              safePackageCurrentPage === totalPackagePages
+                                ? 'opacity-40 cursor-not-allowed border-transparent'
+                                : isDark
+                                ? 'border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer'
+                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100 cursor-pointer shadow-2xs'
+                            }`}
+                          >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            onClick={() => setPackageCurrentPage(totalPackagePages)}
+                            disabled={safePackageCurrentPage === totalPackagePages}
+                            title="Halaman Terakhir"
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              safePackageCurrentPage === totalPackagePages
+                                ? 'opacity-40 cursor-not-allowed border-transparent'
+                                : isDark
+                                ? 'border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer'
+                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100 cursor-pointer shadow-2xs'
+                            }`}
+                          >
+                            <ChevronsRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        onClick={() => {
-                          setSelectedPackage(pkg);
-                          setShowDetailModal(true);
-                        }}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                          isDark ? 'bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white' : 'bg-slate-100 hover:bg-blue-600 text-slate-800 hover:text-white'
-                        }`}
-                      >
-                        Detail
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditingPackage(pkg);
-                          setPackageFormData({
-                            ...pkg,
-                            documents: pkg.documents || []
-                          });
-                          setShowPackageModal(true);
-                        }}
-                        title="Edit Paket"
-                        className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                          isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-700 hover:text-white'
-                        }`}
-                      >
-                        <Edit3 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => handleDeletePackage(pkg.id)}
-                        title="Hapus Paket"
-                        className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                          isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600 text-slate-700'
-                        }`}
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
+                  )}
                 </div>
-              ))}
-            </div>
+              );
+            })()}
           </div>
         )}
 
