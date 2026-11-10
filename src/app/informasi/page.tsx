@@ -8,7 +8,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { 
   BellRing, ChevronRight, FileText, Calendar, Megaphone, 
   Newspaper, Laptop, Globe, MessageSquare, Download, 
-  BarChart2, CheckCircle2, Clock, ShieldCheck, ArrowRight, Package, Scale
+  BarChart2, CheckCircle2, Clock, ShieldCheck, ArrowRight, Package, Scale, RefreshCw
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -63,12 +63,30 @@ const parseItemDate = (dateStr?: string): Date | null => {
 };
 
 export default function InformasiPage() {
-  const { newsList, agendaList, regulasiList, packagesList, siteSettings, lastUpdated } = useData();
+  const { newsList, agendaList, regulasiList, packagesList, totalPackagesCount, siteSettings, lastUpdated, refreshFromSupabase } = useData();
   const { trans } = useLanguage();
   const [isMounted, setIsMounted] = React.useState(false);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [refreshSuccess, setRefreshSuccess] = React.useState(false);
+
   React.useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleRefresh = async () => {
+    if (isRefreshing) return;
+    setIsRefreshing(true);
+    setRefreshSuccess(false);
+    try {
+      await refreshFromSupabase();
+      setRefreshSuccess(true);
+      setTimeout(() => setRefreshSuccess(false), 3000);
+    } catch (err) {
+      console.error('Failed to refresh data:', err);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const publishedNews = newsList.filter(n => n.status === 'Published');
 
@@ -354,7 +372,7 @@ export default function InformasiPage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
                     <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{regulasiList.length}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{regulasiList.length.toLocaleString('id-ID')}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">{trans('Regulasi', 'Regulations')}</p>
                   <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">{trans('Total Regulasi', 'Total Regulations')}</p>
                   <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
@@ -368,7 +386,7 @@ export default function InformasiPage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
                     <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{agendaList.length}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{agendaList.length.toLocaleString('id-ID')}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">{trans('Agenda', 'Events')}</p>
                   <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">{trans('Jadwal PBJ', 'PBJ Schedule')}</p>
                   <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
@@ -382,7 +400,9 @@ export default function InformasiPage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
                     <Megaphone className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{packagesList.length}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">
+                    {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
+                  </h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">{trans('Paket PBJ', 'Packages')}</p>
                   <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">{trans('Paket Terdaftar', 'Listed Packages')}</p>
                   <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
@@ -396,7 +416,7 @@ export default function InformasiPage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary-navy group-hover:text-white flex items-center justify-center mb-2.5 sm:mb-4 transition-colors shadow-2xs">
                     <Newspaper className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{publishedNews.length}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-primary-navy mb-0.5">{publishedNews.length.toLocaleString('id-ID')}</h3>
                   <p className="text-[10px] font-bold text-primary-navy uppercase tracking-wider">{trans('Berita', 'News')}</p>
                   <p className="text-[10px] sm:text-[11px] text-slate-500 mb-2 sm:mb-3">{trans('Publikasi Warta', 'Articles')}</p>
                   <div className="mt-auto flex items-center text-[11px] sm:text-xs font-bold text-primary-navy group-hover:text-primary-blue">
@@ -408,16 +428,49 @@ export default function InformasiPage() {
             </FadeIn>
 
 
-            {/* BOTTOM INFO WIDGET */}
+            {/* BOTTOM INFO WIDGET WITH INTERACTIVE REFRESH */}
             <FadeIn direction="up" delay={0.2}>
-              <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex items-center space-x-4 mt-auto">
-                <div className="w-11 h-11 bg-slate-100 rounded-2xl flex items-center justify-center flex-shrink-0 text-primary-navy">
-                  <Clock className="w-5 h-5" />
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mt-auto">
+                <div className="flex items-center space-x-3 sm:space-x-4 min-w-0">
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 bg-slate-100 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 text-primary-navy">
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] xs:text-xs sm:text-sm font-bold text-primary-navy leading-snug break-words" suppressHydrationWarning>
+                      {trans(lastUpdatedFormatted.id, lastUpdatedFormatted.en)}
+                    </p>
+                    <p className="text-[9.5px] sm:text-[11px] text-slate-500 flex items-center gap-1.5 mt-0.5 leading-tight">
+                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${refreshSuccess ? 'bg-emerald-500 animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
+                      <span className="truncate sm:whitespace-normal">
+                        {refreshSuccess
+                          ? trans('Data berhasil disinkronkan!', 'Data successfully synchronized!')
+                          : trans('Tersambung langsung dengan server Supabase UKPBJ', 'Connected directly to UKPBJ Supabase server')}
+                      </span>
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-bold text-primary-navy" suppressHydrationWarning>
-                    {trans(lastUpdatedFormatted.id, lastUpdatedFormatted.en)}
-                  </p>
+
+                <div className="flex items-center gap-2 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t border-slate-100 sm:border-0">
+                  <button
+                    type="button"
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
+                    title={trans('Segarkan dan sinkronkan data terbaru dari server', 'Refresh and sync latest data from server')}
+                    className={`w-full sm:w-auto justify-center inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs hover:shadow-md active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer group ${
+                      refreshSuccess 
+                        ? 'bg-emerald-600 text-white' 
+                        : 'bg-primary-navy hover:bg-primary-blue text-white'
+                    }`}
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isRefreshing ? 'animate-spin text-amber-300' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
+                    <span>
+                      {isRefreshing 
+                        ? trans('Menyinkronkan...', 'Syncing...') 
+                        : refreshSuccess 
+                        ? trans('Tersinkron!', 'Synced!') 
+                        : trans('Segarkan Data', 'Refresh Data')}
+                    </span>
+                  </button>
                 </div>
               </div>
             </FadeIn>

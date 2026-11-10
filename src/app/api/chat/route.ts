@@ -126,21 +126,24 @@ export async function POST(req: Request) {
 
         for (const model of Array.from(new Set(geminiCandidateModels))) {
           try {
-            // Timeout cepat 5 detik per percobaan agar tidak menunggu lama jika server sibuk
+            // Timeout 8.5 detik per percobaan untuk mengakomodasi live search grounding
             const response = await fetch(
               `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
               {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                signal: AbortSignal.timeout(5000),
+                signal: AbortSignal.timeout(8500),
                 body: JSON.stringify({
                   systemInstruction: {
                     parts: [{ text: RAG_PROMPT }],
                   },
                   contents: geminiContents,
+                  tools: [
+                    { googleSearch: {} }
+                  ],
                   generationConfig: {
                     temperature: 0.2,
-                    maxOutputTokens: 1200,
+                    maxOutputTokens: 1500,
                   },
                 }),
               }
@@ -148,8 +151,23 @@ export async function POST(req: Request) {
 
             if (response.ok) {
               const data = await response.json();
-              const textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+              let textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text;
               if (textResponse) {
+                // Ekstrak rujukan sumber web dari groundingMetadata jika hasil pencarian internet digunakan
+                const groundingChunks = data?.candidates?.[0]?.groundingMetadata?.groundingChunks;
+                if (Array.isArray(groundingChunks) && groundingChunks.length > 0) {
+                  const webSources = groundingChunks
+                    .map((c: { web?: { uri?: string; title?: string } }) => c?.web)
+                    .filter((w: { uri?: string; title?: string } | undefined): w is { uri: string; title: string } => Boolean(w?.uri && w?.title));
+
+                  // Ambil hingga 3 sumber unik resmi
+                  const uniqueSources = Array.from(new Map(webSources.map(s => [s.uri, s])).values()).slice(0, 3);
+                  const filteredSources = uniqueSources.filter(s => !textResponse?.includes(s.uri));
+                  if (filteredSources.length > 0) {
+                    textResponse += '\n\n**📌 Rujukan & Sumber Terkait:**\n' + filteredSources.map(s => `- [${s.title}](${s.uri})`).join('\n');
+                  }
+                }
+
                 reply = textResponse;
                 keySucceeded = true;
                 break; // Sukses, selesai untuk request ini

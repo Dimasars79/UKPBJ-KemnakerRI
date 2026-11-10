@@ -1099,6 +1099,15 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         }
 
         setIsSupabaseConnected(true);
+        const nowIso = new Date().toISOString();
+        setLastUpdated(nowIso);
+        if (typeof window !== 'undefined') {
+          try {
+            const existing = localStorage.getItem(STORAGE_KEY);
+            const parsed = existing ? JSON.parse(existing) : {};
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...parsed, updatedAt: nowIso, lastUpdated: nowIso }));
+          } catch {}
+        }
       }
     } catch (err) {
       console.warn('Database sync fetch failed, using cached snapshot:', err);
