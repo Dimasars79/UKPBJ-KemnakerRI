@@ -127,7 +127,8 @@ export async function POST(req: Request) {
         for (const model of Array.from(new Set(geminiCandidateModels))) {
           try {
             // Timeout 8.5 detik per percobaan untuk mengakomodasi live search grounding
-            const response = await fetch(
+            // 1. Coba request dengan live Google Search Grounding
+            let response = await fetch(
               `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
               {
                 method: 'POST',
@@ -148,6 +149,34 @@ export async function POST(req: Request) {
                 }),
               }
             );
+
+            // 2. Jika akun Free Tier belum memiliki kuota Google Search (butuh billing pay-as-you-go),
+            // lakukan fallback instan tanpa tools search agar tetap menjawab dengan RAG internal tanpa eror ke user.
+            if (!response.ok) {
+              const errCheck = await response.clone().json().catch(() => ({}));
+              const checkMsg = (errCheck?.error?.message || '').toLowerCase();
+              if (checkMsg.includes('quota') || checkMsg.includes('billing') || checkMsg.includes('resourceexhausted') || response.status === 429 || response.status === 400) {
+                console.warn(`[Search Grounding Fallback] Kuota pencarian web tidak tersedia pada key [${keyMask}]. Beralih otomatis ke mode RAG internal...`);
+                response = await fetch(
+                  `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+                  {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    signal: AbortSignal.timeout(6000),
+                    body: JSON.stringify({
+                      systemInstruction: {
+                        parts: [{ text: RAG_PROMPT }],
+                      },
+                      contents: geminiContents,
+                      generationConfig: {
+                        temperature: 0.2,
+                        maxOutputTokens: 1200,
+                      },
+                    }),
+                  }
+                );
+              }
+            }
 
             if (response.ok) {
               const data = await response.json();
