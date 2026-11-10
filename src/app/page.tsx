@@ -79,7 +79,7 @@ export default function Home() {
         <HeroSection />
 
         {/* Floating Core Values & Navy CTA Banner */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20 mb-8">
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20 mb-2 sm:mb-4">
           <FadeIn direction="up" delay={0.2}>
             <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(10,35,66,0.12)] border border-slate-100 p-3 sm:p-4 lg:p-4">
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3 lg:gap-0 items-stretch">
@@ -208,7 +208,7 @@ export default function Home() {
         </section>
 
         {/* 2. Profil UKPBJ - Minimalist & Clean with Single Direct CTA */}
-        <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden bg-gradient-to-br from-white via-slate-50/50 to-white" id="profil">
+        <section className="pt-2 sm:pt-4 md:pt-6 pb-12 sm:pb-16 md:pb-20 relative overflow-hidden bg-gradient-to-br from-white via-slate-50/50 to-white" id="profil">
           <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
@@ -295,7 +295,7 @@ export default function Home() {
 
                 {/* 1 Tombol Aksi Tunggal (Clean & Minimal) */}
                 <FadeIn direction="up" delay={0.2}>
-                  <div className="pt-1">
+                  <div className="pt-1 flex justify-end">
                     <Link 
                       href="/tentang"
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-navy hover:bg-primary-blue text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 group"
