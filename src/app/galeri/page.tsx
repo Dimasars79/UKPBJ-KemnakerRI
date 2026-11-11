@@ -8,9 +8,9 @@ import { useData, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
 import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
-import { 
-  Camera, Video, Play, 
-  ExternalLink, X, Film, Calendar, Eye, ZoomIn, 
+import {
+  Camera, Video, Play,
+  ExternalLink, X, Film, Calendar, Eye, ZoomIn,
   Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -32,8 +32,8 @@ export default function GaleriPage() {
   // Filtered Photo List
   const filteredPhotos = photosList.filter(p => {
     const matchCat = photoFilter === 'all' || p.category === photoFilter;
-    const matchSearch = searchQuery === '' || 
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchSearch = searchQuery === '' ||
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (p.desc && p.desc.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchCat && matchSearch;
   });
@@ -41,8 +41,8 @@ export default function GaleriPage() {
   // Filtered Video List
   const filteredVideos = videosList.filter(v => {
     const matchCat = videoFilter === 'all' || v.category === videoFilter;
-    const matchSearch = searchQuery === '' || 
-      v.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchSearch = searchQuery === '' ||
+      v.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (v.desc && v.desc.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchCat && matchSearch;
   });
@@ -50,7 +50,7 @@ export default function GaleriPage() {
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col font-sans">
       <Header />
-      
+
       <main className="flex-grow pb-24 -mt-[80px] md:-mt-[88px]">
         {/* HERO BANNER SECTION */}
         <section className="relative pt-28 sm:pt-32 lg:pt-36 pb-16 lg:pb-20 overflow-hidden bg-gradient-to-br from-[#061B30] via-[#0B2A4A] to-[#071F36]">
@@ -58,7 +58,7 @@ export default function GaleriPage() {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#0284c712_1px,transparent_1px),linear-gradient(to_bottom,#0284c712_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-blue/20 rounded-full blur-[130px] pointer-events-none" />
           <div className="absolute -bottom-10 left-10 w-80 h-80 bg-accent-gold/15 rounded-full blur-[100px] pointer-events-none" />
-          
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <div className="max-w-4xl mx-auto">
               <FadeIn direction="up">
@@ -83,11 +83,10 @@ export default function GaleriPage() {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3">
                   <button
                     onClick={() => setActiveTab('foto')}
-                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                      activeTab === 'foto'
+                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'foto'
                         ? 'bg-gradient-to-r from-primary-blue to-blue-700 text-white shadow-xl shadow-blue-900/40 ring-2 ring-cyan-400/30 scale-102'
                         : 'bg-white/10 hover:bg-white/15 border border-white/20 text-white backdrop-blur-md'
-                    }`}
+                      }`}
                   >
                     <Camera className="w-4 h-4 text-cyan-300" />
                     <span>{trans('Galeri Foto Kegiatan', 'Activity Photo Gallery')}</span>
@@ -95,11 +94,10 @@ export default function GaleriPage() {
 
                   <button
                     onClick={() => setActiveTab('video')}
-                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                      activeTab === 'video'
+                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'video'
                         ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-xl shadow-amber-900/40 ring-2 ring-amber-300/40 scale-102'
                         : 'bg-white/10 hover:bg-white/15 border border-white/20 text-white backdrop-blur-md'
-                    }`}
+                      }`}
                   >
                     <Video className="w-4 h-4 text-slate-950" />
                     <span>{trans('Video Dokumentasi', 'Video Documentation')}</span>
@@ -112,13 +110,13 @@ export default function GaleriPage() {
 
         {/* MAIN MEDIA CONTENT AREA */}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-10">
-          
+
           {/* ========================================================= */}
           {/* TAB 1: GALERI FOTO KEGIATAN (PERFECTIONIST BALANCED GRID) */}
           {/* ========================================================= */}
           {activeTab === 'foto' ? (
             <div className="space-y-8">
-              
+
               {/* Header & Filter Control Bar */}
               <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div className="space-y-1">
@@ -159,11 +157,10 @@ export default function GaleriPage() {
                         key={cat}
                         type="button"
                         onClick={() => setPhotoFilter(cat)}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                          photoFilter === cat
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${photoFilter === cat
                             ? 'bg-primary-navy text-white shadow-xs'
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                        }`}
+                          }`}
                       >
                         {cat === 'all' ? trans('Semua', 'All') : cat}
                       </button>
@@ -174,31 +171,31 @@ export default function GaleriPage() {
 
               {/* Photos Grid - Balanced 3-Column Studio Cards */}
               {filteredPhotos.length > 0 ? (
-                <StaggerContainer 
+                <StaggerContainer
                   key={`photos-${photoFilter}-${searchQuery}`}
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
                   {filteredPhotos.map((img) => (
                     <StaggerItem key={img.id}>
-                      <div 
+                      <div
                         onClick={() => setSelectedPhoto(img)}
                         className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xs hover:shadow-xl hover:border-cyan-300 transition-all duration-300 flex flex-col justify-between h-full group cursor-pointer"
                       >
                         {/* Photo Image Banner with Clean Hover Zoom */}
                         <div className="relative aspect-[16/10] bg-slate-950 overflow-hidden">
                           {img.src ? (
-                            <Image 
-                              src={img.src} 
-                              alt={img.title} 
+                            <Image
+                              src={img.src}
+                              alt={img.title}
                               fill
-                              className="object-cover transform group-hover:scale-105 transition-transform duration-500" 
+                              className="object-cover transform group-hover:scale-105 transition-transform duration-500"
                             />
                           ) : (
                             <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-xs">
                               ({trans('Tidak Ada Gambar', 'No Image')})
                             </div>
                           )}
-                          
+
                           {/* Hover Zoom Icon & Subtle Overlay */}
                           <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
                             <div className="w-12 h-12 rounded-full bg-cyan-500/95 text-white flex items-center justify-center shadow-xl transform scale-90 group-hover:scale-100 transition-transform">
@@ -262,7 +259,7 @@ export default function GaleriPage() {
               )}
             </div>
           ) : (
-            
+
             /* ========================================================= */
             /* TAB 2: GALERI VIDEO DOKUMENTASI & MULTIMEDIA */
             /* ========================================================= */
@@ -306,11 +303,10 @@ export default function GaleriPage() {
                         key={cat}
                         type="button"
                         onClick={() => setVideoFilter(cat)}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                          videoFilter === cat
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${videoFilter === cat
                             ? 'bg-amber-600 text-white shadow-xs'
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                        }`}
+                          }`}
                       >
                         {cat === 'all' ? trans('Semua', 'All') : cat}
                       </button>
@@ -337,7 +333,7 @@ export default function GaleriPage() {
                       key={video.id}
                       className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xs hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between group"
                     >
-                      <div 
+                      <div
                         onClick={() => setSelectedVideo(video)}
                         className="cursor-pointer flex-1 flex flex-col"
                       >
@@ -349,7 +345,7 @@ export default function GaleriPage() {
                             fill
                             className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                           />
-                          
+
                           {/* Play Icon Overlay */}
                           <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/40 flex items-center justify-center z-10 transition-colors">
                             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl transform scale-95 group-hover:scale-110 transition-transform">
@@ -525,7 +521,7 @@ export default function GaleriPage() {
                     const trimmedUrl = (selectedVideo.url || '').trim();
                     const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/i;
                     const match = trimmedUrl.match(regExp);
-                    
+
                     let embedUrl: string | null = null;
                     if (match && match[1]) {
                       embedUrl = `https://www.youtube-nocookie.com/embed/${match[1]}?autoplay=1&rel=0&modestbranding=1`;
