@@ -180,6 +180,7 @@ interface DataContextType {
   addPackage: (pkg: Omit<ProcurementPackage, 'id'>) => void;
   updatePackage: (id: string, updated: Partial<ProcurementPackage>) => void;
   deletePackage: (id: string) => void;
+  syncInaprocPackages: (tahun?: string, saveToDb?: boolean) => Promise<{ success: boolean; count: number; error?: string }>;
 
   // Regulasi
   regulasiList: RegulasiItem[];
@@ -883,6 +884,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           });
         }
 
+        let syncedPkgs: ProcurementPackage[] | null = null;
         if (Array.isArray(procurement_packages)) {
           const mappedPkgs: ProcurementPackage[] = procurement_packages.map((p: {
             id: string;
@@ -915,6 +917,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             fileSize: p.file_size,
             downloadUrl: p.file_url || '#'
           }));
+          syncedPkgs = mappedPkgs;
           if (mappedPkgs.length >= 20) {
             setPackagesList(mappedPkgs);
           } else {
@@ -1105,6 +1108,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           try {
             const existing = localStorage.getItem(STORAGE_KEY);
             const parsed = existing ? JSON.parse(existing) : {};
+            if (syncedPkgs && syncedPkgs.length > 0) {
+              parsed.packagesList = syncedPkgs;
+            }
             localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...parsed, updatedAt: nowIso, lastUpdated: nowIso }));
           } catch {}
         }
@@ -1550,6 +1556,23 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     persist(newsList, agendaList, updated);
 
     await syncAdminData('procurement_packages', 'delete', { id });
+  };
+
+  const syncInaprocPackages = async (tahun: string = '2026', saveToDb: boolean = true) => {
+    try {
+      const res = await fetch(`/api/inaproc/packages?tahun=${encodeURIComponent(tahun)}&limit=100&saveToDb=${saveToDb}`);
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        setPackagesList(json.data);
+        setTotalPackagesCount(json.count || json.data.length);
+        persist(newsList, agendaList, json.data);
+        return { success: true, count: json.data.length };
+      }
+      return { success: false, count: 0, error: json.error || 'Gagal memuat data dari INAPROC' };
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      return { success: false, count: 0, error: errorMsg };
+    }
   };
 
   // ==========================================
@@ -2036,6 +2059,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         addPackage,
         updatePackage,
         deletePackage,
+        syncInaprocPackages,
         regulasiList,
         addRegulasi,
         updateRegulasi,

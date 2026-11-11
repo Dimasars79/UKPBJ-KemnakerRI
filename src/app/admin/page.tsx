@@ -30,6 +30,7 @@ import {
   Eye,
   MapPin,
   Check,
+  CheckCircle2,
   RefreshCw,
   Sun,
   Moon,
@@ -652,6 +653,7 @@ export default function AdminPortalPage() {
     addPackage,
     updatePackage,
     deletePackage,
+    syncInaprocPackages,
     regulasiList,
     addRegulasi,
     updateRegulasi,
@@ -758,6 +760,31 @@ export default function AdminPortalPage() {
     downloadUrl: '#',
     documents: []
   });
+
+  // State & Handler Integrasi INAPROC LKPP (DEWA Sync)
+  const [isInaprocSyncing, setIsInaprocSyncing] = useState(false);
+  const [inaprocSyncStatus, setInaprocSyncStatus] = useState<string | null>(null);
+
+  const handleSyncInaproc = async (tahun: string = '2026') => {
+    setIsInaprocSyncing(true);
+    setInaprocSyncStatus(`Menghubungkan ke data.inaproc.id (K34 - Kemnaker RI TA ${tahun})...`);
+    try {
+      const res = await syncInaprocPackages(tahun, true);
+      if (res.success) {
+        setInaprocSyncStatus(`Berhasil! ${res.count} paket pengadaan Kemnaker TA ${tahun} berhasil disinkronkan langsung dari data.inaproc.id (KLPD: K34).`);
+        setTimeout(() => setInaprocSyncStatus(null), 8000);
+      } else {
+        setInaprocSyncStatus(`Gagal: ${res.error}`);
+        setTimeout(() => setInaprocSyncStatus(null), 8000);
+      }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setInaprocSyncStatus(`Terjadi kesalahan: ${msg}`);
+      setTimeout(() => setInaprocSyncStatus(null), 8000);
+    } finally {
+      setIsInaprocSyncing(false);
+    }
+  };
 
 
 
@@ -4824,34 +4851,68 @@ export default function AdminPortalPage() {
                   Kelola paket tender, seleksi, pengadaan langsung, dan e-purchasing. Perubahan langsung tersinkronisasi ke database Supabase dan beranda publik (<Link href="/#pengadaan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/#pengadaan</Link>).
                 </p>
               </div>
-              <button 
-                onClick={() => {
-                  setEditingPackage(null);
-                  setPackageFormData({
-                    code: `TND-2026-00${packagesList.length + 1}`,
-                    title: '',
-                    unit: 'Biro Perencanaan Kemnaker RI',
-                    hps: 'Rp 500.000.000',
-                    category: 'Tender',
-                    status: 'Pendaftaran Dibuka',
-                    deadline: '28 Sep 2026',
-                    method: 'Tender - Pascakualifikasi Satu File',
-                    docCount: 1,
-                    desc: '',
-                    fileName: '',
-                    fileSize: '',
-                    fileData: '',
-                    downloadUrl: '#',
-                    documents: []
-                  });
-                  setShowPackageModal(true);
-                }}
-                className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer shrink-0"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Tambah Paket Baru</span>
-              </button>
+              <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+                <button
+                  type="button"
+                  disabled={isInaprocSyncing}
+                  onClick={() => handleSyncInaproc('2026')}
+                  className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer shrink-0 disabled:opacity-60"
+                  title="Tarik & sinkronkan data paket RUP dari API data.inaproc.id (K34 / DEWA)"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isInaprocSyncing ? 'animate-spin' : ''}`} />
+                  <span>{isInaprocSyncing ? 'Menyinkronkan LKPP...' : 'Tarik Data INAPROC (DEWA)'}</span>
+                </button>
+
+                <button 
+                  onClick={() => {
+                    setEditingPackage(null);
+                    setPackageFormData({
+                      code: `TND-2026-00${packagesList.length + 1}`,
+                      title: '',
+                      unit: 'Biro Perencanaan Kemnaker RI',
+                      hps: 'Rp 500.000.000',
+                      category: 'Tender',
+                      status: 'Pendaftaran Dibuka',
+                      deadline: '28 Sep 2026',
+                      method: 'Tender - Pascakualifikasi Satu File',
+                      docCount: 1,
+                      desc: '',
+                      fileName: '',
+                      fileSize: '',
+                      fileData: '',
+                      downloadUrl: '#',
+                      documents: []
+                    });
+                    setShowPackageModal(true);
+                  }}
+                  className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Tambah Paket Baru</span>
+                </button>
+              </div>
             </div>
+
+            {/* Notification Banner Sinkronisasi INAPROC */}
+            {inaprocSyncStatus && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold flex items-center justify-between shadow-xs"
+              >
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
+                  <span>{inaprocSyncStatus}</span>
+                </div>
+                <button 
+                  type="button" 
+                  onClick={() => setInaprocSyncStatus(null)} 
+                  className="text-xs font-bold underline hover:opacity-80 ml-3 cursor-pointer shrink-0"
+                >
+                  Tutup
+                </button>
+              </motion.div>
+            )}
 
             {/* Quick Stats Grid - Interactive Clickable Filters */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">

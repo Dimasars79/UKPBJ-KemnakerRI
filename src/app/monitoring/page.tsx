@@ -9,7 +9,7 @@ import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
 import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { DataTable } from '@/components/dashboard/DataTable';
-import { TrendingUp, Clock, PackageCheck, BarChart3 } from 'lucide-react';
+import { Clock, PackageCheck, BarChart3 } from 'lucide-react';
 
 import { useData } from '@/contexts/DataContext';
 
@@ -17,25 +17,9 @@ export default function MonitoringPage() {
   const { t, trans } = useLanguage();
   const { packagesList, totalPackagesCount: totalDbCount } = useData();
 
-  // Helper konversi string Rupiah ke angka numerik
-  const parseRupiahNumber = (rupiahStr: string): number => {
-    if (!rupiahStr) return 0;
-    const clean = rupiahStr.replace(/[^0-9]/g, '');
-    const num = parseInt(clean, 10);
-    return isNaN(num) ? 0 : num;
-  };
-
-  const { totalPackagesCount, savingsDisplay } = React.useMemo(() => {
+  const totalPackagesCount = React.useMemo(() => {
     const count = totalDbCount || (packagesList && packagesList.length > 0 ? packagesList.length : 8333);
-    const totalPaguNum = packagesList && packagesList.length > 0
-      ? packagesList.reduce((acc, p) => acc + parseRupiahNumber(p.hps), 0)
-      : 842300000000;
-    const savingsNum = Math.round(totalPaguNum * 0.048);
-
-    return {
-      totalPackagesCount: count.toLocaleString('id-ID'),
-      savingsDisplay: `Rp ${savingsNum.toLocaleString('id-ID')}`
-    };
+    return count.toLocaleString('id-ID');
   }, [packagesList, totalDbCount]);
 
   const performanceStats = [
@@ -50,12 +34,6 @@ export default function MonitoringPage() {
       value: '18%', 
       icon: <Clock className="w-4 h-4 sm:w-7 sm:h-7 text-white" />, 
       trend: trans('Lebih cepat 4 hari/paket', '4 days faster per package') 
-    },
-    { 
-      title: trans('Penghematan Pagu (Efisiensi)', 'Budget Savings (Efficiency)'), 
-      value: savingsDisplay, 
-      icon: <TrendingUp className="w-4 h-4 sm:w-7 sm:h-7 text-white" />, 
-      trend: trans('4.8% efisiensi dari HPS', '4.8% efficiency from HPS') 
     },
   ];
 
@@ -96,7 +74,7 @@ export default function MonitoringPage() {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
           {/* Stat Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-6 mb-6 sm:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-6 mb-6 sm:mb-12">
             {performanceStats.map((stat, idx) => (
               <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white rounded-xl sm:rounded-2xl shadow-sm sm:shadow-lg border border-slate-100 p-2.5 sm:p-6 flex items-center gap-3 sm:gap-5">
                 <div className="bg-gradient-to-br from-primary-blue to-blue-600 rounded-lg sm:rounded-xl p-2 sm:p-4 shadow-sm sm:shadow-md shrink-0">
