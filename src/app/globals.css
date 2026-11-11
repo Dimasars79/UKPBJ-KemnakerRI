@@ -14,32 +14,124 @@
     text-wrap: balance;
   }
   .no-scrollbar::-webkit-scrollbar {
-    display: none;
+    display: none !important;
   }
   .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
   }
 
-  /* Sleek custom scrollbar for admin portal and compact panels */
+  /* Sleek custom scrollbar utility */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 12px;
+    height: 12px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+    background: transparent !important;
+    margin-top: 28px !important;
+    margin-bottom: 28px !important;
+    margin-block: 28px !important;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.25);
-    border-radius: 9999px;
+    background-color: rgba(148, 163, 184, 0.4);
+    border: 3px solid transparent !important;
+    background-clip: padding-box !important;
+    border-radius: 9999px !important;
+    min-height: 36px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(148, 163, 184, 0.45);
+    background-color: rgba(59, 130, 246, 0.75) !important;
+  }
+  .custom-scrollbar::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+    scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
   }
+}
+
+/* ========================================================= */
+/* UNIVERSAL SLEEK MODERN SCROLLBAR (CHROME, SAFARI, EDGE, FIREFOX) */
+/* ========================================================= */
+
+/* Firefox & Standard CSS */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+
+.dark * {
+  scrollbar-color: rgba(148, 163, 184, 0.28) transparent;
+}
+
+/* WebKit-based browsers (Chrome, Edge, Safari, Opera, Electron) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+/* Margin aman 28px atas & bawah: berhenti sebelum lengkungan sudut rounded-3xl (24px) */
+::-webkit-scrollbar-track {
+  background: transparent !important;
+  margin-top: 28px !important;
+  margin-bottom: 28px !important;
+  margin-block: 28px !important;
+}
+
+/* Border transparan 3px + background-clip padding-box membuat thumb mengambang rapi, TIDAK MEPET ke tepi border */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.4);
+  border: 3px solid transparent !important;
+  background-clip: padding-box !important;
+  border-radius: 9999px !important;
+  min-height: 40px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(59, 130, 246, 0.75) !important; /* Highlight blue saat di-hover */
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(37, 99, 235, 0.95) !important;
+}
+
+/* Hilangkan secara tuntas semua tombol panah atas/bawah bawaan browser */
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-button:single-button,
+::-webkit-scrollbar-button:start,
+::-webkit-scrollbar-button:end,
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment,
+::-webkit-scrollbar-button:vertical:start:decrement,
+::-webkit-scrollbar-button:vertical:end:increment,
+::-webkit-scrollbar-button:horizontal:start:decrement,
+::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Sudut pertemuan scrollbar vertikal dan horizontal */
+::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+/* Penyesuaian khusus mode gelap (Dark Mode) */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.32);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(96, 165, 250, 0.7) !important;
 }
 
 @keyframes slow-zoom {

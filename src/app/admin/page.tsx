@@ -4503,10 +4503,6 @@ export default function AdminPortalPage() {
             {/* Header with Backend Sync Status */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
-                  <Newspaper className="w-3.5 h-3.5" />
-                  <span>Backend Content Management System (CMS)</span>
-                </div>
                 <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Berita & Pengumuman
                 </h2>
@@ -4693,10 +4689,6 @@ export default function AdminPortalPage() {
             {/* Header with Backend Sync Status */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>Backend Schedule & Timeline Handler</span>
-                </div>
                 <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Agenda & Jadwal PBJ
                 </h2>
@@ -4825,10 +4817,6 @@ export default function AdminPortalPage() {
           <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
-                  <Package className="w-3.5 h-3.5" />
-                  <span>Tender & Seleksi Procurement Database</span>
-                </div>
                 <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Kelola Tender, Seleksi & Paket Pengadaan
                 </h2>
@@ -5403,10 +5391,6 @@ export default function AdminPortalPage() {
           <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
-                  <BookOpen className="w-3.5 h-3.5" />
-                  <span>Backend Manual & Technical Guide CMS</span>
-                </div>
                 <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Panduan, Petunjuk Teknis & Modul PBJ
                 </h2>
@@ -5753,10 +5737,6 @@ export default function AdminPortalPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
-                  <History className="w-3.5 h-3.5" />
-                  <span>Audit Trail & Activity Log</span>
-                </div>
                 <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Log Aktivitas & Riwayat Perubahan Sistem
                 </h2>
@@ -6164,10 +6144,6 @@ export default function AdminPortalPage() {
           <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
-                  <ScrollText className="w-3.5 h-3.5" />
-                  <span>Backend Regulation & Legal CMS</span>
-                </div>
                 <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Regulasi & Aturan PBJ
                 </h2>
@@ -6312,10 +6288,6 @@ export default function AdminPortalPage() {
           <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>Backend Standard Operating Procedures CMS</span>
-                </div>
                 <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Manage Standar Operasional Prosedur (SOP)
                 </h2>
@@ -6481,10 +6453,6 @@ export default function AdminPortalPage() {
 
               <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
                 <div className="space-y-1.5 sm:space-y-2">
-                  <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-500 dark:text-cyan-400 text-[10px] sm:text-xs font-bold uppercase">
-                    <Camera className="w-3.5 h-3.5" />
-                    <span>Media & Dokumentasi CMS UKPBJ</span>
-                  </div>
                   <h2 className={`text-lg sm:text-2xl md:text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     Kelola Galeri Foto & Video Dokumentasi
                   </h2>
@@ -7232,10 +7200,6 @@ export default function AdminPortalPage() {
         {activeTab === 'pengaturan' && (
           <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 max-w-4xl">
             <div>
-              <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] sm:text-xs font-bold uppercase mb-1.5 sm:mb-2">
-                <Settings className="w-3.5 h-3.5" />
-                <span>Global Site & Database Settings</span>
-              </div>
               <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 Pengaturan Sistem & Database
               </h2>
@@ -7311,11 +7275,12 @@ export default function AdminPortalPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className={`border rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+              className={`border rounded-3xl max-w-2xl w-full shadow-2xl max-h-[90vh] flex flex-col overflow-hidden ${
                 isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
-              <div className="flex justify-between items-center mb-6">
+              {/* Header Modal */}
+              <div className="flex justify-between items-center p-5 sm:p-7 pb-4 border-b border-slate-200/80 dark:border-slate-800 shrink-0">
                 <div>
                   <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {editingNews ? 'Edit Berita Pengadaan' : 'Terbitkan Berita / Pengumuman Baru'}
@@ -7323,14 +7288,17 @@ export default function AdminPortalPage() {
                   <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>Konten akan langsung ter-update di backend dan tampil di frontend publik.</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setShowNewsModal(false)}
-                  className={`p-2 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
+                  className={`p-2 rounded-full cursor-pointer transition-colors ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`}
                 >
                   ✕
                 </button>
               </div>
 
-              <form onSubmit={handleSaveNews} className="space-y-4 text-xs">
+              {/* Scrollable Form Body */}
+              <div className="overflow-y-auto p-5 sm:p-7 flex-1">
+                <form onSubmit={handleSaveNews} className="space-y-4 text-xs">
                 <div>
                   <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Judul Berita *</label>
                   <input
@@ -7776,7 +7744,8 @@ export default function AdminPortalPage() {
                   </button>
                 </div>
               </form>
-            </motion.div>
+            </div>
+          </motion.div>
           </div>
         )}
       </AnimatePresence>
@@ -7791,11 +7760,12 @@ export default function AdminPortalPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className={`border rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+              className={`border rounded-3xl max-w-xl w-full shadow-2xl max-h-[90vh] flex flex-col overflow-hidden ${
                 isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
-              <div className="flex justify-between items-center mb-6">
+              {/* Header Modal */}
+              <div className="flex justify-between items-center p-5 sm:p-7 pb-4 border-b border-slate-200/80 dark:border-slate-800 shrink-0">
                 <div>
                   <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {editingAgenda ? 'Edit Agenda PBJ' : 'Tambah Agenda / Kegiatan Baru'}
@@ -7803,14 +7773,17 @@ export default function AdminPortalPage() {
                   <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-0.5`}>Jadwal akan otomatis muncul pada kalender interaktif (/agenda).</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setShowAgendaModal(false)}
-                  className={`p-2 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
+                  className={`p-2 rounded-full cursor-pointer transition-colors ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`}
                 >
                   ✕
                 </button>
               </div>
 
-              <form onSubmit={handleSaveAgenda} className="space-y-4 text-xs">
+              {/* Scrollable Form Body */}
+              <div className="overflow-y-auto p-5 sm:p-7 flex-1">
+                <form onSubmit={handleSaveAgenda} className="space-y-4 text-xs">
                 <div>
                   <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Nama Kegiatan / Agenda *</label>
                   <input
@@ -8066,7 +8039,8 @@ export default function AdminPortalPage() {
                   </button>
                 </div>
               </form>
-            </motion.div>
+            </div>
+          </motion.div>
           </div>
         )}
       </AnimatePresence>
@@ -8157,11 +8131,12 @@ export default function AdminPortalPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className={`border rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto ${
+              className={`border rounded-3xl max-w-2xl w-full shadow-2xl max-h-[90vh] flex flex-col overflow-hidden ${
                 isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
               }`}
             >
-              <div className="flex justify-between items-center mb-6">
+              {/* Header Modal - Fixed at top with clean rounded boundary */}
+              <div className="flex justify-between items-center p-5 sm:p-7 pb-4 border-b border-slate-200/80 dark:border-slate-800 shrink-0">
                 <div>
                   <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {editingPackage ? 'Edit Paket Pengadaan / Tender' : 'Tambah Paket Pengadaan Baru'}
@@ -8171,14 +8146,17 @@ export default function AdminPortalPage() {
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setShowPackageModal(false)}
-                  className={`p-2 rounded-full ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
+                  className={`p-2 rounded-full cursor-pointer transition-colors ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`}
                 >
                   ✕
                 </button>
               </div>
 
-              <form onSubmit={handleSavePackage} className="space-y-4 text-xs">
+              {/* Scrollable Form Body - Contained neatly inside the modal */}
+              <div className="overflow-y-auto p-5 sm:p-7 flex-1">
+                <form onSubmit={handleSavePackage} className="space-y-4 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Kode Paket / RUP *</label>
@@ -8408,7 +8386,8 @@ export default function AdminPortalPage() {
                   </button>
                 </div>
               </form>
-            </motion.div>
+            </div>
+          </motion.div>
           </div>
         )}
       </AnimatePresence>

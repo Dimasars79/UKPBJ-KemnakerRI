@@ -249,12 +249,9 @@ export default function AgendaPage() {
               <div className="w-full lg:w-1/2 p-5 sm:p-7 md:p-9 relative z-10 bg-white">
                 <div>
                   <div className="flex justify-between items-center mb-4 sm:mb-6">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-2 h-5 sm:h-6 rounded-full bg-gradient-to-b from-[#06182E] to-primary-blue" />
-                      <h3 className="text-base sm:text-xl font-black text-slate-900 tracking-tight">
-                        {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-                      </h3>
-                    </div>
+                    <h3 className="text-base sm:text-xl font-black text-slate-900 tracking-tight">
+                      {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+                    </h3>
                     <div className="flex items-center space-x-1.5 sm:space-x-2">
                       <button 
                         onClick={goToToday}

@@ -59,6 +59,60 @@ export function PengadaanSection({ activeCategory, onCategoryChange }: Pengadaan
     return () => window.removeEventListener('filter-procurement-category', handleCustomFilter);
   }, []);
 
+  // Otomatis buka modal detail paket saat diakses lewat URL parameter (?package=...) atau event pencarian
+  React.useEffect(() => {
+    const checkAndOpenPackage = (codeOrId?: string) => {
+      if (typeof window === 'undefined') return;
+      const targetParam = codeOrId || new URLSearchParams(window.location.search).get('package');
+      if (!targetParam) return;
+
+      const found = packagesList.find(
+        (p) => p.code?.toLowerCase() === targetParam.toLowerCase() || p.id === targetParam
+      );
+
+      if (found) {
+        setSelectedCategory('Semua');
+        setSelectedStatus('Semua');
+        setActiveModalPackage(found);
+        const el = document.getElementById('pengadaan');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    };
+
+    // Pengecekan saat halaman selesai dimuat
+    const timer = setTimeout(() => {
+      checkAndOpenPackage();
+    }, 150);
+
+    const handleCustomOpen = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail) {
+        checkAndOpenPackage(customEvent.detail);
+      }
+    };
+
+    window.addEventListener('open-package-detail', handleCustomOpen);
+    window.addEventListener('popstate', () => checkAndOpenPackage());
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('open-package-detail', handleCustomOpen);
+      window.removeEventListener('popstate', () => checkAndOpenPackage());
+    };
+  }, [packagesList]);
+
+  const handleCloseModal = () => {
+    setActiveModalPackage(null);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has('package')) {
+        url.searchParams.delete('package');
+        window.history.replaceState({}, '', url.pathname + (url.hash || ''));
+      }
+    }
+  };
+
   const categories = ['Semua', 'Tender', 'Seleksi', 'Pengadaan Langsung', 'E-Purchasing'];
   const statuses = ['Semua', 'Pendaftaran Dibuka', 'Tahap Evaluasi', 'Selesai'];
 
@@ -512,7 +566,7 @@ export function PengadaanSection({ activeCategory, onCategoryChange }: Pengadaan
       {/* Package Detail Modal */}
       <AnimatePresence>
         {activeModalPackage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
+          <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -527,8 +581,8 @@ export function PengadaanSection({ activeCategory, onCategoryChange }: Pengadaan
                   </h3>
                 </div>
                 <button
-                  onClick={() => setActiveModalPackage(null)}
-                  className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-all text-sm font-bold"
+                  onClick={handleCloseModal}
+                  className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-all text-sm font-bold cursor-pointer"
                 >
                   ✕
                 </button>
@@ -649,8 +703,8 @@ export function PengadaanSection({ activeCategory, onCategoryChange }: Pengadaan
 
               <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
                 <button
-                  onClick={() => setActiveModalPackage(null)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+                  onClick={handleCloseModal}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   {trans('Tutup', 'Close')}
                 </button>
