@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import Link from 'next/link';
 import { 
   FileText, 
   ChevronLeft, 
@@ -134,9 +133,6 @@ export function DataTable() {
             <span>Portal SPSE Kemnaker</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
-          <Link href="/#pengadaan" className="px-3.5 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-colors shadow-2xs whitespace-nowrap text-center">
-            {trans('Lihat di Beranda', 'View on Homepage')}
-          </Link>
         </div>
       </div>
 

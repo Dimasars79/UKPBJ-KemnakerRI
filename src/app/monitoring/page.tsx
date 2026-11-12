@@ -5,37 +5,12 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
-import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
-import { EfficiencyChart } from '@/components/dashboard/EfficiencyChart';
-import { CategoryChart } from '@/components/dashboard/CategoryChart';
+import { ProcurementSplitLedger } from '@/components/dashboard/ProcurementSplitLedger';
 import { DataTable } from '@/components/dashboard/DataTable';
-import { Clock, PackageCheck, BarChart3 } from 'lucide-react';
-
-import { useData } from '@/contexts/DataContext';
+import { BarChart3 } from 'lucide-react';
 
 export default function MonitoringPage() {
   const { t, trans } = useLanguage();
-  const { packagesList, totalPackagesCount: totalDbCount } = useData();
-
-  const totalPackagesCount = React.useMemo(() => {
-    const count = totalDbCount || (packagesList && packagesList.length > 0 ? packagesList.length : 8333);
-    return count.toLocaleString('id-ID');
-  }, [packagesList, totalDbCount]);
-
-  const performanceStats = [
-    { 
-      title: trans('Total Paket Pengadaan Terdata', 'Total Registered Packages'), 
-      value: totalPackagesCount, 
-      icon: <PackageCheck className="w-4 h-4 sm:w-7 sm:h-7 text-white" />, 
-      trend: trans('+12% dari bulan lalu', '+12% from last month') 
-    },
-    { 
-      title: trans('Efisiensi Waktu Proses', 'Time Efficiency'), 
-      value: '18%', 
-      icon: <Clock className="w-4 h-4 sm:w-7 sm:h-7 text-white" />, 
-      trend: trans('Lebih cepat 4 hari/paket', '4 days faster per package') 
-    },
-  ];
 
   return (
     <>
@@ -72,56 +47,14 @@ export default function MonitoringPage() {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
-          {/* Stat Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-6 mb-6 sm:mb-12">
-            {performanceStats.map((stat, idx) => (
-              <FadeIn key={idx} direction="up" delay={idx * 0.1} className="bg-white rounded-xl sm:rounded-2xl shadow-sm sm:shadow-lg border border-slate-100 p-2.5 sm:p-6 flex items-center gap-3 sm:gap-5">
-                <div className="bg-gradient-to-br from-primary-blue to-blue-600 rounded-lg sm:rounded-xl p-2 sm:p-4 shadow-sm sm:shadow-md shrink-0">
-                  <div className="w-4 h-4 sm:w-7 sm:h-7 flex items-center justify-center">
-                    {stat.icon}
-                  </div>
-                </div>
-                <div className="min-w-0">
-                  <p className="text-slate-500 text-[10px] sm:text-sm font-medium mb-0 sm:mb-1 truncate">{stat.title}</p>
-                  <h3 className="text-base sm:text-2xl md:text-3xl font-extrabold text-primary-navy mb-0 sm:mb-1 truncate leading-tight">{stat.value}</h3>
-                  <p className="text-green-600 text-[10px] sm:text-xs font-bold truncate leading-tight">{stat.trend}</p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20 space-y-8">
+          {/* OPSI 2: PANORAMIC SPLIT LEDGER (Filter + Total Anggaran Hero + Realisasi vs Sisa) */}
+          <FadeIn direction="up" delay={0.1}>
+            <ProcurementSplitLedger />
+          </FadeIn>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8">
-            <FadeIn direction="up" delay={0.1}>
-              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
-                <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                  <span>{trans('Tren Kinerja Pengadaan', 'Procurement Performance Trend')}</span>
-                </h3>
-                <PerformanceChart />
-              </div>
-            </FadeIn>
-            <FadeIn direction="up" delay={0.2}>
-              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
-                <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>{trans('Komitmen PDN & UMK (TKDN)', 'Domestic & SME Commitment')}</span>
-                </h3>
-                <EfficiencyChart />
-              </div>
-            </FadeIn>
-            <FadeIn direction="up" delay={0.3}>
-              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
-                <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-4 sm:mb-6 border-b pb-3 sm:pb-4 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  <span>{trans('Target vs Realisasi & Efisiensi', 'Target vs Realization & Savings')}</span>
-                </h3>
-                <CategoryChart />
-              </div>
-            </FadeIn>
-          </div>
-
-          <FadeIn direction="up" delay={0.4}>
+          {/* Tabel Detail Paket Pengadaan */}
+          <FadeIn direction="up" delay={0.2}>
             <DataTable />
           </FadeIn>
         </section>

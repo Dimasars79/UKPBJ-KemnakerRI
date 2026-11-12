@@ -43,6 +43,22 @@ export function ProcurementDonutChart({
   const ry = 47;  // Radius dalam vertikal
   const depth = 22; // Ketebalan dinding silinder 3D ke bawah
 
+  // Geometri Podium Pusat (Dihitung presisi konsentris dan simetris terhadap lubang donut)
+  const podiumRx = 52;
+  const podiumRy = 37;
+  const podiumTopY = cy - 3.5;
+  const podiumBottomY = cy + 3.5;
+
+  const podiumSidePath = useMemo(() => {
+    return [
+      `M ${(cx - podiumRx).toFixed(2)} ${podiumTopY.toFixed(2)}`,
+      `A ${podiumRx} ${podiumRy} 0 0 0 ${(cx + podiumRx).toFixed(2)} ${podiumTopY.toFixed(2)}`,
+      `L ${(cx + podiumRx).toFixed(2)} ${podiumBottomY.toFixed(2)}`,
+      `A ${podiumRx} ${podiumRy} 0 0 1 ${(cx - podiumRx).toFixed(2)} ${podiumBottomY.toFixed(2)}`,
+      'Z'
+    ].join(' ');
+  }, [cx, podiumRx, podiumRy, podiumTopY, podiumBottomY]);
+
   // Perhitungan Geometri Segmen Isometrik 3D
   const segments = useMemo(() => {
     const totalPercentage = data.reduce((acc, curr) => acc + curr.percentage, 0) || 100;
@@ -241,6 +257,15 @@ export function ProcurementDonutChart({
             </React.Fragment>
           ))}
 
+          {/* Gradien Dinding Samping Silinder Putih Pusat */}
+          <linearGradient id="podium-wall" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#64748B" />
+            <stop offset="25%" stopColor="#94A3B8" />
+            <stop offset="50%" stopColor="#E2E8F0" />
+            <stop offset="75%" stopColor="#94A3B8" />
+            <stop offset="100%" stopColor="#64748B" />
+          </linearGradient>
+
           {/* Gradien Piringan Silinder Putih Pusat */}
           <radialGradient id="podium-top" cx="45%" cy="35%" r="65%">
             <stop offset="0%" stopColor="#FFFFFF" />
@@ -322,23 +347,31 @@ export function ProcurementDonutChart({
           })}
         </g>
 
-        {/* 3. PIRINGAN SILINDER TIMBUL PUTIH DI TENGAH (3D White Raised Podium) */}
+        {/* 3. PIRINGAN SILINDER TIMBUL PUTIH DI TENGAH (3D White Raised Symmetrical Podium) */}
         <g filter="url(#center-podium-shadow)" className="pointer-events-none">
-          {/* Sisi Tebal Silinder Putih */}
+          {/* Dasar Bawah Silinder */}
           <ellipse
             cx={cx}
-            cy={cy + 8}
-            rx={rx * 0.82}
-            ry={ry * 0.82}
-            fill="#94A3B8"
+            cy={podiumBottomY}
+            rx={podiumRx}
+            ry={podiumRy}
+            fill="#64748B"
+          />
+
+          {/* Dinding Samping Silinder 3D Terhubung Mulus */}
+          <path
+            d={podiumSidePath}
+            fill="url(#podium-wall)"
+            stroke="rgba(0, 0, 0, 0.15)"
+            strokeWidth="0.5"
           />
 
           {/* Permukaan Atas Piringan Putih Glossy */}
           <ellipse
             cx={cx}
-            cy={cy}
-            rx={rx * 0.82}
-            ry={ry * 0.82}
+            cy={podiumTopY}
+            rx={podiumRx}
+            ry={podiumRy}
             fill="url(#podium-top)"
             stroke="#FFFFFF"
             strokeWidth="2"
@@ -347,11 +380,11 @@ export function ProcurementDonutChart({
           {/* Cincin Aksen Emas Halus di Sekeliling Piringan */}
           <ellipse
             cx={cx}
-            cy={cy}
-            rx={rx * 0.82 - 3}
-            ry={ry * 0.82 - 3}
+            cy={podiumTopY}
+            rx={podiumRx - 3}
+            ry={podiumRy - 2.5}
             fill="none"
-            stroke="rgba(212, 175, 55, 0.25)"
+            stroke="rgba(212, 175, 55, 0.35)"
             strokeWidth="1"
           />
         </g>
@@ -362,7 +395,7 @@ export function ProcurementDonutChart({
             <>
               <text
                 x={cx}
-                y={cy - 12}
+                y={podiumTopY - 11}
                 textAnchor="middle"
                 className="font-extrabold uppercase tracking-tight transition-all duration-200"
                 style={{
@@ -374,7 +407,7 @@ export function ProcurementDonutChart({
               </text>
               <text
                 x={cx}
-                y={cy + 4}
+                y={podiumTopY + 4}
                 textAnchor="middle"
                 className="text-[13px] sm:text-[14px] font-black fill-[#0A2342] tracking-tight transition-all duration-200"
                 style={{ textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
@@ -383,7 +416,7 @@ export function ProcurementDonutChart({
               </text>
               <text
                 x={cx}
-                y={cy + 18}
+                y={podiumTopY + 18}
                 textAnchor="middle"
                 className="text-[9.5px] font-bold fill-slate-600 transition-all duration-200"
               >
@@ -394,7 +427,7 @@ export function ProcurementDonutChart({
             <>
               <text
                 x={cx}
-                y={cy - 12}
+                y={podiumTopY - 11}
                 textAnchor="middle"
                 className="text-[9px] font-black fill-slate-500 uppercase tracking-widest transition-all duration-200"
               >
@@ -402,7 +435,7 @@ export function ProcurementDonutChart({
               </text>
               <text
                 x={cx}
-                y={cy + 4}
+                y={podiumTopY + 4}
                 textAnchor="middle"
                 className="text-sm sm:text-[15px] font-black fill-[#0A2342] tracking-tight transition-all duration-200"
                 style={{ textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
@@ -411,7 +444,7 @@ export function ProcurementDonutChart({
               </text>
               <text
                 x={cx}
-                y={cy + 18}
+                y={podiumTopY + 18}
                 textAnchor="middle"
                 className="text-[9.5px] font-bold fill-slate-600 transition-all duration-200"
               >
