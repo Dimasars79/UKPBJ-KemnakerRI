@@ -230,13 +230,10 @@ export function ProcurementSplitLedger() {
 
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-[11px] font-bold uppercase tracking-wider">
-                <TrendingUp className="w-3.5 h-3.5 text-cyan-300" />
+              <div className="inline-flex items-center gap-1.5 text-cyan-300 text-xs font-extrabold uppercase tracking-wider">
+                <TrendingUp className="w-4 h-4 text-cyan-300" />
                 <span>{trans('Alokasi Pagu Induk APBN', 'Main APBN Budget Allocation')}</span>
               </div>
-              <span className="text-[11px] font-mono font-bold bg-white/10 text-cyan-200 px-2.5 py-0.5 rounded-md border border-white/10">
-                100% Pagu
-              </span>
             </div>
 
             <p className="text-xs text-slate-300 mb-1">
@@ -267,9 +264,45 @@ export function ProcurementSplitLedger() {
                 </p>
               </div>
             </div>
+
+            {/* Integrated Dual Stacked Progress Bar & Target TW3 (Moved for Balanced Layout) */}
+            <div className="mt-3.5 bg-white/5 rounded-xl p-3.5 border border-white/10 backdrop-blur-xs space-y-2">
+              <div className="flex justify-between items-center text-[11px] font-bold font-mono">
+                <span className="text-emerald-300 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>{trans('Realisasi', 'Realized')}:</span>
+                  <span className="text-white font-extrabold">{metrics.sudahRealisasiPct.toFixed(2).replace('.', ',')}%</span>
+                </span>
+                <span className="text-amber-300 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <span>{trans('Sisa Pagu', 'Remaining')}:</span>
+                  <span className="text-white font-extrabold">{metrics.belumRealisasiPct.toFixed(2).replace('.', ',')}%</span>
+                </span>
+              </div>
+
+              <div className="w-full bg-slate-900/90 rounded-full h-2.5 overflow-hidden flex border border-white/10 p-0.5">
+                <div 
+                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-l-full transition-all duration-500"
+                  style={{ width: `${metrics.sudahRealisasiPct}%` }}
+                />
+                <div 
+                  className="bg-gradient-to-r from-amber-400 to-orange-400 h-full rounded-r-full transition-all duration-500"
+                  style={{ width: `${metrics.belumRealisasiPct}%` }}
+                />
+              </div>
+
+              <div className="flex justify-between items-center text-[10px] text-slate-300 pt-0.5">
+                <span>
+                  {trans('Target TW3:', 'Q3 Target:')} <strong className="text-cyan-300 font-mono">{metrics.targetTw3Pct},00%</strong>
+                </span>
+                <span className="text-amber-300 font-mono font-bold">
+                  {trans('Deviasi:', 'Deviation:')} -{(metrics.targetTw3Pct - metrics.sudahRealisasiPct).toFixed(2).replace('.', ',')}%
+                </span>
+              </div>
+            </div>
           </div>
 
-          <div className="relative z-10 mt-6 pt-3.5 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
+          <div className="relative z-10 mt-5 pt-3.5 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
             <span>{trans('Basis Evaluasi:', 'Evaluation Basis:')} <strong className="text-cyan-200">{basisRealisasi === 'kontrak' ? trans('Nilai Kontrak Terikat', 'Bound Contract Value') : trans('Pagu Pengadaan', 'Procurement Ceiling')}</strong></span>
             <span className="text-slate-300 font-semibold">{trans('UKPBJ Kemnaker RI', 'UKPBJ MoM RI')}</span>
           </div>
@@ -281,7 +314,7 @@ export function ProcurementSplitLedger() {
           <div className="absolute -top-16 -right-16 w-52 h-52 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="relative z-10">
+          <div className="relative z-10 flex-1 flex flex-col">
             {/* Header Ledger */}
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-white/10">
               <div>
@@ -298,34 +331,8 @@ export function ProcurementSplitLedger() {
               </div>
             </div>
 
-            {/* INTEGRATED DUAL STACKED BAR - Clean Minimalist Proportion Bar */}
-            <div className="space-y-2 mb-5">
-              <div className="flex justify-between items-center text-xs font-bold font-mono">
-                <span className="text-emerald-300 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  <span>{trans('Sudah Realisasi', 'Realized')}:</span>
-                  <span className="text-white font-extrabold">{metrics.sudahRealisasiPct.toFixed(2).replace('.', ',')}%</span>
-                </span>
-                <span className="text-amber-300 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                  <span>{trans('Sisa Pagu', 'Remaining')}:</span>
-                  <span className="text-white font-extrabold">{metrics.belumRealisasiPct.toFixed(2).replace('.', ',')}%</span>
-                </span>
-              </div>
-              <div className="w-full bg-slate-900/90 rounded-full h-2.5 overflow-hidden flex border border-white/10 p-0.5">
-                <div 
-                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-l-full transition-all duration-500"
-                  style={{ width: `${metrics.sudahRealisasiPct}%` }}
-                />
-                <div 
-                  className="bg-gradient-to-r from-amber-400 to-orange-400 h-full rounded-r-full transition-all duration-500"
-                  style={{ width: `${metrics.belumRealisasiPct}%` }}
-                />
-              </div>
-            </div>
-
             {/* TWO COMPARATIVE LEDGER BOXES */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 flex-1">
               
               {/* Box Realisasi */}
               <div className="p-4 rounded-xl bg-white/5 border border-emerald-400/30 backdrop-blur-xs flex flex-col justify-between">
