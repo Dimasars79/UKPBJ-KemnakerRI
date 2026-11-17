@@ -421,10 +421,10 @@ export default function Home() {
               </div>
             ) : (
               <motion.div
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-30px" }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, amount: 0.35, margin: "0px 0px -80px 0px" }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className="group relative rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#0C2344] via-[#091C36] to-[#051122] border border-amber-400/30 hover:border-amber-400/60 p-4 sm:p-6 lg:p-7 shadow-xl overflow-hidden transition-all duration-500 hover:shadow-[0_20px_50px_rgba(251,191,36,0.1)]"
               >
                 {/* Background ambient radial glow dengan animasi breathing halus */}

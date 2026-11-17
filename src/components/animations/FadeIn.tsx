@@ -32,10 +32,10 @@ export function FadeIn({
   }
 
   const directions = {
-    up: { y: 24, x: 0 },
-    down: { y: -24, x: 0 },
-    left: { x: 24, y: 0 },
-    right: { x: -24, y: 0 },
+    up: { y: 12, x: 0 },
+    down: { y: -12, x: 0 },
+    left: { x: 12, y: 0 },
+    right: { x: -12, y: 0 },
     none: { x: 0, y: 0 },
   };
 
@@ -43,11 +43,11 @@ export function FadeIn({
     <motion.div
       initial={{ opacity: 0, ...directions[direction] }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
+      viewport={{ once: true, amount: 0.35, margin: "0px 0px -80px 0px" }}
       transition={{
-        duration: 0.55,
+        duration: 0.6,
         delay,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.22, 1, 0.36, 1],
       }}
       className={className}
     >
