@@ -225,7 +225,7 @@ export default function LoginPage() {
               initial={{ opacity: 0, x: -25 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.65, delay: 0.3 }}
-              className="text-center mb-6 sm:mb-8"
+              className="text-center mb-2 sm:mb-3"
             >
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-1.5">
                 Masuk Akun Admin
@@ -235,38 +235,42 @@ export default function LoginPage() {
               </p>
             </motion.div>
 
-            {/* Notification Alerts (Ultra Compact & Minimalist) */}
-            <AnimatePresence>
-              {errorMsg && (
-                <motion.div
-                  initial={{ opacity: 0, y: -4, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                  className="mb-3 py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-md bg-rose-50/90 border border-rose-200/70 text-rose-800 text-[10px] sm:text-[11px] flex items-start gap-1.5 sm:gap-2 shadow-xs"
-                >
-                  <AlertCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-600 shrink-0 mt-0.5" />
-                  <div className="min-w-0">
-                    <p className="font-bold text-[9.5px] sm:text-[10.5px] leading-tight">Gagal Masuk</p>
-                    <p className="mt-0.5 text-[9px] sm:text-[10px] leading-tight text-rose-700">{errorMsg}</p>
-                  </div>
-                </motion.div>
-              )}
+            {/* Fixed-Height Notification Slot (Prevents Card Resizing / Layout Shift) */}
+            <div className="h-[52px] mb-2 flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                {errorMsg && (
+                  <motion.div
+                    key="error-alert"
+                    initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                    className="w-full py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-lg bg-rose-50/90 border border-rose-200/70 text-rose-800 text-[10px] sm:text-[11px] flex items-center gap-2 shadow-xs"
+                  >
+                    <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-bold text-[10px] sm:text-[11px] leading-tight">Gagal Masuk</p>
+                      <p className="mt-0.5 text-[9.5px] sm:text-[10px] leading-tight text-rose-700 truncate">{errorMsg}</p>
+                    </div>
+                  </motion.div>
+                )}
 
-              {successMsg && (
-                <motion.div
-                  initial={{ opacity: 0, y: -4, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                  className="mb-3 py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-md bg-emerald-50/90 border border-emerald-200/70 text-emerald-800 text-[10px] sm:text-[11px] flex items-start gap-1.5 sm:gap-2 shadow-xs"
-                >
-                  <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                  <div className="min-w-0">
-                    <p className="font-bold text-[9.5px] sm:text-[10.5px] leading-tight">Berhasil</p>
-                    <p className="mt-0.5 text-[9px] sm:text-[10px] leading-tight text-emerald-700">{successMsg}</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                {successMsg && (
+                  <motion.div
+                    key="success-alert"
+                    initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                    className="w-full py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-lg bg-emerald-50/90 border border-emerald-200/70 text-emerald-800 text-[10px] sm:text-[11px] flex items-center gap-2 shadow-xs"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-bold text-[10px] sm:text-[11px] leading-tight">Berhasil</p>
+                      <p className="mt-0.5 text-[9.5px] sm:text-[10px] leading-tight text-emerald-700 truncate">{successMsg}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Form Fields with Staggered Left Swipe */}
             <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
