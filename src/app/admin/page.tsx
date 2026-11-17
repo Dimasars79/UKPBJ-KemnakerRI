@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -342,6 +342,33 @@ export default function AdminPortalPage() {
     duration?: string;
   } | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSidebarHovered, setIsSidebarHovered] = useState(false);
+  const sidebarHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleSidebarMouseEnter = () => {
+    if (sidebarHoverTimeoutRef.current) {
+      clearTimeout(sidebarHoverTimeoutRef.current);
+      sidebarHoverTimeoutRef.current = null;
+    }
+    setIsSidebarHovered(true);
+  };
+
+  const handleSidebarMouseLeave = () => {
+    if (sidebarHoverTimeoutRef.current) {
+      clearTimeout(sidebarHoverTimeoutRef.current);
+    }
+    sidebarHoverTimeoutRef.current = setTimeout(() => {
+      setIsSidebarHovered(false);
+    }, 120);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (sidebarHoverTimeoutRef.current) {
+        clearTimeout(sidebarHoverTimeoutRef.current);
+      }
+    };
+  }, []);
   
   // Header Interactive States
   const [showNotifications, setShowNotifications] = useState(false);
@@ -2060,17 +2087,33 @@ export default function AdminPortalPage() {
 
       {/* ========================================================= */}
       {/* ========================================================= */}
-      {/* DESKTOP SIDEBAR NAVIGATION (PINNED HEADER & FOOTER + SLIM SCROLLBAR) */}
+      {/* DESKTOP SIDEBAR NAVIGATION (SMOOTH SLIDING AUTO HOVER-EXPAND) */}
       {/* ========================================================= */}
-      <aside className={`hidden md:flex w-64 md:w-72 border-r flex-col shrink-0 h-screen sticky top-0 overflow-hidden transition-colors duration-300 select-none ${
-        isDark ? 'bg-slate-950 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
-      }`}>
+      <motion.aside 
+        onMouseEnter={handleSidebarMouseEnter}
+        onMouseLeave={handleSidebarMouseLeave}
+        initial={false}
+        animate={{ 
+          width: isSidebarHovered ? 272 : 72
+        }}
+        transition={{ 
+          type: 'spring', 
+          stiffness: 320, 
+          damping: 32,
+          mass: 0.8
+        }}
+        className={`hidden md:flex flex-col shrink-0 h-screen sticky top-0 select-none border-r z-40 overflow-hidden ${
+          isSidebarHovered ? 'shadow-2xl shadow-black/40' : 'shadow-none'
+        } ${
+          isDark ? 'bg-slate-950 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
+        }`}
+      >
         {/* Logo & Portal Brand - Fixed Pinned Header */}
-        <div className={`h-[5.5rem] px-5 border-b flex items-center justify-between shrink-0 box-border ${
+        <div className={`h-[5.5rem] px-3.5 border-b flex items-center shrink-0 box-border transition-colors ${
           isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
         }`}>
-          <div className="flex items-center space-x-3">
-            <div className={`w-10 h-10 rounded-xl p-1.5 flex items-center justify-center shadow-md transition-all ${
+          <div className="flex items-center space-x-3 min-w-0 w-full">
+            <div className={`w-10 h-10 rounded-xl p-1.5 flex items-center justify-center shadow-md transition-all shrink-0 ${
               isDark 
                 ? 'bg-white/95 border border-white/20 shadow-blue-500/10' 
                 : 'bg-white border border-slate-200 shadow-sm'
@@ -2083,104 +2126,185 @@ export default function AdminPortalPage() {
                 className="w-full h-full object-contain drop-shadow-xs" 
               />
             </div>
-            <div>
-              <h1 className={`font-extrabold text-sm tracking-wide ${isDark ? 'text-white' : 'text-primary-navy'}`}>
+            <motion.div 
+              initial={false}
+              animate={{ 
+                opacity: isSidebarHovered ? 1 : 0,
+                x: isSidebarHovered ? 0 : -10
+              }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              className="min-w-0 overflow-hidden whitespace-nowrap"
+            >
+              <h1 className={`font-extrabold text-sm tracking-wide truncate ${isDark ? 'text-white' : 'text-primary-navy'}`}>
                 PORTAL ADMIN
               </h1>
-              <p className="text-[10px] text-accent-gold font-bold">UKPBJ KEMNAKER RI</p>
-            </div>
+              <p className="text-[10px] text-accent-gold font-bold truncate">UKPBJ KEMNAKER RI</p>
+            </motion.div>
           </div>
         </div>
 
         {/* Nav Items - Scrollable with Custom Slim Scrollbar */}
-        <nav className="flex-1 overflow-y-auto p-3 space-y-3.5 custom-scrollbar min-h-0">
+        <nav className="flex-1 overflow-y-auto px-2.5 py-3 space-y-2.5 custom-scrollbar min-h-0">
           {/* GRUP 1: UTAMA */}
           <div className="space-y-1">
-            <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
-              Utama
-            </p>
+            <motion.div
+              initial={false}
+              animate={{ 
+                opacity: isSidebarHovered ? 1 : 0,
+                height: isSidebarHovered ? 'auto' : 0,
+                marginBottom: isSidebarHovered ? 4 : 0
+              }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden whitespace-nowrap"
+            >
+              <p className={`px-2.5 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+                Utama
+              </p>
+            </motion.div>
             
             <button
               onClick={() => setActiveTab('dashboard')}
-              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              title={!isSidebarHovered ? "Dashboard" : undefined}
+              className={`w-full flex items-center h-10 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer group ${
                 activeTab === 'dashboard'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold'
                   : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
               }`}
             >
-              <LayoutDashboard className="w-4 h-4" />
-              <span>Dashboard</span>
+              <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                <LayoutDashboard className="w-4 h-4" />
+              </div>
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: isSidebarHovered ? 1 : 0,
+                  x: isSidebarHovered ? 0 : -8
+                }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="flex-1 min-w-0 overflow-hidden whitespace-nowrap text-left pl-2.5"
+              >
+                <span className="truncate">Dashboard</span>
+              </motion.div>
             </button>
           </div>
 
           {/* GRUP 2: PENGADAAN */}
-          <div className="space-y-1">
-            <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
-              Pengadaan
-            </p>
+          <div className="space-y-1 pt-1">
+            <motion.div
+              initial={false}
+              animate={{ 
+                opacity: isSidebarHovered ? 1 : 0,
+                height: isSidebarHovered ? 'auto' : 0,
+                marginBottom: isSidebarHovered ? 4 : 0
+              }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden whitespace-nowrap"
+            >
+              <p className={`px-2.5 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                Pengadaan
+              </p>
+            </motion.div>
 
             {/* Paket Pengadaan */}
             <button
               onClick={() => setActiveTab('paket')}
-              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              title={!isSidebarHovered ? `Paket Pengadaan (${(totalPackagesCount || packagesList.length).toLocaleString('id-ID')})` : undefined}
+              className={`w-full flex items-center h-10 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer group ${
                 activeTab === 'paket'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold'
                   : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
               }`}
             >
-              <Package className="w-4 h-4 text-blue-500" />
-              <span>Paket Pengadaan</span>
-              <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${
-                activeTab === 'paket' 
-                  ? 'bg-white/20 text-white' 
-                  : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
-              }`}>
-                {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
-              </span>
+              <div className="w-6 h-6 flex items-center justify-center shrink-0 relative">
+                <Package className="w-4 h-4 text-blue-500" />
+                {!isSidebarHovered && (
+                  <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-blue-500" />
+                )}
+              </div>
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: isSidebarHovered ? 1 : 0,
+                  x: isSidebarHovered ? 0 : -8
+                }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="flex-1 flex items-center justify-between min-w-0 overflow-hidden whitespace-nowrap text-left pl-2.5"
+              >
+                <span className="truncate">Paket Pengadaan</span>
+                <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${
+                  activeTab === 'paket' 
+                    ? 'bg-white/20 text-white' 
+                    : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
+                }`}>
+                  {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
+                </span>
+              </motion.div>
             </button>
           </div>
 
-          {/* GRUP 3: KELOLA WEB PUBLIK (CMS) - INTERACTIVE SLIDE DOWN ACCORDION */}
-          <div className="space-y-1">
+          {/* GRUP 3: KELOLA WEB PUBLIK (CMS) */}
+          <div className="space-y-1 pt-1">
             <button
               type="button"
-              onClick={() => setIsCmsOpen(!isCmsOpen)}
-              className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl transition-all cursor-pointer group ${
-                isCmsOpen 
+              onClick={() => {
+                if (!isSidebarHovered) {
+                  setIsSidebarHovered(true);
+                  setIsCmsOpen(true);
+                } else {
+                  setIsCmsOpen(!isCmsOpen);
+                }
+              }}
+              title={!isSidebarHovered ? "Kelola Web (CMS)" : "Klik untuk membuka / menutup menu CMS"}
+              className={`w-full flex items-center h-10 px-2.5 rounded-xl transition-all cursor-pointer group ${
+                isCmsOpen && isSidebarHovered
                   ? isDark ? 'bg-amber-500/10 text-accent-gold' : 'bg-amber-50 text-amber-900 font-bold'
                   : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900/60' : 'text-slate-700 hover:text-amber-900 hover:bg-slate-100'
               }`}
-              title="Klik untuk membuka / menutup menu CMS"
             >
-              <div className="flex items-center space-x-2">
-                <Globe className={`w-3.5 h-3.5 transition-colors ${
-                  isCmsOpen ? 'text-accent-gold' : isDark ? 'text-slate-400 group-hover:text-accent-gold' : 'text-slate-600 group-hover:text-amber-800'
+              <div className="w-6 h-6 flex items-center justify-center shrink-0 relative">
+                <Globe className={`w-4 h-4 transition-colors ${
+                  (isCmsOpen && isSidebarHovered) ? 'text-accent-gold' : isDark ? 'text-slate-400 group-hover:text-accent-gold' : 'text-slate-600 group-hover:text-amber-800'
                 }`} />
-                <span className={`text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
+                {!isSidebarHovered && (
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-500 text-slate-950 text-[8px] font-black rounded-full flex items-center justify-center shadow-xs">
+                    7
+                  </span>
+                )}
+              </div>
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: isSidebarHovered ? 1 : 0,
+                  x: isSidebarHovered ? 0 : -8
+                }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="flex-1 flex items-center justify-between min-w-0 overflow-hidden whitespace-nowrap text-left pl-2.5"
+              >
+                <span className={`text-[10px] font-extrabold uppercase tracking-wider truncate ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
                   Kelola Web (CMS)
                 </span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
-                  isCmsOpen 
-                    ? isDark ? 'bg-accent-gold/20 text-accent-gold' : 'bg-amber-200/80 text-amber-900'
-                    : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'
-                }`}>
-                  7
-                </span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
-              </div>
+                <div className="flex items-center space-x-1.5 shrink-0 pl-1">
+                  <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                    isCmsOpen 
+                      ? isDark ? 'bg-accent-gold/20 text-accent-gold' : 'bg-amber-200/80 text-amber-900'
+                      : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'
+                  }`}>
+                    7
+                  </span>
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCmsOpen ? 'rotate-180' : ''}`} />
+                </div>
+              </motion.div>
             </button>
 
-            {/* Side-Down Collapsible Submenu with Compact Height */}
+            {/* Side-Down Collapsible Submenu */}
             <AnimatePresence initial={false}>
-              {isCmsOpen && (
+              {isCmsOpen && isSidebarHovered && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden space-y-0.5 pl-2 border-l-2 border-accent-gold/30 ml-2.5 pt-0.5"
+                  transition={{ duration: 0.22, ease: 'easeInOut' }}
+                  className="overflow-hidden space-y-0.5 pl-2 border-l-2 border-accent-gold/30 ml-4.5 pt-0.5"
                 >
                   {/* Tender & Seleksi */}
                   <button
@@ -2193,7 +2317,7 @@ export default function AdminPortalPage() {
                   >
                     <Package className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                     <span className="truncate">Tender & Seleksi</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
                       {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
                     </span>
                   </button>
@@ -2209,7 +2333,7 @@ export default function AdminPortalPage() {
                   >
                     <Newspaper className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                     <span className="truncate">Berita & Pengumuman</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
                       {newsList.length}
                     </span>
                   </button>
@@ -2225,7 +2349,7 @@ export default function AdminPortalPage() {
                   >
                     <Calendar className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     <span className="truncate">Agenda & Jadwal</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
                       {agendaList.length}
                     </span>
                   </button>
@@ -2241,7 +2365,7 @@ export default function AdminPortalPage() {
                   >
                     <BookOpen className="w-3.5 h-3.5 text-teal-500 shrink-0" />
                     <span className="truncate">Panduan & Juknis</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
                       {panduanList.length}
                     </span>
                   </button>
@@ -2257,7 +2381,7 @@ export default function AdminPortalPage() {
                   >
                     <ScrollText className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                     <span className="truncate">Regulasi & Aturan</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
                       {regulasiList.length}
                     </span>
                   </button>
@@ -2273,12 +2397,12 @@ export default function AdminPortalPage() {
                   >
                     <Layers className="w-3.5 h-3.5 text-purple-500 shrink-0" />
                     <span className="truncate">Standar SOP</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
                       {sopList.length}
                     </span>
                   </button>
 
-                  {/* Galeri & Media (Foto/Video) */}
+                  {/* Galeri & Media */}
                   <button
                     onClick={() => setActiveTab('manage-galeri')}
                     className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
@@ -2289,7 +2413,7 @@ export default function AdminPortalPage() {
                   >
                     <Camera className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
                     <span className="truncate">Galeri & Media</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
                       {photosList.length + videosList.length}
                     </span>
                   </button>
@@ -2299,79 +2423,149 @@ export default function AdminPortalPage() {
           </div>
 
           {/* GRUP 4: SISTEM & PENGATURAN */}
-          <div className="space-y-1">
-            <p className={`px-3 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
-              Sistem & Pengaturan
-            </p>
+          <div className="space-y-1 pt-1">
+            <motion.div
+              initial={false}
+              animate={{ 
+                opacity: isSidebarHovered ? 1 : 0,
+                height: isSidebarHovered ? 'auto' : 0,
+                marginBottom: isSidebarHovered ? 4 : 0
+              }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden whitespace-nowrap"
+            >
+              <p className={`px-2.5 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+                Sistem & Pengaturan
+              </p>
+            </motion.div>
 
             {/* Log Aktivitas */}
             <button
               onClick={() => setActiveTab('log-aktivitas')}
-              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              title={!isSidebarHovered ? "Log Aktivitas (Live)" : undefined}
+              className={`w-full flex items-center h-10 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer group ${
                 activeTab === 'log-aktivitas'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold'
                   : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
               }`}
             >
-              <History className="w-4 h-4 text-emerald-500" />
-              <span>Log Aktivitas</span>
-              <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
-                Live
-              </span>
+              <div className="w-6 h-6 flex items-center justify-center shrink-0 relative">
+                <History className="w-4 h-4 text-emerald-500" />
+                <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: isSidebarHovered ? 1 : 0,
+                  x: isSidebarHovered ? 0 : -8
+                }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="flex-1 flex items-center justify-between min-w-0 overflow-hidden whitespace-nowrap text-left pl-2.5"
+              >
+                <span className="truncate">Log Aktivitas</span>
+                <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                  Live
+                </span>
+              </motion.div>
             </button>
 
             {/* Pengaturan Portal */}
             <button
               onClick={() => setActiveTab('pengaturan')}
-              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              title={!isSidebarHovered ? "Pengaturan Portal" : undefined}
+              className={`w-full flex items-center h-10 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer group ${
                 activeTab === 'pengaturan'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold'
                   : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
               }`}
             >
-              <Settings className="w-4 h-4 text-slate-400" />
-              <span>Pengaturan Portal</span>
+              <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                <Settings className="w-4 h-4 text-slate-400" />
+              </div>
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: isSidebarHovered ? 1 : 0,
+                  x: isSidebarHovered ? 0 : -8
+                }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="flex-1 min-w-0 overflow-hidden whitespace-nowrap text-left pl-2.5"
+              >
+                <span className="truncate">Pengaturan Portal</span>
+              </motion.div>
             </button>
           </div>
         </nav>
 
         {/* Profile Card & Back to Home - Fixed Pinned Footer */}
-        <div className={`p-3.5 border-t shrink-0 space-y-2.5 transition-colors ${
+        <div className={`border-t shrink-0 p-3 transition-colors ${
           isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
         }`}>
-          <div className={`flex items-center space-x-3 px-2.5 py-2 rounded-xl border ${
-            isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-50 border-slate-200'
-          }`}>
+          <div 
+            title={!isSidebarHovered ? `${currentAdmin.nama_lengkap} (${currentAdmin.jabatan || 'Admin UKPBJ'})` : undefined}
+            className={`flex items-center px-2 py-2 rounded-xl border transition-colors ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-50 border-slate-200'
+            }`}
+          >
             <div className="w-8 h-8 rounded-full bg-accent-gold/20 border border-accent-gold/40 flex items-center justify-center font-bold text-accent-gold text-xs shrink-0">
               {currentAdmin.nama_lengkap.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'AD'}
             </div>
-            <div className="flex-1 min-w-0">
+            <motion.div
+              initial={false}
+              animate={{
+                opacity: isSidebarHovered ? 1 : 0,
+                x: isSidebarHovered ? 0 : -8
+              }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              className="flex-1 min-w-0 overflow-hidden whitespace-nowrap pl-2.5"
+            >
               <p className={`text-xs font-bold truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>{currentAdmin.nama_lengkap}</p>
               <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>{currentAdmin.jabatan || 'Admin UKPBJ'}</p>
-            </div>
+            </motion.div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 mt-2">
             <Link
               href="/"
-              className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-colors ${
+              title="Kembali ke Web Publik"
+              className={`h-8 px-2 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors ${
                 isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
               }`}
             >
-              <ArrowLeft className="w-3 h-3" />
-              <span>Web Publik</span>
+              <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
+              <motion.span
+                initial={false}
+                animate={{
+                  opacity: isSidebarHovered ? 1 : 0
+                }}
+                transition={{ duration: 0.18 }}
+                className={`${isSidebarHovered ? 'inline' : 'hidden'} overflow-hidden whitespace-nowrap`}
+              >
+                Web Publik
+              </motion.span>
             </Link>
 
             <button
+              type="button"
               onClick={handleLogout}
-              className="px-2.5 py-1.5 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              title="Keluar dari Portal Admin"
+              className="h-8 px-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
-              <LogOut className="w-3 h-3" />
-              <span>Keluar</span>
+              <LogOut className="w-3.5 h-3.5 shrink-0" />
+              <motion.span
+                initial={false}
+                animate={{
+                  opacity: isSidebarHovered ? 1 : 0
+                }}
+                transition={{ duration: 0.18 }}
+                className={`${isSidebarHovered ? 'inline' : 'hidden'} overflow-hidden whitespace-nowrap`}
+              >
+                Keluar
+              </motion.span>
             </button>
           </div>
         </div>
-      </aside>
+      </motion.aside>
 
       {/* MAIN CONTENT WRAPPER */}
       <main className={`flex-1 flex flex-col min-w-0 overflow-y-auto max-h-screen transition-colors duration-300 ${

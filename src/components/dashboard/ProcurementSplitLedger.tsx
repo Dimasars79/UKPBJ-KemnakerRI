@@ -298,31 +298,29 @@ export function ProcurementSplitLedger() {
               </div>
             </div>
 
-            {/* INTEGRATED DUAL STACKED BAR */}
-            <div className="space-y-1.5 mb-5">
+            {/* INTEGRATED DUAL STACKED BAR - Clean Minimalist Proportion Bar */}
+            <div className="space-y-2 mb-5">
               <div className="flex justify-between items-center text-xs font-bold font-mono">
-                <span className="text-emerald-300 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  {trans('Sudah Realisasi', 'Realized')}: {metrics.sudahRealisasiPct.toFixed(2).replace('.', ',')}%
+                <span className="text-emerald-300 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>{trans('Sudah Realisasi', 'Realized')}:</span>
+                  <span className="text-white font-extrabold">{metrics.sudahRealisasiPct.toFixed(2).replace('.', ',')}%</span>
                 </span>
-                <span className="text-amber-300 flex items-center gap-1">
+                <span className="text-amber-300 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                  {trans('Belum Realisasi (Sisa)', 'Remaining')}: {metrics.belumRealisasiPct.toFixed(2).replace('.', ',')}%
+                  <span>{trans('Sisa Pagu', 'Remaining')}:</span>
+                  <span className="text-white font-extrabold">{metrics.belumRealisasiPct.toFixed(2).replace('.', ',')}%</span>
                 </span>
               </div>
-              <div className="w-full bg-slate-900/80 rounded-xl h-4 overflow-hidden flex shadow-inner border border-white/15 p-0.5">
+              <div className="w-full bg-slate-900/90 rounded-full h-2.5 overflow-hidden flex border border-white/10 p-0.5">
                 <div 
-                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-l-lg transition-all duration-500 flex items-center justify-center text-[10px] text-white font-extrabold font-mono"
+                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-l-full transition-all duration-500"
                   style={{ width: `${metrics.sudahRealisasiPct}%` }}
-                >
-                  {metrics.sudahRealisasiPct > 15 ? `${metrics.sudahRealisasiPct.toFixed(1)}%` : ''}
-                </div>
+                />
                 <div 
-                  className="bg-gradient-to-r from-amber-400 to-orange-400 h-full rounded-r-lg transition-all duration-500 flex items-center justify-center text-[10px] text-white font-extrabold font-mono"
+                  className="bg-gradient-to-r from-amber-400 to-orange-400 h-full rounded-r-full transition-all duration-500"
                   style={{ width: `${metrics.belumRealisasiPct}%` }}
-                >
-                  {metrics.belumRealisasiPct > 15 ? `${metrics.belumRealisasiPct.toFixed(1)}%` : ''}
-                </div>
+                />
               </div>
             </div>
 
