@@ -419,7 +419,7 @@ export default function Home() {
                   </div>
                 </FadeIn>
               </div>
-            ) : (
+            ) : latestAgenda ? (
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -588,6 +588,85 @@ export default function Home() {
                     </div>
                   </div>
                 )}
+              </motion.div>
+            ) : (
+              /* ==============================================================
+                 TAMPILAN 3 (OPSI 3): COMPACT MINIMALIST BANNER SAAT AGENDA KOSONG
+                 ============================================================== */
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.35, margin: "0px 0px -80px 0px" }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="relative rounded-2xl sm:rounded-[20px] bg-gradient-to-r from-[#07192E] via-[#0B2D52] to-[#134A7E] border border-white/15 shadow-xl overflow-hidden"
+              >
+                {/* Signature Right Curved Swoop Accent (Matching Kemnaker Banner Reference) */}
+                <svg
+                  className="absolute right-0 top-0 h-full w-40 sm:w-56 md:w-72 pointer-events-none select-none"
+                  viewBox="0 0 280 120"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="agendaSwoopBlue" x1="0%" y1="100%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#2563EB" stopOpacity="0.65" />
+                      <stop offset="55%" stopColor="#60A5FA" stopOpacity="0.85" />
+                      <stop offset="100%" stopColor="#E0F2FE" stopOpacity="0.95" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M175,120 C205,70 230,30 265,0 L280,0 L280,120 Z"
+                    fill="url(#agendaSwoopBlue)"
+                  />
+                  <path
+                    d="M235,120 C252,85 268,48 280,22 L280,120 Z"
+                    fill="#F8FAFC"
+                    fillOpacity="0.92"
+                  />
+                </svg>
+
+                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-5 sm:px-7 py-4 sm:py-5 pr-6 sm:pr-12">
+                  <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
+                    {/* Emblem Kemnaker */}
+                    <div className="shrink-0 flex items-center justify-center">
+                      <Image
+                        src="/logo-kemnaker.png"
+                        alt="Logo Kemnaker RI"
+                        width={42}
+                        height={42}
+                        className="w-9 h-9 sm:w-10 sm:h-10 object-contain brightness-0 invert drop-shadow-sm"
+                      />
+                    </div>
+
+                    {/* Vertical Divider */}
+                    <div className="hidden sm:block h-9 w-px bg-white/20 shrink-0" />
+
+                    {/* Text Content */}
+                    <div className="min-w-0">
+                      <h3 className="text-base sm:text-lg md:text-xl font-black text-white tracking-tight leading-snug">
+                        {trans('Belum Ada Agenda Kegiatan Mendatang', 'No Upcoming Activities Scheduled')}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-blue-100/80 mt-0.5 leading-relaxed">
+                        {trans(
+                          'Jadwal bimbingan teknis, sosialisasi, dan kegiatan pengadaan UKPBJ Kemnaker RI akan diumumkan secara resmi di sini.',
+                          'Official schedules for technical guidance, socialization, and UKPBJ Kemnaker RI procurement events will be announced here.'
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  <div className="shrink-0 sm:mr-6">
+                    <Link
+                      href="/agenda"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-accent-gold hover:bg-amber-400 text-primary-navy font-extrabold text-xs sm:text-sm shadow-md shadow-black/25 hover:scale-[1.02] transition-all duration-200 whitespace-nowrap"
+                    >
+                      <Calendar className="w-3.5 h-3.5 shrink-0" />
+                      <span>{trans('Buka Kalender', 'Open Calendar')}</span>
+                      <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                    </Link>
+                  </div>
+                </div>
               </motion.div>
             )}
           </div>

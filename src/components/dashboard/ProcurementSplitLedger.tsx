@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { 
   Building2, 
   RotateCcw, 
@@ -241,7 +242,7 @@ export function ProcurementSplitLedger() {
             </p>
             {/* Strict Full Number for Government Transparency with Matrix Cyber Scramble Animation */}
             <div className="text-2xl sm:text-3xl lg:text-3xl font-black font-mono tracking-tight text-white mb-4">
-              <ScrambleDecoderNumber value={metrics.totalPaguNominal} delay={150} duration={1200} />
+              <ScrambleDecoderNumber value={metrics.totalPaguNominal} delay={150} duration={2200} />
             </div>
 
             {/* Mini Dashboard Highlights Inside Hero */}
@@ -251,7 +252,7 @@ export function ProcurementSplitLedger() {
                   {trans('Jumlah Paket Keseluruhan', 'Total Packages')}
                 </p>
                 <p className="text-lg sm:text-xl font-black font-mono text-white flex items-center gap-1">
-                  <ScrambleDecoderNumber value={metrics.totalPaket.toLocaleString('id-ID')} delay={350} duration={900} />
+                  <ScrambleDecoderNumber value={metrics.totalPaket.toLocaleString('id-ID')} delay={350} duration={1600} />
                   <span className="text-xs font-normal text-cyan-300">{trans('paket', 'packages')}</span>
                 </p>
               </div>
@@ -260,7 +261,7 @@ export function ProcurementSplitLedger() {
                   {trans('Tingkat Capaian Pagu', 'Budget Utilization Rate')}
                 </p>
                 <p className="text-lg sm:text-xl font-black font-mono text-emerald-400">
-                  <ScrambleDecoderNumber value={`${metrics.sudahRealisasiPct.toFixed(2).replace('.', ',')}%`} delay={500} duration={900} />
+                  <ScrambleDecoderNumber value={`${metrics.sudahRealisasiPct.toFixed(2).replace('.', ',')}%`} delay={500} duration={1600} />
                 </p>
               </div>
             </div>
@@ -281,14 +282,32 @@ export function ProcurementSplitLedger() {
               </div>
 
               <div className="w-full bg-slate-900/90 rounded-full h-2.5 overflow-hidden flex border border-white/10 p-0.5">
-                <div 
-                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-l-full transition-all duration-500"
-                  style={{ width: `${metrics.sudahRealisasiPct}%` }}
-                />
-                <div 
-                  className="bg-gradient-to-r from-amber-400 to-orange-400 h-full rounded-r-full transition-all duration-500"
-                  style={{ width: `${metrics.belumRealisasiPct}%` }}
-                />
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${metrics.sudahRealisasiPct}%` }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-l-full relative overflow-hidden"
+                >
+                  <motion.div
+                    animate={{ x: ['-100%', '200%'] }}
+                    transition={{ repeat: Infinity, duration: 2.4, ease: 'linear' }}
+                    className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/35 to-transparent"
+                  />
+                </motion.div>
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${metrics.belumRealisasiPct}%` }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 1.0, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                  className="bg-gradient-to-r from-amber-400 to-orange-400 h-full rounded-r-full relative overflow-hidden"
+                >
+                  <motion.div
+                    animate={{ x: ['-100%', '200%'] }}
+                    transition={{ repeat: Infinity, duration: 2.4, delay: 0.6, ease: 'linear' }}
+                    className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/35 to-transparent"
+                  />
+                </motion.div>
               </div>
 
               <div className="flex justify-between items-center text-[10px] text-slate-300 pt-0.5">
@@ -351,7 +370,7 @@ export function ProcurementSplitLedger() {
                     {trans('Nilai kontrak terikat:', 'Bound contract value:')}
                   </p>
                   <div className="text-base sm:text-lg font-black font-mono text-white tracking-tight mb-2">
-                    <ScrambleDecoderNumber value={metrics.sudahRealisasiNominal} delay={350} duration={1200} />
+                    <ScrambleDecoderNumber value={metrics.sudahRealisasiNominal} delay={350} duration={2200} />
                   </div>
                 </div>
 
@@ -363,7 +382,19 @@ export function ProcurementSplitLedger() {
                     </span>
                   </div>
                   <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-emerald-400 h-1.5 rounded-full" style={{ width: `${metrics.paketRealisasiPct}%` }}></div>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${metrics.paketRealisasiPct}%` }}
+                      viewport={{ once: true, amount: 0.4 }}
+                      transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                      className="bg-emerald-400 h-1.5 rounded-full relative overflow-hidden"
+                    >
+                      <motion.div
+                        animate={{ x: ['-100%', '200%'] }}
+                        transition={{ repeat: Infinity, duration: 2.0, ease: 'linear' }}
+                        className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+                      />
+                    </motion.div>
                   </div>
                 </div>
               </div>
@@ -385,7 +416,7 @@ export function ProcurementSplitLedger() {
                     {trans('Sisa pagu belum kontrak:', 'Remaining budget to contract:')}
                   </p>
                   <div className="text-base sm:text-lg font-black font-mono text-white tracking-tight mb-2">
-                    <ScrambleDecoderNumber value={metrics.belumRealisasiNominal} delay={500} duration={1200} />
+                    <ScrambleDecoderNumber value={metrics.belumRealisasiNominal} delay={500} duration={2200} />
                   </div>
                 </div>
 
@@ -397,7 +428,19 @@ export function ProcurementSplitLedger() {
                     </span>
                   </div>
                   <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-amber-400 h-1.5 rounded-full" style={{ width: `${metrics.paketBelumRealisasiPct}%` }}></div>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${metrics.paketBelumRealisasiPct}%` }}
+                      viewport={{ once: true, amount: 0.4 }}
+                      transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                      className="bg-amber-400 h-1.5 rounded-full relative overflow-hidden"
+                    >
+                      <motion.div
+                        animate={{ x: ['-100%', '200%'] }}
+                        transition={{ repeat: Infinity, duration: 2.0, delay: 0.3, ease: 'linear' }}
+                        className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+                      />
+                    </motion.div>
                   </div>
                 </div>
               </div>

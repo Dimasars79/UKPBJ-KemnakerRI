@@ -14,7 +14,7 @@ const GLYPHS = '0123456789';
 export function ScrambleDecoderNumber({
   value,
   delay = 100,
-  duration = 1200,
+  duration = 2000,
   className = ""
 }: ScrambleDecoderNumberProps) {
   const containerRef = useRef<HTMLSpanElement>(null);
@@ -55,15 +55,24 @@ export function ScrambleDecoderNumber({
 
     let animId: number;
     let startTime: number | null = null;
+    let lastTickTime = 0;
 
     const timeoutId = setTimeout(() => {
       const step = (timestamp: number) => {
         if (!startTime) startTime = timestamp;
         const elapsed = timestamp - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+        const rawProgress = Math.min(elapsed / duration, 1);
 
-        // Calculate how many characters are locked into place
-        const resolvedCount = Math.floor(progress * value.length);
+        // Throttle random digit flicker to ~55ms so motion looks relaxed, deliberate, and readable
+        if (rawProgress < 1 && timestamp - lastTickTime < 55) {
+          animId = requestAnimationFrame(step);
+          return;
+        }
+        lastTickTime = timestamp;
+
+        // Ease-out curve so final digits lock in smoothly
+        const easedProgress = 1 - Math.pow(1 - rawProgress, 2);
+        const resolvedCount = Math.floor(easedProgress * value.length);
 
         let result = '';
         for (let i = 0; i < value.length; i++) {
@@ -82,7 +91,7 @@ export function ScrambleDecoderNumber({
 
         setDisplayText(result);
 
-        if (progress < 1) {
+        if (rawProgress < 1) {
           animId = requestAnimationFrame(step);
         } else {
           setDisplayText(value);
