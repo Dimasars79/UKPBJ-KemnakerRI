@@ -173,3 +173,17 @@ export const filterActiveAgendas = <T extends { date?: string | null; time?: str
 
   return { active, expired };
 };
+
+const SHORT_MONTHS_ID = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+/**
+ * Generates an always-upcoming Indonesian date string (e.g. "20 Nov 2026") for form defaults.
+ */
+export const getDefaultAgendaDate = (offsetDays: number = 1): string => {
+  const target = new Date();
+  target.setDate(target.getDate() + offsetDays);
+  const d = String(target.getDate()).padStart(2, '0');
+  const m = SHORT_MONTHS_ID[target.getMonth()];
+  const y = target.getFullYear();
+  return `${d} ${m} ${y}`;
+};

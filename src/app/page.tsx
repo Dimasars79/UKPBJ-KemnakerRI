@@ -211,15 +211,24 @@ export default function Home() {
               
               {/* Kolom Kiri: Logo Bersih & Elegan */}
               <FadeIn direction="right" className="w-full lg:w-4/12 flex justify-center">
-                <div className="relative group p-4 sm:p-6 flex items-center justify-center">
+                <div className="relative group p-4 sm:p-6 flex items-center justify-center" style={{ perspective: 1000 }}>
                   <div className="absolute inset-0 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-accent-gold/10 transition-colors duration-500 pointer-events-none" />
-                  <Image 
-                    src="/logo-ukpbj-kemnaker-new.png" 
-                    alt="Logo UKPBJ Kementerian Ketenagakerjaan RI" 
-                    width={480} 
-                    height={160} 
-                    className="w-52 sm:w-64 md:w-72 lg:w-80 h-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300 relative z-10" 
-                  />
+                  <motion.div
+                    initial={{ rotateY: 0 }}
+                    whileInView={{ rotateY: 720 }}
+                    viewport={{ once: true, amount: 0.45 }}
+                    transition={{ duration: 3.2, ease: [0.22, 0.68, 0.2, 1] }}
+                    style={{ transformStyle: 'preserve-3d' }}
+                    className="relative z-10"
+                  >
+                    <Image 
+                      src="/logo-ukpbj-kemnaker-new.png" 
+                      alt="Logo UKPBJ Kementerian Ketenagakerjaan RI" 
+                      width={480} 
+                      height={160} 
+                      className="w-52 sm:w-64 md:w-72 lg:w-80 h-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300" 
+                    />
+                  </motion.div>
                 </div>
               </FadeIn>
               

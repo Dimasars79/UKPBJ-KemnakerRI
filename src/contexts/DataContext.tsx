@@ -170,8 +170,8 @@ interface DataContextType {
 
   // Agenda
   agendaList: AgendaItem[];
-  addAgenda: (agenda: Omit<AgendaItem, 'id' | 'syncFrontend'>) => void;
-  updateAgenda: (id: string, updated: Partial<AgendaItem>) => void;
+  addAgenda: (agenda: Omit<AgendaItem, 'id' | 'syncFrontend'>) => Promise<{ success: boolean; error?: string }>;
+  updateAgenda: (id: string, updated: Partial<AgendaItem>) => Promise<{ success: boolean; error?: string }>;
   deleteAgenda: (id: string) => void;
 
   // Procurement Packages (Tender & Seleksi)
@@ -1389,7 +1389,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newsList]);
 
-  const addAgenda = async (agenda: Omit<AgendaItem, 'id' | 'syncFrontend'>) => {
+  const addAgenda = async (agenda: Omit<AgendaItem, 'id' | 'syncFrontend'>): Promise<{ success: boolean; error?: string }> => {
     const tempId = `AGD-${Date.now().toString().slice(-4)}`;
     const newEntry: AgendaItem = {
       ...agenda,
@@ -1400,10 +1400,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     
     // Check if agenda is already expired before saving
     if (isAgendaExpired(newEntry)) {
-      console.warn('Agenda yang ditambahkan sudah terlewati dan tidak akan ditampilkan.');
-      return;
+      const msg = 'Tanggal atau waktu agenda sudah terlewat sehingga tidak dapat ditampilkan di kalender publik.';
+      console.warn(msg);
+      return { success: false, error: msg };
     }
 
+    const prevList = agendaList;
     const updated = [newEntry, ...agendaList.filter((a) => a.id !== tempId)];
     const { active } = filterActiveAgendas(updated);
     setAgendaList(active);
@@ -1428,10 +1430,20 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     if (res?.success && res.data) {
       setAgendaList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
+      return { success: true };
     }
+
+    // Roll back optimistic state if database insert failed
+    setAgendaList(prevList);
+    persist(newsList, prevList);
+    return {
+      success: false,
+      error: typeof res?.error === 'string' ? res.error : 'Gagal menyimpan agenda ke database Supabase.'
+    };
   };
 
-  const updateAgenda = async (id: string, updated: Partial<AgendaItem>) => {
+  const updateAgenda = async (id: string, updated: Partial<AgendaItem>): Promise<{ success: boolean; error?: string }> => {
+    const prevList = agendaList;
     const target = agendaList.find((item) => item.id === id);
     const next: AgendaItem = {
       ...(target || ({} as AgendaItem)),
@@ -1449,10 +1461,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     // If updated agenda has now expired/passed, remove from database
     if (expired.some((e) => e.id === id)) {
       await syncAdminData('agendas', 'delete', { id });
-      return;
+      return { success: true };
     }
 
-    await syncAdminData('agendas', 'update', {
+    const res = await syncAdminData('agendas', 'update', {
       id,
       data: {
         title: updated.title ?? target?.title,
@@ -1468,6 +1480,17 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         zoom_url: updated.zoomUrl !== undefined ? updated.zoomUrl : target?.zoomUrl
       }
     });
+
+    if (res?.success) {
+      return { success: true };
+    }
+
+    setAgendaList(prevList);
+    persist(newsList, prevList);
+    return {
+      success: false,
+      error: typeof res?.error === 'string' ? res.error : 'Gagal memperbarui agenda di database Supabase.'
+    };
   };
 
   const deleteAgenda = async (id: string) => {

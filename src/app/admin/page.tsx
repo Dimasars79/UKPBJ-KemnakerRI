@@ -53,10 +53,12 @@ import {
   Upload,
   Image as ImageIcon,
   BookOpen,
-  Hash
+  Hash,
+  AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, RegulasiItem, SopItem, PanduanItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
+import { getDefaultAgendaDate, isAgendaExpired } from '@/lib/agendaUtils';
 import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
 import { supabase } from '@/lib/supabase/client';
 import { parseGoogleDriveImage, parseGoogleDriveVideo } from '@/lib/driveHelper';
@@ -679,7 +681,6 @@ export default function AdminPortalPage() {
     totalPackagesCount,
     addPackage,
     updatePackage,
-    deletePackage,
     syncInaprocPackages,
     regulasiList,
     addRegulasi,
@@ -892,10 +893,10 @@ export default function AdminPortalPage() {
 
   const [showAgendaModal, setShowAgendaModal] = useState(false);
   const [editingAgenda, setEditingAgenda] = useState<AgendaItem | null>(null);
-  const [agendaFormData, setAgendaFormData] = useState<Partial<AgendaItem>>({
+  const [agendaFormData, setAgendaFormData] = useState<Partial<AgendaItem>>(() => ({
     title: '',
     category: 'Bimtek',
-    date: '15 Sep 2026',
+    date: getDefaultAgendaDate(),
     time: '09:00 - 12:00 WIB',
     location: 'Gedung Kemnaker RI',
     organizer: 'UKPBJ Kemnaker RI',
@@ -904,7 +905,7 @@ export default function AdminPortalPage() {
     imageUrl: '',
     status: 'Terjadwal',
     zoomUrl: ''
-  });
+  }));
 
   // REGULASI & SOP MODAL STATES
   const [showRegulasiModal, setShowRegulasiModal] = useState(false);
@@ -1123,35 +1124,52 @@ export default function AdminPortalPage() {
     }
   };
 
-  const handleSaveAgenda = (e: React.FormEvent) => {
+  const handleSaveAgenda = async (e: React.FormEvent) => {
     e.preventDefault();
+    const targetDate = agendaFormData.date || getDefaultAgendaDate();
+    const targetTime = agendaFormData.time || '09:00 - 12:00 WIB';
+    const targetStatus = (agendaFormData.status as AgendaItem['status']) || 'Terjadwal';
+
+    if (!editingAgenda && isAgendaExpired({ date: targetDate, time: targetTime, status: targetStatus })) {
+      showNotification('⚠️ Tanggal atau waktu agenda sudah terlewat. Gunakan tanggal/waktu yang masih aktif agar tampil di web publik.');
+      return;
+    }
+
     if (editingAgenda) {
-      updateAgenda(editingAgenda.id, {
+      const result = await updateAgenda(editingAgenda.id, {
         ...agendaFormData,
         description: agendaFormData.description || '',
         imageUrl: agendaFormData.imageUrl || '',
         zoomUrl: agendaFormData.zoomUrl || ''
       });
+      if (!result.success) {
+        showNotification(`⚠️ ${result.error || 'Gagal memperbarui agenda di database.'}`);
+        return;
+      }
       showNotification('✓ Agenda berhasil diperbarui dan tersinkronisasi ke Frontend (/agenda)!');
       pushAdminNotification('Agenda Bimtek Diperbarui', `"${agendaFormData.title || 'Agenda PBJ'}" berhasil diperbarui`, 'agenda');
       pushActivityLog('Agenda', 'agenda', 'UPDATE', `Pembaruan jadwal & rincian kegiatan: "${agendaFormData.title || 'Agenda'}"`, `AGD-${editingAgenda.id}`);
     } else {
-      addAgenda({
+      const result = await addAgenda({
         title: agendaFormData.title || 'Agenda Baru',
         category: (agendaFormData.category as AgendaItem['category']) || 'Bimtek',
-        date: agendaFormData.date || '15 Sep 2026',
-        time: agendaFormData.time || '09:00 - 12:00 WIB',
+        date: targetDate,
+        time: targetTime,
         location: agendaFormData.location || 'Gedung Kemnaker RI',
         organizer: agendaFormData.organizer || 'UKPBJ Kemnaker RI',
         capacity: agendaFormData.capacity || '100 Peserta',
         description: agendaFormData.description || '',
         imageUrl: agendaFormData.imageUrl || '',
-        status: (agendaFormData.status as AgendaItem['status']) || 'Terjadwal',
+        status: targetStatus,
         zoomUrl: agendaFormData.zoomUrl || ''
       });
+      if (!result.success) {
+        showNotification(`⚠️ ${result.error || 'Gagal menambahkan agenda ke database.'}`);
+        return;
+      }
       showNotification('✓ Agenda baru berhasil ditambahkan ke kalender publik (/agenda)!');
-      pushAdminNotification('Agenda PBJ Baru Dijadwalkan', `"${agendaFormData.title || 'Agenda Baru'}" pada ${agendaFormData.date || 'jadwal kegiatan'}`, 'agenda');
-      pushActivityLog('Agenda', 'agenda', 'INSERT', `Penjadwalan agenda kegiatan baru: "${agendaFormData.title || 'Agenda'}" (${agendaFormData.date || 'TBA'})`, `AGD-2026-${String(agendaList.length + 1).padStart(3, '0')}`);
+      pushAdminNotification('Agenda PBJ Baru Dijadwalkan', `"${agendaFormData.title || 'Agenda Baru'}" pada ${targetDate}`, 'agenda');
+      pushActivityLog('Agenda', 'agenda', 'INSERT', `Penjadwalan agenda kegiatan baru: "${agendaFormData.title || 'Agenda'}" (${targetDate})`, `AGD-2026-${String(agendaList.length + 1).padStart(3, '0')}`);
     }
     setShowAgendaModal(false);
     setEditingAgenda(null);
@@ -1700,16 +1718,6 @@ export default function AdminPortalPage() {
     setEditingPackage(null);
   };
 
-  const handleDeletePackage = (id: string) => {
-    if (confirm('Apakah Anda yakin ingin menghapus paket pengadaan ini dari sistem?')) {
-      const targetPkg = packagesList.find(p => p.id === id);
-      deletePackage(id);
-      showNotification('Paket pengadaan telah dihapus dari sistem backend.');
-      pushAdminNotification('Paket Pengadaan Dihapus', 'Satu paket pengadaan telah dihapus dari sistem backend', 'paket');
-      pushActivityLog('Paket PBJ', 'pengadaan', 'DELETE', `Penghapusan paket pengadaan tender: "${targetPkg?.title || id}"`, `${targetPkg?.code || id}`);
-    }
-  };
-
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
@@ -1737,9 +1745,17 @@ export default function AdminPortalPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-5 right-5 z-50 bg-emerald-600 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2 border border-emerald-400/30 text-xs font-bold"
+            className={`fixed top-5 right-5 z-50 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2 border text-xs font-bold ${
+              notificationMsg.startsWith('⚠️') || notificationMsg.startsWith('❌')
+                ? 'bg-amber-600 border-amber-400/40'
+                : 'bg-emerald-600 border-emerald-400/30'
+            }`}
           >
-            <Check className="w-4 h-4" />
+            {notificationMsg.startsWith('⚠️') || notificationMsg.startsWith('❌') ? (
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+            ) : (
+              <Check className="w-4 h-4 shrink-0" />
+            )}
             <span>{notificationMsg}</span>
           </motion.div>
         )}
@@ -2703,31 +2719,6 @@ export default function AdminPortalPage() {
                       <button
                         onClick={() => {
                           setShowQuickAdd(false);
-                          setPackageFormData({
-                            code: `TND-2026-00${packagesList.length + 1}`,
-                            title: '',
-                            unit: 'Biro Perencanaan Kemnaker RI',
-                            hps: 'Rp 500.000.000',
-                            category: 'Tender',
-                            status: 'Pendaftaran Dibuka',
-                            deadline: '28 Sep 2026',
-                            method: 'Tender - Pascakualifikasi Satu File',
-                            docCount: 3,
-                            desc: ''
-                          });
-                          setShowPackageModal(true);
-                        }}
-                        className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
-                          isDark ? 'hover:bg-slate-800 text-slate-200' : 'hover:bg-slate-50 text-slate-800 font-bold'
-                        }`}
-                      >
-                        <Package className="w-3.5 h-3.5 text-blue-500" />
-                        <span>Paket Pengadaan</span>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setShowQuickAdd(false);
                           setEditingNews(null);
                           setNewsFormData({
                             title: '',
@@ -2754,7 +2745,7 @@ export default function AdminPortalPage() {
                           setAgendaFormData({
                             title: '',
                             category: 'Bimtek',
-                            date: '15 Sep 2026',
+                            date: getDefaultAgendaDate(),
                             time: '09:00 - 12:00 WIB',
                             location: 'Gedung Kemnaker RI',
                             organizer: 'UKPBJ Kemnaker RI',
@@ -3300,38 +3291,6 @@ export default function AdminPortalPage() {
                             <h4 className={`text-sm sm:text-base font-bold leading-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
                             <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender Aktif</p>
                           </div>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPackageFormData({
-                                code: `TND-2026-${String(packagesList.length + 1).padStart(3, '0')}`,
-                                title: '',
-                                unit: 'Biro Perencanaan Kemnaker RI',
-                                hps: '',
-                                category: 'Tender',
-                                status: 'Pendaftaran Dibuka',
-                                deadline: '30 Sep 2026',
-                                method: 'Tender - Pascakualifikasi Satu File - Harga Terendah Sistem Gugur',
-                                docCount: 1,
-                                desc: '',
-                                fileName: '',
-                                fileSize: '',
-                                fileData: '',
-                                downloadUrl: '#'
-                              });
-                              setShowPackageModal(true);
-                            }}
-                            className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 ${
-                              isDark
-                                ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200'
-                                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
-                            }`}
-                            title="Tambah Paket Tender / Non-Tender"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                            <span>Buat Paket</span>
-                          </button>
                         </div>
 
                         {/* Middle Content + Mini Donut Chart */}
@@ -3518,7 +3477,7 @@ export default function AdminPortalPage() {
                               setAgendaFormData({
                                 title: '',
                                 category: 'Bimtek',
-                                date: '20 Sep 2026',
+                                date: getDefaultAgendaDate(),
                                 time: '09:00 - 12:00 WIB',
                                 location: 'Gedung Kemnaker RI',
                                 organizer: 'UKPBJ Kemnaker RI',
@@ -5013,7 +4972,7 @@ export default function AdminPortalPage() {
                     setAgendaFormData({
                       title: '',
                       category: 'Bimtek',
-                      date: '15 Sep 2026',
+                      date: getDefaultAgendaDate(),
                       time: '09:00 - 12:00 WIB',
                       location: 'Gedung Kemnaker RI',
                       organizer: 'UKPBJ Kemnaker RI',
@@ -5127,10 +5086,10 @@ export default function AdminPortalPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
                 <h2 className={`text-lg sm:text-2xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Kelola Tender, Seleksi & Paket Pengadaan
+                  Monitoring Tender, Seleksi & Paket Pengadaan
                 </h2>
                 <p className={`text-[11px] sm:text-xs ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'} mt-1`}>
-                  Kelola paket tender, seleksi, pengadaan langsung, dan e-purchasing. Perubahan langsung tersinkronisasi ke database Supabase dan beranda publik (<Link href="/#pengadaan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/#pengadaan</Link>).
+                  Pantau paket tender, seleksi, pengadaan langsung, dan e-purchasing yang ditarik dari situs terhubung (INAPROC / SiRUP LKPP). Data bersifat read-only dan tampil di beranda publik (<Link href="/#pengadaan" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">/#pengadaan</Link>).
                 </p>
               </div>
               <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
@@ -5143,34 +5102,6 @@ export default function AdminPortalPage() {
                 >
                   <RefreshCw className={`w-4 h-4 ${isInaprocSyncing ? 'animate-spin' : ''}`} />
                   <span>{isInaprocSyncing ? 'Menyinkronkan LKPP...' : 'Tarik Data INAPROC (DEWA)'}</span>
-                </button>
-
-                <button 
-                  onClick={() => {
-                    setEditingPackage(null);
-                    setPackageFormData({
-                      code: `TND-2026-00${packagesList.length + 1}`,
-                      title: '',
-                      unit: 'Biro Perencanaan Kemnaker RI',
-                      hps: 'Rp 500.000.000',
-                      category: 'Tender',
-                      status: 'Pendaftaran Dibuka',
-                      deadline: '28 Sep 2026',
-                      method: 'Tender - Pascakualifikasi Satu File',
-                      docCount: 1,
-                      desc: '',
-                      fileName: '',
-                      fileSize: '',
-                      fileData: '',
-                      downloadUrl: '#',
-                      documents: []
-                    });
-                    setShowPackageModal(true);
-                  }}
-                  className="w-full sm:w-auto justify-center px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer shrink-0"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Tambah Paket Baru</span>
                 </button>
               </div>
             </div>
@@ -5557,31 +5488,6 @@ export default function AdminPortalPage() {
                                 }`}
                               >
                                 Detail
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setEditingPackage(pkg);
-                                  setPackageFormData({
-                                    ...pkg,
-                                    documents: pkg.documents || []
-                                  });
-                                  setShowPackageModal(true);
-                                }}
-                                title="Edit Paket"
-                                className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                                  isDark ? 'bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white' : 'bg-slate-100 hover:bg-amber-600 text-slate-700 hover:text-white'
-                                }`}
-                              >
-                                <Edit3 className="w-3.5 h-3.5" />
-                              </button>
-                              <button
-                                onClick={() => handleDeletePackage(pkg.id)}
-                                title="Hapus Paket"
-                                className={`p-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer ${
-                                  isDark ? 'bg-slate-800 hover:bg-red-600' : 'bg-slate-100 hover:bg-red-600 text-slate-700'
-                                }`}
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           </div>
@@ -8181,7 +8087,7 @@ export default function AdminPortalPage() {
                     <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Tanggal Pelaksanaan *</label>
                     <input
                       type="text"
-                      placeholder="e.g. 15 Sep 2026"
+                      placeholder={`e.g. ${getDefaultAgendaDate()}`}
                       value={agendaFormData.date || ''}
                       onChange={(e) => setAgendaFormData({ ...agendaFormData, date: e.target.value })}
                       className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
