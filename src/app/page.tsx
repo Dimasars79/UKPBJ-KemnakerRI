@@ -12,9 +12,10 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { HeroSection } from '@/components/home/HeroSection';
 import { ProcurementStatsOverview } from '@/components/home/ProcurementStatsOverview';
-import { PengadaanSection } from '@/components/home/PengadaanSection';
+import { SopHighlightSection } from '@/components/home/SopHighlightSection';
 import { BeritaSection } from '@/components/home/BeritaSection';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
@@ -25,16 +26,10 @@ import { parseAgendaDateObject, parseAgendaDate, isAgendaExpired } from '@/lib/a
 export default function Home() {
   const { t, trans } = useLanguage();
   const { agendaList } = useData();
+  const router = useRouter();
 
-  // State sinkronisasi metode pengadaan yang dipilih dari kartu atas ke tabel bawah
-  const [selectedMethodCategory, setSelectedMethodCategory] = React.useState<string>('Semua');
-
-  const handleSelectMethod = (method: string) => {
-    setSelectedMethodCategory(method);
-    const el = document.getElementById('pengadaan');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleSelectMethod = () => {
+    router.push('/monitoring');
   };
 
   // Dynamically sort and find the closest upcoming agenda (Jadwal Terdekat)
@@ -313,11 +308,8 @@ export default function Home() {
         {/* 2.5 Ikhtisar Distribusi & Tahapan Pengadaan (Pengganti Dashboard Kinerja) */}
         <ProcurementStatsOverview onSelectMethod={handleSelectMethod} />
 
-        {/* 3. Menu Pengadaan Barang & Jasa */}
-        <PengadaanSection 
-          activeCategory={selectedMethodCategory} 
-          onCategoryChange={setSelectedMethodCategory} 
-        />
+        {/* 3. Standar Operasional Prosedur (SOP) Highlight */}
+        <SopHighlightSection />
 
         {/* 4. Berita & Pengumuman Carousel */}
         <BeritaSection />

@@ -1727,7 +1727,7 @@ export default function AdminPortalPage() {
 
   return (
     <div className={`min-h-screen flex flex-col md:flex-row font-sans admin-theme-smooth ${
-      isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-100 text-slate-800'
+      isDark ? 'bg-[#0F172A] text-slate-100' : 'bg-slate-50 text-slate-800'
     }`}>
       
       {/* NOTIFICATION TOAST */}
@@ -2103,14 +2103,14 @@ export default function AdminPortalPage() {
           mass: 0.8
         }}
         className={`hidden md:flex flex-col shrink-0 h-screen sticky top-0 select-none border-r z-40 overflow-hidden ${
-          isSidebarHovered ? 'shadow-2xl shadow-black/40' : 'shadow-none'
+          isSidebarHovered ? 'shadow-xl shadow-black/25' : 'shadow-none'
         } ${
-          isDark ? 'bg-slate-950 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
+          isDark ? 'bg-[#111827] border-slate-800' : 'bg-white border-slate-200/80'
         }`}
       >
         {/* Logo & Portal Brand - Fixed Pinned Header */}
         <div className={`h-[5.5rem] px-3.5 border-b flex items-center shrink-0 box-border transition-colors ${
-          isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
+          isDark ? 'border-slate-800 bg-[#111827]' : 'border-slate-200/80 bg-white'
         }`}>
           <div className="flex items-center space-x-3 min-w-0 w-full">
             <div className={`w-10 h-10 rounded-xl p-1.5 flex items-center justify-center shadow-md transition-all shrink-0 ${
@@ -2167,8 +2167,8 @@ export default function AdminPortalPage() {
               title={!isSidebarHovered ? "Dashboard" : undefined}
               className={`w-full flex items-center h-10 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer group ${
                 activeTab === 'dashboard'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <div className="w-6 h-6 flex items-center justify-center shrink-0">
@@ -2211,14 +2211,14 @@ export default function AdminPortalPage() {
               title={!isSidebarHovered ? `Paket Pengadaan (${(totalPackagesCount || packagesList.length).toLocaleString('id-ID')})` : undefined}
               className={`w-full flex items-center h-10 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer group ${
                 activeTab === 'paket'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <div className="w-6 h-6 flex items-center justify-center shrink-0 relative">
-                <Package className="w-4 h-4 text-blue-500" />
+                <Package className={`w-4 h-4 ${activeTab === 'paket' ? 'text-white' : isDark ? 'text-slate-400' : 'text-slate-500'}`} />
                 {!isSidebarHovered && (
-                  <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-blue-500" />
+                  <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-blue-500" />
                 )}
               </div>
               <motion.div
@@ -2234,7 +2234,7 @@ export default function AdminPortalPage() {
                 <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${
                   activeTab === 'paket' 
                     ? 'bg-white/20 text-white' 
-                    : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'
+                    : isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'
                 }`}>
                   {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
                 </span>
@@ -2257,16 +2257,18 @@ export default function AdminPortalPage() {
               title={!isSidebarHovered ? "Kelola Web (CMS)" : "Klik untuk membuka / menutup menu CMS"}
               className={`w-full flex items-center h-10 px-2.5 rounded-xl transition-all cursor-pointer group ${
                 isCmsOpen && isSidebarHovered
-                  ? isDark ? 'bg-amber-500/10 text-accent-gold' : 'bg-amber-50 text-amber-900 font-bold'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900/60' : 'text-slate-700 hover:text-amber-900 hover:bg-slate-100'
+                  ? isDark ? 'bg-slate-800/70 text-slate-100' : 'bg-slate-100 text-slate-900 font-bold'
+                  : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <div className="w-6 h-6 flex items-center justify-center shrink-0 relative">
                 <Globe className={`w-4 h-4 transition-colors ${
-                  (isCmsOpen && isSidebarHovered) ? 'text-accent-gold' : isDark ? 'text-slate-400 group-hover:text-accent-gold' : 'text-slate-600 group-hover:text-amber-800'
+                  (isCmsOpen && isSidebarHovered) ? 'text-blue-500' : isDark ? 'text-slate-400 group-hover:text-slate-200' : 'text-slate-500 group-hover:text-slate-800'
                 }`} />
                 {!isSidebarHovered && (
-                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-500 text-slate-950 text-[8px] font-black rounded-full flex items-center justify-center shadow-xs">
+                  <span className={`absolute -top-1 -right-1 w-3.5 h-3.5 text-[8px] font-black rounded-full flex items-center justify-center ${
+                    isDark ? 'bg-slate-700 text-slate-200' : 'bg-slate-200 text-slate-700'
+                  }`}>
                     7
                   </span>
                 )}
@@ -2280,14 +2282,12 @@ export default function AdminPortalPage() {
                 transition={{ duration: 0.22, ease: 'easeOut' }}
                 className="flex-1 flex items-center justify-between min-w-0 overflow-hidden whitespace-nowrap text-left pl-2.5"
               >
-                <span className={`text-[10px] font-extrabold uppercase tracking-wider truncate ${isDark ? 'text-accent-gold' : 'text-amber-800'}`}>
+                <span className={`text-[10px] font-extrabold uppercase tracking-wider truncate ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                   Kelola Web (CMS)
                 </span>
                 <div className="flex items-center space-x-1.5 shrink-0 pl-1">
                   <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
-                    isCmsOpen 
-                      ? isDark ? 'bg-accent-gold/20 text-accent-gold' : 'bg-amber-200/80 text-amber-900'
-                      : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'
+                    isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-200 text-slate-700'
                   }`}>
                     7
                   </span>
@@ -2304,20 +2304,20 @@ export default function AdminPortalPage() {
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.22, ease: 'easeInOut' }}
-                  className="overflow-hidden space-y-0.5 pl-2 border-l-2 border-accent-gold/30 ml-4.5 pt-0.5"
+                  className={`overflow-hidden space-y-0.5 pl-2 border-l ml-4.5 pt-0.5 ${isDark ? 'border-slate-800' : 'border-slate-200'}`}
                 >
                   {/* Tender & Seleksi */}
                   <button
                     onClick={() => setActiveTab('paket')}
                     className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       activeTab === 'paket'
-                        ? 'bg-blue-600 text-white shadow-xs font-bold'
-                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                        ? 'bg-blue-600 text-white font-bold'
+                        : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
-                    <Package className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                    <Package className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'paket' ? 'text-white' : 'text-slate-400'}`} />
                     <span className="truncate">Tender & Seleksi</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${activeTab === 'paket' ? 'bg-white/20 text-white' : isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
                       {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
                     </span>
                   </button>
@@ -2327,13 +2327,13 @@ export default function AdminPortalPage() {
                     onClick={() => setActiveTab('manage-berita')}
                     className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       activeTab === 'manage-berita'
-                        ? 'bg-blue-600 text-white shadow-xs font-bold'
-                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                        ? 'bg-blue-600 text-white font-bold'
+                        : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
-                    <Newspaper className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                    <Newspaper className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'manage-berita' ? 'text-white' : 'text-slate-400'}`} />
                     <span className="truncate">Berita & Pengumuman</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${activeTab === 'manage-berita' ? 'bg-white/20 text-white' : isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
                       {newsList.length}
                     </span>
                   </button>
@@ -2343,13 +2343,13 @@ export default function AdminPortalPage() {
                     onClick={() => setActiveTab('manage-agenda')}
                     className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       activeTab === 'manage-agenda'
-                        ? 'bg-blue-600 text-white shadow-xs font-bold'
-                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                        ? 'bg-blue-600 text-white font-bold'
+                        : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
-                    <Calendar className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <Calendar className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'manage-agenda' ? 'text-white' : 'text-slate-400'}`} />
                     <span className="truncate">Agenda & Jadwal</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${activeTab === 'manage-agenda' ? 'bg-white/20 text-white' : isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
                       {agendaList.length}
                     </span>
                   </button>
@@ -2359,13 +2359,13 @@ export default function AdminPortalPage() {
                     onClick={() => setActiveTab('manage-panduan')}
                     className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       activeTab === 'manage-panduan'
-                        ? 'bg-blue-600 text-white shadow-xs font-bold'
-                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                        ? 'bg-blue-600 text-white font-bold'
+                        : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
-                    <BookOpen className="w-3.5 h-3.5 text-teal-500 shrink-0" />
+                    <BookOpen className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'manage-panduan' ? 'text-white' : 'text-slate-400'}`} />
                     <span className="truncate">Panduan & Juknis</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-100 text-teal-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${activeTab === 'manage-panduan' ? 'bg-white/20 text-white' : isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
                       {panduanList.length}
                     </span>
                   </button>
@@ -2375,13 +2375,13 @@ export default function AdminPortalPage() {
                     onClick={() => setActiveTab('manage-regulasi')}
                     className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       activeTab === 'manage-regulasi'
-                        ? 'bg-blue-600 text-white shadow-xs font-bold'
-                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                        ? 'bg-blue-600 text-white font-bold'
+                        : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
-                    <ScrollText className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                    <ScrollText className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'manage-regulasi' ? 'text-white' : 'text-slate-400'}`} />
                     <span className="truncate">Regulasi & Aturan</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${activeTab === 'manage-regulasi' ? 'bg-white/20 text-white' : isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
                       {regulasiList.length}
                     </span>
                   </button>
@@ -2391,13 +2391,13 @@ export default function AdminPortalPage() {
                     onClick={() => setActiveTab('manage-sop')}
                     className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       activeTab === 'manage-sop'
-                        ? 'bg-blue-600 text-white shadow-xs font-bold'
-                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                        ? 'bg-blue-600 text-white font-bold'
+                        : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
-                    <Layers className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+                    <Layers className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'manage-sop' ? 'text-white' : 'text-slate-400'}`} />
                     <span className="truncate">Standar SOP</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${activeTab === 'manage-sop' ? 'bg-white/20 text-white' : isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
                       {sopList.length}
                     </span>
                   </button>
@@ -2407,13 +2407,13 @@ export default function AdminPortalPage() {
                     onClick={() => setActiveTab('manage-galeri')}
                     className={`w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       activeTab === 'manage-galeri'
-                        ? 'bg-blue-600 text-white shadow-xs font-bold'
-                        : isDark ? 'text-slate-300 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100'
+                        ? 'bg-blue-600 text-white font-bold'
+                        : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
-                    <Camera className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
+                    <Camera className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'manage-galeri' ? 'text-white' : 'text-slate-400'}`} />
                     <span className="truncate">Galeri & Media</span>
-                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
+                    <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${activeTab === 'manage-galeri' ? 'bg-white/20 text-white' : isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
                       {photosList.length + videosList.length}
                     </span>
                   </button>
@@ -2434,7 +2434,7 @@ export default function AdminPortalPage() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden whitespace-nowrap"
             >
-              <p className={`px-2.5 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>
+              <p className={`px-2.5 text-[10px] font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                 Sistem & Pengaturan
               </p>
             </motion.div>
@@ -2445,13 +2445,13 @@ export default function AdminPortalPage() {
               title={!isSidebarHovered ? "Log Aktivitas (Live)" : undefined}
               className={`w-full flex items-center h-10 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer group ${
                 activeTab === 'log-aktivitas'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <div className="w-6 h-6 flex items-center justify-center shrink-0 relative">
-                <History className="w-4 h-4 text-emerald-500" />
-                <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <History className={`w-4 h-4 ${activeTab === 'log-aktivitas' ? 'text-white' : isDark ? 'text-slate-400' : 'text-slate-500'}`} />
+                <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-500" />
               </div>
               <motion.div
                 initial={false}
@@ -2463,7 +2463,7 @@ export default function AdminPortalPage() {
                 className="flex-1 flex items-center justify-between min-w-0 overflow-hidden whitespace-nowrap text-left pl-2.5"
               >
                 <span className="truncate">Log Aktivitas</span>
-                <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-800'}`}>
+                <span className={`ml-auto px-1.5 py-0.2 text-[9px] rounded font-bold shrink-0 ${activeTab === 'log-aktivitas' ? 'bg-white/20 text-white' : isDark ? 'bg-emerald-500/15 text-emerald-400' : 'bg-emerald-50 text-emerald-700'}`}>
                   Live
                 </span>
               </motion.div>
@@ -2475,12 +2475,12 @@ export default function AdminPortalPage() {
               title={!isSidebarHovered ? "Pengaturan Portal" : undefined}
               className={`w-full flex items-center h-10 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer group ${
                 activeTab === 'pengaturan'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold'
-                  : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-900' : 'text-slate-800 hover:text-blue-900 hover:bg-slate-100 font-bold'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : isDark ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <div className="w-6 h-6 flex items-center justify-center shrink-0">
-                <Settings className="w-4 h-4 text-slate-400" />
+                <Settings className={`w-4 h-4 ${activeTab === 'pengaturan' ? 'text-white' : isDark ? 'text-slate-400' : 'text-slate-500'}`} />
               </div>
               <motion.div
                 initial={false}
@@ -2499,15 +2499,17 @@ export default function AdminPortalPage() {
 
         {/* Profile Card & Back to Home - Fixed Pinned Footer */}
         <div className={`border-t shrink-0 p-3 transition-colors ${
-          isDark ? 'border-slate-800/80 bg-slate-950' : 'border-slate-200 bg-white'
+          isDark ? 'border-slate-800 bg-[#111827]' : 'border-slate-200/80 bg-white'
         }`}>
           <div 
             title={!isSidebarHovered ? `${currentAdmin.nama_lengkap} (${currentAdmin.jabatan || 'Admin UKPBJ'})` : undefined}
             className={`flex items-center px-2 py-2 rounded-xl border transition-colors ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-50 border-slate-200'
+              isDark ? 'bg-slate-800/60 border-slate-700/60' : 'bg-slate-50 border-slate-200/80'
             }`}
           >
-            <div className="w-8 h-8 rounded-full bg-accent-gold/20 border border-accent-gold/40 flex items-center justify-center font-bold text-accent-gold text-xs shrink-0">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 border ${
+              isDark ? 'bg-slate-700 border-slate-600 text-slate-200' : 'bg-slate-200 border-slate-300 text-slate-700'
+            }`}>
               {currentAdmin.nama_lengkap.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'AD'}
             </div>
             <motion.div
@@ -2519,8 +2521,8 @@ export default function AdminPortalPage() {
               transition={{ duration: 0.22, ease: 'easeOut' }}
               className="flex-1 min-w-0 overflow-hidden whitespace-nowrap pl-2.5"
             >
-              <p className={`text-xs font-bold truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>{currentAdmin.nama_lengkap}</p>
-              <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>{currentAdmin.jabatan || 'Admin UKPBJ'}</p>
+              <p className={`text-xs font-bold truncate ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{currentAdmin.nama_lengkap}</p>
+              <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-500 font-medium'}`}>{currentAdmin.jabatan || 'Admin UKPBJ'}</p>
             </motion.div>
           </div>
 
@@ -2528,8 +2530,8 @@ export default function AdminPortalPage() {
             <Link
               href="/"
               title="Kembali ke Web Publik"
-              className={`h-8 px-2 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors ${
-                isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
+              className={`h-8 px-2 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors border ${
+                isDark ? 'bg-slate-800/70 hover:bg-slate-800 border-slate-700/60 text-slate-300' : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
               }`}
             >
               <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
@@ -2549,7 +2551,11 @@ export default function AdminPortalPage() {
               type="button"
               onClick={handleLogout}
               title="Keluar dari Portal Admin"
-              className="h-8 px-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              className={`h-8 px-2 rounded-xl border text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                isDark
+                  ? 'bg-red-500/10 hover:bg-red-500/20 border-red-500/20 text-red-400'
+                  : 'bg-red-50 hover:bg-red-100 border-red-200 text-red-600'
+              }`}
             >
               <LogOut className="w-3.5 h-3.5 shrink-0" />
               <motion.span
@@ -2569,15 +2575,15 @@ export default function AdminPortalPage() {
 
       {/* MAIN CONTENT WRAPPER */}
       <main className={`flex-1 flex flex-col min-w-0 overflow-y-auto max-h-screen transition-colors duration-300 ${
-        isDark ? 'bg-slate-950' : 'bg-slate-100'
+        isDark ? 'bg-[#0F172A]' : 'bg-slate-50'
       }`}>
         
         {/* Top Header - Spacious & Clean Modern Command Bar */}
         {/* Top Header - Responsive Modern Command Bar with Mobile Drawer Toggle */}
         <header className={`h-14 sm:h-16 md:h-[5.5rem] border-b backdrop-blur-xl px-3 sm:px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 shrink-0 box-border transition-all duration-300 ${
           isDark 
-            ? 'border-slate-800/80 bg-slate-950/90 shadow-sm shadow-black/20' 
-            : 'border-slate-200 bg-white/95 shadow-sm shadow-slate-200/50'
+            ? 'border-slate-800 bg-[#111827]/95' 
+            : 'border-slate-200/80 bg-white/95'
         }`}>
           {/* LEFT: Mobile Hamburger, Icon & Clean Page Title */}
           <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0">
@@ -2669,7 +2675,7 @@ export default function AdminPortalPage() {
                   if (showNotifications) setShowNotifications(false);
                   if (mobileSearchOpen) setMobileSearchOpen(false);
                 }}
-                className="flex items-center space-x-1.5 p-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-600/25 transition-all cursor-pointer"
+                className="flex items-center space-x-1.5 p-2 sm:px-4 sm:py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
                 title="Tambah data baru secara instan"
               >
                 <Plus className="w-4 h-4" />
@@ -3191,20 +3197,16 @@ export default function AdminPortalPage() {
                 {/* Top Greeting & Operational Telemetry Banner */}
                 <div className={`p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border relative overflow-hidden transition-all ${
                   isDark 
-                    ? 'bg-gradient-to-r from-slate-900 via-[#0B1E38] to-slate-900 border-slate-800/80 shadow-2xl shadow-blue-950/40' 
-                    : 'bg-gradient-to-r from-white via-blue-50/40 to-slate-50/80 border-slate-200/90 shadow-md shadow-slate-300/40 ring-1 ring-slate-900/5'
+                    ? 'bg-[#111827] border-slate-800 shadow-sm' 
+                    : 'bg-white border-slate-200/80 shadow-xs'
                 }`}>
-                  {/* Background ambient accents */}
-                  <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-                  <div className="absolute -bottom-10 left-1/3 w-60 h-60 bg-accent-gold/10 rounded-full blur-3xl pointer-events-none" />
-
                   <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
-                    <div className="space-y-2.5 sm:space-y-3">
-                      <h2 className={`text-xl sm:text-2xl md:text-3xl font-black font-jakarta tracking-normal not-italic ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    <div className="space-y-2 sm:space-y-2.5">
+                      <h2 className={`text-xl sm:text-2xl md:text-3xl font-black font-jakarta tracking-normal not-italic ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
                         Selamat Datang, {currentAdmin.nama_lengkap}
                       </h2>
                       
-                      <p className={`text-xs sm:text-sm max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
+                      <p className={`text-xs sm:text-sm max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
                         Pusat kendali dan monitoring terpadu pengadaan barang/jasa, integrasi SPSE, serta publikasi informasi resmi UKPBJ Kemnaker RI.
                       </p>
                     </div>
@@ -3224,7 +3226,7 @@ export default function AdminPortalPage() {
                           });
                           setShowNewsModal(true);
                         }}
-                        className="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                        className="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all cursor-pointer"
                       >
                         <PlusCircle className="w-4 h-4" />
                         <span>Posting Cepat</span>
@@ -3262,115 +3264,153 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
 
-                {/* STRATEGIC ACTIONABLE METRIC CARDS (2x2 BENTO GRID - SPACIOUS & PERFECTIONIST) */}
+                {/* STRATEGIC ACTIONABLE METRIC CARDS WITH MINI CHARTS (OPSI 1 - 2x2 BENTO GRID) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 items-stretch">
                   
-                  {/* Box 1: Paket Pengadaan PBJ */}
-                  <div 
-                    onClick={() => setContentFeedFilter('paket')}
-                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
-                      contentFeedFilter === 'paket'
-                        ? isDark ? 'bg-indigo-950/40 border-indigo-500 ring-1 ring-indigo-500/50' : 'bg-indigo-50/90 border-indigo-400 ring-2 ring-indigo-400/40 shadow-md shadow-indigo-100'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50 hover:shadow-xl' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 hover:shadow-xl hover:shadow-slate-300/50 hover:border-indigo-300 ring-1 ring-slate-900/5'
-                    }`}
-                  >
-                    {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2.5 sm:gap-3">
-                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Package className="w-4 h-4 sm:w-5 sm:h-5" />
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
-                          <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender Aktif</p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setPackageFormData({
-                            code: `TND-2026-${String(packagesList.length + 1).padStart(3, '0')}`,
-                            title: '',
-                            unit: 'Biro Perencanaan Kemnaker RI',
-                            hps: '',
-                            category: 'Tender',
-                            status: 'Pendaftaran Dibuka',
-                            deadline: '30 Sep 2026',
-                            method: 'Tender - Pascakualifikasi Satu File - Harga Terendah Sistem Gugur',
-                            docCount: 1,
-                            desc: '',
-                            fileName: '',
-                            fileSize: '',
-                            fileData: '',
-                            downloadUrl: '#'
-                          });
-                          setShowPackageModal(true);
-                        }}
-                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-indigo-500/10 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
-                        title="Tambah Paket Tender / Non-Tender"
+                  {/* Box 1: Paket Pengadaan PBJ + Mini Donut Chart */}
+                  {(() => {
+                    const totalPkg = packagesList.length || 1;
+                    const openCount = packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length;
+                    const evalCount = packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length;
+                    const openPct = Math.round((openCount / totalPkg) * 100);
+                    const evalPct = 100 - openPct;
+
+                    const catCounts = [
+                      { label: 'Tender', count: packagesList.filter(p => p.category === 'Tender').length, color: '#3B82F6' },
+                      { label: 'E-Purchasing', count: packagesList.filter(p => p.category === 'E-Purchasing').length, color: '#10B981' },
+                      { label: 'Langsung', count: packagesList.filter(p => p.category === 'Pengadaan Langsung').length, color: '#F59E0B' },
+                      { label: 'Seleksi', count: packagesList.filter(p => p.category === 'Seleksi').length, color: '#A855F7' }
+                    ];
+                    const catSum = catCounts.reduce((acc, c) => acc + c.count, 0) || 1;
+                    const circ = 2 * Math.PI * 24;
+                    let dashAcc = 0;
+
+                    return (
+                      <div 
+                        onClick={() => setContentFeedFilter('paket')}
+                        className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
+                          contentFeedFilter === 'paket'
+                            ? isDark ? 'bg-[#111827] border-blue-500/70 ring-1 ring-blue-500/30' : 'bg-white border-blue-400 ring-2 ring-blue-400/25 shadow-sm'
+                            : isDark ? 'bg-[#111827] border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200/80 shadow-xs hover:border-slate-300'
+                        }`}
                       >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Buat Paket</span>
-                      </button>
-                    </div>
+                        {/* Top Header */}
+                        <div className="flex items-center justify-between gap-2.5 sm:gap-3">
+                          <div className="min-w-0">
+                            <h4 className={`text-sm sm:text-base font-bold leading-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>Pengadaan PBJ</h4>
+                            <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tender & Non-Tender Aktif</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPackageFormData({
+                                code: `TND-2026-${String(packagesList.length + 1).padStart(3, '0')}`,
+                                title: '',
+                                unit: 'Biro Perencanaan Kemnaker RI',
+                                hps: '',
+                                category: 'Tender',
+                                status: 'Pendaftaran Dibuka',
+                                deadline: '30 Sep 2026',
+                                method: 'Tender - Pascakualifikasi Satu File - Harga Terendah Sistem Gugur',
+                                docCount: 1,
+                                desc: '',
+                                fileName: '',
+                                fileSize: '',
+                                fileData: '',
+                                downloadUrl: '#'
+                              });
+                              setShowPackageModal(true);
+                            }}
+                            className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                              isDark
+                                ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200'
+                                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
+                            }`}
+                            title="Tambah Paket Tender / Non-Tender"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Buat Paket</span>
+                          </button>
+                        </div>
 
-                    {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-center justify-between my-2.5 sm:my-4">
-                      <div className="flex items-center gap-2 sm:gap-2.5">
-                        <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                          {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
-                        </span>
-                        <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 leading-none">
-                          Paket Terdaftar
-                        </span>
-                      </div>
-                      <div className="text-right flex flex-col justify-center">
-                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Total Estimasi Pagu
-                        </span>
-                        <span className="text-xs sm:text-sm md:text-base font-black text-amber-500 leading-tight mt-0.5">
-                          Rp 48.2 M
-                        </span>
-                      </div>
-                    </div>
+                        {/* Middle Content + Mini Donut Chart */}
+                        <div className="flex items-center justify-between gap-4 my-3">
+                          <div className="min-w-0 flex-1 space-y-2.5">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className={`text-2xl sm:text-3xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                                {(totalPackagesCount || packagesList.length).toLocaleString('id-ID')}
+                              </span>
+                              <span className={`inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border leading-none ${
+                                isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-600 border-slate-200'
+                              }`}>
+                                Paket Terdaftar
+                              </span>
+                            </div>
 
-                    {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
-                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          <span>{packagesList.filter(p => p.status === 'Pendaftaran Dibuka').length} Pendaftaran Dibuka</span>
-                        </span>
-                        <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-semibold ${
-                          isDark ? 'bg-slate-800/80 text-slate-300' : 'bg-slate-100 text-slate-700'
-                        }`}>
-                          <span>{packagesList.filter(p => p.status !== 'Pendaftaran Dibuka').length} Evaluasi</span>
-                        </span>
-                      </div>
-                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-                    </div>
-                  </div>
+                            {/* Thin Horizontal Status Bar */}
+                            <div className="space-y-1.5">
+                              <div className={`w-full h-1.5 rounded-full overflow-hidden flex ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>
+                                <div className="bg-emerald-500 h-full" style={{ width: `${openPct}%` }} />
+                                <div className="bg-amber-400 h-full" style={{ width: `${evalPct}%` }} />
+                              </div>
+                              <div className={`flex items-center gap-3 text-[11px] font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                                <span className="flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                  <strong className={isDark ? 'text-white' : 'text-slate-900'}>{openCount}</strong> Dibuka
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                  <strong className={isDark ? 'text-white' : 'text-slate-900'}>{evalCount}</strong> Evaluasi
+                                </span>
+                              </div>
+                            </div>
+                          </div>
 
-                  {/* Box 2: Berita & Publikasi CMS */}
+                          {/* Mini Donut Chart */}
+                          <div className="shrink-0 flex flex-col items-center">
+                            <svg width="72" height="72" viewBox="0 0 64 64" className="-rotate-90">
+                              <circle cx="32" cy="32" r="24" fill="none" stroke={isDark ? '#1E293B' : '#E2E8F0'} strokeWidth="8" />
+                              {catCounts.map((c) => {
+                                const segLen = (c.count / catSum) * circ;
+                                const offset = -dashAcc;
+                                dashAcc += segLen;
+                                if (c.count === 0) return null;
+                                return (
+                                  <circle
+                                    key={c.label}
+                                    cx="32"
+                                    cy="32"
+                                    r="24"
+                                    fill="none"
+                                    stroke={c.color}
+                                    strokeWidth="8"
+                                    strokeDasharray={`${Math.max(segLen - 2, 0)} ${circ}`}
+                                    strokeDashoffset={offset}
+                                  />
+                                );
+                              })}
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Box 2: Berita & Publikasi Warta + Area Sparkline Chart */}
                   <div 
                     onClick={() => setContentFeedFilter('berita')}
-                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
+                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
                       contentFeedFilter === 'berita'
-                        ? isDark ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500/50' : 'bg-amber-50/90 border-amber-400 ring-2 ring-amber-400/40 shadow-md shadow-amber-100'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50 hover:shadow-xl' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 hover:shadow-xl hover:shadow-slate-300/50 hover:border-amber-300 ring-1 ring-slate-900/5'
+                        ? isDark ? 'bg-[#111827] border-blue-500/70 ring-1 ring-blue-500/30' : 'bg-white border-blue-400 ring-2 ring-blue-400/25 shadow-sm'
+                        : isDark ? 'bg-[#111827] border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200/80 shadow-xs hover:border-slate-300'
                     }`}
                   >
-                    {/* Top Header: Icon + Category + Quick Action */}
+                    {/* Top Header */}
                     <div className="flex items-center justify-between gap-2.5 sm:gap-3">
-                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Newspaper className="w-4 h-4 sm:w-5 sm:h-5" />
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Berita & Publikasi Warta</h4>
-                          <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Informasi & Siaran Pers PBJ</p>
-                        </div>
+                      <div className="min-w-0">
+                        <h4 className={`text-sm sm:text-base font-bold leading-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>Berita & Publikasi Warta</h4>
+                        <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Informasi & Siaran Pers PBJ</p>
                       </div>
                       <button
                         type="button"
@@ -3388,7 +3428,11 @@ export default function AdminPortalPage() {
                           });
                           setShowNewsModal(true);
                         }}
-                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
+                        className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                          isDark
+                            ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200'
+                            : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
+                        }`}
                         title="Tulis Berita Baru"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -3396,209 +3440,253 @@ export default function AdminPortalPage() {
                       </button>
                     </div>
 
-                    {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-center justify-between my-2.5 sm:my-4">
-                      <div className="flex items-center gap-2 sm:gap-2.5">
-                        <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {/* Middle Hero + Readership */}
+                    <div className="flex items-center justify-between gap-2 my-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-2xl sm:text-3xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {newsList.length}
                         </span>
-                        <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 leading-none">
+                        <span className={`inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border leading-none ${
+                          isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-600 border-slate-200'
+                        }`}>
                           Artikel Terbit
                         </span>
                       </div>
-                      <div className="text-right flex flex-col justify-center">
-                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Estimasi Pembaca
-                        </span>
-                        <span className="text-xs sm:text-sm md:text-base font-black text-blue-500 leading-tight mt-0.5">
-                          14.8K Tayang
-                        </span>
+                      <div className={`flex items-center gap-1.5 text-xs sm:text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                        <span>14.8K Tayang</span>
+                        <Eye className="w-3.5 h-3.5 text-sky-400" />
                       </div>
                     </div>
 
-                    {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
-                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          <span>{newsList.filter(n => n.status === 'Published').length} Publikasi Aktif</span>
-                        </span>
-                        <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-semibold ${
-                          newsList.filter(n => n.status !== 'Published').length > 0
-                            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold'
-                            : isDark ? 'bg-slate-800/80 text-slate-400' : 'bg-slate-100 text-slate-600'
-                        }`}>
-                          <span>{newsList.filter(n => n.status !== 'Published').length} Draft</span>
-                        </span>
+                    {/* Smooth Area Sparkline Chart */}
+                    <div className="space-y-1.5">
+                      <svg viewBox="0 0 280 44" className="w-full h-11 overflow-visible" preserveAspectRatio="none">
+                        <defs>
+                          <linearGradient id="newsSparkGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.35" />
+                            <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.0" />
+                          </linearGradient>
+                        </defs>
+                        <path
+                          d="M0,36 C25,30 35,22 55,26 C75,30 95,12 120,16 C145,20 165,26 190,14 C215,4 245,10 280,6 L280,44 L0,44 Z"
+                          fill="url(#newsSparkGrad)"
+                        />
+                        <path
+                          d="M0,36 C25,30 35,22 55,26 C75,30 95,12 120,16 C145,20 165,26 190,14 C215,4 245,10 280,6"
+                          fill="none"
+                          stroke="#38BDF8"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      <div className={`flex items-center justify-between text-[11px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span>{newsList.filter(n => n.status === 'Published').length} Publikasi Aktif • {newsList.filter(n => n.status !== 'Published').length} Draft</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-400 transition-colors" />
                       </div>
-                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                     </div>
                   </div>
 
-                  {/* Box 3: Agenda & Kegiatan PBJ */}
-                  <div 
-                    onClick={() => setContentFeedFilter('agenda')}
-                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
-                      contentFeedFilter === 'agenda'
-                        ? isDark ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500/50' : 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-400/40 shadow-md shadow-emerald-100'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50 hover:shadow-xl' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 hover:shadow-xl hover:shadow-slate-300/50 hover:border-emerald-300 ring-1 ring-slate-900/5'
-                    }`}
-                  >
-                    {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2.5 sm:gap-3">
-                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Agenda & Bimbingan Teknis</h4>
-                          <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Jadwal Pelatihan & Bimtek</p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setEditingAgenda(null);
-                          setAgendaFormData({
-                            title: '',
-                            category: 'Bimtek',
-                            date: '20 Sep 2026',
-                            time: '09:00 - 12:00 WIB',
-                            location: 'Gedung Kemnaker RI',
-                            organizer: 'UKPBJ Kemnaker RI',
-                            capacity: '100 Peserta',
-                            description: '',
-                            imageUrl: '',
-                            status: 'Terjadwal'
-                          });
-                          setShowAgendaModal(true);
-                        }}
-                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-500/10 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
-                        title="Jadwalkan Agenda Baru"
+                  {/* Box 3: Agenda & Bimbingan Teknis + Radial Gauge Ring */}
+                  {(() => {
+                    const scheduledCount = agendaList.filter(a => a.status === 'Terjadwal' || a.status === 'Berlangsung').length;
+                    const doneCount = agendaList.filter(a => a.status === 'Selesai').length;
+                    const totalAg = agendaList.length || 1;
+                    const ratio = agendaList.length > 0 ? scheduledCount / totalAg : 0;
+                    const ringCirc = 2 * Math.PI * 24;
+                    const ringDash = ratio * ringCirc;
+
+                    return (
+                      <div 
+                        onClick={() => setContentFeedFilter('agenda')}
+                        className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
+                          contentFeedFilter === 'agenda'
+                            ? isDark ? 'bg-[#111827] border-blue-500/70 ring-1 ring-blue-500/30' : 'bg-white border-blue-400 ring-2 ring-blue-400/25 shadow-sm'
+                            : isDark ? 'bg-[#111827] border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200/80 shadow-xs hover:border-slate-300'
+                        }`}
                       >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Jadwalkan</span>
-                      </button>
-                    </div>
-
-                    {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-center justify-between my-2.5 sm:my-4">
-                      <div className="flex items-center gap-2 sm:gap-2.5">
-                        <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                          {agendaList.length}
-                        </span>
-                        <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-none">
-                          Jadwal Kegiatan
-                        </span>
-                      </div>
-                      <div className="text-right flex flex-col justify-center">
-                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Target Partisipasi
-                        </span>
-                        <span className="text-xs sm:text-sm md:text-base font-black text-emerald-500 leading-tight mt-0.5">
-                          850+ Peserta
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
-                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                          <span>{agendaList.filter(a => a.status === 'Terjadwal' || a.status === 'Berlangsung').length} Terjadwal</span>
-                        </span>
-                        <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-semibold ${
-                          isDark ? 'bg-slate-800/80 text-slate-300' : 'bg-slate-100 text-slate-700'
-                        }`}>
-                          <span>{agendaList.filter(a => a.status === 'Selesai').length} Selesai</span>
-                        </span>
-                      </div>
-                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-                    </div>
-                  </div>
-
-                  {/* Box 4: Regulasi & Dokumen SOP */}
-                  <div 
-                    onClick={() => setContentFeedFilter('regulasi')}
-                    className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[180px] cursor-pointer group ${
-                      contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
-                        ? isDark ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500/50' : 'bg-purple-50/90 border-purple-400 ring-2 ring-purple-400/40 shadow-md shadow-purple-100'
-                        : isDark ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50 hover:shadow-xl' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 hover:shadow-xl hover:shadow-slate-300/50 hover:border-purple-300 ring-1 ring-slate-900/5'
-                    }`}
-                  >
-                    {/* Top Header: Icon + Category + Quick Action */}
-                    <div className="flex items-center justify-between gap-2.5 sm:gap-3">
-                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <ScrollText className="w-4 h-4 sm:w-5 sm:h-5" />
+                        {/* Top Header */}
+                        <div className="flex items-center justify-between gap-2.5 sm:gap-3">
+                          <div className="min-w-0">
+                            <h4 className={`text-sm sm:text-base font-bold leading-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>Agenda & Bimbingan Teknis</h4>
+                            <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Jadwal Pelatihan & Bimtek</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingAgenda(null);
+                              setAgendaFormData({
+                                title: '',
+                                category: 'Bimtek',
+                                date: '20 Sep 2026',
+                                time: '09:00 - 12:00 WIB',
+                                location: 'Gedung Kemnaker RI',
+                                organizer: 'UKPBJ Kemnaker RI',
+                                capacity: '100 Peserta',
+                                description: '',
+                                imageUrl: '',
+                                status: 'Terjadwal'
+                              });
+                              setShowAgendaModal(true);
+                            }}
+                            className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                              isDark
+                                ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200'
+                                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
+                            }`}
+                            title="Jadwalkan Agenda Baru"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Jadwalkan</span>
+                          </button>
                         </div>
-                        <div className="min-w-0">
-                          <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Regulasi & Dokumen SOP</h4>
-                          <p className={`text-[10px] sm:text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Produk Hukum & Tata Kelola</p>
+
+                        {/* Middle Content + Radial Gauge Ring */}
+                        <div className="flex items-center justify-between gap-4 my-3">
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2.5">
+                              <span className={`text-2xl sm:text-3xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                                {agendaList.length}
+                              </span>
+                              <div className="space-y-1">
+                                <span className={`inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border leading-none ${
+                                  isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-600 border-slate-200'
+                                }`}>
+                                  Jadwal Kegiatan
+                                </span>
+                                <p className={`text-[11px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>850+</strong> Peserta Target
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-lg text-[11px] font-medium border ${
+                              isDark ? 'bg-slate-800/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+                            }`}>
+                              <span><strong className={isDark ? 'text-white' : 'text-slate-900'}>{scheduledCount}</strong> Terjadwal</span>
+                              <span>•</span>
+                              <span><strong className={isDark ? 'text-white' : 'text-slate-900'}>{doneCount}</strong> Selesai</span>
+                            </div>
+                          </div>
+
+                          {/* Mini Radial Gauge Ring */}
+                          <div className="shrink-0">
+                            <svg width="72" height="72" viewBox="0 0 64 64" className="-rotate-90">
+                              <circle cx="32" cy="32" r="24" fill="none" stroke={isDark ? '#1E293B' : '#E2E8F0'} strokeWidth="6" />
+                              <circle cx="32" cy="32" r="17" fill="none" stroke={isDark ? '#334155' : '#CBD5E1'} strokeWidth="4" />
+                              {ratio > 0 && (
+                                <circle
+                                  cx="32"
+                                  cy="32"
+                                  r="24"
+                                  fill="none"
+                                  stroke="#10B981"
+                                  strokeWidth="6"
+                                  strokeLinecap="round"
+                                  strokeDasharray={`${ringDash} ${ringCirc}`}
+                                />
+                              )}
+                            </svg>
+                          </div>
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setEditingRegulasi(null);
-                          setRegulasiFormData({
-                            nomor: '',
-                            tentang: '',
-                            tahun: '2026',
-                            kategori: 'Peraturan Menteri',
-                            fileSize: '2.5 MB',
-                            fileName: '',
-                            fileData: '',
-                            downloadUrl: '',
-                            status: 'Aktif'
-                          });
-                          setShowRegulasiModal(true);
-                        }}
-                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-purple-500/10 hover:bg-purple-600 text-purple-600 dark:text-purple-400 hover:text-white transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0"
-                        title="Upload Regulasi Baru"
+                    );
+                  })()}
+
+                  {/* Box 4: Regulasi & Dokumen SOP + Segmented Proportion Bar */}
+                  {(() => {
+                    const regCount = regulasiList.length;
+                    const sopCount = sopList.length;
+                    const totalDocs = regCount + sopCount;
+                    const regPct = totalDocs > 0 ? (regCount / totalDocs) * 100 : 50;
+                    const sopPct = totalDocs > 0 ? 100 - regPct : 50;
+
+                    return (
+                      <div 
+                        onClick={() => setContentFeedFilter('regulasi')}
+                        className={`p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-200 flex flex-col justify-between h-full min-h-[180px] cursor-pointer group ${
+                          contentFeedFilter === 'regulasi' || contentFeedFilter === 'sop'
+                            ? isDark ? 'bg-[#111827] border-blue-500/70 ring-1 ring-blue-500/30' : 'bg-white border-blue-400 ring-2 ring-blue-400/25 shadow-sm'
+                            : isDark ? 'bg-[#111827] border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200/80 shadow-xs hover:border-slate-300'
+                        }`}
                       >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Upload File</span>
-                      </button>
-                    </div>
+                        {/* Top Header */}
+                        <div className="flex items-center justify-between gap-2.5 sm:gap-3">
+                          <div className="min-w-0">
+                            <h4 className={`text-sm sm:text-base font-bold leading-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>Regulasi & Dokumen SOP</h4>
+                            <p className={`text-[11px] font-medium mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Produk Hukum & Tata Kelola</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingRegulasi(null);
+                              setRegulasiFormData({
+                                nomor: '',
+                                tentang: '',
+                                tahun: '2026',
+                                kategori: 'Peraturan Menteri',
+                                fileSize: '2.5 MB',
+                                fileName: '',
+                                fileData: '',
+                                downloadUrl: '',
+                                status: 'Aktif'
+                              });
+                              setShowRegulasiModal(true);
+                            }}
+                            className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                              isDark
+                                ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200'
+                                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
+                            }`}
+                            title="Upload Regulasi Baru"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Upload File</span>
+                          </button>
+                        </div>
 
-                    {/* Main Hero Number & Metric Highlight */}
-                    <div className="flex items-center justify-between my-2.5 sm:my-4">
-                      <div className="flex items-center gap-2 sm:gap-2.5">
-                        <span className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                          {regulasiList.length + sopList.length}
-                        </span>
-                        <span className="inline-flex items-center text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 leading-none">
-                          Total Dokumen
-                        </span>
-                      </div>
-                      <div className="text-right flex flex-col justify-center">
-                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider block leading-tight ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          Status Validasi
-                        </span>
-                        <span className="text-xs sm:text-sm md:text-base font-black text-emerald-500 leading-tight mt-0.5">
-                          100% Sah & Aktif
-                        </span>
-                      </div>
-                    </div>
+                        {/* Middle Hero */}
+                        <div className="flex items-center gap-2.5 my-2.5">
+                          <span className={`text-2xl sm:text-3xl font-black tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            {totalDocs}
+                          </span>
+                          <div className="space-y-1">
+                            <span className={`inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border leading-none ${
+                              isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-600 border-slate-200'
+                            }`}>
+                              Total Dokumen
+                            </span>
+                            <p className={`text-[11px] font-medium flex items-center gap-1.5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              <span>100% Sah & Aktif</span>
+                            </p>
+                          </div>
+                        </div>
 
-                    {/* Bottom Status Chips & Filter Indicator */}
-                    <div className="pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
-                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                          <span>{regulasiList.length} Regulasi JDIH</span>
-                        </span>
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                          <span>{sopList.length} Standar SOP</span>
-                        </span>
+                        {/* Segmented Proportion Bar Chart */}
+                        <div className="space-y-2">
+                          <div className={`w-full h-3 rounded-lg overflow-hidden flex gap-0.5 ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>
+                            <div className="bg-blue-500 h-full rounded-l-lg transition-all duration-500" style={{ width: `${regPct}%` }} />
+                            <div className="bg-purple-500 h-full rounded-r-lg transition-all duration-500" style={{ width: `${sopPct}%` }} />
+                          </div>
+                          <div className={`flex items-center justify-between text-[11px] font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                            <div className="flex items-center gap-3">
+                              <span className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-xs bg-blue-500" />
+                                <strong className={isDark ? 'text-white' : 'text-slate-900'}>{regCount}</strong> Regulasi JDIH
+                              </span>
+                              <span className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-xs bg-purple-500" />
+                                <strong className={isDark ? 'text-white' : 'text-slate-900'}>{sopCount}</strong> Standar SOP
+                              </span>
+                            </div>
+                            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-400 transition-colors" />
+                          </div>
+                        </div>
                       </div>
-                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-purple-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-                    </div>
-                  </div>
-
+                    );
+                  })()}
                 </div>
 
 

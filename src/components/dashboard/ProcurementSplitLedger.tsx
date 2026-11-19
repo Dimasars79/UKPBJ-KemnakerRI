@@ -23,7 +23,6 @@ export function ProcurementSplitLedger() {
 
   // Filter States
   const [selectedSatker, setSelectedSatker] = useState('Semua Satker');
-  const [selectedPpk, setSelectedPpk] = useState('Semua PPK');
   const [selectedTa, setSelectedTa] = useState('Seluruh Tahun');
   const [basisRealisasi, setBasisRealisasi] = useState<'kontrak' | 'pagu'>('kontrak');
 
@@ -37,15 +36,6 @@ export function ProcurementSplitLedger() {
     'Badan Perencanaan & Pengembangan',
     'Inspektorat Jenderal',
     'Politeknik Ketenagakerjaan'
-  ];
-
-  const ppkOptions = [
-    'Semua PPK',
-    'PPK Biro Umum & Pengadaan',
-    'PPK Dit. Bina Kelembagaan',
-    'PPK Dit. Standardisasi Kompetensi',
-    'PPK Pusdatin Ketenagakerjaan',
-    'PPK Balai Besar Pelatihan Vokasi'
   ];
 
   const taOptions = [
@@ -75,7 +65,6 @@ export function ProcurementSplitLedger() {
 
   const handleReset = () => {
     setSelectedSatker('Semua Satker');
-    setSelectedPpk('Semua PPK');
     setSelectedTa('Seluruh Tahun');
     setBasisRealisasi('kontrak');
   };
@@ -98,7 +87,7 @@ export function ProcurementSplitLedger() {
                 </span>
               </h3>
               <p className="text-[11px] text-slate-500">
-                {trans('Sesuaikan unit kerja Satker, PPK, dan basis evaluasi realisasi belanja APBN', 'Filter by Satker, PPK, and budget realization basis')}
+                {trans('Sesuaikan unit kerja Satker, Tahun Anggaran, dan basis evaluasi realisasi belanja APBN', 'Filter by Satker, Fiscal Year, and budget realization basis')}
               </p>
             </div>
           </div>
@@ -125,7 +114,7 @@ export function ProcurementSplitLedger() {
         </div>
 
         {/* Filter Selectors Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Satker Dropdown */}
           <div>
             <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1">
@@ -139,26 +128,6 @@ export function ProcurementSplitLedger() {
                 className="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 pr-8 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer truncate"
               >
                 {satkerOptions.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
-          </div>
-
-          {/* PPK Dropdown */}
-          <div>
-            <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-              <FileText className="w-3 h-3 text-slate-400" />
-              <span>{trans('Pejabat Pembuat Komitmen', 'Commitment Officer (PPK)')}</span>
-            </label>
-            <div className="relative">
-              <select
-                value={selectedPpk}
-                onChange={(e) => setSelectedPpk(e.target.value)}
-                className="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 pr-8 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer truncate"
-              >
-                {ppkOptions.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>

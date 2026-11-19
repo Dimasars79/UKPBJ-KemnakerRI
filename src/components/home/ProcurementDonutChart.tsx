@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 
 export interface DonutMethodItem {
   name: string;
@@ -32,6 +32,56 @@ export function ProcurementDonutChart({
   const [internalHover, setInternalHover] = useState<string | null>(null);
   const currentActive = activeMethod !== undefined && activeMethod !== null ? activeMethod : internalHover;
 
+  // Animasi Putar 3D Isometrik saat masuk layar lalu diam di posisi akhir
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [angleOffset, setAngleOffset] = useState<number>(-360);
+  const hasAnimatedRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setAngleOffset(0);
+      return;
+    }
+
+    let animId: number;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimatedRef.current) {
+          hasAnimatedRef.current = true;
+          observer.disconnect();
+
+          const duration = 1800; // 1.8 detik putaran halus lalu berhenti
+          let startTime: number | null = null;
+
+          const animateSpin = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease-out quartic: berputar cepat di awal lalu melambat mulus hingga diam presisi di 0
+            const eased = 1 - Math.pow(1 - progress, 4);
+            setAngleOffset(-360 * (1 - eased));
+
+            if (progress < 1) {
+              animId = requestAnimationFrame(animateSpin);
+            } else {
+              setAngleOffset(0);
+            }
+          };
+
+          animId = requestAnimationFrame(animateSpin);
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      if (animId) cancelAnimationFrame(animId);
+    };
+  }, []);
+
   // Dimensi Isometrik 3D
   const vbWidth = 340;
   const vbHeight = 265;
@@ -62,7 +112,7 @@ export function ProcurementDonutChart({
   // Perhitungan Geometri Segmen Isometrik 3D
   const segments = useMemo(() => {
     const totalPercentage = data.reduce((acc, curr) => acc + curr.percentage, 0) || 100;
-    let currentAngle = -90; // Mulai dari jam 12
+    let currentAngle = -90 + angleOffset; // Mulai dari jam 12 + offset putaran animasi
 
     // Skema Warna Claymorphism 3D: Permukaan Atas Glossy + Dinding Samping Dalam
     const colorThemes: Record<string, {
@@ -164,8 +214,8 @@ export function ProcurementDonutChart({
       // Vector angkat 3D saat di-hover (halus dan proporsional)
       const liftY = -7;
 
-      // Nilai kedalaman (Z-depth) untuk sorting: Sisi depan (y lebih besar) tampil di depan
-      const depthOrder = y1 + y2;
+      // Nilai kedalaman (Z-depth) untuk sorting: Sisi depan (sin midRad lebih besar) tampil di depan
+      const depthOrder = Math.sin(midRad);
 
       return {
         ...item,
@@ -179,7 +229,7 @@ export function ProcurementDonutChart({
         depthOrder
       };
     });
-  }, [data, cx, cy, Rx, Ry, rx, ry, depth]);
+  }, [data, cx, cy, Rx, Ry, rx, ry, depth, angleOffset]);
 
   // Item yang sedang aktif di-hover (untuk detail pada piringan pusat)
   const activeItem = useMemo(() => {
@@ -203,7 +253,7 @@ export function ProcurementDonutChart({
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center select-none py-1 sm:py-1.5 lg:py-2 w-full">
+    <div ref={containerRef} className="relative flex flex-col items-center justify-center select-none py-1 sm:py-1.5 lg:py-2 w-full">
       {/* 1. AMBIENT BACKLIGHT GLOW (Cahaya di belakang diagram) */}
       <div className="absolute w-64 h-64 sm:w-80 sm:h-80 lg:w-[380px] lg:h-[380px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,transparent_70%)] pointer-events-none" />
 

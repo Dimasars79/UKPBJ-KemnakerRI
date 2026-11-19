@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { ProcurementSplitLedger } from '@/components/dashboard/ProcurementSplitLedger';
-import { DataTable } from '@/components/dashboard/DataTable';
+import { SatkerMonitoringBreakdown } from '@/components/dashboard/SatkerMonitoringBreakdown';
 import { BarChart3 } from 'lucide-react';
 
 export default function MonitoringPage() {
@@ -53,9 +53,9 @@ export default function MonitoringPage() {
             <ProcurementSplitLedger />
           </FadeIn>
 
-          {/* Tabel Detail Paket Pengadaan */}
+          {/* Peringkat Top 10 Satker, Proporsi Metode Pengadaan, & Kepatuhan PDN/UKM */}
           <FadeIn direction="up" delay={0.2}>
-            <DataTable />
+            <SatkerMonitoringBreakdown />
           </FadeIn>
         </section>
       </main>
