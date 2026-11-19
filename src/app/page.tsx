@@ -28,8 +28,8 @@ export default function Home() {
   const { agendaList } = useData();
   const router = useRouter();
 
-  const handleSelectMethod = () => {
-    router.push('/monitoring');
+  const handleSelectMethod = (method: string) => {
+    router.push(`/monitoring?metode=${encodeURIComponent(method)}`);
   };
 
   // Dynamically sort and find the closest upcoming agenda (Jadwal Terdekat)

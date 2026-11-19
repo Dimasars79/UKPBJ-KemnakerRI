@@ -13,112 +13,31 @@ import {
   Search
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import {
+  INAPROC_SATKERS_44,
+  INAPROC_METHOD_TOTALS
+} from '@/lib/inaprocData';
 
-interface SatkerSummary {
-  name: string;
-  eselon1: string;
-  packages: number;
-  pagu: number;
-}
-
-interface MethodSummary {
-  name: string;
-  packages: number;
-  pagu: number;
-  pct: number;
+interface MethodStyleMeta {
   colorClass: string;
   dotClass: string;
 }
 
-const ALL_SATKERS_44: SatkerSummary[] = [
-  { name: 'Direktorat Bina Kelembagaan Pelatihan Vokasi', eselon1: 'Ditjen Binalavotas', packages: 132, pagu: 1151518917703 },
-  { name: 'Badan Perencanaan dan Pengembangan Ketenagakerjaan', eselon1: 'Barenbang Ketenagakerjaan', packages: 199, pagu: 259566146000 },
-  { name: 'Sekretariat Jenderal Kemnaker', eselon1: 'Sekretariat Jenderal', packages: 530, pagu: 165111792000 },
-  { name: 'Balai Besar Pelatihan Vokasi dan Produktivitas Bandung', eselon1: 'Ditjen Binalavotas', packages: 205, pagu: 55269778000 },
-  { name: 'Ditjen Binapenta & Perluasan Kesempatan Kerja', eselon1: 'Ditjen Binapenta & PKK', packages: 204, pagu: 51406038000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Bandung Barat', eselon1: 'Ditjen Binalavotas', packages: 432, pagu: 39914224000 },
-  { name: 'Balai Besar Pelatihan Vokasi dan Produktivitas Serang', eselon1: 'Ditjen Binalavotas', packages: 114, pagu: 36490511000 },
-  { name: 'Pusat Pasar Kerja', eselon1: 'Sekretariat Jenderal', packages: 83, pagu: 35056178000 },
-  { name: 'Direktorat Bina Penyelenggaraan Pelatihan Vokasi & Pemagangan', eselon1: 'Ditjen Binalavotas', packages: 52, pagu: 34826570000 },
-  { name: 'Ditjen Pembinaan Hubungan Industrial & Jamsos Tenaga Kerja', eselon1: 'Ditjen PHI & Jamsos', packages: 427, pagu: 34226043000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Surakarta', eselon1: 'Ditjen Binalavotas', packages: 188, pagu: 33793133600 },
-  { name: 'Ditjen Pembinaan Pelatihan Vokasi dan Produktivitas', eselon1: 'Ditjen Binalavotas', packages: 250, pagu: 33076109327 },
-  { name: 'Ditjen Pembinaan Pengawasan Ketenagakerjaan dan K3', eselon1: 'Ditjen Binwasnaker & K3', packages: 264, pagu: 31699850000 },
-  { name: 'Balai Besar Pelatihan Vokasi dan Produktivitas Bekasi', eselon1: 'Ditjen Binalavotas', packages: 325, pagu: 24311475000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Ternate', eselon1: 'Ditjen Binalavotas', packages: 89, pagu: 23898927000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Banda Aceh', eselon1: 'Ditjen Binalavotas', packages: 346, pagu: 21422913000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Samarinda', eselon1: 'Ditjen Binalavotas', packages: 275, pagu: 20611671000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Banyuwangi', eselon1: 'Ditjen Binalavotas', packages: 162, pagu: 20330955000 },
-  { name: 'Balai Besar Pelatihan Vokasi dan Produktivitas Semarang', eselon1: 'Ditjen Binalavotas', packages: 117, pagu: 19554936000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Lombok Timur', eselon1: 'Ditjen Binalavotas', packages: 596, pagu: 17995690000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Padang', eselon1: 'Ditjen Binalavotas', packages: 41, pagu: 17650121000 },
-  { name: 'Balai Besar Pelatihan Vokasi dan Produktivitas Medan', eselon1: 'Ditjen Binalavotas', packages: 218, pagu: 15818630000 },
-  { name: 'Balai Besar Pelatihan Vokasi dan Produktivitas Makassar', eselon1: 'Ditjen Binalavotas', packages: 182, pagu: 15592235000 },
-  { name: 'Sekretariat Badan Nasional Sertifikasi Profesi', eselon1: 'Sekretariat Jenderal', packages: 64, pagu: 13948561000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Sidoarjo', eselon1: 'Ditjen Binalavotas', packages: 485, pagu: 13894425000 },
-  { name: 'Politeknik Ketenagakerjaan', eselon1: 'Sekretariat Jenderal', packages: 243, pagu: 11941140000 },
-  { name: 'Pusat Pengembangan Sumber Daya Manusia Ketenagakerjaan', eselon1: 'Sekretariat Jenderal', packages: 237, pagu: 9821608000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Sorong', eselon1: 'Ditjen Binalavotas', packages: 211, pagu: 8299662000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Bantaeng', eselon1: 'Ditjen Binalavotas', packages: 259, pagu: 8137267400 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Kendari', eselon1: 'Ditjen Binalavotas', packages: 254, pagu: 7695515000 },
-  { name: 'Inspektorat Jenderal', eselon1: 'Inspektorat Jenderal', packages: 231, pagu: 7105856000 },
-  { name: 'Balai Besar Perluasan Kesempatan Kerja', eselon1: 'Ditjen Binapenta & PKK', packages: 104, pagu: 6955862000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Ambon', eselon1: 'Ditjen Binalavotas', packages: 240, pagu: 6748878000 },
-  { name: 'Balai Perluasan Kesempatan Kerja Bekasi', eselon1: 'Ditjen Binapenta & PKK', packages: 144, pagu: 5864189000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Pangkep', eselon1: 'Ditjen Binalavotas', packages: 69, pagu: 5695222000 },
-  { name: 'Balai Pelatihan Vokasi dan Produktivitas Belitung', eselon1: 'Ditjen Binalavotas', packages: 103, pagu: 5182210941 },
-  { name: 'Direktorat Bina Perluasan Kesempatan Kerja', eselon1: 'Ditjen Binapenta & PKK', packages: 57, pagu: 5078635000 },
-  { name: 'Balai Besar Keselamatan dan Kesehatan Kerja Jakarta', eselon1: 'Ditjen Binwasnaker & K3', packages: 49, pagu: 4280263000 },
-  { name: 'Balai Keselamatan dan Kesehatan Kerja Bandung', eselon1: 'Ditjen Binwasnaker & K3', packages: 23, pagu: 3352889000 },
-  { name: 'Balai Keselamatan dan Kesehatan Kerja Medan', eselon1: 'Ditjen Binwasnaker & K3', packages: 27, pagu: 2891648000 },
-  { name: 'Balai Keselamatan dan Kesehatan Kerja Makassar', eselon1: 'Ditjen Binwasnaker & K3', packages: 22, pagu: 2538401000 },
-  { name: 'Balai Perluasan Kesempatan Kerja Kendari', eselon1: 'Ditjen Binapenta & PKK', packages: 34, pagu: 2499093000 },
-  { name: 'Balai Keselamatan dan Kesehatan Kerja Samarinda', eselon1: 'Ditjen Binwasnaker & K3', packages: 20, pagu: 2317374000 },
-  { name: 'Balai Higiene Perusahaan, Kesehatan dan Keselamatan Kerja di Surabaya', eselon1: 'Ditjen Binwasnaker & K3', packages: 14, pagu: 1086359000 }
-];
+const ALL_SATKERS_44 = INAPROC_SATKERS_44;
 
-const METHOD_BREAKDOWN: MethodSummary[] = [
-  {
-    name: 'Tender',
-    packages: 30,
-    pagu: 1204172487703,
-    pct: 52.48,
-    colorClass: 'from-blue-500 to-cyan-400',
-    dotClass: 'bg-blue-500'
-  },
-  {
-    name: 'E-Purchasing (e-Katalog)',
-    packages: 1831,
-    pagu: 540573731127,
-    pct: 23.56,
-    colorClass: 'from-emerald-500 to-teal-400',
-    dotClass: 'bg-emerald-500'
-  },
-  {
-    name: 'Pengadaan Langsung',
-    packages: 6143,
-    pagu: 359647831141,
-    pct: 15.67,
-    colorClass: 'from-amber-400 to-orange-400',
-    dotClass: 'bg-amber-400'
-  },
-  {
-    name: 'Seleksi',
-    packages: 31,
-    pagu: 145930314000,
-    pct: 6.36,
-    colorClass: 'from-purple-500 to-indigo-400',
-    dotClass: 'bg-purple-500'
-  },
-  {
-    name: 'Lainnya (Penunjukan / Dikecualikan)',
-    packages: 286,
-    pagu: 44153538000,
-    pct: 1.92,
-    colorClass: 'from-slate-400 to-slate-500',
-    dotClass: 'bg-slate-400'
-  }
-];
+const METHOD_STYLE_MAP: Record<string, MethodStyleMeta> = {
+  'Tender': { colorClass: 'from-blue-500 to-cyan-400', dotClass: 'bg-blue-500' },
+  'E-Purchasing': { colorClass: 'from-emerald-500 to-teal-400', dotClass: 'bg-emerald-500' },
+  'Pengadaan Langsung': { colorClass: 'from-amber-400 to-orange-400', dotClass: 'bg-amber-400' },
+  'Seleksi': { colorClass: 'from-purple-500 to-indigo-400', dotClass: 'bg-purple-500' },
+  'Lainnya': { colorClass: 'from-slate-400 to-slate-500', dotClass: 'bg-slate-400' }
+};
+
+const METHOD_BREAKDOWN = INAPROC_METHOD_TOTALS.map((m) => ({
+  ...m,
+  name: m.label,
+  ...(METHOD_STYLE_MAP[m.key] || METHOD_STYLE_MAP['Lainnya'])
+}));
 
 function formatFullRupiah(amount: number): string {
   return new Intl.NumberFormat('id-ID', {
@@ -130,10 +49,18 @@ function formatFullRupiah(amount: number): string {
     .replace('IDR', 'Rp');
 }
 
-export function SatkerMonitoringBreakdown() {
+export interface SatkerMonitoringBreakdownProps {
+  highlightedMethod?: string | null;
+  onClearMethod?: () => void;
+}
+
+export function SatkerMonitoringBreakdown({
+  highlightedMethod = null,
+  onClearMethod
+}: SatkerMonitoringBreakdownProps = {}) {
   const { trans } = useLanguage();
   const [sortBy, setSortBy] = useState<'pagu' | 'packages'>('pagu');
-  const [viewMode, setViewMode] = useState<'satker' | 'eselon1'>('satker');
+  const [viewMode, setViewMode] = useState<'satker' | 'eselon1'>('eselon1');
   const [selectedEselon1, setSelectedEselon1] = useState<string>('Semua Eselon I');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -221,19 +148,8 @@ export function SatkerMonitoringBreakdown() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              {/* View Mode Switcher: 44 Satker vs 7 Eselon I */}
+              {/* View Mode Switcher: Eselon I vs Satker */}
               <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold">
-                <button
-                  type="button"
-                  onClick={() => setViewMode('satker')}
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                    viewMode === 'satker'
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  44 Satker
-                </button>
                 <button
                   type="button"
                   onClick={() => setViewMode('eselon1')}
@@ -243,7 +159,18 @@ export function SatkerMonitoringBreakdown() {
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  7 Eselon I
+                  Eselon I
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('satker')}
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                    viewMode === 'satker'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Satker
                 </button>
               </div>
 
@@ -345,13 +272,13 @@ export function SatkerMonitoringBreakdown() {
                           </span>
                         </div>
                       </div>
-                      <div className="pl-7 sm:pl-0 text-left sm:text-right shrink-0 font-mono">
-                        <span className="font-extrabold text-slate-900 text-[11px] sm:text-xs">
+                      <div className="pl-7 sm:pl-0 text-left sm:text-right shrink-0 font-mono leading-tight">
+                        <div className="font-extrabold text-slate-900 text-[11px] sm:text-xs">
                           {formatFullRupiah(eselon.pagu)}
-                        </span>
-                        <span className="ml-1.5 text-[10px] font-semibold text-slate-500">
+                        </div>
+                        <div className="mt-0.5 text-[10px] font-semibold text-slate-500">
                           ({eselon.packages.toLocaleString('id-ID')} pkt)
-                        </span>
+                        </div>
                       </div>
                     </div>
 
@@ -409,13 +336,13 @@ export function SatkerMonitoringBreakdown() {
                             </span>
                           </div>
                         </div>
-                        <div className="pl-7 sm:pl-0 text-left sm:text-right shrink-0 font-mono">
-                          <span className="font-extrabold text-slate-900 text-[11px] sm:text-xs">
+                        <div className="pl-7 sm:pl-0 text-left sm:text-right shrink-0 font-mono leading-tight">
+                          <div className="font-extrabold text-slate-900 text-[11px] sm:text-xs">
                             {formatFullRupiah(satker.pagu)}
-                          </span>
-                          <span className="ml-1.5 text-[10px] font-semibold text-slate-500">
+                          </div>
+                          <div className="mt-0.5 text-[10px] font-semibold text-slate-500">
                             ({satker.packages.toLocaleString('id-ID')} pkt)
-                          </span>
+                          </div>
                         </div>
                       </div>
 
@@ -455,47 +382,73 @@ export function SatkerMonitoringBreakdown() {
         {/* Card 1: Distribusi Metode Pengadaan */}
         <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/90 flex-1 flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-2.5 pb-3 mb-4 border-b border-slate-100">
-              <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
-                <BarChart3 className="w-4 h-4" />
+            <div className="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-slate-900 text-sm sm:text-base tracking-tight">
+                    {trans('Proporsi Metode Pengadaan', 'Procurement Method Distribution')}
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    {trans('Berdasarkan porsi nilai pagu anggaran RUP 2026', 'Based on FY 2026 RUP budget share')}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-extrabold text-slate-900 text-sm sm:text-base tracking-tight">
-                  {trans('Proporsi Metode Pengadaan', 'Procurement Method Distribution')}
-                </h3>
-                <p className="text-[11px] text-slate-500">
-                  {trans('Berdasarkan porsi nilai pagu anggaran RUP 2026', 'Based on FY 2026 RUP budget share')}
-                </p>
-              </div>
+              {highlightedMethod && onClearMethod && (
+                <button
+                  type="button"
+                  onClick={onClearMethod}
+                  className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition-colors cursor-pointer shrink-0"
+                >
+                  {trans('Reset Sorotan', 'Clear Focus')}
+                </button>
+              )}
             </div>
 
-            <div className="space-y-3.5">
-              {METHOD_BREAKDOWN.map((m, idx) => (
-                <div key={m.name}>
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="flex items-center gap-2 font-bold text-slate-800">
-                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${m.dotClass}`} />
-                      <span>{m.name}</span>
-                    </span>
-                    <span className="font-mono font-extrabold text-slate-900">
-                      {m.pct.toFixed(2).replace('.', ',')}%
-                    </span>
+            <div className="space-y-3">
+              {METHOD_BREAKDOWN.map((m, idx) => {
+                const isHighlighted = highlightedMethod === m.key;
+                return (
+                  <div
+                    key={m.name}
+                    className={`rounded-xl transition-all ${
+                      isHighlighted
+                        ? 'bg-blue-50/80 ring-1 ring-blue-300 p-2.5 -mx-2.5'
+                        : ''
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="flex items-center gap-2 font-bold text-slate-800">
+                        <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${m.dotClass}`} />
+                        <span>{m.name}</span>
+                        {isHighlighted && (
+                          <span className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-600 text-white">
+                            {trans('Terpilih', 'Selected')}
+                          </span>
+                        )}
+                      </span>
+                      <span className="font-mono font-extrabold text-slate-900">
+                        {m.pct.toFixed(2).replace('.', ',')}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden mb-1">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${Math.max(m.pct, 2)}%` }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.9, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                        className={`h-full rounded-full bg-gradient-to-r ${m.colorClass}`}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono">
+                      <span>{m.packages.toLocaleString('id-ID')} {trans('paket', 'packages')}</span>
+                      <span>{formatFullRupiah(m.pagu)}</span>
+                    </div>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden mb-1">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${Math.max(m.pct, 2)}%` }}
-                      viewport={{ once: true, amount: 0.2 }}
-                      transition={{ duration: 0.9, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                      className={`h-full rounded-full bg-gradient-to-r ${m.colorClass}`}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono">
-                    <span>{m.packages.toLocaleString('id-ID')} {trans('paket', 'packages')}</span>
-                    <span>{formatFullRupiah(m.pagu)}</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

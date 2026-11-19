@@ -11,6 +11,11 @@ import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { ProcurementDonutChart, DonutMethodItem } from './ProcurementDonutChart';
+import {
+  INAPROC_TOTAL_PACKAGES,
+  INAPROC_TOTAL_PAGU,
+  INAPROC_METHOD_TOTALS
+} from '@/lib/inaprocData';
 
 export interface ProcurementStatsOverviewProps {
   onSelectMethod?: (method: string) => void;
@@ -64,32 +69,34 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
     return packagesList.length >= 5000;
   }, [packagesList]);
 
-  // Total Nilai Anggaran Keseluruhan (Official RUP 2026 Kemnaker: Rp 1.510.789.870.868)
+  // Total Nilai Anggaran Keseluruhan (Official INAPROC KLPD K34 RUP 2026: Rp 2.294.477.901.971)
   const totalBudgetNumber = useMemo(() => {
     if (isUsingFullRupData) {
       return packagesList.reduce((acc, curr) => acc + parseRupiahNumber(curr.hps), 0);
     }
-    return 1510789870868;
+    return INAPROC_TOTAL_PAGU;
   }, [packagesList, isUsingFullRupData]);
 
   const totalAllPaguFormatted = useMemo(() => {
     return formatMiliar(totalBudgetNumber);
   }, [totalBudgetNumber]);
 
-  // Total Jumlah Paket (Official RUP 2026: 8.333 Paket)
+  // Total Jumlah Paket (Official INAPROC KLPD K34 RUP 2026: 8.321 Paket)
   const totalPackagesCount = useMemo(() => {
     if (isUsingFullRupData) return packagesList.length;
-    return 8333;
+    return INAPROC_TOTAL_PACKAGES;
   }, [packagesList, isUsingFullRupData]);
 
-  // 1. DATA DISTRIBUSI METODE PENGADAAN (4 METODE RESMI RUP KEMNAKER)
+  // 1. DATA DISTRIBUSI METODE PENGADAAN (4 METODE RESMI RUP KEMNAKER - SINKRON DENGAN /monitoring)
   const methodsData = useMemo(() => {
-    // Data RUP Resmi dari data_dashboard_rup_table Kemnaker RI 2026
+    const findMethod = (key: string) =>
+      INAPROC_METHOD_TOTALS.find((m) => m.key === key) || { packages: 0, pagu: 0 };
+
     const defaultRupCounts: Record<string, { count: number; totalPagu: number }> = {
-      'E-Purchasing': { count: 1792, totalPagu: 523553694727 },
-      'Tender': { count: 30, totalPagu: 447632574750 },
-      'Pengadaan Langsung': { count: 6122, totalPagu: 334239894141 },
-      'Seleksi': { count: 31, totalPagu: 80618326250 }
+      'Tender': { count: findMethod('Tender').packages, totalPagu: findMethod('Tender').pagu },
+      'E-Purchasing': { count: findMethod('E-Purchasing').packages, totalPagu: findMethod('E-Purchasing').pagu },
+      'Pengadaan Langsung': { count: findMethod('Pengadaan Langsung').packages, totalPagu: findMethod('Pengadaan Langsung').pagu },
+      'Seleksi': { count: findMethod('Seleksi').packages, totalPagu: findMethod('Seleksi').pagu }
     };
 
     let counts = defaultRupCounts;
@@ -240,7 +247,7 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
             {item.name}
           </h4>
           <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">
-            {item.count} Paket
+            {item.count.toLocaleString('id-ID')} Paket
           </p>
         </div>
 

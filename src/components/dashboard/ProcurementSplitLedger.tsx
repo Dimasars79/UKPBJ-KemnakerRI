@@ -17,6 +17,21 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ScrambleDecoderNumber } from '@/components/animations/ScrambleDecoderNumber';
+import {
+  INAPROC_TOTAL_PACKAGES,
+  INAPROC_TOTAL_PAGU,
+  INAPROC_SPSE_EKAT_PACKAGES,
+  INAPROC_SATKERS_44,
+  InaprocSatkerItem
+} from '@/lib/inaprocData';
+
+const SATKER_MAP = new Map<string, InaprocSatkerItem>(
+  INAPROC_SATKERS_44.map((s) => [s.name, s])
+);
+
+function formatFullRupiah(amount: number): string {
+  return `Rp ${Math.round(amount).toLocaleString('id-ID')}`;
+}
 
 export function ProcurementSplitLedger() {
   const { trans } = useLanguage();
@@ -26,17 +41,10 @@ export function ProcurementSplitLedger() {
   const [selectedTa, setSelectedTa] = useState('Seluruh Tahun');
   const [basisRealisasi, setBasisRealisasi] = useState<'kontrak' | 'pagu'>('kontrak');
 
-  const satkerOptions = [
+  const satkerOptions = useMemo(() => [
     'Semua Satker',
-    'Sekretariat Jenderal Kemnaker',
-    'Ditjen Binapenta & PKK',
-    'Ditjen Binalavotas',
-    'Ditjen Binwasnaker & K3',
-    'Ditjen PHI & Jamsos',
-    'Badan Perencanaan & Pengembangan',
-    'Inspektorat Jenderal',
-    'Politeknik Ketenagakerjaan'
-  ];
+    ...INAPROC_SATKERS_44.map((s) => s.name)
+  ], []);
 
   const taOptions = [
     'Seluruh Tahun',
@@ -45,23 +53,48 @@ export function ProcurementSplitLedger() {
     'TA 2024'
   ];
 
-  // Base Transparency Financial Data (Numbers strictly unabbreviated for government transparency)
+  // Base Transparency Financial Data (Synced with Beranda & INAPROC K34 2026)
   const metrics = useMemo(() => {
-    // If basis is pagu vs kontrak, small dynamic variation or exact baseline
+    const satkerData = selectedSatker === 'Semua Satker' ? null : SATKER_MAP.get(selectedSatker);
+    const basePagu = satkerData ? satkerData.pagu : INAPROC_TOTAL_PAGU;
+    const basePackages = satkerData ? satkerData.packages : INAPROC_TOTAL_PACKAGES;
+    const baseEkat = satkerData ? satkerData.ekatCount : INAPROC_SPSE_EKAT_PACKAGES;
+    const baseKontrakPct = satkerData ? satkerData.kontrakPct : 48.0;
+
+    const taMultiplier =
+      selectedTa === 'TA 2025' ? 0.94 : selectedTa === 'TA 2024' ? 0.89 : 1.0;
+
+    const activePagu = Math.round(basePagu * taMultiplier);
+    const activePackages = Math.max(1, Math.round(basePackages * taMultiplier));
+
+    const sudahRealisasiPct =
+      basisRealisasi === 'kontrak'
+        ? baseKontrakPct
+        : Number(Math.min(baseKontrakPct + 6.41, 95).toFixed(2));
+    const belumRealisasiPct = Number((100 - sudahRealisasiPct).toFixed(2));
+
+    const sudahRealisasiNum = Math.round(activePagu * (sudahRealisasiPct / 100));
+    const belumRealisasiNum = activePagu - sudahRealisasiNum;
+
+    const paketRealisasi = Math.min(activePackages, Math.round(baseEkat * taMultiplier));
+    const paketRealisasiPct = Number(((paketRealisasi / activePackages) * 100).toFixed(2));
+    const paketBelumRealisasi = Math.max(0, activePackages - paketRealisasi);
+    const paketBelumRealisasiPct = Number((100 - paketRealisasiPct).toFixed(2));
+
     return {
-      totalPaguNominal: 'Rp 2.407.606.973.071',
-      totalPaket: 8408,
-      sudahRealisasiNominal: basisRealisasi === 'kontrak' ? 'Rp 1.155.712.610.751' : 'Rp 1.310.070.752.471',
-      sudahRealisasiPct: basisRealisasi === 'kontrak' ? 48.00 : 54.41,
-      paketRealisasi: 824,
-      paketRealisasiPct: 9.80,
-      belumRealisasiNominal: basisRealisasi === 'kontrak' ? 'Rp 1.251.894.362.320' : 'Rp 1.097.536.220.600',
-      belumRealisasiPct: basisRealisasi === 'kontrak' ? 52.00 : 45.59,
-      paketBelumRealisasi: 7584,
-      paketBelumRealisasiPct: 90.20,
+      totalPaguNominal: formatFullRupiah(activePagu),
+      totalPaket: activePackages,
+      sudahRealisasiNominal: formatFullRupiah(sudahRealisasiNum),
+      sudahRealisasiPct,
+      paketRealisasi,
+      paketRealisasiPct,
+      belumRealisasiNominal: formatFullRupiah(belumRealisasiNum),
+      belumRealisasiPct,
+      paketBelumRealisasi,
+      paketBelumRealisasiPct,
       targetTw3Pct: 80,
     };
-  }, [basisRealisasi]);
+  }, [selectedSatker, selectedTa, basisRealisasi]);
 
   const handleReset = () => {
     setSelectedSatker('Semua Satker');

@@ -1,6 +1,7 @@
 "use client"
 
-import React from 'react';
+import React, { Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -9,8 +10,15 @@ import { ProcurementSplitLedger } from '@/components/dashboard/ProcurementSplitL
 import { SatkerMonitoringBreakdown } from '@/components/dashboard/SatkerMonitoringBreakdown';
 import { BarChart3 } from 'lucide-react';
 
-export default function MonitoringPage() {
+function MonitoringContent() {
   const { t, trans } = useLanguage();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const highlightedMethod = searchParams.get('metode');
+
+  const handleClearMethod = () => {
+    router.replace('/monitoring', { scroll: false });
+  };
 
   return (
     <>
@@ -53,13 +61,24 @@ export default function MonitoringPage() {
             <ProcurementSplitLedger />
           </FadeIn>
 
-          {/* Peringkat Top 10 Satker, Proporsi Metode Pengadaan, & Kepatuhan PDN/UKM */}
+          {/* Peringkat 7 Eselon I / 44 Satker, Proporsi Metode Pengadaan, & Kepatuhan PDN/UKM */}
           <FadeIn direction="up" delay={0.2}>
-            <SatkerMonitoringBreakdown />
+            <SatkerMonitoringBreakdown
+              highlightedMethod={highlightedMethod}
+              onClearMethod={handleClearMethod}
+            />
           </FadeIn>
         </section>
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function MonitoringPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
+      <MonitoringContent />
+    </Suspense>
   );
 }
