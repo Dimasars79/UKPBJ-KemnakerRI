@@ -12,8 +12,8 @@ import {
 } from 'lucide-react';
 import { useData, SopItem } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { motion } from 'framer-motion';
 import { FadeIn } from '@/components/animations/FadeIn';
-import { StaggerContainer, StaggerItem } from '@/components/animations/Stagger';
 
 const CATEGORY_LABELS: Record<string, { id: string; en: string; badgeClass: string }> = {
   'tata-kelola': {
@@ -161,13 +161,18 @@ export function SopHighlightSection() {
             {trans('Belum ada dokumen SOP yang tersedia untuk kategori ini.', 'No SOP documents available for this category.')}
           </div>
         ) : (
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {activeSops.map((sop) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {activeSops.map((sop, idx) => {
               const catInfo = sop.kategori ? CATEGORY_LABELS[sop.kategori] : null;
               const hasDownload = Boolean(sop.fileData || (sop.downloadUrl && sop.downloadUrl !== '#'));
 
               return (
-                <StaggerItem key={sop.id}>
+                <motion.div
+                  key={`${activeFilter}-${sop.id}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: idx * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                >
                   <div className="h-full bg-white rounded-2xl border border-slate-200/90 hover:border-blue-300 p-5 shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between group">
                     <div>
                       {/* Top Badge Row */}
@@ -232,10 +237,10 @@ export function SopHighlightSection() {
                       </div>
                     </div>
                   </div>
-                </StaggerItem>
+                </motion.div>
               );
             })}
-          </StaggerContainer>
+          </div>
         )}
       </div>
     </section>

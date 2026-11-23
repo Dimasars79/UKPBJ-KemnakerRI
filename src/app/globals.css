@@ -226,24 +226,9 @@
 /* ========================================================= */
 /* ULTRA-SMOOTH THEME TRANSITION FOR ADMIN PORTAL */
 /* ========================================================= */
-.admin-theme-smooth,
-.admin-theme-smooth header,
-.admin-theme-smooth aside,
-.admin-theme-smooth main,
-.admin-theme-smooth nav,
-.admin-theme-smooth section,
-.admin-theme-smooth article,
-.admin-theme-smooth table,
-.admin-theme-smooth thead,
-.admin-theme-smooth tbody,
-.admin-theme-smooth tr,
-.admin-theme-smooth th,
-.admin-theme-smooth td,
-.admin-theme-smooth button,
-.admin-theme-smooth input,
-.admin-theme-smooth select,
-.admin-theme-smooth textarea {
-  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
-  transition-duration: 400ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+.admin-theme-transitioning .admin-theme-smooth,
+.admin-theme-transitioning .admin-theme-smooth * {
+  transition-property: background-color, border-color, color, fill, stroke !important;
+  transition-duration: 360ms !important;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
 }

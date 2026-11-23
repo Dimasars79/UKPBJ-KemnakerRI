@@ -320,10 +320,15 @@ export default function AdminPortalPage() {
   }, []);
 
   const handleToggleTheme = (newTheme: 'dark' | 'light') => {
-    setTheme(newTheme);
+    if (newTheme === theme) return;
     if (typeof window !== 'undefined') {
+      document.documentElement.classList.add('admin-theme-transitioning');
       localStorage.setItem('ukpbj_admin_theme', newTheme);
+      window.setTimeout(() => {
+        document.documentElement.classList.remove('admin-theme-transitioning');
+      }, 400);
     }
+    setTheme(newTheme);
   };
 
   const [activeTab, setActiveTab] = useState<'dashboard' | 'paket' | 'manage-berita' | 'manage-agenda' | 'manage-panduan' | 'manage-regulasi' | 'manage-sop' | 'manage-galeri' | 'log-aktivitas' | 'pengaturan'>('dashboard');
@@ -3696,7 +3701,7 @@ export default function AdminPortalPage() {
                             : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
-                        Paket ({packagesList.length})
+                        Paket ({(totalPackagesCount || packagesList.length).toLocaleString('id-ID')})
                       </button>
 
                       <button
@@ -4111,6 +4116,25 @@ export default function AdminPortalPage() {
                       </div>
                     ))}
 
+                    {contentFeedFilter === 'paket' && packagesList.length > 5 && (
+                      <div className="pt-2 flex justify-center">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('paket')}
+                          className={`w-full sm:w-auto px-5 py-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center gap-2 ${
+                            isDark
+                              ? 'bg-slate-800/80 hover:bg-indigo-600 border-slate-700 hover:border-indigo-500 text-slate-200 hover:text-white'
+                              : 'bg-white hover:bg-indigo-600 border-slate-200 hover:border-indigo-600 text-slate-700 hover:text-white shadow-xs'
+                          }`}
+                        >
+                          <span>
+                            Lihat Selengkapnya ({(totalPackagesCount || packagesList.length).toLocaleString('id-ID')} Paket)
+                          </span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    )}
+
                     {/* VIEW BERITA: Filtered top 5 news */}
                     {contentFeedFilter === 'berita' && newsList.slice(0, 5).map((item) => (
                       <div
@@ -4173,6 +4197,23 @@ export default function AdminPortalPage() {
                       </div>
                     ))}
 
+                    {contentFeedFilter === 'berita' && (
+                      <div className="pt-2 flex justify-center">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('manage-berita')}
+                          className={`w-full sm:w-auto px-5 py-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center gap-2 ${
+                            isDark
+                              ? 'bg-slate-800/80 hover:bg-amber-600 border-slate-700 hover:border-amber-500 text-slate-200 hover:text-white'
+                              : 'bg-white hover:bg-amber-600 border-slate-200 hover:border-amber-600 text-slate-700 hover:text-white shadow-xs'
+                          }`}
+                        >
+                          <span>Lihat Selengkapnya ({newsList.length} Berita)</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    )}
+
                     {/* VIEW AGENDA: Filtered top 5 agenda */}
                     {contentFeedFilter === 'agenda' && agendaList.slice(0, 5).map((item) => (
                       <div
@@ -4227,6 +4268,23 @@ export default function AdminPortalPage() {
                       </div>
                     ))}
 
+                    {contentFeedFilter === 'agenda' && (
+                      <div className="pt-2 flex justify-center">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('manage-agenda')}
+                          className={`w-full sm:w-auto px-5 py-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center gap-2 ${
+                            isDark
+                              ? 'bg-slate-800/80 hover:bg-emerald-600 border-slate-700 hover:border-emerald-500 text-slate-200 hover:text-white'
+                              : 'bg-white hover:bg-emerald-600 border-slate-200 hover:border-emerald-600 text-slate-700 hover:text-white shadow-xs'
+                          }`}
+                        >
+                          <span>Lihat Selengkapnya ({agendaList.length} Agenda)</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    )}
+
                     {/* VIEW REGULASI: Filtered top 5 regulasi */}
                     {contentFeedFilter === 'regulasi' && regulasiList.slice(0, 5).map((item) => (
                       <div
@@ -4280,6 +4338,23 @@ export default function AdminPortalPage() {
                         </div>
                       </div>
                     ))}
+
+                    {contentFeedFilter === 'regulasi' && (
+                      <div className="pt-2 flex justify-center">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('manage-regulasi')}
+                          className={`w-full sm:w-auto px-5 py-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center gap-2 ${
+                            isDark
+                              ? 'bg-slate-800/80 hover:bg-blue-600 border-slate-700 hover:border-blue-500 text-slate-200 hover:text-white'
+                              : 'bg-white hover:bg-blue-600 border-slate-200 hover:border-blue-600 text-slate-700 hover:text-white shadow-xs'
+                          }`}
+                        >
+                          <span>Lihat Selengkapnya ({regulasiList.length} Regulasi)</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    )}
 
                     {/* VIEW SOP: Filtered top 5 SOP */}
                     {contentFeedFilter === 'sop' && sopList.slice(0, 5).map((item) => (
@@ -4337,6 +4412,23 @@ export default function AdminPortalPage() {
                         </div>
                       </div>
                     ))}
+
+                    {contentFeedFilter === 'sop' && (
+                      <div className="pt-2 flex justify-center">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('manage-sop')}
+                          className={`w-full sm:w-auto px-5 py-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center gap-2 ${
+                            isDark
+                              ? 'bg-slate-800/80 hover:bg-purple-600 border-slate-700 hover:border-purple-500 text-slate-200 hover:text-white'
+                              : 'bg-white hover:bg-purple-600 border-slate-200 hover:border-purple-600 text-slate-700 hover:text-white shadow-xs'
+                          }`}
+                        >
+                          <span>Lihat Selengkapnya ({sopList.length} SOP)</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    )}
 
                   </div>
                 </div>
@@ -4531,6 +4623,7 @@ export default function AdminPortalPage() {
                         </span>
                       </div>
                     ))}
+
                   </div>
 
                   {/* Action Buttons: Direct Input & Manage Tab Shortcut */}
