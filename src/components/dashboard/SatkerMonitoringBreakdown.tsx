@@ -277,7 +277,7 @@ export function SatkerMonitoringBreakdown({
                           {formatFullRupiah(eselon.pagu)}
                         </div>
                         <div className="mt-0.5 text-[10px] font-semibold text-slate-500">
-                          ({eselon.packages.toLocaleString('id-ID')} pkt)
+                          ({eselon.packages.toLocaleString('id-ID')} {trans('paket', 'packages')})
                         </div>
                       </div>
                     </div>
@@ -341,7 +341,7 @@ export function SatkerMonitoringBreakdown({
                             {formatFullRupiah(satker.pagu)}
                           </div>
                           <div className="mt-0.5 text-[10px] font-semibold text-slate-500">
-                            ({satker.packages.toLocaleString('id-ID')} pkt)
+                            ({satker.packages.toLocaleString('id-ID')} {trans('paket', 'packages')})
                           </div>
                         </div>
                       </div>

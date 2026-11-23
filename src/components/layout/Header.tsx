@@ -234,6 +234,22 @@ export function Header() {
     if (nextState) {
       setIsMobileMenuOpen(false);
     }
+  };
+
+  const markSinglePublicNotifRead = (id: string) => {
+    if (seenNotifIds.includes(id)) return;
+    const mergedSeenIds = Array.from(new Set([...seenNotifIds, id]));
+    setSeenNotifIds(mergedSeenIds);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('ukpbj_public_seen_notif_ids', JSON.stringify(mergedSeenIds));
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  };
+
+  const markAllPublicNotifsRead = () => {
     const mergedSeenIds = Array.from(new Set([...seenNotifIds, ...cmsNotifications.map((item) => item.id)]));
     setSeenNotifIds(mergedSeenIds);
     if (typeof window !== 'undefined') {
@@ -648,6 +664,15 @@ export function Header() {
                           )}
                         </div>
                         <div className="flex items-center gap-1.5 sm:gap-2">
+                          {unreadPublicCount > 0 && (
+                            <button
+                              type="button"
+                              onClick={markAllPublicNotifsRead}
+                              className="text-[10px] sm:text-[11px] text-primary-blue hover:underline font-bold cursor-pointer"
+                            >
+                              Tandai Dibaca
+                            </button>
+                          )}
                           <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold hidden sm:inline">
                             {cmsNotifications.length} Aktivitas
                           </span>
@@ -662,36 +687,59 @@ export function Header() {
                       </div>
                       
                       {/* Scrollable list of notifications */}
-                      <div className="overflow-y-auto divide-y divide-slate-100 bg-white flex-1 overscroll-contain">
+                      <div className="overflow-y-auto p-2.5 sm:p-3 space-y-2 bg-white flex-1 overscroll-contain">
                         {cmsNotifications.length > 0 ? (
-                          cmsNotifications.map((item) => (
-                            <Link
-                              key={item.id}
-                              href={item.href}
-                              onClick={() => setIsNotificationOpen(false)}
-                              className="p-2.5 sm:p-3.5 hover:bg-slate-50/80 transition-colors flex items-start gap-2.5 sm:gap-3 group cursor-pointer block bg-white"
-                            >
-                              <div className={`w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform shadow-2xs [&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4`}>
-                                {item.icon}
-                              </div>
-                              <div className="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
-                                <div className="flex items-center justify-between gap-1.5 sm:gap-2">
-                                  <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold border max-w-[130px] sm:max-w-[170px] truncate bg-slate-100 text-slate-600 border-slate-200">
-                                    {item.category}
-                                  </span>
-                                  <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium shrink-0">
-                                    {item.time}
-                                  </span>
+                          cmsNotifications.map((item) => {
+                            const isUnread = isLoaded && !seenNotifIds.includes(item.id);
+                            return (
+                              <Link
+                                key={item.id}
+                                href={item.href}
+                                onClick={() => {
+                                  markSinglePublicNotifRead(item.id);
+                                  setIsNotificationOpen(false);
+                                }}
+                                className={`p-2.5 sm:p-3 rounded-xl border transition-all flex items-start gap-2.5 sm:gap-3 group cursor-pointer block ${
+                                  isUnread
+                                    ? 'bg-blue-50/80 border-blue-200 hover:bg-blue-100/70 shadow-2xs'
+                                    : 'bg-slate-50/70 border-slate-200/80 hover:bg-white'
+                                }`}
+                              >
+                                <div className={`w-7 h-7 sm:w-9 sm:h-9 rounded-xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform shadow-2xs [&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4`}>
+                                  {item.icon}
                                 </div>
-                                <h4 className="text-[11px] sm:text-sm font-bold text-slate-800 group-hover:text-primary-blue transition-colors leading-snug line-clamp-1 sm:line-clamp-2">
-                                  {item.title}
-                                </h4>
-                                <p className="text-[10px] sm:text-[11px] text-slate-500 leading-snug line-clamp-1 sm:line-clamp-2">
-                                  {item.desc}
-                                </p>
-                              </div>
-                            </Link>
-                          ))
+                                <div className="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
+                                  <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+                                    <span className={`px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold border max-w-[130px] sm:max-w-[170px] truncate ${
+                                      isUnread
+                                        ? 'bg-white text-blue-700 border-blue-200'
+                                        : 'bg-slate-100 text-slate-600 border-slate-200'
+                                    }`}>
+                                      {item.category}
+                                    </span>
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                      <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium">
+                                        {item.time}
+                                      </span>
+                                      {isUnread && (
+                                        <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <h4 className={`text-[11px] sm:text-sm leading-snug line-clamp-1 sm:line-clamp-2 transition-colors ${
+                                    isUnread
+                                      ? 'font-extrabold text-primary-blue'
+                                      : 'font-bold text-slate-800 group-hover:text-primary-blue'
+                                  }`}>
+                                    {item.title}
+                                  </h4>
+                                  <p className="text-[10px] sm:text-[11px] text-slate-500 leading-snug line-clamp-1 sm:line-clamp-2">
+                                    {item.desc}
+                                  </p>
+                                </div>
+                              </Link>
+                            );
+                          })
                         ) : (
                           <div className="p-6 sm:p-8 text-center text-slate-400 text-xs bg-white">
                             Belum ada notifikasi atau pembaruan konten baru.
@@ -938,7 +986,11 @@ export function Header() {
                   >
                     <Bell className="w-4 h-4 text-primary-navy" />
                     <span>Notifikasi</span>
-                    <span className="w-2 h-2 rounded-full bg-red-500 absolute top-2 right-2 animate-pulse" />
+                    {unreadPublicCount > 0 && (
+                      <span className="px-1.5 min-w-[16px] h-[16px] rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center absolute top-1.5 right-1.5 animate-pulse">
+                        {unreadPublicCount}
+                      </span>
+                    )}
                   </Link>
                 </div>
 

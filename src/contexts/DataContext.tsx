@@ -776,7 +776,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // Sync / Fetch data from Supabase PostgreSQL
   const refreshFromSupabase = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/data');
+      const res = await fetch('/api/admin/data', { cache: 'no-store' });
       if (!res.ok) throw new Error('API fetch failed');
       const json = await res.json();
 
@@ -1235,33 +1235,45 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(purgeTimer);
   }, []);
 
-  // Cross-tab live sync: refresh from Supabase when another tab mutates CMS data or tab regains focus
+  // Cross-tab live sync: refresh from Supabase when another tab mutates CMS data or window regains focus
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    let lastSyncAt = Date.now();
+    let lastSyncAt = 0;
 
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible' && Date.now() - lastSyncAt > 4000) {
-        lastSyncAt = Date.now();
+    const triggerSync = (force = false) => {
+      const now = Date.now();
+      if (force || now - lastSyncAt > 1000) {
+        lastSyncAt = now;
         refreshFromSupabase();
       }
     };
 
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        triggerSync(false);
+      }
+    };
+
+    const handleFocus = () => {
+      triggerSync(false);
+    };
+
     document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('focus', handleFocus);
 
     let channel: BroadcastChannel | null = null;
     if ('BroadcastChannel' in window) {
       channel = new BroadcastChannel('ukpbj_data_sync');
       channel.onmessage = (ev) => {
         if (ev?.data?.type === 'refresh') {
-          lastSyncAt = Date.now();
-          refreshFromSupabase();
+          triggerSync(true);
         }
       };
     }
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('focus', handleFocus);
       channel?.close();
     };
   }, [refreshFromSupabase]);
@@ -1491,7 +1503,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     });
 
     if (res?.success && res.data) {
-      setAgendaList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
+      const realId = res.data.id;
+      setAgendaList((prev) => {
+        const nextList = prev.map((item) => (item.id === tempId ? { ...item, id: realId } : item));
+        persist(newsList, nextList);
+        return nextList;
+      });
       return { success: true };
     }
 
