@@ -35,13 +35,13 @@ export default function LayananPage() {
       href: "https://sikap.inaproc.id/"
     },
     {
-      title: trans("Layanan Pengaduan", "Complaints & Helpdesk"),
+      title: trans("Layanan Deklarasi dan Lapor", "Declaration & Reporting Services"),
       description: trans(
-        "Sampaikan laporan, kendala teknis, atau pengaduan pengadaan langsung via WhatsApp Helpdesk resmi UKPBJ.",
-        "Submit reports, technical issues, or procurement complaints directly via official UKPBJ WhatsApp Helpdesk."
+        "Sampaikan laporan, deklarasi benturan kepentingan (COI), atau pengaduan pengadaan secara resmi melalui portal UKPBJ.",
+        "Submit reports, conflict of interest (COI) declarations, or procurement complaints officially via the UKPBJ portal."
       ),
       icon: HelpCircle,
-      href: "https://wa.me/628988180009?text=Halo%20Helpdesk%20UKPBJ%20Kemnaker%2C%20saya%20ingin%20menyampaikan%20laporan%20atau%20pengaduan%20terkait%20layanan%20pengadaan."
+      href: "https://deklarasi-coi-kemnaker.vercel.app/"
     },
     {
       title: trans("Layanan Berita", "News Services"),

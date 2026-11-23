@@ -20,7 +20,7 @@ export function ServiceCard({ title, description, icon: Icon, href }: ServiceCar
       <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 text-primary-blue rounded-xl flex items-center justify-center mb-3 sm:mb-5 group-hover:bg-primary-navy group-hover:text-white transition-colors duration-300 shadow-xs shrink-0">
         <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
       </div>
-      <h3 className="text-sm sm:text-lg font-bold text-primary-navy mb-1.5 sm:mb-2 group-hover:text-primary-blue transition-colors leading-snug">{title}</h3>
+      <h3 className="text-[12.5px] sm:text-[14px] xl:text-[15px] font-bold text-primary-navy mb-1.5 sm:mb-2 group-hover:text-primary-blue transition-colors leading-snug tracking-tight">{title}</h3>
       <p className="text-slate-600 text-xs sm:text-sm mb-3.5 sm:mb-6 flex-grow leading-relaxed line-clamp-3 sm:line-clamp-none">{description}</p>
       
       {isExternal ? (
