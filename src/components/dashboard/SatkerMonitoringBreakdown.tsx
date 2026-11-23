@@ -147,7 +147,7 @@ export function SatkerMonitoringBreakdown({
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="w-full flex flex-wrap items-center justify-between gap-2">
               {/* View Mode Switcher: Eselon I vs Satker */}
               <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold">
                 <button
@@ -175,7 +175,7 @@ export function SatkerMonitoringBreakdown({
               </div>
 
               {/* Sort Toggle */}
-              <div className="inline-flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold">
+              <div className="inline-flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold ml-auto">
                 <ArrowUpDown className="w-3 h-3 text-slate-400 ml-1.5" />
                 <button
                   type="button"

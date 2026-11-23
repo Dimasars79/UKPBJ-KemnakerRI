@@ -89,72 +89,105 @@ export default function LayananPage() {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-12 relative z-20">
-          <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
-            {services.map((service, idx) => (
-              <StaggerItem key={idx}>
-                <ServiceCard {...service} />
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </section>
+        {/* LOWER CONTENT AREA WITH LAYERED CURVED RIBBON BACKGROUND */}
+        <div className="relative">
+          {/* Subtle Dot Pattern + Ambient Glows */}
+          <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] opacity-35 pointer-events-none" />
+          <div className="absolute top-12 -left-24 w-96 h-96 bg-blue-500/8 rounded-full blur-[110px] pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-[420px] h-[420px] bg-sky-400/10 rounded-full blur-[120px] pointer-events-none" />
 
-        {/* SECTION: CONSOLIDATED HELPDESK & CONSULTATION BANNER */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-20">
-          <FadeIn direction="up">
-            <div className="relative rounded-3xl p-8 sm:p-10 lg:p-12 overflow-hidden bg-gradient-to-br from-[#061a35] via-[#0a2540] to-[#041226] text-white border border-white/15 shadow-xl">
-              {/* Subtle Ambient Glow */}
-              <div className="absolute top-0 right-0 w-80 h-80 bg-primary-blue/20 rounded-full blur-[100px] pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-gold/15 rounded-full blur-[90px] pointer-events-none" />
+          <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-12 relative z-20">
+            <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
+              {services.map((service, idx) => (
+                <StaggerItem key={idx}>
+                  <ServiceCard {...service} />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </section>
 
-              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                {/* Left: Info */}
-                <div className="max-w-2xl">
-                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-3">
-                    {trans('Butuh Bantuan Teknis atau Konsultasi Pengadaan?', 'Need Technical Assistance or Procurement Consultation?')}
-                  </h2>
+          {/* SECTION: CONSOLIDATED HELPDESK & CONSULTATION BANNER */}
+          <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-20 relative z-10">
+            <FadeIn direction="up">
+              <div className="relative rounded-3xl p-8 sm:p-10 lg:p-12 overflow-hidden bg-gradient-to-br from-[#061a35] via-[#0a2540] to-[#041226] text-white border border-white/15 shadow-xl">
+                {/* Subtle Ambient Glow */}
+                <div className="absolute top-0 right-0 w-80 h-80 bg-primary-blue/20 rounded-full blur-[100px] pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-gold/15 rounded-full blur-[90px] pointer-events-none" />
 
-                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
-                    {trans(
-                      'Tim Helpdesk LPSE dan Pokja UKPBJ Kemnaker RI siap membantu kendala teknis SPSE, aktivasi akun penyedia, hingga pendampingan regulasi pengadaan.',
-                      'The MoM LPSE Helpdesk and UKPBJ Pokja team are ready to assist with SPSE technical issues, vendor account activation, and procurement regulatory guidance.'
-                    )}
-                  </p>
+                {/* Signature Curved Ribbon Swoop Inside Helpdesk Banner */}
+                <svg
+                  className="absolute right-0 bottom-0 h-full w-64 sm:w-96 pointer-events-none select-none"
+                  viewBox="0 0 360 180"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="helpdeskSwoopBlue" x1="0%" y1="100%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#1D4ED8" stopOpacity="0.18" />
+                      <stop offset="60%" stopColor="#3B82F6" stopOpacity="0.32" />
+                      <stop offset="100%" stopColor="#60A5FA" stopOpacity="0.48" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M40,180 C165,155 265,105 360,25 L360,180 Z"
+                    fill="url(#helpdeskSwoopBlue)"
+                  />
+                  <path
+                    d="M140,180 C235,155 305,115 360,65 L360,180 Z"
+                    fill="#38BDF8"
+                    fillOpacity="0.16"
+                  />
+                </svg>
 
-                  <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-300 pt-4 border-t border-white/10">
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="w-4 h-4 text-accent-gold" />
-                      <span>{trans('Senin – Jumat (08:00 – 16:00 WIB)', 'Monday – Friday (08:00 – 16:00 WIB)')}</span>
-                    </div>
-                    <span className="text-white/20 hidden sm:inline">•</span>
-                    <div className="flex items-center gap-1.5">
-                      <Mail className="w-4 h-4 text-accent-gold" />
-                      <span>lpse@kemnaker.go.id</span>
-                    </div>
-                    <span className="text-white/20 hidden sm:inline">•</span>
-                    <div className="flex items-center gap-1.5">
-                      <Building2 className="w-4 h-4 text-accent-gold" />
-                      <span>{trans('Gedung A Lt. 4 Kemnaker', 'Building A 4th Floor MoM')}</span>
+                <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                  {/* Left: Info */}
+                  <div className="max-w-2xl">
+                    <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-3">
+                      {trans('Butuh Bantuan Teknis atau Konsultasi Pengadaan?', 'Need Technical Assistance or Procurement Consultation?')}
+                    </h2>
+
+                    <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+                      {trans(
+                        'Tim Helpdesk LPSE dan Pokja UKPBJ Kemnaker RI siap membantu kendala teknis SPSE, aktivasi akun penyedia, hingga pendampingan regulasi pengadaan.',
+                        'The MoM LPSE Helpdesk and UKPBJ Pokja team are ready to assist with SPSE technical issues, vendor account activation, and procurement regulatory guidance.'
+                      )}
+                    </p>
+
+                    <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-300 pt-4 border-t border-white/10">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="w-4 h-4 text-accent-gold" />
+                        <span>{trans('Senin – Jumat (08:00 – 16:00 WIB)', 'Monday – Friday (08:00 – 16:00 WIB)')}</span>
+                      </div>
+                      <span className="text-white/20 hidden sm:inline">•</span>
+                      <div className="flex items-center gap-1.5">
+                        <Mail className="w-4 h-4 text-accent-gold" />
+                        <span>lpse@kemnaker.go.id</span>
+                      </div>
+                      <span className="text-white/20 hidden sm:inline">•</span>
+                      <div className="flex items-center gap-1.5">
+                        <Building2 className="w-4 h-4 text-accent-gold" />
+                        <span>{trans('Gedung A Lt. 4 Kemnaker', 'Building A 4th Floor MoM')}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Right: Actions */}
-                <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 lg:min-w-[220px]">
-                  <a
-                    href="https://wa.me/628988180009"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-accent-gold hover:bg-yellow-400 text-primary-navy font-bold text-xs py-3.5 px-6 rounded-xl transition-all shadow-md active:scale-95"
-                  >
-                    <MessageSquare className="w-4 h-4" />
-                    <span>{trans('Chat WhatsApp Helpdesk', 'Chat WhatsApp Helpdesk')}</span>
-                  </a>
+                  {/* Right: Actions */}
+                  <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 lg:min-w-[220px]">
+                    <a
+                      href="https://wa.me/628988180009"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 bg-accent-gold hover:bg-yellow-400 text-primary-navy font-bold text-xs py-3.5 px-6 rounded-xl transition-all shadow-md active:scale-95"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>{trans('Chat WhatsApp Helpdesk', 'Chat WhatsApp Helpdesk')}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </FadeIn>
-        </section>
+            </FadeIn>
+          </section>
+        </div>
       </main>
       <Footer />
     </>
