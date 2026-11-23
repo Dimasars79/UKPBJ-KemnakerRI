@@ -657,11 +657,6 @@ export function Header() {
                       <div className="px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/90 shrink-0">
                         <div className="flex items-center gap-1.5 sm:gap-2">
                           <h3 className="font-bold text-xs sm:text-sm text-primary-navy">Notifikasi & Pembaruan</h3>
-                          {unreadPublicCount > 0 && (
-                            <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[9px] sm:text-[10px] font-black">
-                              {unreadPublicCount} baru
-                            </span>
-                          )}
                         </div>
                         <div className="flex items-center gap-1.5 sm:gap-2">
                           {unreadPublicCount > 0 && (
