@@ -19,7 +19,7 @@ import { SearchPalette } from '@/components/ui/SearchPalette';
 import { useData } from '@/contexts/DataContext';
 
 export function Header() {
-  const { newsList, agendaList, packagesList, regulasiList, sopList, siteSettings } = useData();
+  const { newsList, agendaList, packagesList, regulasiList, sopList, siteSettings, isLoaded } = useData();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -29,7 +29,7 @@ export function Header() {
   const [isMobileInfoOpen, setIsMobileInfoOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
-  const [readNotifCount, setReadNotifCount] = useState<number>(0);
+  const [seenNotifIds, setSeenNotifIds] = useState<string[]>([]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const pathname = usePathname();
@@ -50,22 +50,33 @@ export function Header() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('ukpbj_public_read_notif_count');
-        if (saved) setReadNotifCount(parseInt(saved, 10));
-      } catch (e) {
-        console.warn(e);
-      }
+      const loadSeen = () => {
+        try {
+          const saved = localStorage.getItem('ukpbj_public_seen_notif_ids');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed)) setSeenNotifIds(parsed);
+          }
+        } catch (e) {
+          console.warn(e);
+        }
+      };
+      loadSeen();
+      const onStorage = (ev: StorageEvent) => {
+        if (ev.key === 'ukpbj_public_seen_notif_ids') loadSeen();
+      };
+      window.addEventListener('storage', onStorage);
+      return () => window.removeEventListener('storage', onStorage);
     }
   }, []);
 
-  // Helper to calculate numeric timestamp for sorting updates (prioritizing updatedAt)
+  // Helper to calculate numeric timestamp for sorting updates (strictly newest first)
   const getUpdateTimestamp = (updatedAt?: number, listIndex: number = 0): number => {
-    if (updatedAt && typeof updatedAt === 'number') {
+    if (updatedAt && typeof updatedAt === 'number' && !isNaN(updatedAt)) {
       return updatedAt;
     }
-    // Fallback based on array position (earlier elements are newer)
-    return Date.now() - 1000000000 - listIndex * 3600000;
+    // Deterministic fallback below real epoch ms so newest CMS updates always appear on top
+    return Math.max(0, 100000 - listIndex * 100);
   };
 
   // Top Dynamic CMS Notifications: Sorted by Newest Update First
@@ -97,7 +108,7 @@ export function Header() {
         iconBg: 'bg-amber-100',
         iconColor: 'text-amber-600',
         icon: <AlertTriangle className="w-4 h-4" />,
-        timestamp: siteSettings.updatedAt || Date.now()
+        timestamp: getUpdateTimestamp(siteSettings.updatedAt, 0)
       });
     }
 
@@ -212,7 +223,10 @@ export function Header() {
     return list.slice(0, 7);
   }, [packagesList, newsList, agendaList, regulasiList, sopList, siteSettings]);
 
-  const unreadPublicCount = Math.max(0, cmsNotifications.length - readNotifCount);
+  const unreadPublicCount = React.useMemo(() => {
+    if (!isLoaded) return 0;
+    return cmsNotifications.filter((item) => !seenNotifIds.includes(item.id)).length;
+  }, [cmsNotifications, seenNotifIds, isLoaded]);
 
   const handleOpenNotifications = () => {
     const nextState = !isNotificationOpen;
@@ -220,10 +234,11 @@ export function Header() {
     if (nextState) {
       setIsMobileMenuOpen(false);
     }
-    setReadNotifCount(cmsNotifications.length);
+    const mergedSeenIds = Array.from(new Set([...seenNotifIds, ...cmsNotifications.map((item) => item.id)]));
+    setSeenNotifIds(mergedSeenIds);
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem('ukpbj_public_read_notif_count', String(cmsNotifications.length));
+        localStorage.setItem('ukpbj_public_seen_notif_ids', JSON.stringify(mergedSeenIds));
       } catch (e) {
         console.warn(e);
       }

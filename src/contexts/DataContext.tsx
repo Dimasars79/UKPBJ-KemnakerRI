@@ -781,6 +781,15 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       const json = await res.json();
 
       if (json.success && json.data) {
+        const toEpochMs = (val?: string | number | null): number | undefined => {
+          if (typeof val === 'number' && !isNaN(val)) return val;
+          if (typeof val === 'string' && val) {
+            const ms = Date.parse(val);
+            if (!isNaN(ms)) return ms;
+          }
+          return undefined;
+        };
+
         const {
           news,
           agendas,
@@ -812,6 +821,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             notice_content?: string;
             noticeContent?: string;
             tags?: string[];
+            created_at?: string;
+            updated_at?: string;
           }) => ({
             id: n.id,
             title: n.title,
@@ -826,7 +837,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             syncFrontend: n.sync_frontend ?? true,
             noticeTitle: n.notice_title || n.noticeTitle || 'Pemberitahuan Resmi UKPBJ Kemnaker RI',
             noticeContent: n.notice_content || n.noticeContent || 'Seluruh proses tender, seleksi, dan pengadaan barang/jasa di lingkungan Kementerian Ketenagakerjaan dilaksanakan secara elektronik dan terpusat melalui Sistem Pengadaan Secara Elektronik (SPSE) dan e-Katalog LKPP.',
-            tags: n.tags || ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker']
+            tags: n.tags || ['#UKPBJKemnaker', '#TransparansiPengadaan', '#SPSEKemnaker'],
+            updatedAt: toEpochMs(n.updated_at || n.created_at)
           }));
           setNewsList(mappedNews);
         }
@@ -850,6 +862,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
               sync_frontend?: boolean;
               zoom_url?: string;
               zoomUrl?: string;
+              created_at?: string;
+              updated_at?: string;
             }) => {
               const localExisting = prevList.find((item) => item.id === a.id);
               const defaultExisting = DEFAULT_AGENDAS.find((item) => item.id === a.id);
@@ -866,7 +880,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 description: a.description || a.deskripsi || localExisting?.description || defaultExisting?.description || '',
                 imageUrl: a.image_url || a.imageUrl || localExisting?.imageUrl || defaultExisting?.imageUrl || '',
                 syncFrontend: a.sync_frontend ?? true,
-                zoomUrl: a.zoom_url || a.zoomUrl || localExisting?.zoomUrl || defaultExisting?.zoomUrl || ''
+                zoomUrl: a.zoom_url || a.zoomUrl || localExisting?.zoomUrl || defaultExisting?.zoomUrl || '',
+                updatedAt: toEpochMs(a.updated_at || a.created_at) ?? localExisting?.updatedAt
               };
             });
 
@@ -901,6 +916,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             file_name?: string;
             file_size?: string;
             file_url?: string;
+            created_at?: string;
+            updated_at?: string;
           }) => ({
             id: p.id,
             code: p.code,
@@ -915,7 +932,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             desc: p.description,
             fileName: p.file_name,
             fileSize: p.file_size,
-            downloadUrl: p.file_url || '#'
+            downloadUrl: p.file_url || '#',
+            updatedAt: toEpochMs(p.updated_at || p.created_at)
           }));
           syncedPkgs = mappedPkgs;
           if (mappedPkgs.length >= 20) {
@@ -941,6 +959,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             download_url?: string;
             status: RegulasiItem['status'];
             sync_frontend?: boolean;
+            created_at?: string;
+            updated_at?: string;
           }) => ({
             id: r.id,
             nomor: r.nomor,
@@ -950,7 +970,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             fileSize: r.file_size,
             downloadUrl: r.download_url || '#',
             status: r.status,
-            syncFrontend: r.sync_frontend ?? true
+            syncFrontend: r.sync_frontend ?? true,
+            updatedAt: toEpochMs(r.updated_at || r.created_at)
           }));
           setRegulasiList(mappedReg);
         }
@@ -970,6 +991,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             deskripsi?: string;
             status: SopItem['status'];
             sync_frontend?: boolean;
+            created_at?: string;
+            updated_at?: string;
           }) => ({
             id: s.id,
             kode: s.kode,
@@ -983,7 +1006,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             kategori: s.kategori,
             deskripsi: s.deskripsi,
             status: s.status,
-            syncFrontend: s.sync_frontend ?? true
+            syncFrontend: s.sync_frontend ?? true,
+            updatedAt: toEpochMs(s.updated_at || s.created_at)
           }));
           setSopList(mappedSop);
         }
@@ -1097,7 +1121,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             announcementBanner: site_settings.announcement_banner,
             announcementActive: site_settings.announcement_active,
             serverStatus: site_settings.server_status,
-            emergencyNotice: site_settings.emergency_notice || ''
+            emergencyNotice: site_settings.emergency_notice || '',
+            updatedAt: toEpochMs(site_settings.updated_at || site_settings.created_at)
           });
         }
 
@@ -1210,6 +1235,37 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(purgeTimer);
   }, []);
 
+  // Cross-tab live sync: refresh from Supabase when another tab mutates CMS data or tab regains focus
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    let lastSyncAt = Date.now();
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible' && Date.now() - lastSyncAt > 4000) {
+        lastSyncAt = Date.now();
+        refreshFromSupabase();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    let channel: BroadcastChannel | null = null;
+    if ('BroadcastChannel' in window) {
+      channel = new BroadcastChannel('ukpbj_data_sync');
+      channel.onmessage = (ev) => {
+        if (ev?.data?.type === 'refresh') {
+          lastSyncAt = Date.now();
+          refreshFromSupabase();
+        }
+      };
+    }
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      channel?.close();
+    };
+  }, [refreshFromSupabase]);
+
   // Persist snapshot to LocalStorage
   const persist = (
     newNews = newsList,
@@ -1253,7 +1309,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           data: payload?.data
         })
       });
-      return await res.json();
+      const json = await res.json();
+      if (json?.success && typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        const ch = new BroadcastChannel('ukpbj_data_sync');
+        ch.postMessage({ type: 'refresh' });
+        ch.close();
+      }
+      return json;
     } catch (err) {
       console.error(`syncAdminData failed for table "${table}":`, err);
       return { success: false, error: err };
