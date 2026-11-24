@@ -174,22 +174,35 @@ export async function GET(req: NextRequest) {
     if (saveToDb && mappedPackages.length > 0) {
       try {
         const supabase = getSupabaseAdmin();
-        const recordsToUpsert = mappedPackages.map((pkg) => ({
-          id: rupToUuid(pkg.code.replace('RUP-', '')),
-          code: pkg.code,
-          title: pkg.title,
-          unit: pkg.unit,
-          hps: pkg.hps,
-          category: pkg.category,
-          status: pkg.status,
-          deadline: pkg.deadline,
-          method: pkg.method,
-          doc_count: pkg.docCount,
-          description: pkg.desc,
-          file_url: pkg.downloadUrl
-        }));
+        const recordsToUpsert = rawList.map((raw, idx) => {
+          const item = raw as typeof raw & Record<string, unknown>;
+          return {
+            'No': idx + 1,
+            'Kode RUP': item.kd_rup ? `RUP-${item.kd_rup}` : '',
+            'Nama Paket': String(item.nama_paket || ''),
+            'Satuan Kerja (Satker)': String(item.nama_satker || ''),
+            'Kode Satker': String(item.kd_satker_str || item.kd_satker || ''),
+            'Pagu (Rp)': Number(item.pagu || 0),
+            'Metode Pengadaan': String(item.metode_pengadaan || ''),
+            'Jenis Pengadaan': String(item.jenis_pengadaan || ''),
+            'Status PDN': item.status_pdn ? 'Ya' : 'Tidak',
+            'Status UKM': item.status_ukm ? 'Ya' : 'Tidak',
+            'Volume': String(item.volume_pekerjaan || ''),
+            'Tgl Pengumuman': String(item.tgl_pengumuman_paket || ''),
+            'Tgl Awal Pemilihan': String(item.tgl_awal_pemilihan || ''),
+            'Tgl Akhir Pemilihan': String(item.tgl_akhir_pemilihan || ''),
+            'Tgl Awal Kontrak': String(item.tgl_awal_kontrak || ''),
+            'Tgl Akhir Kontrak': String(item.tgl_akhir_kontrak || ''),
+            'Status Aktif': item.status_aktif_rup ? 'Aktif' : 'Tidak Aktif',
+            'Status Umumkan': String(item.status_umumkan_paket || ''),
+            'Uraian Pekerjaan': String(item.urarian_pekerjaan || ''),
+            'Spesifikasi Pekerjaan': String(item.spesifikasi_pekerjaan || '')
+          };
+        }).filter((r) => r['Kode RUP']);
 
-        await supabase.from('procurement_packages').upsert(recordsToUpsert, { onConflict: 'code' });
+        if (recordsToUpsert.length > 0) {
+          await supabase.from('procurement_packages').upsert(recordsToUpsert, { onConflict: 'Kode RUP' });
+        }
       } catch (dbErr) {
         console.warn('[INAPROC Sync] Failed to upsert to Supabase procurement_packages:', dbErr);
       }

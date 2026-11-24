@@ -901,40 +901,61 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
         let syncedPkgs: ProcurementPackage[] | null = null;
         if (Array.isArray(procurement_packages)) {
-          const mappedPkgs: ProcurementPackage[] = procurement_packages.map((p: {
-            id: string;
-            code: string;
-            title: string;
-            unit: string;
-            hps: string;
-            category: ProcurementPackage['category'];
-            status: ProcurementPackage['status'];
-            deadline: string;
-            method: string;
-            doc_count?: number;
-            description?: string;
-            file_name?: string;
-            file_size?: string;
-            file_url?: string;
-            created_at?: string;
-            updated_at?: string;
-          }) => ({
-            id: p.id,
-            code: p.code,
-            title: p.title,
-            unit: p.unit,
-            hps: p.hps,
-            category: p.category,
-            status: p.status,
-            deadline: p.deadline,
-            method: p.method,
-            docCount: p.doc_count ?? 1,
-            desc: p.description,
-            fileName: p.file_name,
-            fileSize: p.file_size,
-            downloadUrl: p.file_url || '#',
-            updatedAt: toEpochMs(p.updated_at || p.created_at)
-          }));
+          const formatRupiahStr = (val: unknown): string => {
+            if (typeof val === 'string' && val.trim().startsWith('Rp')) return val;
+            const num = Number(val);
+            if (isNaN(num)) return 'Rp 0';
+            return new Intl.NumberFormat('id-ID', {
+              style: 'currency',
+              currency: 'IDR',
+              maximumFractionDigits: 0
+            }).format(num).replace('IDR', 'Rp');
+          };
+          const mapCat = (metode?: string, jenis?: string): ProcurementPackage['category'] => {
+            const m = String(metode || '').toLowerCase();
+            const j = String(jenis || '').toLowerCase();
+            if (m.includes('tender') || j.includes('tender')) return 'Tender';
+            if (m.includes('seleksi') || j.includes('seleksi') || j.includes('konsultansi')) return 'Seleksi';
+            if (m.includes('e-purchasing') || m.includes('katalog') || m.includes('purchasing')) return 'E-Purchasing';
+            return 'Pengadaan Langsung';
+          };
+          const mapStat = (tglAkhir?: string): ProcurementPackage['status'] => {
+            if (!tglAkhir) return 'Pendaftaran Dibuka';
+            const d = new Date(tglAkhir);
+            if (isNaN(d.getTime())) return 'Pendaftaran Dibuka';
+            const diffDays = (Date.now() - d.getTime()) / (1000 * 3600 * 24);
+            if (diffDays > 30) return 'Selesai';
+            if (diffDays > 0) return 'Tahap Evaluasi';
+            return 'Pendaftaran Dibuka';
+          };
+
+          const mappedPkgs: ProcurementPackage[] = procurement_packages.map((p: Record<string, unknown>) => {
+            const code = String(p['Kode RUP'] ?? p.code ?? '');
+            const title = String(p['Nama Paket'] ?? p.title ?? '');
+            const unit = String(p['Satuan Kerja (Satker)'] ?? p.unit ?? '');
+            const method = String(p['Metode Pengadaan'] ?? p.method ?? 'Pengadaan Langsung');
+            const jenis = String(p['Jenis Pengadaan'] ?? '');
+            const tglAkhir = String(p['Tgl Akhir Pemilihan'] ?? p.deadline ?? '31 Des 2026');
+            const pagu = p['Pagu (Rp)'] ?? p.hps ?? 0;
+
+            return {
+              id: String(p.id ?? code),
+              code,
+              title,
+              unit,
+              hps: formatRupiahStr(pagu),
+              category: (p.category as ProcurementPackage['category']) || mapCat(method, jenis),
+              status: (p.status as ProcurementPackage['status']) || mapStat(tglAkhir),
+              deadline: tglAkhir,
+              method,
+              docCount: Number(p.doc_count ?? 1),
+              desc: String(p['Uraian Pekerjaan'] || p['Spesifikasi Pekerjaan'] || p.description || title),
+              fileName: p.file_name ? String(p.file_name) : undefined,
+              fileSize: p.file_size ? String(p.file_size) : undefined,
+              downloadUrl: String(p.file_url || 'https://sirup.lkpp.go.id/sirup/ro/rekap/klpd/K34'),
+              updatedAt: toEpochMs((p.updated_at || p.created_at) as string | undefined)
+            };
+          });
           syncedPkgs = mappedPkgs;
           if (mappedPkgs.length >= 20) {
             setPackagesList(mappedPkgs);
@@ -1595,26 +1616,24 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setTotalPackagesCount((prev) => prev + 1);
     persist(newsList, agendaList, updated);
 
+    const parseHpsNumber = (hpsStr?: string) => Number(String(hpsStr || '0').replace(/[^0-9]/g, '')) || 0;
+
     const res = await syncAdminData('procurement_packages', 'insert', {
       data: {
-        code: pkg.code,
-        title: pkg.title,
-        unit: pkg.unit,
-        hps: pkg.hps,
-        category: pkg.category,
-        status: pkg.status,
-        deadline: pkg.deadline,
-        method: pkg.method,
-        doc_count: pkg.docCount || 1,
-        description: pkg.desc,
-        file_name: pkg.fileName,
-        file_size: pkg.fileSize,
-        file_url: pkg.downloadUrl
+        'Kode RUP': pkg.code,
+        'Nama Paket': pkg.title,
+        'Satuan Kerja (Satker)': pkg.unit,
+        'Pagu (Rp)': parseHpsNumber(pkg.hps),
+        'Metode Pengadaan': pkg.method,
+        'Jenis Pengadaan': pkg.category,
+        'Tgl Akhir Pemilihan': pkg.deadline,
+        'Uraian Pekerjaan': pkg.desc || pkg.title
       }
     });
 
     if (res?.success && res.data) {
-      setPackagesList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: res.data.id } : item)));
+      const savedId = res.data['Kode RUP'] || res.data.id || pkg.code;
+      setPackagesList((prev) => prev.map((item) => (item.id === tempId ? { ...item, id: savedId } : item)));
     }
   };
 
@@ -1631,33 +1650,31 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setPackagesList(updatedList);
     persist(newsList, agendaList, updatedList);
 
+    const parseHpsNumber = (hpsStr?: string) => Number(String(hpsStr || '0').replace(/[^0-9]/g, '')) || 0;
+
     await syncAdminData('procurement_packages', 'update', {
-      id,
+      id: target?.code || id,
       data: {
-        code: updated.code,
-        title: updated.title,
-        unit: updated.unit,
-        hps: updated.hps,
-        category: updated.category,
-        status: updated.status,
-        deadline: updated.deadline,
-        method: updated.method,
-        doc_count: updated.docCount,
-        description: updated.desc,
-        file_name: updated.fileName,
-        file_size: updated.fileSize,
-        file_url: updated.downloadUrl
+        'Kode RUP': updated.code,
+        'Nama Paket': updated.title,
+        'Satuan Kerja (Satker)': updated.unit,
+        'Pagu (Rp)': updated.hps !== undefined ? parseHpsNumber(updated.hps) : undefined,
+        'Metode Pengadaan': updated.method,
+        'Jenis Pengadaan': updated.category,
+        'Tgl Akhir Pemilihan': updated.deadline,
+        'Uraian Pekerjaan': updated.desc
       }
     });
   };
 
   const deletePackage = async (id: string) => {
+    const target = packagesList.find((item) => item.id === id);
     const updated = packagesList.filter((item) => item.id !== id);
     setPackagesList(updated);
     setTotalPackagesCount((prev) => Math.max(0, prev - 1));
     persist(newsList, agendaList, updated);
 
-    await syncAdminData('procurement_packages', 'delete', { id });
+    await syncAdminData('procurement_packages', 'delete', { id: target?.code || id });
   };
 
   const syncInaprocPackages = async (tahun: string = '2026', saveToDb: boolean = true) => {

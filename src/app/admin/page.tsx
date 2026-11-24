@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -325,21 +326,32 @@ export default function AdminPortalPage() {
     }
   }, []);
 
-  const themeTransitionTimerRef = useRef<number | null>(null);
-
   const handleToggleTheme = (newTheme: 'dark' | 'light') => {
     if (newTheme === theme) return;
     if (typeof window !== 'undefined') {
-      if (themeTransitionTimerRef.current) {
-        window.clearTimeout(themeTransitionTimerRef.current);
-      }
-      document.documentElement.classList.add('admin-theme-transitioning');
       localStorage.setItem('ukpbj_admin_theme', newTheme);
-      themeTransitionTimerRef.current = window.setTimeout(() => {
-        document.documentElement.classList.remove('admin-theme-transitioning');
-        themeTransitionTimerRef.current = null;
-      }, 600);
     }
+
+    const doc = document as Document & {
+      startViewTransition?: (cb: () => void) => { finished: Promise<void> };
+    };
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (typeof doc.startViewTransition === 'function' && !prefersReducedMotion) {
+      document.documentElement.classList.add('admin-theme-instant');
+      const transition = doc.startViewTransition(() => {
+        flushSync(() => {
+          setTheme(newTheme);
+        });
+      });
+      transition.finished.finally(() => {
+        document.documentElement.classList.remove('admin-theme-instant');
+      });
+      return;
+    }
+
     setTheme(newTheme);
   };
 
@@ -1755,7 +1767,7 @@ export default function AdminPortalPage() {
       initial={isBootEntering ? { opacity: 0, scale: 0.985 } : false}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className={`min-h-screen flex flex-col md:flex-row font-sans admin-theme-smooth ${
+      className={`min-h-screen flex flex-col md:flex-row font-sans ${
         isDark ? 'dark bg-[#0F172A] text-slate-100' : 'bg-slate-50 text-slate-800'
       }`}
     >

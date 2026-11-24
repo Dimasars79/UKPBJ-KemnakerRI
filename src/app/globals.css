@@ -224,11 +224,15 @@
 }
 
 /* ========================================================= */
-/* ULTRA-SMOOTH THEME TRANSITION FOR ADMIN PORTAL */
+/* VIEW TRANSITION API FOR SYNCHRONIZED ADMIN THEME TOGGLE   */
 /* ========================================================= */
-.admin-theme-transitioning .admin-theme-smooth,
-.admin-theme-transitioning .admin-theme-smooth * {
-  transition-property: background-color, border-color, color, fill, stroke, box-shadow !important;
-  transition-duration: 380ms !important;
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
+.admin-theme-instant,
+.admin-theme-instant * {
+  transition: none !important;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }

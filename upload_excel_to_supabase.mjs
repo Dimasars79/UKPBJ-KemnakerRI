@@ -88,30 +88,36 @@ const sheetName = wb.SheetNames.includes('Data Paket RUP 2026') ? 'Data Paket RU
 const rawRows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
 console.log(`✅ Berhasil membaca ${rawRows.length} baris dari sheet "${sheetName}".`);
 
-// 3. Map to Supabase schema (deduplicate by code just in case)
+// 3. Map to exact 20 Excel columns in Supabase (deduplicate by Kode RUP)
 const recordMap = new Map();
 for (const row of rawRows) {
   const code = String(row['Kode RUP'] || '').trim();
   if (!code) continue;
-  const title = String(row['Nama Paket'] || 'Paket Pengadaan Kemnaker').trim();
-  const unit = String(row['Satuan Kerja (Satker)'] || 'Kementerian Ketenagakerjaan RI').trim();
-  const method = String(row['Metode Pengadaan'] || 'Pengadaan Langsung').trim();
-  const jenis = String(row['Jenis Pengadaan'] || '').trim();
-  const tglAkhir = row['Tgl Akhir Pemilihan'] || '';
+
+  const noVal = row['No'];
+  const paguVal = Number(row['Pagu (Rp)']);
 
   recordMap.set(code, {
-    id: rupToUuid(code),
-    code,
-    title,
-    unit,
-    hps: formatRupiah(row['Pagu (Rp)']),
-    category: mapCategory(method, jenis),
-    status: mapStatus(tglAkhir),
-    deadline: String(tglAkhir || '31 Des 2026'),
-    method,
-    doc_count: 1,
-    description: String(row['Uraian Pekerjaan'] || row['Spesifikasi Pekerjaan'] || title).trim(),
-    file_url: 'https://sirup.lkpp.go.id/sirup/ro/rekap/klpd/K34'
+    'No': noVal !== undefined && noVal !== '' && !isNaN(Number(noVal)) ? Number(noVal) : null,
+    'Kode RUP': code,
+    'Nama Paket': String(row['Nama Paket'] || '').trim(),
+    'Satuan Kerja (Satker)': String(row['Satuan Kerja (Satker)'] || '').trim(),
+    'Kode Satker': String(row['Kode Satker'] || '').trim(),
+    'Pagu (Rp)': !isNaN(paguVal) ? Math.round(paguVal) : 0,
+    'Metode Pengadaan': String(row['Metode Pengadaan'] || '').trim(),
+    'Jenis Pengadaan': String(row['Jenis Pengadaan'] || '').trim(),
+    'Status PDN': String(row['Status PDN'] || '').trim(),
+    'Status UKM': String(row['Status UKM'] || '').trim(),
+    'Volume': String(row['Volume'] || '').trim(),
+    'Tgl Pengumuman': String(row['Tgl Pengumuman'] || '').trim(),
+    'Tgl Awal Pemilihan': String(row['Tgl Awal Pemilihan'] || '').trim(),
+    'Tgl Akhir Pemilihan': String(row['Tgl Akhir Pemilihan'] || '').trim(),
+    'Tgl Awal Kontrak': String(row['Tgl Awal Kontrak'] || '').trim(),
+    'Tgl Akhir Kontrak': String(row['Tgl Akhir Kontrak'] || '').trim(),
+    'Status Aktif': String(row['Status Aktif'] || '').trim(),
+    'Status Umumkan': String(row['Status Umumkan'] || '').trim(),
+    'Uraian Pekerjaan': String(row['Uraian Pekerjaan'] || '').trim(),
+    'Spesifikasi Pekerjaan': String(row['Spesifikasi Pekerjaan'] || '').trim()
   });
 }
 
@@ -125,7 +131,7 @@ let successCount = 0;
 
 for (let i = 0; i < totalBatches; i++) {
   const batch = records.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE);
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/procurement_packages?on_conflict=code`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/procurement_packages?on_conflict=${encodeURIComponent('Kode RUP')}`, {
     method: 'POST',
     headers: {
       'apikey': SERVICE_KEY,

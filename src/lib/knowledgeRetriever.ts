@@ -51,6 +51,16 @@ interface PackageRecord {
   deadline?: string;
   status?: string;
   description?: string;
+  'Kode RUP'?: string;
+  'Nama Paket'?: string;
+  'Satuan Kerja (Satker)'?: string;
+  'Pagu (Rp)'?: number;
+  'Metode Pengadaan'?: string;
+  'Jenis Pengadaan'?: string;
+  'Tgl Akhir Pemilihan'?: string;
+  'Status Umumkan'?: string;
+  'Uraian Pekerjaan'?: string;
+  'Spesifikasi Pekerjaan'?: string;
 }
 
 interface SettingsRecord {
@@ -447,7 +457,7 @@ export async function retrieveKnowledge(query: string): Promise<string> {
           supabaseAdmin
             .from('procurement_packages')
             .select('*')
-            .or(`title.ilike.${pattern},code.ilike.${pattern},category.ilike.${pattern},unit.ilike.${pattern},method.ilike.${pattern}`)
+            .or(`"Nama Paket".ilike.${pattern},"Kode RUP".ilike.${pattern},"Jenis Pengadaan".ilike.${pattern},"Satuan Kerja (Satker)".ilike.${pattern},"Metode Pengadaan".ilike.${pattern}`)
             .limit(3)
         ]);
 
@@ -514,16 +524,20 @@ export async function retrieveKnowledge(query: string): Promise<string> {
 
         if (packages.status === 'fulfilled' && packages.value.data) {
           (packages.value.data as PackageRecord[]).forEach((item) => {
+            const judul = item['Nama Paket'] || item.title || '-';
+            const pagu = item['Pagu (Rp)'] !== undefined
+              ? `Rp ${Number(item['Pagu (Rp)']).toLocaleString('id-ID')}`
+              : (item.hps || '-');
             results.push(
-              `<dokumen_sumber jenis="Paket Pengadaan" judul="${item.title || '-'}">\n` +
-              `Kode Paket: ${item.code || '-'}\n` +
-              `Kategori: ${item.category || '-'}\n` +
-              `Satuan Kerja: ${item.unit || '-'}\n` +
-              `Nilai HPS: ${item.hps || '-'}\n` +
-              `Metode Pemilihan: ${item.method || '-'}\n` +
-              `Batas Waktu: ${item.deadline || '-'}\n` +
-              `Status: ${item.status || '-'}\n` +
-              `Deskripsi: ${item.description || '-'}\n` +
+              `<dokumen_sumber jenis="Paket Pengadaan" judul="${judul}">\n` +
+              `Kode Paket: ${item['Kode RUP'] || item.code || '-'}\n` +
+              `Kategori: ${item['Jenis Pengadaan'] || item.category || '-'}\n` +
+              `Satuan Kerja: ${item['Satuan Kerja (Satker)'] || item.unit || '-'}\n` +
+              `Nilai HPS: ${pagu}\n` +
+              `Metode Pemilihan: ${item['Metode Pengadaan'] || item.method || '-'}\n` +
+              `Batas Waktu: ${item['Tgl Akhir Pemilihan'] || item.deadline || '-'}\n` +
+              `Status: ${item['Status Umumkan'] || item.status || '-'}\n` +
+              `Deskripsi: ${item['Uraian Pekerjaan'] || item['Spesifikasi Pekerjaan'] || item.description || '-'}\n` +
               `</dokumen_sumber>`
             );
           });
@@ -536,7 +550,7 @@ export async function retrieveKnowledge(query: string): Promise<string> {
       const searches = await Promise.allSettled([
         supabaseAdmin.from('news').select('*').order('created_at', { ascending: false }).limit(2),
         supabaseAdmin.from('agendas').select('*').order('created_at', { ascending: false }).limit(4),
-        supabaseAdmin.from('procurement_packages').select('*').order('created_at', { ascending: false }).limit(2)
+        supabaseAdmin.from('procurement_packages').select('*').order('No', { ascending: true }).limit(2)
       ]);
 
       const [news, agendasFallback, packages] = searches;

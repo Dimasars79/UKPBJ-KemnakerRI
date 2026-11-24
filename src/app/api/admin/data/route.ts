@@ -97,7 +97,7 @@ export async function GET(req: NextRequest) {
     ] = await Promise.all([
       supabaseAdmin.from('news').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('agendas').select('*').order('created_at', { ascending: false }),
-      supabaseAdmin.from('procurement_packages').select('*', { count: 'exact' }).order('created_at', { ascending: false }),
+      supabaseAdmin.from('procurement_packages').select('*', { count: 'exact' }).order('No', { ascending: true }),
       supabaseAdmin.from('regulasi').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('sop').select('*').order('created_at', { ascending: false }),
       supabaseAdmin.from('panduan').select('*').order('created_at', { ascending: false }),
@@ -200,13 +200,14 @@ export async function POST(req: NextRequest) {
           );
         }
 
+        const pkCol = table === 'procurement_packages' ? 'Kode RUP' : 'id';
         result = await executeWithColumnFallback(
           table,
           (payload) =>
             supabaseAdmin
               .from(table)
               .update(payload)
-              .eq('id', id)
+              .eq(pkCol, id)
               .select()
               .single(),
           data || {}
@@ -222,10 +223,11 @@ export async function POST(req: NextRequest) {
           );
         }
 
+        const pkCol = table === 'procurement_packages' ? 'Kode RUP' : 'id';
         const { error } = await supabaseAdmin
           .from(table)
           .delete()
-          .eq('id', id);
+          .eq(pkCol, id);
 
         if (error) throw error;
         result = { id, deleted: true };
