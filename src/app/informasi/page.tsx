@@ -197,7 +197,7 @@ export default function InformasiPage() {
           color: 'bg-purple-500/20',
           timestamp: parsed ? parsed.getTime() : 0
         });
-      });
+      }); 
     }
 
     // Urutkan secara kronologis menurun: update terbaru selalu di paling atas

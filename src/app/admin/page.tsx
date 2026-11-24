@@ -45,8 +45,6 @@ import {
   Camera,
   Video,
   Play,
-  Activity,
-  Clock,
   Building2,
   ArrowUpRight,
   PlusCircle,
@@ -59,6 +57,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, RegulasiItem, SopItem, PanduanItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
+import { useAdminTransition } from '@/contexts/AdminTransitionContext';
 import { getDefaultAgendaDate, isAgendaExpired } from '@/lib/agendaUtils';
 import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
 import { supabase } from '@/lib/supabase/client';
@@ -308,20 +307,15 @@ const DEFAULT_NOTIFICATIONS: AdminNotificationItem[] = [
 
 export default function AdminPortalPage() {
   const router = useRouter();
+  const { markAdminReady, cancelTransition } = useAdminTransition();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
-  const [isBootEntering, setIsBootEntering] = useState(false);
-
-  // Load saved theme preference & boot transition flag on mount
+  // Load saved theme preference on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('ukpbj_admin_theme') as 'dark' | 'light' | null;
       if (savedTheme === 'light' || savedTheme === 'dark') {
         setTheme(savedTheme);
-      }
-      if (sessionStorage.getItem('ukpbj_admin_boot_transition') === '1') {
-        sessionStorage.removeItem('ukpbj_admin_boot_transition');
-        setIsBootEntering(true);
       }
     }
   }, []);
@@ -426,6 +420,7 @@ export default function AdminPortalPage() {
   // Check Supabase Auth Session and verify registered admin
   useEffect(() => {
     async function verifyAdminAuth() {
+      let redirected = false;
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
         
@@ -433,6 +428,8 @@ export default function AdminPortalPage() {
         if (error || !session?.user) {
           const saved = typeof window !== 'undefined' ? localStorage.getItem('ukpbj_admin_profile') : null;
           if (!saved) {
+            redirected = true;
+            cancelTransition();
             router.replace('/login');
             return;
           }
@@ -453,6 +450,8 @@ export default function AdminPortalPage() {
           if (profile.status === 'nonaktif') {
             await supabase.auth.signOut();
             if (typeof window !== 'undefined') localStorage.removeItem('ukpbj_admin_profile');
+            redirected = true;
+            cancelTransition();
             router.replace('/login');
             return;
           }
@@ -473,11 +472,15 @@ export default function AdminPortalPage() {
         }
       } catch (err) {
         console.warn('Gagal verifikasi sesi admin:', err);
+      } finally {
+        if (!redirected) {
+          markAdminReady();
+        }
       }
     }
 
     verifyAdminAuth();
-  }, [router]);
+  }, [router, markAdminReady, cancelTransition]);
 
   // Persistent Dynamic Notifications System (Hydration Safe)
   const [notificationsList, setNotificationsList] = useState<AdminNotificationItem[]>(DEFAULT_NOTIFICATIONS);
@@ -1764,9 +1767,9 @@ export default function AdminPortalPage() {
 
   return (
     <motion.div
-      initial={isBootEntering ? { opacity: 0, scale: 0.985 } : false}
+      initial={false}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       className={`min-h-screen flex flex-col md:flex-row font-sans ${
         isDark ? 'dark bg-[#0F172A] text-slate-100' : 'bg-slate-50 text-slate-800'
       }`}
@@ -3212,12 +3215,12 @@ export default function AdminPortalPage() {
         {/* ========================================================= */}
         {activeTab === 'dashboard' && (
           <div className="p-3.5 sm:p-5 md:p-8">
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-8 items-start">
+            <div className="grid grid-cols-1 gap-5 sm:gap-8 items-start">
               
               {/* ========================================================= */}
-              {/* LEFT & CENTER COLUMN (MAIN ANALYTICS & CMS COMMAND) */}
+              {/* MAIN ANALYTICS & CMS COMMAND                              */}
               {/* ========================================================= */}
-              <div className="xl:col-span-8 2xl:col-span-8 space-y-5 sm:space-y-8 min-w-0">
+              <div className="space-y-5 sm:space-y-8 min-w-0">
                 
                 {/* Top Greeting & Operational Telemetry Banner */}
                 <div className={`p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border relative overflow-hidden transition-all ${
@@ -4459,422 +4462,6 @@ export default function AdminPortalPage() {
                       </div>
                     )}
 
-                  </div>
-                </div>
-
-              </div>
-
-              {/* ========================================================= */}
-              {/* RIGHT COMMAND & INTEL PANEL (ENTERPRISE SIDEBAR WIDGETS) */}
-              {/* ========================================================= */}
-              <div className="xl:col-span-4 2xl:col-span-4 space-y-6 min-w-0">
-                
-                {/* WIDGET 1: LIVE AUDIT FEED & SYSTEM ACTIVITY */}
-                <div className={`p-5 rounded-3xl border space-y-4 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
-                }`}>
-                  <div className={`flex justify-between items-center pb-3 border-b ${
-                    isDark ? 'border-slate-800/60' : 'border-slate-200'
-                  }`}>
-                    <div className="flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-emerald-500" />
-                      <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        Live Activity & Audit Feed
-                      </h3>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    {/* Activity Item 1 */}
-                    <div className="flex items-start gap-3 text-xs">
-                      <div className="w-7 h-7 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 mt-0.5">
-                        <Newspaper className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
-                          Berita Pengadaan Terbit
-                        </p>
-                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                          {newsList[0]?.title || 'Pembaruan Siaran Pers PBJ'}
-                        </p>
-                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>2 menit lalu • {currentAdmin.nama_lengkap}</span>
-                      </div>
-                    </div>
-
-                    {/* Activity Item 2 */}
-                    <div className="flex items-start gap-3 text-xs">
-                      <div className="w-7 h-7 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 mt-0.5">
-                        <ScrollText className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
-                          Regulasi Baru Tersinkron
-                        </p>
-                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                          {regulasiList[0]?.nomor || 'Permenaker No. 01/2026'}
-                        </p>
-                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>14 menit lalu • JDIH Hook</span>
-                      </div>
-                    </div>
-
-                    {/* Activity Item 3 */}
-                    <div className="flex items-start gap-3 text-xs">
-                      <div className="w-7 h-7 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Building2 className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
-                          Verifikasi Vendor SiKAP
-                        </p>
-                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                          PT Telkom Akses (Kualifikasi Lolos)
-                        </p>
-                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>1 jam lalu • Pokja Pemilihan</span>
-                      </div>
-                    </div>
-
-                    {/* Activity Item 4 */}
-                    <div className="flex items-start gap-3 text-xs">
-                      <div className="w-7 h-7 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Camera className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
-                          Dokumentasi Galeri Terkini
-                        </p>
-                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                          {photosList[0]?.title || 'Foto Rapat Koordinasi PBJ'}
-                        </p>
-                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>3 jam lalu • /galeri sync</span>
-                      </div>
-                    </div>
-
-                    {/* Activity Item 5 */}
-                    <div className="flex items-start gap-3 text-xs">
-                      <div className="w-7 h-7 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Layers className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
-                          Pembaruan Tahapan SOP
-                        </p>
-                        <p className={`text-[11px] truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                          {sopList[0]?.judul || 'SOP Pengadaan Langsung'}
-                        </p>
-                        <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600 font-semibold'}`}>Kemarin • Biro Hukum</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={`pt-2 border-t text-[10px] text-center ${
-                    isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600 font-bold'
-                  }`}>
-                    <span>Auto-persisted to Local Database Engine v1</span>
-                  </div>
-                </div>
-
-                {/* WIDGET 2: DEADLINE TENDER & AGENDA MENDATANG */}
-                <div className={`p-5 rounded-3xl border space-y-4 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
-                }`}>
-                  <div className={`flex justify-between items-center pb-3 border-b ${
-                    isDark ? 'border-slate-800/60' : 'border-slate-200'
-                  }`}>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-accent-gold" />
-                      <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        Deadline & Jadwal Mendatang
-                      </h3>
-                    </div>
-                    <span className="text-[10px] font-bold text-accent-gold bg-accent-gold/10 px-2 py-0.5 rounded-full border border-accent-gold/20">
-                      {agendaList.length} Event
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    {/* Tender Deadline Card */}
-                    <div 
-                      onClick={() => {
-                        if (packagesList[0]) {
-                          setSelectedPackage(packagesList[0]);
-                          setShowDetailModal(true);
-                        }
-                      }}
-                      title="Klik untuk melihat detail paket pengadaan"
-                      className={`p-3.5 rounded-2xl border space-y-1.5 transition-all cursor-pointer group hover:scale-[1.01] ${
-                        isDark ? 'bg-slate-950/60 border-amber-500/30 hover:border-amber-400' : 'bg-amber-50/80 border-amber-200 shadow-xs hover:border-amber-300'
-                      }`}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500 text-slate-950">
-                          Batas Tender Hari Ini
-                        </span>
-                        <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1 font-mono">
-                          <Clock className="w-3 h-3" />
-                          <span>16:00 WIB</span>
-                        </span>
-                      </div>
-                      <p className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'} group-hover:text-amber-500 transition-colors`}>
-                        {packagesList[0]?.title || 'Pengadaan Server & Storage SPSE'}
-                      </p>
-                      <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                        Pagu: {packagesList[0]?.hps || 'Rp 500.000.000'} • {packagesList[0]?.unit || 'Biro Perencanaan'}
-                      </p>
-                    </div>
-
-                    {/* Upcoming Agenda List */}
-                    {agendaList.slice(0, 2).map((agenda) => (
-                      <div 
-                        key={agenda.id} 
-                        onClick={() => {
-                          setEditingAgenda(agenda);
-                          setAgendaFormData({ ...agenda });
-                          setShowAgendaModal(true);
-                        }}
-                        title="Klik untuk mengedit agenda ini"
-                        className={`p-3 rounded-2xl border flex items-center justify-between transition-all cursor-pointer group hover:scale-[1.01] ${
-                          isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/50' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:bg-white hover:border-blue-300 hover:shadow-sm'
-                        }`}
-                      >
-                        <div className="min-w-0 pr-2">
-                          <p className={`font-bold text-xs truncate ${isDark ? 'text-slate-200' : 'text-slate-900'} group-hover:text-blue-500 transition-colors`}>
-                            {agenda.title}
-                          </p>
-                          <p className={`text-[10px] mt-0.5 flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                            <Clock className="w-2.5 h-2.5 text-emerald-500" />
-                            <span>{agenda.date}</span>
-                            <span>•</span>
-                            <span className="truncate">{agenda.location}</span>
-                          </p>
-                        </div>
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold shrink-0 ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                          {agenda.category}
-                        </span>
-                      </div>
-                    ))}
-
-                  </div>
-
-                  {/* Action Buttons: Direct Input & Manage Tab Shortcut */}
-                  <div className="pt-1 flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setEditingAgenda(null);
-                        setAgendaFormData({
-                          title: '',
-                          category: 'Bimtek',
-                          date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
-                          time: '09:00 - 12:00 WIB',
-                          location: 'Gedung Kemnaker RI',
-                          organizer: 'UKPBJ Kemnaker RI',
-                          capacity: '100 Peserta',
-                          description: '',
-                          imageUrl: '',
-                          status: 'Terjadwal',
-                          zoomUrl: ''
-                        });
-                        setShowAgendaModal(true);
-                      }}
-                      className="flex-1 py-2 sm:py-2.5 rounded-xl bg-accent-gold/15 hover:bg-accent-gold text-accent-gold hover:text-slate-950 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
-                    >
-                      <PlusCircle className="w-3.5 h-3.5" />
-                      <span>Jadwalkan Agenda Baru</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('manage-agenda')}
-                      title="Buka tab kelola agenda selengkapnya"
-                      className={`p-2 sm:p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
-                        isDark ? 'border-slate-800 bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-white' : 'border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700'
-                      }`}
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* WIDGET 3: GOVERNMENT ECOSYSTEM INTEGRATION STATUS */}
-                <div className={`p-5 rounded-3xl border flex flex-col justify-between space-y-4 transition-all ${
-                  isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
-                }`}>
-                  <div>
-                    <div className={`flex justify-between items-center pb-3 border-b ${
-                      isDark ? 'border-slate-800/60' : 'border-slate-200'
-                    }`}>
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-                          <Globe className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            Ekosistem Layanan PBJ
-                          </h3>
-                          <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                            Integrasi Portal SPSE & LKPP Nasional
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span>All Connected</span>
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3.5 text-xs">
-                      <a
-                        href="https://lpse.kemnaker.go.id"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`p-2.5 rounded-2xl border flex items-center justify-between transition-all group ${
-                          isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-500/40 hover:bg-white hover:shadow-sm'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                          <span className={`font-semibold text-xs truncate ${isDark ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>LPSE Kemnaker</span>
-                        </div>
-                        <span className={`text-[10px] flex items-center gap-1 shrink-0 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          <span>18ms</span>
-                          <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
-                        </span>
-                      </a>
-
-                      <a
-                        href="https://sikap.lkpp.go.id"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`p-2.5 rounded-2xl border flex items-center justify-between transition-all group ${
-                          isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-500/40 hover:bg-white hover:shadow-sm'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                          <span className={`font-semibold text-xs truncate ${isDark ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>SiKAP LKPP</span>
-                        </div>
-                        <span className={`text-[10px] flex items-center gap-1 shrink-0 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          <span>Live Sync</span>
-                          <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
-                        </span>
-                      </a>
-
-                      <a
-                        href="https://jdih.kemnaker.go.id"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`p-2.5 rounded-2xl border flex items-center justify-between transition-all group ${
-                          isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-500/40 hover:bg-white hover:shadow-sm'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                          <span className={`font-semibold text-xs truncate ${isDark ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>JDIH Kemnaker</span>
-                        </div>
-                        <span className={`text-[10px] flex items-center gap-1 shrink-0 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          <span>Synced</span>
-                          <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
-                        </span>
-                      </a>
-
-                      <a
-                        href="https://katalog.inaproc.id/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`p-2.5 rounded-2xl border flex items-center justify-between transition-all group ${
-                          isDark ? 'bg-slate-950/40 border-slate-800 hover:border-blue-500/40 hover:bg-slate-950' : 'bg-slate-50/90 border-slate-200 shadow-xs hover:border-blue-500/40 hover:bg-white hover:shadow-sm'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                          <span className={`font-semibold text-xs truncate ${isDark ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>e-Katalog v6</span>
-                        </div>
-                        <span className={`text-[10px] flex items-center gap-1 shrink-0 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          <span>Active</span>
-                          <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
-                        </span>
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className={`pt-2 border-t flex items-center justify-between text-[10px] ${
-                    isDark ? 'border-slate-800/80 text-slate-400' : 'border-slate-100 text-slate-500'
-                  }`}>
-                    <span>Protokol TLS 1.3 & API Gateway</span>
-                    <span className="font-bold text-emerald-500">100% Online</span>
-                  </div>
-                </div>
-
-                {/* WIDGET 4: QUICK EXPORT & DATA BACKUP UTILITIES */}
-                <div className={`p-5 rounded-3xl border flex flex-col justify-between space-y-4 transition-all ${
-                  isDark ? 'bg-slate-900/90 border-slate-800 shadow-sm' : 'bg-white border-slate-200/90 shadow-md shadow-slate-200/80 ring-1 ring-slate-900/5'
-                }`}>
-                  <div>
-                    <div className={`flex justify-between items-center pb-3 border-b ${
-                      isDark ? 'border-slate-800/60' : 'border-slate-200'
-                    }`}>
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
-                          <Download className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            Utilitas Rekap & Cadangan
-                          </h3>
-                          <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                            Ekspor Laporan & Snapshot Database
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold text-blue-500 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20">
-                        Siap Diunduh
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2 mt-3.5 text-xs">
-                      <button
-                        type="button"
-                        onClick={() => showNotification('✓ Laporan Rekap PBJ (.xlsx) berhasil diekspor.')}
-                        className={`p-3 rounded-2xl border font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer group ${
-                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-emerald-500/40 text-emerald-400 hover:bg-slate-950' : 'bg-emerald-50/70 border-emerald-200/90 text-emerald-700 hover:bg-emerald-100/80 shadow-xs hover:shadow-sm'
-                        }`}
-                      >
-                        <div className="flex items-center gap-1.5">
-                          <Download className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
-                          <span className="text-xs font-black">Export XLSX</span>
-                        </div>
-                        <span className={`text-[10px] font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Laporan PBJ</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const dataStr = JSON.stringify({ newsList, agendaList, packagesList, regulasiList, sopList, photosList, videosList }, null, 2);
-                          const blob = new Blob([dataStr], { type: 'application/json' });
-                          const url = URL.createObjectURL(blob);
-                          const link = document.createElement('a');
-                          link.href = url;
-                          link.download = `backup_ukpbj_db_${new Date().toISOString().slice(0,10)}.json`;
-                          link.click();
-                          showNotification('✓ Cadangan Database JSON berhasil diunduh.');
-                        }}
-                        className={`p-3 rounded-2xl border font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer group ${
-                          isDark ? 'bg-slate-950/60 border-slate-800 hover:border-blue-500/40 text-blue-400 hover:bg-slate-950' : 'bg-blue-50/70 border-blue-200/90 text-blue-700 hover:bg-blue-100/80 shadow-xs hover:shadow-sm'
-                        }`}
-                      >
-                        <div className="flex items-center gap-1.5">
-                          <Database className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
-                          <span className="text-xs font-black">Backup JSON</span>
-                        </div>
-                        <span className={`text-[10px] font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Snapshot Data</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className={`pt-2 border-t flex items-center justify-between text-[10px] ${
-                    isDark ? 'border-slate-800/80 text-slate-400' : 'border-slate-100 text-slate-500'
-                  }`}>
-                    <span>Standar Satu Data Indonesia (SDI)</span>
-                    <span className="font-mono text-blue-500 font-bold">JSON & XLSX</span>
                   </div>
                 </div>
 

@@ -25,6 +25,15 @@ const config: Config = {
           red: "#dc2626",
           gold: "#d4af37",
         },
+        portal: {
+          "navy-deep": "var(--ukpbj-navy-deep)",
+          "navy-from": "var(--ukpbj-navy-from)",
+          "navy-via": "var(--ukpbj-navy-via)",
+          "navy-to": "var(--ukpbj-navy-to)",
+          gold: "var(--ukpbj-gold)",
+          "gold-bright": "var(--ukpbj-gold-bright)",
+          "gold-soft": "var(--ukpbj-gold-soft)",
+        },
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],

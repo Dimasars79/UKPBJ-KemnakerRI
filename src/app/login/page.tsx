@@ -1,28 +1,33 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Mail, Lock, LogIn, Loader2, AlertCircle, CheckCircle2, ShieldCheck, Database, Cpu, Terminal } from 'lucide-react';
+import { ArrowLeft, Mail, Lock, LogIn, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase/client';
+import { useAdminTransition } from '@/contexts/AdminTransitionContext';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { isTransitioning, startTransition, cancelTransition } = useAdminTransition();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  const [showBootSequence, setShowBootSequence] = useState(false);
-  const [bootStep, setBootStep] = useState(0);
+
+  useEffect(() => {
+    router.prefetch('/admin');
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg(null);
     setSuccessMsg(null);
+    startTransition();
 
     try {
       // 1. Otentikasi Kredensial via Supabase Auth
@@ -32,6 +37,7 @@ export default function LoginPage() {
       });
 
       if (error || !data.user) {
+        cancelTransition();
         setErrorMsg(
           error?.message === 'Invalid login credentials'
             ? 'Kombinasi email dan kata sandi tidak sesuai. Pastikan akun Anda telah terdaftar sebagai pengelola layanan.'
@@ -56,6 +62,7 @@ export default function LoginPage() {
         // Cek status keaktifan akun
         if (adminProfile.status === 'nonaktif') {
           await supabase.auth.signOut();
+          cancelTransition();
           setErrorMsg('Akses ditolak: Akun admin Anda sedang dinonaktifkan.');
           setIsLoading(false);
           return;
@@ -95,20 +102,12 @@ export default function LoginPage() {
         }
       }
 
-      setSuccessMsg('Autentikasi berhasil! Menginisialisasi Command Center...');
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('ukpbj_admin_boot_transition', '1');
-      }
-      setShowBootSequence(true);
-      setBootStep(1);
-      setTimeout(() => setBootStep(2), 400);
-      setTimeout(() => setBootStep(3), 820);
-      setTimeout(() => {
-        router.push('/admin');
-      }, 1300);
+      setSuccessMsg('Autentikasi berhasil! Membuka Admin Portal...');
+      router.push('/admin');
 
     } catch (err: unknown) {
       console.error('Error saat login:', err);
+      cancelTransition();
       setErrorMsg('Terjadi kendala saat menghubungkan ke server sistem. Silakan coba kembali.');
       setIsLoading(false);
     }
@@ -144,8 +143,12 @@ export default function LoginPage() {
       <div className="w-full max-w-5xl relative z-10 flex justify-center items-center">
         <motion.div 
           initial={{ opacity: 0, x: -90 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+          animate={
+            isTransitioning
+              ? { opacity: 0, scale: 0.96, x: 0 }
+              : { opacity: 1, scale: 1, x: 0 }
+          }
+          transition={{ duration: isTransitioning ? 0.3 : 0.85, ease: [0.16, 1, 0.3, 1] }}
           className="w-full rounded-3xl shadow-[0_30px_90px_-20px_rgba(0,0,0,0.85)] border border-slate-700/60 flex flex-col md:flex-row bg-[#081E36] relative overflow-hidden"
         >
           {/* Global Light Sheen Sweep Effect from Left to Right */}
@@ -392,128 +395,6 @@ export default function LoginPage() {
         </motion.div>
       </motion.div>
     </div>
-
-    {/* OPSI 1: COMMAND CENTER IT BOOT SEQUENCE OVERLAY */}
-    <AnimatePresence>
-      {showBootSequence && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.28, ease: 'easeOut' }}
-          className="fixed inset-0 z-[100] bg-[#060D1A] flex items-center justify-center p-4 overflow-hidden"
-        >
-          {/* Cyber Blueprint Grid & Ambient Glows */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0ea5e912_1px,transparent_1px),linear-gradient(to_bottom,#0ea5e912_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] bg-blue-600/15 rounded-full blur-[130px] pointer-events-none" />
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 w-full max-w-md rounded-2xl bg-[#0B1528]/95 border border-cyan-500/25 p-6 sm:p-7 shadow-2xl shadow-cyan-950/50 backdrop-blur-md"
-          >
-            {/* Header Emblem & System Title */}
-            <div className="flex items-center gap-3.5 pb-4 mb-5 border-b border-slate-800/90">
-              <div className="relative w-11 h-11 rounded-xl bg-white/95 p-1.5 flex items-center justify-center shadow-md shrink-0">
-                <Image
-                  src="/logo-ukpbj-emblem.png"
-                  alt="UKPBJ Emblem"
-                  width={36}
-                  height={36}
-                  className="w-full h-full object-contain"
-                />
-                <span className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#0B1528] animate-pulse" />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400">
-                  <Terminal className="w-3 h-3" />
-                  <span>Secure Handshake</span>
-                </div>
-                <h3 className="text-sm sm:text-base font-extrabold text-white tracking-tight truncate">
-                  UKPBJ Executive Command Center
-                </h3>
-              </div>
-            </div>
-
-            {/* Boot Steps */}
-            <div className="space-y-3 font-mono text-xs mb-6">
-              {[
-                { step: 1, icon: ShieldCheck, label: 'Verifikasi Token Sesi & Otoritas RBAC' },
-                { step: 2, icon: Database, label: 'Sinkronisasi Supabase & Telemetri INAPROC' },
-                { step: 3, icon: Cpu, label: 'Memuat Antarmuka CMS Admin Portal...' }
-              ].map((item) => {
-                const Icon = item.icon;
-                const isDone = bootStep > item.step;
-                const isActive = bootStep === item.step;
-
-                return (
-                  <motion.div
-                    key={item.step}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: bootStep >= item.step ? 1 : 0.35, x: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="flex items-center justify-between gap-2.5"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <Icon
-                        className={`w-4 h-4 shrink-0 ${
-                          isDone
-                            ? 'text-emerald-400'
-                            : isActive
-                            ? 'text-cyan-400 animate-pulse'
-                            : 'text-slate-600'
-                        }`}
-                      />
-                      <span
-                        className={`truncate ${
-                          isDone
-                            ? 'text-slate-200'
-                            : isActive
-                            ? 'text-cyan-200 font-bold'
-                            : 'text-slate-500'
-                        }`}
-                      >
-                        {item.label}
-                      </span>
-                    </div>
-                    <span
-                      className={`text-[10px] font-bold shrink-0 ${
-                        isDone
-                          ? 'text-emerald-400'
-                          : isActive
-                          ? 'text-cyan-400'
-                          : 'text-slate-600'
-                      }`}
-                    >
-                      {isDone ? '[OK]' : isActive ? 'RUN' : 'WAIT'}
-                    </span>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* Progress Bar */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                <span>Initializing workspace</span>
-                <span className="text-cyan-300 font-bold">
-                  {bootStep === 1 ? '35%' : bootStep === 2 ? '72%' : '100%'}
-                </span>
-              </div>
-              <div className="w-full h-2 rounded-full bg-slate-900 border border-slate-800 overflow-hidden p-0.5">
-                <motion.div
-                  initial={{ width: '8%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
-                  className="h-full rounded-full bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400"
-                />
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
   </div>
   );
 }

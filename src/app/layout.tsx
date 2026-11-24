@@ -12,6 +12,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { DataProvider } from "@/contexts/DataContext";
+import { AdminTransitionProvider } from "@/contexts/AdminTransitionContext";
 
 import { FloatingContact } from "@/components/ui/FloatingContact";
 
@@ -31,8 +32,10 @@ export default function RootLayout({
         <AccessibilityProvider>
           <LanguageProvider>
             <DataProvider>
-              {children}
-              <FloatingContact />
+              <AdminTransitionProvider>
+                {children}
+                <FloatingContact />
+              </AdminTransitionProvider>
             </DataProvider>
           </LanguageProvider>
         </AccessibilityProvider>
