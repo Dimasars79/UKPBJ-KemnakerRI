@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ProcurementPackage } from '@/contexts/DataContext';
 import { createClient } from '@supabase/supabase-js';
-import crypto from 'crypto';
 
 export const dynamic = 'force-dynamic';
-
-function rupToUuid(kdRup: string | number): string {
-  const hash = crypto.createHash('md5').update('RUP-' + kdRup).digest('hex');
-  return `${hash.slice(0, 8)}-${hash.slice(8, 12)}-4${hash.slice(13, 16)}-a${hash.slice(17, 20)}-${hash.slice(20, 32)}`;
-}
 
 function getSupabaseAdmin() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qxmdhemplqaldswspuwd.supabase.co';
