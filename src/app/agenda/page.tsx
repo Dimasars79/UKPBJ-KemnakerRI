@@ -524,11 +524,6 @@ export default function AgendaPage() {
                 </select>
               </div>
 
-              {/* Active Counter Badge */}
-              <span className="hidden lg:inline-flex text-[11px] font-bold text-slate-700 bg-slate-100 border border-slate-200/80 px-3 py-2 rounded-2xl">
-                {filteredAgendas.length} {trans('Agenda', 'Events')}
-              </span>
-
               {/* Header Carousel Slide Controls (When > 6 items) */}
               {totalPages > 1 && (
                 <div className="flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-2xl border border-slate-200/80">

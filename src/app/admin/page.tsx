@@ -309,24 +309,36 @@ export default function AdminPortalPage() {
   const router = useRouter();
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
-  // Load saved theme preference on mount
+  const [isBootEntering, setIsBootEntering] = useState(false);
+
+  // Load saved theme preference & boot transition flag on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('ukpbj_admin_theme') as 'dark' | 'light' | null;
       if (savedTheme === 'light' || savedTheme === 'dark') {
         setTheme(savedTheme);
       }
+      if (sessionStorage.getItem('ukpbj_admin_boot_transition') === '1') {
+        sessionStorage.removeItem('ukpbj_admin_boot_transition');
+        setIsBootEntering(true);
+      }
     }
   }, []);
+
+  const themeTransitionTimerRef = useRef<number | null>(null);
 
   const handleToggleTheme = (newTheme: 'dark' | 'light') => {
     if (newTheme === theme) return;
     if (typeof window !== 'undefined') {
+      if (themeTransitionTimerRef.current) {
+        window.clearTimeout(themeTransitionTimerRef.current);
+      }
       document.documentElement.classList.add('admin-theme-transitioning');
       localStorage.setItem('ukpbj_admin_theme', newTheme);
-      window.setTimeout(() => {
+      themeTransitionTimerRef.current = window.setTimeout(() => {
         document.documentElement.classList.remove('admin-theme-transitioning');
-      }, 400);
+        themeTransitionTimerRef.current = null;
+      }, 600);
     }
     setTheme(newTheme);
   };
@@ -1739,9 +1751,14 @@ export default function AdminPortalPage() {
   const isDark = theme === 'dark';
 
   return (
-    <div className={`min-h-screen flex flex-col md:flex-row font-sans admin-theme-smooth ${
-      isDark ? 'bg-[#0F172A] text-slate-100' : 'bg-slate-50 text-slate-800'
-    }`}>
+    <motion.div
+      initial={isBootEntering ? { opacity: 0, scale: 0.985 } : false}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className={`min-h-screen flex flex-col md:flex-row font-sans admin-theme-smooth ${
+        isDark ? 'dark bg-[#0F172A] text-slate-100' : 'bg-slate-50 text-slate-800'
+      }`}
+    >
       
       {/* NOTIFICATION TOAST */}
       <AnimatePresence>
@@ -6785,10 +6802,10 @@ export default function AdminPortalPage() {
           <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
             
             {/* 1. TOP HEADER & ACTION BANNER */}
-            <div className={`p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border relative overflow-hidden transition-all ${
+            <div className={`p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border relative overflow-hidden ${
               isDark 
-                ? 'bg-gradient-to-r from-slate-900 via-[#09223D] to-slate-900 border-slate-800/80 shadow-2xl shadow-blue-950/30' 
-                : 'bg-gradient-to-r from-white via-cyan-50/40 to-slate-50 border-slate-200/90 shadow-lg shadow-slate-200/50'
+                ? 'bg-[#111827] border-slate-800 shadow-lg shadow-black/20' 
+                : 'bg-white border-slate-200/90 shadow-xs'
             }`}>
               <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
               <div className="absolute -bottom-10 left-1/3 w-60 h-60 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -10510,7 +10527,7 @@ export default function AdminPortalPage() {
         )}
       </AnimatePresence>
 
-    </div>
+    </motion.div>
   );
 }
 

@@ -143,7 +143,7 @@ export function Header() {
             title: `${pkg.code}: ${pkg.title}`,
             desc: `Nilai HPS: ${pkg.hps} • ${pkg.unit}`,
             time: `Batas: ${pkg.deadline}`,
-            href: '/#pengadaan',
+            href: `/monitoring?paket=${encodeURIComponent(pkg.code)}`,
             badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
             iconBg: 'bg-indigo-100',
             iconColor: 'text-indigo-600',

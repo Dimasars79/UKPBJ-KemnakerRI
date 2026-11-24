@@ -166,7 +166,7 @@ export default function LayananPage() {
                       <span className="text-white/20 hidden sm:inline">•</span>
                       <div className="flex items-center gap-1.5">
                         <Building2 className="w-4 h-4 text-accent-gold" />
-                        <span>{trans('Gedung A Lt. 4 Kemnaker', 'Building A 4th Floor MoM')}</span>
+                        <span>{trans('Gedung B lantai 3 Kemnaker RI', 'Building B 3rd Floor MoM RI')}</span>
                       </div>
                     </div>
                   </div>

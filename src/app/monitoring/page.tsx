@@ -1,22 +1,34 @@
 "use client"
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useData } from '@/contexts/DataContext';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { ProcurementSplitLedger } from '@/components/dashboard/ProcurementSplitLedger';
 import { SatkerMonitoringBreakdown } from '@/components/dashboard/SatkerMonitoringBreakdown';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, Package, Building2, Calendar, ExternalLink, X } from 'lucide-react';
 
 function MonitoringContent() {
   const { t, trans } = useLanguage();
+  const { packagesList } = useData();
   const searchParams = useSearchParams();
   const router = useRouter();
   const highlightedMethod = searchParams.get('metode');
+  const selectedPaketCode = searchParams.get('paket');
+
+  const selectedPackage = useMemo(() => {
+    if (!selectedPaketCode) return null;
+    return packagesList.find((p) => p.code === selectedPaketCode || p.id === selectedPaketCode) || null;
+  }, [selectedPaketCode, packagesList]);
 
   const handleClearMethod = () => {
+    router.replace('/monitoring', { scroll: false });
+  };
+
+  const handleClearPaket = () => {
     router.replace('/monitoring', { scroll: false });
   };
 
@@ -56,6 +68,95 @@ function MonitoringContent() {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20 space-y-8">
+          {/* DETAIL PAKET TERPILIH DARI NOTIFIKASI */}
+          {selectedPackage && (
+            <FadeIn direction="up">
+              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-md border-2 border-blue-200 relative">
+                <button
+                  type="button"
+                  onClick={handleClearPaket}
+                  title={trans('Tutup Detail Paket', 'Close Package Detail')}
+                  className="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+
+                <div className="flex flex-wrap items-center gap-2 mb-2.5 pr-8">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-primary-blue border border-blue-200 text-[11px] font-extrabold font-mono">
+                    <Package className="w-3.5 h-3.5" />
+                    {selectedPackage.code}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-bold">
+                    {selectedPackage.category}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold">
+                    {selectedPackage.status}
+                  </span>
+                </div>
+
+                <h2 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug mb-3 pr-8">
+                  {selectedPackage.title}
+                </h2>
+
+                {selectedPackage.desc && (
+                  <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                    {selectedPackage.desc}
+                  </p>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                      {trans('Nilai Pagu / HPS', 'Budget / HPS')}
+                    </span>
+                    <span className="font-mono font-black text-emerald-700 text-sm">
+                      {selectedPackage.hps}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                      {trans('Satuan Kerja (Satker)', 'Work Unit')}
+                    </span>
+                    <span className="font-semibold text-slate-800 flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span className="line-clamp-1">{selectedPackage.unit}</span>
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                      {trans('Metode Pemilihan', 'Selection Method')}
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {selectedPackage.method}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                        {trans('Batas Jadwal', 'Schedule Deadline')}
+                      </span>
+                      <span className="font-semibold text-slate-800 flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span>{selectedPackage.deadline}</span>
+                      </span>
+                    </div>
+                    {selectedPackage.downloadUrl && selectedPackage.downloadUrl !== '#' && (
+                      <a
+                        href={selectedPackage.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary-navy hover:bg-primary-blue text-white text-[11px] font-bold transition-colors shrink-0"
+                      >
+                        <span>SiRUP</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          )}
+
           {/* OPSI 2: PANORAMIC SPLIT LEDGER (Filter + Total Anggaran Hero + Realisasi vs Sisa) */}
           <FadeIn direction="up" delay={0.1}>
             <ProcurementSplitLedger />
