@@ -131,7 +131,7 @@ let successCount = 0;
 
 for (let i = 0; i < totalBatches; i++) {
   const batch = records.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE);
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/procurement_packages?on_conflict=${encodeURIComponent('Kode RUP')}`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/paket_penyedia_terumumkan?on_conflict=${encodeURIComponent('Kode RUP')}`, {
     method: 'POST',
     headers: {
       'apikey': SERVICE_KEY,

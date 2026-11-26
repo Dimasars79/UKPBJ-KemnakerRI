@@ -1618,7 +1618,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     const parseHpsNumber = (hpsStr?: string) => Number(String(hpsStr || '0').replace(/[^0-9]/g, '')) || 0;
 
-    const res = await syncAdminData('procurement_packages', 'insert', {
+    const res = await syncAdminData('paket_penyedia_terumumkan', 'insert', {
       data: {
         'Kode RUP': pkg.code,
         'Nama Paket': pkg.title,
@@ -1652,7 +1652,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     const parseHpsNumber = (hpsStr?: string) => Number(String(hpsStr || '0').replace(/[^0-9]/g, '')) || 0;
 
-    await syncAdminData('procurement_packages', 'update', {
+    await syncAdminData('paket_penyedia_terumumkan', 'update', {
       id: target?.code || id,
       data: {
         'Kode RUP': updated.code,
@@ -1674,7 +1674,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setTotalPackagesCount((prev) => Math.max(0, prev - 1));
     persist(newsList, agendaList, updated);
 
-    await syncAdminData('procurement_packages', 'delete', { id: target?.code || id });
+    await syncAdminData('paket_penyedia_terumumkan', 'delete', { id: target?.code || id });
   };
 
   const syncInaprocPackages = async (tahun: string = '2026', saveToDb: boolean = true) => {

@@ -455,7 +455,7 @@ export async function retrieveKnowledge(query: string): Promise<string> {
             .or(`title.ilike.${pattern},category.ilike.${pattern},location.ilike.${pattern},organizer.ilike.${pattern},date.ilike.${pattern}`)
             .limit(3),
           supabaseAdmin
-            .from('procurement_packages')
+            .from('paket_penyedia_terumumkan')
             .select('*')
             .or(`"Nama Paket".ilike.${pattern},"Kode RUP".ilike.${pattern},"Jenis Pengadaan".ilike.${pattern},"Satuan Kerja (Satker)".ilike.${pattern},"Metode Pengadaan".ilike.${pattern}`)
             .limit(3)
@@ -550,7 +550,7 @@ export async function retrieveKnowledge(query: string): Promise<string> {
       const searches = await Promise.allSettled([
         supabaseAdmin.from('news').select('*').order('created_at', { ascending: false }).limit(2),
         supabaseAdmin.from('agendas').select('*').order('created_at', { ascending: false }).limit(4),
-        supabaseAdmin.from('procurement_packages').select('*').order('No', { ascending: true }).limit(2)
+        supabaseAdmin.from('paket_penyedia_terumumkan').select('*').order('No', { ascending: true }).limit(2)
       ]);
 
       const [news, agendasFallback, packages] = searches;

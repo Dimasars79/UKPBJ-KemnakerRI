@@ -195,7 +195,7 @@ export async function GET(req: NextRequest) {
         }).filter((r) => r['Kode RUP']);
 
         if (recordsToUpsert.length > 0) {
-          await supabase.from('procurement_packages').upsert(recordsToUpsert, { onConflict: 'Kode RUP' });
+          await supabase.from('paket_penyedia_terumumkan').upsert(recordsToUpsert, { onConflict: 'Kode RUP' });
         }
       } catch (dbErr) {
         console.warn('[INAPROC Sync] Failed to upsert to Supabase procurement_packages:', dbErr);
