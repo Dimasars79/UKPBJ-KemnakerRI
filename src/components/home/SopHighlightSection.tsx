@@ -2,8 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
-  Layers,
   ArrowRight,
   Download,
   Building2,
@@ -85,9 +85,59 @@ export function SopHighlightSection() {
   return (
     <section
       id="sop"
-      className="py-12 sm:py-16 md:py-20 bg-slate-50 border-y border-slate-200/80 relative overflow-hidden"
+      className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-slate-50 via-white to-blue-50/40 border-y border-slate-200/80 relative overflow-hidden"
     >
-      {/* Subtle Background Accent */}
+      {/* Subtle Flowing Wave Lines Accent */}
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+        className="absolute bottom-0 left-0 w-full h-36 sm:h-48 pointer-events-none select-none opacity-60"
+      >
+        <defs>
+          <linearGradient id="sop-wave-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#1e3a8a" stopOpacity="0.06" />
+            <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.04" />
+          </linearGradient>
+          <linearGradient id="sop-wave-gold" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#d4af37" stopOpacity="0.02" />
+            <stop offset="60%" stopColor="#d4af37" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#d4af37" stopOpacity="0.03" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M0,224 C240,176 480,260 720,216 C960,172 1200,120 1440,176 L1440,320 L0,320 Z"
+          fill="url(#sop-wave-blue)"
+        />
+        <path
+          d="M0,248 C300,200 540,280 840,224 C1080,180 1280,152 1440,192"
+          fill="none"
+          stroke="url(#sop-wave-blue)"
+          strokeWidth="1.5"
+        />
+        <path
+          d="M0,268 C360,216 620,292 920,238 C1140,198 1300,182 1440,212"
+          fill="none"
+          stroke="url(#sop-wave-gold)"
+          strokeWidth="1.25"
+        />
+      </svg>
+
+      {/* Subtle Kemnaker RI Logo Watermark */}
+      <div
+        aria-hidden="true"
+        className="absolute right-[-4%] bottom-[-8%] sm:right-6 sm:bottom-4 w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] opacity-[0.045] pointer-events-none select-none"
+      >
+        <Image
+          src="/logo-kemnaker.png"
+          alt=""
+          fill
+          className="object-contain grayscale"
+        />
+      </div>
+
+      {/* Subtle Background Glow Accents */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-100/40 rounded-full blur-3xl pointer-events-none translate-y-1/2 -translate-x-1/3" />
 
@@ -95,19 +145,53 @@ export function SopHighlightSection() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
           <FadeIn direction="left" className="max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-primary-blue text-[11px] font-extrabold uppercase tracking-wider mb-2.5">
-              <Layers className="w-3.5 h-3.5 text-primary-blue" />
-              <span>{trans('Standar Operasional Prosedur (SOP)', 'Standard Operating Procedures (SOP)')}</span>
+            <div className="flex items-start sm:items-center gap-4">
+              {/* Custom SOP Emblem Logo (60% opacity) */}
+              <div
+                aria-hidden="true"
+                className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-50 border border-blue-200/80 flex items-center justify-center shrink-0 opacity-60 shadow-xs"
+              >
+                <svg
+                  viewBox="0 0 64 64"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-9 h-9 sm:w-10 sm:h-10"
+                >
+                  {/* Document Base */}
+                  <rect x="12" y="8" width="34" height="44" rx="5" stroke="#1e3a8a" strokeWidth="2.8" fill="#ffffff" />
+                  {/* Top Header Bar */}
+                  <path d="M20 18H38" stroke="#1e3a8a" strokeWidth="2.8" strokeLinecap="round" />
+                  {/* Workflow Step Nodes */}
+                  <circle cx="21" cy="28" r="2.6" fill="#d4af37" />
+                  <path d="M27 28H38" stroke="#1e3a8a" strokeWidth="2.4" strokeLinecap="round" />
+                  <circle cx="21" cy="36" r="2.6" fill="#1e3a8a" />
+                  <path d="M27 36H35" stroke="#1e3a8a" strokeWidth="2.4" strokeLinecap="round" />
+                  <circle cx="21" cy="44" r="2.6" fill="#1e3a8a" />
+                  <path d="M27 44H33" stroke="#1e3a8a" strokeWidth="2.4" strokeLinecap="round" />
+                  {/* Verified Seal Badge */}
+                  <circle cx="44" cy="44" r="11" fill="#0f172a" stroke="#d4af37" strokeWidth="2.4" />
+                  <path
+                    d="M39.5 44.2L42.6 47.2L48.8 41"
+                    stroke="#d4af37"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-navy tracking-tight leading-tight">
+                  {trans('Pedoman & Alur Kerja Pengadaan', 'Procurement Workflow & Standards')}
+                </h2>
+                <p className="text-slate-600 text-xs sm:text-sm md:text-base mt-1.5 leading-relaxed">
+                  {trans(
+                    'Standar baku pelaksanaan tugas pengadaan barang dan jasa UKPBJ Kementerian Ketenagakerjaan RI yang terstruktur, cepat, dan akuntabel.',
+                    'Structured, fast, and accountable standard operating procedures for goods and services procurement at the Ministry of Manpower.'
+                  )}
+                </p>
+              </div>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-navy tracking-tight leading-tight">
-              {trans('Pedoman & Alur Kerja Pengadaan', 'Procurement Workflow & Standards')}
-            </h2>
-            <p className="text-slate-600 text-xs sm:text-sm md:text-base mt-1.5 leading-relaxed">
-              {trans(
-                'Standar baku pelaksanaan tugas pengadaan barang dan jasa UKPBJ Kementerian Ketenagakerjaan RI yang terstruktur, cepat, dan akuntabel.',
-                'Structured, fast, and accountable standard operating procedures for goods and services procurement at the Ministry of Manpower.'
-              )}
-            </p>
           </FadeIn>
 
           <FadeIn direction="right" className="shrink-0">

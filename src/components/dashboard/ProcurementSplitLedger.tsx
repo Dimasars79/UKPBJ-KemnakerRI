@@ -192,31 +192,39 @@ export function ProcurementSplitLedger() {
             <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5">
               {trans('Basis Realisasi', 'Realization Basis')}
             </label>
-            <div className="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
-              <button
-                type="button"
-                onClick={() => setBasisRealisasi('kontrak')}
-                className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-                  basisRealisasi === 'kontrak'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <FileText className="w-3 h-3" />
-                <span>{trans('Nilai Kontrak', 'Contract Value')}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setBasisRealisasi('pagu')}
-                className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-                  basisRealisasi === 'pagu'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Building2 className="w-3 h-3" />
-                <span>{trans('Pagu', 'Ceiling')}</span>
-              </button>
+            <div className="relative grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+              {(['kontrak', 'pagu'] as const).map((option) => {
+                const isActive = basisRealisasi === option;
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => setBasisRealisasi(option)}
+                    className={`relative z-10 py-1.5 px-2 rounded-lg text-xs font-bold transition-colors duration-200 flex items-center justify-center gap-1 cursor-pointer ${
+                      isActive ? 'text-white' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="basis-realisasi-active-pill"
+                        transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                        className="absolute inset-0 rounded-lg bg-blue-600 shadow-xs -z-10"
+                      />
+                    )}
+                    {option === 'kontrak' ? (
+                      <>
+                        <FileText className="w-3 h-3" />
+                        <span>{trans('Nilai Kontrak', 'Contract Value')}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Building2 className="w-3 h-3" />
+                        <span>{trans('Pagu', 'Ceiling')}</span>
+                      </>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

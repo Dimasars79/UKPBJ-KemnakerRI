@@ -668,9 +668,6 @@ export function Header() {
                               Tandai Dibaca
                             </button>
                           )}
-                          <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold hidden sm:inline">
-                            {cmsNotifications.length} Aktivitas
-                          </span>
                           <button
                             onClick={() => setIsNotificationOpen(false)}
                             className="p-1 -mr-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors cursor-pointer flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 text-xs font-bold"

@@ -58,7 +58,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData, NewsItem, AgendaItem, ProcurementPackage, PackageDocument, RegulasiItem, SopItem, PanduanItem, PhotoItem, VideoMediaItem } from '@/contexts/DataContext';
 import { useAdminTransition } from '@/contexts/AdminTransitionContext';
-import { getDefaultAgendaDate, isAgendaExpired } from '@/lib/agendaUtils';
+import { getDefaultAgendaDate, isAgendaExpired, parseAgendaDate } from '@/lib/agendaUtils';
 import { uploadDocument, uploadMedia } from '@/lib/supabase/storage';
 import { supabase } from '@/lib/supabase/client';
 import { parseGoogleDriveImage, parseGoogleDriveVideo } from '@/lib/driveHelper';
@@ -7795,12 +7795,32 @@ export default function AdminPortalPage() {
                   <div>
                     <label className={`font-bold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>Tanggal Pelaksanaan *</label>
                     <input
-                      type="text"
-                      placeholder={`e.g. ${getDefaultAgendaDate()}`}
-                      value={agendaFormData.date || ''}
-                      onChange={(e) => setAgendaFormData({ ...agendaFormData, date: e.target.value })}
-                      className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none ${
-                        isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500' : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-emerald-600'
+                      type="date"
+                      value={(() => {
+                        const info = parseAgendaDate(agendaFormData.date);
+                        if (!info) return '';
+                        return `${info.year}-${String(info.month + 1).padStart(2, '0')}-${String(info.day).padStart(2, '0')}`;
+                      })()}
+                      onClick={(e) => {
+                        try {
+                          (e.currentTarget as HTMLInputElement & { showPicker?: () => void }).showPicker?.();
+                        } catch {}
+                      }}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (!val) {
+                          setAgendaFormData({ ...agendaFormData, date: '' });
+                          return;
+                        }
+                        const [y, m, d] = val.split('-').map(Number);
+                        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                        const formatted = y && m && d ? `${String(d).padStart(2, '0')} ${months[m - 1]} ${y}` : val;
+                        setAgendaFormData({ ...agendaFormData, date: formatted });
+                      }}
+                      className={`w-full px-3 py-2.5 border rounded-xl text-xs outline-none cursor-pointer ${
+                        isDark
+                          ? 'bg-slate-950 border-slate-800 text-white focus:border-emerald-500 [color-scheme:dark]'
+                          : 'bg-slate-50 border-slate-300 text-slate-900 focus:border-emerald-600 [color-scheme:light]'
                       }`}
                     />
                   </div>

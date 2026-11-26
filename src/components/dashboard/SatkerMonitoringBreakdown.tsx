@@ -149,56 +149,58 @@ export function SatkerMonitoringBreakdown({
 
             <div className="w-full flex flex-wrap items-center justify-between gap-2">
               {/* View Mode Switcher: Eselon I vs Satker */}
-              <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold">
-                <button
-                  type="button"
-                  onClick={() => setViewMode('eselon1')}
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                    viewMode === 'eselon1'
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Eselon I
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode('satker')}
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                    viewMode === 'satker'
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Satker
-                </button>
+              <div className="relative inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold">
+                {(['eselon1', 'satker'] as const).map((mode) => {
+                  const isActive = viewMode === mode;
+                  return (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setViewMode(mode)}
+                      className={`relative z-10 px-2.5 py-1 rounded-lg transition-colors duration-200 cursor-pointer ${
+                        isActive ? 'text-white' : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="satker-view-mode-pill"
+                          transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                          className="absolute inset-0 rounded-lg bg-blue-600 shadow-xs -z-10"
+                        />
+                      )}
+                      {mode === 'eselon1' ? 'Eselon I' : 'Satker'}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Sort Toggle */}
-              <div className="inline-flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold ml-auto">
+              <div className="relative inline-flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold ml-auto">
                 <ArrowUpDown className="w-3 h-3 text-slate-400 ml-1.5" />
-                <button
-                  type="button"
-                  onClick={() => setSortBy('pagu')}
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                    sortBy === 'pagu'
-                      ? 'bg-primary-navy text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {trans('Nilai Pagu', 'Budget')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSortBy('packages')}
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                    sortBy === 'packages'
-                      ? 'bg-primary-navy text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {trans('Jumlah Paket', 'Packages')}
-                </button>
+                {(['pagu', 'packages'] as const).map((sortOption) => {
+                  const isActive = sortBy === sortOption;
+                  return (
+                    <button
+                      key={sortOption}
+                      type="button"
+                      onClick={() => setSortBy(sortOption)}
+                      className={`relative z-10 px-2.5 py-1 rounded-lg transition-colors duration-200 cursor-pointer ${
+                        isActive ? 'text-white' : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="satker-sort-by-pill"
+                          transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                          className="absolute inset-0 rounded-lg bg-primary-navy shadow-xs -z-10"
+                        />
+                      )}
+                      {sortOption === 'pagu'
+                        ? trans('Nilai Pagu', 'Budget')
+                        : trans('Jumlah Paket', 'Packages')}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -407,7 +409,7 @@ export function SatkerMonitoringBreakdown({
               )}
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-5">
               {METHOD_BREAKDOWN.map((m, idx) => {
                 const isHighlighted = highlightedMethod === m.key;
                 return (
@@ -419,7 +421,7 @@ export function SatkerMonitoringBreakdown({
                         : ''
                     }`}
                   >
-                    <div className="flex items-center justify-between text-xs mb-1">
+                    <div className="flex items-center justify-between text-xs mb-1.5">
                       <span className="flex items-center gap-2 font-bold text-slate-800">
                         <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${m.dotClass}`} />
                         <span>{m.name}</span>
@@ -433,7 +435,7 @@ export function SatkerMonitoringBreakdown({
                         {m.pct.toFixed(2).replace('.', ',')}%
                       </span>
                     </div>
-                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden mb-1">
+                    <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden mb-1.5">
                       <motion.div
                         initial={{ width: 0 }}
                         whileInView={{ width: `${Math.max(m.pct, 2)}%` }}

@@ -220,16 +220,13 @@ export function BeritaSection() {
         </div>
 
         {/* Scroll Progress Indicator Bar */}
-        <div className="mt-4 flex items-center justify-between gap-4">
+        <div className="mt-4">
           <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-primary-navy to-primary-blue rounded-full transition-all duration-300"
               style={{ width: `${Math.max(15, scrollProgress)}%` }}
             />
           </div>
-          <span className="text-[11px] font-mono font-bold text-slate-400 shrink-0">
-            {publishedNews.length} {trans('Berita Aktif', 'Active Articles')}
-          </span>
         </div>
 
         {/* Bottom CTA to /berita */}
