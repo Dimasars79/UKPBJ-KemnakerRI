@@ -589,7 +589,7 @@ export default function InformasiPage() {
                       <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
                       <div>
                         <p className="font-semibold text-slate-700">
-                          {trans('Gedung A Lt. 4, Kemnaker RI', 'Building A 4th Fl, Kemnaker RI')}
+                          {trans('Gedung B Lt. 3, Kemnaker RI', 'Building B 3rd Fl, Kemnaker RI')}
                         </p>
                         <p className="text-[10px] sm:text-[11px] text-slate-500 truncate">
                           Jl. Jend. Gatot Subroto Kav. 51, Jakarta

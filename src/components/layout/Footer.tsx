@@ -7,7 +7,16 @@ import { useLanguage } from '@/contexts/LanguageContext';
 export function Footer() {
   const { t } = useLanguage();
   return (
-    <footer className="relative z-30 w-full bg-[#061B30] text-white pt-8 sm:pt-10 md:pt-12 pb-6 sm:pb-8 border-t border-slate-800 shadow-2xl mt-auto">
+    <footer className="relative z-30 w-full bg-[#061B30] text-white pt-8 sm:pt-10 md:pt-12 pb-6 sm:pb-8 mt-auto overflow-hidden">
+      {/* Uniform Full-Width Neon Top Edge Glow */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 flex flex-col">
+        {/* Uniform Neon Tube Line */}
+        <div className="w-full h-[2px] bg-cyan-400" />
+        {/* Uniform Inner Core Filament */}
+        <div className="w-full h-[1px] -mt-[1.5px] bg-cyan-100/80" />
+        {/* Uniform Full-Width Downward Neon Ambient Wash */}
+        <div className="w-full h-10 bg-gradient-to-b from-cyan-400/25 via-blue-500/10 to-transparent" />
+      </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 mb-6 sm:mb-8">

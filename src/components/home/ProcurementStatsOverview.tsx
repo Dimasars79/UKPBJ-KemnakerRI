@@ -311,17 +311,19 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
 
             {/* SISI TENGAH: HERO 3D DONUT CHART (Besar & Dominan di Tengah) */}
             <div className="order-1 lg:order-2 col-span-1 md:col-span-2 lg:col-span-6 flex flex-col items-center justify-center py-1 sm:py-2 lg:py-0 w-full overflow-visible">
-              <ProcurementDonutChart 
-                data={donutData}
-                totalPaguFormatted={totalAllPaguFormatted}
-                totalPackages={totalPackagesCount}
-                activeMethod={hoveredMethod}
-                onHoverMethod={setHoveredMethod}
-                onSelectMethod={handleMethodClick}
-              />
+              <div className="order-2 lg:order-1 w-full flex justify-center">
+                <ProcurementDonutChart 
+                  data={donutData}
+                  totalPaguFormatted={totalAllPaguFormatted}
+                  totalPackages={totalPackagesCount}
+                  activeMethod={hoveredMethod}
+                  onHoverMethod={setHoveredMethod}
+                  onSelectMethod={handleMethodClick}
+                />
+              </div>
 
-              {/* KAPSUL PENJELASAN GRAFIK */}
-              <div className="mt-2 sm:mt-2.5 lg:mt-3 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex items-center gap-2 text-xs sm:text-[13px] font-bold text-white tracking-wide shadow-lg transition-all">
+              {/* KAPSUL PENJELASAN GRAFIK (Mobile: di atas chart | Desktop: di bawah chart) */}
+              <div className="order-1 lg:order-2 mb-2.5 sm:mb-3 lg:mb-0 lg:mt-3 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 backdrop-blur-md flex items-center gap-2 text-xs sm:text-[13px] font-bold text-white tracking-wide shadow-lg transition-all">
                 <PieChart className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                 <span>{trans('Proporsi Pagu per Metode Pemilihan', 'Budget Share by Selection Method')}</span>
               </div>
@@ -329,8 +331,12 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
 
             {/* SISI KANAN: E-Purchasing & Pengadaan Langsung (Desktop: Kolom 10-12 | Mobile/Tablet: 2 Kartu Berdampingan) */}
             <div className="order-3 lg:order-3 col-span-1 md:col-span-1 lg:col-span-3 flex flex-col gap-2.5 sm:gap-3.5 w-full">
-              {/* Tombol Monitoring tepat di atas widget E-Purchasing */}
-              <div className="h-7 sm:h-8 flex items-center self-start lg:self-end whitespace-nowrap shadow-sm -mt-2 sm:-mt-3.5 mb-2.5 sm:mb-3.5">
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-2.5 sm:gap-4 w-full">
+                {renderMethodCard(ePurchasingItem)}
+                {renderMethodCard(pengadaanLangsungItem)}
+              </div>
+              {/* Tombol Monitoring di kanan bawah */}
+              <div className="h-7 sm:h-8 flex items-center self-end whitespace-nowrap shadow-sm mt-0.5 sm:mt-1">
                 <Link
                   href="/monitoring"
                   className="h-full inline-flex items-center gap-1 px-2.5 sm:px-3 rounded-full bg-accent-gold/15 hover:bg-accent-gold/25 border border-accent-gold/40 text-accent-gold text-[10px] sm:text-[11px] font-bold transition-all group shadow-sm"
@@ -338,10 +344,6 @@ export function ProcurementStatsOverview({ onSelectMethod }: ProcurementStatsOve
                   <span>{trans('Monitoring', 'Monitoring')}</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform shrink-0" />
                 </Link>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-1 gap-2.5 sm:gap-4 w-full">
-                {renderMethodCard(ePurchasingItem)}
-                {renderMethodCard(pengadaanLangsungItem)}
               </div>
             </div>
 

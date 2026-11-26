@@ -145,7 +145,7 @@ export function SopHighlightSection() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
           <FadeIn direction="left" className="max-w-2xl">
-            <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               {/* Custom SOP Emblem Logo (60% opacity) */}
               <div
                 aria-hidden="true"
@@ -184,12 +184,6 @@ export function SopHighlightSection() {
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-navy tracking-tight leading-tight">
                   {trans('Pedoman & Alur Kerja Pengadaan', 'Procurement Workflow & Standards')}
                 </h2>
-                <p className="text-slate-600 text-xs sm:text-sm md:text-base mt-1.5 leading-relaxed">
-                  {trans(
-                    'Standar baku pelaksanaan tugas pengadaan barang dan jasa UKPBJ Kementerian Ketenagakerjaan RI yang terstruktur, cepat, dan akuntabel.',
-                    'Structured, fast, and accountable standard operating procedures for goods and services procurement at the Ministry of Manpower.'
-                  )}
-                </p>
               </div>
             </div>
           </FadeIn>
