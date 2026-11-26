@@ -124,7 +124,7 @@ export function SatkerMonitoringBreakdown({
   }, [eselon1Summary, sortBy]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-stretch">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
       {/* LEFT (7 COLS): DISTRIBUSI 44 SATKER & 7 UNIT ESELON I KEMNAKER RI */}
       <div className="lg:col-span-7 bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/90 flex flex-col justify-between">
         <div>
@@ -290,11 +290,7 @@ export function SatkerMonitoringBreakdown({
                         whileInView={{ width: `${Math.max(barPct, 2)}%` }}
                         viewport={{ once: true, amount: 0.2 }}
                         transition={{ duration: 0.7, delay: idx * 0.04, ease: [0.22, 1, 0.36, 1] }}
-                        className={`h-full rounded-full ${
-                          idx === 0
-                            ? 'bg-gradient-to-r from-primary-navy via-blue-600 to-cyan-500'
-                            : 'bg-gradient-to-r from-indigo-600 to-blue-400'
-                        }`}
+                        className="h-full rounded-full bg-gradient-to-r from-[#03152B] via-[#0E2F5A] to-[#264E82]"
                       />
                     </div>
                   </button>
@@ -354,11 +350,7 @@ export function SatkerMonitoringBreakdown({
                           whileInView={{ width: `${Math.max(barPct, 2)}%` }}
                           viewport={{ once: true, amount: 0.1 }}
                           transition={{ duration: 0.6, delay: Math.min(idx * 0.02, 0.3), ease: [0.22, 1, 0.36, 1] }}
-                          className={`h-full rounded-full ${
-                            idx === 0
-                              ? 'bg-gradient-to-r from-primary-navy via-blue-600 to-cyan-500'
-                              : 'bg-gradient-to-r from-blue-600 to-sky-400'
-                          }`}
+                          className="h-full rounded-full bg-gradient-to-r from-[#03152B] via-[#0E2F5A] to-[#264E82]"
                         />
                       </div>
                     </div>
@@ -382,7 +374,7 @@ export function SatkerMonitoringBreakdown({
       {/* RIGHT (5 COLS): METODE PENGADAAN + KPI PDN & UKM */}
       <div className="lg:col-span-5 flex flex-col gap-4 sm:gap-6">
         {/* Card 1: Distribusi Metode Pengadaan */}
-        <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/90 flex-1 flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/90">
           <div>
             <div className="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
@@ -423,7 +415,6 @@ export function SatkerMonitoringBreakdown({
                   >
                     <div className="flex items-center justify-between text-xs mb-1.5">
                       <span className="flex items-center gap-2 font-bold text-slate-800">
-                        <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${m.dotClass}`} />
                         <span>{m.name}</span>
                         {isHighlighted && (
                           <span className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-600 text-white">
@@ -441,7 +432,7 @@ export function SatkerMonitoringBreakdown({
                         whileInView={{ width: `${Math.max(m.pct, 2)}%` }}
                         viewport={{ once: true, amount: 0.2 }}
                         transition={{ duration: 0.9, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                        className={`h-full rounded-full bg-gradient-to-r ${m.colorClass}`}
+                        className="h-full rounded-full bg-gradient-to-r from-[#03152B] via-[#0E2F5A] to-[#264E82]"
                       />
                     </div>
                     <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono">

@@ -330,11 +330,6 @@ export function ProcurementSplitLedger() {
               </div>
             </div>
           </div>
-
-          <div className="relative z-10 mt-5 pt-3.5 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
-            <span>{trans('Basis Evaluasi:', 'Evaluation Basis:')} <strong className="text-cyan-200">{basisRealisasi === 'kontrak' ? trans('Nilai Kontrak Terikat', 'Bound Contract Value') : trans('Pagu Pengadaan', 'Procurement Ceiling')}</strong></span>
-            <span className="text-slate-300 font-semibold">{trans('UKPBJ Kemnaker RI', 'UKPBJ MoM RI')}</span>
-          </div>
         </div>
 
         {/* SISI KANAN: DUAL COMPARATIVE LEDGER (7 COLS / ~58%) - Blue Theme */}
@@ -456,16 +451,6 @@ export function ProcurementSplitLedger() {
               </div>
 
             </div>
-          </div>
-
-          {/* Footer Ledger Note */}
-          <div className="relative z-10 pt-3 border-t border-white/10 mt-4 text-[10px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <span>
-              {trans('Realisasi dihitung dari paket berkontrak SPSE & e-Katalog tahun berjalan.', 'Realization calculated from active SPSE & e-Katalog contracts.')}
-            </span>
-            <span className="text-cyan-200 font-semibold">
-              {trans('Evaluasi TW3 Kementerian Ketenagakerjaan RI', 'Q3 Evaluation Ministry of Manpower RI')}
-            </span>
           </div>
         </div>
 

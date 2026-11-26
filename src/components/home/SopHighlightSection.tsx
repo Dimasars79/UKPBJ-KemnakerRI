@@ -85,14 +85,14 @@ export function SopHighlightSection() {
   return (
     <section
       id="sop"
-      className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-slate-50 via-white to-blue-50/40 border-y border-slate-200/80 relative overflow-hidden"
+      className="pt-10 pb-16 sm:py-16 md:py-20 bg-gradient-to-b from-slate-50 via-white to-blue-50/40 border-y border-slate-200/80 relative overflow-hidden"
     >
       {/* Subtle Flowing Wave Lines Accent */}
       <svg
         aria-hidden="true"
         viewBox="0 0 1440 320"
         preserveAspectRatio="none"
-        className="absolute bottom-0 left-0 w-full h-36 sm:h-48 pointer-events-none select-none opacity-60"
+        className="absolute bottom-0 left-0 w-full h-28 sm:h-44 pointer-events-none select-none opacity-85 sm:opacity-60"
       >
         <defs>
           <linearGradient id="sop-wave-blue" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -127,7 +127,7 @@ export function SopHighlightSection() {
       {/* Subtle Kemnaker RI Logo Watermark */}
       <div
         aria-hidden="true"
-        className="absolute right-[-4%] bottom-[-8%] sm:right-6 sm:bottom-4 w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] opacity-[0.045] pointer-events-none select-none"
+        className="absolute right-3 bottom-3 w-36 h-36 sm:right-6 sm:bottom-4 sm:w-[340px] sm:h-[340px] opacity-[0.075] sm:opacity-[0.05] pointer-events-none select-none"
       >
         <Image
           src="/logo-kemnaker.png"
@@ -145,17 +145,17 @@ export function SopHighlightSection() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
           <FadeIn direction="left" className="max-w-2xl">
-            <div className="flex items-start sm:items-center gap-4">
+            <div className="flex items-start sm:items-center gap-3 sm:gap-4">
               {/* Custom SOP Emblem Logo (60% opacity) */}
               <div
                 aria-hidden="true"
-                className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-50 border border-blue-200/80 flex items-center justify-center shrink-0 opacity-60 shadow-xs"
+                className="w-11 h-11 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-blue-50 border border-blue-200/80 flex items-center justify-center shrink-0 opacity-60 shadow-xs"
               >
                 <svg
                   viewBox="0 0 64 64"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-9 h-9 sm:w-10 sm:h-10"
+                  className="w-7 h-7 sm:w-10 sm:h-10"
                 >
                   {/* Document Base */}
                   <rect x="12" y="8" width="34" height="44" rx="5" stroke="#1e3a8a" strokeWidth="2.8" fill="#ffffff" />
@@ -245,7 +245,7 @@ export function SopHighlightSection() {
             {trans('Belum ada dokumen SOP yang tersedia untuk kategori ini.', 'No SOP documents available for this category.')}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
             {activeSops.map((sop, idx) => {
               const catInfo = sop.kategori ? CATEGORY_LABELS[sop.kategori] : null;
               const hasDownload = Boolean(sop.fileData || (sop.downloadUrl && sop.downloadUrl !== '#'));
@@ -257,65 +257,65 @@ export function SopHighlightSection() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: idx * 0.04, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <div className="h-full bg-white rounded-2xl border border-slate-200/90 hover:border-blue-300 p-5 shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between group">
+                  <div className="h-full bg-white rounded-xl sm:rounded-2xl border border-slate-200/90 hover:border-blue-300 p-3.5 sm:p-5 shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between group">
                     <div>
                       {/* Top Badge Row */}
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-800 font-mono text-[11px] font-bold border border-slate-200">
-                          <FileCheck2 className="w-3 h-3 text-primary-blue" />
+                      <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 font-mono text-[10px] sm:text-[11px] font-bold border border-slate-200">
+                          <FileCheck2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary-blue" />
                           {sop.kode}
                         </span>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1 sm:gap-1.5">
                           {catInfo && (
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${catInfo.badgeClass}`}>
+                            <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold border ${catInfo.badgeClass}`}>
                               {trans(catInfo.id, catInfo.en)}
                             </span>
                           )}
-                          <span className="px-2 py-0.5 rounded-full bg-slate-50 text-slate-500 border border-slate-200 text-[10px] font-semibold">
+                          <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-slate-50 text-slate-500 border border-slate-200 text-[9px] sm:text-[10px] font-semibold">
                             {sop.revisi}
                           </span>
                         </div>
                       </div>
 
                       {/* Title & Description */}
-                      <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug mb-2 group-hover:text-primary-blue transition-colors line-clamp-2">
+                      <h3 className="font-extrabold text-slate-900 text-[13px] sm:text-base leading-snug mb-1.5 sm:mb-2 group-hover:text-primary-blue transition-colors line-clamp-2">
                         {sop.judul}
                       </h3>
-                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 mb-4">
+                      <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed line-clamp-2 mb-3 sm:mb-4">
                         {sop.deskripsi || trans('Pedoman standar operasional pelaksanaan pengadaan barang dan jasa pemerintah di lingkungan Kemnaker RI.', 'Standard operating procedure for procurement at the Ministry of Manpower.')}
                       </p>
                     </div>
 
                     <div>
                       {/* Meta Info */}
-                      <div className="flex items-center justify-between text-[11px] text-slate-500 pt-3 border-t border-slate-100 mb-3">
+                      <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-slate-500 pt-2.5 sm:pt-3 border-t border-slate-100 mb-2.5 sm:mb-3">
                         <span className="inline-flex items-center gap-1 truncate max-w-[60%]">
-                          <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <Building2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400 shrink-0" />
                           <span className="truncate font-medium">{sop.unit}</span>
                         </span>
                         <span className="inline-flex items-center gap-1 font-bold text-primary-navy shrink-0">
-                          <ListChecks className="w-3.5 h-3.5 text-emerald-600" />
+                          <ListChecks className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600" />
                           <span>{sop.tahapanCount} {trans('Tahapan', 'Steps')}</span>
                         </span>
                       </div>
 
                       {/* Actions */}
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         <Link
                           href="/informasi/sop"
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-primary-navy text-slate-800 hover:text-white text-xs font-bold transition-colors"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl bg-slate-100 hover:bg-primary-navy text-slate-800 hover:text-white text-[11px] sm:text-xs font-bold transition-colors"
                         >
                           <span>{trans('Lihat Alur SOP', 'View Workflow')}</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         </Link>
                         {hasDownload && (
                           <button
                             type="button"
                             onClick={() => handleDownload(sop)}
                             title={trans('Unduh Dokumen SOP', 'Download SOP Document')}
-                            className="inline-flex items-center justify-center p-2 rounded-xl bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-200 hover:border-blue-600 transition-colors cursor-pointer"
+                            className="inline-flex items-center justify-center p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-200 hover:border-blue-600 transition-colors cursor-pointer"
                           >
-                            <Download className="w-4 h-4" />
+                            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                           </button>
                         )}
                       </div>

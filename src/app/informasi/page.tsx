@@ -7,8 +7,8 @@ import { Footer } from '@/components/layout/Footer';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { 
   BellRing, ChevronRight, FileText, Calendar, Megaphone, 
-  Newspaper, Laptop, Globe, MessageSquare, Download, 
-  BarChart2, CheckCircle2, Clock, ShieldCheck, ArrowRight, Package, Scale, RefreshCw
+  Newspaper, Laptop, Globe, MessageSquare, 
+  BarChart2, Clock, Zap, ArrowRight, Package, Scale, RefreshCw, ExternalLink, MapPin, Phone
 } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -63,7 +63,7 @@ const parseItemDate = (dateStr?: string): Date | null => {
 };
 
 export default function InformasiPage() {
-  const { newsList, agendaList, regulasiList, packagesList, totalPackagesCount, siteSettings, lastUpdated, refreshFromSupabase } = useData();
+  const { newsList, agendaList, regulasiList, packagesList, totalPackagesCount, lastUpdated, refreshFromSupabase } = useData();
   const { trans } = useLanguage();
   const [isMounted, setIsMounted] = React.useState(false);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
@@ -204,13 +204,49 @@ export default function InformasiPage() {
     return list.sort((a, b) => b.timestamp - a.timestamp).slice(0, 5);
   }, [packagesList, publishedNews, agendaList, regulasiList, trans]);
 
-  const serviceStatuses = [
-    { name: trans('SPSE Kemnaker', 'MoM SPSE Portal'), status: siteSettings.serverStatus === 'Maintenance' ? 'MAINTENANCE' : 'NORMAL', icon: <Laptop className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: trans('Portal Informasi', 'Information Portal'), status: 'NORMAL', icon: <Globe className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: trans('Layanan Konsultasi', 'Consultation Desk'), status: 'NORMAL', icon: <MessageSquare className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: trans('Download Dokumen', 'Document Downloads'), status: 'NORMAL', icon: <Download className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: trans('Layanan Pengaduan', 'Complaints / Helpdesk'), status: 'NORMAL', icon: <ShieldCheck className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
-    { name: trans('SIRUP Kemnaker', 'SiRUP MoM'), status: 'NORMAL', icon: <BarChart2 className="w-6 h-6 text-primary-navy"/>, color: 'bg-slate-100' },
+  const quickServices = [
+    {
+      name: trans('SPSE / LPSE Kemnaker', 'MoM SPSE / LPSE'),
+      desc: trans('Portal Tender & Seleksi', 'Tender & Selection Portal'),
+      href: 'https://spse.inaproc.id/lkpp',
+      external: true,
+      icon: <Laptop className="w-5 h-5 sm:w-6 sm:h-6 text-primary-navy" />
+    },
+    {
+      name: trans('SiRUP & Paket RUP', 'SiRUP & RUP Packages'),
+      desc: trans('Daftar Rencana Pengadaan', 'Procurement Plan List'),
+      href: '/informasi/pemilu',
+      external: false,
+      icon: <BarChart2 className="w-5 h-5 sm:w-6 sm:h-6 text-primary-navy" />
+    },
+    {
+      name: trans('e-Katalog v6 INAPROC', 'e-Catalogue v6 INAPROC'),
+      desc: trans('Belanja Katalog Elektronik', 'Electronic Catalogue'),
+      href: 'https://katalog.inaproc.id/',
+      external: true,
+      icon: <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-primary-navy" />
+    },
+    {
+      name: trans('SOP & Alur Kerja', 'SOP & Workflows'),
+      desc: trans('Pedoman Pelaksanaan PBJ', 'Procurement Guidelines'),
+      href: '/informasi/sop',
+      external: false,
+      icon: <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-primary-navy" />
+    },
+    {
+      name: trans('Regulasi & JDIH', 'Regulations & JDIH'),
+      desc: trans('Dasar Hukum Pengadaan', 'Legal Basis & Rules'),
+      href: '/informasi/peraturan',
+      external: false,
+      icon: <Scale className="w-5 h-5 sm:w-6 sm:h-6 text-primary-navy" />
+    },
+    {
+      name: trans('Helpdesk & Konsultasi', 'Helpdesk & Consultation'),
+      desc: trans('Layanan Bantuan & Pengaduan', 'Support & Complaints'),
+      href: '/layanan',
+      external: false,
+      icon: <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-primary-navy" />
+    },
   ];
 
   return (
@@ -223,6 +259,24 @@ export default function InformasiPage() {
       <div className="absolute top-12 left-1/4 w-[550px] h-[550px] bg-blue-400/10 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute top-1/3 right-8 w-[480px] h-[480px] bg-amber-400/8 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-12 left-12 w-[420px] h-[420px] bg-sky-400/8 rounded-full blur-[140px] pointer-events-none" />
+
+      {/* X-Ray Scan Background Animation (Top to Bottom) */}
+      <div aria-hidden="true" className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="animate-xray-scan w-full h-40 sm:h-52 relative">
+          {/* Trailing X-Ray Gradient Beam */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/[0.06] to-cyan-500/[0.14]" />
+          {/* Highlighted Grid Reveal inside Scan Beam */}
+          <div
+            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(37,99,235,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(37,99,235,0.12)_1px,transparent_1px)] bg-[size:32px_32px]"
+            style={{
+              maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 55%, black 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 55%, black 100%)'
+            }}
+          />
+          {/* Leading Laser Scan Line */}
+          <div className="absolute bottom-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500/60 to-transparent shadow-[0_0_24px_4px_rgba(37,99,235,0.25)]" />
+        </div>
+      </div>
 
       <Header />
       
@@ -331,35 +385,65 @@ export default function InformasiPage() {
           {/* ================= RIGHT COLUMN ================= */}
           <div className="w-full lg:w-7/12 flex flex-col gap-6">
             
-            {/* STATUS LAYANAN */}
+            {/* AKSES CEPAT LAYANAN & EKOSISTEM PBJ */}
             <FadeIn direction="up">
               <div className="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/80 shadow-xl shadow-slate-200/70 backdrop-blur-md">
                 <div className="flex justify-between items-center mb-4 sm:mb-6">
                   <div className="flex items-center space-x-2">
+                    <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-slate-900 border border-slate-200/80 shrink-0">
+                      <Zap className="w-4 h-4" />
+                    </span>
                     <h2 className="text-base sm:text-xl font-bold text-primary-navy tracking-tight">
-                      {trans('STATUS LAYANAN', 'SERVICE STATUS')}
+                      {trans('AKSES CEPAT LAYANAN PBJ', 'QUICK SERVICE ACCESS')}
                     </h2>
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   </div>
-                  <Link href="/layanan" className="text-xs sm:text-sm text-primary-navy hover:text-primary-blue flex items-center font-bold">
-                    {trans('Lihat Detail', 'View Details')} <ChevronRight className="w-4 h-4 ml-1" />
+                  <Link href="/layanan" className="text-xs sm:text-sm text-primary-navy hover:text-primary-blue flex items-center font-bold shrink-0">
+                    {trans('Semua Layanan', 'All Services')} <ChevronRight className="w-4 h-4 ml-1" />
                   </Link>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
-                  {serviceStatuses.map((service, idx) => (
-                    <div key={idx} className="flex items-center space-x-3 p-2.5 sm:p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 hover:bg-white hover:border-blue-200 transition-colors">
-                      <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${service.color} shadow-2xs`}>
-                        {service.icon}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs sm:text-sm font-bold text-slate-800 truncate">{service.name}</p>
-                        <p className="text-[10px] sm:text-[11px] font-extrabold text-emerald-600 mt-0.5 uppercase tracking-wide flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3 shrink-0" /> {service.status}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                  {quickServices.map((service, idx) => {
+                    const cardContent = (
+                      <>
+                        <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-slate-100 group-hover:bg-blue-50 transition-colors shadow-2xs">
+                          {service.icon}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary-blue truncate transition-colors">
+                            {service.name}
+                          </p>
+                          <p className="text-[10px] sm:text-[11px] font-medium text-slate-500 mt-0.5 truncate">
+                            {service.desc}
+                          </p>
+                        </div>
+                        {service.external ? (
+                          <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-blue shrink-0 transition-colors" />
+                        ) : (
+                          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-blue group-hover:translate-x-0.5 shrink-0 transition-all" />
+                        )}
+                      </>
+                    );
+
+                    const cardClass =
+                      'flex items-center space-x-3 p-2.5 sm:p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 hover:bg-white hover:border-blue-300 hover:shadow-sm transition-all group';
+
+                    return service.external ? (
+                      <a
+                        key={idx}
+                        href={service.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cardClass}
+                      >
+                        {cardContent}
+                      </a>
+                    ) : (
+                      <Link key={idx} href={service.href} className={cardClass}>
+                        {cardContent}
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             </FadeIn>
@@ -472,6 +556,56 @@ export default function InformasiPage() {
                     </span>
                   </button>
                 </div>
+              </div>
+            </FadeIn>
+
+            {/* JAM LAYANAN & LOKASI HELPDESK UKPBJ */}
+            <FadeIn direction="up" delay={0.25}>
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-2 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-blue-50 text-primary-blue border border-blue-200/80 shrink-0">
+                      <Phone className="w-3.5 h-3.5" />
+                    </span>
+                    <h3 className="text-xs sm:text-sm font-extrabold text-primary-navy tracking-tight">
+                      {trans('Jam Layanan & Helpdesk UKPBJ', 'UKPBJ Service Hours & Helpdesk')}
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-4 text-[11px] sm:text-xs text-slate-600">
+                    <div className="flex items-start gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-slate-700">
+                          {trans('Senin – Kamis: 08.00 – 16.00 WIB', 'Mon – Thu: 08:00 – 16:00 WIB')}
+                        </p>
+                        <p className="text-[10px] sm:text-[11px] text-slate-500">
+                          {trans('Jumat: 08.00 – 16.30 WIB', 'Friday: 08:00 – 16:30 WIB')}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-slate-700">
+                          {trans('Gedung A Lt. 4, Kemnaker RI', 'Building A 4th Fl, Kemnaker RI')}
+                        </p>
+                        <p className="text-[10px] sm:text-[11px] text-slate-500 truncate">
+                          Jl. Jend. Gatot Subroto Kav. 51, Jakarta
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Link
+                  href="/layanan"
+                  className="w-full sm:w-auto justify-center inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-primary-navy text-primary-navy hover:text-white border border-slate-200 hover:border-primary-navy text-xs font-bold transition-all shrink-0 group"
+                >
+                  <span>{trans('Hubungi Helpdesk', 'Contact Helpdesk')}</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
               </div>
             </FadeIn>
 
